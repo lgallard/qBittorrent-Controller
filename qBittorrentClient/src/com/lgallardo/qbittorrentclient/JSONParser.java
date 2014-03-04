@@ -1,0 +1,326 @@
+/*******************************************************************************
+ * Copyright (c) 2014 Luis M. Gallardo D..
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Public License v3.0
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/gpl.html
+ * 
+ * Contributors:
+ *     Luis M. Gallardo D. - initial implementation
+ ******************************************************************************/
+package com.lgallardo.qbittorrentclient;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.util.Log;
+
+public class JSONParser {
+	static InputStream is = null;
+	private JSONObject jObj = null;
+	private JSONArray jArray = null;
+	private String json = "";
+	private String hostname;
+	private int port;
+	private String protocol;
+	private String username;
+	private String password;
+
+	static boolean nohome = false;
+
+	// constructor
+	public JSONParser() {
+		this("", "", 0, "", "");
+	}
+	
+	public JSONParser(String hostname,int port, String username, String password) {
+		this(hostname, "http", port, username, password);
+	}
+
+	public JSONParser(String hostname, String protocol, int port, String username, String password) {
+
+		this.hostname = hostname;
+		this.protocol = protocol;
+		this.port = port;
+		this.username = username;
+		this.password = password;
+
+	}
+
+	public JSONObject getJSONFromUrl(String url) {
+
+		HttpResponse httpResponse;
+		DefaultHttpClient httpclient;
+
+		// Making HTTP request
+		HttpHost targetHost = new HttpHost(this.hostname, this.port,
+				this.protocol);
+
+		httpclient = new DefaultHttpClient();
+		try {
+
+			AuthScope authScope = new AuthScope(targetHost.getHostName(),
+					targetHost.getPort());
+			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+					this.username, this.password);
+
+			httpclient.getCredentialsProvider().setCredentials(authScope,
+					credentials);
+
+			HttpGet httpget = new HttpGet(url);
+
+			httpResponse = httpclient.execute(targetHost, httpget);
+
+			HttpEntity httpEntity = httpResponse.getEntity();
+			is = httpEntity.getContent();
+			Log.i("parser", is.toString());
+
+			// Build JSON
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "iso-8859-1"), 8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+			json = sb.toString();
+
+			// try parse the string to a JSON object
+			jObj = new JSONObject(json);
+
+		} catch (JSONException e) {
+			Log.e("JSON Parser", "Error parsing data " + e.toString());
+		} catch (UnsupportedEncodingException e) {
+			Log.e("JSON", "UnsupportedEncodingException: " + e.toString());
+
+		} catch (ClientProtocolException e) {
+			Log.e("JSON", "ClientProtocolException: " + e.toString());
+		} catch (IOException e) {
+			Log.e("JSON", "IOException: " + e.toString());
+			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e("JSON", "Generic: " + e.toString());
+		}
+
+		finally {
+			// When HttpClient instance is no longer needed,
+			// shut down the connection manager to ensure
+			// immediate deallocation of all system resources
+			httpclient.getConnectionManager().shutdown();
+		}
+
+		// return JSON String
+		return jObj;
+	}
+
+	public JSONArray getJSONArrayFromUrl(String url) {
+
+		HttpResponse httpResponse;
+		DefaultHttpClient httpclient;
+
+		// Log.i("getJSONArrayFromUrl", "url:" + url);
+		// Log.i("getJSONArrayFromUrl", "hostname:" + this.hostname);
+		// Log.i("getJSONArrayFromUrl", "password:" + this.password);
+		// Log.i("getJSONArrayFromUrl", "port:" + this.port);
+		// Log.i("getJSONArrayFromUrl", "protocol:" + this.protocol);
+
+		// Making HTTP request
+		HttpHost targetHost = new HttpHost(hostname, port, protocol);
+
+		httpclient = new DefaultHttpClient();
+		try {
+
+			AuthScope authScope = new AuthScope(targetHost.getHostName(),
+					targetHost.getPort());
+			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+					username, password);
+
+			httpclient.getCredentialsProvider().setCredentials(authScope,
+					credentials);
+
+			HttpGet httpget = new HttpGet(url);
+
+			httpResponse = httpclient.execute(targetHost, httpget);
+
+			StatusLine statusLine = httpResponse.getStatusLine();
+			int mStatusCode = statusLine.getStatusCode();
+			Log.i("Status", "CODE: " + mStatusCode);
+
+			HttpEntity httpEntity = httpResponse.getEntity();
+			is = httpEntity.getContent();
+			Log.i("parser", is.toString());
+
+
+		// Build JSON
+
+		
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "iso-8859-1"), 8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+			json = sb.toString();
+
+			jArray = new JSONArray(json);
+		} catch (JSONException e) {
+			Log.e("JSON Parser", "Error parsing data " + e.toString());
+		} 
+		catch (UnsupportedEncodingException e) {
+		} catch (ClientProtocolException e) {
+			Log.e("JSON", "Client: " + e.toString());
+		} catch (IOException e) {
+			Log.e("JSON", "IO: " + e.toString());
+			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e("JSON", "Generic: " + e.toString());
+		}
+
+		finally {
+			// When HttpClient instance is no longer needed,
+			// shut down the connection manager to ensure
+			// immediate deallocation of all system resources
+			httpclient.getConnectionManager().shutdown();
+		}
+
+		// return JSON String
+		return jArray;
+	}
+
+	public void postCommand(String command, String hash) {
+		
+		String key = "hash";
+		
+		String urlContentType = "application/x-www-form-urlencoded";
+
+		HttpResponse httpResponse;
+		DefaultHttpClient httpclient;
+
+		String url = "";
+
+		if ("start".equals(command)) {
+			url = "command/resume";
+		}
+		if ("pause".equals(command)) {
+			url = "command/pause";
+		}
+		if ("delete".equals(command)) {
+			url = "command/delete";
+			key = "hashes";
+		}
+		if ("deleteDrive".equals(command)) {
+			url = "command/deletePerm";
+			key = "hashes";
+		}
+		
+		if ("addTorrent".equals(command)) {
+			url = "command/download";
+			key = "urls";
+		}
+
+		 Log.i("qbittorrent", "url:" + url);
+		 Log.i("qbittorrent", "hostname:" + this.hostname);
+		 Log.i("qbittorrent", "port:" + this.port);
+		 Log.i("qbittorrent", "protocol:" + this.protocol);
+		 Log.i("qbittorrent", "username:" + this.username);
+		 Log.i("qbittorrent", "password:" + this.password);
+		 Log.i("qbittorrent", "hash:" + hash);
+
+		// Making HTTP request
+		HttpHost targetHost = new HttpHost(this.hostname, this.port,
+				this.protocol);
+
+		httpclient = new DefaultHttpClient();
+		try {
+
+			AuthScope authScope = new AuthScope(targetHost.getHostName(),
+					targetHost.getPort());
+			
+			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+					this.username, this.password);
+
+			httpclient.getCredentialsProvider().setCredentials(authScope,
+					credentials);
+
+			HttpPost httpget = new HttpPost(url);
+
+			Log.i("qbittorrent", "1");
+
+			// In order to pass the has we must set the pair name value
+
+			BasicNameValuePair bnvp = new BasicNameValuePair(key, hash);
+			
+			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+			nvps.add(bnvp);
+			httpget.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+			
+			
+			// Set content type and urls
+			if ("addTorrent".equals(command)) {
+				httpget.setHeader("Content-Type", urlContentType);
+			}
+
+			 Log.i("qbittorrent", "2");
+
+			httpResponse = httpclient.execute(targetHost, httpget);
+
+			 Log.i("qbittorrent", "3");
+
+			HttpEntity httpEntity = httpResponse.getEntity();
+
+			 Log.i("qbittorrent", "4");
+
+			is = httpEntity.getContent();
+
+			Log.i("qbittorrent", "5");
+
+			Log.i("parser", is.toString());
+
+		}
+
+		catch (UnsupportedEncodingException e) {
+		} catch (ClientProtocolException e) {
+			Log.e("qbittorrent", "Client: " + e.toString());
+		} catch (IOException e) {
+			Log.e("qbittorrent", "IO: " + e.toString());
+			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e("qbittorrent", "Generic: " + e.toString());
+		}
+
+		finally {
+			// When HttpClient instance is no longer needed,
+			// shut down the connection manager to ensure
+			// immediate deallocation of all system resources
+			httpclient.getConnectionManager().shutdown();
+		}
+
+	}
+
+}

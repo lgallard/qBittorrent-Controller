@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Luis M. Gallardo D..
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Public License v3.0
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/gpl.html
+  
+  Contributors:
+      Luis M. Gallardo D. - initial implementation
+-->
+<resources>
+
+    <string name="app_name">qBitttorrent Client</string>
+    <string name="action_settings">Settings</string>
+    <string name="textview">TextView</string>
+    <string name="dialog_message">Network connection failed</string>
+    <string name="dialog_title">Error</string>
+    <string name="connection_error">Network connection failed</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="connecting">Connecting to server</string>
+    <string name="title_activity_torrent_actions">Action</string>
+    <string name="title_activity_setting">Settings</string>
+    <string name="dm_deleteTorrent">Pressing OK will delete the torrent</string>
+    <string name="dt_deleteTorrent">Delete torrent</string>
+    <string name="dm_deleteDriveTorrent">Pressing OK will delete torrent and data from the hard drive</string>
+    <string name="dt_deleteDriveTorrent">Delete torrent and data </string>
+    <string name="torrentAdded">Torrent sent!</string>
+    <string name="torrentStarted">Torrent started!</string>
+    <string name="torrentPaused">Torrent paused!</string>
+    <string name="torrentDeleled">Torrent deleted!</string>
+    <string name="torrentDeletedDrive">Torrent and data deleted!</string>
+
+</resources>
