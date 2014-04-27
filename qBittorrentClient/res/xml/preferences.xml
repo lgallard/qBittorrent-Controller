@@ -16,7 +16,7 @@
         android:title="Account" >
         <EditTextPreference
             android:defaultValue="192.168.1.1"
-            android:dialogTitle="Hostname or IP;"
+            android:dialogTitle="Hostname or IP?"
             android:key="hostname"
             android:summary="Hostname or IP"
             android:title="Connection Host" />
@@ -28,10 +28,10 @@
             android:title="Connection Port " 
             android:inputType="number"/>
         <EditTextPreference
-            android:defaultValue="username"
+            android:defaultValue="admin"
             android:dialogTitle="Username?"
-            android:key="admin"
-            android:summary="Provide username"
+            android:key="username"
+            android:summary="Provide a username"
             android:title="Username " />
         <EditTextPreference
             android:defaultValue=""
