@@ -2,6 +2,7 @@ qBittorrent-Client
 ==================
 
 This is the repository for Android's qBittorrent Client 
+<img src="https://farm4.staticflickr.com/3803/12764736074_8d2ff0c6ba.jpg">
 
 <h2>Features</h2>
 <span style="line-height: 1.5em;">With this first version you be able to:</span>
