@@ -36,6 +36,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class qBittorrentBinder {
@@ -50,6 +53,10 @@ public class qBittorrentBinder {
 	private String password;
 
 	static boolean nohome = false;
+	
+	// Preferences fields
+	private SharedPreferences sharedPrefs;
+	private StringBuilder builderPrefs;
 
 	// constructor
 	public qBittorrentBinder() {
@@ -70,6 +77,12 @@ public class qBittorrentBinder {
 
 	}
 
+
+	public void getJSONFromUrl(qBittorrentListener listener, String url) {
+		
+		
+	}
+	
 	public JSONObject getJSONFromUrl(String url) {
 
 		HttpResponse httpResponse;
