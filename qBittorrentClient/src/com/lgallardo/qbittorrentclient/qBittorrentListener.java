@@ -1,5 +1,7 @@
 package com.lgallardo.qbittorrentclient;
 
+import com.lgallardo.qbittorrentclient.qBittorrentBinder.myObject;
+
 public interface qBittorrentListener {
-	void updatUI(JSONParser JParser);
+	void updateUI(myObject[] result);
 }
