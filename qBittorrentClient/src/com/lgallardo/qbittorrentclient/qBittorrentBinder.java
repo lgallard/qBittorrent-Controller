@@ -39,14 +39,16 @@ import org.json.JSONObject;
 import com.lgallardo.qbittorrentclient.qBittorrentClient.myAdapter;
 import com.lgallardo.qbittorrentclient.qBittorrentClient.myObject;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-public class qBittorrentBinder {
+public class qBittorrentBinder extends Binder {
 	static InputStream is = null;
 	private JSONObject jObj = null;
 	private JSONArray jArray = null;
@@ -98,23 +100,22 @@ public class qBittorrentBinder {
 
 	// constructor
 	public qBittorrentBinder() {
-		this("", "", 0, "", "");
+
+	}
+	
+	public void getTorrenList(String url, String hostname, String protocol, String port,
+			String username, String password, qBittorrentListener listener){
+		
+		qBittorrentTask qtt = new qBittorrentTask(listener);
+		
+		qtt.execute(new String[] {url, hostname, protocol, port,username,password});
+		
+		
 	}
 
-	public qBittorrentBinder(String hostname, int port, String username,
-			String password) {
-		this(hostname, "http", port, username, password);
-	}
-
-	public qBittorrentBinder(String hostname, String protocol, int port,
-			String username, String password) {
-
-		this.hostname = hostname;
-		this.protocol = protocol;
-		this.port = port;
-		this.username = username;
-		this.password = password;
-
+	// This will be the new postCommand method, similar to getTorrenList	
+	public void postCommand(){
+		
 	}
 
 	// To be deprecated
@@ -296,12 +297,16 @@ public class qBittorrentBinder {
 	}
 
 	// Here is where the action happens
-	private class qBittorrentTask extends
+	protected class qBittorrentTask extends
 			AsyncTask<String, Integer, myObject[]> {
 
 		qBittorrentListener listener = null;
 		qBittorrentBinder binder;
 		String url = null;
+
+		// Preferences stuff
+		private SharedPreferences sharedPrefs;
+		private StringBuilder builderPrefs;
 
 		String name, size, info, progress, state, hash, ratio, leechs, seeds;
 
@@ -317,6 +322,12 @@ public class qBittorrentBinder {
 			// Fetch JSON
 
 			url = params[0];
+
+			hostname = params[1];
+			protocol = params[2];
+			port = Integer.parseInt(params[3]);
+			username = params[4];
+			password = params[5];
 
 			HttpResponse httpResponse;
 			DefaultHttpClient httpclient;
