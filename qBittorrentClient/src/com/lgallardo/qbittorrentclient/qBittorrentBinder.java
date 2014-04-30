@@ -94,10 +94,6 @@ public class qBittorrentBinder extends Binder {
 	protected static final int DELETE_CODE = 3;
 	protected static final int DELETE_DRIVE_CODE = 4;
 
-	// Preferences fields
-	private SharedPreferences sharedPrefs;
-	private StringBuilder builderPrefs;
-
 	// constructor
 	public qBittorrentBinder() {
 
@@ -304,10 +300,6 @@ public class qBittorrentBinder extends Binder {
 		qBittorrentBinder binder;
 		String url = null;
 
-		// Preferences stuff
-		private SharedPreferences sharedPrefs;
-		private StringBuilder builderPrefs;
-
 		String name, size, info, progress, state, hash, ratio, leechs, seeds;
 
 		myObject[] objects = null;
@@ -452,6 +444,78 @@ public class qBittorrentBinder extends Binder {
 		}
 
 	}
+	
+	// Here is where the action happens
+	private class qBittorrentCommand extends AsyncTask<String, Integer, String>
+	{
+
+		private qBittorrentListener listener;
+		
+		public qBittorrentCommand(qBittorrentListener listener) {
+			this.listener = listener;
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+
+			// Creating new JSON Parser
+			JSONParser jParser = new JSONParser(hostname, port, username,
+												password);
+
+			jParser.postCommand(params[0], params[1]);
+
+			// move postCommand code to here
+			
+			return params[0];
+
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			
+			// TODO: A getTorrentList should be invoked from the Activity
+			// to update the UI
+			
+			// Send message to the activity
+			
+			int messageId = R.string.connection_error;
+
+			if (result == null) {
+				messageId = R.string.connection_error;
+			}
+
+			if ("start".equals(result)) {
+				messageId = R.string.torrentStarted;
+			}
+
+			if ("pause".equals(result)) {
+				messageId = R.string.torrentPaused;
+			}
+
+			if ("delete".equals(result)) {
+				messageId = R.string.torrentDeleled;
+			}
+
+			if ("deleteDrive".equals(result)) {
+				messageId = R.string.torrentDeletedDrive;
+			}
+
+			if ("addTorrent".equals(result)) {
+				messageId = R.string.torrentAdded;
+			}
+			
+			if (listener != null) {
+				listener.sendCommandResult(result);
+			}
+			
+		    // this should be moved to the Activity
+
+//			Toast.makeText(getApplicationContext(), messageId,
+//						   Toast.LENGTH_LONG).show();
+//
+		}
+	}
+	
 
 	class myObject {
 
