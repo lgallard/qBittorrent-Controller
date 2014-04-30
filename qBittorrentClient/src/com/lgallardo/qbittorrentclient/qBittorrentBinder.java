@@ -110,8 +110,12 @@ public class qBittorrentBinder extends Binder {
 	}
 
 	// This will be the new postCommand method, similar to getTorrenList	
-	public void postCommand(){
+	public void postCommand(String command, String hash,  String hostname, String protocol, String port,
+			String username, String password, qBittorrentListener listener){
+			
+		qBittorrentCommand qtc = new qBittorrentCommand(listener);
 		
+		qtc.execute(new String[] {command,hash, hostname, protocol, port,username,password});
 	}
 
 	// To be deprecated
@@ -458,13 +462,126 @@ public class qBittorrentBinder extends Binder {
 		@Override
 		protected String doInBackground(String... params) {
 
-			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, port, username,
-												password);
+			
+			// qtc.execute(new String[] {command, hash, hostname, protocol, port,username,password});
 
-			jParser.postCommand(params[0], params[1]);
+			//jParser.postCommand(params[0], params[1]);
+			
+			String command 	= params[0];
+			String hash 	= params[1];
+			String hostname = params[2];
+			String protocol = params[3];
+			int port 		= Integer.parseInt(params[4]);
+			String username = params[5];
+			String password = params[6];
 
 			// move postCommand code to here
+			
+
+			String key = "hash";
+
+			String urlContentType = "application/x-www-form-urlencoded";
+
+			HttpResponse httpResponse;
+			DefaultHttpClient httpclient;
+
+			String url = "";
+
+			if ("start".equals(command)) {
+				url = "command/resume";
+			}
+			if ("pause".equals(command)) {
+				url = "command/pause";
+			}
+			if ("delete".equals(command)) {
+				url = "command/delete";
+				key = "hashes";
+			}
+			if ("deleteDrive".equals(command)) {
+				url = "command/deletePerm";
+				key = "hashes";
+			}
+
+			if ("addTorrent".equals(command)) {
+				url = "command/download";
+				key = "urls";
+			}
+
+			Log.i("qbittorrent", "url:" + url);
+			Log.i("qbittorrent", "hostname:" + hostname);
+			Log.i("qbittorrent", "port:" + port);
+			Log.i("qbittorrent", "protocol:" + protocol);
+			Log.i("qbittorrent", "username:" + username);
+			Log.i("qbittorrent", "password:" + password);
+			Log.i("qbittorrent", "hash:" + hash);
+
+			// Making HTTP request
+			HttpHost targetHost = new HttpHost(hostname, port, protocol);
+
+			httpclient = new DefaultHttpClient();
+			try {
+
+				AuthScope authScope = new AuthScope(targetHost.getHostName(),
+						targetHost.getPort());
+
+				UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+						username, password);
+
+				httpclient.getCredentialsProvider().setCredentials(authScope,
+						credentials);
+
+				HttpPost httpget = new HttpPost(url);
+
+				Log.i("qbittorrent", "1");
+
+				// In order to pass the has we must set the pair name value
+
+				BasicNameValuePair bnvp = new BasicNameValuePair(key, hash);
+
+				List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+				nvps.add(bnvp);
+				httpget.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+
+				// Set content type and urls
+				if ("addTorrent".equals(command)) {
+					httpget.setHeader("Content-Type", urlContentType);
+				}
+
+				Log.i("qbittorrent", "2");
+
+				httpResponse = httpclient.execute(targetHost, httpget);
+
+				Log.i("qbittorrent", "3");
+
+				HttpEntity httpEntity = httpResponse.getEntity();
+
+				Log.i("qbittorrent", "4");
+
+				is = httpEntity.getContent();
+
+				Log.i("qbittorrent", "5");
+
+				Log.i("parser", is.toString());
+
+			}
+
+			catch (UnsupportedEncodingException e) {
+			} catch (ClientProtocolException e) {
+				Log.e("qbittorrent", "Client: " + e.toString());
+			} catch (IOException e) {
+				Log.e("qbittorrent", "IO: " + e.toString());
+				e.printStackTrace();
+			} catch (Exception e) {
+				Log.e("qbittorrent", "Generic: " + e.toString());
+			}
+
+			finally {
+				// When HttpClient instance is no longer needed,
+				// shut down the connection manager to ensure
+				// immediate deallocation of all system resources
+				httpclient.getConnectionManager().shutdown();
+			}
+
 			
 			return params[0];
 
