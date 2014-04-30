@@ -108,7 +108,7 @@ public class MainActivity extends ListActivity {
 		// Get preferences
 		getPreferences();
 		
-		// If it were awaked from a intent-filter, 
+		// If it were awaked from an intent-filter, 
 		// get intent from the intent filter adn Add URL torrent
 		Intent intent = getIntent();
 		String urlTorrent = intent.getDataString();
@@ -302,8 +302,7 @@ public class MainActivity extends ListActivity {
 		intent.putExtra("username", username);
 		intent.putExtra("password", password);
 		
-		startActivityForResult(intent, ACTION_CODE);
-		//startActivity(intent);
+		startActivityForResult(intent, ACTION_CODE);	
 	}
 	
 	public void startTorrent(String hash) {
@@ -431,7 +430,7 @@ public class MainActivity extends ListActivity {
 
 			if (jArray != null) {
 
-				Log.i("jArray length", "" + jArray.length());
+				//Log.i("jArray length", "" + jArray.length());
 
 				try {
 
