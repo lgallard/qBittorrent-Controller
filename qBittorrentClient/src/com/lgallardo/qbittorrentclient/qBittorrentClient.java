@@ -10,35 +10,16 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.AlertDialog;
-import android.app.ListActivity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.app.*;
+import android.content.*;
+import android.content.res.*;
+import android.net.*;
+import android.os.*;
+import android.preference.*;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
+import org.json.*;
 
 public class qBittorrentClient extends ListActivity {
 
@@ -96,10 +77,28 @@ public class qBittorrentClient extends ListActivity {
 
 	private JSONArray user = null;
 
+	private  State  state = null ;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		// Service code
+		state = ( State ) getLastNonConfigurationInstance(); 
+
+		if (state == null) {
+
+			state = new  State();
+			getApplicationContext().bindService(new  Intent(this, qBittorrentService.class), state ,  BIND_AUTO_CREATE);
+
+		} else  if (state.lastResult != null) {
+
+			refresh();
+		}
+
+		state.attach(this);
+
 
 		// Get preferences
 		getPreferences();
@@ -148,14 +147,14 @@ public class qBittorrentClient extends ListActivity {
 
 			// Connecting message
 			Toast.makeText(getApplicationContext(), R.string.connecting,
-					Toast.LENGTH_LONG).show();
+						   Toast.LENGTH_LONG).show();
 
 			qtt.execute(urls);
 		} else {
 
 			// Connection Error message
 			Toast.makeText(getApplicationContext(), R.string.connection_error,
-					Toast.LENGTH_SHORT).show();
+						   Toast.LENGTH_SHORT).show();
 
 		}
 
@@ -171,21 +170,21 @@ public class qBittorrentClient extends ListActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_add:
-			// Add URL torrent
-			addUrlTorrent();
+			case R.id.action_add:
+				// Add URL torrent
+				addUrlTorrent();
 
-			return true;
-		case R.id.action_refresh:
-			// Refresh option clicked.
-			refresh();
-			return true;
-		case R.id.action_settings:
-			// Settings option clicked.
-			openPreferences();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+				return true;
+			case R.id.action_refresh:
+				// Refresh option clicked.
+				refresh();
+				return true;
+			case R.id.action_settings:
+				// Settings option clicked.
+				openPreferences();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -203,18 +202,18 @@ public class qBittorrentClient extends ListActivity {
 
 			// Check which request we're responding to
 			switch (action) {
-			case START_CODE:
-				startTorrent(hash);
-				break;
-			case PAUSE_CODE:
-				pauseTorrent(hash);
-				break;
-			case DELETE_CODE:
-				deleteTorrent(hash);
-				break;
-			case DELETE_DRIVE_CODE:
-				deleteDriveTorrent(hash);
-				break;
+				case START_CODE:
+					startTorrent(hash);
+					break;
+				case PAUSE_CODE:
+					pauseTorrent(hash);
+					break;
+				case DELETE_CODE:
+					deleteTorrent(hash);
+					break;
+				case DELETE_DRIVE_CODE:
+					deleteDriveTorrent(hash);
+					break;
 			}
 
 		}
@@ -229,31 +228,31 @@ public class qBittorrentClient extends ListActivity {
 
 		// URL input
 		final EditText urlInput = (EditText) addTorrentView
-				.findViewById(R.id.url);
+			.findViewById(R.id.url);
 
 		// Dialog
 		AlertDialog.Builder builder = new AlertDialog.Builder(
-				qBittorrentClient.this);
+			qBittorrentClient.this);
 
 		// Set add_torrent.xml to AlertDialog builder
 		builder.setView(addTorrentView);
 
 		// Cancel
 		builder.setNeutralButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						// User cancelled the dialog
-					}
-				});
+			new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// User cancelled the dialog
+				}
+			});
 
 		// Ok
 		builder.setPositiveButton(R.string.ok,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						// User accepted the dialog
-						addTorrent(urlInput.getText().toString());
-					}
-				});
+			new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// User accepted the dialog
+					addTorrent(urlInput.getText().toString());
+				}
+			});
 
 		// Create dialog
 		AlertDialog dialog = builder.create();
@@ -282,12 +281,12 @@ public class qBittorrentClient extends ListActivity {
 		intent.putExtra(TAG_INFO, qBittorrentClient.lines[position].getInfo());
 		intent.putExtra(TAG_RATIO, qBittorrentClient.lines[position].getRatio());
 		intent.putExtra(TAG_PROGRESS,
-				qBittorrentClient.lines[position].getProgress());
+						qBittorrentClient.lines[position].getProgress());
 		intent.putExtra(TAG_STATE, qBittorrentClient.lines[position].getState());
 		intent.putExtra(TAG_NUMLEECHS,
-				qBittorrentClient.lines[position].getLeechs());
+						qBittorrentClient.lines[position].getLeechs());
 		intent.putExtra(TAG_NUMSEEDS,
-				qBittorrentClient.lines[position].getSeeds());
+						qBittorrentClient.lines[position].getSeeds());
 
 		intent.putExtra(TAG_HASH, qBittorrentClient.lines[position].getHash());
 
@@ -336,7 +335,7 @@ public class qBittorrentClient extends ListActivity {
 	protected void getPreferences() {
 		// Preferences stuff
 		sharedPrefs = PreferenceManager
-				.getDefaultSharedPreferences(qBittorrentClient.this);
+			.getDefaultSharedPreferences(qBittorrentClient.this);
 
 		builderPrefs = new StringBuilder();
 
@@ -362,7 +361,7 @@ public class qBittorrentClient extends ListActivity {
 
 			// Creating new JSON Parser
 			JSONParser jParser = new JSONParser(hostname, port, username,
-					password);
+												password);
 
 			jParser.postCommand(params[0], params[1]);
 
@@ -400,14 +399,14 @@ public class qBittorrentClient extends ListActivity {
 			}
 
 			Toast.makeText(getApplicationContext(), messageId,
-					Toast.LENGTH_LONG).show();
+						   Toast.LENGTH_LONG).show();
 
 		}
 	}
 
 	// Here is where the action happens
 	private class qBittorrentTask extends
-			AsyncTask<String, Integer, myObject[]> {
+	AsyncTask<String, Integer, myObject[]> {
 
 
 		@Override
@@ -422,7 +421,7 @@ public class qBittorrentClient extends ListActivity {
 
 			// Creating new JSON Parser
 			JSONParser jParser = new JSONParser(hostname, port, username,
-					password);
+												password);
 
 			JSONArray jArray = jParser.getJSONArrayFromUrl(params[0]);
 
@@ -443,11 +442,11 @@ public class qBittorrentClient extends ListActivity {
 						name = json.getString(TAG_NAME);
 						size = json.getString(TAG_SIZE);
 						progress = String.format("%.2f",
-								json.getDouble(TAG_PROGRESS) * 100)
-								+ "%";
+												 json.getDouble(TAG_PROGRESS) * 100)
+							+ "%";
 						info = size + " | D:" + json.getString(TAG_DLSPEED)
-								+ " | U:" + json.getString(TAG_UPSPEED) + " | "
-								+ progress;
+							+ " | U:" + json.getString(TAG_UPSPEED) + " | "
+							+ progress;
 						state = json.getString(TAG_STATE);
 						hash = json.getString(TAG_HASH);
 						ratio = json.getString(TAG_RATIO);
@@ -455,11 +454,12 @@ public class qBittorrentClient extends ListActivity {
 						seeds = json.getString(TAG_NUMSEEDS);
 
 						objects[i] = new myObject(name, size, state, hash,
-								info, ratio, progress, leechs, seeds);
+												  info, ratio, progress, leechs, seeds);
 
 						qBittorrentClient.names[i] = name;
 					}
-				} catch (JSONException e) {
+				}
+				catch (JSONException e) {
 					Log.e("MAIN:", e.toString());
 				}
 
@@ -474,7 +474,7 @@ public class qBittorrentClient extends ListActivity {
 			if (result == null) {
 
 				Toast.makeText(getApplicationContext(),
-						R.string.connection_error, Toast.LENGTH_LONG).show();
+							   R.string.connection_error, Toast.LENGTH_LONG).show();
 
 			} else {
 
@@ -483,7 +483,8 @@ public class qBittorrentClient extends ListActivity {
 				try {
 					setListAdapter(new myAdapter());
 
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					// TODO: handle exception
 					Log.e("ADAPTER", e.toString());
 				}
@@ -507,8 +508,8 @@ public class qBittorrentClient extends ListActivity {
 		private String seeds;
 
 		public myObject(String file, String size, String state, String hash,
-				String info, String ratio, String progress, String leechs,
-				String seeds) {
+						String info, String ratio, String progress, String leechs,
+						String seeds) {
 			this.file = file;
 			this.size = size;
 			this.state = state;
@@ -610,4 +611,36 @@ public class qBittorrentClient extends ListActivity {
 		}
 	}
 
+	static class State     implements  qBittorrentListener ,  ServiceConnection {
+
+		qBittorrentBinder binder = null ;     
+		qBittorrentClient  activity = null ;   
+		String lastResult = null;
+
+		void  attach(qBittorrentClient  activity) {     
+			this.activity = activity;
+		}
+
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder rawBinder) {
+			binder = (qBittorrentBinder) rawBinder;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName className) {
+			binder = null;
+		}
+
+		@Override
+		public void updateUI(qBittorrentBinder.myObject[] result) {
+			// TODO: Implement this method
+		}
+
+		@Override
+		public void sendCommandResult(String result) {
+			// TODO: Implement this method
+		}
+
+
+	}
 }
