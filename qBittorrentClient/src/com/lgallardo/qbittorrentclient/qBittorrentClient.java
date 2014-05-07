@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/gpl.html
  * 
  * Contributors:
- *     Luis M. Gallardo D. - initial implementation
+ *     Luis M. Gallardo D. 
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
@@ -611,7 +611,7 @@ public class qBittorrentClient extends ListActivity {
 		}
 	}
 
-	static class State     implements  qBittorrentListener ,  ServiceConnection {
+	static class State implements  qBittorrentListener, ServiceConnection {
 
 		qBittorrentBinder binder = null ;     
 		qBittorrentClient  activity = null ;   
@@ -633,7 +633,8 @@ public class qBittorrentClient extends ListActivity {
 
 		@Override
 		public void updateUI(qBittorrentBinder.myObject[] result) {
-			// TODO: Implement this method
+			// TODO: pass the result to refresh
+			activity.refresh();
 		}
 
 		@Override
