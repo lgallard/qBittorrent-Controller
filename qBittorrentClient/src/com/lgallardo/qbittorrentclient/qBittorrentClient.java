@@ -70,7 +70,7 @@ public class qBittorrentClient extends ListActivity {
 	private SharedPreferences sharedPrefs;
 	private StringBuilder builderPrefs;
 
-	static myObject[] lines;
+	static torrent[] lines;
 	static String[] names;
 
 	TextView name1, size1;
@@ -92,9 +92,9 @@ public class qBittorrentClient extends ListActivity {
 			state = new  State();
 			getApplicationContext().bindService(new  Intent(this, qBittorrentService.class), state ,  BIND_AUTO_CREATE);
 
-		} else  if (state.lastResult != null) {
+		} else  if (state.torrents != null) {
 
-			refresh();
+			refresh(state.torrents);
 		}
 
 		state.attach(this);
@@ -128,6 +128,32 @@ public class qBittorrentClient extends ListActivity {
 			container.setOrientation(LinearLayout.VERTICAL);
 		}
 	}
+	
+	
+	public void refresh(torrent[] result) {
+
+		if (result == null) {
+
+			Toast.makeText(getApplicationContext(),
+						   R.string.connection_error, Toast.LENGTH_LONG).show();
+			
+			
+		} else {
+
+			qBittorrentClient.lines = result;
+
+			try {
+				setListAdapter(new myAdapter());
+
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+				Log.e("ADAPTER", e.toString());
+			}
+
+		}
+		
+	}
 
 	private void refresh() {
 
@@ -143,13 +169,13 @@ public class qBittorrentClient extends ListActivity {
 		if (networkInfo != null && networkInfo.isConnected()) {
 
 			// Execute the task in background
-			qBittorrentTask qtt = new qBittorrentTask();
+			//qBittorrentTask qtt = new qBittorrentTask();
 
 			// Connecting message
 			Toast.makeText(getApplicationContext(), R.string.connecting,
 						   Toast.LENGTH_LONG).show();
 
-			qtt.execute(urls);
+			//qtt.execute(urls);
 		} else {
 
 			// Connection Error message
@@ -404,164 +430,6 @@ public class qBittorrentClient extends ListActivity {
 		}
 	}
 
-	// Here is where the action happens
-	private class qBittorrentTask extends
-	AsyncTask<String, Integer, myObject[]> {
-
-
-		@Override
-		protected myObject[] doInBackground(String... params) {
-
-			String name, size, info, progress, state, hash, ratio, leechs, seeds;
-
-			myObject[] objects = null;
-
-			// Preferences stuff
-			getPreferences();
-
-			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, port, username,
-												password);
-
-			JSONArray jArray = jParser.getJSONArrayFromUrl(params[0]);
-
-			if (jArray != null) {
-
-				Log.i("jArray length", "" + jArray.length());
-
-				try {
-
-					objects = new myObject[jArray.length()];
-
-					qBittorrentClient.names = new String[jArray.length()];
-
-					for (int i = 0; i < jArray.length(); i++) {
-
-						JSONObject json = jArray.getJSONObject(i);
-
-						name = json.getString(TAG_NAME);
-						size = json.getString(TAG_SIZE);
-						progress = String.format("%.2f",
-												 json.getDouble(TAG_PROGRESS) * 100)
-							+ "%";
-						info = size + " | D:" + json.getString(TAG_DLSPEED)
-							+ " | U:" + json.getString(TAG_UPSPEED) + " | "
-							+ progress;
-						state = json.getString(TAG_STATE);
-						hash = json.getString(TAG_HASH);
-						ratio = json.getString(TAG_RATIO);
-						leechs = json.getString(TAG_NUMLEECHS);
-						seeds = json.getString(TAG_NUMSEEDS);
-
-						objects[i] = new myObject(name, size, state, hash,
-												  info, ratio, progress, leechs, seeds);
-
-						qBittorrentClient.names[i] = name;
-					}
-				}
-				catch (JSONException e) {
-					Log.e("MAIN:", e.toString());
-				}
-
-			}
-			return objects;
-
-		}
-
-		@Override
-		protected void onPostExecute(myObject[] result) {
-
-			if (result == null) {
-
-				Toast.makeText(getApplicationContext(),
-							   R.string.connection_error, Toast.LENGTH_LONG).show();
-
-			} else {
-
-				qBittorrentClient.lines = result;
-
-				try {
-					setListAdapter(new myAdapter());
-
-				}
-				catch (Exception e) {
-					// TODO: handle exception
-					Log.e("ADAPTER", e.toString());
-				}
-
-			}
-		}
-
-	}
-
-	class myObject {
-
-		private String file;
-		private String size;
-		private String info;
-		private String state;
-		private String hash;
-		private String downloadSpeed;
-		private String ratio;
-		private String progress;
-		private String leechs;
-		private String seeds;
-
-		public myObject(String file, String size, String state, String hash,
-						String info, String ratio, String progress, String leechs,
-						String seeds) {
-			this.file = file;
-			this.size = size;
-			this.state = state;
-			this.hash = hash;
-			this.info = info;
-			this.ratio = ratio;
-			this.progress = progress;
-			this.leechs = leechs;
-			this.seeds = seeds;
-		}
-
-		public String getFile() {
-			return this.file;
-		}
-
-		public String getSize() {
-			return this.size;
-		}
-
-		public String getState() {
-			return this.state;
-		}
-
-		public String getHash() {
-			return this.hash;
-		}
-
-		public String getInfo() {
-			return this.info;
-		}
-
-		public String getRatio() {
-			return this.ratio;
-		}
-
-		public String getProgress() {
-			return this.progress;
-		}
-
-		public String getLeechs() {
-			return this.leechs;
-		}
-
-		public String getSeeds() {
-			return this.seeds;
-		}
-
-		public void setInfo(String info) {
-			this.info = info;
-		}
-
-	}
 
 	class myAdapter extends ArrayAdapter<String> {
 		public myAdapter() {
@@ -615,7 +483,8 @@ public class qBittorrentClient extends ListActivity {
 
 		qBittorrentBinder binder = null ;     
 		qBittorrentClient  activity = null ;   
-		String lastResult = null;
+		boolean refreshed = false;
+		torrent[] torrents;
 
 		void  attach(qBittorrentClient  activity) {     
 			this.activity = activity;
@@ -632,9 +501,11 @@ public class qBittorrentClient extends ListActivity {
 		}
 
 		@Override
-		public void updateUI(qBittorrentBinder.myObject[] result) {
+		public void updateUI(torrent[] result) {
 			// TODO: pass the result to refresh
-			activity.refresh();
+			
+			torrents = result;
+			activity.refresh(result);
 		}
 
 		@Override
