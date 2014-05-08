@@ -1,8 +1,8 @@
 package com.lgallardo.qbittorrentclient;
 
-import com.lgallardo.qbittorrentclient.qBittorrentBinder.myObject;
+import com.lgallardo.qbittorrentclient.torrent;
 
 public interface qBittorrentListener {
-	void updateUI(myObject[] result);
+	void updateUI(torrent[] result);
 	void sendCommandResult(String result);
 }
