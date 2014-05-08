@@ -37,7 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.lgallardo.qbittorrentclient.qBittorrentClient.myAdapter;
-import com.lgallardo.qbittorrentclient.qBittorrentClient.myObject;
+import com.lgallardo.qbittorrentclient.torrent;
 
 import android.app.Application;
 import android.content.Context;
@@ -298,7 +298,7 @@ public class qBittorrentBinder extends Binder {
 
 	// Here is where the action happens
 	protected class qBittorrentTask extends
-			AsyncTask<String, Integer, myObject[]> {
+			AsyncTask<String, Integer, torrent[]> {
 
 		qBittorrentListener listener = null;
 		qBittorrentBinder binder;
@@ -306,14 +306,14 @@ public class qBittorrentBinder extends Binder {
 
 		String name, size, info, progress, state, hash, ratio, leechs, seeds;
 
-		myObject[] objects = null;
+		torrent[] objects = null;
 
 		public qBittorrentTask(qBittorrentListener listener) {
 			this.listener = listener;
 		}
 
 		@Override
-		protected myObject[] doInBackground(String... params) {
+		protected torrent[] doInBackground(String... params) {
 
 			// Fetch JSON
 
@@ -402,7 +402,7 @@ public class qBittorrentBinder extends Binder {
 
 				try {
 
-					objects = new myObject[jArray.length()];
+					objects = new torrent[jArray.length()];
 
 					qBittorrentClient.names = new String[jArray.length()];
 
@@ -424,7 +424,7 @@ public class qBittorrentBinder extends Binder {
 						leechs = json.getString(TAG_NUMLEECHS);
 						seeds = json.getString(TAG_NUMSEEDS);
 
-						objects[i] = new myObject(name, size, state, hash,
+						objects[i] = new torrent(name, size, state, hash,
 								info, ratio, progress, leechs, seeds);
 
 						qBittorrentClient.names[i] = name;
@@ -439,7 +439,7 @@ public class qBittorrentBinder extends Binder {
 		}
 
 		@Override
-		protected void onPostExecute(myObject[] result) {
+		protected void onPostExecute(torrent[] result) {
 
 			if (listener != null && result != null) {
 				listener.updateUI(result);
@@ -634,73 +634,6 @@ public class qBittorrentBinder extends Binder {
 	}
 	
 
-	class myObject {
 
-		private String file;
-		private String size;
-		private String info;
-		private String state;
-		private String hash;
-		private String downloadSpeed;
-		private String ratio;
-		private String progress;
-		private String leechs;
-		private String seeds;
-
-		public myObject(String file, String size, String state, String hash,
-				String info, String ratio, String progress, String leechs,
-				String seeds) {
-			this.file = file;
-			this.size = size;
-			this.state = state;
-			this.hash = hash;
-			this.info = info;
-			this.ratio = ratio;
-			this.progress = progress;
-			this.leechs = leechs;
-			this.seeds = seeds;
-		}
-
-		public String getFile() {
-			return this.file;
-		}
-
-		public String getSize() {
-			return this.size;
-		}
-
-		public String getState() {
-			return this.state;
-		}
-
-		public String getHash() {
-			return this.hash;
-		}
-
-		public String getInfo() {
-			return this.info;
-		}
-
-		public String getRatio() {
-			return this.ratio;
-		}
-
-		public String getProgress() {
-			return this.progress;
-		}
-
-		public String getLeechs() {
-			return this.leechs;
-		}
-
-		public String getSeeds() {
-			return this.seeds;
-		}
-
-		public void setInfo(String info) {
-			this.info = info;
-		}
-
-	}
 
 }
