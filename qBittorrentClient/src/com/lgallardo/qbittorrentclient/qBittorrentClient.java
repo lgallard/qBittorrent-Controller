@@ -113,7 +113,7 @@ public class qBittorrentClient extends ListActivity {
 		}
 
 		// Refresh UI
-		refresh();
+		//refresh();
 	}
 
 	// Rotation handling
