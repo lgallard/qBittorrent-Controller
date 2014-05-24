@@ -98,23 +98,23 @@ public class qBittorrentBinder extends Binder {
 	public qBittorrentBinder() {
 
 	}
-	
+
 	public void getTorrenList(String url, String hostname, String protocol, String port,
-			String username, String password, qBittorrentListener listener){
-		
+							  String username, String password, qBittorrentListener listener) {
+
 		qBittorrentTask qtt = new qBittorrentTask(listener);
-		
+
 		qtt.execute(new String[] {url, hostname, protocol, port,username,password});
-		
-		
+
+
 	}
 
 	// This will be the new postCommand method, similar to getTorrenList	
 	public void postCommand(String command, String hash,  String hostname, String protocol, String port,
-			String username, String password, qBittorrentListener listener){
-			
+							String username, String password, qBittorrentListener listener) {
+
 		qBittorrentCommand qtc = new qBittorrentCommand(listener);
-		
+
 		qtc.execute(new String[] {command,hash, hostname, protocol, port,username,password});
 	}
 
@@ -122,7 +122,7 @@ public class qBittorrentBinder extends Binder {
 
 	// Here is where the action happens
 	protected class qBittorrentTask extends
-			AsyncTask<String, Integer, torrent[]> {
+	AsyncTask<String, Integer, torrent[]> {
 
 		qBittorrentListener listener = null;
 		qBittorrentBinder binder;
@@ -165,12 +165,12 @@ public class qBittorrentBinder extends Binder {
 			try {
 
 				AuthScope authScope = new AuthScope(targetHost.getHostName(),
-						targetHost.getPort());
+													targetHost.getPort());
 				UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-						username, password);
+					username, password);
 
 				httpclient.getCredentialsProvider().setCredentials(authScope,
-						credentials);
+																   credentials);
 
 				HttpGet httpget = new HttpGet(url);
 
@@ -187,7 +187,7 @@ public class qBittorrentBinder extends Binder {
 				// Build JSON
 
 				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(is, "iso-8859-1"), 8);
+					new InputStreamReader(is, "iso-8859-1"), 8);
 				StringBuilder sb = new StringBuilder();
 				String line = null;
 				while ((line = reader.readLine()) != null) {
@@ -199,15 +199,20 @@ public class qBittorrentBinder extends Binder {
 				// Creat array from JSON
 				jArray = new JSONArray(json);
 
-			} catch (JSONException e) {
+			}
+			catch (JSONException e) {
 				Log.e("JSON Parser", "Error parsing data " + e.toString());
-			} catch (UnsupportedEncodingException e) {
-			} catch (ClientProtocolException e) {
+			}
+			catch (UnsupportedEncodingException e) {
+			}
+			catch (ClientProtocolException e) {
 				Log.e("JSON", "Client: " + e.toString());
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				Log.e("JSON", "IO: " + e.toString());
 				e.printStackTrace();
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				Log.e("JSON", "Generic: " + e.toString());
 			}
 
@@ -237,11 +242,11 @@ public class qBittorrentBinder extends Binder {
 						name = json.getString(TAG_NAME);
 						size = json.getString(TAG_SIZE);
 						progress = String.format("%.2f",
-								json.getDouble(TAG_PROGRESS) * 100)
-								+ "%";
+												 json.getDouble(TAG_PROGRESS) * 100)
+							+ "%";
 						info = size + " | D:" + json.getString(TAG_DLSPEED)
-								+ " | U:" + json.getString(TAG_UPSPEED) + " | "
-								+ progress;
+							+ " | U:" + json.getString(TAG_UPSPEED) + " | "
+							+ progress;
 						state = json.getString(TAG_STATE);
 						hash = json.getString(TAG_HASH);
 						ratio = json.getString(TAG_RATIO);
@@ -249,11 +254,13 @@ public class qBittorrentBinder extends Binder {
 						seeds = json.getString(TAG_NUMSEEDS);
 
 						objects[i] = new torrent(name, size, state, hash,
-								info, ratio, progress, leechs, seeds);
+												 info, ratio, progress, leechs, seeds);
 
-						qBittorrentClient.names[i] = name;
+						// The service must not depend on an Activity currently running. 
+						//qBittorrentClient.names[i] = name;
 					}
-				} catch (JSONException e) {
+				}
+				catch (JSONException e) {
 					Log.e("MAIN:", e.toString());
 				}
 
@@ -272,13 +279,12 @@ public class qBittorrentBinder extends Binder {
 		}
 
 	}
-	
+
 	// Here is where the action happens
-	private class qBittorrentCommand extends AsyncTask<String, Integer, String>
-	{
+	private class qBittorrentCommand extends AsyncTask<String, Integer, String> {
 
 		private qBittorrentListener listener;
-		
+
 		public qBittorrentCommand(qBittorrentListener listener) {
 			this.listener = listener;
 		}
@@ -286,11 +292,11 @@ public class qBittorrentBinder extends Binder {
 		@Override
 		protected String doInBackground(String... params) {
 
-			
+
 			// qtc.execute(new String[] {command, hash, hostname, protocol, port,username,password});
 
 			//jParser.postCommand(params[0], params[1]);
-			
+
 			String command 	= params[0];
 			String hash 	= params[1];
 			String hostname = params[2];
@@ -300,7 +306,7 @@ public class qBittorrentBinder extends Binder {
 			String password = params[6];
 
 			// move postCommand code to here
-			
+
 
 			String key = "hash";
 
@@ -346,13 +352,13 @@ public class qBittorrentBinder extends Binder {
 			try {
 
 				AuthScope authScope = new AuthScope(targetHost.getHostName(),
-						targetHost.getPort());
+													targetHost.getPort());
 
 				UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-						username, password);
+					username, password);
 
 				httpclient.getCredentialsProvider().setCredentials(authScope,
-						credentials);
+																   credentials);
 
 				HttpPost httpget = new HttpPost(url);
 
@@ -390,12 +396,15 @@ public class qBittorrentBinder extends Binder {
 			}
 
 			catch (UnsupportedEncodingException e) {
-			} catch (ClientProtocolException e) {
+			}
+			catch (ClientProtocolException e) {
 				Log.e("qbittorrent", "Client: " + e.toString());
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				Log.e("qbittorrent", "IO: " + e.toString());
 				e.printStackTrace();
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				Log.e("qbittorrent", "Generic: " + e.toString());
 			}
 
@@ -406,19 +415,19 @@ public class qBittorrentBinder extends Binder {
 				httpclient.getConnectionManager().shutdown();
 			}
 
-			
+
 			return params[0];
 
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
-			
+
 			// TODO: A getTorrentList should be invoked from the Activity
 			// to update the UI
-			
+
 			// Send message to the activity
-			
+
 			int messageId = R.string.connection_error;
 
 			if (result == null) {
@@ -444,11 +453,11 @@ public class qBittorrentBinder extends Binder {
 			if ("addTorrent".equals(result)) {
 				messageId = R.string.torrentAdded;
 			}
-			
+
 			if (listener != null) {
 				listener.sendCommandResult(result);
 			}
-			
+
 		    // this should be moved to the Activity
 
 //			Toast.makeText(getApplicationContext(), messageId,
@@ -456,7 +465,7 @@ public class qBittorrentBinder extends Binder {
 //
 		}
 	}
-	
+
 
 
 
