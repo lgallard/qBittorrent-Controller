@@ -82,8 +82,7 @@
         <activity
             android:name="com.lgallardo.qbittorrentclient.SettingsActivity"
             android:label="@string/title_activity_settings" >
-        </activity>
-        <service android:name="qBittorrent" />       
+        </activity>     
     </application>
 
 </manifest>

@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/gpl.html
  * 
  * Contributors:
- *     Luis M. Gallardo D. - initial implementation
+ *     Luis M. Gallardo D.
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
@@ -43,7 +43,6 @@ import android.widget.Toast;
 public class MainActivity extends ListActivity {
 
 	// URL to get JSON Array
-	// private static String url = "http://192.168.2.172/JSON/";
 	private static String[] urls = new String[1];
 
 	// JSON Node Names
