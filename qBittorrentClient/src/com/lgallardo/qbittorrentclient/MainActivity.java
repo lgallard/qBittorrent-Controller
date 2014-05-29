@@ -335,6 +335,11 @@ public class MainActivity extends ListActivity {
 	}
 	
 	
+	public void pauseAllTorrents() {
+		// Execute the task in background
+		qBittorrentCommand qtc = new qBittorrentCommand();
+		qtc.execute(new String[] { "pauseAll"});
+	}
 	
 	// Get Preferences
 	protected void getPreferences() {

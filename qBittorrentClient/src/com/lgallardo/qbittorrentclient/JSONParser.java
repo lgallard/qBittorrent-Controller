@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/gpl.html
  * 
  * Contributors:
- *     Luis M. Gallardo D. - initial implementation
+ *     Luis M. Gallardo D.
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
