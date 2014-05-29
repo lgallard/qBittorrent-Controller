@@ -96,8 +96,6 @@ public class MainActivity extends ListActivity {
 
 	TextView name1, size1;
 
-	private JSONArray user = null;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -176,13 +174,20 @@ public class MainActivity extends ListActivity {
 		switch (item.getItemId()) {
 		 case R.id.action_add:
 			 // Add URL torrent
-			 addUrlTorrent();
-		
+			 addUrlTorrent();		
 		 return true;
-		case R.id.action_refresh:
-			// Refresh option clicked.
-			refresh();
-			return true;
+			case R.id.action_refresh:
+				// Refresh option clicked.
+				refresh();
+				return true;
+			case R.id.action_pauseall:
+				// Refresh option clicked.
+				pauseAllTorrents();
+				return true;
+			case R.id.action_resumeall:
+				// Refresh option clicked.
+				resumeAllTorrents();
+				return true;
 		case R.id.action_settings:
 			// Settings option clicked.
 			openPreferences();
@@ -412,6 +417,14 @@ public class MainActivity extends ListActivity {
 				messageId = R.string.torrentAdded;
 			}
 			
+			if ("pauseAll".equals(result)) {
+				messageId = R.string.AllTorrentsPaused;
+			}
+
+			if ("resumeAll".equals(result)) {
+				messageId = R.string.AllTorrentsResumed;
+			}
+
 			Toast.makeText(getApplicationContext(),messageId, Toast.LENGTH_LONG).show();
 			
 		}

@@ -13,6 +13,10 @@
 
     <string name="app_name">qBitttorrent Client</string>
     <string name="action_settings">Settings</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_add">Add</string>
+    <string name="action_pauseall">Pause all</string>
+    <string name="action_resumeall">Resume all</string>
     <string name="textview">TextView</string>
     <string name="dialog_message">Network connection failed</string>
     <string name="dialog_title">Error</string>
@@ -29,6 +33,8 @@
     <string name="torrentAdded">Torrent sent!</string>
     <string name="torrentStarted">Torrent started!</string>
     <string name="torrentPaused">Torrent paused!</string>
+    <string name="AllTorrentsPaused">All torrents were paused!</string>
+    <string name="AllTorrentsResumed">All torrents were resumed!</string>
     <string name="torrentDeleled">Torrent deleted!</string>
     <string name="torrentDeletedDrive">Torrent and data deleted!</string>
 

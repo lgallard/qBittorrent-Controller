@@ -14,19 +14,27 @@
         android:id="@+id/action_refresh"
         android:icon="@drawable/ic_action_refresh"
         android:showAsAction="always"
-        android:title="Refresh"/>
-    
-        <item
+        android:title="@string/action_refresh"/>
+    <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_add"
         android:showAsAction="ifRoom"
-        android:title="Add"/>
-    
+        android:title="@string/action_add"/>
+    <item
+        android:id="@+id/action_pauseall"
+        android:icon="@drawable/ic_action_pauseall"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_pauseall"/>
+    <item
+        android:id="@+id/action_resumeall"
+        android:icon="@drawable/ic_action_resumeall"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_resumeall"/>
     <item
         android:id="@+id/action_settings"
-                android:icon="@drawable/ic_action_settings"
+        android:icon="@drawable/ic_action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        android:showAsAction="ifRoom"
         android:title="@string/action_settings"/>
 
 </menu>
