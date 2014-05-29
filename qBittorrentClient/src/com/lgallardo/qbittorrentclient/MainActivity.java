@@ -333,12 +333,17 @@ public class MainActivity extends ListActivity {
 		qBittorrentCommand qtc = new qBittorrentCommand();
 		qtc.execute(new String[] { "addTorrent", url});
 	}
-	
-	
+		
 	public void pauseAllTorrents() {
 		// Execute the task in background
 		qBittorrentCommand qtc = new qBittorrentCommand();
-		qtc.execute(new String[] { "pauseAll"});
+		qtc.execute(new String[] { "pauseAll", null});
+	}
+	
+	public void resumeAllTorrents() {
+		// Execute the task in background
+		qBittorrentCommand qtc = new qBittorrentCommand();
+		qtc.execute(new String[] { "resumeAll", null});
 	}
 	
 	// Get Preferences
