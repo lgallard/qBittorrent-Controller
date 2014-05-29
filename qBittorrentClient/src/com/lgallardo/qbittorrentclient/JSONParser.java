@@ -238,12 +238,16 @@ public class JSONParser {
 			url = "command/deletePerm";
 			key = "hashes";
 		}
-		
 		if ("addTorrent".equals(command)) {
 			url = "command/download";
 			key = "urls";
 		}
-
+		if ("pauseAll".equals(command)) {
+			url = "command/pauseall";
+		}
+		if ("resumeAll".equals(command)) {
+			url = "command/resumeall";
+		}
 		 Log.i("qbittorrent", "url:" + url);
 		 Log.i("qbittorrent", "hostname:" + this.hostname);
 		 Log.i("qbittorrent", "port:" + this.port);
