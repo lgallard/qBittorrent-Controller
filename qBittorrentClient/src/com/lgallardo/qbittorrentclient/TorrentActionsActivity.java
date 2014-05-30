@@ -24,7 +24,7 @@ import android.widget.TextView;
 public class TorrentActionsActivity extends Activity {
 
 	// Torrent variables
-	String name, info, hash, ratio, size, progress, state, leechs, seeds;
+	String name, info, hash, ratio, size, progress, state, leechs, seeds, priority;
 
 	String hostname;
 	String protocol;
@@ -48,6 +48,8 @@ public class TorrentActionsActivity extends Activity {
 		state = intent.getStringExtra(MainActivity.TAG_STATE);
 		leechs = intent.getStringExtra(MainActivity.TAG_NUMLEECHS);
 		seeds = intent.getStringExtra(MainActivity.TAG_NUMSEEDS);
+		priority = intent.getStringExtra(MainActivity.TAG_PRIORITY);
+		
 
 		hostname = intent.getStringExtra("hostname");
 		protocol = intent.getStringExtra("protocol");
@@ -59,17 +61,13 @@ public class TorrentActionsActivity extends Activity {
 
 		TextView nameTextView = (TextView) this.findViewById(R.id.torrentName);
 		TextView infoTextView = (TextView) this.findViewById(R.id.torrentSize);
-		TextView ratioTextView = (TextView) this
-				.findViewById(R.id.torrentRatio);
-		TextView progressTextView = (TextView) this
-				.findViewById(R.id.torrentProgress);
-		TextView stateTextView = (TextView) this
-				.findViewById(R.id.torrentState);
-		TextView leechsTextView = (TextView) this
-				.findViewById(R.id.torrentLeechs);
-		TextView seedsTextView = (TextView) this
-				.findViewById(R.id.torrentSeeds);
+		TextView ratioTextView = (TextView) this.findViewById(R.id.torrentRatio);
+		TextView progressTextView = (TextView) this.findViewById(R.id.torrentProgress);
+		TextView stateTextView = (TextView) this.findViewById(R.id.torrentState);
+		TextView leechsTextView = (TextView) this.findViewById(R.id.torrentLeechs);
+		TextView seedsTextView = (TextView) this.findViewById(R.id.torrentSeeds);
 		TextView hashTextView = (TextView) this.findViewById(R.id.torrentHash);
+		TextView priorityTextView = (TextView) this.findViewById(R.id.torrentPriority);
 
 		nameTextView.setText(name);
 
@@ -80,6 +78,7 @@ public class TorrentActionsActivity extends Activity {
 		leechsTextView.setText("Leechs: " + leechs);
 		seedsTextView.setText("Seeds: " + seeds);
 		hashTextView.setText("Hash: " + hash);
+		priorityTextView.setText("Priority: "+priority);
 
 	}
 

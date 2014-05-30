@@ -12,10 +12,11 @@ class torrent {
 	private String progress;
 	private String leechs;
 	private String seeds;
+	private String priority;
 
 	public torrent(String file, String size, String state, String hash,
 					String info, String ratio, String progress, String leechs,
-					String seeds) {
+					String seeds, String priority) {
 		this.file = file;
 		this.size = size;
 		this.state = state;
@@ -25,6 +26,7 @@ class torrent {
 		this.progress = progress;
 		this.leechs = leechs;
 		this.seeds = seeds;
+		this.priority = priority;
 	}
 
 	public String getFile() {
@@ -61,6 +63,10 @@ class torrent {
 
 	public String getSeeds() {
 		return this.seeds;
+	}
+	
+	public String getPriority(){
+		return this.priority;
 	}
 
 	public void setInfo(String info) {

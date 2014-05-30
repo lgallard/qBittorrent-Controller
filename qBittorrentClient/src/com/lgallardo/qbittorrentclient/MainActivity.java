@@ -62,6 +62,7 @@ public class MainActivity extends ListActivity {
 	protected static final String TAG_NUMLEECHS = "num_leechs";
 	protected static final String TAG_NUMSEEDS = "num_seeds";
 	protected static final String TAG_RATIO = "ratio";
+	protected static final String TAG_PRIORITY = "priority";
 
 	protected static final String TAG_INFO = "info";
 
@@ -91,7 +92,7 @@ public class MainActivity extends ListActivity {
 	private SharedPreferences sharedPrefs;
 	private StringBuilder builderPrefs;
 
-	static myObject[] lines;
+	static torrent[] lines;
 	static String[] names;
 
 	TextView name1, size1;
@@ -295,6 +296,7 @@ public class MainActivity extends ListActivity {
 		intent.putExtra(TAG_STATE, MainActivity.lines[position].getState());
 		intent.putExtra(TAG_NUMLEECHS, MainActivity.lines[position].getLeechs());
 		intent.putExtra(TAG_NUMSEEDS, MainActivity.lines[position].getSeeds());
+		intent.putExtra(TAG_PRIORITY, MainActivity.lines[position].getPriority());
 			
 
 		intent.putExtra(TAG_HASH, MainActivity.lines[position].getHash());
@@ -432,15 +434,15 @@ public class MainActivity extends ListActivity {
 
 	// Here is where the action happens
 	private class qBittorrentTask extends
-			AsyncTask<String, Integer, myObject[]> {
+			AsyncTask<String, Integer, torrent[]> {
 
 		@Override
-		protected myObject[] doInBackground(String... params) {
+		protected torrent[] doInBackground(String... params) {
 
-			String name, size, info, progress, state, hash, ratio, leechs, seeds;
+			String name, size, info, progress, state, hash, ratio, leechs, seeds, priority;
 			
 			
-			myObject[] objects = null;
+			torrent[] torrents = null;
 
 			// Preferences stuff
 			getPreferences();
@@ -456,7 +458,7 @@ public class MainActivity extends ListActivity {
 
 				try {
 
-					objects = new myObject[jArray.length()];
+					torrents = new torrent[jArray.length()];
 
 					MainActivity.names = new String[jArray.length()];
 
@@ -473,9 +475,10 @@ public class MainActivity extends ListActivity {
 						ratio 		= json.getString(TAG_RATIO);
 						leechs 		= json.getString(TAG_NUMLEECHS);
 						seeds 		= json.getString(TAG_NUMSEEDS);
+						priority	= json.getString(TAG_PRIORITY);
 						
-
-						objects[i]	= new myObject(name, size, state, hash,info, ratio, progress, leechs, seeds);
+						
+						torrents[i]	= new torrent(name, size, state, hash,info, ratio, progress, leechs, seeds,priority);
 						
 						MainActivity.names[i] = name;
 					}
@@ -484,12 +487,12 @@ public class MainActivity extends ListActivity {
 				}
 
 			}
-			return objects;
+			return torrents;
 
 		}
 
 		@Override
-		protected void onPostExecute(myObject[] result) {
+		protected void onPostExecute(torrent[] result) {
 
 			if (result == null) {
 
@@ -508,74 +511,6 @@ public class MainActivity extends ListActivity {
 				}
 
 			}
-		}
-
-	}
-
-	class myObject {
-
-		private String file;
-		private String size;
-		private String info;
-		private String state;
-		private String hash;
-		private String downloadSpeed;
-		private String ratio;
-		private String progress;
-		private String leechs;
-		private String seeds;
-	
-
-		public myObject(String file, String size, String state, String hash, String info, String ratio, String progress, String leechs, String seeds) {
-			this.file 		= file;
-			this.size 		= size;
-			this.state 		= state;
-			this.hash 		= hash;
-			this.info 		= info;
-			this.ratio 		= ratio;
-			this.progress	= progress;
-			this.leechs		= leechs;
-			this.seeds		= seeds;
-		}
-
-		public String getFile() {
-			return this.file;
-		}
-
-		public String getSize() {
-			return this.size;
-		}
-
-		public String getState() {
-			return this.state;
-		}
-
-		public String getHash() {
-			return this.hash;
-		}
-
-		public String getInfo() {
-			return this.info;
-		}
-
-		public String getRatio() {
-			return this.ratio;
-		}
-
-		public String getProgress() {
-			return this.progress;
-		}
-
-		public String getLeechs() {
-			return this.leechs;
-		}
-
-		public String getSeeds() {
-			return this.seeds;
-		}
-
-		public void setInfo(String info) {
-			this.info = info;
 		}
 
 	}
