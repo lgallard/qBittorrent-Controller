@@ -13,25 +13,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <LinearLayout
-        android:id="@+id/content_container"
+    <FrameLayout
+        android:id="@+id/one_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:baselineAligned="false" >
-
-        <FrameLayout
-            android:id="@+id/list_frame"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <FrameLayout
-            android:id="@+id/content_frame"
-            android:layout_width="0px"
-            android:layout_height="match_parent"
-            android:layout_weight="2" />
-    </LinearLayout>
+        android:layout_weight="2" />
 
     <ListView
         android:id="@+id/left_drawer"
