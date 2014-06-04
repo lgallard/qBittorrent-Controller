@@ -37,5 +37,15 @@
     <string name="AllTorrentsResumed">All torrents were resumed!</string>
     <string name="torrentDeleled">Torrent deleted!</string>
     <string name="torrentDeletedDrive">Torrent and data deleted!</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string-array name="navigation_drawer_items_array">
+        <item>All</item>
+        <item>Downloading</item>
+        <item>Completed</item>
+        <item>Settings</item>
+        <item>Options</item>
+    </string-array>
 
 </resources>

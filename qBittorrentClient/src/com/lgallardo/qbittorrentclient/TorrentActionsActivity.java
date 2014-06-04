@@ -36,7 +36,7 @@ public class TorrentActionsActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_torrent_actions);
+		setContentView(R.layout.torrent_details);
 
 		Intent intent = getIntent();
 		name = intent.getStringExtra(MainActivity.TAG_NAME);
