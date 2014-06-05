@@ -74,10 +74,10 @@ public final class R {
         public static final int action_resumeall=0x7f0a001d;
         public static final int action_settings=0x7f0a001e;
         public static final int container=0x7f0a0006;
-        public static final int content_container=0x7f0a0003;
         public static final int content_frame=0x7f0a0005;
         public static final int drawer_layout=0x7f0a0000;
         public static final int file=0x7f0a000e;
+        public static final int fragment_container=0x7f0a0003;
         public static final int icon=0x7f0a000d;
         public static final int imageViewIcon=0x7f0a0009;
         public static final int info=0x7f0a000f;

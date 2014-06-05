@@ -205,18 +205,34 @@ public class MainActivity extends FragmentActivity {
 		refresh();
 
 		// Fragments
-		
-		listFragment 	= new ItemstFragment();
-		contentFragment = new TorrentDetailsFragment();
 
-		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager
-				.beginTransaction();
-		
-		fragmentTransaction.add(R.id.list_frame, listFragment);
-		fragmentTransaction.add(R.id.content_frame,contentFragment);
-		
-		fragmentTransaction.commit();
+		// Check whether the activity is using the layout version with
+		// the fragment_container FrameLayout. If so, we must add the first
+		// fragment
+		if (findViewById(R.id.fragment_container) != null) {
+
+			// However, if we're being restored from a previous state,
+			// then we don't need to do anything and should return or else
+			// we could end up with overlapping fragments.
+			if (savedInstanceState != null) {
+				return;
+			}
+
+			// Create an instance of ExampleFragment
+			ListFragment firstFragment = new ItemstFragment();
+
+			// Add the fragment to the 'list_frame' FrameLayout			
+			FragmentManager fragmentManager = getFragmentManager();
+			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+			
+			fragmentTransaction.add(R.id.list_frame, firstFragment);
+
+			fragmentTransaction.commit();
+			
+			// Second fragment wil be added in ItemsFRagment's onListItemClick method
+
+		}
+
 
 		if (savedInstanceState == null) {
 			selectItem(0);
@@ -634,9 +650,9 @@ public class MainActivity extends FragmentActivity {
 
 				try {
 
-//					ListFragment fList = (ListFragment) listFragment;
-//					fList.setListAdapter(new myAdapter());
-					
+					// ListFragment fList = (ListFragment) listFragment;
+					// fList.setListAdapter(new myAdapter());
+
 					listFragment.setListAdapter(new myAdapter());
 
 				} catch (Exception e) {
@@ -716,7 +732,7 @@ public class MainActivity extends FragmentActivity {
 
 		switch (position) {
 		case 0:
-			//fragment = new ItemstFragment();
+			// fragment = new ItemstFragment();
 			refresh();
 			break;
 		case 1:
@@ -730,13 +746,10 @@ public class MainActivity extends FragmentActivity {
 			break;
 		}
 
-		
-		
-		
 		if (fragment != null || listFragment != null || contentFragment != null) {
-//			FragmentManager fragmentManager = getFragmentManager();
-//			fragmentManager.beginTransaction()
-//					.replace(R.id.content_frame, fragment).commit();
+			// FragmentManager fragmentManager = getFragmentManager();
+			// fragmentManager.beginTransaction()
+			// .replace(R.id.content_frame, fragment).commit();
 
 			drawerList.setItemChecked(position, true);
 			drawerList.setSelection(position);
