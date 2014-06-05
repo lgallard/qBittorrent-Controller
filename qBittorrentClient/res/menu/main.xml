@@ -21,15 +21,15 @@
         android:showAsAction="ifRoom"
         android:title="@string/action_add"/>
     <item
-        android:id="@+id/action_pauseall"
-        android:icon="@drawable/ic_action_pauseall"
+        android:id="@+id/action_resume"
+        android:icon="@drawable/ic_action_resume"
         android:showAsAction="ifRoom"
-        android:title="@string/action_pauseall"/>
+        android:title="@string/action_resume"/>
     <item
-        android:id="@+id/action_resumeall"
-        android:icon="@drawable/ic_action_resumeall"
+        android:id="@+id/action_pause"
+        android:icon="@drawable/ic_action_pause"
         android:showAsAction="ifRoom"
-        android:title="@string/action_resumeall"/>
+        android:title="@string/action_pause"/>
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_action_settings"

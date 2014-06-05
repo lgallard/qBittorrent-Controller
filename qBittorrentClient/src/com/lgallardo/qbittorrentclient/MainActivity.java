@@ -111,8 +111,7 @@ public class MainActivity extends FragmentActivity {
 	// For app icon control for nav drawer, add new property on MainActivity
 	private ActionBarDrawerToggle drawerToggle;
 
-	private Fragment fragment, contentFragment = null;
-	private ListFragment listFragment = null;
+	private ListFragment firstFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -219,20 +218,21 @@ public class MainActivity extends FragmentActivity {
 			}
 
 			// Create an instance of ExampleFragment
-			ListFragment firstFragment = new ItemstFragment();
+			firstFragment = new ItemstFragment();
 
-			// Add the fragment to the 'list_frame' FrameLayout			
+			// Add the fragment to the 'list_frame' FrameLayout
 			FragmentManager fragmentManager = getFragmentManager();
-			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-			
+			FragmentTransaction fragmentTransaction = fragmentManager
+					.beginTransaction();
+
 			fragmentTransaction.add(R.id.list_frame, firstFragment);
 
 			fragmentTransaction.commit();
-			
-			// Second fragment wil be added in ItemsFRagment's onListItemClick method
+
+			// Second fragment will be added in ItemsFRagment's onListItemClick
+			// method
 
 		}
-
 
 		if (savedInstanceState == null) {
 			selectItem(0);
@@ -309,6 +309,12 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
+		TorrentDetailsFragment tf = (TorrentDetailsFragment) getFragmentManager()
+				.findFragmentById(R.id.content_frame);
+
+		int position;
+		String hash;
+
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
@@ -322,13 +328,26 @@ public class MainActivity extends FragmentActivity {
 			// Refresh option clicked.
 			refresh();
 			return true;
-		case R.id.action_pauseall:
+		case R.id.action_pause:
 			// Refresh option clicked.
-			pauseAllTorrents();
+			// pauseAllTorrents();
+
+			if (tf != null) {
+				position = tf.position;
+				hash = MainActivity.lines[position].getHash();
+				pauseTorrent(hash);
+			}
 			return true;
-		case R.id.action_resumeall:
+		case R.id.action_resume:
 			// Refresh option clicked.
-			resumeAllTorrents();
+			// resumeAllTorrents();
+
+			if (tf != null) {
+				position = tf.position;
+				hash = MainActivity.lines[position].getHash();
+				startTorrent(hash);
+			}
+
 			return true;
 		case R.id.action_settings:
 			// Settings option clicked.
@@ -653,7 +672,11 @@ public class MainActivity extends FragmentActivity {
 					// ListFragment fList = (ListFragment) listFragment;
 					// fList.setListAdapter(new myAdapter());
 
-					listFragment.setListAdapter(new myAdapter());
+					firstFragment.setListAdapter(new myAdapter());
+
+					// firstFragment.getListView().setItemChecked(0, true);
+					firstFragment.getListView().setChoiceMode(
+							ListView.CHOICE_MODE_SINGLE);
 
 				} catch (Exception e) {
 					// TODO: handle exception
@@ -746,18 +769,19 @@ public class MainActivity extends FragmentActivity {
 			break;
 		}
 
-		if (fragment != null || listFragment != null || contentFragment != null) {
-			// FragmentManager fragmentManager = getFragmentManager();
-			// fragmentManager.beginTransaction()
-			// .replace(R.id.content_frame, fragment).commit();
+		// if (fragment != null || listFragment != null || contentFragment !=
+		// null) {
+		// // FragmentManager fragmentManager = getFragmentManager();
+		// // fragmentManager.beginTransaction()
+		// // .replace(R.id.content_frame, fragment).commit();
 
-			drawerList.setItemChecked(position, true);
-			drawerList.setSelection(position);
-			setTitle(navigationDrawerItemTitles[position]);
-			drawerLayout.closeDrawer(drawerList);
+		drawerList.setItemChecked(position, true);
+		drawerList.setSelection(position);
+		setTitle(navigationDrawerItemTitles[position]);
+		drawerLayout.closeDrawer(drawerList);
 
-		} else {
-			Log.e("MainActivity", "Error in creating fragment");
-		}
+		// } else {
+		// Log.e("MainActivity", "Error in creating fragment");
+		// }
 	}
 }

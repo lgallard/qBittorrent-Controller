@@ -49,7 +49,7 @@ public final class R {
         public static final int ic_action_pauseall=0x7f02000d;
         public static final int ic_action_play=0x7f02000e;
         public static final int ic_action_refresh=0x7f02000f;
-        public static final int ic_action_resumeall=0x7f020010;
+        public static final int ic_action_resume=0x7f020010;
         public static final int ic_action_server_settings=0x7f020011;
         public static final int ic_action_settings=0x7f020012;
         public static final int ic_drawer=0x7f020013;
@@ -65,13 +65,12 @@ public final class R {
     }
     public static final class id {
         public static final int action_add=0x7f0a001b;
-        public static final int action_delete=0x7f0a0021;
-        public static final int action_delete_drive=0x7f0a0022;
-        public static final int action_pause=0x7f0a0020;
-        public static final int action_pauseall=0x7f0a001c;
+        public static final int action_delete=0x7f0a0020;
+        public static final int action_delete_drive=0x7f0a0021;
+        public static final int action_pause=0x7f0a001c;
         public static final int action_play=0x7f0a001f;
         public static final int action_refresh=0x7f0a001a;
-        public static final int action_resumeall=0x7f0a001d;
+        public static final int action_resume=0x7f0a001d;
         public static final int action_settings=0x7f0a001e;
         public static final int container=0x7f0a0006;
         public static final int content_frame=0x7f0a0005;
@@ -120,9 +119,9 @@ public final class R {
         public static final int AllTorrentsPaused=0x7f070016;
         public static final int AllTorrentsResumed=0x7f070017;
         public static final int action_add=0x7f070003;
-        public static final int action_pauseall=0x7f070004;
+        public static final int action_pause=0x7f070004;
         public static final int action_refresh=0x7f070002;
-        public static final int action_resumeall=0x7f070005;
+        public static final int action_resume=0x7f070005;
         public static final int action_settings=0x7f070001;
         public static final int app_name=0x7f070000;
         public static final int cancel=0x7f07000b;

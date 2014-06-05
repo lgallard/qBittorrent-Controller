@@ -15,8 +15,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_add">Add</string>
-    <string name="action_pauseall">Pause all</string>
-    <string name="action_resumeall">Resume all</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_resume">Resume</string>
     <string name="textview">TextView</string>
     <string name="dialog_message">Network connection failed</string>
     <string name="dialog_title">Error</string>

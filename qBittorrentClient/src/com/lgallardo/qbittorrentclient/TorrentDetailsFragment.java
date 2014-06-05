@@ -50,6 +50,15 @@ public class TorrentDetailsFragment extends Fragment {
         if( MainActivity.lines != null){
     		name = MainActivity.lines[position].getFile();
     		size = MainActivity.lines[position].getSize();
+    		hash = MainActivity.lines[position].getHash();
+    		ratio = MainActivity.lines[position].getRatio();
+    		progress = MainActivity.lines[position].getProgress();
+    		state = MainActivity.lines[position].getState();
+    		leechs = MainActivity.lines[position].getLeechs();
+    		seeds = MainActivity.lines[position].getSeeds();
+    		hash = MainActivity.lines[position].getHash();
+    		priority = MainActivity.lines[position].getPriority();
+    		
         }
 
 //		info = intent.getStringExtra(MainActivity.TAG_INFO);
@@ -72,28 +81,24 @@ public class TorrentDetailsFragment extends Fragment {
 //		Log.i("TorrentAA", "port: " + port);
 
 		TextView nameTextView = (TextView) rootView.findViewById(R.id.torrentName);
-		TextView infoTextView = (TextView) rootView.findViewById(R.id.torrentSize);
-//		TextView ratioTextView = (TextView) this.findViewById(R.id.torrentRatio);
-//		TextView progressTextView = (TextView) this.findViewById(R.id.torrentProgress);
-//		TextView stateTextView = (TextView) this.findViewById(R.id.torrentState);
-//		TextView leechsTextView = (TextView) this.findViewById(R.id.torrentLeechs);
-//		TextView seedsTextView = (TextView) this.findViewById(R.id.torrentSeeds);
-//		TextView hashTextView = (TextView) this.findViewById(R.id.torrentHash);
-//		TextView priorityTextView = (TextView) this.findViewById(R.id.torrentPriority);
+		TextView sizeTextView = (TextView) rootView.findViewById(R.id.torrentSize);
+		TextView ratioTextView = (TextView) rootView.findViewById(R.id.torrentRatio);
+		TextView progressTextView = (TextView) rootView.findViewById(R.id.torrentProgress);
+		TextView stateTextView = (TextView) rootView.findViewById(R.id.torrentState);
+		TextView leechsTextView = (TextView) rootView.findViewById(R.id.torrentLeechs);
+		TextView seedsTextView = (TextView) rootView.findViewById(R.id.torrentSeeds);
+		TextView hashTextView = (TextView) rootView.findViewById(R.id.torrentHash);
+		TextView priorityTextView = (TextView) rootView.findViewById(R.id.torrentPriority);
 
 		nameTextView.setText(name);
-
-//		progressTextView.setText("Progress: " + progress);
-		infoTextView.setText("Size: " + size);
-//		ratioTextView.setText("Ratio: " + ratio);
-//		stateTextView.setText("State: " + state);
-//		leechsTextView.setText("Leechs: " + leechs);
-//		seedsTextView.setText("Seeds: " + seeds);
-//		hashTextView.setText("Hash: " + hash);
-//		priorityTextView.setText("Priority: "+priority);
-		
-		
-
+		sizeTextView.setText("Size: " + size);
+		ratioTextView.setText("Ratio: " + ratio);
+		progressTextView.setText("Progress: " + progress);
+		stateTextView.setText("State: " + state);
+		leechsTextView.setText("Leechs: " + leechs);
+		seedsTextView.setText("Seeds: " + seeds);
+		hashTextView.setText("Hash: " + hash);
+		priorityTextView.setText("Priority: "+priority);
         
         //setListAdapter(new myAdapter());
  
