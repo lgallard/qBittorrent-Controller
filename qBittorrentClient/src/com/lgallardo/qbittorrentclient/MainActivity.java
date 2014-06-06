@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,7 +99,7 @@ public class MainActivity extends FragmentActivity {
 	private SharedPreferences sharedPrefs;
 	private StringBuilder builderPrefs;
 
-	static torrent[] lines;
+	static Torrent[] lines;
 	static String[] names;
 
 	TextView name1, size1;
@@ -140,17 +142,24 @@ public class MainActivity extends FragmentActivity {
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 
 		// Drawer item list objects
-		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[5];
+		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[8];
 
-		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_action_all, "All");
-		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_action_downloading,
+		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_all3, "All");
+		drawerItem[1] = new ObjectDrawerItem(R.drawable.downloading,
 				"Downloading");
-		drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_completed,
+		drawerItem[2] = new ObjectDrawerItem(R.drawable.uploading,
 				"Completed");
-		drawerItem[3] = new ObjectDrawerItem(R.drawable.ic_action_completed,
-				"Settings");
-		drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_action_completed,
+		drawerItem[3] = new ObjectDrawerItem(R.drawable.paused,
+				"Paused");
+		drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_active,
+				"Active");
+		drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_action_completed,
+				"Inacctive");
+		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_completed,
 				"Options");
+		drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_action_completed,
+				"Settings");
+
 
 		// Create object for drawer item OnbjectDrawerItem
 		DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this,
@@ -600,14 +609,14 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	// Here is where the action happens
-	private class qBittorrentTask extends AsyncTask<String, Integer, torrent[]> {
+	private class qBittorrentTask extends AsyncTask<String, Integer, Torrent[]> {
 
 		@Override
-		protected torrent[] doInBackground(String... params) {
+		protected Torrent[] doInBackground(String... params) {
 
 			String name, size, info, progress, state, hash, ratio, leechs, seeds, priority;
 
-			torrent[] torrents = null;
+			Torrent[] torrents = null;
 			
 			// Preferences stuff
 			getPreferences();
@@ -624,7 +633,7 @@ public class MainActivity extends FragmentActivity {
 
 				try {
 
-					torrents = new torrent[jArray.length()];
+					torrents = new Torrent[jArray.length()];
 
 					MainActivity.names = new String[jArray.length()];
 
@@ -648,7 +657,7 @@ public class MainActivity extends FragmentActivity {
 						seeds = json.getString(TAG_NUMSEEDS);
 						priority = json.getString(TAG_PRIORITY);
 						
-						torrents[i] = new torrent(name, size, state, hash,
+						torrents[i] = new Torrent(name, size, state, hash,
 								info, ratio, progress, leechs, seeds, priority);
 
 						MainActivity.names[i] = name;
@@ -664,7 +673,7 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		@Override
-		protected void onPostExecute(torrent[] result) {
+		protected void onPostExecute(Torrent[] result) {
 
 			if (result == null) {
 
@@ -673,7 +682,39 @@ public class MainActivity extends FragmentActivity {
 
 			} else {
 
-				MainActivity.lines = result;
+				
+				ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
+				
+				for(int i=0; i<result.length;i++){
+					
+					if(params[1].equals("all")){						 
+						torrentsFiltered.add(result[i]);
+					}
+
+					
+					if(params[1].equals("downloading") && "stalledDL".equals(result[i].getState())){
+						torrentsFiltered.add(result[i]);
+					}
+					
+				}
+				
+				
+				
+				//MainActivity.lines = (torrent[]) torrentsFiltered.toArray();
+				
+				
+				// Get names (delete in background method)
+				MainActivity.names = new String[torrentsFiltered.size()];
+				MainActivity.lines = new Torrent[torrentsFiltered.size()];
+				
+				for(int i=0; i<torrentsFiltered.size() ;i++){
+					
+					Torrent torrent = (Torrent) torrentsFiltered.get(i);
+					
+					MainActivity.names[i] = torrent.getFile();
+					MainActivity.lines[i] = torrent;
+				}
+				
 
 				try {
 

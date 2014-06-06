@@ -1,6 +1,6 @@
 package com.lgallardo.qbittorrentclient;
 
-class torrent {
+class Torrent {
 
 	private String file;
 	private String size;
@@ -14,7 +14,7 @@ class torrent {
 	private String seeds;
 	private String priority;
 
-	public torrent(String file, String size, String state, String hash,
+	public Torrent(String file, String size, String state, String hash,
 					String info, String ratio, String progress, String leechs,
 					String seeds, String priority) {
 		this.file = file;

@@ -52,16 +52,20 @@ public final class R {
         public static final int ic_action_resume=0x7f020010;
         public static final int ic_action_server_settings=0x7f020011;
         public static final int ic_action_settings=0x7f020012;
-        public static final int ic_drawer=0x7f020013;
-        public static final int ic_launcher=0x7f020014;
-        public static final int paused=0x7f020015;
-        public static final int qbittorrent32=0x7f020016;
-        public static final int queued=0x7f020017;
-        public static final int ratio=0x7f020018;
-        public static final int seeding=0x7f020019;
-        public static final int stalleddl=0x7f02001a;
-        public static final int stalledup=0x7f02001b;
-        public static final int uploading=0x7f02001c;
+        public static final int ic_active=0x7f020013;
+        public static final int ic_all=0x7f020014;
+        public static final int ic_all3=0x7f020015;
+        public static final int ic_drawer=0x7f020016;
+        public static final int ic_launcher=0x7f020017;
+        public static final int ic_uploading=0x7f020018;
+        public static final int paused=0x7f020019;
+        public static final int qbittorrent32=0x7f02001a;
+        public static final int queued=0x7f02001b;
+        public static final int ratio=0x7f02001c;
+        public static final int seeding=0x7f02001d;
+        public static final int stalleddl=0x7f02001e;
+        public static final int stalledup=0x7f02001f;
+        public static final int uploading=0x7f020020;
     }
     public static final class id {
         public static final int action_add=0x7f0a001b;
