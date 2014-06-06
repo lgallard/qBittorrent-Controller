@@ -50,8 +50,8 @@ import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
-	// URL to get JSON Array
-	private static String[] urls = new String[1];
+	// Params to get JSON Array
+	private static String[] params = new String[2];
 
 	// JSON Node Names
 	protected static final String TAG_USER = "user";
@@ -268,18 +268,25 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	private void refresh() {
+	private void refresh(){
+		
+		refresh("all");
+		
+	}
+	private void refresh(String state) {
 
 		if (oldVersion == true) {
-			urls[0] = "json/events";
+			params[0] = "json/events";
 		} else {
-			urls[0] = "json/torrents";
+			params[0] = "json/torrents";
 		}
+		
+		params[1] = state;
 
 		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-		if (networkInfo != null && networkInfo.isConnected()) {
+		if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
 			// Execute the task in background
 			qBittorrentTask qtt = new qBittorrentTask();
@@ -288,7 +295,7 @@ public class MainActivity extends FragmentActivity {
 			Toast.makeText(getApplicationContext(), R.string.connecting,
 					Toast.LENGTH_LONG).show();
 
-			qtt.execute(urls);
+			qtt.execute(params);
 		} else {
 
 			// Connection Error message
@@ -345,9 +352,8 @@ public class MainActivity extends FragmentActivity {
 			if (tf != null) {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
-				startTorrent(hash);
+				startTorrent(hash);				
 			}
-
 			return true;
 		case R.id.action_settings:
 			// Settings option clicked.
@@ -602,7 +608,7 @@ public class MainActivity extends FragmentActivity {
 			String name, size, info, progress, state, hash, ratio, leechs, seeds, priority;
 
 			torrent[] torrents = null;
-
+			
 			// Preferences stuff
 			getPreferences();
 
@@ -624,6 +630,7 @@ public class MainActivity extends FragmentActivity {
 
 					for (int i = 0; i < jArray.length(); i++) {
 
+						
 						JSONObject json = jArray.getJSONObject(i);
 
 						name = json.getString(TAG_NAME);
@@ -640,11 +647,12 @@ public class MainActivity extends FragmentActivity {
 						leechs = json.getString(TAG_NUMLEECHS);
 						seeds = json.getString(TAG_NUMSEEDS);
 						priority = json.getString(TAG_PRIORITY);
-
+						
 						torrents[i] = new torrent(name, size, state, hash,
 								info, ratio, progress, leechs, seeds, priority);
 
 						MainActivity.names[i] = name;
+						
 					}
 				} catch (JSONException e) {
 					Log.e("MAIN:", e.toString());
@@ -755,11 +763,10 @@ public class MainActivity extends FragmentActivity {
 
 		switch (position) {
 		case 0:
-			// fragment = new ItemstFragment();
-			refresh();
+			refresh("all");
 			break;
 		case 1:
-			// fragment = new ReadFragment();
+			refresh("downloading");
 			break;
 		case 2:
 			// fragment = new HelpFragment();

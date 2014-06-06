@@ -67,10 +67,10 @@ public final class R {
         public static final int action_add=0x7f0a001b;
         public static final int action_delete=0x7f0a0020;
         public static final int action_delete_drive=0x7f0a0021;
-        public static final int action_pause=0x7f0a001c;
+        public static final int action_pause=0x7f0a001d;
         public static final int action_play=0x7f0a001f;
         public static final int action_refresh=0x7f0a001a;
-        public static final int action_resume=0x7f0a001d;
+        public static final int action_resume=0x7f0a001c;
         public static final int action_settings=0x7f0a001e;
         public static final int container=0x7f0a0006;
         public static final int content_frame=0x7f0a0005;
