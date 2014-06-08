@@ -142,22 +142,22 @@ public class MainActivity extends FragmentActivity {
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 
 		// Drawer item list objects
-		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[8];
+		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[7];
 
-		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_all3, "All");
-		drawerItem[1] = new ObjectDrawerItem(R.drawable.downloading,
+		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_drawer_all, "All");
+		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_drawer_downloading,
 				"Downloading");
-		drawerItem[2] = new ObjectDrawerItem(R.drawable.uploading,
+		drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_drawer_completed,
 				"Completed");
-		drawerItem[3] = new ObjectDrawerItem(R.drawable.paused,
+		drawerItem[3] = new ObjectDrawerItem(R.drawable.ic_drawer_paused,
 				"Paused");
-		drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_active,
+		drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_drawer_active,
 				"Active");
-		drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_action_completed,
+		drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_drawer_inactive,
 				"Inacctive");
-		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_completed,
-				"Options");
-		drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_action_completed,
+//		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_completed,
+//				"Options");
+		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_drawer_settings,
 				"Settings");
 
 
@@ -172,7 +172,7 @@ public class MainActivity extends FragmentActivity {
 		// Get drawer title
 		title = drawerTitle = getTitle();
 
-		// Add the app icon control code inside MainActivity oncreate
+		// Add the application icon control code inside MainActivity onCreate
 
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
@@ -336,18 +336,16 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		switch (item.getItemId()) {
-		case R.id.action_add:
-			// Add URL torrent
-			addUrlTorrent();
-			return true;
 		case R.id.action_refresh:
 			// Refresh option clicked.
 			refresh();
 			return true;
-		case R.id.action_pause:
-			// Refresh option clicked.
-			// pauseAllTorrents();
+		case R.id.action_add:
+			// Add URL torrent
+			addUrlTorrent();
+			return true;
 
+		case R.id.action_pause:
 			if (tf != null) {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
@@ -355,18 +353,31 @@ public class MainActivity extends FragmentActivity {
 			}
 			return true;
 		case R.id.action_resume:
-			// Refresh option clicked.
-			// resumeAllTorrents();
-
 			if (tf != null) {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
 				startTorrent(hash);				
 			}
 			return true;
-		case R.id.action_settings:
-			// Settings option clicked.
-			openPreferences();
+		case R.id.action_delete:
+			if (tf != null) {
+				position = tf.position;
+				hash = MainActivity.lines[position].getHash();
+				deleteTorrent(hash);
+			}
+			return true;
+		case R.id.action_delete_drive:
+			if (tf != null) {
+				position = tf.position;
+				hash = MainActivity.lines[position].getHash();
+				deleteDriveTorrent(hash);
+			}
+			return true;
+		case R.id.action_resume_all:
+			resumeAllTorrents();
+			return true;
+		case R.id.action_pause_all:
+			pauseAllTorrents();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -810,9 +821,17 @@ public class MainActivity extends FragmentActivity {
 			refresh("downloading");
 			break;
 		case 2:
-			// fragment = new HelpFragment();
+			break;			
+		case 3:
 			break;
-
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			// Settings
+			openPreferences();
+			break;
 		default:
 			break;
 		}

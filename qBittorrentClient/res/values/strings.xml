@@ -44,8 +44,10 @@
         <item>All</item>
         <item>Downloading</item>
         <item>Completed</item>
+        <item>Paused</item>
+        <item>Active</item>
+        <item>Inactive</item>
         <item>Settings</item>
-        <item>Options</item>
     </string-array>
 
 </resources>
