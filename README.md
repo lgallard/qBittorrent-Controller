@@ -15,11 +15,3 @@ This is the repository for Android's qBittorrent Client <br>
 	<li>Pause, resume, delete or delete individual torrents with its downloaded data</li>
 	<li>Set a connexion account</li>
 </ul>
-<h2>New features</h2>
-In future releases these features will be available:
-<ul>
-	<li>Auto-update torrents's status</li>
-	<li>Set qBittorrent server's settings from device</li>
-	<li>Download notification, even if the application's UI is not running.</li>
-	<li>Other features</li>
-</ul>
