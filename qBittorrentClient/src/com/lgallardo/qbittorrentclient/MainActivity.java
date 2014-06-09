@@ -701,10 +701,35 @@ public class MainActivity extends FragmentActivity {
 					if(params[1].equals("all")){						 
 						torrentsFiltered.add(result[i]);
 					}
-
+		
+					if(params[1].equals("downloading")){
+						if("downloading".equals(result[i].getState()) || "stalledDL".equals(result[i].getState()) || "pausedDL".equals(result[i].getState())|| "queueDL".equals(result[i].getState()) || "checkingDL".equals(result[i].getState())){
+							torrentsFiltered.add(result[i]);
+						}
+					}
 					
-					if(params[1].equals("downloading") && "stalledDL".equals(result[i].getState())){
-						torrentsFiltered.add(result[i]);
+					if(params[1].equals("completed")){
+						if("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())|| "queueUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState())){
+							torrentsFiltered.add(result[i]);
+						}
+					}
+					
+					if(params[1].equals("paused")){
+						if("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())){
+							torrentsFiltered.add(result[i]);
+						}
+					}
+					
+					if(params[1].equals("active")){
+						if("uploading".equals(result[i].getState()) || "downloading".equals(result[i].getState())){
+							torrentsFiltered.add(result[i]);
+						}
+					}
+					
+					if(params[1].equals("inactive")){
+						if("pausedUP".equals(result[i].getState()) || "pausedDL".equals(result[i].getState()) || "queueUP".equals(result[i].getState())|| "queueDL".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "stalledDL".equals(result[i].getState())){
+							torrentsFiltered.add(result[i]);
+						}
 					}
 					
 				}
@@ -720,7 +745,7 @@ public class MainActivity extends FragmentActivity {
 				
 				for(int i=0; i<torrentsFiltered.size() ;i++){
 					
-					Torrent torrent = (Torrent) torrentsFiltered.get(i);
+					Torrent torrent = torrentsFiltered.get(i);
 					
 					MainActivity.names[i] = torrent.getFile();
 					MainActivity.lines[i] = torrent;
@@ -821,12 +846,16 @@ public class MainActivity extends FragmentActivity {
 			refresh("downloading");
 			break;
 		case 2:
+			refresh("completed");
 			break;			
 		case 3:
+			refresh("paused");
 			break;
 		case 4:
+			refresh("active");
 			break;
 		case 5:
+			refresh("inactive");
 			break;
 		case 6:
 			// Settings
