@@ -11,9 +11,24 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 public class ItemstFragment extends ListFragment {
+	
+	int secondContainer;
 
 	public ItemstFragment() {
 	}
+	
+	public void setSecondFragmentContainer(int container){
+		
+		this.secondContainer = container;
+		
+	}
+	
+	public int getSecondFragmentContainer(){
+		
+		return this.secondContainer;
+		
+	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -21,9 +36,7 @@ public class ItemstFragment extends ListFragment {
 
 		View rootView = inflater.inflate(R.layout.activity_main_original,
 				container, false);
-
-		// setListAdapter(new myAdapter());
-
+		
 		return rootView;
 	}
 
@@ -35,11 +48,12 @@ public class ItemstFragment extends ListFragment {
 		TorrentDetailsFragment fragment = new TorrentDetailsFragment();
 
 		fragment.setPosition(position);
+						
 
 		if (fragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction()
-					.replace(R.id.content_frame, fragment).commit();
+					.replace(this.getSecondFragmentContainer(), fragment).commit();
 		}
 
 		// selection.setText(items[position]);

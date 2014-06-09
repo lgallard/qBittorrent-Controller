@@ -113,7 +113,7 @@ public class MainActivity extends FragmentActivity {
 	// For app icon control for nav drawer, add new property on MainActivity
 	private ActionBarDrawerToggle drawerToggle;
 
-	private ListFragment firstFragment;
+	private ItemstFragment firstFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -229,6 +229,8 @@ public class MainActivity extends FragmentActivity {
 			// Create an instance of ExampleFragment
 			firstFragment = new ItemstFragment();
 
+			firstFragment.setSecondFragmentContainer(R.id.content_frame);
+
 			// Add the fragment to the 'list_frame' FrameLayout
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager
@@ -241,7 +243,33 @@ public class MainActivity extends FragmentActivity {
 			// Second fragment will be added in ItemsFRagment's onListItemClick
 			// method
 
+		}else{
+			
+			// Phones handle just one fragment
+			
+			
+			// However, if we're being restored from a previous state,
+			// then we don't need to do anything and should return or else
+			// we could end up with overlapping fragments.
+			if (savedInstanceState != null) {
+				return;
+			}
+
+			// Create an instance of ExampleFragment
+			firstFragment = new ItemstFragment();
+
+			firstFragment.setSecondFragmentContainer(R.id.one_frame);
+
+			// Add the fragment to the 'list_frame' FrameLayout
+			FragmentManager fragmentManager = getFragmentManager();
+			FragmentTransaction fragmentTransaction = fragmentManager
+					.beginTransaction();
+
+			fragmentTransaction.add(R.id.one_frame, firstFragment);
+
+			fragmentTransaction.commit();
 		}
+			
 
 		if (savedInstanceState == null) {
 			selectItem(0);
