@@ -247,14 +247,6 @@ public class MainActivity extends FragmentActivity {
 			
 			// Phones handle just one fragment
 			
-			
-			// However, if we're being restored from a previous state,
-			// then we don't need to do anything and should return or else
-			// we could end up with overlapping fragments.
-			if (savedInstanceState != null) {
-				return;
-			}
-
 			// Create an instance of ExampleFragment
 			firstFragment = new ItemstFragment();
 
@@ -266,8 +258,7 @@ public class MainActivity extends FragmentActivity {
 					.beginTransaction();
 
 			fragmentTransaction.add(R.id.one_frame, firstFragment);
-			fragmentTransaction.addToBackStack(null);
-			
+						
 			fragmentTransaction.commit();
 		}
 			
@@ -304,6 +295,26 @@ public class MainActivity extends FragmentActivity {
 		} else {
 			container.setOrientation(LinearLayout.VERTICAL);
 		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+//		if (findViewById(R.id.fragment_container) == null) {
+//				
+//			if (firstFragment != null) {
+//				FragmentManager fragmentManager = getFragmentManager();
+//				fragmentManager.beginTransaction()
+//						.replace(R.id.one_frame, firstFragment)
+//						.addToBackStack(null)
+//						.commit();
+//			}			
+//		}
+		
+		   if (getFragmentManager().getBackStackEntryCount() == 0) {
+		        this.finish();
+		    } else {
+		        getFragmentManager().popBackStack();
+		    }
 	}
 
 	private void refresh(){
@@ -348,6 +359,12 @@ public class MainActivity extends FragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		
+//		if(firstFragment != null){
+//		
+//		 menu.findItem(R.id.action_refresh).setVisible(false);
+//		}
+//		
 		return true;
 	}
 

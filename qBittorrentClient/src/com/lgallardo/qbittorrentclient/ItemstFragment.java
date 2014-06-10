@@ -53,45 +53,14 @@ public class ItemstFragment extends ListFragment {
 		if (fragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction()
-					.replace(this.getSecondFragmentContainer(), fragment).commit();
+					.replace(this.getSecondFragmentContainer(), fragment, "second")
+					.addToBackStack(null)
+					.commit();
 		}
 
-		// selection.setText(items[position]);
-
-		// Intent intent = new Intent(this, TorrentActionsActivity.class);
-		//
-		// // Torrent info
-		// intent.putExtra(MainActivity.TAG_NAME,
-		// MainActivity.lines[position].getFile());
-		// intent.putExtra(MainActivity.TAG_SIZE,
-		// MainActivity.lines[position].getSize());
-		// intent.putExtra(MainActivity.TAG_INFO,
-		// MainActivity.lines[position].getInfo());
-		// intent.putExtra(MainActivity.TAG_RATIO,
-		// MainActivity.lines[position].getRatio());
-		// intent.putExtra(MainActivity.TAG_PROGRESS,
-		// MainActivity.lines[position].getProgress());
-		// intent.putExtra(MainActivity.TAG_STATE,
-		// MainActivity.lines[position].getState());
-		// intent.putExtra(MainActivity.TAG_NUMLEECHS,
-		// MainActivity.lines[position].getLeechs());
-		// intent.putExtra(MainActivity.TAG_NUMSEEDS,
-		// MainActivity.lines[position].getSeeds());
-		// intent.putExtra(MainActivity.TAG_PRIORITY,
-		// MainActivity.lines[position].getPriority());
-		//
-		// intent.putExtra(TAG_HASH, MainActivity.lines[position].getHash());
-		//
-		// // Http client params
-		// intent.putExtra("hostname", MainActivity.hostname);
-		// intent.putExtra("protocol", MainActivity.protocol);
-		// intent.putExtra("port", MainActivity.port);
-		// intent.putExtra("username", MainActivity.username);
-		// intent.putExtra("password", MainActivity.password);
-		//
-		// startActivityForResult(intent, MainActivity.ACTION_CODE);
 	}
 
 
+	
 
 }
