@@ -266,7 +266,8 @@ public class MainActivity extends FragmentActivity {
 					.beginTransaction();
 
 			fragmentTransaction.add(R.id.one_frame, firstFragment);
-
+			fragmentTransaction.addToBackStack(null);
+			
 			fragmentTransaction.commit();
 		}
 			
