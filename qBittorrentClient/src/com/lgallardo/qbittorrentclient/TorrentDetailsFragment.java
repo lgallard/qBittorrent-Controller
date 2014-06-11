@@ -1,8 +1,6 @@
 package com.lgallardo.qbittorrentclient;
 
 import android.app.Fragment;
-import android.app.ListFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -107,10 +105,17 @@ public class TorrentDetailsFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 
 		if (menu != null) {
-			menu.findItem(R.id.action_refresh).setVisible(false);
-			Log.i("menu", "Menu deleted");
+//			menu.findItem(R.id.action_refresh).setVisible(false);
+			menu.findItem(R.id.action_add).setVisible(false);
+			menu.findItem(R.id.action_resume_all).setVisible(false);
+			menu.findItem(R.id.action_pause_all).setVisible(false);
+			
+			menu.findItem(R.id.action_resume).setVisible(true);
+			menu.findItem(R.id.action_pause).setVisible(true);
+			menu.findItem(R.id.action_delete).setVisible(true);
+			menu.findItem(R.id.action_delete_drive).setVisible(true);
+	
 		}
-
 	}
 
 }
