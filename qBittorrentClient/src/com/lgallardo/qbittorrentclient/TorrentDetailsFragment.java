@@ -1,6 +1,7 @@
 package com.lgallardo.qbittorrentclient;
 
 import android.app.Fragment;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,8 +9,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.app.Activity;
 
 public class TorrentDetailsFragment extends Fragment {
 
@@ -43,6 +46,7 @@ public class TorrentDetailsFragment extends Fragment {
 		// Tell the host activity that your fragment has menu options that it
 		// wants to add/replace/delete using the onCreateOptionsMenu method.
 		setHasOptionsMenu(true);
+
 
 		View rootView = inflater.inflate(R.layout.torrent_details, container,
 				false);
@@ -101,9 +105,10 @@ public class TorrentDetailsFragment extends Fragment {
 
 	// @Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.torrent_details, menu);
-		super.onCreateOptionsMenu(menu, inflater);
+//		inflater.inflate(R.menu.torrent_details, menu);
+//		super.onCreateOptionsMenu(menu, inflater);
 
+		
 		if (menu != null) {
 //			menu.findItem(R.id.action_refresh).setVisible(false);
 			menu.findItem(R.id.action_add).setVisible(false);

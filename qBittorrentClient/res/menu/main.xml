@@ -20,9 +20,6 @@
         android:icon="@drawable/ic_action_add"
         android:showAsAction="always"
         android:title="@string/action_add"/>
- 
-
-
     <item
         android:id="@+id/action_resume_all"
         android:icon="@drawable/ic_action_resume"
@@ -33,5 +30,26 @@
         android:icon="@drawable/ic_action_pause"
         android:showAsAction="ifRoom"
         android:title="Pause all"/>
+    
+    <item
+        android:id="@+id/action_resume"
+        android:icon="@drawable/ic_action_resume"
+        android:showAsAction="always"
+        android:title="@string/action_resume"/>
+    <item
+        android:id="@+id/action_pause"
+        android:icon="@drawable/ic_action_pause"
+        android:showAsAction="always"
+        android:title="@string/action_pause"/>
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_action_delete"
+        android:showAsAction="ifRoom"
+        android:title="Delete"/>
+    <item
+        android:id="@+id/action_delete_drive"
+        android:icon="@drawable/ic_action_delete_drive"
+        android:showAsAction="ifRoom"
+        android:title="Delete data"/>
 
 </menu>
