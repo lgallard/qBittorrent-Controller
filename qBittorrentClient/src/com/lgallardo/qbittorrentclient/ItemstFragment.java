@@ -17,6 +17,7 @@ import android.widget.ListView;
 public class ItemstFragment extends ListFragment {
 
 	int secondContainer;
+	TorrentDetailsFragment detailFragment;;
 
 	public ItemstFragment() {
 	}
@@ -50,14 +51,20 @@ public class ItemstFragment extends ListFragment {
 	// @Override
 	public void onListItemClick(ListView parent, View v, int position, long id) {
 
-		TorrentDetailsFragment fragment = new TorrentDetailsFragment();
-		
-		fragment.setPosition(position);
+		ListItemClicked(position);
 
-		if (fragment != null) {
+	}
+	
+	public void ListItemClicked(int position) {
+
+		detailFragment = new TorrentDetailsFragment();
+		
+		detailFragment.setPosition(position);
+
+		if (detailFragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction()
-					.replace(this.getSecondFragmentContainer(), fragment)
+					.replace(this.getSecondFragmentContainer(), detailFragment)
 					.addToBackStack(null).commit();
 		}
 

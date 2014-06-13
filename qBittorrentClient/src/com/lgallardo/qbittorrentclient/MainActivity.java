@@ -10,8 +10,24 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +69,7 @@ import android.widget.Toast;
 public class MainActivity extends FragmentActivity {
 
 	// Params to get JSON Array
-	private static String[] params = new String[2];
+	private static String[] params = new String[3];
 
 	// JSON Node Names
 	protected static final String TAG_USER = "user";
@@ -317,11 +333,17 @@ public class MainActivity extends FragmentActivity {
 
 	private void refresh() {
 
-		refresh("all");
+		refresh("all", false);
 
 	}
 
 	private void refresh(String state) {
+
+		refresh(state, false);
+
+	}
+
+	private void refresh(String state, boolean clear) {
 
 		if (oldVersion == true) {
 			params[0] = "json/events";
@@ -330,6 +352,12 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		params[1] = state;
+
+		if (clear) {
+			params[2] = "clear";
+		} else {
+			params[2] = "";
+		}
 
 		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -340,11 +368,12 @@ public class MainActivity extends FragmentActivity {
 			// Execute the task in background
 			qBittorrentTask qtt = new qBittorrentTask();
 
+			qtt.execute(params);
+
 			// Connecting message
 			Toast.makeText(getApplicationContext(), R.string.connecting,
 					Toast.LENGTH_LONG).show();
 
-			qtt.execute(params);
 		} else {
 
 			// Connection Error message
@@ -543,6 +572,7 @@ public class MainActivity extends FragmentActivity {
 		// Execute the task in background
 		qBittorrentCommand qtc = new qBittorrentCommand();
 		qtc.execute(new String[] { "start", hash });
+
 	}
 
 	public void pauseTorrent(String hash) {
@@ -658,6 +688,31 @@ public class MainActivity extends FragmentActivity {
 
 			Toast.makeText(getApplicationContext(), messageId,
 					Toast.LENGTH_LONG).show();
+			
+			//TODO: Delete this case, and consider each button case (delete and delete with drive must refresh with clean)
+
+			switch (drawerList.getCheckedItemPosition()) {
+			case 0:
+				refresh("all");
+				break;
+			case 1:
+				refresh("downloading");
+				break;
+			case 2:
+				refresh("completed");
+				break;
+			case 3:
+				refresh("paused");
+				break;
+			case 4:
+				refresh("active");
+				break;
+			case 5:
+				refresh("inactive");
+				break;
+			default:
+				break;
+			}
 
 		}
 	}
@@ -806,14 +861,41 @@ public class MainActivity extends FragmentActivity {
 
 				try {
 
-					// ListFragment fList = (ListFragment) listFragment;
-					// fList.setListAdapter(new myAdapter());
+					ListView lv = firstFragment.getListView();
+					lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+					int position = lv.getCheckedItemPosition();
+
+					Log.i("position", "Position: " + position);
+					if (position < 0) {
+						position = 0;
+					}
 
 					firstFragment.setListAdapter(new myAdapter());
 
-					// firstFragment.getListView().setItemChecked(0, true);
-					firstFragment.getListView().setChoiceMode(
-							ListView.CHOICE_MODE_SINGLE);
+					// lv.clearChoices();
+
+					// Also update the second fragment (if it doesn't come from
+					// drawer)
+					if (params[2].equals("clear") && lv.getCount() > 0) {
+						lv.smoothScrollToPosition(0);
+						lv.setSelection(0);
+						lv.setItemChecked(0, true);
+						firstFragment.ListItemClicked(0);
+					}
+					
+					if (params[2].equals("") && lv.getCount() > 0) {
+						
+						lv.smoothScrollToPosition(position);
+						lv.setSelection(position);
+						lv.setItemChecked(position, true);
+						firstFragment.ListItemClicked(position);
+					
+						
+						Log.i("params -test", "params[2] is: (" +params[2]+")");
+						
+						
+					}
 
 				} catch (Exception e) {
 					// TODO: handle exception
@@ -892,22 +974,22 @@ public class MainActivity extends FragmentActivity {
 
 		switch (position) {
 		case 0:
-			refresh("all");
+			refresh("all", true);
 			break;
 		case 1:
-			refresh("downloading");
+			refresh("downloading", true);
 			break;
 		case 2:
-			refresh("completed");
+			refresh("completed", true);
 			break;
 		case 3:
-			refresh("paused");
+			refresh("paused", true);
 			break;
 		case 4:
-			refresh("active");
+			refresh("active", true);
 			break;
 		case 5:
-			refresh("inactive");
+			refresh("inactive", true);
 			break;
 		case 6:
 			// Settings
