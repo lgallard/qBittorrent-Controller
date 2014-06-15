@@ -10,34 +10,15 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -130,6 +111,7 @@ public class MainActivity extends FragmentActivity {
 	private ActionBarDrawerToggle drawerToggle;
 
 	private ItemstFragment firstFragment;
+	private AboutFragment secondFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -241,17 +223,24 @@ public class MainActivity extends FragmentActivity {
 				return;
 			}
 
-			// Create an instance of ExampleFragment
+			// This fragment will hold the list of torrents
 			firstFragment = new ItemstFragment();
 
+			// Set the second fragments container
 			firstFragment.setSecondFragmentContainer(R.id.content_frame);
-
+			
+			
+			// This i the second fragment, holding a default message at the beginning
+			secondFragment = new AboutFragment();
+			
+			
 			// Add the fragment to the 'list_frame' FrameLayout
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager
 					.beginTransaction();
 
 			fragmentTransaction.add(R.id.list_frame, firstFragment);
+			fragmentTransaction.add(R.id.content_frame, secondFragment);
 
 			fragmentTransaction.commit();
 
@@ -875,13 +864,23 @@ public class MainActivity extends FragmentActivity {
 
 					// lv.clearChoices();
 
-					// Also update the second fragment (if it doesn't come from
+					// Also update the second fragment (if it comes from the
 					// drawer)
 					if (params[2].equals("clear") && lv.getCount() > 0) {
 						lv.smoothScrollToPosition(0);
 						lv.setSelection(0);
 						lv.setItemChecked(0, true);
 						firstFragment.ListItemClicked(0);
+						
+						AboutFragment aboutFragment = new AboutFragment();
+					
+						if (aboutFragment != null) {
+							FragmentManager fragmentManager = getFragmentManager();
+							fragmentManager.beginTransaction()
+									.replace(R.id.content_frame, aboutFragment)
+									.commit();
+						}
+						
 					}
 					
 					if (params[2].equals("") && lv.getCount() > 0) {

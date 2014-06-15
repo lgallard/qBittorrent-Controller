@@ -1,16 +1,42 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
-	
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/qBittorrent_logo"
+        android:layout_marginTop="54dp"
+        android:text="Manage all your torrent from your Android using qBittorent Client" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/qBittorrent_logo"
+        android:layout_centerHorizontal="true"
+        android:text="qBitttorrent Client"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
-        android:id="@+id/ic_launcher"
+        android:id="@+id/qBittorrent_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp"
+        android:paddingRight="10dp"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/TextView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:paddingRight="10dp" />
-	
-    
-</LinearLayout>
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="22dp"
+        android:text="Usage: First" />
+
+</RelativeLayout>
