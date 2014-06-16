@@ -56,6 +56,15 @@ public class ItemstFragment extends ListFragment {
 	}
 	
 	public void ListItemClicked(int position) {
+		
+		ListView lv = getListView();
+		
+		int count = lv.getCount();
+		
+		if(count == 1 && lv.getItemAtPosition(0).equals(MainActivity.NO_RESULTS)){
+		
+			return;
+		}
 
 		detailFragment = new TorrentDetailsFragment();
 		

@@ -25,5 +25,21 @@ public class AboutFragment extends Fragment {
 
 		return rootView;
 	}
+	
+	// @Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		if (menu != null) {
+			menu.findItem(R.id.action_refresh).setVisible(true);
+			menu.findItem(R.id.action_add).setVisible(true);
+			menu.findItem(R.id.action_resume_all).setVisible(true);
+			menu.findItem(R.id.action_pause_all).setVisible(true);
+			
+			menu.findItem(R.id.action_resume).setVisible(false);
+			menu.findItem(R.id.action_pause).setVisible(false);
+			menu.findItem(R.id.action_delete).setVisible(false);
+			menu.findItem(R.id.action_delete_drive).setVisible(false);
+	
+		}
+	}
 
 }

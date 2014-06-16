@@ -92,6 +92,8 @@ public class MainActivity extends FragmentActivity {
 	protected static String password;
 	protected static boolean oldVersion;
 
+	protected static String NO_RESULTS = "No torrents found";
+
 	// Preferences fields
 	private SharedPreferences sharedPrefs;
 	private StringBuilder builderPrefs;
@@ -228,12 +230,11 @@ public class MainActivity extends FragmentActivity {
 
 			// Set the second fragments container
 			firstFragment.setSecondFragmentContainer(R.id.content_frame);
-			
-			
-			// This i the second fragment, holding a default message at the beginning
+
+			// This i the second fragment, holding a default message at the
+			// beginning
 			secondFragment = new AboutFragment();
-			
-			
+
 			// Add the fragment to the 'list_frame' FrameLayout
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager
@@ -381,12 +382,9 @@ public class MainActivity extends FragmentActivity {
 		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public TorrentDetailsFragment getTorrentDetailsFragment() {
 
 		TorrentDetailsFragment tf = null;
-		int position;
-		String hash;
 
 		if (findViewById(R.id.fragment_container) != null) {
 			tf = (TorrentDetailsFragment) getFragmentManager()
@@ -400,6 +398,15 @@ public class MainActivity extends FragmentActivity {
 			}
 
 		}
+		return tf;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		TorrentDetailsFragment tf = null;
+		int position;
+		String hash;
 
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
@@ -437,6 +444,9 @@ public class MainActivity extends FragmentActivity {
 			return true;
 
 		case R.id.action_pause:
+
+			tf = this.getTorrentDetailsFragment();
+
 			if (tf != null) {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
@@ -446,6 +456,9 @@ public class MainActivity extends FragmentActivity {
 			}
 			return true;
 		case R.id.action_resume:
+
+			tf = this.getTorrentDetailsFragment();
+
 			if (tf != null) {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
@@ -453,6 +466,9 @@ public class MainActivity extends FragmentActivity {
 			}
 			return true;
 		case R.id.action_delete:
+
+			tf = this.getTorrentDetailsFragment();
+
 			if (tf != null) {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
@@ -460,6 +476,9 @@ public class MainActivity extends FragmentActivity {
 			}
 			return true;
 		case R.id.action_delete_drive:
+
+			tf = this.getTorrentDetailsFragment();
+
 			if (tf != null) {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
@@ -677,8 +696,9 @@ public class MainActivity extends FragmentActivity {
 
 			Toast.makeText(getApplicationContext(), messageId,
 					Toast.LENGTH_LONG).show();
-			
-			//TODO: Delete this case, and consider each button case (delete and delete with drive must refresh with clean)
+
+			// TODO: Delete this case, and consider each button case (delete and
+			// delete with drive must refresh with clean)
 
 			switch (drawerList.getCheckedItemPosition()) {
 			case 0:
@@ -851,49 +871,65 @@ public class MainActivity extends FragmentActivity {
 				try {
 
 					ListView lv = firstFragment.getListView();
-					lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-					int position = lv.getCheckedItemPosition();
+					// No results
+					if (torrentsFiltered.size() > 0) {
 
-					Log.i("position", "Position: " + position);
-					if (position < 0) {
-						position = 0;
-					}
+						lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-					firstFragment.setListAdapter(new myAdapter());
+						int position = lv.getCheckedItemPosition();
 
-					// lv.clearChoices();
-
-					// Also update the second fragment (if it comes from the
-					// drawer)
-					if (params[2].equals("clear") && lv.getCount() > 0) {
-						lv.smoothScrollToPosition(0);
-						lv.setSelection(0);
-						lv.setItemChecked(0, true);
-						firstFragment.ListItemClicked(0);
-						
-						AboutFragment aboutFragment = new AboutFragment();
-					
-						if (aboutFragment != null) {
-							FragmentManager fragmentManager = getFragmentManager();
-							fragmentManager.beginTransaction()
-									.replace(R.id.content_frame, aboutFragment)
-									.commit();
+						Log.i("position", "Position: " + position);
+						if (position < 0) {
+							position = 0;
 						}
-						
-					}
-					
-					if (params[2].equals("") && lv.getCount() > 0) {
-						
-						lv.smoothScrollToPosition(position);
-						lv.setSelection(position);
-						lv.setItemChecked(position, true);
-						firstFragment.ListItemClicked(position);
-					
-						
-						Log.i("params -test", "params[2] is: (" +params[2]+")");
-						
-						
+
+						firstFragment.setListAdapter(new myAdapter());
+
+						// lv.clearChoices();
+
+						// Also update the second fragment (if it comes from the
+						// drawer)
+						if (params[2].equals("clear") && lv.getCount() > 0) {
+							lv.smoothScrollToPosition(0);
+							lv.setSelection(0);
+							lv.setItemChecked(0, true);
+							firstFragment.ListItemClicked(0);
+
+							AboutFragment aboutFragment = new AboutFragment();
+
+							if (aboutFragment != null) {
+								FragmentManager fragmentManager = getFragmentManager();
+								fragmentManager
+										.beginTransaction()
+										.replace(R.id.content_frame,
+												aboutFragment)
+										.addToBackStack(null).commit();
+							}
+
+						}
+
+						if (params[2].equals("") && lv.getCount() > 0) {
+
+							lv.smoothScrollToPosition(position);
+							lv.setSelection(position);
+							lv.setItemChecked(position, true);
+							firstFragment.ListItemClicked(position);
+
+							Log.i("params -test", "params[2] is: (" + params[2]
+									+ ")");
+
+						}
+
+					} else {
+
+						// No results
+
+						String[] emptyList = new String[] { NO_RESULTS };
+						firstFragment.setListAdapter(new ArrayAdapter<String>(
+								MainActivity.this, R.layout.no_items_found,
+								R.id.no_results, emptyList));
+
 					}
 
 				} catch (Exception e) {
@@ -903,7 +939,6 @@ public class MainActivity extends FragmentActivity {
 
 			}
 		}
-
 	}
 
 	class myAdapter extends ArrayAdapter<String> {
