@@ -31,12 +31,22 @@
         android:src="@drawable/ic_launcher" />
 
     <TextView
-        android:id="@+id/TextView01"
+        android:id="@+id/TextViewHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView2"
         android:layout_marginTop="22dp"
-        android:text="Usage: First" />
+        android:text="Hint:" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/TextViewHint"
+        android:layout_marginTop="16dp"
+        android:layout_toRightOf="@+id/TextViewHint"
+        android:text="To start using the client, set your qBittorrent server&apos;s settings and account by selecting &apos;Settings&apos; from the drawer menu" />
 
 </RelativeLayout>
