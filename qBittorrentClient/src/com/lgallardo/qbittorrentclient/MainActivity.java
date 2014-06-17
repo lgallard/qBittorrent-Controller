@@ -301,25 +301,25 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	@Override
-	public void onBackPressed() {
-		// if (findViewById(R.id.fragment_container) == null) {
-		//
-		// if (firstFragment != null) {
-		// FragmentManager fragmentManager = getFragmentManager();
-		// fragmentManager.beginTransaction()
-		// .replace(R.id.one_frame, firstFragment)
-		// .addToBackStack(null)
-		// .commit();
-		// }
-		// }
-
-		if (getFragmentManager().getBackStackEntryCount() == 0) {
-			this.finish();
-		} else {
-			getFragmentManager().popBackStack();
-		}
-	}
+	// @Override
+	// public void onBackPressed() {
+	// // if (findViewById(R.id.fragment_container) == null) {
+	// //
+	// // if (firstFragment != null) {
+	// // FragmentManager fragmentManager = getFragmentManager();
+	// // fragmentManager.beginTransaction()
+	// // .replace(R.id.one_frame, firstFragment)
+	// // .addToBackStack(null)
+	// // .commit();
+	// // }
+	// // }
+	//
+	// if (getFragmentManager().getBackStackEntryCount() == 0) {
+	// this.finish();
+	// } else {
+	// getFragmentManager().popBackStack();
+	// }
+	// }
 
 	private void refresh() {
 
@@ -872,53 +872,26 @@ public class MainActivity extends FragmentActivity {
 
 					ListView lv = firstFragment.getListView();
 
-					// No results
+					// Got some results
 					if (torrentsFiltered.size() > 0) {
 
 						lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-						int position = lv.getCheckedItemPosition();
-
-						Log.i("position", "Position: " + position);
-						if (position < 0) {
-							position = 0;
-						}
-
 						firstFragment.setListAdapter(new myAdapter());
-
-						// lv.clearChoices();
 
 						// Also update the second fragment (if it comes from the
 						// drawer)
-						if (params[2].equals("clear") && lv.getCount() > 0) {
-							lv.smoothScrollToPosition(0);
-							lv.setSelection(0);
-							lv.setItemChecked(0, true);
-							firstFragment.ListItemClicked(0);
+						lv.setSelection(0);
+						lv.setItemChecked(0, false);
+						firstFragment.ListItemClicked(0);
 
-							AboutFragment aboutFragment = new AboutFragment();
+						AboutFragment aboutFragment = new AboutFragment();
 
-							if (aboutFragment != null) {
-								FragmentManager fragmentManager = getFragmentManager();
-								fragmentManager
-										.beginTransaction()
-										.replace(R.id.content_frame,
-												aboutFragment)
-										.addToBackStack(null).commit();
-							}
-
-						}
-
-						if (params[2].equals("") && lv.getCount() > 0) {
-
-							lv.smoothScrollToPosition(position);
-							lv.setSelection(position);
-							lv.setItemChecked(position, true);
-							firstFragment.ListItemClicked(position);
-
-							Log.i("params -test", "params[2] is: (" + params[2]
-									+ ")");
-
+						if (aboutFragment != null) {
+							FragmentManager fragmentManager = getFragmentManager();
+							fragmentManager.beginTransaction()
+									.replace(R.id.content_frame, aboutFragment)
+									.commit();
 						}
 
 					} else {

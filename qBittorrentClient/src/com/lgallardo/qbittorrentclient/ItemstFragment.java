@@ -54,27 +54,28 @@ public class ItemstFragment extends ListFragment {
 		ListItemClicked(position);
 
 	}
-	
+
 	public void ListItemClicked(int position) {
-		
+
 		ListView lv = getListView();
-		
+
 		int count = lv.getCount();
-		
-		if(count == 1 && lv.getItemAtPosition(0).equals(MainActivity.NO_RESULTS)){
-		
+
+		if (count == 1
+				&& lv.getItemAtPosition(0).equals(MainActivity.NO_RESULTS)) {
+
 			return;
 		}
 
 		detailFragment = new TorrentDetailsFragment();
-		
+
 		detailFragment.setPosition(position);
 
 		if (detailFragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction()
 					.replace(this.getSecondFragmentContainer(), detailFragment)
-					.addToBackStack(null).commit();
+					.commit();
 		}
 
 	}
@@ -84,7 +85,6 @@ public class ItemstFragment extends ListFragment {
 		// inflater.inflate(R.menu.main, menu);
 		// super.onCreateOptionsMenu(menu, inflater);
 
-		
 		if (menu != null) {
 			menu.findItem(R.id.action_refresh).setVisible(true);
 			menu.findItem(R.id.action_add).setVisible(true);
