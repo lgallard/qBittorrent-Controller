@@ -47,11 +47,10 @@ public class TorrentDetailsFragment extends Fragment {
 		// wants to add/replace/delete using the onCreateOptionsMenu method.
 		setHasOptionsMenu(true);
 
-
 		View rootView = inflater.inflate(R.layout.torrent_details, container,
 				false);
 
-		if (MainActivity.lines != null) {
+		if (MainActivity.lines != null && position != -1) {
 			name = MainActivity.lines[position].getFile();
 			size = MainActivity.lines[position].getSize();
 			hash = MainActivity.lines[position].getHash();
@@ -63,36 +62,35 @@ public class TorrentDetailsFragment extends Fragment {
 			hash = MainActivity.lines[position].getHash();
 			priority = MainActivity.lines[position].getPriority();
 
+			TextView nameTextView = (TextView) rootView
+					.findViewById(R.id.torrentName);
+			TextView sizeTextView = (TextView) rootView
+					.findViewById(R.id.torrentSize);
+			TextView ratioTextView = (TextView) rootView
+					.findViewById(R.id.torrentRatio);
+			TextView progressTextView = (TextView) rootView
+					.findViewById(R.id.torrentProgress);
+			TextView stateTextView = (TextView) rootView
+					.findViewById(R.id.torrentState);
+			TextView leechsTextView = (TextView) rootView
+					.findViewById(R.id.torrentLeechs);
+			TextView seedsTextView = (TextView) rootView
+					.findViewById(R.id.torrentSeeds);
+			TextView hashTextView = (TextView) rootView
+					.findViewById(R.id.torrentHash);
+			TextView priorityTextView = (TextView) rootView
+					.findViewById(R.id.torrentPriority);
+
+			nameTextView.setText(name);
+			sizeTextView.setText("Size: " + size);
+			ratioTextView.setText("Ratio: " + ratio);
+			progressTextView.setText("Progress: " + progress);
+			stateTextView.setText("State: " + state);
+			leechsTextView.setText("Leechs: " + leechs);
+			seedsTextView.setText("Seeds: " + seeds);
+			hashTextView.setText("Hash: " + hash);
+			priorityTextView.setText("Priority: " + priority);
 		}
-
-		TextView nameTextView = (TextView) rootView
-				.findViewById(R.id.torrentName);
-		TextView sizeTextView = (TextView) rootView
-				.findViewById(R.id.torrentSize);
-		TextView ratioTextView = (TextView) rootView
-				.findViewById(R.id.torrentRatio);
-		TextView progressTextView = (TextView) rootView
-				.findViewById(R.id.torrentProgress);
-		TextView stateTextView = (TextView) rootView
-				.findViewById(R.id.torrentState);
-		TextView leechsTextView = (TextView) rootView
-				.findViewById(R.id.torrentLeechs);
-		TextView seedsTextView = (TextView) rootView
-				.findViewById(R.id.torrentSeeds);
-		TextView hashTextView = (TextView) rootView
-				.findViewById(R.id.torrentHash);
-		TextView priorityTextView = (TextView) rootView
-				.findViewById(R.id.torrentPriority);
-
-		nameTextView.setText(name);
-		sizeTextView.setText("Size: " + size);
-		ratioTextView.setText("Ratio: " + ratio);
-		progressTextView.setText("Progress: " + progress);
-		stateTextView.setText("State: " + state);
-		leechsTextView.setText("Leechs: " + leechs);
-		seedsTextView.setText("Seeds: " + seeds);
-		hashTextView.setText("Hash: " + hash);
-		priorityTextView.setText("Priority: " + priority);
 
 		return rootView;
 	}
@@ -106,16 +104,16 @@ public class TorrentDetailsFragment extends Fragment {
 	// @Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		if (menu != null) {
-//			menu.findItem(R.id.action_refresh).setVisible(false);
+			// menu.findItem(R.id.action_refresh).setVisible(false);
 			menu.findItem(R.id.action_add).setVisible(false);
 			menu.findItem(R.id.action_resume_all).setVisible(false);
 			menu.findItem(R.id.action_pause_all).setVisible(false);
-			
+
 			menu.findItem(R.id.action_resume).setVisible(true);
 			menu.findItem(R.id.action_pause).setVisible(true);
 			menu.findItem(R.id.action_delete).setVisible(true);
 			menu.findItem(R.id.action_delete_drive).setVisible(true);
-	
+
 		}
 	}
 

@@ -4,14 +4,6 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/qBittorrent_logo"
-        android:layout_marginTop="54dp"
-        android:text="Manage all your torrent from your Android using qBittorent Client" />
-
-    <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,22 +23,30 @@
         android:src="@drawable/ic_launcher" />
 
     <TextView
-        android:id="@+id/TextViewHint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="22dp"
-        android:text="Hint:" />
-
-    <TextView
-        android:id="@+id/TextView01"
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/TextViewHint"
-        android:layout_marginTop="16dp"
-        android:layout_toRightOf="@+id/TextViewHint"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="15dp"
         android:text="To start using the client, set your qBittorrent server&apos;s settings and account by selecting &apos;Settings&apos; from the drawer menu" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView3"
+        android:layout_marginTop="15dp"
+        android:text="Press the refresh button on the menu to refresh the results, or choose an option from the drawer menu to get the torrent list from the server." />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="15dp"
+        android:text="Manage all your torrent from your Android using qBittorent Client" />
 
 </RelativeLayout>

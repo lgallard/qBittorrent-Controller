@@ -75,7 +75,7 @@ public class ItemstFragment extends ListFragment {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction()
 					.replace(this.getSecondFragmentContainer(), detailFragment)
-					.commit();
+					.addToBackStack(null).commit();
 		}
 
 	}
