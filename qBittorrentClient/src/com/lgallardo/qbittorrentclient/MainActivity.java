@@ -624,20 +624,18 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	// Delay method
-	public void delay(int seconds) {
-		final int milliseconds = seconds * 1000;
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				final Handler handler = new Handler();
-				handler.postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						System.out.println("XXX"); // add your code here
-					}
-				}, milliseconds);
-			}
-		});
+	public void refreshWithDelay(final String state, int seconds) {
+		
+		seconds *= 1000;
+		
+		final Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+		    @Override
+		    public void run() {
+		        // Do something after 5s = 5000ms
+		    	refresh(state, true);
+		    }
+		}, seconds);
 	}
 
 	// Get Preferences
@@ -719,28 +717,31 @@ public class MainActivity extends FragmentActivity {
 					Toast.LENGTH_LONG).show();
 
 			// Wait secs
-			delay(60);
+			//delay(60);
 			// TODO: Delete this case, and consider each button case (delete and
 			// delete with drive must refresh with clean)
 
+			
+			final Handler handler;
+			
 			switch (drawerList.getCheckedItemPosition()) {
 			case 0:
-				refresh("all", true);
+				refreshWithDelay("all", 3);
 				break;
 			case 1:
-				refresh("downloading", true);
+				refreshWithDelay("downloading", 3);
 				break;
 			case 2:
-				refresh("completed", true);
+				refreshWithDelay("completed", 3);
 				break;
 			case 3:
-				refresh("paused", true);
+				refreshWithDelay("paused", 3);
 				break;
 			case 4:
-				refresh("active", true);
+				refreshWithDelay("active", 3);				
 				break;
-			case 5:
-				refresh("inactive", true);
+			case 5:			
+				refreshWithDelay("inactive", 3);				
 				break;
 			default:
 				break;
