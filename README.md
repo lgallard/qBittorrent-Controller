@@ -9,7 +9,7 @@ This is the repository for Android's qBittorrent Client <br>
 <img src="https://farm4.staticflickr.com/3731/12764293465_021d24ab48.jpg">&nbsp;
 <img src="https://farm6.staticflickr.com/5547/12764293595_4fd5078513.jpg">&nbsp;
 
-<Tablet's view>
+<h2>Tablet's view</h2>
 <img src="https://farm4.staticflickr.com/3915/14458532641_f3175cc830_c.jpg"/>&nbsp;
 <img src="https://farm4.staticflickr.com/3880/14275272160_3f7d8d5dba_c.jpg"/>&nbsp;
 <img src="https://farm3.staticflickr.com/2926/14482048333_9df77b4516_c.jpg"/>&nbsp;
