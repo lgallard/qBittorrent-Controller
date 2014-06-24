@@ -19,7 +19,7 @@ This is the repository for Android's qBittorrent Client <br>
 <span style="line-height: 1.5em;">With this version you will be able to:</span>
 <ul>
         <li> See a two panel view (fragments) for torrent list and details in the same window</li>
-        <li>Drawer menu for switching between All, Downloaded, Complete,d Active and Inactive torrent list</li>
+        <li>Drawer menu for switching between All, Downloading, Completed, Active and Inactive torrent list</li>
         <li>Pause or resume all torrents from the selected list</li>
         <li>Auto refresh torrent list after performing an action on a torrent (pause, resume, or delete) </li>
 	<li>Add URL directly or by clicking the torrent link on your device's browser</li>
