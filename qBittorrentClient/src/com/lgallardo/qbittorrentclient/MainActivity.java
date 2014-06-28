@@ -17,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -455,6 +454,11 @@ public class MainActivity extends FragmentActivity {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
 				pauseTorrent(hash);
+
+				if (findViewById(R.id.one_frame) != null) {
+					getFragmentManager().popBackStack();
+				}
+
 			} else {
 				Log.i("pase", "tf is null :(");
 			}
@@ -467,6 +471,10 @@ public class MainActivity extends FragmentActivity {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
 				startTorrent(hash);
+
+				if (findViewById(R.id.one_frame) != null) {
+					getFragmentManager().popBackStack();
+				}
 			}
 			return true;
 		case R.id.action_delete:
@@ -477,6 +485,9 @@ public class MainActivity extends FragmentActivity {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
 				deleteTorrent(hash);
+				if (findViewById(R.id.one_frame) != null) {
+					getFragmentManager().popBackStack();
+				}
 			}
 			return true;
 		case R.id.action_delete_drive:
@@ -487,6 +498,9 @@ public class MainActivity extends FragmentActivity {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
 				deleteDriveTorrent(hash);
+				if (findViewById(R.id.one_frame) != null) {
+					getFragmentManager().popBackStack();
+				}
 			}
 			return true;
 		case R.id.action_resume_all:
@@ -625,16 +639,16 @@ public class MainActivity extends FragmentActivity {
 
 	// Delay method
 	public void refreshWithDelay(final String state, int seconds) {
-		
+
 		seconds *= 1000;
-		
+
 		final Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
-		    @Override
-		    public void run() {
-		        // Do something after 5s = 5000ms
-		    	refresh(state, true);
-		    }
+			@Override
+			public void run() {
+				// Do something after 5s = 5000ms
+				refresh(state, true);
+			}
 		}, seconds);
 	}
 
@@ -716,14 +730,6 @@ public class MainActivity extends FragmentActivity {
 			Toast.makeText(getApplicationContext(), messageId,
 					Toast.LENGTH_LONG).show();
 
-			// Wait secs
-			//delay(60);
-			// TODO: Delete this case, and consider each button case (delete and
-			// delete with drive must refresh with clean)
-
-			
-			final Handler handler;
-			
 			switch (drawerList.getCheckedItemPosition()) {
 			case 0:
 				refreshWithDelay("all", 3);
@@ -738,16 +744,16 @@ public class MainActivity extends FragmentActivity {
 				refreshWithDelay("paused", 3);
 				break;
 			case 4:
-				refreshWithDelay("active", 3);				
+				refreshWithDelay("active", 3);
 				break;
-			case 5:			
-				refreshWithDelay("inactive", 3);				
+			case 5:
+				refreshWithDelay("inactive", 3);
 				break;
 			default:
 				break;
 			}
-			
-			Log.i("refresh_done","refresh_perfomed");
+
+			Log.i("refresh_done", "refresh_perfomed");
 
 		}
 	}
@@ -895,22 +901,43 @@ public class MainActivity extends FragmentActivity {
 				}
 
 				try {
-//					
-//					firstFragment = (ItemstFragment) getFragmentManager().findFragmentById(R.id.content_frame);
-//					
+					//
+					// firstFragment = (ItemstFragment)
+					// getFragmentManager().findFragmentById(R.id.content_frame);
+					//
+
+					// firstFragment = new ItemstFragment();
+
+					if (findViewById(R.id.one_frame) != null) {
+
+						getFragmentManager().popBackStack();
+
+					}
 
 					
-//					firstFragment  = new ItemstFragment();
-
+					Log.i("refresh", "---");
 					firstFragment.setListAdapter(new myAdapter());
 					
-					ListView lv = firstFragment.getListView();
+					Log.i("refresh", "----2");
+
+
+					
+
 
 					// Got some results
 					if (torrentsFiltered.size() > 0) {
 
+						
+						ListView lv = firstFragment.getListView();
+						
+						
+						Log.i("refresh", "----3");
+						
+						
 						lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
+						Log.i("refresh", "----4");
+						
 						int position = lv.getCheckedItemPosition();
 
 						Log.i("position", "Position: " + position);
@@ -924,18 +951,23 @@ public class MainActivity extends FragmentActivity {
 						// drawer)
 						if (params[2].equals("clear") && lv.getCount() > 0) {
 
+							Log.i("refresh", "1");
+
 							// Scroll to the first position
 							lv.smoothScrollToPosition(0);
 
-							
-							if(firstFragment != null){
-								
+							if (firstFragment != null) {
+
 							}
 							// Notify there isn't any item selected
 							firstFragment.setSelection(-1);
 
+							Log.i("refresh", "2");
+
 							// Create the about fragment
 							AboutFragment aboutFragment = new AboutFragment();
+
+							Log.i("refresh", "3");
 
 							if (aboutFragment != null) {
 
@@ -949,20 +981,44 @@ public class MainActivity extends FragmentActivity {
 									}
 
 									// Replace with the about fragment
-									fragmentManager
-											.beginTransaction()
-//											.replace(R.id.list_frame,
-//													firstFragment,
-//													"firstFragmet")
+									fragmentManager.beginTransaction()
+									// .replace(R.id.list_frame,
+									// firstFragment,
+									// "firstFragmet")
 											.replace(R.id.content_frame,
 													aboutFragment,
 													"secondFragment").commit();
-									
-									firstFragment.getFragmentManager().beginTransaction().detach(firstFragment).commit();
-									firstFragment.getFragmentManager().beginTransaction().attach(firstFragment).commit();
-									
-									
 
+									firstFragment.getFragmentManager()
+											.beginTransaction()
+											.detach(firstFragment).commit();
+									firstFragment.getFragmentManager()
+											.beginTransaction()
+											.attach(firstFragment).commit();
+
+								} else {
+
+									Log.i("refresh", "4");
+									// Just one fragment
+									// Reset the BackStack (Back button)
+									FragmentManager fragmentManager = getFragmentManager();
+									for (int i = 0; i < fragmentManager
+											.getBackStackEntryCount(); ++i) {
+										fragmentManager.popBackStack();
+									}
+
+									Log.i("refresh", "5");
+
+									// Replace with the about fragment
+									fragmentManager.beginTransaction()
+									// .replace(R.id.list_frame,
+									// firstFragment,
+									// "firstFragmet")
+											.replace(R.id.one_frame,
+													firstFragment,
+													"firstFragment").commit();
+
+									Log.i("refresh", "6");
 								}
 
 							}
@@ -971,24 +1027,56 @@ public class MainActivity extends FragmentActivity {
 
 						if (params[2].equals("") && lv.getCount() > 0) {
 
+							
+							Log.i("refresh", "1");
 							// Scroll listView to the first position
 							lv.smoothScrollToPosition(0);
 
 							AboutFragment aboutFragment = new AboutFragment();
 
 							if (aboutFragment != null) {
-								FragmentManager fragmentManager = getFragmentManager();
-								fragmentManager
-										.beginTransaction()
+
+								if (findViewById(R.id.fragment_container) != null) {
+									
+									Log.i("refresh", "2-1");
+									FragmentManager fragmentManager = getFragmentManager();
+									fragmentManager
+											.beginTransaction()
 											.detach(firstFragment)
 											.attach(firstFragment)
-										.replace(R.id.content_frame,
-												aboutFragment, "secondFragment")
-										.addToBackStack(null).commit();
+											.replace(R.id.content_frame,
+													aboutFragment,
+													"secondFragment")
+											.addToBackStack(null).commit();
+									
+									Log.i("refresh", "3-1");
+								}
+
+								else {
+									
+									Log.i("refresh", "2-2");
+
+									FragmentManager fragmentManager = getFragmentManager();
+
+									fragmentManager.beginTransaction()
+									// .replace(R.id.list_frame,
+									// firstFragment,
+									// "firstFragmet")
+											.replace(R.id.one_frame,
+													firstFragment,
+													"firstFragment").commit();
+
+								}
+								Log.i("refresh", "3-2");
+
 							}
-							
-							firstFragment.getFragmentManager().beginTransaction().detach(firstFragment).commit();
-							firstFragment.getFragmentManager().beginTransaction().attach(firstFragment).commit();
+
+							firstFragment.getFragmentManager()
+									.beginTransaction().detach(firstFragment)
+									.commit();
+							firstFragment.getFragmentManager()
+									.beginTransaction().attach(firstFragment)
+									.commit();
 
 						}
 
