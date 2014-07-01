@@ -901,28 +901,14 @@ public class MainActivity extends FragmentActivity {
 				}
 
 				try {
-					//
-					// firstFragment = (ItemstFragment)
-					// getFragmentManager().findFragmentById(R.id.content_frame);
-					//
-
-					// firstFragment = new ItemstFragment();
 
 					if (findViewById(R.id.one_frame) != null) {
 
 						getFragmentManager().popBackStack();
 
 					}
-
 					
-					Log.i("refresh", "---");
 					firstFragment.setListAdapter(new myAdapter());
-					
-					Log.i("refresh", "----2");
-
-
-					
-
 
 					// Got some results
 					if (torrentsFiltered.size() > 0) {
@@ -931,13 +917,8 @@ public class MainActivity extends FragmentActivity {
 						ListView lv = firstFragment.getListView();
 						
 						
-						Log.i("refresh", "----3");
-						
-						
 						lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-						Log.i("refresh", "----4");
-						
 						int position = lv.getCheckedItemPosition();
 
 						Log.i("position", "Position: " + position);
@@ -945,13 +926,9 @@ public class MainActivity extends FragmentActivity {
 							position = 0;
 						}
 
-						// lv.clearChoices();
-
 						// Also update the second fragment (if it comes from the
 						// drawer)
 						if (params[2].equals("clear") && lv.getCount() > 0) {
-
-							Log.i("refresh", "1");
 
 							// Scroll to the first position
 							lv.smoothScrollToPosition(0);
@@ -962,12 +939,8 @@ public class MainActivity extends FragmentActivity {
 							// Notify there isn't any item selected
 							firstFragment.setSelection(-1);
 
-							Log.i("refresh", "2");
-
 							// Create the about fragment
 							AboutFragment aboutFragment = new AboutFragment();
-
-							Log.i("refresh", "3");
 
 							if (aboutFragment != null) {
 
@@ -998,7 +971,6 @@ public class MainActivity extends FragmentActivity {
 
 								} else {
 
-									Log.i("refresh", "4");
 									// Just one fragment
 									// Reset the BackStack (Back button)
 									FragmentManager fragmentManager = getFragmentManager();
@@ -1006,8 +978,6 @@ public class MainActivity extends FragmentActivity {
 											.getBackStackEntryCount(); ++i) {
 										fragmentManager.popBackStack();
 									}
-
-									Log.i("refresh", "5");
 
 									// Replace with the about fragment
 									fragmentManager.beginTransaction()
@@ -1017,8 +987,6 @@ public class MainActivity extends FragmentActivity {
 											.replace(R.id.one_frame,
 													firstFragment,
 													"firstFragment").commit();
-
-									Log.i("refresh", "6");
 								}
 
 							}
@@ -1027,8 +995,6 @@ public class MainActivity extends FragmentActivity {
 
 						if (params[2].equals("") && lv.getCount() > 0) {
 
-							
-							Log.i("refresh", "1");
 							// Scroll listView to the first position
 							lv.smoothScrollToPosition(0);
 
@@ -1038,7 +1004,6 @@ public class MainActivity extends FragmentActivity {
 
 								if (findViewById(R.id.fragment_container) != null) {
 									
-									Log.i("refresh", "2-1");
 									FragmentManager fragmentManager = getFragmentManager();
 									fragmentManager
 											.beginTransaction()
@@ -1048,14 +1013,11 @@ public class MainActivity extends FragmentActivity {
 													aboutFragment,
 													"secondFragment")
 											.addToBackStack(null).commit();
-									
-									Log.i("refresh", "3-1");
+
 								}
 
 								else {
-									
-									Log.i("refresh", "2-2");
-
+								
 									FragmentManager fragmentManager = getFragmentManager();
 
 									fragmentManager.beginTransaction()
@@ -1067,8 +1029,6 @@ public class MainActivity extends FragmentActivity {
 													"firstFragment").commit();
 
 								}
-								Log.i("refresh", "3-2");
-
 							}
 
 							firstFragment.getFragmentManager()
