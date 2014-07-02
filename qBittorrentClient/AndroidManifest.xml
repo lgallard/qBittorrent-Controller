@@ -13,7 +13,7 @@
     package="com.lgallardo.qbittorrentclient"
     
     android:versionCode="1"
-    android:versionName="1.1" >
+    android:versionName="1.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
