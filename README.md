@@ -28,4 +28,3 @@ This is the repository for Android's qBittorrent Client <br>
 	<li>Set and save a connexion account</li>
 </ul>
 
-<strong>Note:</strong> For phone devices, download version 1.0
