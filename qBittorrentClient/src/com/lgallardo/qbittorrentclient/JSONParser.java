@@ -31,6 +31,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,12 +77,26 @@ public class JSONParser {
 
 		HttpResponse httpResponse;
 		DefaultHttpClient httpclient;
-
+		
+		HttpParams httpParameters = new BasicHttpParams();
+		
+		// Set the timeout in milliseconds until a connection is established.
+		// The default value is zero, that means the timeout is not used. 
+		int timeoutConnection = 3000;
+		
+		// Set the default socket timeout (SO_TIMEOUT) 
+		// in milliseconds which is the timeout for waiting for data.
+		int timeoutSocket = 5000;
+		
+		//Set http parameters
+		HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+		HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+		
 		// Making HTTP request
 		HttpHost targetHost = new HttpHost(this.hostname, this.port,
 				this.protocol);
 
-		httpclient = new DefaultHttpClient();
+		httpclient = new DefaultHttpClient(httpParameters);
 		try {
 
 			AuthScope authScope = new AuthScope(targetHost.getHostName(),
@@ -89,6 +106,8 @@ public class JSONParser {
 
 			httpclient.getCredentialsProvider().setCredentials(authScope,
 					credentials);
+			
+			//set http parameters
 
 			HttpGet httpget = new HttpGet(url);
 
@@ -142,16 +161,24 @@ public class JSONParser {
 		HttpResponse httpResponse;
 		DefaultHttpClient httpclient;
 
-		// Log.i("getJSONArrayFromUrl", "url:" + url);
-		// Log.i("getJSONArrayFromUrl", "hostname:" + this.hostname);
-		// Log.i("getJSONArrayFromUrl", "password:" + this.password);
-		// Log.i("getJSONArrayFromUrl", "port:" + this.port);
-		// Log.i("getJSONArrayFromUrl", "protocol:" + this.protocol);
+		HttpParams httpParameters = new BasicHttpParams();
+		
+		// Set the timeout in milliseconds until a connection is established.
+		// The default value is zero, that means the timeout is not used. 
+		int timeoutConnection = 3000;
+		
+		// Set the default socket timeout (SO_TIMEOUT) 
+		// in milliseconds which is the timeout for waiting for data.
+		int timeoutSocket = 5000;
+		
+		//Set http parameters
+		HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+		HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
 		// Making HTTP request
 		HttpHost targetHost = new HttpHost(hostname, port, protocol);
 
-		httpclient = new DefaultHttpClient();
+		httpclient = new DefaultHttpClient(httpParameters);
 		try {
 
 			AuthScope authScope = new AuthScope(targetHost.getHostName(),
@@ -206,6 +233,7 @@ public class JSONParser {
 			// When HttpClient instance is no longer needed,
 			// shut down the connection manager to ensure
 			// immediate deallocation of all system resources
+			Log.i("qbittorrent", "finaly - goodbye!");
 			httpclient.getConnectionManager().shutdown();
 		}
 
@@ -322,6 +350,7 @@ public class JSONParser {
 			// When HttpClient instance is no longer needed,
 			// shut down the connection manager to ensure
 			// immediate deallocation of all system resources
+			Log.i("qbittorrent", "finaly - goodbye!");
 			httpclient.getConnectionManager().shutdown();
 		}
 
