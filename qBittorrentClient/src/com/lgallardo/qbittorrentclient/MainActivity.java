@@ -120,25 +120,13 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Log.i("onCreate", "Loading activity_main");
-
 		setContentView(R.layout.activity_main);
-
-		Log.i("onCreate", "Starting drawe menu");
 
 		// Drawer menu
 		navigationDrawerItemTitles = getResources().getStringArray(
 				R.array.navigation_drawer_items_array);
 
-		for (int i = 0; i < navigationDrawerItemTitles.length; i++) {
-
-			Log.i("onCreate", "navigationDrawerItemTitles: "
-					+ navigationDrawerItemTitles[i]);
-		}
-
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-		Log.i("onCreate", "DrawerLayout: " + drawerLayout.toString());
 
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -210,7 +198,7 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		// Refresh UI
-		refresh();
+		//refresh();
 
 		// Fragments
 
@@ -253,8 +241,14 @@ public class MainActivity extends FragmentActivity {
 
 			// Phones handle just one fragment
 
-			// Create an instance of ExampleFragment
+			// Create an instance of ItemsFragments
 			firstFragment = new ItemstFragment();
+			
+			
+			// This i the about fragment, holding a default message at the
+			// beginning
+			
+			secondFragment = new AboutFragment();
 
 			firstFragment.setSecondFragmentContainer(R.id.one_frame);
 
@@ -263,13 +257,13 @@ public class MainActivity extends FragmentActivity {
 			FragmentTransaction fragmentTransaction = fragmentManager
 					.beginTransaction();
 
-			fragmentTransaction.add(R.id.one_frame, firstFragment);
+			fragmentTransaction.add(R.id.one_frame, secondFragment);
 
 			fragmentTransaction.commit();
 		}
 
 		if (savedInstanceState == null) {
-			selectItem(0);
+			//selectItem(0);
 		}
 	}
 
@@ -438,6 +432,7 @@ public class MainActivity extends FragmentActivity {
 				refresh("inactive");
 				break;
 			default:
+				selectItem(0);
 				break;
 			}
 			return true;
@@ -843,7 +838,7 @@ public class MainActivity extends FragmentActivity {
 						if ("downloading".equals(result[i].getState())
 								|| "stalledDL".equals(result[i].getState())
 								|| "pausedDL".equals(result[i].getState())
-								|| "queueDL".equals(result[i].getState())
+								|| "queuedDL".equals(result[i].getState())
 								|| "checkingDL".equals(result[i].getState())) {
 							torrentsFiltered.add(result[i]);
 						}
@@ -853,7 +848,7 @@ public class MainActivity extends FragmentActivity {
 						if ("uploading".equals(result[i].getState())
 								|| "stalledUP".equals(result[i].getState())
 								|| "pausedUP".equals(result[i].getState())
-								|| "queueUP".equals(result[i].getState())
+								|| "queuedUP".equals(result[i].getState())
 								|| "checkingUP".equals(result[i].getState())) {
 							torrentsFiltered.add(result[i]);
 						}
@@ -907,7 +902,31 @@ public class MainActivity extends FragmentActivity {
 						getFragmentManager().popBackStack();
 
 					}
+
 					
+					// This fragment will hold the list of torrents
+					firstFragment = new ItemstFragment();
+
+					// Add the fragment to the 'list_frame' FrameLayout
+					FragmentManager fragmentManager = getFragmentManager();
+					FragmentTransaction fragmentTransaction = fragmentManager
+							.beginTransaction();
+
+					
+					// Set the second fragments container
+					if (findViewById(R.id.fragment_container) != null) {
+						firstFragment.setSecondFragmentContainer(R.id.content_frame);
+						fragmentTransaction.replace(R.id.list_frame, firstFragment);
+
+					} else {
+						firstFragment.setSecondFragmentContainer(R.id.one_frame);
+						fragmentTransaction.replace(R.id.one_frame, firstFragment);
+
+					}
+
+
+					fragmentTransaction.commit();
+						
 					firstFragment.setListAdapter(new myAdapter());
 
 					// Got some results
@@ -947,7 +966,7 @@ public class MainActivity extends FragmentActivity {
 								if (findViewById(R.id.fragment_container) != null) {
 
 									// Reset the BackStack (Back button)
-									FragmentManager fragmentManager = getFragmentManager();
+									fragmentManager = getFragmentManager();
 									for (int i = 0; i < fragmentManager
 											.getBackStackEntryCount(); ++i) {
 										fragmentManager.popBackStack();
@@ -973,7 +992,7 @@ public class MainActivity extends FragmentActivity {
 
 									// Just one fragment
 									// Reset the BackStack (Back button)
-									FragmentManager fragmentManager = getFragmentManager();
+									fragmentManager = getFragmentManager();
 									for (int i = 0; i < fragmentManager
 											.getBackStackEntryCount(); ++i) {
 										fragmentManager.popBackStack();
@@ -1004,7 +1023,7 @@ public class MainActivity extends FragmentActivity {
 
 								if (findViewById(R.id.fragment_container) != null) {
 									
-									FragmentManager fragmentManager = getFragmentManager();
+									fragmentManager = getFragmentManager();
 									fragmentManager
 											.beginTransaction()
 											.detach(firstFragment)
@@ -1018,7 +1037,7 @@ public class MainActivity extends FragmentActivity {
 
 								else {
 								
-									FragmentManager fragmentManager = getFragmentManager();
+									fragmentManager = getFragmentManager();
 
 									fragmentManager.beginTransaction()
 									// .replace(R.id.list_frame,
@@ -1080,11 +1099,7 @@ public class MainActivity extends FragmentActivity {
 
 			ImageView icon = (ImageView) row.findViewById(R.id.icon);
 
-			if ("pausedUP".equals(state)) {
-				icon.setImageResource(R.drawable.paused);
-			}
-
-			if ("pausedDL".equals(state)) {
+			if ("pausedUP".equals(state) || "pausedDL".equals(state)) {
 				icon.setImageResource(R.drawable.paused);
 			}
 
@@ -1103,6 +1118,11 @@ public class MainActivity extends FragmentActivity {
 			if ("uploading".equals(state)) {
 				icon.setImageResource(R.drawable.uploading);
 			}
+			
+			if ("queuedDL".equals(state) || "queuedUP".equals(state)) {
+				icon.setImageResource(R.drawable.queued);
+			}
+			
 
 			return (row);
 		}
