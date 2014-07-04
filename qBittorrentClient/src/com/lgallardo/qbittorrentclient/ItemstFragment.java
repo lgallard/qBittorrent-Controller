@@ -57,7 +57,7 @@ public class ItemstFragment extends ListFragment {
 
 	public void ListItemClicked(int position) {
 
-		ListView lv = getListView();
+		ListView lv = this.getListView();
 
 		int count = lv.getCount();
 
@@ -67,6 +67,8 @@ public class ItemstFragment extends ListFragment {
 			return;
 		}
 
+		Log.i("ItemsFragment", "Position => "+ position);
+		
 		detailFragment = new TorrentDetailsFragment();
 
 		detailFragment.setPosition(position);
@@ -75,7 +77,7 @@ public class ItemstFragment extends ListFragment {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction()
 					.replace(this.getSecondFragmentContainer(), detailFragment)
-					.addToBackStack(null).commit();
+					.addToBackStack("secondFragment").commit();
 		}
 
 	}
