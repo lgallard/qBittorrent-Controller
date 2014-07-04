@@ -49,6 +49,8 @@ public class TorrentDetailsFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.torrent_details, container,
 				false);
+		
+		Log.i("TorrentDetails", "Position =>>> "+ position);
 
 		if (MainActivity.lines != null && position != -1) {
 			name = MainActivity.lines[position].getFile();
