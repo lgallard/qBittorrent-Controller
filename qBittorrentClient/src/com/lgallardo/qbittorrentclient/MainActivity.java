@@ -231,7 +231,8 @@ public class MainActivity extends FragmentActivity {
 
 			fragmentTransaction.add(R.id.list_frame, firstFragment);
 			fragmentTransaction.add(R.id.content_frame, secondFragment);
-
+//			.addToBackStack("secondFragment");
+	
 			fragmentTransaction.commit();
 
 			// Second fragment will be added in ItemsFRagment's onListItemClick
@@ -298,16 +299,6 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public void onBackPressed() {
-		// if (findViewById(R.id.fragment_container) == null) {
-		//
-		// if (firstFragment != null) {
-		// FragmentManager fragmentManager = getFragmentManager();
-		// fragmentManager.beginTransaction()
-		// .replace(R.id.one_frame, firstFragment)
-		// .addToBackStack(null)
-		// .commit();
-		// }
-		// }
 
 		if (getFragmentManager().getBackStackEntryCount() == 0) {
 			this.finish();
@@ -904,59 +895,57 @@ public class MainActivity extends FragmentActivity {
 					}
 
 					
-					// This fragment will hold the list of torrents
-					firstFragment = new ItemstFragment();
-
-					// Add the fragment to the 'list_frame' FrameLayout
-					FragmentManager fragmentManager = getFragmentManager();
-					FragmentTransaction fragmentTransaction = fragmentManager
-							.beginTransaction();
-
 					
-					// Set the second fragments container
-					if (findViewById(R.id.fragment_container) != null) {
-						firstFragment.setSecondFragmentContainer(R.id.content_frame);
-						fragmentTransaction.replace(R.id.list_frame, firstFragment);
+					Log.i("Refresh >", "About to set Adapter"); 
+					
+					
 
-					} else {
-						firstFragment.setSecondFragmentContainer(R.id.one_frame);
-						fragmentTransaction.replace(R.id.one_frame, firstFragment);
-
-					}
-
-
-					fragmentTransaction.commit();
-						
-					firstFragment.setListAdapter(new myAdapter());
 
 					// Got some results
 					if (torrentsFiltered.size() > 0) {
+						
+						// Add the fragment to the 'list_frame' FrameLayout
+						FragmentManager fragmentManager = getFragmentManager();
+						FragmentTransaction fragmentTransaction = fragmentManager
+								.beginTransaction();
 
 						
-						ListView lv = firstFragment.getListView();
-						
-						
-						lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+						// Set the second fragments container
+						if (findViewById(R.id.fragment_container) != null) {
+							firstFragment.setListAdapter(new myAdapter());
+							firstFragment.setSecondFragmentContainer(R.id.content_frame);
+							fragmentTransaction.replace(R.id.list_frame, firstFragment);
 
-						int position = lv.getCheckedItemPosition();
+						} else {
+//							firstFragment = new ItemstFragment();
+							firstFragment.setListAdapter(new myAdapter());
+							firstFragment.setSecondFragmentContainer(R.id.one_frame);
+							
+							fragmentTransaction.remove(secondFragment);
+							fragmentTransaction.replace(R.id.one_frame, firstFragment);
 
-						Log.i("position", "Position: " + position);
-						if (position < 0) {
-							position = 0;
 						}
+
+						fragmentTransaction.commit();
+						
+						Log.i("Refresh", "ItemList?: " + (firstFragment instanceof ItemstFragment));
+
+						ListView lv = firstFragment.getListView();
+
+						lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 						// Also update the second fragment (if it comes from the
 						// drawer)
 						if (params[2].equals("clear") && lv.getCount() > 0) {
+							
+							Log.i("Refresh >", "Clear init"); 
 
 							// Scroll to the first position
 							lv.smoothScrollToPosition(0);
 
-							if (firstFragment != null) {
 
-							}
 							// Notify there isn't any item selected
-							firstFragment.setSelection(-1);
+							//firstFragment.setSelection(-1);
 
 							// Create the about fragment
 							AboutFragment aboutFragment = new AboutFragment();
@@ -965,28 +954,24 @@ public class MainActivity extends FragmentActivity {
 
 								if (findViewById(R.id.fragment_container) != null) {
 
+
 									// Reset the BackStack (Back button)
 									fragmentManager = getFragmentManager();
-									for (int i = 0; i < fragmentManager
+									
+									for (int i = 0; i < getFragmentManager()
 											.getBackStackEntryCount(); ++i) {
-										fragmentManager.popBackStack();
+										getFragmentManager()
+												.popBackStack(
+														"secondFragment",
+														FragmentManager.POP_BACK_STACK_INCLUSIVE);
 									}
 
-									// Replace with the about fragment
-									fragmentManager.beginTransaction()
-									// .replace(R.id.list_frame,
-									// firstFragment,
-									// "firstFragmet")
-											.replace(R.id.content_frame,
-													aboutFragment,
-													"secondFragment").commit();
 
-									firstFragment.getFragmentManager()
+									// Replace with the about fragment
+									fragmentManager
 											.beginTransaction()
-											.detach(firstFragment).commit();
-									firstFragment.getFragmentManager()
-											.beginTransaction()
-											.attach(firstFragment).commit();
+											.replace(R.id.content_frame,
+													aboutFragment).commit();
 
 								} else {
 
@@ -999,10 +984,8 @@ public class MainActivity extends FragmentActivity {
 									}
 
 									// Replace with the about fragment
-									fragmentManager.beginTransaction()
-									// .replace(R.id.list_frame,
-									// firstFragment,
-									// "firstFragmet")
+									fragmentManager
+											.beginTransaction()
 											.replace(R.id.one_frame,
 													firstFragment,
 													"firstFragment").commit();
@@ -1023,15 +1006,25 @@ public class MainActivity extends FragmentActivity {
 
 								if (findViewById(R.id.fragment_container) != null) {
 									
+									
+									// Reset the BackStack (Back button)
+									fragmentManager = getFragmentManager();
+									
+									for (int i = 0; i < getFragmentManager()
+											.getBackStackEntryCount(); ++i) {
+										getFragmentManager()
+												.popBackStack(
+														"secondFragment",
+														FragmentManager.POP_BACK_STACK_INCLUSIVE);
+									}
+
+									
 									fragmentManager = getFragmentManager();
 									fragmentManager
 											.beginTransaction()
-											.detach(firstFragment)
-											.attach(firstFragment)
 											.replace(R.id.content_frame,
-													aboutFragment,
-													"secondFragment")
-											.addToBackStack(null).commit();
+													aboutFragment)
+											.commit();
 
 								}
 
@@ -1039,10 +1032,8 @@ public class MainActivity extends FragmentActivity {
 								
 									fragmentManager = getFragmentManager();
 
-									fragmentManager.beginTransaction()
-									// .replace(R.id.list_frame,
-									// firstFragment,
-									// "firstFragmet")
+									fragmentManager
+											.beginTransaction()
 											.replace(R.id.one_frame,
 													firstFragment,
 													"firstFragment").commit();
@@ -1050,12 +1041,6 @@ public class MainActivity extends FragmentActivity {
 								}
 							}
 
-							firstFragment.getFragmentManager()
-									.beginTransaction().detach(firstFragment)
-									.commit();
-							firstFragment.getFragmentManager()
-									.beginTransaction().attach(firstFragment)
-									.commit();
 
 						}
 
@@ -1069,8 +1054,15 @@ public class MainActivity extends FragmentActivity {
 								R.id.no_results, emptyList));
 
 					}
+					
 
-				} catch (Exception e) {
+				} 
+				catch(IllegalStateException le){
+					
+					throw le;
+				}
+				
+				catch (Exception e) {
 					// TODO: handle exception
 					Log.e("ADAPTER", e.toString());
 				}
