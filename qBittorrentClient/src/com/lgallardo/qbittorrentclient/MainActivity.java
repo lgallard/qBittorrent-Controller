@@ -897,7 +897,7 @@ public class MainActivity extends FragmentActivity {
 					
 					
 					Log.i("Refresh >", "About to set Adapter"); 
-					
+					firstFragment.setListAdapter(new myAdapter());
 					
 
 
@@ -912,13 +912,11 @@ public class MainActivity extends FragmentActivity {
 						
 						// Set the second fragments container
 						if (findViewById(R.id.fragment_container) != null) {
-							firstFragment.setListAdapter(new myAdapter());
 							firstFragment.setSecondFragmentContainer(R.id.content_frame);
 							fragmentTransaction.replace(R.id.list_frame, firstFragment);
 
 						} else {
 //							firstFragment = new ItemstFragment();
-							firstFragment.setListAdapter(new myAdapter());
 							firstFragment.setSecondFragmentContainer(R.id.one_frame);
 							
 							fragmentTransaction.remove(secondFragment);
@@ -1057,10 +1055,10 @@ public class MainActivity extends FragmentActivity {
 					
 
 				} 
-				catch(IllegalStateException le){
-					
-					throw le;
-				}
+//				catch(IllegalStateException le){
+//					
+//					throw le;
+//				}
 				
 				catch (Exception e) {
 					// TODO: handle exception
