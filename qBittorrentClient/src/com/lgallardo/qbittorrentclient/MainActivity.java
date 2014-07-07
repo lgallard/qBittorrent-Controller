@@ -115,6 +115,7 @@ public class MainActivity extends FragmentActivity {
 
 	private ItemstFragment firstFragment;
 	private AboutFragment secondFragment;
+	private HelpFragment helpTabletFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -197,8 +198,6 @@ public class MainActivity extends FragmentActivity {
 			addTorrent(intent.getDataString());
 		}
 
-		// Refresh UI
-		//refresh();
 
 		// Fragments
 
@@ -216,6 +215,10 @@ public class MainActivity extends FragmentActivity {
 
 			// This fragment will hold the list of torrents
 			firstFragment = new ItemstFragment();
+			
+			// This fragment will hold the list of torrents
+			helpTabletFragment = new HelpFragment();
+
 
 			// Set the second fragments container
 			firstFragment.setSecondFragmentContainer(R.id.content_frame);
@@ -229,7 +232,7 @@ public class MainActivity extends FragmentActivity {
 			FragmentTransaction fragmentTransaction = fragmentManager
 					.beginTransaction();
 
-			fragmentTransaction.add(R.id.list_frame, firstFragment);
+			fragmentTransaction.add(R.id.list_frame, helpTabletFragment);
 			fragmentTransaction.add(R.id.content_frame, secondFragment);
 //			.addToBackStack("secondFragment");
 	
@@ -350,7 +353,7 @@ public class MainActivity extends FragmentActivity {
 
 			// Connecting message
 			Toast.makeText(getApplicationContext(), R.string.connecting,
-					Toast.LENGTH_LONG).show();
+					Toast.LENGTH_SHORT).show();
 
 		} else {
 
@@ -714,7 +717,7 @@ public class MainActivity extends FragmentActivity {
 			}
 
 			Toast.makeText(getApplicationContext(), messageId,
-					Toast.LENGTH_LONG).show();
+					Toast.LENGTH_SHORT).show();
 
 			switch (drawerList.getCheckedItemPosition()) {
 			case 0:
@@ -736,6 +739,7 @@ public class MainActivity extends FragmentActivity {
 				refreshWithDelay("inactive", 3);
 				break;
 			default:
+				refreshWithDelay("all", 3);
 				break;
 			}
 
@@ -813,7 +817,7 @@ public class MainActivity extends FragmentActivity {
 			if (result == null) {
 
 				Toast.makeText(getApplicationContext(),
-						R.string.connection_error, Toast.LENGTH_LONG).show();
+						R.string.connection_error, Toast.LENGTH_SHORT).show();
 
 			} else {
 
@@ -899,6 +903,8 @@ public class MainActivity extends FragmentActivity {
 					Log.i("Refresh >", "About to set Adapter"); 
 					firstFragment.setListAdapter(new myAdapter());
 					
+					// Create the about fragment
+					AboutFragment aboutFragment = new AboutFragment();
 
 
 					// Got some results
@@ -916,7 +922,7 @@ public class MainActivity extends FragmentActivity {
 							fragmentTransaction.replace(R.id.list_frame, firstFragment);
 
 						} else {
-//							firstFragment = new ItemstFragment();
+
 							firstFragment.setSecondFragmentContainer(R.id.one_frame);
 							
 							fragmentTransaction.remove(secondFragment);
@@ -945,8 +951,6 @@ public class MainActivity extends FragmentActivity {
 							// Notify there isn't any item selected
 							//firstFragment.setSelection(-1);
 
-							// Create the about fragment
-							AboutFragment aboutFragment = new AboutFragment();
 
 							if (aboutFragment != null) {
 
@@ -998,7 +1002,6 @@ public class MainActivity extends FragmentActivity {
 							// Scroll listView to the first position
 							lv.smoothScrollToPosition(0);
 
-							AboutFragment aboutFragment = new AboutFragment();
 
 							if (aboutFragment != null) {
 
@@ -1045,11 +1048,29 @@ public class MainActivity extends FragmentActivity {
 					} else {
 
 						// No results
-
 						String[] emptyList = new String[] { NO_RESULTS };
 						firstFragment.setListAdapter(new ArrayAdapter<String>(
 								MainActivity.this, R.layout.no_items_found,
 								R.id.no_results, emptyList));
+						
+						
+						// Add the fragment to the 'list_frame' FrameLayout
+						FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+						// Set the second fragments container
+						if (findViewById(R.id.fragment_container) != null) {
+							firstFragment.setSecondFragmentContainer(R.id.content_frame);
+							fragmentTransaction.replace(R.id.list_frame, firstFragment);
+							fragmentTransaction.replace(R.id.content_frame, aboutFragment);
+							
+						} else {
+							firstFragment.setSecondFragmentContainer(R.id.one_frame);
+							fragmentTransaction.replace(R.id.one_frame, firstFragment);
+
+						}
+
+						fragmentTransaction.commit();
+						
 
 					}
 					
