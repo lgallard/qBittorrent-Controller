@@ -21,7 +21,7 @@
             android:summary="Hostname or IP"
             android:title="Connection Host" />
         <EditTextPreference
-            android:defaultValue="80"
+            android:defaultValue="8080"
             android:dialogTitle="Connection Port?"
             android:key="port"
             android:summary="Port (80,8080)"
@@ -34,7 +34,7 @@
             android:summary="Provide a username"
             android:title="Username " />
         <EditTextPreference
-            android:defaultValue=""
+            android:defaultValue="adminadmin"
             android:dialogTitle="Password?"
             android:inputType="textPassword"
             android:key="password"
