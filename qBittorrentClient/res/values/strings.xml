@@ -23,7 +23,7 @@
     <string name="connection_error">Network connection failed</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="connecting">Connecting to server</string>
+    <string name="connecting">Refreshing</string>
     <string name="title_activity_torrent_actions">Action</string>
     <string name="title_activity_setting">Settings</string>
     <string name="dm_deleteTorrent">Pressing OK will delete the torrent</string>
