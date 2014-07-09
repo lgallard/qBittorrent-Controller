@@ -276,13 +276,17 @@ public class JSONParser {
 		if ("resumeAll".equals(command)) {
 			url = "command/resumeall";
 		}
-		 Log.i("qbittorrent", "url:" + url);
-		 Log.i("qbittorrent", "hostname:" + this.hostname);
-		 Log.i("qbittorrent", "port:" + this.port);
-		 Log.i("qbittorrent", "protocol:" + this.protocol);
-		 Log.i("qbittorrent", "username:" + this.username);
-		 Log.i("qbittorrent", "password:" + this.password);
-		 Log.i("qbittorrent", "hash:" + hash);
+		if ("increasePrio".equals(command)) {
+			url = "command/increasePrio";
+			key = "hashes";
+			Log.i("increasePrio>","increasePrio");
+		}
+		if ("decreasePrio".equals(command)) {
+			url = "command/decreasePrio";
+			key = "hashes";
+			Log.i("decreasePrio>","decreasePrio");
+		}
+
 
 		// Making HTTP request
 		HttpHost targetHost = new HttpHost(this.hostname, this.port,
@@ -314,8 +318,9 @@ public class JSONParser {
 			
 			
 			// Set content type and urls
-			if ("addTorrent".equals(command)) {
+			if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command)) {
 				httpget.setHeader("Content-Type", urlContentType);
+				Log.i("qbittorrent", "urlContentType");
 			}
 
 			 Log.i("qbittorrent", "2");
@@ -333,6 +338,15 @@ public class JSONParser {
 			Log.i("qbittorrent", "5");
 
 			Log.i("parser", is.toString());
+			
+			 Log.i("qbittorrent", "url:" + url);
+			 Log.i("qbittorrent", "hostname:" + this.hostname);
+			 Log.i("qbittorrent", "port:" + this.port);
+			 Log.i("qbittorrent", "protocol:" + this.protocol);
+			 Log.i("qbittorrent", "username:" + this.username);
+			 Log.i("qbittorrent", "password:" + this.password);
+			 Log.i("qbittorrent", "hash:" + hash);
+
 
 		}
 

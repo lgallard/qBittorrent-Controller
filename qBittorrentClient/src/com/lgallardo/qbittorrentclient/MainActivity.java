@@ -492,6 +492,33 @@ public class MainActivity extends FragmentActivity {
 				}
 			}
 			return true;
+		case R.id.action_increase_prio:
+
+			tf = this.getTorrentDetailsFragment();
+
+			if (tf != null) {
+				position = tf.position;
+				hash = MainActivity.lines[position].getHash();
+				increasePrioTorrent(hash);
+				if (findViewById(R.id.one_frame) != null) {
+					getFragmentManager().popBackStack();
+				}
+			}
+			return true;
+		case R.id.action_decrease_prio:
+
+			tf = this.getTorrentDetailsFragment();
+
+			if (tf != null) {
+				position = tf.position;
+				hash = MainActivity.lines[position].getHash();
+				decreasePrioTorrent(hash);
+				if (findViewById(R.id.one_frame) != null) {
+					getFragmentManager().popBackStack();
+				}
+			}
+			return true;
+
 		case R.id.action_resume_all:
 			resumeAllTorrents();
 			return true;
@@ -625,6 +652,21 @@ public class MainActivity extends FragmentActivity {
 		qBittorrentCommand qtc = new qBittorrentCommand();
 		qtc.execute(new String[] { "resumeAll", null });
 	}
+	
+	public void increasePrioTorrent(String hash) {
+		// Execute the task in background
+		qBittorrentCommand qtc = new qBittorrentCommand();
+		qtc.execute(new String[] { "increasePrio", hash });
+
+	}
+
+	public void decreasePrioTorrent(String hash) {
+		// Execute the task in background
+		qBittorrentCommand qtc = new qBittorrentCommand();
+		qtc.execute(new String[] { "decreasePrio", hash });
+
+	}
+
 
 	// Delay method
 	public void refreshWithDelay(final String state, int seconds) {
@@ -712,8 +754,12 @@ public class MainActivity extends FragmentActivity {
 				messageId = R.string.AllTorrentsPaused;
 			}
 
-			if ("resumeAll".equals(result)) {
-				messageId = R.string.AllTorrentsResumed;
+			if ("increasePrio".equals(result)) {
+				messageId = R.string.increasePrioTorrent;
+			}
+
+			if ("decreasePrio".equals(result)) {
+				messageId = R.string.decreasePrioTorrent;
 			}
 
 			Toast.makeText(getApplicationContext(), messageId,

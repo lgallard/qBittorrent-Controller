@@ -28,18 +28,44 @@ public class AboutFragment extends Fragment {
 	
 	// @Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// inflater.inflate(R.menu.main, menu);
+		// super.onCreateOptionsMenu(menu, inflater);
+
 		if (menu != null) {
 			menu.findItem(R.id.action_refresh).setVisible(true);
 			menu.findItem(R.id.action_add).setVisible(true);
-			menu.findItem(R.id.action_resume_all).setVisible(true);
-			menu.findItem(R.id.action_pause_all).setVisible(true);
+
+			if (menu.findItem(R.id.action_resume_all) != null) {
+				menu.findItem(R.id.action_resume_all).setVisible(false);
+			}
 			
-			menu.findItem(R.id.action_resume).setVisible(false);
-			menu.findItem(R.id.action_pause).setVisible(false);
-			menu.findItem(R.id.action_delete).setVisible(false);
-			menu.findItem(R.id.action_delete_drive).setVisible(false);
-	
+			if (menu.findItem(R.id.action_pause_all) != null) {
+				menu.findItem(R.id.action_pause_all).setVisible(false);
+			}
+
+			
+			if (menu.findItem(R.id.action_resume) != null) {
+				menu.findItem(R.id.action_resume).setVisible(false);
+			}
+			if (menu.findItem(R.id.action_pause) != null) {
+				menu.findItem(R.id.action_pause).setVisible(false);
+			}
+			if (menu.findItem(R.id.action_increase_prio) != null) {
+				menu.findItem(R.id.action_increase_prio).setVisible(false);
+			}
+			if (menu.findItem(R.id.action_decrease_prio) != null) {
+				menu.findItem(R.id.action_decrease_prio).setVisible(false);
+
+			}
+			if (menu.findItem(R.id.action_delete) != null) {
+				menu.findItem(R.id.action_delete).setVisible(false);
+			}
+			if (menu.findItem(R.id.action_delete_drive) != null) {
+				menu.findItem(R.id.action_delete_drive).setVisible(false);
+			}
+
 		}
 	}
+	
 
 }

@@ -30,7 +30,6 @@
         android:icon="@drawable/ic_action_pause"
         android:showAsAction="ifRoom"
         android:title="Pause all"/>
-    
     <item
         android:id="@+id/action_resume"
         android:icon="@drawable/ic_action_resume"
@@ -41,6 +40,16 @@
         android:icon="@drawable/ic_action_pause"
         android:showAsAction="always"
         android:title="@string/action_pause"/>
+    <item
+        android:id="@+id/action_increase_prio"
+        android:icon="@drawable/ic_action_increase_prio"
+        android:showAsAction="ifRoom"
+        android:title="Increase priority"/>
+    <item
+        android:id="@+id/action_decrease_prio"
+        android:icon="@drawable/ic_action_decrease_prio"
+        android:showAsAction="ifRoom"
+        android:title="Decrease priority"/>
     <item
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_action_delete"

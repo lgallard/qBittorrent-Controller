@@ -99,12 +99,18 @@ public class ItemstFragment extends ListFragment {
 			if (menu.findItem(R.id.action_pause) != null) {
 				menu.findItem(R.id.action_pause).setVisible(false);
 			}
+			if (menu.findItem(R.id.action_increase_prio) != null) {
+				menu.findItem(R.id.action_increase_prio).setVisible(false);
+			}
+			if (menu.findItem(R.id.action_decrease_prio) != null) {
+				menu.findItem(R.id.action_decrease_prio).setVisible(false);
+
+			}
 			if (menu.findItem(R.id.action_delete) != null) {
 				menu.findItem(R.id.action_delete).setVisible(false);
 			}
 			if (menu.findItem(R.id.action_delete_drive) != null) {
 				menu.findItem(R.id.action_delete_drive).setVisible(false);
-
 			}
 
 		}

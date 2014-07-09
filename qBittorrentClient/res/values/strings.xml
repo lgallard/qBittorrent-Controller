@@ -37,6 +37,8 @@
     <string name="AllTorrentsResumed">All torrents were resumed!</string>
     <string name="torrentDeleled">Torrent deleted!</string>
     <string name="torrentDeletedDrive">Torrent and data deleted!</string>
+    <string name="increasePrioTorrent">Increased priority!</string>
+    <string name="decreasePrioTorrent">Decreased priority!</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
