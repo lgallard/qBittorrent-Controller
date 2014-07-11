@@ -287,18 +287,10 @@ public class MainActivity extends FragmentActivity {
 
 	// MainActivity old methods
 
-	// Rotation handling
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		LinearLayout container = (LinearLayout) findViewById(R.id.container);
-
-		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			container.setOrientation(LinearLayout.HORIZONTAL);
-		} else {
-			container.setOrientation(LinearLayout.VERTICAL);
-		}
-	}
+//	// Rotation handling
+//	@Override
+//	public void onConfigurationChanged(Configuration newConfig) {
+//	}
 
 	@Override
 	public void onBackPressed() {
