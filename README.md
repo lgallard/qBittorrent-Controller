@@ -10,8 +10,8 @@ This is the repository for Android's qBittorrent Client <br>
         <li>Pause or resume all torrents from the selected list</li>
         <li>Auto refresh torrent list after performing an action on a torrent (pause, resume, or delete) </li>
 	<li>Add URL directly or by clicking the torrent link on your device's browser</li>
-	<li>Pause, resume, delete or delete individual torrents with its downloaded data</li>
-	<li>Set and save a connexion account</li>
+	<li>Pause, resume, or delete individual torrents with its downloaded data</li>
+	<li>Set and save a connection account</li>
 </ul>
 
 <h2>Phone's view</h2>
