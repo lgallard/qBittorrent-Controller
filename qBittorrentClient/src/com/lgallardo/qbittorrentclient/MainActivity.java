@@ -622,33 +622,8 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		// Make sure the request was successful
-		if (resultCode == RESULT_OK && requestCode == ACTION_CODE) {
-
-			// Get Torrent's action
-			int action = data.getIntExtra(TAG_ACTION, 0);
-
-			// Get torrent's hash
-			String hash = data.getStringExtra(TAG_HASH);
-
-			// Check which request we're responding to
-			switch (action) {
-			case START_CODE:
-				startTorrent(hash);
-				break;
-			case PAUSE_CODE:
-				pauseTorrent(hash);
-				break;
-			case DELETE_CODE:
-				deleteTorrent(hash);
-				break;
-			case DELETE_DRIVE_CODE:
-				deleteDriveTorrent(hash);
-				break;
-			}
-
-		}
+		
+		refresh("all", true);
 
 	}
 
@@ -696,7 +671,8 @@ public class MainActivity extends FragmentActivity {
 	private void openPreferences() {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-		startActivity(intent);
+//		startActivity(intent);
+		startActivityForResult(intent, ACTION_CODE);	
 
 	}
 
