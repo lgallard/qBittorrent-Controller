@@ -117,6 +117,8 @@ public class MainActivity extends FragmentActivity {
 	private AboutFragment secondFragment;
 	private HelpFragment helpTabletFragment;
 
+	private boolean okay = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -198,7 +200,6 @@ public class MainActivity extends FragmentActivity {
 			addTorrent(intent.getDataString());
 		}
 
-
 		// Fragments
 
 		// Check whether the activity is using the layout version with
@@ -215,10 +216,9 @@ public class MainActivity extends FragmentActivity {
 
 			// This fragment will hold the list of torrents
 			firstFragment = new ItemstFragment();
-			
+
 			// This fragment will hold the list of torrents
 			helpTabletFragment = new HelpFragment();
-
 
 			// Set the second fragments container
 			firstFragment.setSecondFragmentContainer(R.id.content_frame);
@@ -234,8 +234,8 @@ public class MainActivity extends FragmentActivity {
 
 			fragmentTransaction.add(R.id.list_frame, helpTabletFragment);
 			fragmentTransaction.add(R.id.content_frame, secondFragment);
-//			.addToBackStack("secondFragment");
-	
+			// .addToBackStack("secondFragment");
+
 			fragmentTransaction.commit();
 
 			// Second fragment will be added in ItemsFRagment's onListItemClick
@@ -247,11 +247,10 @@ public class MainActivity extends FragmentActivity {
 
 			// Create an instance of ItemsFragments
 			firstFragment = new ItemstFragment();
-			
-			
+
 			// This i the about fragment, holding a default message at the
 			// beginning
-			
+
 			secondFragment = new AboutFragment();
 
 			firstFragment.setSecondFragmentContainer(R.id.one_frame);
@@ -267,7 +266,7 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		if (savedInstanceState == null) {
-			//selectItem(0);
+			// selectItem(0);
 		}
 	}
 
@@ -287,10 +286,10 @@ public class MainActivity extends FragmentActivity {
 
 	// MainActivity old methods
 
-//	// Rotation handling
-//	@Override
-//	public void onConfigurationChanged(Configuration newConfig) {
-//	}
+	// // Rotation handling
+	// @Override
+	// public void onConfigurationChanged(Configuration newConfig) {
+	// }
 
 	@Override
 	public void onBackPressed() {
@@ -390,6 +389,8 @@ public class MainActivity extends FragmentActivity {
 		TorrentDetailsFragment tf = null;
 		int position;
 		String hash;
+		AlertDialog.Builder builder;
+		AlertDialog dialog;
 
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
@@ -460,29 +461,126 @@ public class MainActivity extends FragmentActivity {
 			return true;
 		case R.id.action_delete:
 
-			tf = this.getTorrentDetailsFragment();
+			okay = false;
 
-			if (tf != null) {
-				position = tf.position;
-				hash = MainActivity.lines[position].getHash();
-				deleteTorrent(hash);
-				if (findViewById(R.id.one_frame) != null) {
-					getFragmentManager().popBackStack();
-				}
-			}
+			builder = new AlertDialog.Builder(this);
+
+			// Message
+			builder.setMessage(R.string.dm_deleteTorrent).setTitle(
+					R.string.dt_deleteTorrent);
+
+			// Cancel
+			builder.setNeutralButton(R.string.cancel,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							// User cancelled the dialog
+
+							okay = false;
+							Log.i("Okay?", "FALSE");
+						}
+					});
+
+			// Ok
+			builder.setPositiveButton(R.string.ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							// User accepted the dialog
+
+							TorrentDetailsFragment tf = null;
+							int position;
+							String hash;
+
+							if (findViewById(R.id.fragment_container) != null) {
+								tf = (TorrentDetailsFragment) getFragmentManager()
+										.findFragmentById(R.id.content_frame);
+							} else {
+
+								if (getFragmentManager().findFragmentById(
+										R.id.one_frame) instanceof TorrentDetailsFragment) {
+
+									tf = (TorrentDetailsFragment) getFragmentManager()
+											.findFragmentById(R.id.one_frame);
+								}
+
+							}
+
+							if (tf != null) {
+								position = tf.position;
+								hash = MainActivity.lines[position].getHash();
+								deleteTorrent(hash);
+								if (findViewById(R.id.one_frame) != null) {
+									getFragmentManager().popBackStack();
+								}
+							}
+
+						}
+					});
+
+			// Create dialog
+			dialog = builder.create();
+
+			// Show dialog
+			dialog.show();
+
 			return true;
 		case R.id.action_delete_drive:
 
-			tf = this.getTorrentDetailsFragment();
+			builder = new AlertDialog.Builder(this);
 
-			if (tf != null) {
-				position = tf.position;
-				hash = MainActivity.lines[position].getHash();
-				deleteDriveTorrent(hash);
-				if (findViewById(R.id.one_frame) != null) {
-					getFragmentManager().popBackStack();
-				}
-			}
+			// Message
+			builder.setMessage(R.string.dm_deleteDriveTorrent).setTitle(
+					R.string.dt_deleteDriveTorrent);
+
+			// Cancel
+			builder.setNeutralButton(R.string.cancel,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							// User canceled the dialog
+						}
+					});
+
+			// Ok
+			builder.setPositiveButton(R.string.ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							// User accepted the dialog
+
+							TorrentDetailsFragment tf = null;
+							int position;
+							String hash;
+
+							if (findViewById(R.id.fragment_container) != null) {
+								tf = (TorrentDetailsFragment) getFragmentManager()
+										.findFragmentById(R.id.content_frame);
+							} else {
+
+								if (getFragmentManager().findFragmentById(
+										R.id.one_frame) instanceof TorrentDetailsFragment) {
+
+									tf = (TorrentDetailsFragment) getFragmentManager()
+											.findFragmentById(R.id.one_frame);
+								}
+
+							}
+
+							if (tf != null) {
+								position = tf.position;
+								hash = MainActivity.lines[position].getHash();
+								deleteDriveTorrent(hash);
+								if (findViewById(R.id.one_frame) != null) {
+									getFragmentManager().popBackStack();
+								}
+							}
+
+						}
+					});
+
+			// Create dialog
+			dialog = builder.create();
+
+			// Show dialog
+			dialog.show();
+
 			return true;
 		case R.id.action_increase_prio:
 
@@ -644,7 +742,7 @@ public class MainActivity extends FragmentActivity {
 		qBittorrentCommand qtc = new qBittorrentCommand();
 		qtc.execute(new String[] { "resumeAll", null });
 	}
-	
+
 	public void increasePrioTorrent(String hash) {
 		// Execute the task in background
 		qBittorrentCommand qtc = new qBittorrentCommand();
@@ -658,7 +756,6 @@ public class MainActivity extends FragmentActivity {
 		qtc.execute(new String[] { "decreasePrio", hash });
 
 	}
-
 
 	// Delay method
 	public void refreshWithDelay(final String state, int seconds) {
@@ -936,41 +1033,42 @@ public class MainActivity extends FragmentActivity {
 
 					}
 
-					
-					
-					Log.i("Refresh >", "About to set Adapter"); 
+					Log.i("Refresh >", "About to set Adapter");
 					firstFragment.setListAdapter(new myAdapter());
-					
+
 					// Create the about fragment
 					AboutFragment aboutFragment = new AboutFragment();
 
-
 					// Got some results
 					if (torrentsFiltered.size() > 0) {
-						
+
 						// Add the fragment to the 'list_frame' FrameLayout
 						FragmentManager fragmentManager = getFragmentManager();
 						FragmentTransaction fragmentTransaction = fragmentManager
 								.beginTransaction();
 
-						
 						// Set the second fragments container
 						if (findViewById(R.id.fragment_container) != null) {
-							firstFragment.setSecondFragmentContainer(R.id.content_frame);
-							fragmentTransaction.replace(R.id.list_frame, firstFragment);
+							firstFragment
+									.setSecondFragmentContainer(R.id.content_frame);
+							fragmentTransaction.replace(R.id.list_frame,
+									firstFragment);
 
 						} else {
 
-							firstFragment.setSecondFragmentContainer(R.id.one_frame);
-							
+							firstFragment
+									.setSecondFragmentContainer(R.id.one_frame);
+
 							fragmentTransaction.remove(secondFragment);
-							fragmentTransaction.replace(R.id.one_frame, firstFragment);
+							fragmentTransaction.replace(R.id.one_frame,
+									firstFragment);
 
 						}
 
 						fragmentTransaction.commit();
-						
-						Log.i("Refresh", "ItemList?: " + (firstFragment instanceof ItemstFragment));
+
+						Log.i("Refresh", "ItemList?: "
+								+ (firstFragment instanceof ItemstFragment));
 
 						ListView lv = firstFragment.getListView();
 
@@ -979,25 +1077,22 @@ public class MainActivity extends FragmentActivity {
 						// Also update the second fragment (if it comes from the
 						// drawer)
 						if (params[2].equals("clear") && lv.getCount() > 0) {
-							
-							Log.i("Refresh >", "Clear init"); 
+
+							Log.i("Refresh >", "Clear init");
 
 							// Scroll to the first position
 							lv.smoothScrollToPosition(0);
 
-
 							// Notify there isn't any item selected
-							//firstFragment.setSelection(-1);
-
+							// firstFragment.setSelection(-1);
 
 							if (aboutFragment != null) {
 
 								if (findViewById(R.id.fragment_container) != null) {
 
-
 									// Reset the BackStack (Back button)
 									fragmentManager = getFragmentManager();
-									
+
 									for (int i = 0; i < getFragmentManager()
 											.getBackStackEntryCount(); ++i) {
 										getFragmentManager()
@@ -1005,7 +1100,6 @@ public class MainActivity extends FragmentActivity {
 														"secondFragment",
 														FragmentManager.POP_BACK_STACK_INCLUSIVE);
 									}
-
 
 									// Replace with the about fragment
 									fragmentManager
@@ -1040,15 +1134,13 @@ public class MainActivity extends FragmentActivity {
 							// Scroll listView to the first position
 							lv.smoothScrollToPosition(0);
 
-
 							if (aboutFragment != null) {
 
 								if (findViewById(R.id.fragment_container) != null) {
-									
-									
+
 									// Reset the BackStack (Back button)
 									fragmentManager = getFragmentManager();
-									
+
 									for (int i = 0; i < getFragmentManager()
 											.getBackStackEntryCount(); ++i) {
 										getFragmentManager()
@@ -1057,18 +1149,16 @@ public class MainActivity extends FragmentActivity {
 														FragmentManager.POP_BACK_STACK_INCLUSIVE);
 									}
 
-									
 									fragmentManager = getFragmentManager();
 									fragmentManager
 											.beginTransaction()
 											.replace(R.id.content_frame,
-													aboutFragment)
-											.commit();
+													aboutFragment).commit();
 
 								}
 
 								else {
-								
+
 									fragmentManager = getFragmentManager();
 
 									fragmentManager
@@ -1080,7 +1170,6 @@ public class MainActivity extends FragmentActivity {
 								}
 							}
 
-
 						}
 
 					} else {
@@ -1090,35 +1179,38 @@ public class MainActivity extends FragmentActivity {
 						firstFragment.setListAdapter(new ArrayAdapter<String>(
 								MainActivity.this, R.layout.no_items_found,
 								R.id.no_results, emptyList));
-						
-						
+
 						// Add the fragment to the 'list_frame' FrameLayout
-						FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+						FragmentTransaction fragmentTransaction = getFragmentManager()
+								.beginTransaction();
 
 						// Set the second fragments container
 						if (findViewById(R.id.fragment_container) != null) {
-							firstFragment.setSecondFragmentContainer(R.id.content_frame);
-							fragmentTransaction.replace(R.id.list_frame, firstFragment);
-							fragmentTransaction.replace(R.id.content_frame, aboutFragment);
-							
+							firstFragment
+									.setSecondFragmentContainer(R.id.content_frame);
+							fragmentTransaction.replace(R.id.list_frame,
+									firstFragment);
+							fragmentTransaction.replace(R.id.content_frame,
+									aboutFragment);
+
 						} else {
-							firstFragment.setSecondFragmentContainer(R.id.one_frame);
-							fragmentTransaction.replace(R.id.one_frame, firstFragment);
+							firstFragment
+									.setSecondFragmentContainer(R.id.one_frame);
+							fragmentTransaction.replace(R.id.one_frame,
+									firstFragment);
 
 						}
 
 						fragmentTransaction.commit();
-						
 
 					}
-					
 
-				} 
-//				catch(IllegalStateException le){
-//					
-//					throw le;
-//				}
-				
+				}
+				// catch(IllegalStateException le){
+				//
+				// throw le;
+				// }
+
 				catch (Exception e) {
 					// TODO: handle exception
 					Log.e("ADAPTER", e.toString());
@@ -1167,11 +1259,10 @@ public class MainActivity extends FragmentActivity {
 			if ("uploading".equals(state)) {
 				icon.setImageResource(R.drawable.uploading);
 			}
-			
+
 			if ("queuedDL".equals(state) || "queuedUP".equals(state)) {
 				icon.setImageResource(R.drawable.queued);
 			}
-			
 
 			return (row);
 		}
