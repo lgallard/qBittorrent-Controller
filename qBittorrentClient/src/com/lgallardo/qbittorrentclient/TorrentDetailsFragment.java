@@ -18,7 +18,9 @@ public class TorrentDetailsFragment extends Fragment {
 
 	// Torrent variables
 	String name, info, hash, ratio, size, progress, state, leechs, seeds,
-			priority = "";
+			priority, savePath, creationDate, comment, totalWasted,
+			totalUploaded, totalDownloaded, timeElapsed, nbConnections,
+			shareRatio = "";
 
 	String hostname;
 	String protocol;
@@ -49,8 +51,8 @@ public class TorrentDetailsFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.torrent_details, container,
 				false);
-		
-		Log.i("TorrentDetails", "Position =>>> "+ position);
+
+		Log.i("TorrentDetails", "Position =>>> " + position);
 
 		if (MainActivity.lines != null && position != -1) {
 			name = MainActivity.lines[position].getFile();
@@ -63,6 +65,16 @@ public class TorrentDetailsFragment extends Fragment {
 			seeds = MainActivity.lines[position].getSeeds();
 			hash = MainActivity.lines[position].getHash();
 			priority = MainActivity.lines[position].getPriority();
+			savePath = MainActivity.lines[position].getSavePath();
+
+			creationDate = MainActivity.lines[position].getCreationDate();
+			comment = MainActivity.lines[position].getComment();
+			totalWasted = MainActivity.lines[position].getTotalWasted();
+			totalUploaded = MainActivity.lines[position].getTotalUploaded();
+			totalDownloaded = MainActivity.lines[position].getTotalDownloaded();
+			timeElapsed = MainActivity.lines[position].getTimeElapsed();
+			nbConnections = MainActivity.lines[position].getNbConnections();
+			shareRatio = MainActivity.lines[position].getShareRatio();
 
 			TextView nameTextView = (TextView) rootView
 					.findViewById(R.id.torrentName);
@@ -82,6 +94,24 @@ public class TorrentDetailsFragment extends Fragment {
 					.findViewById(R.id.torrentHash);
 			TextView priorityTextView = (TextView) rootView
 					.findViewById(R.id.torrentPriority);
+			TextView pathTextView = (TextView) rootView
+					.findViewById(R.id.torrentSavePath);
+			TextView creationDateTextView = (TextView) rootView
+					.findViewById(R.id.torrentCreationDate);
+			TextView commentTextView = (TextView) rootView
+					.findViewById(R.id.torrentComment);
+			TextView totalWastedTextView = (TextView) rootView
+					.findViewById(R.id.torrentTotalWasted);
+			TextView totalUploadedTextView = (TextView) rootView
+					.findViewById(R.id.torrentTotalUploaded);
+			TextView totalDownloadedTextView = (TextView) rootView
+					.findViewById(R.id.torrentTotalDownloaded);
+			TextView timeElapsedTextView = (TextView) rootView
+					.findViewById(R.id.torrentTimeElapsed);
+			TextView nbConnectionsTextView = (TextView) rootView
+					.findViewById(R.id.torrentNbConnections);
+			TextView shareRatioTextView = (TextView) rootView
+					.findViewById(R.id.torrentShareRatio);
 
 			nameTextView.setText(name);
 			sizeTextView.setText("Size: " + size);
@@ -92,6 +122,16 @@ public class TorrentDetailsFragment extends Fragment {
 			seedsTextView.setText("Seeds: " + seeds);
 			hashTextView.setText("Hash: " + hash);
 			priorityTextView.setText("Priority: " + priority);
+			pathTextView.setText("Save Path: " + savePath);	
+			creationDateTextView.setText("Create Date: " + creationDate);
+			commentTextView.setText("Comment: " + comment);
+			totalWastedTextView.setText("Total Wasted: " + totalWasted);
+			totalUploadedTextView.setText("Tota lUploaded: " + totalUploaded);
+			totalDownloadedTextView.setText("Total Downloaded: " + totalDownloaded);
+			timeElapsedTextView.setText("Time Elapsed: " + timeElapsed);
+			nbConnectionsTextView.setText("Num. Connections: " + nbConnections);
+			shareRatioTextView.setText("Share Ratio: " + shareRatio);
+			
 		}
 
 		return rootView;
@@ -106,7 +146,7 @@ public class TorrentDetailsFragment extends Fragment {
 	// @Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		if (menu != null) {
-			
+
 			if (getActivity().findViewById(R.id.one_frame) != null) {
 				menu.findItem(R.id.action_refresh).setVisible(false);
 			}

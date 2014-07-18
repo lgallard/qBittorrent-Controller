@@ -51,7 +51,7 @@ import android.widget.Toast;
 public class MainActivity extends FragmentActivity {
 
 	// Params to get JSON Array
-	private static String[] params = new String[3];
+	private static String[] params = new String[4];
 
 	// JSON Node Names
 	protected static final String TAG_USER = "user";
@@ -71,6 +71,15 @@ public class MainActivity extends FragmentActivity {
 	protected static final String TAG_NUMSEEDS = "num_seeds";
 	protected static final String TAG_RATIO = "ratio";
 	protected static final String TAG_PRIORITY = "priority";
+	protected static final String TAG_SAVE_PATH = "save_path";
+	protected static final String TAG_CREATION_DATE = "creation_date";
+	protected static final String TAG_COMMENT = "comment";		
+	protected static final String TAG_TOTAL_WASTED = "total_wasted";
+	protected static final String TAG_TOTAL_UPLOADED = "total_uploaded";
+	protected static final String TAG_TOTAL_DOWNLOADED = "total_downloaded";
+	protected static final String TAG_TIME_ELAPSED = "time_elapsed";
+	protected static final String TAG_NB_CONNECTIONS = "nb_connections";
+	protected static final String TAG_SHARE_RATIO= "share_ratio";
 
 	protected static final String TAG_INFO = "info";
 
@@ -265,9 +274,6 @@ public class MainActivity extends FragmentActivity {
 			fragmentTransaction.commit();
 		}
 
-		if (savedInstanceState == null) {
-			// selectItem(0);
-		}
 	}
 
 	// Drawer's method
@@ -330,6 +336,8 @@ public class MainActivity extends FragmentActivity {
 		} else {
 			params[2] = "";
 		}
+
+		params[3] = "/json/propertiesGeneral/";
 
 		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -622,7 +630,7 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+
 		refresh("all", true);
 
 	}
@@ -671,8 +679,8 @@ public class MainActivity extends FragmentActivity {
 	private void openPreferences() {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-//		startActivity(intent);
-		startActivityForResult(intent, ACTION_CODE);	
+		// startActivity(intent);
+		startActivityForResult(intent, ACTION_CODE);
 
 	}
 
@@ -912,6 +920,27 @@ public class MainActivity extends FragmentActivity {
 
 						MainActivity.names[i] = name;
 
+						// Get torrent generic properties
+
+						 JSONObject json2 = jParser.getJSONFromUrl(params[3]+hash);
+						 
+						 Log.i("JSON", "param[3]: " + params[3]+hash );
+						 Log.i("JSON", "length: " + json2.length() );
+						
+						 for (int j = 0; j < json2.length(); j++) {
+						
+							 torrents[i].setSavePath(json2.getString(TAG_SAVE_PATH));
+							 torrents[i].setCreationDate(json2.getString(TAG_CREATION_DATE));
+							 torrents[i].setComment(json2.getString(TAG_COMMENT));
+							 torrents[i].setTotalWasted(json2.getString(TAG_TOTAL_WASTED));
+							 torrents[i].setTotalUploaded(json2.getString(TAG_TOTAL_UPLOADED));
+							 torrents[i].setTotalDownloaded(json2.getString(TAG_TOTAL_DOWNLOADED));
+							 torrents[i].setTimeElapsed(json2.getString(TAG_TIME_ELAPSED));
+							 torrents[i].setNbConnections(json2.getString(TAG_NB_CONNECTIONS));
+							 torrents[i].setShareRatio(json2.getString(TAG_SHARE_RATIO));
+						 }
+						
+
 					}
 				} catch (JSONException e) {
 					Log.e("MAIN:", e.toString());
@@ -1031,14 +1060,8 @@ public class MainActivity extends FragmentActivity {
 									firstFragment);
 
 						} else {
-
-							firstFragment
-									.setSecondFragmentContainer(R.id.one_frame);
-
-							fragmentTransaction.remove(secondFragment);
-							fragmentTransaction.replace(R.id.one_frame,
-									firstFragment);
-
+							firstFragment.setSecondFragmentContainer(R.id.one_frame);
+							fragmentTransaction.replace(R.id.one_frame,firstFragment);
 						}
 
 						fragmentTransaction.commit();
@@ -1062,45 +1085,40 @@ public class MainActivity extends FragmentActivity {
 							// Notify there isn't any item selected
 							// firstFragment.setSelection(-1);
 
-							if (aboutFragment != null) {
+							if (findViewById(R.id.fragment_container) != null) {
 
-								if (findViewById(R.id.fragment_container) != null) {
+								// Reset the BackStack (Back button)
+								fragmentManager = getFragmentManager();
 
-									// Reset the BackStack (Back button)
-									fragmentManager = getFragmentManager();
-
-									for (int i = 0; i < getFragmentManager()
-											.getBackStackEntryCount(); ++i) {
-										getFragmentManager()
-												.popBackStack(
-														"secondFragment",
-														FragmentManager.POP_BACK_STACK_INCLUSIVE);
-									}
-
-									// Replace with the about fragment
-									fragmentManager
-											.beginTransaction()
-											.replace(R.id.content_frame,
-													aboutFragment).commit();
-
-								} else {
-
-									// Just one fragment
-									// Reset the BackStack (Back button)
-									fragmentManager = getFragmentManager();
-									for (int i = 0; i < fragmentManager
-											.getBackStackEntryCount(); ++i) {
-										fragmentManager.popBackStack();
-									}
-
-									// Replace with the about fragment
-									fragmentManager
-											.beginTransaction()
-											.replace(R.id.one_frame,
-													firstFragment,
-													"firstFragment").commit();
+								for (int i = 0; i < getFragmentManager()
+										.getBackStackEntryCount(); ++i) {
+									getFragmentManager()
+											.popBackStack(
+													"secondFragment",
+													FragmentManager.POP_BACK_STACK_INCLUSIVE);
 								}
 
+								// Replace with the about fragment
+								fragmentManager
+										.beginTransaction()
+										.replace(R.id.content_frame,
+												aboutFragment).commit();
+
+							} else {
+
+								// Just one fragment
+								// Reset the BackStack (Back button)
+								fragmentManager = getFragmentManager();
+								for (int i = 0; i < fragmentManager
+										.getBackStackEntryCount(); ++i) {
+									fragmentManager.popBackStack();
+								}
+
+								// Replace with the about fragment
+								fragmentManager
+										.beginTransaction()
+										.replace(R.id.one_frame, firstFragment,
+												"firstFragment").commit();
 							}
 
 						}
@@ -1162,18 +1180,13 @@ public class MainActivity extends FragmentActivity {
 
 						// Set the second fragments container
 						if (findViewById(R.id.fragment_container) != null) {
-							firstFragment
-									.setSecondFragmentContainer(R.id.content_frame);
-							fragmentTransaction.replace(R.id.list_frame,
-									firstFragment);
-							fragmentTransaction.replace(R.id.content_frame,
-									aboutFragment);
+							firstFragment.setSecondFragmentContainer(R.id.content_frame);
+							fragmentTransaction.replace(R.id.list_frame,firstFragment);
+							fragmentTransaction.replace(R.id.content_frame,aboutFragment);
 
 						} else {
-							firstFragment
-									.setSecondFragmentContainer(R.id.one_frame);
-							fragmentTransaction.replace(R.id.one_frame,
-									firstFragment);
+							firstFragment.setSecondFragmentContainer(R.id.one_frame);
+							fragmentTransaction.replace(R.id.one_frame,firstFragment);
 
 						}
 
