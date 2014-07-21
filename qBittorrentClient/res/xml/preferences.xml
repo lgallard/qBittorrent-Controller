@@ -20,13 +20,20 @@
             android:key="hostname"
             android:summary="Hostname or IP"
             android:title="Connection Host" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="https"
+            android:summary="Connect using https"
+            android:title="Enable https" />
+
         <EditTextPreference
             android:defaultValue="8080"
             android:dialogTitle="Connection Port?"
+            android:inputType="number"
             android:key="port"
             android:summary="Port (80,8080)"
-            android:title="Connection Port " 
-            android:inputType="number"/>
+            android:title="Connection Port " />
         <EditTextPreference
             android:defaultValue="admin"
             android:dialogTitle="Username?"

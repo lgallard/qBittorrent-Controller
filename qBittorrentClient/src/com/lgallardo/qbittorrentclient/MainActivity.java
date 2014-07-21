@@ -101,6 +101,7 @@ public class MainActivity extends FragmentActivity {
 	protected static String username;
 	protected static String password;
 	protected static boolean oldVersion;
+	protected static boolean https;
 
 	protected static String NO_RESULTS = "No torrents found";
 
@@ -155,7 +156,7 @@ public class MainActivity extends FragmentActivity {
 		drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_drawer_active,
 				"Active");
 		drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_drawer_inactive,
-				"Inacctive");
+				"Inactive");
 		// drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_completed,
 		// "Options");
 		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_drawer_settings,
@@ -773,6 +774,16 @@ public class MainActivity extends FragmentActivity {
 		username = sharedPrefs.getString("username", "NULL");
 		password = sharedPrefs.getString("password", "NULL");
 		oldVersion = sharedPrefs.getBoolean("old_version", false);
+		https = sharedPrefs.getBoolean("https", false);
+		
+		// Check https
+		if (https) {
+
+			protocol = "https";
+
+		} else {
+			protocol = "http";
+		}
 	}
 
 	// Here is where the action happens
@@ -785,7 +796,7 @@ public class MainActivity extends FragmentActivity {
 			getPreferences();
 
 			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, port, username,
+			JSONParser jParser = new JSONParser(hostname, protocol,  port, username,
 					password);
 
 			jParser.postCommand(params[0], params[1]);
@@ -881,7 +892,7 @@ public class MainActivity extends FragmentActivity {
 			getPreferences();
 
 			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, port, username,
+			JSONParser jParser = new JSONParser(hostname, protocol, port, username,
 					password);
 
 			JSONArray jArray = jParser.getJSONArrayFromUrl(params[0]);

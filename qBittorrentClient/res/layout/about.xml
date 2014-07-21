@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/qBittorrent_logo"
         android:layout_centerHorizontal="true"
+        android:background="@android:color/white"
         android:text="qBitttorrent Client"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
