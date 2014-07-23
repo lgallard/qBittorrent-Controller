@@ -631,9 +631,9 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		refresh("all", true);
-
+		
+		// Sleect "All" torrents list
+		selectItem(0);
 	}
 
 	private void addUrlTorrent() {
