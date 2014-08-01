@@ -83,6 +83,11 @@
         <activity
             android:name="com.lgallardo.qbittorrentclient.SettingsActivity"
             android:label="@string/title_activity_settings" >
+        </activity> 
+        
+                <activity
+            android:name="com.lgallardo.qbittorrentclient.OptionsActivity"
+            android:label="Options" >
         </activity>     
     </application>
 

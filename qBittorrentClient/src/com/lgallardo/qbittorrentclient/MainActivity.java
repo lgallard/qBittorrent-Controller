@@ -73,13 +73,13 @@ public class MainActivity extends FragmentActivity {
 	protected static final String TAG_PRIORITY = "priority";
 	protected static final String TAG_SAVE_PATH = "save_path";
 	protected static final String TAG_CREATION_DATE = "creation_date";
-	protected static final String TAG_COMMENT = "comment";		
+	protected static final String TAG_COMMENT = "comment";
 	protected static final String TAG_TOTAL_WASTED = "total_wasted";
 	protected static final String TAG_TOTAL_UPLOADED = "total_uploaded";
 	protected static final String TAG_TOTAL_DOWNLOADED = "total_downloaded";
 	protected static final String TAG_TIME_ELAPSED = "time_elapsed";
 	protected static final String TAG_NB_CONNECTIONS = "nb_connections";
-	protected static final String TAG_SHARE_RATIO= "share_ratio";
+	protected static final String TAG_SHARE_RATIO = "share_ratio";
 
 	protected static final String TAG_INFO = "info";
 
@@ -95,6 +95,7 @@ public class MainActivity extends FragmentActivity {
 	protected static final int DELETE_CODE = 3;
 	protected static final int DELETE_DRIVE_CODE = 4;
 
+	// Preferences properties
 	protected static String hostname;
 	protected static int port;
 	protected static String protocol;
@@ -102,6 +103,12 @@ public class MainActivity extends FragmentActivity {
 	protected static String password;
 	protected static boolean oldVersion;
 	protected static boolean https;
+	
+	// Option
+	protected static int global_max_num_connections;
+	protected static int max_num_conn_per_torrent;
+	protected static int max_num_upslots_per_torrent;
+		
 
 	protected static String NO_RESULTS = "No torrents found";
 
@@ -120,7 +127,7 @@ public class MainActivity extends FragmentActivity {
 	private ListView drawerList;
 	private CharSequence drawerTitle;
 	private CharSequence title;
-	// For app icon control for nav drawer, add new property on MainActivity
+	// For app icon control for navigation drawer, add new property on MainActivity
 	private ActionBarDrawerToggle drawerToggle;
 
 	private ItemstFragment firstFragment;
@@ -128,7 +135,7 @@ public class MainActivity extends FragmentActivity {
 	private HelpFragment helpTabletFragment;
 
 	private boolean okay = false;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -144,7 +151,7 @@ public class MainActivity extends FragmentActivity {
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 
 		// Drawer item list objects
-		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[7];
+		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[8];
 
 		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_drawer_all, "All");
 		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_drawer_downloading,
@@ -157,9 +164,9 @@ public class MainActivity extends FragmentActivity {
 				"Active");
 		drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_drawer_inactive,
 				"Inactive");
-		// drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_completed,
-		// "Options");
-		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_drawer_settings,
+		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_options,
+				"Options");
+		drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_drawer_settings,
 				"Settings");
 
 		// Create object for drawer item OnbjectDrawerItem
@@ -427,6 +434,8 @@ public class MainActivity extends FragmentActivity {
 			case 5:
 				refresh("inactive");
 				break;
+			case 6:
+				break;
 			default:
 				selectItem(0);
 				break;
@@ -631,7 +640,7 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+
 		// Sleect "All" torrents list
 		selectItem(0);
 	}
@@ -681,6 +690,19 @@ public class MainActivity extends FragmentActivity {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
 		// startActivity(intent);
+		startActivityForResult(intent, ACTION_CODE);
+
+	}
+	
+	
+	private void openOptions() {
+
+		// Retrieve preferences from options
+		
+		
+		// this must be moved to the on result
+		
+		Intent intent = new Intent(getBaseContext(), OptionsActivity.class);
 		startActivityForResult(intent, ACTION_CODE);
 
 	}
@@ -775,7 +797,7 @@ public class MainActivity extends FragmentActivity {
 		password = sharedPrefs.getString("password", "NULL");
 		oldVersion = sharedPrefs.getBoolean("old_version", false);
 		https = sharedPrefs.getBoolean("https", false);
-		
+
 		// Check https
 		if (https) {
 
@@ -785,6 +807,40 @@ public class MainActivity extends FragmentActivity {
 			protocol = "http";
 		}
 	}
+	
+	// Get Preferences
+	protected void getOptions() {
+		// Preferences stuff
+		sharedPrefs = PreferenceManager
+				.getDefaultSharedPreferences(MainActivity.this);
+
+		builderPrefs = new StringBuilder();
+
+		builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
+
+		// Get values from options
+		global_max_num_connections =  Integer.parseInt(sharedPrefs.getString("global_max_num_connections", "0"));
+		max_num_conn_per_torrent =  Integer.parseInt(sharedPrefs.getString("max_num_conn_per_torrent", "0"));
+		max_num_upslots_per_torrent = Integer.parseInt(sharedPrefs.getString("max_num_upslots_per_torrent", "0"));
+		
+		protocol = sharedPrefs.getString("protocol", "NULL");
+		port = Integer.parseInt(sharedPrefs.getString("port", "80"));
+		username = sharedPrefs.getString("username", "NULL");
+		password = sharedPrefs.getString("password", "NULL");
+		oldVersion = sharedPrefs.getBoolean("old_version", false);
+		https = sharedPrefs.getBoolean("https", false);
+
+		// Check https
+		if (https) {
+
+			protocol = "https";
+
+		} else {
+			protocol = "http";
+		}
+	}
+
+	
 
 	// Here is where the action happens
 	private class qBittorrentCommand extends AsyncTask<String, Integer, String> {
@@ -796,8 +852,100 @@ public class MainActivity extends FragmentActivity {
 			getPreferences();
 
 			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, protocol,  port, username,
-					password);
+			JSONParser jParser = new JSONParser(hostname, protocol, port,
+					username, password);
+
+			jParser.postCommand(params[0], params[1]);
+
+			return params[0];
+
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+
+			int messageId = R.string.connection_error;
+
+			if (result == null) {
+				messageId = R.string.connection_error;
+			}
+
+			if ("start".equals(result)) {
+				messageId = R.string.torrentStarted;
+			}
+
+			if ("pause".equals(result)) {
+				messageId = R.string.torrentPaused;
+			}
+
+			if ("delete".equals(result)) {
+				messageId = R.string.torrentDeleled;
+			}
+
+			if ("deleteDrive".equals(result)) {
+				messageId = R.string.torrentDeletedDrive;
+			}
+
+			if ("addTorrent".equals(result)) {
+				messageId = R.string.torrentAdded;
+			}
+
+			if ("pauseAll".equals(result)) {
+				messageId = R.string.AllTorrentsPaused;
+			}
+
+			if ("increasePrio".equals(result)) {
+				messageId = R.string.increasePrioTorrent;
+			}
+
+			if ("decreasePrio".equals(result)) {
+				messageId = R.string.decreasePrioTorrent;
+			}
+
+			Toast.makeText(getApplicationContext(), messageId,
+					Toast.LENGTH_SHORT).show();
+
+			switch (drawerList.getCheckedItemPosition()) {
+			case 0:
+				refreshWithDelay("all", 3);
+				break;
+			case 1:
+				refreshWithDelay("downloading", 3);
+				break;
+			case 2:
+				refreshWithDelay("completed", 3);
+				break;
+			case 3:
+				refreshWithDelay("paused", 3);
+				break;
+			case 4:
+				refreshWithDelay("active", 3);
+				break;
+			case 5:
+				refreshWithDelay("inactive", 3);
+				break;
+			default:
+				refreshWithDelay("all", 3);
+				break;
+			}
+
+			Log.i("refresh_done", "refresh_perfomed");
+
+		}
+	}
+	
+	// Here is where the action happens
+	private class qBittorrentOptions extends AsyncTask<String, Integer, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+
+			// Get values from preferences
+			getPreferences();
+
+			// Creating new JSON Parser
+			JSONParser jParser = new JSONParser(hostname, protocol, port,
+					username, password);
 
 			jParser.postCommand(params[0], params[1]);
 
@@ -878,6 +1026,7 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+
 	// Here is where the action happens
 	private class qBittorrentTask extends AsyncTask<String, Integer, Torrent[]> {
 
@@ -892,8 +1041,8 @@ public class MainActivity extends FragmentActivity {
 			getPreferences();
 
 			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, protocol, port, username,
-					password);
+			JSONParser jParser = new JSONParser(hostname, protocol, port,
+					username, password);
 
 			JSONArray jArray = jParser.getJSONArrayFromUrl(params[0]);
 
@@ -933,24 +1082,33 @@ public class MainActivity extends FragmentActivity {
 
 						// Get torrent generic properties
 
-						 JSONObject json2 = jParser.getJSONFromUrl(params[3]+hash);
-						 
-						 Log.i("JSON", "param[3]: " + params[3]+hash );
-						 Log.i("JSON", "length: " + json2.length() );
-						
-						 for (int j = 0; j < json2.length(); j++) {
-						
-							 torrents[i].setSavePath(json2.getString(TAG_SAVE_PATH));
-							 torrents[i].setCreationDate(json2.getString(TAG_CREATION_DATE));
-							 torrents[i].setComment(json2.getString(TAG_COMMENT));
-							 torrents[i].setTotalWasted(json2.getString(TAG_TOTAL_WASTED));
-							 torrents[i].setTotalUploaded(json2.getString(TAG_TOTAL_UPLOADED));
-							 torrents[i].setTotalDownloaded(json2.getString(TAG_TOTAL_DOWNLOADED));
-							 torrents[i].setTimeElapsed(json2.getString(TAG_TIME_ELAPSED));
-							 torrents[i].setNbConnections(json2.getString(TAG_NB_CONNECTIONS));
-							 torrents[i].setShareRatio(json2.getString(TAG_SHARE_RATIO));
-						 }
-						
+						JSONObject json2 = jParser.getJSONFromUrl(params[3]
+								+ hash);
+
+						Log.i("JSON", "param[3]: " + params[3] + hash);
+						Log.i("JSON", "length: " + json2.length());
+
+						for (int j = 0; j < json2.length(); j++) {
+
+							torrents[i].setSavePath(json2
+									.getString(TAG_SAVE_PATH));
+							torrents[i].setCreationDate(json2
+									.getString(TAG_CREATION_DATE));
+							torrents[i]
+									.setComment(json2.getString(TAG_COMMENT));
+							torrents[i].setTotalWasted(json2
+									.getString(TAG_TOTAL_WASTED));
+							torrents[i].setTotalUploaded(json2
+									.getString(TAG_TOTAL_UPLOADED));
+							torrents[i].setTotalDownloaded(json2
+									.getString(TAG_TOTAL_DOWNLOADED));
+							torrents[i].setTimeElapsed(json2
+									.getString(TAG_TIME_ELAPSED));
+							torrents[i].setNbConnections(json2
+									.getString(TAG_NB_CONNECTIONS));
+							torrents[i].setShareRatio(json2
+									.getString(TAG_SHARE_RATIO));
+						}
 
 					}
 				} catch (JSONException e) {
@@ -1071,8 +1229,10 @@ public class MainActivity extends FragmentActivity {
 									firstFragment);
 
 						} else {
-							firstFragment.setSecondFragmentContainer(R.id.one_frame);
-							fragmentTransaction.replace(R.id.one_frame,firstFragment);
+							firstFragment
+									.setSecondFragmentContainer(R.id.one_frame);
+							fragmentTransaction.replace(R.id.one_frame,
+									firstFragment);
 						}
 
 						fragmentTransaction.commit();
@@ -1191,13 +1351,18 @@ public class MainActivity extends FragmentActivity {
 
 						// Set the second fragments container
 						if (findViewById(R.id.fragment_container) != null) {
-							firstFragment.setSecondFragmentContainer(R.id.content_frame);
-							fragmentTransaction.replace(R.id.list_frame,firstFragment);
-							fragmentTransaction.replace(R.id.content_frame,aboutFragment);
+							firstFragment
+									.setSecondFragmentContainer(R.id.content_frame);
+							fragmentTransaction.replace(R.id.list_frame,
+									firstFragment);
+							fragmentTransaction.replace(R.id.content_frame,
+									aboutFragment);
 
 						} else {
-							firstFragment.setSecondFragmentContainer(R.id.one_frame);
-							fragmentTransaction.replace(R.id.one_frame,firstFragment);
+							firstFragment
+									.setSecondFragmentContainer(R.id.one_frame);
+							fragmentTransaction.replace(R.id.one_frame,
+									firstFragment);
 
 						}
 
@@ -1305,6 +1470,10 @@ public class MainActivity extends FragmentActivity {
 			refresh("inactive", true);
 			break;
 		case 6:
+			// Options
+			openOptions();
+			break;
+		case 7:
 			// Settings
 			openPreferences();
 			break;

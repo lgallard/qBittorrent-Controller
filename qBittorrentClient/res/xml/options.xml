@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="Connections Limits"
+        android:title="Connections Limits" >
+        <EditTextPreference
+            android:dialogTitle="Global maximum number of connections"
+            android:key="global_max_num_connections"
+            android:title="Global max connections" />
+        <EditTextPreference
+            android:dialogTitle="Maximum number of connections per torrent"
+            android:key="max_num_conn_per_torrent"
+            android:title="Max num conn per torrent" />
+        <EditTextPreference
+            android:dialogTitle="Maximum number of upload slots per torrent"
+            android:key="max_num_upslots_per_torrent"
+            android:title="Max num upload slots per torrent" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="Global Rate Limits"
+        android:title="Global Rate Limits" >
+        <EditTextPreference
+            android:dialogTitle="Global upload"
+            android:key="global_upload"
+            android:title="Upload" />
+        <EditTextPreference
+            android:dialogTitle="Global download"
+            android:key="global_download"
+            android:title="Download" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="Alternative Global Rate Limits"
+        android:title="Alternative Global Rate Limits" >
+        <EditTextPreference
+            android:dialogTitle="Alternative upload"
+            android:key="alt_upload"
+            android:title="Upload" />
+        <EditTextPreference
+            android:dialogTitle="Alternative download"
+            android:key="alt_download"
+            android:title="Download" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="Torrent Queueing"
+        android:title="Torrent Queueing" >
+        <CheckBoxPreference
+            android:key="torrent_queueing"
+            android:title="Torrent Queueing" />
+
+        <EditTextPreference
+            android:dependency="torrent_queueing"
+            android:key="max_act_downloads"
+            android:title="Maximum active downloads" />
+        <EditTextPreference
+            android:dependency="torrent_queueing"
+            android:key="max_act_uploads"
+            android:title="Maximum active uploads" />
+        <EditTextPreference
+            android:dependency="torrent_queueing"
+            android:key="max_act_torrents"
+            android:title="Maximum active torrents" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
