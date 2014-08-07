@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -89,11 +90,20 @@ public class MainActivity extends FragmentActivity {
 	protected static final String TAG_DELETE = "delete";
 	protected static final String TAG_DELETE_DRIVE = "deleteDrive";
 
-	protected static final int ACTION_CODE = 0;
-	protected static final int START_CODE = 1;
-	protected static final int PAUSE_CODE = 2;
-	protected static final int DELETE_CODE = 3;
-	protected static final int DELETE_DRIVE_CODE = 4;
+	protected static final String TAG_GLOBAL_MAX_NUM_CONNECTIONS = "max_connec";
+	protected static final String TAG_MAX_NUM_CONN_PER_TORRENT = "max_connec_per_torrent";
+	protected static final String TAG_MAX_NUM_UPSLOTS_PER_TORRENT = "max_uploads_per_torrent";
+	protected static final String TAG_GLOBAL_UPLOAD = "up_limit";
+	protected static final String TAG_GLOBAL_DOWNLOAD = "dl_limit";
+	protected static final String TAG_ALT_UPLOAD = "alt_up_limit";
+	protected static final String TAG_ALT_DOWNLOAD = "alt_dl_limit";
+	protected static final String TAG_TORRENT_QUEUEING = "queueing_enabled";
+	protected static final String TAG_MAX_ACT_DOWNLOADS = "max_active_downloads";
+	protected static final String TAG_MAX_ACT_UPLOADS = "max_active_uploads";
+	protected static final String TAG_MAX_ACT_TORRENTS = "max_active_torrents";
+
+	protected static final int SETTINGS_CODE = 0;
+	protected static final int OPTION_CODE = 1;
 
 	// Preferences properties
 	protected static String hostname;
@@ -103,12 +113,19 @@ public class MainActivity extends FragmentActivity {
 	protected static String password;
 	protected static boolean oldVersion;
 	protected static boolean https;
-	
+
 	// Option
-	protected static int global_max_num_connections;
-	protected static int max_num_conn_per_torrent;
-	protected static int max_num_upslots_per_torrent;
-		
+	protected static String global_max_num_connections;
+	protected static String max_num_conn_per_torrent;
+	protected static String max_num_upslots_per_torrent;
+	protected static String global_upload;
+	protected static String global_download;
+	protected static String alt_upload;
+	protected static String alt_download;
+	protected static boolean torrent_queueing;
+	protected static String max_act_downloads;
+	protected static String max_act_uploads;
+	protected static String max_act_torrents;
 
 	protected static String NO_RESULTS = "No torrents found";
 
@@ -127,7 +144,8 @@ public class MainActivity extends FragmentActivity {
 	private ListView drawerList;
 	private CharSequence drawerTitle;
 	private CharSequence title;
-	// For app icon control for navigation drawer, add new property on MainActivity
+	// For app icon control for navigation drawer, add new property on
+	// MainActivity
 	private ActionBarDrawerToggle drawerToggle;
 
 	private ItemstFragment firstFragment;
@@ -135,7 +153,7 @@ public class MainActivity extends FragmentActivity {
 	private HelpFragment helpTabletFragment;
 
 	private boolean okay = false;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -206,7 +224,7 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setHomeButtonEnabled(true);
 
 		// Get preferences
-		getPreferences();
+		getSettings();
 
 		// If it were awaked from an intent-filter,
 		// get intent from the intent filter and Add URL torrent
@@ -641,8 +659,66 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		// Sleect "All" torrents list
-		selectItem(0);
+		if (requestCode == SETTINGS_CODE) {
+
+			// Select "All" torrents list
+			selectItem(0);
+		}
+
+		if (requestCode == OPTION_CODE) {
+
+			String json = "";
+
+			// Get Options
+			getOptions();
+
+			/***************************************
+			 * Save qBittorrent's options remotely *
+			 ****************************************/
+
+			// Maximum global number of simultaneous connections
+			json += "\"max_connec\":" + global_max_num_connections;
+
+			// Maximum number of simultaneous connections per torrent
+			json += ",\"max_connec_per_torrent\":" + max_num_conn_per_torrent;
+
+			// Maximum number of upload slots per torrent
+			json += ",\"max_uploads_per_torrent\":"
+					+ max_num_upslots_per_torrent;
+
+			// Global upload speed limit in KiB/s; -1 means no limit is applied
+			json += ",\"up_limit\":" + global_upload;
+
+			// Global download speed limit in KiB/s; -1 means no limit is
+			// applied
+			json += ",\"dl_limit\":" + global_download;
+
+			// alternative global upload speed limit in KiB/s
+			json += ",\"alt_up_limit\":" + alt_upload;
+
+			// alternative global upload speed limit in KiB/s
+			json += ",\"alt_dl_limit\":" + alt_download;
+
+			// Is torrent queuing enabled ?
+			json += ",\"queueing_enabled\":" + torrent_queueing;
+
+			// Maximum number of active simultaneous downloads
+			json += ",\"max_active_downloads\":" + max_act_downloads;
+
+			// Maximum number of active simultaneous uploads
+			json += ",\"max_active_uploads\":" + max_act_uploads;
+
+			// Maximum number of active simultaneous downloads and uploads
+			json += ",\"max_active_torrents\":" + max_act_torrents;
+
+			// Put everything in an json object
+
+			json = "{" + json + "}";
+
+			// Set preferences using this json object
+			setQBittorrentPrefefrences(json);
+		}
+
 	}
 
 	private void addUrlTorrent() {
@@ -686,24 +762,18 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
-	private void openPreferences() {
+	private void openSettings() {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
 		// startActivity(intent);
-		startActivityForResult(intent, ACTION_CODE);
+		startActivityForResult(intent, SETTINGS_CODE);
 
 	}
-	
-	
-	private void openOptions() {
 
-		// Retrieve preferences from options
-		
-		
-		// this must be moved to the on result
-		
+	private void openOptions() {
+		// Retrieve preferences for options
 		Intent intent = new Intent(getBaseContext(), OptionsActivity.class);
-		startActivityForResult(intent, ACTION_CODE);
+		startActivityForResult(intent, OPTION_CODE);
 
 	}
 
@@ -764,6 +834,13 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
+	public void setQBittorrentPrefefrences(String hash) {
+		// Execute the task in background
+		qBittorrentCommand qtc = new qBittorrentCommand();
+		qtc.execute(new String[] { "setQBittorrentPrefefrences", hash });
+
+	}
+
 	// Delay method
 	public void refreshWithDelay(final String state, int seconds) {
 
@@ -779,8 +856,8 @@ public class MainActivity extends FragmentActivity {
 		}, seconds);
 	}
 
-	// Get Preferences
-	protected void getPreferences() {
+	// Get settings
+	protected void getSettings() {
 		// Preferences stuff
 		sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(MainActivity.this);
@@ -807,8 +884,8 @@ public class MainActivity extends FragmentActivity {
 			protocol = "http";
 		}
 	}
-	
-	// Get Preferences
+
+	// Get Options
 	protected void getOptions() {
 		// Preferences stuff
 		sharedPrefs = PreferenceManager
@@ -819,28 +896,28 @@ public class MainActivity extends FragmentActivity {
 		builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
 
 		// Get values from options
-		global_max_num_connections =  Integer.parseInt(sharedPrefs.getString("global_max_num_connections", "0"));
-		max_num_conn_per_torrent =  Integer.parseInt(sharedPrefs.getString("max_num_conn_per_torrent", "0"));
-		max_num_upslots_per_torrent = Integer.parseInt(sharedPrefs.getString("max_num_upslots_per_torrent", "0"));
-		
-		protocol = sharedPrefs.getString("protocol", "NULL");
-		port = Integer.parseInt(sharedPrefs.getString("port", "80"));
-		username = sharedPrefs.getString("username", "NULL");
-		password = sharedPrefs.getString("password", "NULL");
-		oldVersion = sharedPrefs.getBoolean("old_version", false);
-		https = sharedPrefs.getBoolean("https", false);
+		global_max_num_connections = sharedPrefs.getString(
+				"global_max_num_connections", "0");
 
-		// Check https
-		if (https) {
+		max_num_conn_per_torrent = sharedPrefs.getString(
+				"max_num_conn_per_torrent", "0");
+		max_num_upslots_per_torrent = sharedPrefs.getString(
+				"max_num_upslots_per_torrent", "0");
 
-			protocol = "https";
+		global_upload = sharedPrefs.getString("global_upload", "0");
+		global_download = sharedPrefs.getString("global_download", "0");
 
-		} else {
-			protocol = "http";
-		}
+		alt_upload = sharedPrefs.getString("alt_upload", "0");
+		alt_download = sharedPrefs.getString("alt_download", "0");
+
+		// This will used for checking if the torrent queuing option are used
+		torrent_queueing = sharedPrefs.getBoolean("torrent_queueing", false);
+
+		max_act_downloads = sharedPrefs.getString("max_act_downloads", "0");
+		max_act_uploads = sharedPrefs.getString("max_act_uploads", "0");
+		max_act_torrents = sharedPrefs.getString("max_act_torrents", "0");
+
 	}
-
-	
 
 	// Here is where the action happens
 	private class qBittorrentCommand extends AsyncTask<String, Integer, String> {
@@ -849,7 +926,7 @@ public class MainActivity extends FragmentActivity {
 		protected String doInBackground(String... params) {
 
 			// Get values from preferences
-			getPreferences();
+			getSettings();
 
 			// Creating new JSON Parser
 			JSONParser jParser = new JSONParser(hostname, protocol, port,
@@ -902,95 +979,7 @@ public class MainActivity extends FragmentActivity {
 				messageId = R.string.decreasePrioTorrent;
 			}
 
-			Toast.makeText(getApplicationContext(), messageId,
-					Toast.LENGTH_SHORT).show();
-
-			switch (drawerList.getCheckedItemPosition()) {
-			case 0:
-				refreshWithDelay("all", 3);
-				break;
-			case 1:
-				refreshWithDelay("downloading", 3);
-				break;
-			case 2:
-				refreshWithDelay("completed", 3);
-				break;
-			case 3:
-				refreshWithDelay("paused", 3);
-				break;
-			case 4:
-				refreshWithDelay("active", 3);
-				break;
-			case 5:
-				refreshWithDelay("inactive", 3);
-				break;
-			default:
-				refreshWithDelay("all", 3);
-				break;
-			}
-
-			Log.i("refresh_done", "refresh_perfomed");
-
-		}
-	}
-	
-	// Here is where the action happens
-	private class qBittorrentOptions extends AsyncTask<String, Integer, String> {
-
-		@Override
-		protected String doInBackground(String... params) {
-
-			// Get values from preferences
-			getPreferences();
-
-			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, protocol, port,
-					username, password);
-
-			jParser.postCommand(params[0], params[1]);
-
-			return params[0];
-
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-
-			int messageId = R.string.connection_error;
-
-			if (result == null) {
-				messageId = R.string.connection_error;
-			}
-
-			if ("start".equals(result)) {
-				messageId = R.string.torrentStarted;
-			}
-
-			if ("pause".equals(result)) {
-				messageId = R.string.torrentPaused;
-			}
-
-			if ("delete".equals(result)) {
-				messageId = R.string.torrentDeleled;
-			}
-
-			if ("deleteDrive".equals(result)) {
-				messageId = R.string.torrentDeletedDrive;
-			}
-
-			if ("addTorrent".equals(result)) {
-				messageId = R.string.torrentAdded;
-			}
-
-			if ("pauseAll".equals(result)) {
-				messageId = R.string.AllTorrentsPaused;
-			}
-
-			if ("increasePrio".equals(result)) {
-				messageId = R.string.increasePrioTorrent;
-			}
-
-			if ("decreasePrio".equals(result)) {
+			if ("setQBittorrentPrefefrences".equals(result)) {
 				messageId = R.string.decreasePrioTorrent;
 			}
 
@@ -1025,7 +1014,6 @@ public class MainActivity extends FragmentActivity {
 
 		}
 	}
-
 
 	// Here is where the action happens
 	private class qBittorrentTask extends AsyncTask<String, Integer, Torrent[]> {
@@ -1037,8 +1025,8 @@ public class MainActivity extends FragmentActivity {
 
 			Torrent[] torrents = null;
 
-			// Preferences stuff
-			getPreferences();
+			// Get settings
+			getSettings();
 
 			// Creating new JSON Parser
 			JSONParser jParser = new JSONParser(hostname, protocol, port,
@@ -1385,6 +1373,86 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	// Here is where the action happens
+	private class qBittorrentSetOptions extends
+			AsyncTask<String, Integer, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+
+			// Get settings
+			getSettings();
+
+			// Creating new JSON Parser
+			JSONParser jParser = new JSONParser(hostname, protocol, port,
+					username, password);
+
+			//
+			JSONObject json = jParser.getJSONFromUrl(params[0]);
+
+			if (json != null) {
+
+				try {
+
+					// // Option
+					// protected static int global_upload;
+					// protected static int global_download;
+					// protected static int alt_upload;
+					// protected static int alt_download;
+					// protected static boolean torrent_queueing;
+					// protected static String max_act_downloads;
+					// protected static String max_act_uploads;
+					// protected static String max_act_torrents;
+
+					global_max_num_connections = json
+							.getString(TAG_GLOBAL_MAX_NUM_CONNECTIONS);
+					max_num_conn_per_torrent = json
+							.getString(TAG_MAX_NUM_CONN_PER_TORRENT);
+					max_num_upslots_per_torrent = json
+							.getString(TAG_MAX_NUM_UPSLOTS_PER_TORRENT);
+
+					// Save options locally
+					sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+					Editor editor = sharedPrefs.edit();
+					
+					// Save key-values
+					editor.putString("global_max_num_connections",
+							global_max_num_connections);
+					editor.putString("max_num_conn_per_torrent",
+							max_num_conn_per_torrent);
+					editor.putString("max_num_upslots_per_torrent",
+							max_num_upslots_per_torrent);
+
+					// Commit changes
+					editor.commit();
+
+				} catch (Exception e) {
+					Log.e("MAIN:", e.toString());
+					return null;
+				}
+
+			}
+			return "ok";
+
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+
+			if (result == null) {
+
+				Toast.makeText(getApplicationContext(),
+						R.string.connection_error, Toast.LENGTH_SHORT).show();
+
+			} else {
+
+				// Open options activity
+				openOptions();
+
+			}
+		}
+	}
+
 	class myAdapter extends ArrayAdapter<String> {
 		public myAdapter() {
 			// TODO Auto-generated constructor stub
@@ -1470,12 +1538,13 @@ public class MainActivity extends FragmentActivity {
 			refresh("inactive", true);
 			break;
 		case 6:
-			// Options
-			openOptions();
+			// Options - Execute the task in background
+			qBittorrentSetOptions qso = new qBittorrentSetOptions();
+			qso.execute(new String[] { "json/preferences" });
 			break;
 		case 7:
 			// Settings
-			openPreferences();
+			openSettings();
 			break;
 		default:
 			break;
