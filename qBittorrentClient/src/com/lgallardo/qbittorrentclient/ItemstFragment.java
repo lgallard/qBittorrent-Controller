@@ -77,7 +77,7 @@ public class ItemstFragment extends ListFragment {
 			return;
 		}
 
-		Log.i("ItemsFragment", "Position => "+ position);
+//		Log.i("ItemsFragment", "Position => "+ position);
 		
 		detailFragment = new TorrentDetailsFragment();
 

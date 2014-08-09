@@ -13,7 +13,6 @@ package com.lgallardo.qbittorrentclient;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
@@ -24,7 +23,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -44,7 +42,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -161,8 +158,7 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 
 		// Drawer menu
-		navigationDrawerItemTitles = getResources().getStringArray(
-				R.array.navigation_drawer_items_array);
+		navigationDrawerItemTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
 
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -172,24 +168,16 @@ public class MainActivity extends FragmentActivity {
 		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[8];
 
 		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_drawer_all, "All");
-		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_drawer_downloading,
-				"Downloading");
-		drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_drawer_completed,
-				"Completed");
-		drawerItem[3] = new ObjectDrawerItem(R.drawable.ic_drawer_paused,
-				"Paused");
-		drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_drawer_active,
-				"Active");
-		drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_drawer_inactive,
-				"Inactive");
-		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_options,
-				"Options");
-		drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_drawer_settings,
-				"Settings");
+		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_drawer_downloading, "Downloading");
+		drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_drawer_completed, "Completed");
+		drawerItem[3] = new ObjectDrawerItem(R.drawable.ic_drawer_paused, "Paused");
+		drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_drawer_active, "Active");
+		drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_drawer_inactive, "Inactive");
+		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_options, "Options");
+		drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_drawer_settings, "Settings");
 
 		// Create object for drawer item OnbjectDrawerItem
-		DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this,
-				R.layout.listview_item_row, drawerItem);
+		DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.listview_item_row, drawerItem);
 		drawerList.setAdapter(adapter);
 
 		// Set the item click listener
@@ -201,9 +189,7 @@ public class MainActivity extends FragmentActivity {
 		// Add the application icon control code inside MainActivity onCreate
 
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-				R.drawable.ic_drawer, R.string.drawer_open,
-				R.string.drawer_close) {
+		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
 
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
@@ -264,8 +250,7 @@ public class MainActivity extends FragmentActivity {
 
 			// Add the fragment to the 'list_frame' FrameLayout
 			FragmentManager fragmentManager = getFragmentManager();
-			FragmentTransaction fragmentTransaction = fragmentManager
-					.beginTransaction();
+			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 			fragmentTransaction.add(R.id.list_frame, helpTabletFragment);
 			fragmentTransaction.add(R.id.content_frame, secondFragment);
@@ -292,8 +277,7 @@ public class MainActivity extends FragmentActivity {
 
 			// Add the fragment to the 'list_frame' FrameLayout
 			FragmentManager fragmentManager = getFragmentManager();
-			FragmentTransaction fragmentTransaction = fragmentManager
-					.beginTransaction();
+			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 			fragmentTransaction.add(R.id.one_frame, secondFragment);
 
@@ -329,8 +313,7 @@ public class MainActivity extends FragmentActivity {
 		if (getFragmentManager().getBackStackEntryCount() == 0) {
 			this.finish();
 		} else {
-			Log.i("onBackPressed", "getBackStackEntryCount: "
-					+ getFragmentManager().getBackStackEntryCount());
+//			Log.i("onBackPressed", "getBackStackEntryCount: " + getFragmentManager().getBackStackEntryCount());
 			getFragmentManager().popBackStack();
 		}
 	}
@@ -368,8 +351,7 @@ public class MainActivity extends FragmentActivity {
 		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-		if (networkInfo != null && networkInfo.isConnected()
-				&& !networkInfo.isFailover()) {
+		if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
 			// Execute the task in background
 			qBittorrentTask qtt = new qBittorrentTask();
@@ -377,14 +359,12 @@ public class MainActivity extends FragmentActivity {
 			qtt.execute(params);
 
 			// Connecting message
-			Toast.makeText(getApplicationContext(), R.string.connecting,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), R.string.connecting, Toast.LENGTH_SHORT).show();
 
 		} else {
 
 			// Connection Error message
-			Toast.makeText(getApplicationContext(), R.string.connection_error,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
 		}
 
@@ -403,14 +383,12 @@ public class MainActivity extends FragmentActivity {
 		TorrentDetailsFragment tf = null;
 
 		if (findViewById(R.id.fragment_container) != null) {
-			tf = (TorrentDetailsFragment) getFragmentManager()
-					.findFragmentById(R.id.content_frame);
+			tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
 		} else {
 
 			if (getFragmentManager().findFragmentById(R.id.one_frame) instanceof TorrentDetailsFragment) {
 
-				tf = (TorrentDetailsFragment) getFragmentManager()
-						.findFragmentById(R.id.one_frame);
+				tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.one_frame);
 			}
 
 		}
@@ -454,6 +432,8 @@ public class MainActivity extends FragmentActivity {
 				break;
 			case 6:
 				break;
+			case 7:
+				break;
 			default:
 				selectItem(0);
 				break;
@@ -478,7 +458,7 @@ public class MainActivity extends FragmentActivity {
 				}
 
 			} else {
-				Log.i("pase", "tf is null :(");
+//				Log.i("pase", "tf is null :(");
 			}
 			return true;
 		case R.id.action_resume:
@@ -502,55 +482,49 @@ public class MainActivity extends FragmentActivity {
 			builder = new AlertDialog.Builder(this);
 
 			// Message
-			builder.setMessage(R.string.dm_deleteTorrent).setTitle(
-					R.string.dt_deleteTorrent);
+			builder.setMessage(R.string.dm_deleteTorrent).setTitle(R.string.dt_deleteTorrent);
 
 			// Cancel
-			builder.setNeutralButton(R.string.cancel,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							// User cancelled the dialog
+			builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// User cancelled the dialog
 
-							okay = false;
-							Log.i("Okay?", "FALSE");
-						}
-					});
+					okay = false;
+//					Log.i("Okay?", "FALSE");
+				}
+			});
 
 			// Ok
-			builder.setPositiveButton(R.string.ok,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							// User accepted the dialog
+			builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// User accepted the dialog
 
-							TorrentDetailsFragment tf = null;
-							int position;
-							String hash;
+					TorrentDetailsFragment tf = null;
+					int position;
+					String hash;
 
-							if (findViewById(R.id.fragment_container) != null) {
-								tf = (TorrentDetailsFragment) getFragmentManager()
-										.findFragmentById(R.id.content_frame);
-							} else {
+					if (findViewById(R.id.fragment_container) != null) {
+						tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
+					} else {
 
-								if (getFragmentManager().findFragmentById(
-										R.id.one_frame) instanceof TorrentDetailsFragment) {
+						if (getFragmentManager().findFragmentById(R.id.one_frame) instanceof TorrentDetailsFragment) {
 
-									tf = (TorrentDetailsFragment) getFragmentManager()
-											.findFragmentById(R.id.one_frame);
-								}
-
-							}
-
-							if (tf != null) {
-								position = tf.position;
-								hash = MainActivity.lines[position].getHash();
-								deleteTorrent(hash);
-								if (findViewById(R.id.one_frame) != null) {
-									getFragmentManager().popBackStack();
-								}
-							}
-
+							tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.one_frame);
 						}
-					});
+
+					}
+
+					if (tf != null) {
+						position = tf.position;
+						hash = MainActivity.lines[position].getHash();
+						deleteTorrent(hash);
+						if (findViewById(R.id.one_frame) != null) {
+							getFragmentManager().popBackStack();
+						}
+					}
+
+				}
+			});
 
 			// Create dialog
 			dialog = builder.create();
@@ -564,52 +538,46 @@ public class MainActivity extends FragmentActivity {
 			builder = new AlertDialog.Builder(this);
 
 			// Message
-			builder.setMessage(R.string.dm_deleteDriveTorrent).setTitle(
-					R.string.dt_deleteDriveTorrent);
+			builder.setMessage(R.string.dm_deleteDriveTorrent).setTitle(R.string.dt_deleteDriveTorrent);
 
 			// Cancel
-			builder.setNeutralButton(R.string.cancel,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							// User canceled the dialog
-						}
-					});
+			builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// User canceled the dialog
+				}
+			});
 
 			// Ok
-			builder.setPositiveButton(R.string.ok,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							// User accepted the dialog
+			builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// User accepted the dialog
 
-							TorrentDetailsFragment tf = null;
-							int position;
-							String hash;
+					TorrentDetailsFragment tf = null;
+					int position;
+					String hash;
 
-							if (findViewById(R.id.fragment_container) != null) {
-								tf = (TorrentDetailsFragment) getFragmentManager()
-										.findFragmentById(R.id.content_frame);
-							} else {
+					if (findViewById(R.id.fragment_container) != null) {
+						tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
+					} else {
 
-								if (getFragmentManager().findFragmentById(
-										R.id.one_frame) instanceof TorrentDetailsFragment) {
+						if (getFragmentManager().findFragmentById(R.id.one_frame) instanceof TorrentDetailsFragment) {
 
-									tf = (TorrentDetailsFragment) getFragmentManager()
-											.findFragmentById(R.id.one_frame);
-								}
-
-							}
-
-							if (tf != null) {
-								position = tf.position;
-								hash = MainActivity.lines[position].getHash();
-								deleteDriveTorrent(hash);
-								if (findViewById(R.id.one_frame) != null) {
-									getFragmentManager().popBackStack();
-								}
-							}
-
+							tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.one_frame);
 						}
-					});
+
+					}
+
+					if (tf != null) {
+						position = tf.position;
+						hash = MainActivity.lines[position].getHash();
+						deleteDriveTorrent(hash);
+						if (findViewById(R.id.one_frame) != null) {
+							getFragmentManager().popBackStack();
+						}
+					}
+
+				}
+			});
 
 			// Create dialog
 			dialog = builder.create();
@@ -660,9 +628,10 @@ public class MainActivity extends FragmentActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if (requestCode == SETTINGS_CODE) {
-
+			
 			// Select "All" torrents list
 			selectItem(0);
+
 		}
 
 		if (requestCode == OPTION_CODE) {
@@ -683,8 +652,7 @@ public class MainActivity extends FragmentActivity {
 			json += ",\"max_connec_per_torrent\":" + max_num_conn_per_torrent;
 
 			// Maximum number of upload slots per torrent
-			json += ",\"max_uploads_per_torrent\":"
-					+ max_num_upslots_per_torrent;
+			json += ",\"max_uploads_per_torrent\":" + max_num_upslots_per_torrent;
 
 			// Global upload speed limit in KiB/s; -1 means no limit is applied
 			json += ",\"up_limit\":" + global_upload;
@@ -717,7 +685,10 @@ public class MainActivity extends FragmentActivity {
 
 			// Set preferences using this json object
 			setQBittorrentPrefefrences(json);
+
 		}
+		
+
 
 	}
 
@@ -728,8 +699,7 @@ public class MainActivity extends FragmentActivity {
 		View addTorrentView = li.inflate(R.layout.add_torrent, null);
 
 		// URL input
-		final EditText urlInput = (EditText) addTorrentView
-				.findViewById(R.id.url);
+		final EditText urlInput = (EditText) addTorrentView.findViewById(R.id.url);
 
 		// Dialog
 		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -738,21 +708,19 @@ public class MainActivity extends FragmentActivity {
 		builder.setView(addTorrentView);
 
 		// Cancel
-		builder.setNeutralButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						// User cancelled the dialog
-					}
-				});
+		builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				// User cancelled the dialog
+			}
+		});
 
 		// Ok
-		builder.setPositiveButton(R.string.ok,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						// User accepted the dialog
-						addTorrent(urlInput.getText().toString());
-					}
-				});
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				// User accepted the dialog
+				addTorrent(urlInput.getText().toString());
+			}
+		});
 
 		// Create dialog
 		AlertDialog dialog = builder.create();
@@ -859,8 +827,7 @@ public class MainActivity extends FragmentActivity {
 	// Get settings
 	protected void getSettings() {
 		// Preferences stuff
-		sharedPrefs = PreferenceManager
-				.getDefaultSharedPreferences(MainActivity.this);
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
 		builderPrefs = new StringBuilder();
 
@@ -888,21 +855,17 @@ public class MainActivity extends FragmentActivity {
 	// Get Options
 	protected void getOptions() {
 		// Preferences stuff
-		sharedPrefs = PreferenceManager
-				.getDefaultSharedPreferences(MainActivity.this);
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
 		builderPrefs = new StringBuilder();
 
 		builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
 
 		// Get values from options
-		global_max_num_connections = sharedPrefs.getString(
-				"global_max_num_connections", "0");
+		global_max_num_connections = sharedPrefs.getString("global_max_num_connections", "0");
 
-		max_num_conn_per_torrent = sharedPrefs.getString(
-				"max_num_conn_per_torrent", "0");
-		max_num_upslots_per_torrent = sharedPrefs.getString(
-				"max_num_upslots_per_torrent", "0");
+		max_num_conn_per_torrent = sharedPrefs.getString("max_num_conn_per_torrent", "0");
+		max_num_upslots_per_torrent = sharedPrefs.getString("max_num_upslots_per_torrent", "0");
 
 		global_upload = sharedPrefs.getString("global_upload", "0");
 		global_download = sharedPrefs.getString("global_download", "0");
@@ -929,8 +892,7 @@ public class MainActivity extends FragmentActivity {
 			getSettings();
 
 			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, protocol, port,
-					username, password);
+			JSONParser jParser = new JSONParser(hostname, protocol, port, username, password);
 
 			jParser.postCommand(params[0], params[1]);
 
@@ -980,32 +942,46 @@ public class MainActivity extends FragmentActivity {
 			}
 
 			if ("setQBittorrentPrefefrences".equals(result)) {
-				messageId = R.string.decreasePrioTorrent;
+				messageId = R.string.setQBittorrentPrefefrences;
 			}
 
-			Toast.makeText(getApplicationContext(), messageId,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
 
 			switch (drawerList.getCheckedItemPosition()) {
 			case 0:
+				Log.i("qBittorrentCommand","case 0");
 				refreshWithDelay("all", 3);
 				break;
 			case 1:
+				Log.i("qBittorrentCommand","case 1");
 				refreshWithDelay("downloading", 3);
 				break;
 			case 2:
+				Log.i("qBittorrentCommand","case 2");
 				refreshWithDelay("completed", 3);
 				break;
 			case 3:
+				Log.i("qBittorrentCommand","case 3");
 				refreshWithDelay("paused", 3);
 				break;
 			case 4:
+				Log.i("qBittorrentCommand","case 4");
 				refreshWithDelay("active", 3);
 				break;
 			case 5:
+				Log.i("qBittorrentCommand","case 5");
 				refreshWithDelay("inactive", 3);
 				break;
+			case 6:
+				Log.i("qBittorrentCommand","case 6");
+				// Select "All" torrents list
+				selectItem(0);
+				break;
+			case 7:
+				Log.i("qBittorrentCommand","case 7");
+				break;
 			default:
+				Log.i("qBittorrentCommand","default");
 				refreshWithDelay("all", 3);
 				break;
 			}
@@ -1029,8 +1005,7 @@ public class MainActivity extends FragmentActivity {
 			getSettings();
 
 			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, protocol, port,
-					username, password);
+			JSONParser jParser = new JSONParser(hostname, protocol, port, username, password);
 
 			JSONArray jArray = jParser.getJSONArrayFromUrl(params[0]);
 
@@ -1050,12 +1025,8 @@ public class MainActivity extends FragmentActivity {
 
 						name = json.getString(TAG_NAME);
 						size = json.getString(TAG_SIZE);
-						progress = String.format("%.2f",
-								json.getDouble(TAG_PROGRESS) * 100)
-								+ "%";
-						info = size + " | D:" + json.getString(TAG_DLSPEED)
-								+ " | U:" + json.getString(TAG_UPSPEED) + " | "
-								+ progress;
+						progress = String.format("%.2f", json.getDouble(TAG_PROGRESS) * 100) + "%";
+						info = size + " | D:" + json.getString(TAG_DLSPEED) + " | U:" + json.getString(TAG_UPSPEED) + " | " + progress;
 						state = json.getString(TAG_STATE);
 						hash = json.getString(TAG_HASH);
 						ratio = json.getString(TAG_RATIO);
@@ -1063,43 +1034,32 @@ public class MainActivity extends FragmentActivity {
 						seeds = json.getString(TAG_NUMSEEDS);
 						priority = json.getString(TAG_PRIORITY);
 
-						torrents[i] = new Torrent(name, size, state, hash,
-								info, ratio, progress, leechs, seeds, priority);
+						torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority);
 
 						MainActivity.names[i] = name;
 
 						// Get torrent generic properties
 
-						JSONObject json2 = jParser.getJSONFromUrl(params[3]
-								+ hash);
+						JSONObject json2 = jParser.getJSONFromUrl(params[3] + hash);
 
-						Log.i("JSON", "param[3]: " + params[3] + hash);
-						Log.i("JSON", "length: " + json2.length());
+//						Log.i("JSON", "param[3]: " + params[3] + hash);
+//						Log.i("JSON", "length: " + json2.length());
 
 						for (int j = 0; j < json2.length(); j++) {
 
-							torrents[i].setSavePath(json2
-									.getString(TAG_SAVE_PATH));
-							torrents[i].setCreationDate(json2
-									.getString(TAG_CREATION_DATE));
-							torrents[i]
-									.setComment(json2.getString(TAG_COMMENT));
-							torrents[i].setTotalWasted(json2
-									.getString(TAG_TOTAL_WASTED));
-							torrents[i].setTotalUploaded(json2
-									.getString(TAG_TOTAL_UPLOADED));
-							torrents[i].setTotalDownloaded(json2
-									.getString(TAG_TOTAL_DOWNLOADED));
-							torrents[i].setTimeElapsed(json2
-									.getString(TAG_TIME_ELAPSED));
-							torrents[i].setNbConnections(json2
-									.getString(TAG_NB_CONNECTIONS));
-							torrents[i].setShareRatio(json2
-									.getString(TAG_SHARE_RATIO));
+							torrents[i].setSavePath(json2.getString(TAG_SAVE_PATH));
+							torrents[i].setCreationDate(json2.getString(TAG_CREATION_DATE));
+							torrents[i].setComment(json2.getString(TAG_COMMENT));
+							torrents[i].setTotalWasted(json2.getString(TAG_TOTAL_WASTED));
+							torrents[i].setTotalUploaded(json2.getString(TAG_TOTAL_UPLOADED));
+							torrents[i].setTotalDownloaded(json2.getString(TAG_TOTAL_DOWNLOADED));
+							torrents[i].setTimeElapsed(json2.getString(TAG_TIME_ELAPSED));
+							torrents[i].setNbConnections(json2.getString(TAG_NB_CONNECTIONS));
+							torrents[i].setShareRatio(json2.getString(TAG_SHARE_RATIO));
 						}
 
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					Log.e("MAIN:", e.toString());
 				}
 
@@ -1113,8 +1073,7 @@ public class MainActivity extends FragmentActivity {
 
 			if (result == null) {
 
-				Toast.makeText(getApplicationContext(),
-						R.string.connection_error, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
 			} else {
 
@@ -1127,45 +1086,34 @@ public class MainActivity extends FragmentActivity {
 					}
 
 					if (params[1].equals("downloading")) {
-						if ("downloading".equals(result[i].getState())
-								|| "stalledDL".equals(result[i].getState())
-								|| "pausedDL".equals(result[i].getState())
-								|| "queuedDL".equals(result[i].getState())
-								|| "checkingDL".equals(result[i].getState())) {
+						if ("downloading".equals(result[i].getState()) || "stalledDL".equals(result[i].getState()) || "pausedDL".equals(result[i].getState())
+								|| "queuedDL".equals(result[i].getState()) || "checkingDL".equals(result[i].getState())) {
 							torrentsFiltered.add(result[i]);
 						}
 					}
 
 					if (params[1].equals("completed")) {
-						if ("uploading".equals(result[i].getState())
-								|| "stalledUP".equals(result[i].getState())
-								|| "pausedUP".equals(result[i].getState())
-								|| "queuedUP".equals(result[i].getState())
-								|| "checkingUP".equals(result[i].getState())) {
+						if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())
+								|| "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState())) {
 							torrentsFiltered.add(result[i]);
 						}
 					}
 
 					if (params[1].equals("paused")) {
-						if ("pausedDL".equals(result[i].getState())
-								|| "pausedUP".equals(result[i].getState())) {
+						if ("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())) {
 							torrentsFiltered.add(result[i]);
 						}
 					}
 
 					if (params[1].equals("active")) {
-						if ("uploading".equals(result[i].getState())
-								|| "downloading".equals(result[i].getState())) {
+						if ("uploading".equals(result[i].getState()) || "downloading".equals(result[i].getState())) {
 							torrentsFiltered.add(result[i]);
 						}
 					}
 
 					if (params[1].equals("inactive")) {
-						if ("pausedUP".equals(result[i].getState())
-								|| "pausedDL".equals(result[i].getState())
-								|| "queueUP".equals(result[i].getState())
-								|| "queueDL".equals(result[i].getState())
-								|| "stalledUP".equals(result[i].getState())
+						if ("pausedUP".equals(result[i].getState()) || "pausedDL".equals(result[i].getState()) || "queueUP".equals(result[i].getState())
+								|| "queueDL".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())
 								|| "stalledDL".equals(result[i].getState())) {
 							torrentsFiltered.add(result[i]);
 						}
@@ -1179,15 +1127,15 @@ public class MainActivity extends FragmentActivity {
 				MainActivity.names = new String[torrentsFiltered.size()];
 				MainActivity.lines = new Torrent[torrentsFiltered.size()];
 
-				for (int i = 0; i < torrentsFiltered.size(); i++) {
-
-					Torrent torrent = torrentsFiltered.get(i);
-
-					MainActivity.names[i] = torrent.getFile();
-					MainActivity.lines[i] = torrent;
-				}
-
 				try {
+
+					for (int i = 0; i < torrentsFiltered.size(); i++) {
+
+						Torrent torrent = torrentsFiltered.get(i);
+
+						MainActivity.names[i] = torrent.getFile();
+						MainActivity.lines[i] = torrent;
+					}
 
 					if (findViewById(R.id.one_frame) != null) {
 
@@ -1195,7 +1143,7 @@ public class MainActivity extends FragmentActivity {
 
 					}
 
-					Log.i("Refresh >", "About to set Adapter");
+//					Log.i("Refresh >", "About to set Adapter");
 					firstFragment.setListAdapter(new myAdapter());
 
 					// Create the about fragment
@@ -1206,27 +1154,21 @@ public class MainActivity extends FragmentActivity {
 
 						// Add the fragment to the 'list_frame' FrameLayout
 						FragmentManager fragmentManager = getFragmentManager();
-						FragmentTransaction fragmentTransaction = fragmentManager
-								.beginTransaction();
+						FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 						// Set the second fragments container
 						if (findViewById(R.id.fragment_container) != null) {
-							firstFragment
-									.setSecondFragmentContainer(R.id.content_frame);
-							fragmentTransaction.replace(R.id.list_frame,
-									firstFragment);
+							firstFragment.setSecondFragmentContainer(R.id.content_frame);
+							fragmentTransaction.replace(R.id.list_frame, firstFragment);
 
 						} else {
-							firstFragment
-									.setSecondFragmentContainer(R.id.one_frame);
-							fragmentTransaction.replace(R.id.one_frame,
-									firstFragment);
+							firstFragment.setSecondFragmentContainer(R.id.one_frame);
+							fragmentTransaction.replace(R.id.one_frame, firstFragment);
 						}
 
 						fragmentTransaction.commit();
 
-						Log.i("Refresh", "ItemList?: "
-								+ (firstFragment instanceof ItemstFragment));
+//						Log.i("Refresh", "ItemList?: " + (firstFragment instanceof ItemstFragment));
 
 						ListView lv = firstFragment.getListView();
 
@@ -1236,7 +1178,7 @@ public class MainActivity extends FragmentActivity {
 						// drawer)
 						if (params[2].equals("clear") && lv.getCount() > 0) {
 
-							Log.i("Refresh >", "Clear init");
+//							Log.i("Refresh >", "Clear init");
 
 							// Scroll to the first position
 							lv.smoothScrollToPosition(0);
@@ -1249,35 +1191,24 @@ public class MainActivity extends FragmentActivity {
 								// Reset the BackStack (Back button)
 								fragmentManager = getFragmentManager();
 
-								for (int i = 0; i < getFragmentManager()
-										.getBackStackEntryCount(); ++i) {
-									getFragmentManager()
-											.popBackStack(
-													"secondFragment",
-													FragmentManager.POP_BACK_STACK_INCLUSIVE);
+								for (int i = 0; i < getFragmentManager().getBackStackEntryCount(); ++i) {
+									getFragmentManager().popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 								}
 
 								// Replace with the about fragment
-								fragmentManager
-										.beginTransaction()
-										.replace(R.id.content_frame,
-												aboutFragment).commit();
+								fragmentManager.beginTransaction().replace(R.id.content_frame, aboutFragment).commit();
 
 							} else {
 
 								// Just one fragment
 								// Reset the BackStack (Back button)
 								fragmentManager = getFragmentManager();
-								for (int i = 0; i < fragmentManager
-										.getBackStackEntryCount(); ++i) {
+								for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
 									fragmentManager.popBackStack();
 								}
 
 								// Replace with the about fragment
-								fragmentManager
-										.beginTransaction()
-										.replace(R.id.one_frame, firstFragment,
-												"firstFragment").commit();
+								fragmentManager.beginTransaction().replace(R.id.one_frame, firstFragment, "firstFragment").commit();
 							}
 
 						}
@@ -1294,19 +1225,12 @@ public class MainActivity extends FragmentActivity {
 									// Reset the BackStack (Back button)
 									fragmentManager = getFragmentManager();
 
-									for (int i = 0; i < getFragmentManager()
-											.getBackStackEntryCount(); ++i) {
-										getFragmentManager()
-												.popBackStack(
-														"secondFragment",
-														FragmentManager.POP_BACK_STACK_INCLUSIVE);
+									for (int i = 0; i < getFragmentManager().getBackStackEntryCount(); ++i) {
+										getFragmentManager().popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 									}
 
 									fragmentManager = getFragmentManager();
-									fragmentManager
-											.beginTransaction()
-											.replace(R.id.content_frame,
-													aboutFragment).commit();
+									fragmentManager.beginTransaction().replace(R.id.content_frame, aboutFragment).commit();
 
 								}
 
@@ -1314,11 +1238,7 @@ public class MainActivity extends FragmentActivity {
 
 									fragmentManager = getFragmentManager();
 
-									fragmentManager
-											.beginTransaction()
-											.replace(R.id.one_frame,
-													firstFragment,
-													"firstFragment").commit();
+									fragmentManager.beginTransaction().replace(R.id.one_frame, firstFragment, "firstFragment").commit();
 
 								}
 							}
@@ -1329,28 +1249,20 @@ public class MainActivity extends FragmentActivity {
 
 						// No results
 						String[] emptyList = new String[] { NO_RESULTS };
-						firstFragment.setListAdapter(new ArrayAdapter<String>(
-								MainActivity.this, R.layout.no_items_found,
-								R.id.no_results, emptyList));
+						firstFragment.setListAdapter(new ArrayAdapter<String>(MainActivity.this, R.layout.no_items_found, R.id.no_results, emptyList));
 
 						// Add the fragment to the 'list_frame' FrameLayout
-						FragmentTransaction fragmentTransaction = getFragmentManager()
-								.beginTransaction();
+						FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
 						// Set the second fragments container
 						if (findViewById(R.id.fragment_container) != null) {
-							firstFragment
-									.setSecondFragmentContainer(R.id.content_frame);
-							fragmentTransaction.replace(R.id.list_frame,
-									firstFragment);
-							fragmentTransaction.replace(R.id.content_frame,
-									aboutFragment);
+							firstFragment.setSecondFragmentContainer(R.id.content_frame);
+							fragmentTransaction.replace(R.id.list_frame, firstFragment);
+							fragmentTransaction.replace(R.id.content_frame, aboutFragment);
 
 						} else {
-							firstFragment
-									.setSecondFragmentContainer(R.id.one_frame);
-							fragmentTransaction.replace(R.id.one_frame,
-									firstFragment);
+							firstFragment.setSecondFragmentContainer(R.id.one_frame);
+							fragmentTransaction.replace(R.id.one_frame, firstFragment);
 
 						}
 
@@ -1374,8 +1286,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	// Here is where the action happens
-	private class qBittorrentSetOptions extends
-			AsyncTask<String, Integer, String> {
+	private class qBittorrentSetOptions extends AsyncTask<String, Integer, String> {
 
 		@Override
 		protected String doInBackground(String... params) {
@@ -1384,8 +1295,7 @@ public class MainActivity extends FragmentActivity {
 			getSettings();
 
 			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, protocol, port,
-					username, password);
+			JSONParser jParser = new JSONParser(hostname, protocol, port, username, password);
 
 			//
 			JSONObject json = jParser.getJSONFromUrl(params[0]);
@@ -1394,34 +1304,34 @@ public class MainActivity extends FragmentActivity {
 
 				try {
 
-					// // Option
-					// protected static int global_upload;
-					// protected static int global_download;
-					// protected static int alt_upload;
-					// protected static int alt_download;
-					// protected static boolean torrent_queueing;
-					// protected static String max_act_downloads;
-					// protected static String max_act_uploads;
-					// protected static String max_act_torrents;
-
-					global_max_num_connections = json
-							.getString(TAG_GLOBAL_MAX_NUM_CONNECTIONS);
-					max_num_conn_per_torrent = json
-							.getString(TAG_MAX_NUM_CONN_PER_TORRENT);
-					max_num_upslots_per_torrent = json
-							.getString(TAG_MAX_NUM_UPSLOTS_PER_TORRENT);
+					global_max_num_connections = json.getString(TAG_GLOBAL_MAX_NUM_CONNECTIONS);
+					max_num_conn_per_torrent = json.getString(TAG_MAX_NUM_CONN_PER_TORRENT);
+					max_num_upslots_per_torrent = json.getString(TAG_MAX_NUM_UPSLOTS_PER_TORRENT);
+					global_upload = json.getString(TAG_GLOBAL_UPLOAD);
+					global_download = json.getString(TAG_GLOBAL_DOWNLOAD);
+					alt_upload = json.getString(TAG_ALT_UPLOAD);
+					alt_download = json.getString(TAG_ALT_DOWNLOAD);
+					torrent_queueing = json.getBoolean(TAG_TORRENT_QUEUEING);
+					max_act_downloads = json.getString(TAG_MAX_ACT_DOWNLOADS);
+					max_act_uploads = json.getString(TAG_MAX_ACT_UPLOADS);
+					max_act_torrents = json.getString(TAG_MAX_ACT_TORRENTS);
 
 					// Save options locally
 					sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 					Editor editor = sharedPrefs.edit();
-					
+
 					// Save key-values
-					editor.putString("global_max_num_connections",
-							global_max_num_connections);
-					editor.putString("max_num_conn_per_torrent",
-							max_num_conn_per_torrent);
-					editor.putString("max_num_upslots_per_torrent",
-							max_num_upslots_per_torrent);
+					editor.putString("global_max_num_connections", global_max_num_connections);
+					editor.putString("max_num_conn_per_torrent", max_num_conn_per_torrent);
+					editor.putString("max_num_upslots_per_torrent", max_num_upslots_per_torrent);
+					editor.putString("global_upload", global_upload);
+					editor.putString("global_download", global_download);
+					editor.putString("alt_upload", alt_upload);
+					editor.putString("alt_download", alt_download);
+					editor.putBoolean("torrent_queueing", torrent_queueing);
+					editor.putString("max_act_downloads", max_act_downloads);
+					editor.putString("max_act_uploads", max_act_uploads);
+					editor.putString("max_act_torrents", max_act_torrents);
 
 					// Commit changes
 					editor.commit();
@@ -1441,8 +1351,7 @@ public class MainActivity extends FragmentActivity {
 
 			if (result == null) {
 
-				Toast.makeText(getApplicationContext(),
-						R.string.connection_error, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
 			} else {
 
@@ -1457,7 +1366,7 @@ public class MainActivity extends FragmentActivity {
 		public myAdapter() {
 			// TODO Auto-generated constructor stub
 			super(MainActivity.this, R.layout.row, R.id.file, names);
-			Log.i("myAdapter", "lines: " + lines.length);
+//			Log.i("myAdapter", "lines: " + lines.length);
 		}
 
 		@Override
@@ -1503,12 +1412,10 @@ public class MainActivity extends FragmentActivity {
 
 	// Drawer classes
 
-	private class DrawerItemClickListener implements
-			ListView.OnItemClickListener {
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			selectItem(position);
 		}
 
@@ -1539,6 +1446,7 @@ public class MainActivity extends FragmentActivity {
 			break;
 		case 6:
 			// Options - Execute the task in background
+			Toast.makeText(getApplicationContext(), R.string.getQBittorrentPrefefrences, Toast.LENGTH_SHORT).show();
 			qBittorrentSetOptions qso = new qBittorrentSetOptions();
 			qso.execute(new String[] { "json/preferences" });
 			break;
