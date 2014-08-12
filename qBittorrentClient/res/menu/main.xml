@@ -60,5 +60,15 @@
         android:icon="@drawable/ic_action_delete_drive"
         android:showAsAction="ifRoom"
         android:title="Delete data"/>
-
+	
+	<item
+        android:id="@+id/action_download_rate_limit"
+        android:showAsAction="ifRoom"
+        android:title="Download rate limit"/>
+	
+	<item
+        android:id="@+id/action_upload_rate_limit"
+        android:showAsAction="ifRoom"
+        android:title="Upload rate limit"/>
+	
 </menu>
