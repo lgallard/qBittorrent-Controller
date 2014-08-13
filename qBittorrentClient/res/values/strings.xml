@@ -43,8 +43,7 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="getQBittorrentPrefefrences">Getting options...</string>
     <string name="setQBittorrentPrefefrences">Options saved</string>
-    
-    
+    <string name="setUploadRateLimit">Upload rate limit set</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>All</item>

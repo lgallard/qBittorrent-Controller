@@ -619,6 +619,21 @@ public class MainActivity extends FragmentActivity {
 		case R.id.action_pause_all:
 			pauseAllTorrents();
 			return true;
+			
+		case R.id.upload_rate_limit:
+
+			tf = this.getTorrentDetailsFragment();
+
+			if (tf != null) {
+				position = tf.position;
+				hash = MainActivity.lines[position].getHash();
+				uploadRateLimitDialog(hash);
+				if (findViewById(R.id.one_frame) != null) {
+					getFragmentManager().popBackStack();
+				}
+			}
+			return true;
+			
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -808,6 +823,50 @@ public class MainActivity extends FragmentActivity {
 		qtc.execute(new String[] { "setQBittorrentPrefefrences", hash });
 
 	}
+	
+	public void uploadRateLimitDialog(final String hash) {
+
+		// get prompts.xml view
+		LayoutInflater li = LayoutInflater.from(MainActivity.this);
+		View view = li.inflate(R.layout.upload_rate_limit, null);
+
+		// URL input
+		final EditText uploadRateLimit = (EditText) view.findViewById(R.id.upload_rate_limit);
+
+		// Dialog
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+		// Set add_torrent.xml to AlertDialog builder
+		builder.setView(view);
+
+		// Cancel
+		builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// User cancelled the dialog
+				}
+			});
+
+		// Ok
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// User accepted the dialog
+					setUploadRateLimit(hash,uploadRateLimit.getText().toString());
+				}
+			});
+
+		// Create dialog
+		AlertDialog dialog = builder.create();
+
+		// Show dialog
+		dialog.show();
+	}
+	
+	public void setUploadRateLimit(String hash, String uploadRateLimit){
+		
+		qBittorrentCommand qtc = new qBittorrentCommand();
+		qtc.execute(new String[] { "setUploadRateLimit", hash+"&limit="+Integer.parseInt(uploadRateLimit)*1024});
+
+	}
 
 	// Delay method
 	public void refreshWithDelay(final String state, int seconds) {
@@ -943,6 +1002,10 @@ public class MainActivity extends FragmentActivity {
 
 			if ("setQBittorrentPrefefrences".equals(result)) {
 				messageId = R.string.setQBittorrentPrefefrences;
+			}
+			
+			if("setUploadRateLimit".equals(result)){
+				messageId = R.string.setUploadRateLimit;
 			}
 
 			Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();

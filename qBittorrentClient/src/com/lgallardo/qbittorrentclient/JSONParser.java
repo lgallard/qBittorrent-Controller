@@ -309,7 +309,12 @@ public class JSONParser {
 			key = "json";
 //			Log.i("setQBittorrentPrefefrences", "setQBittorrentPrefefrences");
 		}
-
+		
+		if ("setUploadRateLimit".equals(command)) {
+			url = "command/setUploadRateLimit";
+		}
+		
+		
 		// Making HTTP request
 		HttpHost targetHost = new HttpHost(this.hostname, this.port,
 				this.protocol);
