@@ -871,6 +871,7 @@ public class MainActivity extends FragmentActivity {
 	public void setUploadRateLimit(String hash, String uploadRateLimit){
 		
 		Log.i("upload_rate_limit", hash+"&limit="+Integer.parseInt(uploadRateLimit)*1024);
+
 		qBittorrentCommand qtc = new qBittorrentCommand();
 		qtc.execute(new String[] { "setUploadRateLimit", hash+"&"+ Integer.parseInt(uploadRateLimit)*1024});
 

@@ -124,7 +124,8 @@ public class TorrentDetailsFragment extends Fragment {
 			nbConnectionsTextView.setText("Num. Connections: " + nbConnections);
 			shareRatioTextView.setText("Share Ratio: " + shareRatio);
 			uploadRateLimitTextView.setText("Upload Rate Limit: " + uploadRateLimit);
-			downloadRateLimitTextView.setText("Upload Rate Limit: " + downloadRateLimit);
+			downloadRateLimitTextView.setText("Download Rate Limit: " + downloadRateLimit);
+ 
 		}
 
 		return rootView;

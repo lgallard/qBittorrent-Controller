@@ -191,10 +191,22 @@ class Torrent {
 	}
 	
 	public String getUploadLimit() {
+		
+		// If apply, return infinity symbol
+		if(Character.codePointAt(uploadLimit, 0) == 226){
+			return Character.toString('\u221E');
+		}
+
 		return uploadLimit;
 	}
 
 	public String getDownloadLimit() {
+		
+		// If apply, return infinity symbol
+		if(Character.codePointAt(downloadLimit, 0) == 226){
+			return Character.toString('\u221E');
+		}
+		
 		return downloadLimit;
 	}
 
