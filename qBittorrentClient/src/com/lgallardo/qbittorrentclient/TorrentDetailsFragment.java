@@ -27,10 +27,8 @@ import android.app.Activity;
 public class TorrentDetailsFragment extends Fragment {
 
 	// Torrent variables
-	String name, info, hash, ratio, size, progress, state, leechs, seeds,
-			priority, savePath, creationDate, comment, totalWasted,
-			totalUploaded, totalDownloaded, timeElapsed, nbConnections,
-			shareRatio = "";
+	String name, info, hash, ratio, size, progress, state, leechs, seeds, priority, savePath, creationDate, comment, totalWasted, totalUploaded,
+			totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit = "";
 
 	String hostname;
 	String protocol;
@@ -52,15 +50,13 @@ public class TorrentDetailsFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		// Tell the host activity that your fragment has menu options that it
 		// wants to add/replace/delete using the onCreateOptionsMenu method.
 		setHasOptionsMenu(true);
 
-		View rootView = inflater.inflate(R.layout.torrent_details, container,
-				false);
+		View rootView = inflater.inflate(R.layout.torrent_details, container, false);
 
 		Log.i("TorrentDetails", "Position =>>> " + position);
 
@@ -85,43 +81,29 @@ public class TorrentDetailsFragment extends Fragment {
 			timeElapsed = MainActivity.lines[position].getTimeElapsed();
 			nbConnections = MainActivity.lines[position].getNbConnections();
 			shareRatio = MainActivity.lines[position].getShareRatio();
+			uploadRateLimit = MainActivity.lines[position].getUploadLimit();
+			downloadRateLimit = MainActivity.lines[position].getDownloadLimit();
 
-			TextView nameTextView = (TextView) rootView
-					.findViewById(R.id.torrentName);
-			TextView sizeTextView = (TextView) rootView
-					.findViewById(R.id.torrentSize);
-			TextView ratioTextView = (TextView) rootView
-					.findViewById(R.id.torrentRatio);
-			TextView progressTextView = (TextView) rootView
-					.findViewById(R.id.torrentProgress);
-			TextView stateTextView = (TextView) rootView
-					.findViewById(R.id.torrentState);
-			TextView leechsTextView = (TextView) rootView
-					.findViewById(R.id.torrentLeechs);
-			TextView seedsTextView = (TextView) rootView
-					.findViewById(R.id.torrentSeeds);
-			TextView hashTextView = (TextView) rootView
-					.findViewById(R.id.torrentHash);
-			TextView priorityTextView = (TextView) rootView
-					.findViewById(R.id.torrentPriority);
-			TextView pathTextView = (TextView) rootView
-					.findViewById(R.id.torrentSavePath);
-			TextView creationDateTextView = (TextView) rootView
-					.findViewById(R.id.torrentCreationDate);
-			TextView commentTextView = (TextView) rootView
-					.findViewById(R.id.torrentComment);
-			TextView totalWastedTextView = (TextView) rootView
-					.findViewById(R.id.torrentTotalWasted);
-			TextView totalUploadedTextView = (TextView) rootView
-					.findViewById(R.id.torrentTotalUploaded);
-			TextView totalDownloadedTextView = (TextView) rootView
-					.findViewById(R.id.torrentTotalDownloaded);
-			TextView timeElapsedTextView = (TextView) rootView
-					.findViewById(R.id.torrentTimeElapsed);
-			TextView nbConnectionsTextView = (TextView) rootView
-					.findViewById(R.id.torrentNbConnections);
-			TextView shareRatioTextView = (TextView) rootView
-					.findViewById(R.id.torrentShareRatio);
+			TextView nameTextView = (TextView) rootView.findViewById(R.id.torrentName);
+			TextView sizeTextView = (TextView) rootView.findViewById(R.id.torrentSize);
+			TextView ratioTextView = (TextView) rootView.findViewById(R.id.torrentRatio);
+			TextView progressTextView = (TextView) rootView.findViewById(R.id.torrentProgress);
+			TextView stateTextView = (TextView) rootView.findViewById(R.id.torrentState);
+			TextView leechsTextView = (TextView) rootView.findViewById(R.id.torrentLeechs);
+			TextView seedsTextView = (TextView) rootView.findViewById(R.id.torrentSeeds);
+			TextView hashTextView = (TextView) rootView.findViewById(R.id.torrentHash);
+			TextView priorityTextView = (TextView) rootView.findViewById(R.id.torrentPriority);
+			TextView pathTextView = (TextView) rootView.findViewById(R.id.torrentSavePath);
+			TextView creationDateTextView = (TextView) rootView.findViewById(R.id.torrentCreationDate);
+			TextView commentTextView = (TextView) rootView.findViewById(R.id.torrentComment);
+			TextView totalWastedTextView = (TextView) rootView.findViewById(R.id.torrentTotalWasted);
+			TextView totalUploadedTextView = (TextView) rootView.findViewById(R.id.torrentTotalUploaded);
+			TextView totalDownloadedTextView = (TextView) rootView.findViewById(R.id.torrentTotalDownloaded);
+			TextView timeElapsedTextView = (TextView) rootView.findViewById(R.id.torrentTimeElapsed);
+			TextView nbConnectionsTextView = (TextView) rootView.findViewById(R.id.torrentNbConnections);
+			TextView shareRatioTextView = (TextView) rootView.findViewById(R.id.torrentShareRatio);
+			TextView uploadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentUploadRateLimit);
+			TextView downloadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentDownloadRateLimit);
 
 			nameTextView.setText(name);
 			sizeTextView.setText("Size: " + size);
@@ -132,7 +114,7 @@ public class TorrentDetailsFragment extends Fragment {
 			seedsTextView.setText("Seeds: " + seeds);
 			hashTextView.setText("Hash: " + hash);
 			priorityTextView.setText("Priority: " + priority);
-			pathTextView.setText("Save Path: " + savePath);	
+			pathTextView.setText("Save Path: " + savePath);
 			creationDateTextView.setText("Create Date: " + creationDate);
 			commentTextView.setText("Comment: " + comment);
 			totalWastedTextView.setText("Total Wasted: " + totalWasted);
@@ -141,7 +123,8 @@ public class TorrentDetailsFragment extends Fragment {
 			timeElapsedTextView.setText("Time Elapsed: " + timeElapsed);
 			nbConnectionsTextView.setText("Num. Connections: " + nbConnections);
 			shareRatioTextView.setText("Share Ratio: " + shareRatio);
-			
+			uploadRateLimitTextView.setText("Upload Rate Limit: " + uploadRateLimit);
+			downloadRateLimitTextView.setText("Upload Rate Limit: " + downloadRateLimit);
 		}
 
 		return rootView;

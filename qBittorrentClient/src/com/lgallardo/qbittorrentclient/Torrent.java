@@ -32,7 +32,9 @@ class Torrent {
 	private String timeElapsed;
 	private String nbConnections;
 	private String shareRatio;
-
+	private String 	uploadLimit;
+	private String 	downloadLimit;
+	
 	public Torrent(String file, String size, String state, String hash,
 					String info, String ratio, String progress, String leechs,
 					String seeds, String priority) {
@@ -187,6 +189,15 @@ class Torrent {
 	public String getShareRatio() {
 		return shareRatio;
 	}
+	
+	public String getUploadLimit() {
+		return uploadLimit;
+	}
+
+	public String getDownloadLimit() {
+		return downloadLimit;
+	}
+
 
 	/**
 	 * @param file the file to set
@@ -326,6 +337,14 @@ class Torrent {
 	 */
 	public void setShareRatio(String shareRatio) {
 		this.shareRatio = shareRatio;
+	}
+
+	public void setUploadLimit(String uploadLimit) {
+		this.uploadLimit = uploadLimit;
+	}
+
+	public void setDownloadLimit(String downloadLimit) {
+		this.downloadLimit = downloadLimit;
 	}
 
 }

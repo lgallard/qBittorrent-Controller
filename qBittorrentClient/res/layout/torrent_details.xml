@@ -1,3 +1,4 @@
+
 <!--
   Copyright (c) 2014 Luis M. Gallardo D..
   All rights reserved. This program and the accompanying materials
@@ -12,11 +13,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@android:color/white"
     tools:context=".TorrentActionsActivity" >
 
     <ScrollView
@@ -120,6 +121,18 @@
 
             <TextView
                 android:id="@+id/torrentComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/torrentUploadRateLimit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/torrentDownloadRateLimit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView" />

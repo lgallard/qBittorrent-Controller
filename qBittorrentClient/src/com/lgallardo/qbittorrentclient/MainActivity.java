@@ -78,6 +78,9 @@ public class MainActivity extends FragmentActivity {
 	protected static final String TAG_TIME_ELAPSED = "time_elapsed";
 	protected static final String TAG_NB_CONNECTIONS = "nb_connections";
 	protected static final String TAG_SHARE_RATIO = "share_ratio";
+	protected static final String TAG_UPLOAD_LIMIT = "up_limit";
+	protected static final String TAG_DOWNLOAD_LIMIT = "dl_limit";
+	
 
 	protected static final String TAG_INFO = "info";
 
@@ -620,13 +623,16 @@ public class MainActivity extends FragmentActivity {
 			pauseAllTorrents();
 			return true;
 			
-		case R.id.upload_rate_limit:
+		case R.id.action_upload_rate_limit:
+			
+			Log.i("upload_rate_limit", "upload_rate_limit");
 
 			tf = this.getTorrentDetailsFragment();
 
 			if (tf != null) {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
+				Log.i("upload_rate_limit", "hash: "+hash);
 				uploadRateLimitDialog(hash);
 				if (findViewById(R.id.one_frame) != null) {
 					getFragmentManager().popBackStack();
@@ -850,6 +856,7 @@ public class MainActivity extends FragmentActivity {
 		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					// User accepted the dialog
+					Log.i("upload_rate_limit", "setUploadRateLimit called");
 					setUploadRateLimit(hash,uploadRateLimit.getText().toString());
 				}
 			});
@@ -863,8 +870,9 @@ public class MainActivity extends FragmentActivity {
 	
 	public void setUploadRateLimit(String hash, String uploadRateLimit){
 		
+		Log.i("upload_rate_limit", hash+"&limit="+Integer.parseInt(uploadRateLimit)*1024);
 		qBittorrentCommand qtc = new qBittorrentCommand();
-		qtc.execute(new String[] { "setUploadRateLimit", hash+"&limit="+Integer.parseInt(uploadRateLimit)*1024});
+		qtc.execute(new String[] { "setUploadRateLimit", hash+"&"+ Integer.parseInt(uploadRateLimit)*1024});
 
 	}
 
@@ -1119,6 +1127,8 @@ public class MainActivity extends FragmentActivity {
 							torrents[i].setTimeElapsed(json2.getString(TAG_TIME_ELAPSED));
 							torrents[i].setNbConnections(json2.getString(TAG_NB_CONNECTIONS));
 							torrents[i].setShareRatio(json2.getString(TAG_SHARE_RATIO));
+							torrents[i].setUploadLimit(json2.getString(TAG_UPLOAD_LIMIT));
+							torrents[i].setDownloadLimit(json2.getString(TAG_DOWNLOAD_LIMIT));							
 						}
 
 					}
