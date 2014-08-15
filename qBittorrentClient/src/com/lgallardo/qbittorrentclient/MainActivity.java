@@ -1185,6 +1185,14 @@ public class MainActivity extends FragmentActivity {
 						// Get torrent generic properties
 
 						JSONObject json2 = jParser.getJSONFromUrl(params[3] + hash);
+						
+						
+						// If no data, throw exception
+						if(json2.length() == 0){
+							
+							throw(new Exception());
+							
+						}
 
 						// Log.i("JSON", "param[3]: " + params[3] + hash);
 						// Log.i("JSON", "length: " + json2.length());
@@ -1207,6 +1215,7 @@ public class MainActivity extends FragmentActivity {
 					}
 				}
 			} catch (Exception e) {
+				torrents = null;
 				Log.e("MAIN:", e.toString());
 			}
 
