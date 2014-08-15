@@ -44,7 +44,8 @@
     <string name="getQBittorrentPrefefrences">Getting options...</string>
     <string name="setQBittorrentPrefefrences">Options saved</string>
     <string name="setUploadRateLimit">Upload rate limit set</string>
-
+    <string name="setDownloadRateLimit">Download rate limit set</string>
+    
     <string-array name="navigation_drawer_items_array">
         <item>All</item>
         <item>Downloading</item>

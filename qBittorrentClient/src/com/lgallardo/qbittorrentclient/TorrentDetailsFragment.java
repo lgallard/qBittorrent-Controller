@@ -60,72 +60,77 @@ public class TorrentDetailsFragment extends Fragment {
 
 		Log.i("TorrentDetails", "Position =>>> " + position);
 
-		if (MainActivity.lines != null && position != -1) {
-			name = MainActivity.lines[position].getFile();
-			size = MainActivity.lines[position].getSize();
-			hash = MainActivity.lines[position].getHash();
-			ratio = MainActivity.lines[position].getRatio();
-			progress = MainActivity.lines[position].getProgress();
-			state = MainActivity.lines[position].getState();
-			leechs = MainActivity.lines[position].getLeechs();
-			seeds = MainActivity.lines[position].getSeeds();
-			hash = MainActivity.lines[position].getHash();
-			priority = MainActivity.lines[position].getPriority();
-			savePath = MainActivity.lines[position].getSavePath();
+		try {
+			if (MainActivity.lines != null && position != -1) {
+				name = MainActivity.lines[position].getFile();
+				size = MainActivity.lines[position].getSize();
+				hash = MainActivity.lines[position].getHash();
+				ratio = MainActivity.lines[position].getRatio();
+				progress = MainActivity.lines[position].getProgress();
+				state = MainActivity.lines[position].getState();
+				leechs = MainActivity.lines[position].getLeechs();
+				seeds = MainActivity.lines[position].getSeeds();
+				hash = MainActivity.lines[position].getHash();
+				priority = MainActivity.lines[position].getPriority();
+				savePath = MainActivity.lines[position].getSavePath();
 
-			creationDate = MainActivity.lines[position].getCreationDate();
-			comment = MainActivity.lines[position].getComment();
-			totalWasted = MainActivity.lines[position].getTotalWasted();
-			totalUploaded = MainActivity.lines[position].getTotalUploaded();
-			totalDownloaded = MainActivity.lines[position].getTotalDownloaded();
-			timeElapsed = MainActivity.lines[position].getTimeElapsed();
-			nbConnections = MainActivity.lines[position].getNbConnections();
-			shareRatio = MainActivity.lines[position].getShareRatio();
-			uploadRateLimit = MainActivity.lines[position].getUploadLimit();
-			downloadRateLimit = MainActivity.lines[position].getDownloadLimit();
+				creationDate = MainActivity.lines[position].getCreationDate();
+				comment = MainActivity.lines[position].getComment();
+				totalWasted = MainActivity.lines[position].getTotalWasted();
+				totalUploaded = MainActivity.lines[position].getTotalUploaded();
+				totalDownloaded = MainActivity.lines[position].getTotalDownloaded();
+				timeElapsed = MainActivity.lines[position].getTimeElapsed();
+				nbConnections = MainActivity.lines[position].getNbConnections();
+				shareRatio = MainActivity.lines[position].getShareRatio();
+				uploadRateLimit = MainActivity.lines[position].getUploadLimit();
+				downloadRateLimit = MainActivity.lines[position].getDownloadLimit();
 
-			TextView nameTextView = (TextView) rootView.findViewById(R.id.torrentName);
-			TextView sizeTextView = (TextView) rootView.findViewById(R.id.torrentSize);
-			TextView ratioTextView = (TextView) rootView.findViewById(R.id.torrentRatio);
-			TextView progressTextView = (TextView) rootView.findViewById(R.id.torrentProgress);
-			TextView stateTextView = (TextView) rootView.findViewById(R.id.torrentState);
-			TextView leechsTextView = (TextView) rootView.findViewById(R.id.torrentLeechs);
-			TextView seedsTextView = (TextView) rootView.findViewById(R.id.torrentSeeds);
-			TextView hashTextView = (TextView) rootView.findViewById(R.id.torrentHash);
-			TextView priorityTextView = (TextView) rootView.findViewById(R.id.torrentPriority);
-			TextView pathTextView = (TextView) rootView.findViewById(R.id.torrentSavePath);
-			TextView creationDateTextView = (TextView) rootView.findViewById(R.id.torrentCreationDate);
-			TextView commentTextView = (TextView) rootView.findViewById(R.id.torrentComment);
-			TextView totalWastedTextView = (TextView) rootView.findViewById(R.id.torrentTotalWasted);
-			TextView totalUploadedTextView = (TextView) rootView.findViewById(R.id.torrentTotalUploaded);
-			TextView totalDownloadedTextView = (TextView) rootView.findViewById(R.id.torrentTotalDownloaded);
-			TextView timeElapsedTextView = (TextView) rootView.findViewById(R.id.torrentTimeElapsed);
-			TextView nbConnectionsTextView = (TextView) rootView.findViewById(R.id.torrentNbConnections);
-			TextView shareRatioTextView = (TextView) rootView.findViewById(R.id.torrentShareRatio);
-			TextView uploadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentUploadRateLimit);
-			TextView downloadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentDownloadRateLimit);
+				TextView nameTextView = (TextView) rootView.findViewById(R.id.torrentName);
+				TextView sizeTextView = (TextView) rootView.findViewById(R.id.torrentSize);
+				TextView ratioTextView = (TextView) rootView.findViewById(R.id.torrentRatio);
+				TextView progressTextView = (TextView) rootView.findViewById(R.id.torrentProgress);
+				TextView stateTextView = (TextView) rootView.findViewById(R.id.torrentState);
+				TextView leechsTextView = (TextView) rootView.findViewById(R.id.torrentLeechs);
+				TextView seedsTextView = (TextView) rootView.findViewById(R.id.torrentSeeds);
+				TextView hashTextView = (TextView) rootView.findViewById(R.id.torrentHash);
+				TextView priorityTextView = (TextView) rootView.findViewById(R.id.torrentPriority);
+				TextView pathTextView = (TextView) rootView.findViewById(R.id.torrentSavePath);
+				TextView creationDateTextView = (TextView) rootView.findViewById(R.id.torrentCreationDate);
+				TextView commentTextView = (TextView) rootView.findViewById(R.id.torrentComment);
+				TextView totalWastedTextView = (TextView) rootView.findViewById(R.id.torrentTotalWasted);
+				TextView totalUploadedTextView = (TextView) rootView.findViewById(R.id.torrentTotalUploaded);
+				TextView totalDownloadedTextView = (TextView) rootView.findViewById(R.id.torrentTotalDownloaded);
+				TextView timeElapsedTextView = (TextView) rootView.findViewById(R.id.torrentTimeElapsed);
+				TextView nbConnectionsTextView = (TextView) rootView.findViewById(R.id.torrentNbConnections);
+				TextView shareRatioTextView = (TextView) rootView.findViewById(R.id.torrentShareRatio);
+				TextView uploadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentUploadRateLimit);
+				TextView downloadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentDownloadRateLimit);
 
-			nameTextView.setText(name);
-			sizeTextView.setText("Size: " + size);
-			ratioTextView.setText("Ratio: " + ratio);
-			progressTextView.setText("Progress: " + progress);
-			stateTextView.setText("State: " + state);
-			leechsTextView.setText("Leechs: " + leechs);
-			seedsTextView.setText("Seeds: " + seeds);
-			hashTextView.setText("Hash: " + hash);
-			priorityTextView.setText("Priority: " + priority);
-			pathTextView.setText("Save Path: " + savePath);
-			creationDateTextView.setText("Create Date: " + creationDate);
-			commentTextView.setText("Comment: " + comment);
-			totalWastedTextView.setText("Total Wasted: " + totalWasted);
-			totalUploadedTextView.setText("Tota lUploaded: " + totalUploaded);
-			totalDownloadedTextView.setText("Total Downloaded: " + totalDownloaded);
-			timeElapsedTextView.setText("Time Elapsed: " + timeElapsed);
-			nbConnectionsTextView.setText("Num. Connections: " + nbConnections);
-			shareRatioTextView.setText("Share Ratio: " + shareRatio);
-			uploadRateLimitTextView.setText("Upload Rate Limit: " + uploadRateLimit);
-			downloadRateLimitTextView.setText("Download Rate Limit: " + downloadRateLimit);
+				nameTextView.setText(name);
+				sizeTextView.setText("Size: " + size);
+				ratioTextView.setText("Ratio: " + ratio);
+				progressTextView.setText("Progress: " + progress);
+				stateTextView.setText("State: " + state);
+				leechsTextView.setText("Leechs: " + leechs);
+				seedsTextView.setText("Seeds: " + seeds);
+				hashTextView.setText("Hash: " + hash);
+				priorityTextView.setText("Priority: " + priority);
+				pathTextView.setText("Save Path: " + savePath);
+				creationDateTextView.setText("Create Date: " + creationDate);
+				commentTextView.setText("Comment: " + comment);
+				totalWastedTextView.setText("Total Wasted: " + totalWasted);
+				totalUploadedTextView.setText("Tota lUploaded: " + totalUploaded);
+				totalDownloadedTextView.setText("Total Downloaded: " + totalDownloaded);
+				timeElapsedTextView.setText("Time Elapsed: " + timeElapsed);
+				nbConnectionsTextView.setText("Num. Connections: " + nbConnections);
+				shareRatioTextView.setText("Share Ratio: " + shareRatio);
+				uploadRateLimitTextView.setText("Upload Rate Limit: " + uploadRateLimit);
+				downloadRateLimitTextView.setText("Download Rate Limit: " + downloadRateLimit);
  
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e("TorrentDetailsFragment - onCreateView",e.toString());
 		}
 
 		return rootView;

@@ -322,7 +322,19 @@ public class JSONParser {
 			Log.i("upload_rate_limit", "limit: " + limit);
 		}
 		
+
+		if ("setDownloadRateLimit".equals(command)) {
+			url = "command/setTorrentDlLimit";
+
+			String[] tmpString = hash.split("&");
+			hash = tmpString[0];
+			limit = tmpString[1];
+			
+			Log.i("download_rate_limit", "limit: " + limit);
+		}
 		
+		
+
 		// Making HTTP request
 		HttpHost targetHost = new HttpHost(this.hostname, this.port,
 				this.protocol);

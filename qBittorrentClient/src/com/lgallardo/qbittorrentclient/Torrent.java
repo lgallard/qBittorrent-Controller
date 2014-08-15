@@ -48,6 +48,8 @@ class Torrent {
 		this.leechs = leechs;
 		this.seeds = seeds;
 		this.priority = priority;
+		this.uploadLimit = null;
+		this.downloadLimit = null;
 	}
 
 	/**
@@ -193,7 +195,7 @@ class Torrent {
 	public String getUploadLimit() {
 		
 		// If apply, return infinity symbol
-		if(Character.codePointAt(uploadLimit, 0) == 226){
+		if(uploadLimit != null && Character.codePointAt(uploadLimit, 0) == 226){
 			return Character.toString('\u221E');
 		}
 
@@ -203,7 +205,7 @@ class Torrent {
 	public String getDownloadLimit() {
 		
 		// If apply, return infinity symbol
-		if(Character.codePointAt(downloadLimit, 0) == 226){
+		if(downloadLimit != null && Character.codePointAt(downloadLimit, 0) == 226){
 			return Character.toString('\u221E');
 		}
 		

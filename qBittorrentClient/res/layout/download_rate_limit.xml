@@ -17,17 +17,20 @@ Luis M. Gallardo D.
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Download rate limit" />
 
     <EditText
         android:id="@+id/download_rate_limit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:numeric="integer"
         android:ems="10" >
 
         <requestFocus />
     </EditText>
 
 </LinearLayout>
+
+
