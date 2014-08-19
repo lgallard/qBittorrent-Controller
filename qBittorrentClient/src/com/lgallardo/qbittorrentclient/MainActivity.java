@@ -664,6 +664,10 @@ public class MainActivity extends FragmentActivity {
 
 		if (requestCode == SETTINGS_CODE) {
 
+			// Get options and save them as shared preferences
+			qBittorrentOptions qso = new qBittorrentOptions();
+			qso.execute(new String[] { "json/preferences", "getSettings" });
+
 			// Select "All" torrents list
 			selectItem(0);
 
@@ -917,25 +921,37 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public void setUploadRateLimit(String hash, String uploadRateLimit) {
+		int limit;
 
 		if (uploadRateLimit != null && !uploadRateLimit.equals("")) {
 
-			Log.i("upload_rate_limit", hash + "&limit=" + Integer.parseInt(uploadRateLimit) * 1024);
+			Log.i("upload_rate_limit", "global_upload: " + global_upload);
+			Log.i("upload_rate_limit", "uploadRateLimit: " + uploadRateLimit);
+
+			limit = (Integer.parseInt(uploadRateLimit) > Integer.parseInt(global_upload) && Integer.parseInt(global_upload) != 0) ? Integer
+					.parseInt(global_upload) : Integer.parseInt(uploadRateLimit);
+
+			Log.i("upload_rate_limit", hash + "&limit=" + limit * 1024);
 
 			qBittorrentCommand qtc = new qBittorrentCommand();
-			qtc.execute(new String[] { "setUploadRateLimit", hash + "&" + Integer.parseInt(uploadRateLimit) * 1024 });
+			qtc.execute(new String[] { "setUploadRateLimit", hash + "&" + limit * 1024 });
 		}
 
 	}
 
 	public void setDownloadRateLimit(String hash, String downloadRateLimit) {
 
+		int limit;
+
 		if (downloadRateLimit != null && !downloadRateLimit.equals("")) {
 
-			Log.i("download_rate_limit", hash + "&limit=" + Integer.parseInt(downloadRateLimit) * 1024);
+			limit = (Integer.parseInt(downloadRateLimit) > Integer.parseInt(global_upload)) ? Integer.parseInt(global_upload) : Integer
+					.parseInt(downloadRateLimit);
+
+			Log.i("download_rate_limit", hash + "&limit=" + limit * 1024);
 
 			qBittorrentCommand qtc = new qBittorrentCommand();
-			qtc.execute(new String[] { "setDownloadRateLimit", hash + "&" + Integer.parseInt(downloadRateLimit) * 1024 });
+			qtc.execute(new String[] { "setDownloadRateLimit", hash + "&" + limit * 1024 });
 		}
 
 	}
@@ -1185,13 +1201,12 @@ public class MainActivity extends FragmentActivity {
 						// Get torrent generic properties
 
 						JSONObject json2 = jParser.getJSONFromUrl(params[3] + hash);
-						
-						
+
 						// If no data, throw exception
-						if(json2.length() == 0){
-							
-							throw(new Exception());
-							
+						if (json2.length() == 0) {
+
+							throw (new Exception());
+
 						}
 
 						// Log.i("JSON", "param[3]: " + params[3] + hash);
@@ -1442,7 +1457,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	// Here is where the action happens
-	private class qBittorrentSetOptions extends AsyncTask<String, Integer, String> {
+	private class qBittorrentOptions extends AsyncTask<String, Integer, String> {
 
 		@Override
 		protected String doInBackground(String... params) {
@@ -1498,7 +1513,9 @@ public class MainActivity extends FragmentActivity {
 				}
 
 			}
-			return "ok";
+
+			// Return getSettings or setSettings
+			return params[1];
 
 		}
 
@@ -1510,9 +1527,21 @@ public class MainActivity extends FragmentActivity {
 				Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
 			} else {
+				
+				// Set options with the preference UI
 
-				// Open options activity
-				openOptions();
+				if (result.equals("setOptions")) {
+
+					// Open options activity
+					openOptions();
+				}
+
+				// Get options only
+				if (result.equals("getOptions")) {
+
+					// Do nothing
+
+				}
 
 			}
 		}
@@ -1603,8 +1632,8 @@ public class MainActivity extends FragmentActivity {
 		case 6:
 			// Options - Execute the task in background
 			Toast.makeText(getApplicationContext(), R.string.getQBittorrentPrefefrences, Toast.LENGTH_SHORT).show();
-			qBittorrentSetOptions qso = new qBittorrentSetOptions();
-			qso.execute(new String[] { "json/preferences" });
+			qBittorrentOptions qso = new qBittorrentOptions();
+			qso.execute(new String[] { "json/preferences", "setOptions" });
 			break;
 		case 7:
 			// Settings
