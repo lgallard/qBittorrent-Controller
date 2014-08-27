@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -214,6 +215,10 @@ public class MainActivity extends FragmentActivity {
 		// Get preferences
 		getSettings();
 
+		// Get options and save them as shared preferences
+		qBittorrentOptions qso = new qBittorrentOptions();
+		qso.execute(new String[] { "json/preferences", "getSettings" });
+
 		// If it were awaked from an intent-filter,
 		// get intent from the intent filter and Add URL torrent
 		Intent intent = getIntent();
@@ -233,9 +238,9 @@ public class MainActivity extends FragmentActivity {
 			// However, if we're being restored from a previous state,
 			// then we don't need to do anything and should return or else
 			// we could end up with overlapping fragments.
-			if (savedInstanceState != null) {
-				return;
-			}
+			// if (savedInstanceState != null) {
+			// return;
+			// }
 
 			// This fragment will hold the list of torrents
 			firstFragment = new ItemstFragment();
@@ -768,7 +773,6 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private void openSettings() {
-		// TODO Auto-generated method stub
 		Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
 		// startActivity(intent);
 		startActivityForResult(intent, SETTINGS_CODE);
@@ -928,13 +932,21 @@ public class MainActivity extends FragmentActivity {
 			Log.i("upload_rate_limit", "global_upload: " + global_upload);
 			Log.i("upload_rate_limit", "uploadRateLimit: " + uploadRateLimit);
 
-			limit = (Integer.parseInt(uploadRateLimit) > Integer.parseInt(global_upload) && Integer.parseInt(global_upload) != 0) ? Integer
-					.parseInt(global_upload) : Integer.parseInt(uploadRateLimit);
+			if (global_upload != null) {
 
-			Log.i("upload_rate_limit", hash + "&limit=" + limit * 1024);
+				limit = (Integer.parseInt(uploadRateLimit) > Integer.parseInt(global_upload) && Integer.parseInt(global_upload) != 0) ? Integer
+						.parseInt(global_upload) : Integer.parseInt(uploadRateLimit);
 
-			qBittorrentCommand qtc = new qBittorrentCommand();
-			qtc.execute(new String[] { "setUploadRateLimit", hash + "&" + limit * 1024 });
+				Log.i("upload_rate_limit", hash + "&limit=" + limit * 1024);
+
+				qBittorrentCommand qtc = new qBittorrentCommand();
+				qtc.execute(new String[] { "setUploadRateLimit", hash + "&" + limit * 1024 });
+
+			} else {
+				// TODO: Dialog with error message
+				genericOkDialog(R.string.error, R.string.global_value_error);
+
+			}
 		}
 
 	}
@@ -945,14 +957,47 @@ public class MainActivity extends FragmentActivity {
 
 		if (downloadRateLimit != null && !downloadRateLimit.equals("")) {
 
-			limit = (Integer.parseInt(downloadRateLimit) > Integer.parseInt(global_upload)) ? Integer.parseInt(global_upload) : Integer
-					.parseInt(downloadRateLimit);
+			Log.i("download_rate_limit", "global_download: " + global_download);
+			Log.i("download_rate_limit", "downloadRateLimit: " + downloadRateLimit);
 
-			Log.i("download_rate_limit", hash + "&limit=" + limit * 1024);
+			if (global_download != null) {
 
-			qBittorrentCommand qtc = new qBittorrentCommand();
-			qtc.execute(new String[] { "setDownloadRateLimit", hash + "&" + limit * 1024 });
+				limit = (Integer.parseInt(downloadRateLimit) > Integer.parseInt(global_download)) ? Integer.parseInt(global_download) : Integer
+						.parseInt(downloadRateLimit);
+
+				Log.i("download_rate_limit", hash + "&limit=" + limit * 1024);
+
+				qBittorrentCommand qtc = new qBittorrentCommand();
+				qtc.execute(new String[] { "setDownloadRateLimit", hash + "&" + limit * 1024 });
+			} else {
+				// TODO: Dialog with error message
+				genericOkDialog(R.string.error, R.string.global_value_error);
+			}
+
 		}
+
+	}
+
+	public void genericOkDialog(int title, int message) {
+
+		Builder builder = new AlertDialog.Builder(this);
+
+		// Message
+		builder.setMessage(message).setTitle(title);
+
+		// Ok
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int id) {
+				// User accepted the dialog
+			}
+		});
+
+		// Create dialog
+		AlertDialog dialog = builder.create();
+
+		// Show dialog
+		dialog.show();
 
 	}
 
@@ -983,7 +1028,14 @@ public class MainActivity extends FragmentActivity {
 		// Get values from preferences
 		hostname = sharedPrefs.getString("hostname", "NULL");
 		protocol = sharedPrefs.getString("protocol", "NULL");
-		port = Integer.parseInt(sharedPrefs.getString("port", "80"));
+
+		// If user leave the field empty, set 8080 port
+		try {
+			port = Integer.parseInt(sharedPrefs.getString("port", "8080"));
+		} catch (NumberFormatException e) {
+			port = 8080;
+
+		}
 		username = sharedPrefs.getString("username", "NULL");
 		password = sharedPrefs.getString("password", "NULL");
 		oldVersion = sharedPrefs.getBoolean("old_version", false);
@@ -1527,7 +1579,7 @@ public class MainActivity extends FragmentActivity {
 				Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
 			} else {
-				
+
 				// Set options with the preference UI
 
 				if (result.equals("setOptions")) {

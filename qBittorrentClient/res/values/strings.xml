@@ -45,7 +45,9 @@
     <string name="setQBittorrentPrefefrences">Options saved</string>
     <string name="setUploadRateLimit">Upload rate limit set</string>
     <string name="setDownloadRateLimit">Download rate limit set</string>
-    
+    <string name="error">Error</string>
+    <string name="global_value_error">Global value cannot be retrieved. Please check your connection settings!</string>
+
     <string-array name="navigation_drawer_items_array">
         <item>All</item>
         <item>Downloading</item>

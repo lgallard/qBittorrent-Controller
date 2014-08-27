@@ -126,11 +126,11 @@ public class TorrentDetailsFragment extends Fragment {
 				shareRatioTextView.setText("Share Ratio: " + shareRatio);
 				uploadRateLimitTextView.setText("Upload Rate Limit: " + uploadRateLimit);
 				downloadRateLimitTextView.setText("Download Rate Limit: " + downloadRateLimit);
- 
+
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			Log.e("TorrentDetailsFragment - onCreateView",e.toString());
+			Log.e("TorrentDetailsFragment - onCreateView", e.toString());
 		}
 
 		return rootView;
@@ -159,6 +159,8 @@ public class TorrentDetailsFragment extends Fragment {
 			menu.findItem(R.id.action_decrease_prio).setVisible(true);
 			menu.findItem(R.id.action_delete).setVisible(true);
 			menu.findItem(R.id.action_delete_drive).setVisible(true);
+			menu.findItem(R.id.action_download_rate_limit).setVisible(true);
+			menu.findItem(R.id.action_upload_rate_limit).setVisible(true);
 
 		}
 	}

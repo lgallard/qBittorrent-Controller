@@ -20,7 +20,7 @@
         android:layout_below="@+id/qBittorrent_logo"
         android:layout_centerHorizontal="true"
         android:background="@android:color/white"
-        android:text="qBitttorrent Client"
+        android:text="@string/app_name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
@@ -37,7 +37,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView2"
         android:layout_marginTop="10dp"
         android:padding="10dp"
