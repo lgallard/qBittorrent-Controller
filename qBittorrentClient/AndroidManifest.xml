@@ -11,13 +11,11 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lgallardo.qbittorrentclient"
-    
-    android:versionCode="19"
-    android:versionName="1.9" >
+    android:versionCode="191"
+    android:versionName="1.9.1" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -50,8 +48,10 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="*"
                     android:pathPattern=".*\\.torrent"
@@ -83,12 +83,19 @@
         <activity
             android:name="com.lgallardo.qbittorrentclient.SettingsActivity"
             android:label="@string/title_activity_settings" >
-        </activity> 
-        
-                <activity
+        </activity>
+        <activity
             android:name="com.lgallardo.qbittorrentclient.OptionsActivity"
             android:label="Options" >
-        </activity>     
+        </activity>
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" >
+        </activity>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+             />
     </application>
 
 </manifest>

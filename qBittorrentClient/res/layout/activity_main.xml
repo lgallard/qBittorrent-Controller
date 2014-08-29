@@ -16,8 +16,8 @@
 
     <FrameLayout
         android:id="@+id/one_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:background="@android:color/white" 
         android:layout_weight="2" />
 
