@@ -317,9 +317,10 @@ public class MainActivity extends FragmentActivity {
 
 		if (findViewById(R.id.one_frame) != null) {
 			frameLayout = (FrameLayout) findViewById(R.id.one_frame);
+			Log.i("qb-ads", "one_frame");
 		} else {
-
 			frameLayout = (FrameLayout) findViewById(R.id.content_frame);
+			Log.i("qb-ads", "content_frame");
 		}
 
 		FrameLayout.LayoutParams adsParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,
