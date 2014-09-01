@@ -10,6 +10,10 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
 import android.app.Fragment;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -20,7 +24,10 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.app.Activity;
 
@@ -37,6 +44,9 @@ public class TorrentDetailsFragment extends Fragment {
 	String password;
 
 	int position;
+
+	private AdView adView;
+	private View rootView;
 
 	public TorrentDetailsFragment() {
 	}
@@ -56,7 +66,7 @@ public class TorrentDetailsFragment extends Fragment {
 		// wants to add/replace/delete using the onCreateOptionsMenu method.
 		setHasOptionsMenu(true);
 
-		View rootView = inflater.inflate(R.layout.torrent_details, container, false);
+		rootView = inflater.inflate(R.layout.torrent_details, container, false);
 
 		Log.i("TorrentDetails", "Position =>>> " + position);
 
@@ -126,11 +136,14 @@ public class TorrentDetailsFragment extends Fragment {
 				shareRatioTextView.setText("Share Ratio: " + shareRatio);
 				uploadRateLimitTextView.setText("Upload Rate Limit: " + uploadRateLimit);
 				downloadRateLimitTextView.setText("Download Rate Limit: " + downloadRateLimit);
- 
+
+				// Load banner
+				loadBanner();
+
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			Log.e("TorrentDetailsFragment - onCreateView",e.toString());
+			Log.e("TorrentDetailsFragment - onCreateView", e.toString());
 		}
 
 		return rootView;
@@ -159,8 +172,36 @@ public class TorrentDetailsFragment extends Fragment {
 			menu.findItem(R.id.action_decrease_prio).setVisible(true);
 			menu.findItem(R.id.action_delete).setVisible(true);
 			menu.findItem(R.id.action_delete_drive).setVisible(true);
+			menu.findItem(R.id.action_download_rate_limit).setVisible(true);
+			menu.findItem(R.id.action_upload_rate_limit).setVisible(true);
 
 		}
+	}
+
+	// Load Banner
+	public void loadBanner() {
+		LinearLayout linearLayout = null;
+		// Create the adView.
+		adView = new AdView(getActivity());
+		adView.setAdSize(AdSize.SMART_BANNER);
+		adView.setAdUnitId("ca-app-pub-1035265933040074/6449288097");
+
+		// Add the AdView to the view hierarchy. The view will have no size
+		// until the ad is loaded.
+
+		linearLayout = (LinearLayout) rootView.findViewById(R.id.linearLayout3);
+
+		LinearLayout.LayoutParams adsParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,
+				android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL);
+		linearLayout.addView(adView, adsParams);
+
+
+		// Create an ad request. Check logcat output for the hashed device ID to
+		// get test ads on a physical device.
+//		AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice("AC3EF86A25487F26E036ABA00FC22908").build();
+		AdRequest adRequest = new AdRequest.Builder().build();
+		// Start loading the ad in the background.
+		adView.loadAd(adRequest);
 	}
 
 }

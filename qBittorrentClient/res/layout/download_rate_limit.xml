@@ -19,7 +19,7 @@ Luis M. Gallardo D.
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Download rate limit" />
+        android:text="Download rate limit (KiB/s)" />
 
     <EditText
         android:id="@+id/download_rate_limit"

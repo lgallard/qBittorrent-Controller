@@ -15,7 +15,12 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -41,7 +46,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -153,6 +160,8 @@ public class MainActivity extends FragmentActivity {
 
 	private boolean okay = false;
 
+	private AdView adView;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -214,6 +223,10 @@ public class MainActivity extends FragmentActivity {
 		// Get preferences
 		getSettings();
 
+		// Get options and save them as shared preferences
+		qBittorrentOptions qso = new qBittorrentOptions();
+		qso.execute(new String[] { "json/preferences", "getSettings" });
+
 		// If it were awaked from an intent-filter,
 		// get intent from the intent filter and Add URL torrent
 		Intent intent = getIntent();
@@ -233,9 +246,9 @@ public class MainActivity extends FragmentActivity {
 			// However, if we're being restored from a previous state,
 			// then we don't need to do anything and should return or else
 			// we could end up with overlapping fragments.
-			if (savedInstanceState != null) {
-				return;
-			}
+			// if (savedInstanceState != null) {
+			// return;
+			// }
 
 			// This fragment will hold the list of torrents
 			firstFragment = new ItemstFragment();
@@ -285,7 +298,41 @@ public class MainActivity extends FragmentActivity {
 
 			fragmentTransaction.commit();
 		}
+		
+		refresh();
 
+	}
+
+	// Load Banner
+
+	public void loadBanner() {
+		FrameLayout frameLayout = null;
+		// Create the adView.
+		adView = new AdView(this);
+		adView.setAdSize(AdSize.BANNER);
+		adView.setAdUnitId("ca-app-pub-1035265933040074/6449288097");
+
+		// Add the AdView to the view hierarchy. The view will have no size
+		// until the ad is loaded.
+
+		if (findViewById(R.id.one_frame) != null) {
+			frameLayout = (FrameLayout) findViewById(R.id.one_frame);
+		} else {
+
+			frameLayout = (FrameLayout) findViewById(R.id.content_frame);
+		}
+
+		FrameLayout.LayoutParams adsParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,
+				android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL);
+		frameLayout.addView(adView, adsParams);
+
+		// Create an ad request. Check logcat output for the hashed device ID to
+		// get test ads on a physical device.
+//		AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice("AC3EF86A25487F26E036ABA00FC22908").build();
+		AdRequest adRequest = new AdRequest.Builder().build();
+		
+		// Start loading the ad in the background.
+		adView.loadAd(adRequest);
 	}
 
 	// Drawer's method
@@ -360,6 +407,9 @@ public class MainActivity extends FragmentActivity {
 			qBittorrentTask qtt = new qBittorrentTask();
 
 			qtt.execute(params);
+
+			// Load banner
+			loadBanner();
 
 			// Connecting message
 			Toast.makeText(getApplicationContext(), R.string.connecting, Toast.LENGTH_SHORT).show();
@@ -664,6 +714,10 @@ public class MainActivity extends FragmentActivity {
 
 		if (requestCode == SETTINGS_CODE) {
 
+			// Get options and save them as shared preferences
+			qBittorrentOptions qso = new qBittorrentOptions();
+			qso.execute(new String[] { "json/preferences", "getSettings" });
+
 			// Select "All" torrents list
 			selectItem(0);
 
@@ -764,7 +818,6 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private void openSettings() {
-		// TODO Auto-generated method stub
 		Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
 		// startActivity(intent);
 		startActivityForResult(intent, SETTINGS_CODE);
@@ -917,26 +970,79 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public void setUploadRateLimit(String hash, String uploadRateLimit) {
+		int limit;
 
 		if (uploadRateLimit != null && !uploadRateLimit.equals("")) {
 
-			Log.i("upload_rate_limit", hash + "&limit=" + Integer.parseInt(uploadRateLimit) * 1024);
+			Log.i("upload_rate_limit", "global_upload: " + global_upload);
+			Log.i("upload_rate_limit", "uploadRateLimit: " + uploadRateLimit);
 
-			qBittorrentCommand qtc = new qBittorrentCommand();
-			qtc.execute(new String[] { "setUploadRateLimit", hash + "&" + Integer.parseInt(uploadRateLimit) * 1024 });
+			if (global_upload != null) {
+
+				limit = (Integer.parseInt(uploadRateLimit) > Integer.parseInt(global_upload) && Integer.parseInt(global_upload) != 0) ? Integer
+						.parseInt(global_upload) : Integer.parseInt(uploadRateLimit);
+
+				Log.i("upload_rate_limit", hash + "&limit=" + limit * 1024);
+
+				qBittorrentCommand qtc = new qBittorrentCommand();
+				qtc.execute(new String[] { "setUploadRateLimit", hash + "&" + limit * 1024 });
+
+			} else {
+				// TODO: Dialog with error message
+				genericOkDialog(R.string.error, R.string.global_value_error);
+
+			}
 		}
 
 	}
 
 	public void setDownloadRateLimit(String hash, String downloadRateLimit) {
 
+		int limit;
+
 		if (downloadRateLimit != null && !downloadRateLimit.equals("")) {
 
-			Log.i("download_rate_limit", hash + "&limit=" + Integer.parseInt(downloadRateLimit) * 1024);
+			Log.i("download_rate_limit", "global_download: " + global_download);
+			Log.i("download_rate_limit", "downloadRateLimit: " + downloadRateLimit);
 
-			qBittorrentCommand qtc = new qBittorrentCommand();
-			qtc.execute(new String[] { "setDownloadRateLimit", hash + "&" + Integer.parseInt(downloadRateLimit) * 1024 });
+			if (global_download != null) {
+
+				limit = (Integer.parseInt(downloadRateLimit) > Integer.parseInt(global_download)) ? Integer.parseInt(global_download) : Integer
+						.parseInt(downloadRateLimit);
+
+				Log.i("download_rate_limit", hash + "&limit=" + limit * 1024);
+
+				qBittorrentCommand qtc = new qBittorrentCommand();
+				qtc.execute(new String[] { "setDownloadRateLimit", hash + "&" + limit * 1024 });
+			} else {
+				// TODO: Dialog with error message
+				genericOkDialog(R.string.error, R.string.global_value_error);
+			}
+
 		}
+
+	}
+
+	public void genericOkDialog(int title, int message) {
+
+		Builder builder = new AlertDialog.Builder(this);
+
+		// Message
+		builder.setMessage(message).setTitle(title);
+
+		// Ok
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int id) {
+				// User accepted the dialog
+			}
+		});
+
+		// Create dialog
+		AlertDialog dialog = builder.create();
+
+		// Show dialog
+		dialog.show();
 
 	}
 
@@ -967,7 +1073,14 @@ public class MainActivity extends FragmentActivity {
 		// Get values from preferences
 		hostname = sharedPrefs.getString("hostname", "NULL");
 		protocol = sharedPrefs.getString("protocol", "NULL");
-		port = Integer.parseInt(sharedPrefs.getString("port", "80"));
+
+		// If user leave the field empty, set 8080 port
+		try {
+			port = Integer.parseInt(sharedPrefs.getString("port", "8080"));
+		} catch (NumberFormatException e) {
+			port = 8080;
+
+		}
 		username = sharedPrefs.getString("username", "NULL");
 		password = sharedPrefs.getString("password", "NULL");
 		oldVersion = sharedPrefs.getBoolean("old_version", false);
@@ -1185,13 +1298,12 @@ public class MainActivity extends FragmentActivity {
 						// Get torrent generic properties
 
 						JSONObject json2 = jParser.getJSONFromUrl(params[3] + hash);
-						
-						
+
 						// If no data, throw exception
-						if(json2.length() == 0){
-							
-							throw(new Exception());
-							
+						if (json2.length() == 0) {
+
+							throw (new Exception());
+
 						}
 
 						// Log.i("JSON", "param[3]: " + params[3] + hash);
@@ -1442,7 +1554,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	// Here is where the action happens
-	private class qBittorrentSetOptions extends AsyncTask<String, Integer, String> {
+	private class qBittorrentOptions extends AsyncTask<String, Integer, String> {
 
 		@Override
 		protected String doInBackground(String... params) {
@@ -1498,7 +1610,9 @@ public class MainActivity extends FragmentActivity {
 				}
 
 			}
-			return "ok";
+
+			// Return getSettings or setSettings
+			return params[1];
 
 		}
 
@@ -1511,8 +1625,20 @@ public class MainActivity extends FragmentActivity {
 
 			} else {
 
-				// Open options activity
-				openOptions();
+				// Set options with the preference UI
+
+				if (result.equals("setOptions")) {
+
+					// Open options activity
+					openOptions();
+				}
+
+				// Get options only
+				if (result.equals("getOptions")) {
+
+					// Do nothing
+
+				}
 
 			}
 		}
@@ -1603,8 +1729,8 @@ public class MainActivity extends FragmentActivity {
 		case 6:
 			// Options - Execute the task in background
 			Toast.makeText(getApplicationContext(), R.string.getQBittorrentPrefefrences, Toast.LENGTH_SHORT).show();
-			qBittorrentSetOptions qso = new qBittorrentSetOptions();
-			qso.execute(new String[] { "json/preferences" });
+			qBittorrentOptions qso = new qBittorrentOptions();
+			qso.execute(new String[] { "json/preferences", "setOptions" });
 			break;
 		case 7:
 			// Settings
