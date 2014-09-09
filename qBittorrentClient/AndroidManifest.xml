@@ -11,8 +11,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lgallardo.qbittorrentclient"
-    android:versionCode="191"
-    android:versionName="1.9.1" >
+    android:versionCode="192"
+    android:versionName="1.9.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -90,7 +90,8 @@
         </activity>
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" >
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" >
         </activity>
         <meta-data
             android:name="com.google.android.gms.version"

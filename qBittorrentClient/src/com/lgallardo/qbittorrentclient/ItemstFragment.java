@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.content.Intent;
