@@ -306,30 +306,9 @@ public class MainActivity extends FragmentActivity {
 	// Load Banner
 
 	public void loadBanner() {
-		FrameLayout frameLayout = null;
-		// Create the adView.
-		adView = new AdView(this);
-		adView.setAdSize(AdSize.BANNER);
-		adView.setAdUnitId("ca-app-pub-1035265933040074/6449288097");
-
-		// Add the AdView to the view hierarchy. The view will have no size
-		// until the ad is loaded.
-
-		if (findViewById(R.id.one_frame) != null) {
-			frameLayout = (FrameLayout) findViewById(R.id.one_frame);
-			Log.i("qb-ads", "one_frame");
-		} else {
-			frameLayout = (FrameLayout) findViewById(R.id.content_frame);
-			Log.i("qb-ads", "content_frame");
-		}
-
-		FrameLayout.LayoutParams adsParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,
-				android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL);
-		frameLayout.addView(adView, adsParams);
-
-		// Create an ad request. Check logcat output for the hashed device ID to
-		// get test ads on a physical device.
-//		AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice("AC3EF86A25487F26E036ABA00FC22908").build();
+		
+		// Look up the AdView as a resource and load a request.
+		adView = (AdView)this.findViewById(R.id.adView);
 		AdRequest adRequest = new AdRequest.Builder().build();
 		
 		// Start loading the ad in the background.
@@ -1528,14 +1507,14 @@ public class MainActivity extends FragmentActivity {
 							firstFragment.setSecondFragmentContainer(R.id.content_frame);
 							fragmentTransaction.replace(R.id.list_frame, firstFragment);
 							fragmentTransaction.replace(R.id.content_frame, aboutFragment);
+							fragmentTransaction.commit();
 
 						} else {
 							firstFragment.setSecondFragmentContainer(R.id.one_frame);
 							fragmentTransaction.replace(R.id.one_frame, firstFragment);
-
+							fragmentTransaction.commit();
 						}
 
-						fragmentTransaction.commit();
 
 					}
 

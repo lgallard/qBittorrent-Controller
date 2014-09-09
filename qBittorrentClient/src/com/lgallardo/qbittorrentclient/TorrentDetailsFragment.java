@@ -137,15 +137,14 @@ public class TorrentDetailsFragment extends Fragment {
 				uploadRateLimitTextView.setText("Upload Rate Limit: " + uploadRateLimit);
 				downloadRateLimitTextView.setText("Download Rate Limit: " + downloadRateLimit);
 
-				// Load banner
-				loadBanner();
-
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Log.e("TorrentDetailsFragment - onCreateView", e.toString());
 		}
 
+		// Load banner
+		loadBanner();
 		return rootView;
 	}
 
@@ -180,15 +179,26 @@ public class TorrentDetailsFragment extends Fragment {
 
 	// Load Banner
 	public void loadBanner() {
-		LinearLayout linearLayout = null;
-		// Create the adView.
-		AdView adView = (AdView)rootView.findViewById(R.id.adView);
 
-		// Create an ad request. Check logcat output for the hashed device ID to
-		// get test ads on a physical device.
-//		AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice("AC3EF86A25487F26E036ABA00FC22908").build();
+		// LinearLayout linearLayout = null;
+
+		// linearLayout.removeView(adView);
+		//
+		// LinearLayout.LayoutParams adsParams = new
+		// LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+		// LinearLayout.LayoutParams.WRAP_CONTENT,
+		// android.view.Gravity.BOTTOM |
+		// android.view.Gravity.CENTER_HORIZONTAL);
+		//
+		//
+		// linearLayout.addView(adView, adsParams);
+		//
+
+		// Get the adView.
+		adView = (AdView) getActivity().findViewById(R.id.adView);
+
 		AdRequest adRequest = new AdRequest.Builder().build();
-		
+
 		// Start loading the ad in the background.
 		adView.loadAd(adRequest);
 
