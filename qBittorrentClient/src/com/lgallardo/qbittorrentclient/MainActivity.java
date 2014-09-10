@@ -15,10 +15,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.FragmentManager;
@@ -46,12 +42,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends FragmentActivity {
 
@@ -298,7 +295,7 @@ public class MainActivity extends FragmentActivity {
 
 			fragmentTransaction.commit();
 		}
-		
+
 		refresh();
 
 	}
@@ -306,11 +303,11 @@ public class MainActivity extends FragmentActivity {
 	// Load Banner
 
 	public void loadBanner() {
-		
+
 		// Look up the AdView as a resource and load a request.
-		adView = (AdView)this.findViewById(R.id.adView);
+		adView = (AdView) this.findViewById(R.id.adView);
 		AdRequest adRequest = new AdRequest.Builder().build();
-		
+
 		// Start loading the ad in the background.
 		adView.loadAd(adRequest);
 	}
@@ -1385,12 +1382,9 @@ public class MainActivity extends FragmentActivity {
 					}
 
 					if (findViewById(R.id.one_frame) != null) {
-
 						getFragmentManager().popBackStack();
-
 					}
 
-					// Log.i("Refresh >", "About to set Adapter");
 					firstFragment.setListAdapter(new myAdapter());
 
 					// Create the about fragment
@@ -1414,9 +1408,6 @@ public class MainActivity extends FragmentActivity {
 						}
 
 						fragmentTransaction.commit();
-
-						// Log.i("Refresh", "ItemList?: " + (firstFragment
-						// instanceof ItemstFragment));
 
 						ListView lv = firstFragment.getListView();
 
@@ -1514,7 +1505,6 @@ public class MainActivity extends FragmentActivity {
 							fragmentTransaction.replace(R.id.one_frame, firstFragment);
 							fragmentTransaction.commit();
 						}
-
 
 					}
 
