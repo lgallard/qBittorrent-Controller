@@ -6,52 +6,61 @@
   http://www.gnu.org/licenses/gpl.html
   
   Contributors:
-      Luis M. Gallardo D. - initial implementation
+      Luis M. Gallardo D.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
         android:key="Account"
-        android:title="Account" >
+        android:title="@string/settings_account" >
+        <ListPreference
+            android:defaultValue="1"
+            android:dialogTitle="@string/settings_qbittorrent_currentServer_dialog_title"
+            android:entries="@array/qBittorrentServers"
+            android:entryValues="@array/qBittorrentServersValues"
+            android:key="currentServer"
+            android:summary="@string/settings_qbittorrent_currentServer_summary"
+            android:title="@string/settings_qbittorrent_currentServer_title" />
+
         <EditTextPreference
             android:defaultValue="192.168.1.1"
-            android:dialogTitle="Hostname or IP?"
+            android:dialogTitle="@string/settings_qbittorrent_hostname_dialog_title"
             android:key="hostname"
-            android:summary="Hostname or IP"
-            android:title="Connection Host" />
+            android:summary="@string/settings_qbittorrent_hostname_summary"
+            android:title="@string/settings_qbittorrent_hostname_title" />
 
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="https"
-            android:summary="Connect using https"
-            android:title="Enable https" />
+            android:summary="@string/settings_qbittorrent_https_summary"
+            android:title="@string/settings_qbittorrent_https_title" />
 
         <EditTextPreference
             android:defaultValue="8080"
-            android:dialogTitle="Connection Port?"
+            android:dialogTitle="@string/settings_qbittorrent_port_dialog_title"
             android:inputType="number"
             android:key="port"
-            android:summary="Port (80,8080)"
-            android:title="Connection Port " />
+            android:summary="@string/settings_qbittorrent_port_summary"
+            android:title="@string/settings_qbittorrent_port_title" />
         <EditTextPreference
             android:defaultValue="admin"
-            android:dialogTitle="Username?"
+            android:dialogTitle="@string/settings_qbittorrent_username_dialog_title"
             android:key="username"
-            android:summary="Provide a username"
-            android:title="Username " />
+            android:summary="@string/settings_qbittorrent_username_dialog_title"
+            android:title="@string/settings_qbittorrent_username_title" />
         <EditTextPreference
             android:defaultValue="adminadmin"
-            android:dialogTitle="Password?"
+            android:dialogTitle="@string/settings_qbittorrent_password_dialog_title"
             android:inputType="textPassword"
             android:key="password"
-            android:summary="Provide password"
-            android:title="Password" />
+            android:summary="@string/settings_qbittorrent_password_summary"
+            android:title="@string/settings_qbittorrent_password_title" />
 
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="old_version"
-            android:summary="Use old qBittorrent version"
-            android:title="qBittorrent 2.x" />
+            android:summary="@string/settings_qbittorrent_version_summary"
+            android:title="@string/settings_qbittorrent_version_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>

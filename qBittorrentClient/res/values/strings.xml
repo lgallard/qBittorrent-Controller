@@ -17,20 +17,25 @@
     <string name="action_add">Add</string>
     <string name="action_pause">Pause</string>
     <string name="action_resume">Resume</string>
-    <string name="textview">TextView</string>
-    <string name="dialog_message">Network connection failed</string>
-    <string name="dialog_title">Error</string>
+    <string name="action_resume_all">Resume all</string>
+    <string name="action_pause_all">Pause all</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_delete_drive">Delete data</string>
+    <string name="action_increase_priority">Increase priority</string>
+    <string name="action_decrease_priority">Decrease priority</string>
+    <string name="action_download_rate_limit">Download rate limit</string>
+    <string name="action_upload_rate_limit">Upload rate limit</string>
     <string name="connection_error">Network connection failed</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="connecting">Refreshing</string>
     <string name="title_activity_torrent_actions">Action</string>
-    <string name="title_activity_setting">Settings</string>
     <string name="dm_deleteTorrent">Pressing OK will delete the torrent</string>
     <string name="dt_deleteTorrent">Delete torrent</string>
     <string name="dm_deleteDriveTorrent">Pressing OK will delete torrent and its data from the hard drive</string>
     <string name="dt_deleteDriveTorrent">Delete torrent and its data </string>
     <string name="torrentAdded">Torrent sent!</string>
+    <string name="torrentFileAdded">Torrent file sent!</string>
     <string name="torrentStarted">Torrent started!</string>
     <string name="torrentPaused">Torrent paused!</string>
     <string name="AllTorrentsPaused">All torrents were paused!</string>
@@ -47,6 +52,14 @@
     <string name="setDownloadRateLimit">Download rate limit set</string>
     <string name="error">Error</string>
     <string name="global_value_error">Global value cannot be retrieved. Please check your connection settings!</string>
+    <string name="navigation_drawer_all">All</string>
+    <string name="navigation_drawer_downloading">Downloading</string>
+    <string name="navigation_drawer_completed">Completed</string>
+    <string name="navigation_drawer_paused">Paused</string>
+    <string name="navigation_drawer_active">Active</string>
+    <string name="navigation_drawer_inactive">Inactive</string>
+    <string name="navigation_drawer_options">Options</string>
+    <string name="navigation_drawer_settins">Settings</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>All</item>
@@ -58,5 +71,54 @@
         <item>Options</item>
         <item>Settings</item>
     </string-array>
+
+    <string name="about_help1">To start using the client, set your qBittorrent server\'s settings and account by selecting \'Settings\' from the drawer menu</string>
+    <string name="about_help2">Press the refresh button on the menu to get new results, or choose an option from the drawer menu to get the torrent list from the server.</string>
+    <string name="about_motto">Manage all your torrent from Android using qBittorrent Client</string>
+    <string name="icon">icon</string>
+    <string name="no_results">No results</string>
+    <string name="tablet_help">Use the drawer menu to choose an option</string>
+    <string name="torrent_details_size">Size</string>
+    <string name="torrent_details_general_info">General info</string>
+    <string name="torrent_details_save_path">Save path:</string>
+    <string name="torrent_details_ratio">Ratio:</string>
+    <string name="torrent_details_priority">Priority:</string>
+    <string name="torrent_details_leechs">Leechs:</string>
+    <string name="torrent_details_seeds">Seeds:</string>
+    <string name="torrent_details_state">State:</string>
+    <string name="torrent_details_progres">Progress:</string>
+    <string name="torrent_details_torrent_hash">Torrent Hash:</string>
+    <string name="torrent_details_created_date">Created Date:</string>
+    <string name="torrent_details_comment">Comment:</string>
+    <string name="torrent_details_upload_rate_limit">Upload Rate Limit:</string>
+    <string name="torrent_details_download_rate_limit">Download Rate Limit:</string>
+    <string name="torrent_details_total_wasted">Total wasted:</string>
+    <string name="torrent_details_total_uploaded">Total Uploaded:</string>
+    <string name="torrent_details_total_downloaded">Total Downloaded:</string>
+    <string name="torrent_details_time_elapsed">Time Elapsed:</string>
+    <string name="torrent_details_num_connections">Num. Connections:</string>
+    <string name="torrent_details_share_ratio">Share Ratio:</string>
+    <string name="settings_account">Accounts</string>
+    <string name="settings_qbittorrent_currentServer_title">Choose a qBittorrent server</string>
+        <string name="settings_qbittorrent_currentServer_dialog_title">Choose a server</string>
+    <string name="settings_qbittorrent_currentServer_summary">qBitttorent Server</string>
+    <string name="settings_qbittorrent_hostname_title">Connection Host</string>
+    <string name="settings_qbittorrent_hostname_summary">Hostname or IP</string>
+    <string name="settings_qbittorrent_hostname_dialog_title">Hostname or IP?</string>
+    <string name="settings_qbittorrent_https_title">Enable https</string>
+    <string name="settings_qbittorrent_https_summary">Connect using https</string>
+    <string name="settings_qbittorrent_port_title">Connection Port</string>
+    <string name="settings_qbittorrent_port_summary">Port (80, 8080, etc)</string>
+    <string name="settings_qbittorrent_port_dialog_title">Connection Port?</string>
+    <string name="settings_qbittorrent_username_title">Username</string>
+    <string name="settings_qbittorrent_username_summary">Provide username</string>
+    <string name="settings_qbittorrent_username_dialog_title">Username?</string>
+    <string name="settings_qbittorrent_password_title">Password</string>
+    <string name="settings_qbittorrent_password_summary">Provide password</string>
+    <string name="settings_qbittorrent_password_dialog_title">Password?</string>
+    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
+    <string name="settings_qbittorrent_version_summary">Use old qBittorrent server version</string>
+    <string name="settings_qbittorrent_pro_title">Feature not available</string>
+    <string name="settings_qbittorrent_pro_message">This feature is only available on qBittorrent PRO version!</string>
 
 </resources>

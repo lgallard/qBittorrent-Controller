@@ -29,6 +29,7 @@
                 android:layout_below="@+id/qBittorrent_logo"
                 android:layout_centerHorizontal="true"
                 android:background="@android:color/white"
+                android:contentDescription="@string/app_name"
                 android:text="@string/app_name"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -50,7 +51,7 @@
                 android:layout_below="@+id/textView2"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
-                android:text="To start using the client, set your qBittorrent server&apos;s settings and account by selecting &apos;Settings&apos; from the drawer menu" />
+                android:text="@string/about_help1" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -60,7 +61,7 @@
                 android:layout_below="@+id/textView3"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
-                android:text="Press the refresh button on the menu to refresh the results, or choose an option from the drawer menu to get the torrent list from the server." />
+                android:text="@string/about_help2" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -69,7 +70,7 @@
                 android:layout_below="@+id/textView1"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
-                android:text="Manage all your torrent from your Android using qBittorent Client" />
+                android:text="@string/about_motto" />
         </RelativeLayout>
     </ScrollView>
 

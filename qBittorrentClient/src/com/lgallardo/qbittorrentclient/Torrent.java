@@ -23,6 +23,7 @@ class Torrent {
 	private String leechs;
 	private String seeds;
 	private String priority;
+	private String eta;
 	private String savePath;
 	private String creationDate;
 	private String comment;
@@ -32,12 +33,11 @@ class Torrent {
 	private String timeElapsed;
 	private String nbConnections;
 	private String shareRatio;
-	private String 	uploadLimit;
-	private String 	downloadLimit;
-	
-	public Torrent(String file, String size, String state, String hash,
-					String info, String ratio, String progress, String leechs,
-					String seeds, String priority) {
+	private String uploadLimit;
+	private String downloadLimit;
+
+	public Torrent(String file, String size, String state, String hash, String info, String ratio, String progress, String leechs, String seeds,
+			String priority, String eta) {
 		this.file = file;
 		this.size = size;
 		this.state = state;
@@ -48,6 +48,7 @@ class Torrent {
 		this.leechs = leechs;
 		this.seeds = seeds;
 		this.priority = priority;
+		this.eta = eta;
 		this.uploadLimit = null;
 		this.downloadLimit = null;
 	}
@@ -130,6 +131,19 @@ class Torrent {
 	}
 
 	/**
+	 * @return the eta
+	 */
+	public String getEta() {
+
+		// If apply, return infinity symbol
+		if (eta != null && Character.codePointAt(eta, 0) == 226) {
+			return Character.toString('\u221E');
+		}
+
+		return eta;
+	}
+
+	/**
 	 * @return the path
 	 */
 	public String getSavePath() {
@@ -191,11 +205,11 @@ class Torrent {
 	public String getShareRatio() {
 		return shareRatio;
 	}
-	
+
 	public String getUploadLimit() {
-		
+
 		// If apply, return infinity symbol
-		if(uploadLimit != null && Character.codePointAt(uploadLimit, 0) == 226){
+		if (uploadLimit != null && Character.codePointAt(uploadLimit, 0) == 226) {
 			return Character.toString('\u221E');
 		}
 
@@ -203,151 +217,177 @@ class Torrent {
 	}
 
 	public String getDownloadLimit() {
-		
+
 		// If apply, return infinity symbol
-		if(downloadLimit != null && Character.codePointAt(downloadLimit, 0) == 226){
+		if (downloadLimit != null && Character.codePointAt(downloadLimit, 0) == 226) {
 			return Character.toString('\u221E');
 		}
-		
+
 		return downloadLimit;
 	}
 
-
 	/**
-	 * @param file the file to set
+	 * @param file
+	 *            the file to set
 	 */
 	public void setFile(String file) {
 		this.file = file;
 	}
 
 	/**
-	 * @param size the size to set
+	 * @param size
+	 *            the size to set
 	 */
 	public void setSize(String size) {
 		this.size = size;
 	}
 
 	/**
-	 * @param info the info to set
+	 * @param info
+	 *            the info to set
 	 */
 	public void setInfo(String info) {
 		this.info = info;
 	}
 
 	/**
-	 * @param state the state to set
+	 * @param state
+	 *            the state to set
 	 */
 	public void setState(String state) {
 		this.state = state;
 	}
 
 	/**
-	 * @param hash the hash to set
+	 * @param hash
+	 *            the hash to set
 	 */
 	public void setHash(String hash) {
 		this.hash = hash;
 	}
 
 	/**
-	 * @param downloadSpeed the downloadSpeed to set
+	 * @param downloadSpeed
+	 *            the downloadSpeed to set
 	 */
 	public void setDownloadSpeed(String downloadSpeed) {
 		this.downloadSpeed = downloadSpeed;
 	}
 
 	/**
-	 * @param ratio the ratio to set
+	 * @param ratio
+	 *            the ratio to set
 	 */
 	public void setRatio(String ratio) {
 		this.ratio = ratio;
 	}
 
 	/**
-	 * @param progress the progress to set
+	 * @param progress
+	 *            the progress to set
 	 */
 	public void setProgress(String progress) {
 		this.progress = progress;
 	}
 
 	/**
-	 * @param leechs the leechs to set
+	 * @param leechs
+	 *            the leechs to set
 	 */
 	public void setLeechs(String leechs) {
 		this.leechs = leechs;
 	}
 
 	/**
-	 * @param seeds the seeds to set
+	 * @param seeds
+	 *            the seeds to set
 	 */
 	public void setSeeds(String seeds) {
 		this.seeds = seeds;
 	}
 
 	/**
-	 * @param priority the priority to set
+	 * @param priority
+	 *            the priority to set
 	 */
 	public void setPriority(String priority) {
 		this.priority = priority;
 	}
 
 	/**
-	 * @param path the path to set
+	 * @param priority the eta to set
+	 */
+	public void setEta(String eta) {
+		this.eta = eta;
+	}
+
+	/**
+	 * @param path
+	 *            the path to set
 	 */
 	public void setSavePath(String savePath) {
 		this.savePath = savePath;
 	}
 
 	/**
-	 * @param creationDate the creationDate to set
+	 * @param creationDate
+	 *            the creationDate to set
 	 */
 	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
 	}
 
 	/**
-	 * @param comment the comment to set
+	 * @param comment
+	 *            the comment to set
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
 	/**
-	 * @param totalWasted the totalWasted to set
+	 * @param totalWasted
+	 *            the totalWasted to set
 	 */
 	public void setTotalWasted(String totalWasted) {
 		this.totalWasted = totalWasted;
 	}
 
 	/**
-	 * @param totalUploaded the totalUploaded to set
+	 * @param totalUploaded
+	 *            the totalUploaded to set
 	 */
 	public void setTotalUploaded(String totalUploaded) {
 		this.totalUploaded = totalUploaded;
 	}
 
 	/**
-	 * @param totalDownloaded the totalDownloaded to set
+	 * @param totalDownloaded
+	 *            the totalDownloaded to set
 	 */
 	public void setTotalDownloaded(String totalDownloaded) {
 		this.totalDownloaded = totalDownloaded;
 	}
 
 	/**
-	 * @param timeElapsed the timeElapsed to set
+	 * @param timeElapsed
+	 *            the timeElapsed to set
 	 */
 	public void setTimeElapsed(String timeElapsed) {
 		this.timeElapsed = timeElapsed;
 	}
 
 	/**
-	 * @param nbConnections the nbConnections to set
+	 * @param nbConnections
+	 *            the nbConnections to set
 	 */
 	public void setNbConnections(String nbConnections) {
 		this.nbConnections = nbConnections;
 	}
 
 	/**
-	 * @param shareRatio the shareRatio to set
+	 * @param shareRatio
+	 *            the shareRatio to set
 	 */
 	public void setShareRatio(String shareRatio) {
 		this.shareRatio = shareRatio;

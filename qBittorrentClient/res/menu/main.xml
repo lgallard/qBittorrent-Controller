@@ -24,12 +24,12 @@
         android:id="@+id/action_resume_all"
         android:icon="@drawable/ic_action_resume"
         android:showAsAction="ifRoom"
-        android:title="Resume all"/>
+        android:title="@string/action_resume_all"/>
     <item
         android:id="@+id/action_pause_all"
         android:icon="@drawable/ic_action_pause"
         android:showAsAction="ifRoom"
-        android:title="Pause all"/>
+        android:title="@string/action_pause_all"/>
     <item
         android:id="@+id/action_resume"
         android:icon="@drawable/ic_action_resume"
@@ -44,29 +44,29 @@
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_action_delete"
         android:showAsAction="ifRoom"
-        android:title="Delete"/>
+        android:title="@string/action_delete"/>
     <item
         android:id="@+id/action_delete_drive"
         android:icon="@drawable/ic_action_delete_drive"
         android:showAsAction="ifRoom"
-        android:title="Delete data"/>
+        android:title="@string/action_delete_drive"/>
     <item
         android:id="@+id/action_increase_prio"
         android:icon="@drawable/ic_action_increase_prio"
         android:showAsAction="ifRoom"
-        android:title="Increase priority"/>
+        android:title="@string/action_increase_priority"/>
     <item
         android:id="@+id/action_decrease_prio"
         android:icon="@drawable/ic_action_decrease_prio"
         android:showAsAction="ifRoom"
-        android:title="Decrease priority"/>
+        android:title="@string/action_decrease_priority"/>
     <item
         android:id="@+id/action_download_rate_limit"
         android:showAsAction="ifRoom"
-        android:title="Download rate limit"/>
+        android:title="@string/action_download_rate_limit"/>
     <item
         android:id="@+id/action_upload_rate_limit"
         android:showAsAction="ifRoom"
-        android:title="Upload rate limit"/>
+        android:title="@string/action_upload_rate_limit"/>
 
 </menu>
