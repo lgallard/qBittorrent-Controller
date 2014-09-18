@@ -11,12 +11,14 @@
 package com.lgallardo.qbittorrentclient;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -35,6 +37,9 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -67,13 +72,11 @@ public class JSONParser {
 		this("", "", 0, "", "");
 	}
 
-	public JSONParser(String hostname, int port, String username,
-			String password) {
+	public JSONParser(String hostname, int port, String username, String password) {
 		this(hostname, "http", port, username, password);
 	}
 
-	public JSONParser(String hostname, String protocol, int port,
-			String username, String password) {
+	public JSONParser(String hostname, String protocol, int port, String username, String password) {
 
 		this.hostname = hostname;
 		this.protocol = protocol;
@@ -99,13 +102,11 @@ public class JSONParser {
 		int timeoutSocket = 5000;
 
 		// Set http parameters
-		HttpConnectionParams.setConnectionTimeout(httpParameters,
-				timeoutConnection);
+		HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
 		HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
 		// Making HTTP request
-		HttpHost targetHost = new HttpHost(this.hostname, this.port,
-				this.protocol);
+		HttpHost targetHost = new HttpHost(this.hostname, this.port, this.protocol);
 
 		// httpclient = new DefaultHttpClient(httpParameters);
 		// httpclient = new DefaultHttpClient();
@@ -115,13 +116,10 @@ public class JSONParser {
 
 		try {
 
-			AuthScope authScope = new AuthScope(targetHost.getHostName(),
-					targetHost.getPort());
-			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-					this.username, this.password);
+			AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
+			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.username, this.password);
 
-			httpclient.getCredentialsProvider().setCredentials(authScope,
-					credentials);
+			httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
 
 			// set http parameters
 
@@ -131,11 +129,10 @@ public class JSONParser {
 
 			HttpEntity httpEntity = httpResponse.getEntity();
 			is = httpEntity.getContent();
-//			Log.i("parser", is.toString());
+			// Log.i("parser", is.toString());
 
 			// Build JSON
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					is, "iso-8859-1"), 8);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
 			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = reader.readLine()) != null) {
@@ -188,8 +185,7 @@ public class JSONParser {
 		int timeoutSocket = 5000;
 
 		// Set http parameters
-		HttpConnectionParams.setConnectionTimeout(httpParameters,
-				timeoutConnection);
+		HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
 		HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
 		// Making HTTP request
@@ -203,13 +199,10 @@ public class JSONParser {
 
 		try {
 
-			AuthScope authScope = new AuthScope(targetHost.getHostName(),
-					targetHost.getPort());
-			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-					username, password);
+			AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
+			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
 
-			httpclient.getCredentialsProvider().setCredentials(authScope,
-					credentials);
+			httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
 
 			HttpGet httpget = new HttpGet(url);
 
@@ -217,16 +210,15 @@ public class JSONParser {
 
 			StatusLine statusLine = httpResponse.getStatusLine();
 			int mStatusCode = statusLine.getStatusCode();
-//			Log.i("Status", "CODE: " + mStatusCode);
+			// Log.i("Status", "CODE: " + mStatusCode);
 
 			HttpEntity httpEntity = httpResponse.getEntity();
 			is = httpEntity.getContent();
-//			Log.i("parser", is.toString());
+			// Log.i("parser", is.toString());
 
 			// Build JSON
 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					is, "iso-8859-1"), 8);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
 			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = reader.readLine()) != null) {
@@ -252,7 +244,7 @@ public class JSONParser {
 			// When HttpClient instance is no longer needed,
 			// shut down the connection manager to ensure
 			// immediate deallocation of all system resources
-//			Log.i("qbittorrent", "finaly - goodbye!");
+			// Log.i("qbittorrent", "finaly - goodbye!");
 			httpclient.getConnectionManager().shutdown();
 		}
 
@@ -267,7 +259,12 @@ public class JSONParser {
 		String urlContentType = "application/x-www-form-urlencoded";
 
 		String limit = "";
-		
+		String boundary = null;
+
+		String contentDisposition = "";
+
+		StringBuilder fileContent = null;
+
 		HttpResponse httpResponse;
 		DefaultHttpClient httpclient;
 
@@ -291,6 +288,15 @@ public class JSONParser {
 			url = "command/download";
 			key = "urls";
 		}
+		if ("addTorrentFile".equals(command)) {
+			url = "command/upload";
+			key = "urls";
+
+			boundary = "-----------------------" + (new Date()).getTime();
+
+			urlContentType = "multipart/form-data; boundary=" + boundary;
+
+		}
 		if ("pauseAll".equals(command)) {
 			url = "command/pauseall";
 		}
@@ -309,19 +315,19 @@ public class JSONParser {
 		if ("setQBittorrentPrefefrences".equals(command)) {
 			url = "command/setPreferences";
 			key = "json";
-//			Log.i("setQBittorrentPrefefrences", "setQBittorrentPrefefrences");
+			// Log.i("setQBittorrentPrefefrences",
+			// "setQBittorrentPrefefrences");
 		}
-		
+
 		if ("setUploadRateLimit".equals(command)) {
 			url = "command/setTorrentUpLimit";
 
 			String[] tmpString = hash.split("&");
 			hash = tmpString[0];
 			limit = tmpString[1];
-			
+
 			Log.i("upload_rate_limit", "limit: " + limit);
 		}
-		
 
 		if ("setDownloadRateLimit".equals(command)) {
 			url = "command/setTorrentDlLimit";
@@ -329,33 +335,27 @@ public class JSONParser {
 			String[] tmpString = hash.split("&");
 			hash = tmpString[0];
 			limit = tmpString[1];
-			
+
 			Log.i("download_rate_limit", "limit: " + limit);
 		}
-		
-		
 
 		// Making HTTP request
-		HttpHost targetHost = new HttpHost(this.hostname, this.port,
-				this.protocol);
+		HttpHost targetHost = new HttpHost(this.hostname, this.port, this.protocol);
 
 		// httpclient = new DefaultHttpClient();
 		httpclient = getNewHttpClient();
 
 		try {
 
-			AuthScope authScope = new AuthScope(targetHost.getHostName(),
-					targetHost.getPort());
+			AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
 
-			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-					this.username, this.password);
+			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.username, this.password);
 
-			httpclient.getCredentialsProvider().setCredentials(authScope,
-					credentials);
+			httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
 
 			HttpPost httpget = new HttpPost(url);
 
-//			Log.i("qbittorrent", "1");
+			// Log.i("qbittorrent", "1");
 
 			// In order to pass the has we must set the pair name value
 
@@ -363,45 +363,77 @@ public class JSONParser {
 
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 			nvps.add(bnvp);
-			
+
 			// Add limit
-			if(!limit.equals("")){
+			if (!limit.equals("")) {
 				nvps.add(new BasicNameValuePair("limit", limit));
-			
+
 			}
-			
+
 			httpget.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
 			// Set content type and urls
-			if ("addTorrent".equals(command) || "increasePrio".equals(command)
-					|| "decreasePrio".equals(command)) {
+			if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command)) {
 				httpget.setHeader("Content-Type", urlContentType);
-//				Log.i("qbittorrent", "urlContentType");
+				// Log.i("qbittorrent", "urlContentType");
 			}
 
-//			Log.i("qbittorrent", "2");
+			// Set content type and urls
+			if ("addTorrentFile".equals(command)) {
+
+				Log.i("addTorrentFile", "Sending file: " + hash);
+				httpget.setHeader("Content-Type", urlContentType);
+
+				MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+				builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+				// Add boundary
+				builder.setBoundary(boundary);
+
+				// Add text expected by qBittorrent server
+				// builder.addTextBody("text",
+				// "Content-Disposition: form-data; name=\"torrents\"; filename=\""
+				// + hash + "\"\n"
+				// + "Content-Type: application/x-bittorrent\n\n");
+
+				// Add torrent file as binary
+				File file = new File(hash);
+				// FileBody fileBody = new FileBody(file);
+				// builder.addPart("file", fileBody);
+
+				builder.addBinaryBody("upfile", file, ContentType.DEFAULT_BINARY, hash);
+
+				// Build entity
+				HttpEntity entity = builder.build();
+
+				// Set entity to http post
+				httpget.setEntity(entity);
+
+			}
+
+			// Log.i("qbittorrent", "2");
 
 			httpResponse = httpclient.execute(targetHost, httpget);
 
-//			Log.i("qbittorrent", "3");
+			// Log.i("qbittorrent", "3");
 
 			HttpEntity httpEntity = httpResponse.getEntity();
 
-//			Log.i("qbittorrent", "4");
+			// Log.i("qbittorrent", "4");
 
 			is = httpEntity.getContent();
 
-//			Log.i("qbittorrent", "5");
-//
-//			Log.i("parser", is.toString());
-//
-//			Log.i("qbittorrent", "url:" + url);
-//			Log.i("qbittorrent", "hostname:" + this.hostname);
-//			Log.i("qbittorrent", "port:" + this.port);
-//			Log.i("qbittorrent", "protocol:" + this.protocol);
-//			Log.i("qbittorrent", "username:" + this.username);
-//			Log.i("qbittorrent", "password:" + this.password);
-//			Log.i("qbittorrent", "hash:" + hash);
+			// Log.i("qbittorrent", "5");
+			//
+			// Log.i("parser", is.toString());
+			//
+			// Log.i("qbittorrent", "url:" + url);
+			// Log.i("qbittorrent", "hostname:" + this.hostname);
+			// Log.i("qbittorrent", "port:" + this.port);
+			// Log.i("qbittorrent", "protocol:" + this.protocol);
+			// Log.i("qbittorrent", "username:" + this.username);
+			// Log.i("qbittorrent", "password:" + this.password);
+			// Log.i("qbittorrent", "hash:" + hash);
 
 		}
 
@@ -419,7 +451,7 @@ public class JSONParser {
 			// When HttpClient instance is no longer needed,
 			// shut down the connection manager to ensure
 			// immediate deallocation of all system resources
-//			Log.i("qbittorrent", "finaly - goodbye!");
+			// Log.i("qbittorrent", "finaly - goodbye!");
 			httpclient.getConnectionManager().shutdown();
 		}
 
@@ -428,8 +460,7 @@ public class JSONParser {
 	// https
 	public DefaultHttpClient getNewHttpClient() {
 		try {
-			KeyStore trustStore = KeyStore.getInstance(KeyStore
-					.getDefaultType());
+			KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
 			trustStore.load(null, null);
 
 			MySSLSocketFactory sf = new MySSLSocketFactory(trustStore);
@@ -441,12 +472,10 @@ public class JSONParser {
 			HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
 
 			SchemeRegistry registry = new SchemeRegistry();
-			registry.register(new Scheme("http", PlainSocketFactory
-					.getSocketFactory(), 80));
+			registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 			registry.register(new Scheme("https", sf, 443));
 
-			ClientConnectionManager ccm = new ThreadSafeClientConnManager(
-					params, registry);
+			ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
 
 			return new DefaultHttpClient(ccm, params);
 		} catch (Exception e) {

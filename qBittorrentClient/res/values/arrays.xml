@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="qBittorrentServers">
+        <item name="1">Server 1</item>
+        <item name="2">Server 2</item>
+        <item name="3">Server 3</item>
+    </string-array>
+    <string-array name="qBittorrentServersValues">
+        <item name="1">1</item>
+        <item name="2">2</item>
+        <item name="3">3</item>
+    </string-array>
+
+</resources>
