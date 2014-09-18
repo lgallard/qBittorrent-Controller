@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/torrentName"
                     android:layout_marginTop="15dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="@string/torrent_details_size" />
             </LinearLayout>
@@ -84,7 +84,7 @@
                     android:id="@+id/torrentProgress"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="Progress" />
             </LinearLayout>
@@ -105,7 +105,7 @@
                     android:id="@+id/torrentRatio"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="Ratio" >
                 </TextView>
@@ -127,7 +127,7 @@
                     android:id="@+id/torrentState"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="State" />
             </LinearLayout>
@@ -148,7 +148,7 @@
                     android:id="@+id/torrentLeechs"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="Leechs" />
             </LinearLayout>
@@ -169,7 +169,7 @@
                     android:id="@+id/torrentSeeds"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="Seeds" />
             </LinearLayout>
@@ -190,7 +190,7 @@
                     android:id="@+id/torrentPriority"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="Priority" />
             </LinearLayout>
@@ -211,7 +211,7 @@
                     android:id="@+id/torrentHash"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="hash" />
             </LinearLayout>
@@ -247,7 +247,7 @@
                     android:id="@+id/torrentSavePath"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="Path" />
             </LinearLayout>
@@ -268,7 +268,7 @@
                     android:id="@+id/torrentCreationDate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="TextView" />
             </LinearLayout>
@@ -289,7 +289,7 @@
                     android:id="@+id/torrentComment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="TextView" />
             </LinearLayout>
@@ -310,7 +310,7 @@
                     android:id="@+id/torrentUploadRateLimit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="TextView" />
             </LinearLayout>
@@ -320,7 +320,7 @@
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:id="@+id/torrentDownloadRateLimit"
+                    android:id="@+id/torrentDownloadRateLimitLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -328,10 +328,10 @@
                     android:text="@string/torrent_details_download_rate_limit" />
 
                 <TextView
-                    android:id="@+id/torrentDownloadRateLimitLabel"
+                    android:id="@+id/torrentDownloadRateLimit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="TextView" />
             </LinearLayout>
@@ -352,7 +352,7 @@
                     android:id="@+id/torrentTotalWasted"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="TextView" />
             </LinearLayout>
@@ -373,7 +373,7 @@
                     android:id="@+id/torrentTotalUploaded"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="TextView" />
             </LinearLayout>
@@ -394,7 +394,7 @@
                     android:id="@+id/torrentTotalDownloaded"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="TextView" />
             </LinearLayout>
@@ -415,7 +415,7 @@
                     android:id="@+id/torrentTimeElapsed"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="TextView" />
             </LinearLayout>
@@ -436,7 +436,7 @@
                     android:id="@+id/torrentNbConnections"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="TextView" />
             </LinearLayout>
@@ -456,10 +456,11 @@
                 <TextView
                     android:id="@+id/torrentShareRatio"
                     android:layout_width="0dp"
-                    android:layout_weight="2"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="TextView" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

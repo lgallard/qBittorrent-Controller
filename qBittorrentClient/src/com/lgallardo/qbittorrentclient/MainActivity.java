@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -73,6 +74,7 @@ public class MainActivity extends FragmentActivity {
 	protected static final String TAG_NUMSEEDS = "num_seeds";
 	protected static final String TAG_RATIO = "ratio";
 	protected static final String TAG_PRIORITY = "priority";
+	protected static final String TAG_ETA = "eta";
 	protected static final String TAG_SAVE_PATH = "save_path";
 	protected static final String TAG_CREATION_DATE = "creation_date";
 	protected static final String TAG_COMMENT = "comment";
@@ -175,14 +177,14 @@ public class MainActivity extends FragmentActivity {
 		// Drawer item list objects
 		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[8];
 
-		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_drawer_all, "All");
-		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_drawer_downloading, "Downloading");
-		drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_drawer_completed, "Completed");
-		drawerItem[3] = new ObjectDrawerItem(R.drawable.ic_drawer_paused, "Paused");
-		drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_drawer_active, "Active");
-		drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_drawer_inactive, "Inactive");
-		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_options, "Options");
-		drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_drawer_settings, "Settings");
+		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_drawer_all, navigationDrawerItemTitles[0]);
+		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_drawer_downloading, navigationDrawerItemTitles[1]);
+		drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_drawer_completed, navigationDrawerItemTitles[2]);
+		drawerItem[3] = new ObjectDrawerItem(R.drawable.ic_drawer_paused, navigationDrawerItemTitles[3]);
+		drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_drawer_active, navigationDrawerItemTitles[4]);
+		drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[5]);
+		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[6]);
+		drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[7]);
 
 		// Create object for drawer item OnbjectDrawerItem
 		DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.listview_item_row, drawerItem);
@@ -230,7 +232,23 @@ public class MainActivity extends FragmentActivity {
 		String urlTorrent = intent.getDataString();
 
 		if (urlTorrent != null && urlTorrent.length() != 0) {
-			addTorrent(intent.getDataString());
+
+			// File
+			Log.i("intent started", urlTorrent.substring(0, 4));
+
+			if (urlTorrent.substring(0, 4).equals("file")) {
+				// File
+				Log.i("FILE:", urlTorrent);
+
+				addTorrentFile(Uri.parse(urlTorrent).getPath());
+			} else {
+
+				// URL
+				addTorrent(intent.getDataString());
+
+				// File
+				Log.i("WEB", urlTorrent);
+			}
 		}
 
 		// Fragments
@@ -652,14 +670,14 @@ public class MainActivity extends FragmentActivity {
 
 		case R.id.action_upload_rate_limit:
 
-			Log.i("upload_rate_limit", "upload_rate_limit");
+			// Log.i("upload_rate_limit", "upload_rate_limit");
 
 			tf = this.getTorrentDetailsFragment();
 
 			if (tf != null) {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
-				Log.i("upload_rate_limit", "hash: " + hash);
+				// Log.i("upload_rate_limit", "hash: " + hash);
 				uploadRateLimitDialog(hash);
 				// if (findViewById(R.id.one_frame) != null) {
 				// getFragmentManager().popBackStack();
@@ -691,7 +709,8 @@ public class MainActivity extends FragmentActivity {
 
 		if (requestCode == SETTINGS_CODE) {
 
-			// Get options and save them as shared preferences
+			// Get options from server and save them as shared preferences
+			// locally
 			qBittorrentOptions qso = new qBittorrentOptions();
 			qso.execute(new String[] { "json/preferences", "getSettings" });
 
@@ -839,6 +858,12 @@ public class MainActivity extends FragmentActivity {
 		qtc.execute(new String[] { "addTorrent", url });
 	}
 
+	public void addTorrentFile(String url) {
+		// Execute the task in background
+		qBittorrentCommand qtc = new qBittorrentCommand();
+		qtc.execute(new String[] { "addTorrentFile", url });
+	}
+
 	public void pauseAllTorrents() {
 		// Execute the task in background
 		qBittorrentCommand qtc = new qBittorrentCommand();
@@ -951,21 +976,21 @@ public class MainActivity extends FragmentActivity {
 
 		if (uploadRateLimit != null && !uploadRateLimit.equals("")) {
 
-			Log.i("upload_rate_limit", "global_upload: " + global_upload);
-			Log.i("upload_rate_limit", "uploadRateLimit: " + uploadRateLimit);
+			// Log.i("upload_rate_limit", "global_upload: " + global_upload);
+			// Log.i("upload_rate_limit", "uploadRateLimit: " +
+			// uploadRateLimit);
 
 			if (global_upload != null) {
 
 				limit = (Integer.parseInt(uploadRateLimit) > Integer.parseInt(global_upload) && Integer.parseInt(global_upload) != 0) ? Integer
 						.parseInt(global_upload) : Integer.parseInt(uploadRateLimit);
 
-				Log.i("upload_rate_limit", hash + "&limit=" + limit * 1024);
+				// Log.i("upload_rate_limit", hash + "&limit=" + limit * 1024);
 
 				qBittorrentCommand qtc = new qBittorrentCommand();
 				qtc.execute(new String[] { "setUploadRateLimit", hash + "&" + limit * 1024 });
 
 			} else {
-				// TODO: Dialog with error message
 				genericOkDialog(R.string.error, R.string.global_value_error);
 
 			}
@@ -979,20 +1004,22 @@ public class MainActivity extends FragmentActivity {
 
 		if (downloadRateLimit != null && !downloadRateLimit.equals("")) {
 
-			Log.i("download_rate_limit", "global_download: " + global_download);
-			Log.i("download_rate_limit", "downloadRateLimit: " + downloadRateLimit);
+			// Log.i("download_rate_limit", "global_download: " +
+			// global_download);
+			// Log.i("download_rate_limit", "downloadRateLimit: " +
+			// downloadRateLimit);
 
 			if (global_download != null) {
 
 				limit = (Integer.parseInt(downloadRateLimit) > Integer.parseInt(global_download)) ? Integer.parseInt(global_download) : Integer
 						.parseInt(downloadRateLimit);
 
-				Log.i("download_rate_limit", hash + "&limit=" + limit * 1024);
+				// Log.i("download_rate_limit", hash + "&limit=" + limit *
+				// 1024);
 
 				qBittorrentCommand qtc = new qBittorrentCommand();
 				qtc.execute(new String[] { "setDownloadRateLimit", hash + "&" + limit * 1024 });
 			} else {
-				// TODO: Dialog with error message
 				genericOkDialog(R.string.error, R.string.global_value_error);
 			}
 
@@ -1150,8 +1177,16 @@ public class MainActivity extends FragmentActivity {
 				messageId = R.string.torrentAdded;
 			}
 
+			if ("addTorrentFile".equals(result)) {
+				messageId = R.string.torrentFileAdded;
+			}
+
 			if ("pauseAll".equals(result)) {
 				messageId = R.string.AllTorrentsPaused;
+			}
+
+			if ("resumeAll".equals(result)) {
+				messageId = R.string.AllTorrentsResumed;
 			}
 
 			if ("increasePrio".equals(result)) {
@@ -1184,39 +1219,39 @@ public class MainActivity extends FragmentActivity {
 
 			switch (drawerList.getCheckedItemPosition()) {
 			case 0:
-				Log.i("qBittorrentCommand", "case 0");
+				// Log.i("qBittorrentCommand", "case 0");
 				refreshWithDelay("all", 3);
 				break;
 			case 1:
-				Log.i("qBittorrentCommand", "case 1");
+				// Log.i("qBittorrentCommand", "case 1");
 				refreshWithDelay("downloading", 3);
 				break;
 			case 2:
-				Log.i("qBittorrentCommand", "case 2");
+				// Log.i("qBittorrentCommand", "case 2");
 				refreshWithDelay("completed", 3);
 				break;
 			case 3:
-				Log.i("qBittorrentCommand", "case 3");
+				// Log.i("qBittorrentCommand", "case 3");
 				refreshWithDelay("paused", 3);
 				break;
 			case 4:
-				Log.i("qBittorrentCommand", "case 4");
+				// Log.i("qBittorrentCommand", "case 4");
 				refreshWithDelay("active", 3);
 				break;
 			case 5:
-				Log.i("qBittorrentCommand", "case 5");
+				// Log.i("qBittorrentCommand", "case 5");
 				refreshWithDelay("inactive", 3);
 				break;
 			case 6:
-				Log.i("qBittorrentCommand", "case 6");
+				// Log.i("qBittorrentCommand", "case 6");
 				// Select "All" torrents list
 				selectItem(0);
 				break;
 			case 7:
-				Log.i("qBittorrentCommand", "case 7");
+				// Log.i("qBittorrentCommand", "case 7");
 				break;
 			default:
-				Log.i("qBittorrentCommand", "default");
+				// Log.i("qBittorrentCommand", "default");
 				refreshWithDelay("all", 3);
 				break;
 			}
@@ -1232,7 +1267,7 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		protected Torrent[] doInBackground(String... params) {
 
-			String name, size, info, progress, state, hash, ratio, leechs, seeds, priority;
+			String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, downloaded, eta;
 
 			Torrent[] torrents = null;
 
@@ -1260,15 +1295,16 @@ public class MainActivity extends FragmentActivity {
 						name = json.getString(TAG_NAME);
 						size = json.getString(TAG_SIZE);
 						progress = String.format("%.2f", json.getDouble(TAG_PROGRESS) * 100) + "%";
-						info = size + " | D:" + json.getString(TAG_DLSPEED) + " | U:" + json.getString(TAG_UPSPEED) + " | " + progress;
+						info = "";
 						state = json.getString(TAG_STATE);
 						hash = json.getString(TAG_HASH);
 						ratio = json.getString(TAG_RATIO);
 						leechs = json.getString(TAG_NUMLEECHS);
 						seeds = json.getString(TAG_NUMSEEDS);
 						priority = json.getString(TAG_PRIORITY);
+						eta = json.getString(TAG_ETA);
 
-						torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority);
+						torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta);
 
 						MainActivity.names[i] = name;
 
@@ -1299,6 +1335,14 @@ public class MainActivity extends FragmentActivity {
 							torrents[i].setShareRatio(json2.getString(TAG_SHARE_RATIO));
 							torrents[i].setUploadLimit(json2.getString(TAG_UPLOAD_LIMIT));
 							torrents[i].setDownloadLimit(json2.getString(TAG_DOWNLOAD_LIMIT));
+
+							// Info
+							downloaded = torrents[i].getTotalDownloaded();
+							downloaded = downloaded.substring(0, downloaded.indexOf("(") - 1);
+
+							torrents[i].setInfo(downloaded + " " + Character.toString('\u2193') + " " + json.getString(TAG_DLSPEED) + " "
+									+ Character.toString('\u2191') + " " + json.getString(TAG_UPSPEED) + " - " + progress + " - " + torrents[i].getEta());
+
 						}
 
 					}

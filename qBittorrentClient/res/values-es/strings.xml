@@ -54,8 +54,8 @@
         <item>Configuración</item>
     </string-array>
 
-    <string name="about_help1">Para empezar a utilizar el cliente, proporcione los datos de conexión  seleccionando \'Configuración\' en el menú desplegable</string>
-    <string name="about_help2">Pulse el botón de actualización en el menú para obtener nuevos resultados, o elija una opción del menú de navegación para obtener la lista de torrents desde el servidor.</string>
+    <string name="about_help1">Para empezar a utilizar el cliente, proporciona los datos de conexión  seleccionando \'Configuración\' en el menú desplegable</string>
+    <string name="about_help2">Pulsa el botón de actualización en el menú para obtener nuevos resultados, o elije una opción del menú de navegación para obtener la lista de torrents desde el servidor.</string>
     <string name="about_motto">Gestiona todos tus torrents desde Android usando qBittorrent Client</string>
     <string name="icon">icono</string>
     <string name="no_results">No hay resultados</string>
@@ -101,6 +101,6 @@
     <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
     <string name="settings_qbittorrent_version_summary">Usar servidor qBittorrent anterior</string>
     <string name="settings_qbittorrent_pro_title">Opción no disponible</string>
-    <string name="settings_qbittorrent_pro_message">Esta opción está solo disponible para la versión de qBittorrent PRO!</string>
+    <string name="settings_qbittorrent_pro_message">Esta opción está solo disponible en la versión qBittorrent PRO!</string>
 
 </resources>

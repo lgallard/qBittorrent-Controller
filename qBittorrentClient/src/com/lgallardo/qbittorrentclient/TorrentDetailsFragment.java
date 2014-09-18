@@ -117,26 +117,26 @@ public class TorrentDetailsFragment extends Fragment {
 				TextView downloadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentDownloadRateLimit);
 
 				nameTextView.setText(name);
-				sizeTextView.setText("Size: " + size);
-				ratioTextView.setText("Ratio: " + ratio);
-				progressTextView.setText("Progress: " + progress);
-				stateTextView.setText("State: " + state);
-				leechsTextView.setText("Leechs: " + leechs);
-				seedsTextView.setText("Seeds: " + seeds);
-				hashTextView.setText("Hash: " + hash);
-				priorityTextView.setText("Priority: " + priority);
-				pathTextView.setText("Save Path: " + savePath);
-				creationDateTextView.setText("Create Date: " + creationDate);
-				commentTextView.setText("Comment: " + comment);
-				totalWastedTextView.setText("Total Wasted: " + totalWasted);
-				totalUploadedTextView.setText("Tota lUploaded: " + totalUploaded);
-				totalDownloadedTextView.setText("Total Downloaded: " + totalDownloaded);
-				timeElapsedTextView.setText("Time Elapsed: " + timeElapsed);
-				nbConnectionsTextView.setText("Num. Connections: " + nbConnections);
-				shareRatioTextView.setText("Share Ratio: " + shareRatio);
-				uploadRateLimitTextView.setText("Upload Rate Limit: " + uploadRateLimit);
-				downloadRateLimitTextView.setText("Download Rate Limit: " + downloadRateLimit);
-
+				sizeTextView.setText(size);				
+				ratioTextView.setText(ratio);
+				stateTextView.setText(state);
+				leechsTextView.setText(leechs);
+				seedsTextView.setText(seeds);
+				progressTextView.setText(progress);
+				hashTextView.setText(hash);
+				priorityTextView.setText(priority);
+				pathTextView.setText(savePath);
+				creationDateTextView.setText(creationDate);
+				commentTextView.setText(comment);
+				totalWastedTextView.setText(totalWasted);
+				totalUploadedTextView.setText(totalUploaded);
+				totalDownloadedTextView.setText(totalDownloaded);
+				timeElapsedTextView.setText(timeElapsed);
+				nbConnectionsTextView.setText(nbConnections);
+				shareRatioTextView.setText(shareRatio);
+				uploadRateLimitTextView.setText(uploadRateLimit);
+				downloadRateLimitTextView.setText(downloadRateLimit);
+				
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
