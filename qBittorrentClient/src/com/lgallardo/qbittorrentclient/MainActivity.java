@@ -118,7 +118,9 @@ public class MainActivity extends FragmentActivity {
 	protected static String password;
 	protected static boolean oldVersion;
 	protected static boolean https;
-
+	protected static boolean auto_refresh;
+	protected static int refresh_period;
+	
 	// Option
 	protected static String global_max_num_connections;
 	protected static String max_num_conn_per_torrent;
@@ -159,6 +161,10 @@ public class MainActivity extends FragmentActivity {
 
 	private boolean okay = false;
 
+	// Auto-refresh
+	private Handler handler;
+	private boolean canrefresh = true;
+	
 	private AdView adView;
 
 	@Override
@@ -314,7 +320,13 @@ public class MainActivity extends FragmentActivity {
 			fragmentTransaction.commit();
 		}
 
-		refresh();
+		// First refresh
+		 refresh();
+
+		// Autorefresh
+
+		handler = new Handler();
+		handler.postDelayed(m_Runnable, refresh_period);
 
 	}
 
@@ -330,6 +342,64 @@ public class MainActivity extends FragmentActivity {
 		adView.loadAd(adRequest);
 	}
 
+	// Auto-refresh runnable
+	private final Runnable m_Runnable = new Runnable() {
+		public void run()
+
+		{
+			// Toast.makeText(MainActivity.this, "Refresh period: " +
+			// refresh_period, Toast.LENGTH_SHORT).show();
+
+			// Log.i("Autoefresh", "Refresh period: " + refresh_period);
+
+			if (auto_refresh == true && canrefresh == true) {
+
+				if (findViewById(R.id.fragment_container) != null) {
+					refreshCurrent();
+				} else {
+
+					FragmentManager fm = getFragmentManager();
+
+					if (fm.findFragmentById(R.id.one_frame) instanceof ItemstFragment || fm.findFragmentById(R.id.one_frame) instanceof AboutFragment) {
+						refreshCurrent();
+					}
+
+				}
+			}
+
+			MainActivity.this.handler.postDelayed(m_Runnable, refresh_period);
+		}
+
+	};// runnable
+
+	public void refreshCurrent() {
+		switch (drawerList.getCheckedItemPosition()) {
+		case 0:
+			refresh("all");
+			break;
+		case 1:
+			refresh("downloading");
+			break;
+		case 2:
+			refresh("completed");
+			break;
+		case 3:
+			refresh("paused");
+			break;
+		case 4:
+			refresh("active");
+			break;
+		case 5:
+			refresh("inactive");
+			break;
+		default:
+			refresh();
+			break;
+		}
+
+	}
+	
+	
 	// Drawer's method
 
 	@Override
@@ -716,6 +786,9 @@ public class MainActivity extends FragmentActivity {
 
 			// Select "All" torrents list
 			selectItem(0);
+			
+			// Now it can be refreshed
+			canrefresh = true;
 
 		}
 
@@ -770,6 +843,9 @@ public class MainActivity extends FragmentActivity {
 
 			// Set preferences using this json object
 			setQBittorrentPrefefrences(json);
+			
+			// Now it can be refreshed
+			canrefresh = true;
 
 		}
 
@@ -814,6 +890,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private void openSettings() {
+		canrefresh = false;
 		Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
 		// startActivity(intent);
 		startActivityForResult(intent, SETTINGS_CODE);
@@ -821,6 +898,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private void openOptions() {
+		canrefresh = false;
 		// Retrieve preferences for options
 		Intent intent = new Intent(getBaseContext(), OptionsActivity.class);
 		startActivityForResult(intent, OPTION_CODE);
@@ -1098,6 +1176,10 @@ public class MainActivity extends FragmentActivity {
 		} else {
 			protocol = "http";
 		}
+		
+
+		auto_refresh = sharedPrefs.getBoolean("auto_refresh", true);
+		refresh_period = Integer.parseInt(sharedPrefs.getString("refresh_period", "60000"));
 	}
 
 	// Get Options

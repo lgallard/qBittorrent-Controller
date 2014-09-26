@@ -52,14 +52,6 @@
     <string name="setDownloadRateLimit">Download rate limit set</string>
     <string name="error">Error</string>
     <string name="global_value_error">Global value cannot be retrieved. Please check your connection settings!</string>
-    <string name="navigation_drawer_all">All</string>
-    <string name="navigation_drawer_downloading">Downloading</string>
-    <string name="navigation_drawer_completed">Completed</string>
-    <string name="navigation_drawer_paused">Paused</string>
-    <string name="navigation_drawer_active">Active</string>
-    <string name="navigation_drawer_inactive">Inactive</string>
-    <string name="navigation_drawer_options">Options</string>
-    <string name="navigation_drawer_settins">Settings</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>All</item>
@@ -98,9 +90,9 @@
     <string name="torrent_details_time_elapsed">Time Elapsed:</string>
     <string name="torrent_details_num_connections">Num. Connections:</string>
     <string name="torrent_details_share_ratio">Share Ratio:</string>
-    <string name="settings_account">Accounts</string>
+    <string name="settings_qbittorrent_account_category">Accounts</string>
     <string name="settings_qbittorrent_currentServer_title">Choose a qBittorrent server</string>
-        <string name="settings_qbittorrent_currentServer_dialog_title">Choose a server</string>
+    <string name="settings_qbittorrent_currentServer_dialog_title">Choose a server</string>
     <string name="settings_qbittorrent_currentServer_summary">qBitttorent Server</string>
     <string name="settings_qbittorrent_hostname_title">Connection Host</string>
     <string name="settings_qbittorrent_hostname_summary">Hostname or IP</string>
@@ -120,5 +112,9 @@
     <string name="settings_qbittorrent_version_summary">Use old qBittorrent server version</string>
     <string name="settings_qbittorrent_pro_title">Feature not available</string>
     <string name="settings_qbittorrent_pro_message">This feature is only available on qBittorrent PRO version!</string>
+    <string name="settings_qbittorrent_autorefresh_category">Auto Refresh</string>
+    <string name="settings_qbittorrent_autorefresh_title">Refresh automatically?</string>
+    <string name="settings_qbittorrent_autorefresh_summary">Update torrent list</string>
+    <string name="settings_qbittorrent_refresh_period_title">Refresh every...</string>
 
 </resources>

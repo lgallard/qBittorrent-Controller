@@ -1,4 +1,14 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Luis M. Gallardo D..
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Public License v3.0
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/gpl.html
+  
+  Contributors:
+      Luis M. Gallardo D. - initial implementation
+-->
 <resources>
 
     <string name="app_name">qBittorrent Client</string>
@@ -80,9 +90,9 @@
     <string name="torrent_details_time_elapsed">Tiempo transcurrido:</string>
     <string name="torrent_details_num_connections">Num. Conexiones:</string>
     <string name="torrent_details_share_ratio">Ratio:</string>
-    <string name="settings_account">Cuentas</string>
+    <string name="settings_qbittorrent_account_category">Cuentas</string>
     <string name="settings_qbittorrent_currentServer_title">Servidor qBittorrent</string>
-        <string name="settings_qbittorrent_currentServer_dialog_title">Selecciona un servidor</string>
+    <string name="settings_qbittorrent_currentServer_dialog_title">Elige un servidor</string>
     <string name="settings_qbittorrent_currentServer_summary">Servidor qBitttorent</string>
     <string name="settings_qbittorrent_hostname_title">Host de conexión</string>
     <string name="settings_qbittorrent_hostname_summary">Hostname o IP</string>
@@ -102,5 +112,9 @@
     <string name="settings_qbittorrent_version_summary">Usar servidor qBittorrent anterior</string>
     <string name="settings_qbittorrent_pro_title">Opción no disponible</string>
     <string name="settings_qbittorrent_pro_message">Esta opción está solo disponible en la versión qBittorrent PRO!</string>
+    <string name="settings_qbittorrent_autorefresh_category">Refrescado automático</string>
+    <string name="settings_qbittorrent_autorefresh_title">¿Refrescar automáticamente?</string>
+    <string name="settings_qbittorrent_autorefresh_summary">Actualizar listado de torrents </string>
+    <string name="settings_qbittorrent_refresh_period_title">Refrescar cada...</string>
 
 </resources>

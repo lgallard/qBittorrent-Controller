@@ -11,5 +11,19 @@
         <item name="2">2</item>
         <item name="3">3</item>
     </string-array>
+    <string-array name="autorefresh">
+        <item name="1">30 seconds</item>
+        <item name="2">1 minute</item>
+        <item name="3">5 minutes</item>
+        <item name="4">10 minutes</item>
+        <item name="5">15 minutes</item>
+    </string-array>
+    <string-array name="autorefreshValues">
+        <item name="1">30000</item>
+        <item name="2">60000</item>
+        <item name="3">300000</item>
+        <item name="4">600000</item>
+        <item name="5">900000</item>
+    </string-array>
 
 </resources>
