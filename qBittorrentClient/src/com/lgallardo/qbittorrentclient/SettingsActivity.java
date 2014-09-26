@@ -38,6 +38,9 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 	private CheckBoxPreference old_version;
 	private String currentServerValue;
 
+	private CheckBoxPreference auto_refresh;
+	private ListPreference refresh_period;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,6 +55,9 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 		username = (EditTextPreference) findPreference("username");
 		password = (EditTextPreference) findPreference("password");
 		old_version = (CheckBoxPreference) findPreference("old_version");
+
+		auto_refresh = (CheckBoxPreference) findPreference("auto_refresh");
+		refresh_period = (ListPreference) findPreference("refresh_period");
 
 		// Get values for server
 		getQBittorrentServerValues(currentServer.getValue());
@@ -137,6 +143,11 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
 		password.setText(sharedPrefs.getString("password" + value, "adminadmin"));
 		old_version.setChecked(sharedPrefs.getBoolean("old_version" + value, false));
+		
+		Log.i("auto-refresh", "Refresg value: "+ refresh_period.getEntry());
+
+		refresh_period.setSummary(refresh_period.getEntry());
+		
 
 	}
 
@@ -146,6 +157,7 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 		hostname.setSummary(hostname.getText());
 		port.setSummary(port.getText());
 		username.setSummary(username.getText());
+		refresh_period.setSummary(refresh_period.getEntry());
 
 	}
 

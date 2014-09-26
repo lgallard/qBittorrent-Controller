@@ -116,5 +116,28 @@
     <string name="settings_qbittorrent_autorefresh_title">Refresh automatically?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Update torrent list</string>
     <string name="settings_qbittorrent_refresh_period_title">Refresh every...</string>
+    <string name="options_qbittorrent_connections_limits_category">Connections Limits</string>
+    <string name="options_qbittorrent_global_max_connections_title">Global max connections</string>
+    <string name="options_qbittorrent_global_max_connections_dialog_title">Global maximum number of connections?</string>
+    <string name="options_qbittorrent_max_num_conn_per_torrent_title">Max num conn per torrent</string>
+    <string name="options_qbittorrent_max_num_conn_per_torrent_dialog_title">Maximum number of connections per torrent?</string>
+    <string name="options_qbittorrent_global_rate_limits_category">Global Rate Limits</string>
+    <string name="options_qbittorrent_global_donwload_rate_title">Download rate</string>
+    <string name="options_qbittorrent_global_donwload_rate_dialog_title">Global download rate?</string>
+    <string name="options_qbittorrent_global_upload_rate_title">Upload rate</string>
+    <string name="options_qbittorrent_global_upload_rate_dialog_title">Global upload rate?</string>
+    <string name="options_qbittorrent_alternative_global_rate_limits_category">Alternative Global Rate Limits</string>
+    <string name="options_qbittorrent_alternative_global_donwload_rate_title">Alternative download rate</string>
+    <string name="options_qbittorrent_alternative_global_donwload_rate_dialog_title">Alternative global download rate?</string>
+    <string name="options_qbittorrent_alternative_global_upload_rate_title">Alternative upload rate</string>
+    <string name="options_qbittorrent_alternative_global_upload_rate_dialog_title">Alternative global upload rate?</string>
+    <string name="options_qbittorrent_torrent_queueing_category">Torrent Queueing</string>
+    <string name="options_qbittorrent_torrent_queueing_title">Torrent queueing?</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_downloads_title">Maximum active downloads</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_downloads_dialog_title">Maximum active downloads?</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_uploads_title">Maximum active uploads</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_uploads_dialog_title">Maximum active uploads?</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_torrents_title">Maximum active torrents</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_torrents_dialog_title">Maximum active torrents?</string>
 
 </resources>

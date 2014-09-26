@@ -22,8 +22,8 @@
     <string name="action_delete_drive">Eliminar datos</string>
     <string name="action_increase_priority">Aumentar prioridad</string>
     <string name="action_decrease_priority">Disminuir prioridad</string>
-    <string name="action_download_rate_limit">Configurar límite de descarga</string>
-    <string name="action_upload_rate_limit">Configurar limite de carga</string>
+    <string name="action_download_rate_limit">Configurar límite de bajada</string>
+    <string name="action_upload_rate_limit">Configurar limite de subida</string>
     <string name="action_delete">Eliminar</string>
     <string name="connection_error">Error de conexión</string>
     <string name="ok">Ok</string>
@@ -116,5 +116,28 @@
     <string name="settings_qbittorrent_autorefresh_title">¿Refrescar automáticamente?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Actualizar listado de torrents </string>
     <string name="settings_qbittorrent_refresh_period_title">Refrescar cada...</string>
+    <string name="options_qbittorrent_connections_limits_category">Límites de Conexión</string>
+    <string name="options_qbittorrent_global_max_connections_title">Conexiones max globales</string>
+    <string name="options_qbittorrent_global_max_connections_dialog_title">Numero máximo de conexiones globales?</string>
+    <string name="options_qbittorrent_max_num_conn_per_torrent_title">Num max num conex por torrent</string>
+    <string name="options_qbittorrent_max_num_conn_per_torrent_dialog_title">Número máximo de conexiones por torrent?</string>
+    <string name="options_qbittorrent_global_rate_limits_category">Límites de Velocidad Global</string>
+    <string name="options_qbittorrent_global_donwload_rate_title">Descarga global</string>
+    <string name="options_qbittorrent_global_donwload_rate_dialog_title">Descarga global?</string>
+    <string name="options_qbittorrent_global_upload_rate_title">Subida global</string>
+    <string name="options_qbittorrent_global_upload_rate_dialog_title">Subida global?</string>
+    <string name="options_qbittorrent_alternative_global_rate_limits_category">Límites de Velocidad Alternos</string>
+    <string name="options_qbittorrent_alternative_global_donwload_rate_title">Descarga global alterna</string>
+    <string name="options_qbittorrent_alternative_global_donwload_rate_dialog_title">Descarga global alterna?</string>
+    <string name="options_qbittorrent_alternative_global_upload_rate_title">Subida global alterna?</string>
+    <string name="options_qbittorrent_alternative_global_upload_rate_dialog_title">Subida global alterna?</string>
+    <string name="options_qbittorrent_torrent_queueing_category">Cola de Torrents</string>
+    <string name="options_qbittorrent_torrent_queueing_title">Cola de torrents?</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_downloads_title">Máximo de descargas activas</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_downloads_dialog_title">Máximo de descargas activas?</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_uploads_title">Máximo de subidas activas</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_uploads_dialog_title">Máximo de subidas activas?</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_torrents_title">Máximo de torrents activos</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_torrents_dialog_title">Máximo de torrents activos?</string>
 
 </resources>

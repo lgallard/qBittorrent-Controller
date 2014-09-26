@@ -13,17 +13,17 @@
 
     <PreferenceCategory
         android:key="Connections Limits"
-        android:title="Connections Limits" >
+        android:title="@string/options_qbittorrent_connections_limits_category" >
         <EditTextPreference
-            android:dialogTitle="Global maximum number of connections"
+            android:dialogTitle="@string/options_qbittorrent_global_max_connections_dialog_title"
             android:inputType="number"
             android:key="global_max_num_connections"
-            android:title="Global max connections" />
+            android:title="@string/options_qbittorrent_global_max_connections_title" />
         <EditTextPreference
-            android:dialogTitle="Maximum number of connections per torrent"
+            android:dialogTitle="@string/options_qbittorrent_max_num_conn_per_torrent_dialog_title"
             android:inputType="number"
             android:key="max_num_conn_per_torrent"
-            android:title="Max num conn per torrent" />
+            android:title="@string/options_qbittorrent_max_num_conn_per_torrent_title" />
         <EditTextPreference
             android:dialogTitle="Maximum number of upload slots per torrent"
             android:inputType="number"
@@ -32,54 +32,57 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:key="Global Rate Limits"
-        android:title="Global Rate Limits" >
+        android:title="@string/options_qbittorrent_global_rate_limits_category" >
         <EditTextPreference
-            android:dialogTitle="Global upload"
+            android:dialogTitle="@string/options_qbittorrent_global_upload_rate_dialog_title"
             android:inputType="number"
             android:key="global_upload"
-            android:title="Upload" />
+            android:title="@string/options_qbittorrent_global_upload_rate_title" />
         <EditTextPreference
-            android:dialogTitle="Global download"
+            android:dialogTitle="@string/options_qbittorrent_global_donwload_rate_dialog_title"
             android:inputType="number"
             android:key="global_download"
-            android:title="Download" />
+            android:title="@string/options_qbittorrent_global_donwload_rate_title" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="Alternative Global Rate Limits"
-        android:title="Alternative Global Rate Limits" >
+        android:title="@string/options_qbittorrent_alternative_global_rate_limits_category" >
         <EditTextPreference
-            android:dialogTitle="Alternative upload"
+            android:dialogTitle="@string/options_qbittorrent_alternative_global_upload_rate_dialog_title"
             android:inputType="number"
             android:key="alt_upload"
-            android:title="Upload" />
+            android:title="@string/options_qbittorrent_alternative_global_upload_rate_title" />
         <EditTextPreference
-            android:dialogTitle="Alternative download"
+            android:dialogTitle="@string/options_qbittorrent_alternative_global_donwload_rate_dialog_title"
             android:inputType="number"
             android:key="alt_download"
-            android:title="Download" />
+            android:title="@string/options_qbittorrent_alternative_global_donwload_rate_title" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="Torrent Queueing"
-        android:title="Torrent Queueing" >
+        android:title="@string/options_qbittorrent_torrent_queueing_category" >
         <CheckBoxPreference
             android:key="torrent_queueing"
-            android:title="Torrent Queueing" />
+            android:title="@string/options_qbittorrent_torrent_queueing_title" />
 
         <EditTextPreference
             android:dependency="torrent_queueing"
+            android:dialogTitle="@string/options_qbittorrent_torrent_queueing_max_active_downloads_dialog_title"
             android:inputType="number"
             android:key="max_act_downloads"
-            android:title="Maximum active downloads" />
+            android:title="@string/options_qbittorrent_torrent_queueing_max_active_downloads_title" />
         <EditTextPreference
             android:dependency="torrent_queueing"
+            android:dialogTitle="@string/options_qbittorrent_torrent_queueing_max_active_uploads_dialog_title"
             android:inputType="number"
             android:key="max_act_uploads"
-            android:title="Maximum active uploads" />
+            android:title="@string/options_qbittorrent_torrent_queueing_max_active_uploads_title" />
         <EditTextPreference
             android:dependency="torrent_queueing"
+            android:dialogTitle="@string/options_qbittorrent_torrent_queueing_max_active_torrents_dialog_title"
             android:inputType="number"
             android:key="max_act_torrents"
-            android:title="Maximum active torrents" />
+            android:title="@string/options_qbittorrent_torrent_queueing_max_active_torrents_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>
