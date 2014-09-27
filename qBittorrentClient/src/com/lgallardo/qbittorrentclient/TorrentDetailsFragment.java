@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
+import org.json.JSONObject;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -35,8 +37,7 @@ public class TorrentDetailsFragment extends Fragment {
 
 	// Torrent variables
 	String name, info, hash, ratio, size, progress, state, leechs, seeds, priority, savePath, creationDate, comment, totalWasted, totalUploaded,
-			totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit = "";
-
+			totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit, downloaded, eta, downloadSpeed, uploadSpeed = "";
 	String hostname;
 	String protocol;
 	int port;
@@ -44,6 +45,8 @@ public class TorrentDetailsFragment extends Fragment {
 	String password;
 
 	int position;
+
+	JSONObject json2;
 
 	private AdView adView;
 	private View rootView;
@@ -68,7 +71,19 @@ public class TorrentDetailsFragment extends Fragment {
 
 		rootView = inflater.inflate(R.layout.torrent_details, container, false);
 
-		Log.i("TorrentDetails", "Position =>>> " + position);
+		// Log.i("TorrentDetails", "Position =>>> " + position);
+
+		savePath = "";
+		creationDate = "";
+		comment = "";
+		uploadRateLimit = "";
+		downloadRateLimit = "";
+		totalWasted = "";
+		totalUploaded = "";
+		totalDownloaded = "";
+		timeElapsed = "";
+		nbConnections = "";
+		shareRatio = "";
 
 		try {
 			if (MainActivity.lines != null && position != -1) {
@@ -82,8 +97,8 @@ public class TorrentDetailsFragment extends Fragment {
 				seeds = MainActivity.lines[position].getSeeds();
 				hash = MainActivity.lines[position].getHash();
 				priority = MainActivity.lines[position].getPriority();
+				
 				savePath = MainActivity.lines[position].getSavePath();
-
 				creationDate = MainActivity.lines[position].getCreationDate();
 				comment = MainActivity.lines[position].getComment();
 				totalWasted = MainActivity.lines[position].getTotalWasted();
@@ -117,7 +132,7 @@ public class TorrentDetailsFragment extends Fragment {
 				TextView downloadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentDownloadRateLimit);
 
 				nameTextView.setText(name);
-				sizeTextView.setText(size);				
+				sizeTextView.setText(size);
 				ratioTextView.setText(ratio);
 				stateTextView.setText(state);
 				leechsTextView.setText(leechs);
@@ -136,7 +151,7 @@ public class TorrentDetailsFragment extends Fragment {
 				shareRatioTextView.setText(shareRatio);
 				uploadRateLimitTextView.setText(uploadRateLimit);
 				downloadRateLimitTextView.setText(downloadRateLimit);
-				
+
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
