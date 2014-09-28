@@ -97,6 +97,8 @@
     <string name="settings_qbittorrent_hostname_title">Connection Host</string>
     <string name="settings_qbittorrent_hostname_summary">Hostname or IP</string>
     <string name="settings_qbittorrent_hostname_dialog_title">Hostname or IP?</string>
+    <string name="settings_qbittorrent_subfolder_title">Subfolder</string>
+    <string name="settings_qbittorrent_subfolder_dialog_title">Subfolder? If not subfolder, leave blank</string>
     <string name="settings_qbittorrent_https_title">Enable https</string>
     <string name="settings_qbittorrent_https_summary">Connect using https</string>
     <string name="settings_qbittorrent_port_title">Connection Port</string>

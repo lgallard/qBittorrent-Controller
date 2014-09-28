@@ -28,6 +28,11 @@
             android:key="hostname"
             android:summary="@string/settings_qbittorrent_hostname_summary"
             android:title="@string/settings_qbittorrent_hostname_title" />
+        <EditTextPreference
+            android:defaultValue=""
+            android:dialogTitle="@string/settings_qbittorrent_subfolder_dialog_title"
+            android:key="subfolder"
+            android:title="@string/settings_qbittorrent_subfolder_title" />
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -72,7 +77,7 @@
             android:title="@string/settings_qbittorrent_autorefresh_title" />
 
         <ListPreference
-            android:defaultValue="60000"
+            android:defaultValue="120000"
             android:dependency="auto_refresh"
             android:entries="@array/autorefresh"
             android:entryValues="@array/autorefreshValues"

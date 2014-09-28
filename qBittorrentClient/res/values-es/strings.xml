@@ -38,8 +38,8 @@
     <string name="torrentFileAdded">Archivo torrent enviado!</string>
     <string name="torrentStarted">Torrent iniciado!</string>
     <string name="torrentPaused">Torrent detenido!</string>
-    <string name="AllTorrentsPaused">Todos los torrents se detuvieron!</string>
-    <string name="AllTorrentsResumed">Todos los torrents se reanudaron!</string>
+    <string name="AllTorrentsPaused">Todos los torrents fueron pausados!</string>
+    <string name="AllTorrentsResumed">Todos los torrents fueron reanudados!</string>
     <string name="torrentDeleled">Torrent borrado!</string>
     <string name="torrentDeletedDrive">Torrent y datos borrados!</string>
     <string name="increasePrioTorrent">Prioridad incrementada!</string>
@@ -96,7 +96,9 @@
     <string name="settings_qbittorrent_currentServer_summary">Servidor qBitttorent</string>
     <string name="settings_qbittorrent_hostname_title">Host de conexión</string>
     <string name="settings_qbittorrent_hostname_summary">Hostname o IP</string>
-    <string name="settings_qbittorrent_hostname_dialog_title">Hostname o IP?</string>
+    <string name="settings_qbittorrent_hostname_dialog_title">Hostname o IP?</string>   
+    <string name="settings_qbittorrent_subfolder_dialog_title">Subcarpeta? Si no deje en blanco</string>
+    <string name="settings_qbittorrent_subfolder_title">Subcarpeta</string>
     <string name="settings_qbittorrent_https_title">Habilitar https</string>
     <string name="settings_qbittorrent_https_summary">Connectar usando https</string>
     <string name="settings_qbittorrent_port_title">Puerto dde conexión</string>

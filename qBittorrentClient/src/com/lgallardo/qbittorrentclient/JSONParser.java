@@ -60,6 +60,7 @@ public class JSONParser {
 	private JSONArray jArray = null;
 	private String json = "";
 	private String hostname;
+	private String subfolder;
 	private int port;
 	private String protocol;
 	private String username;
@@ -69,16 +70,17 @@ public class JSONParser {
 
 	// constructor
 	public JSONParser() {
-		this("", "", 0, "", "");
+		this("", "", "", 0, "", "");
 	}
 
-	public JSONParser(String hostname, int port, String username, String password) {
-		this(hostname, "http", port, username, password);
+	public JSONParser(String hostname, String subfolder, int port, String username, String password) {
+		this(hostname, subfolder, "http", port, username, password);
 	}
 
-	public JSONParser(String hostname, String protocol, int port, String username, String password) {
+	public JSONParser(String hostname, String subfolder, String protocol, int port, String username, String password) {
 
 		this.hostname = hostname;
+		this.subfolder = subfolder;
 		this.protocol = protocol;
 		this.port = port;
 		this.username = username;
@@ -87,6 +89,11 @@ public class JSONParser {
 	}
 
 	public JSONObject getJSONFromUrl(String url) {
+
+		// if server is published in a subfolder, fix url
+		if (subfolder != null && subfolder != "") {
+			url = subfolder + "/" + url;
+		}
 
 		HttpResponse httpResponse;
 		DefaultHttpClient httpclient;
@@ -171,6 +178,11 @@ public class JSONParser {
 
 	public JSONArray getJSONArrayFromUrl(String url) {
 
+		// if server is publish in a subfolder, fix url
+		if (subfolder != null && subfolder != "") {
+			url = subfolder + "/" + url;
+		}
+
 		HttpResponse httpResponse;
 		DefaultHttpClient httpclient;
 
@@ -208,9 +220,10 @@ public class JSONParser {
 
 			httpResponse = httpclient.execute(targetHost, httpget);
 
+			// This could help to detect if device is banned
 			StatusLine statusLine = httpResponse.getStatusLine();
 			int mStatusCode = statusLine.getStatusCode();
-			// Log.i("Status", "CODE: " + mStatusCode);
+			Log.i("Status", "CODE: " + mStatusCode);
 
 			HttpEntity httpEntity = httpResponse.getEntity();
 			is = httpEntity.getContent();
@@ -260,10 +273,6 @@ public class JSONParser {
 
 		String limit = "";
 		String boundary = null;
-
-		String contentDisposition = "";
-
-		StringBuilder fileContent = null;
 
 		HttpResponse httpResponse;
 		DefaultHttpClient httpclient;
@@ -337,6 +346,11 @@ public class JSONParser {
 			limit = tmpString[1];
 
 			Log.i("download_rate_limit", "limit: " + limit);
+		}
+
+		// if server is publish in a subfolder, fix url
+		if (subfolder != null && subfolder != "") {
+			url = subfolder + "/" + url;
 		}
 
 		// Making HTTP request
