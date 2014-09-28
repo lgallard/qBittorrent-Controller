@@ -43,6 +43,7 @@ public class TorrentDetailsFragment extends Fragment {
 	int port;
 	String username;
 	String password;
+	String url;
 
 	int position;
 
@@ -96,7 +97,37 @@ public class TorrentDetailsFragment extends Fragment {
 				leechs = MainActivity.lines[position].getLeechs();
 				seeds = MainActivity.lines[position].getSeeds();
 				hash = MainActivity.lines[position].getHash();
-				priority = MainActivity.lines[position].getPriority();
+				priority = MainActivity.lines[position].getPriority();				
+				eta = MainActivity.lines[position].getEta();
+				
+				// Get torrent's extra info
+				url = "/json/propertiesGeneral/";
+
+				try {
+					JSONObject json2 = MainActivity.jParser.getJSONFromUrl(url + hash);
+
+					// If no data, throw exception
+					if (json2.length() == 0) {
+
+						throw (new Exception());
+
+					}
+
+					MainActivity.lines[position].setSavePath(json2.getString(MainActivity.TAG_SAVE_PATH));
+					MainActivity.lines[position].setCreationDate(json2.getString(MainActivity.TAG_CREATION_DATE));
+					MainActivity.lines[position].setComment(json2.getString(MainActivity.TAG_COMMENT));
+					MainActivity.lines[position].setTotalWasted(json2.getString(MainActivity.TAG_TOTAL_WASTED));
+					MainActivity.lines[position].setTotalUploaded(json2.getString(MainActivity.TAG_TOTAL_UPLOADED));
+					MainActivity.lines[position].setTotalDownloaded(json2.getString(MainActivity.TAG_TOTAL_DOWNLOADED));
+					MainActivity.lines[position].setTimeElapsed(json2.getString(MainActivity.TAG_TIME_ELAPSED));
+					MainActivity.lines[position].setNbConnections(json2.getString(MainActivity.TAG_NB_CONNECTIONS));
+					MainActivity.lines[position].setShareRatio(json2.getString(MainActivity.TAG_SHARE_RATIO));
+					MainActivity.lines[position].setUploadLimit(json2.getString(MainActivity.TAG_UPLOAD_LIMIT));
+					MainActivity.lines[position].setDownloadLimit(json2.getString(MainActivity.TAG_DOWNLOAD_LIMIT));
+				} catch (Exception e) {
+					Log.e("MAIN:", e.toString());
+				}
+
 				
 				savePath = MainActivity.lines[position].getSavePath();
 				creationDate = MainActivity.lines[position].getCreationDate();
