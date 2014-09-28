@@ -104,7 +104,10 @@ public class TorrentDetailsFragment extends Fragment {
 				url = "/json/propertiesGeneral/";
 
 				try {
-					JSONObject json2 = MainActivity.jParser.getJSONFromUrl(url + hash);
+					
+					JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port, MainActivity.username, MainActivity.password);
+					
+					json2 = jParser.getJSONFromUrl(url + hash);
 
 					// If no data, throw exception
 					if (json2.length() == 0) {

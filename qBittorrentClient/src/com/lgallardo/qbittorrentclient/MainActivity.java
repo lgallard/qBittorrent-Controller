@@ -1173,7 +1173,7 @@ public class MainActivity extends FragmentActivity {
 		// Get values from preferences
 		hostname = sharedPrefs.getString("hostname", "NULL");
 		subfolder = sharedPrefs.getString("subfolder", "");
-		
+
 		protocol = sharedPrefs.getString("protocol", "NULL");
 
 		// If user leave the field empty, set 8080 port
@@ -1251,8 +1251,9 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			
-			// This delay is needed for resume action. Other actions have a fewer delay (1 second). 
+
+			// This delay is needed for resume action. Other actions have a
+			// fewer delay (1 second).
 			int delay = 1;
 
 			int messageId = R.string.connection_error;
@@ -1263,7 +1264,7 @@ public class MainActivity extends FragmentActivity {
 
 			if ("start".equals(result)) {
 				messageId = R.string.torrentStarted;
-				
+
 				// Needed to refresh after a resume and see the change
 				delay = 3;
 			}
@@ -1294,7 +1295,7 @@ public class MainActivity extends FragmentActivity {
 
 			if ("resumeAll".equals(result)) {
 				messageId = R.string.AllTorrentsResumed;
-				
+
 				// Needed to refresh after a resume and see the change
 				delay = 3;
 			}
@@ -1441,34 +1442,40 @@ public class MainActivity extends FragmentActivity {
 						} catch (Exception e) {
 							torrents[i].setDownloaded(size);
 						}
-						
+
 						// Info
 						torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
 								+ Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
-								+ torrents[i].getRatio() + " " + Character.toString('\u2022') + " "  + progress + " "  + Character.toString('\u2022') + " " + torrents[i].getEta()) ;
+								+ torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + progress + " " + Character.toString('\u2022') + " "
+								+ torrents[i].getEta());
 
-//						for (int j = 0; j < json2.length(); j++) {
-//
-//							torrents[i].setSavePath(json2.getString(TAG_SAVE_PATH));
-//							torrents[i].setCreationDate(json2.getString(TAG_CREATION_DATE));
-//							torrents[i].setComment(json2.getString(TAG_COMMENT));
-//							torrents[i].setTotalWasted(json2.getString(TAG_TOTAL_WASTED));
-//							torrents[i].setTotalUploaded(json2.getString(TAG_TOTAL_UPLOADED));
-//							torrents[i].setTotalDownloaded(json2.getString(TAG_TOTAL_DOWNLOADED));
-//							torrents[i].setTimeElapsed(json2.getString(TAG_TIME_ELAPSED));
-//							torrents[i].setNbConnections(json2.getString(TAG_NB_CONNECTIONS));
-//							torrents[i].setShareRatio(json2.getString(TAG_SHARE_RATIO));
-//							torrents[i].setUploadLimit(json2.getString(TAG_UPLOAD_LIMIT));
-//							torrents[i].setDownloadLimit(json2.getString(TAG_DOWNLOAD_LIMIT));
-//
-//							// Info
-//							downloaded = torrents[i].getTotalDownloaded();
-//							downloaded = downloaded.substring(0, downloaded.indexOf("(") - 1);
-//
-//							torrents[i].setInfo(downloaded + " " + Character.toString('\u2193') + " " + json.getString(TAG_DLSPEED) + " "
-//									+ Character.toString('\u2191') + " " + json.getString(TAG_UPSPEED) + " - " + progress + " - " + torrents[i].getEta());
-//
-//						}
+						// for (int j = 0; j < json2.length(); j++) {
+						//
+						// torrents[i].setSavePath(json2.getString(TAG_SAVE_PATH));
+						// torrents[i].setCreationDate(json2.getString(TAG_CREATION_DATE));
+						// torrents[i].setComment(json2.getString(TAG_COMMENT));
+						// torrents[i].setTotalWasted(json2.getString(TAG_TOTAL_WASTED));
+						// torrents[i].setTotalUploaded(json2.getString(TAG_TOTAL_UPLOADED));
+						// torrents[i].setTotalDownloaded(json2.getString(TAG_TOTAL_DOWNLOADED));
+						// torrents[i].setTimeElapsed(json2.getString(TAG_TIME_ELAPSED));
+						// torrents[i].setNbConnections(json2.getString(TAG_NB_CONNECTIONS));
+						// torrents[i].setShareRatio(json2.getString(TAG_SHARE_RATIO));
+						// torrents[i].setUploadLimit(json2.getString(TAG_UPLOAD_LIMIT));
+						// torrents[i].setDownloadLimit(json2.getString(TAG_DOWNLOAD_LIMIT));
+						//
+						// // Info
+						// downloaded = torrents[i].getTotalDownloaded();
+						// downloaded = downloaded.substring(0,
+						// downloaded.indexOf("(") - 1);
+						//
+						// torrents[i].setInfo(downloaded + " " +
+						// Character.toString('\u2193') + " " +
+						// json.getString(TAG_DLSPEED) + " "
+						// + Character.toString('\u2191') + " " +
+						// json.getString(TAG_UPSPEED) + " - " + progress +
+						// " - " + torrents[i].getEta());
+						//
+						// }
 
 					}
 				}
