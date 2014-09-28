@@ -37,7 +37,7 @@
     <string name="torrentAdded">Torrent enviado!</string>
     <string name="torrentFileAdded">Archivo torrent enviado!</string>
     <string name="torrentStarted">Torrent iniciado!</string>
-    <string name="torrentPaused">Torrent detenido!</string>
+    <string name="torrentPaused">Torrent pausado!</string>
     <string name="AllTorrentsPaused">Todos los torrents fueron pausados!</string>
     <string name="AllTorrentsResumed">Todos los torrents fueron reanudados!</string>
     <string name="torrentDeleled">Torrent borrado!</string>
@@ -47,7 +47,7 @@
     <string name="drawer_open">Abrir menú de navegación</string>
     <string name="drawer_close">Cierre el menú de navegación</string>
     <string name="getQBittorrentPrefefrences">Obteniendo opciones ...</string>
-    <string name="setQBittorrentPrefefrences">Opciones guardan</string>
+    <string name="setQBittorrentPrefefrences">Guardando opciones</string>
     <string name="setUploadRateLimit">Límite de subida cambiado</string>
     <string name="setDownloadRateLimit">Límite de bajada cambiado</string>
     <string name="error">Error</string>
