@@ -1248,6 +1248,9 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		protected void onPostExecute(String result) {
+			
+			// This delay is needed for resume action. Other actions have a fewer delay (1 second). 
+			int delay = 1;
 
 			int messageId = R.string.connection_error;
 
@@ -1257,6 +1260,9 @@ public class MainActivity extends FragmentActivity {
 
 			if ("start".equals(result)) {
 				messageId = R.string.torrentStarted;
+				
+				// Needed to refresh after a resume and see the change
+				delay = 3;
 			}
 
 			if ("pause".equals(result)) {
@@ -1285,6 +1291,9 @@ public class MainActivity extends FragmentActivity {
 
 			if ("resumeAll".equals(result)) {
 				messageId = R.string.AllTorrentsResumed;
+				
+				// Needed to refresh after a resume and see the change
+				delay = 3;
 			}
 
 			if ("increasePrio".equals(result)) {
@@ -1318,27 +1327,27 @@ public class MainActivity extends FragmentActivity {
 			switch (drawerList.getCheckedItemPosition()) {
 			case 0:
 				// Log.i("qBittorrentCommand", "case 0");
-				refreshWithDelay("all", 3);
+				refreshWithDelay("all", delay);
 				break;
 			case 1:
 				// Log.i("qBittorrentCommand", "case 1");
-				refreshWithDelay("downloading", 3);
+				refreshWithDelay("downloading", delay);
 				break;
 			case 2:
 				// Log.i("qBittorrentCommand", "case 2");
-				refreshWithDelay("completed", 3);
+				refreshWithDelay("completed", delay);
 				break;
 			case 3:
 				// Log.i("qBittorrentCommand", "case 3");
-				refreshWithDelay("paused", 3);
+				refreshWithDelay("paused", delay);
 				break;
 			case 4:
 				// Log.i("qBittorrentCommand", "case 4");
-				refreshWithDelay("active", 3);
+				refreshWithDelay("active", delay);
 				break;
 			case 5:
 				// Log.i("qBittorrentCommand", "case 5");
-				refreshWithDelay("inactive", 3);
+				refreshWithDelay("inactive", delay);
 				break;
 			case 6:
 				// Log.i("qBittorrentCommand", "case 6");
@@ -1350,7 +1359,7 @@ public class MainActivity extends FragmentActivity {
 				break;
 			default:
 				// Log.i("qBittorrentCommand", "default");
-				refreshWithDelay("all", 3);
+				refreshWithDelay("all", delay);
 				break;
 			}
 
