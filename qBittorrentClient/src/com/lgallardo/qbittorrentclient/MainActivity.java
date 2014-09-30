@@ -107,17 +107,22 @@ public class MainActivity extends FragmentActivity {
 	protected static final String TAG_MAX_ACT_UPLOADS = "max_active_uploads";
 	protected static final String TAG_MAX_ACT_TORRENTS = "max_active_torrents";
 
+	protected static JSONParser jParser;
+
 	protected static final int SETTINGS_CODE = 0;
 	protected static final int OPTION_CODE = 1;
 
 	// Preferences properties
 	protected static String hostname;
+	protected static String subfolder;
 	protected static int port;
 	protected static String protocol;
 	protected static String username;
 	protected static String password;
 	protected static boolean oldVersion;
 	protected static boolean https;
+	protected static boolean auto_refresh;
+	protected static int refresh_period;
 
 	// Option
 	protected static String global_max_num_connections;
@@ -159,7 +164,14 @@ public class MainActivity extends FragmentActivity {
 
 	private boolean okay = false;
 
+	// Auto-refresh
+	private Handler handler;
+	private boolean canrefresh = true;
+
 	private AdView adView;
+
+	// For checking if the app is visible
+	private boolean activityIsVisible = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -314,8 +326,25 @@ public class MainActivity extends FragmentActivity {
 			fragmentTransaction.commit();
 		}
 
-		refresh();
+		// Autorefresh
 
+		handler = new Handler();
+		handler.postDelayed(m_Runnable, refresh_period);
+
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		activityIsVisible = true;
+
+		refresh();
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		activityIsVisible = false;
 	}
 
 	// Load Banner
@@ -328,6 +357,63 @@ public class MainActivity extends FragmentActivity {
 
 		// Start loading the ad in the background.
 		adView.loadAd(adRequest);
+	}
+
+	// Auto-refresh runnable
+	private final Runnable m_Runnable = new Runnable() {
+		public void run()
+
+		{
+			// Toast.makeText(MainActivity.this, "Refresh period: " +
+			// refresh_period, Toast.LENGTH_SHORT).show();
+
+			// Log.i("Autoefresh", "Refresh period: " + refresh_period);
+
+			if (auto_refresh == true && canrefresh == true && activityIsVisible == true) {
+
+				if (findViewById(R.id.fragment_container) != null) {
+					refreshCurrent();
+				} else {
+
+					FragmentManager fm = getFragmentManager();
+
+					if (fm.findFragmentById(R.id.one_frame) instanceof ItemstFragment || fm.findFragmentById(R.id.one_frame) instanceof AboutFragment) {
+						refreshCurrent();
+					}
+
+				}
+			}
+
+			MainActivity.this.handler.postDelayed(m_Runnable, refresh_period);
+		}
+
+	};// runnable
+
+	public void refreshCurrent() {
+		switch (drawerList.getCheckedItemPosition()) {
+		case 0:
+			refresh("all");
+			break;
+		case 1:
+			refresh("downloading");
+			break;
+		case 2:
+			refresh("completed");
+			break;
+		case 3:
+			refresh("paused");
+			break;
+		case 4:
+			refresh("active");
+			break;
+		case 5:
+			refresh("inactive");
+			break;
+		default:
+			refresh();
+			break;
+		}
+
 	}
 
 	// Drawer's method
@@ -406,9 +492,11 @@ public class MainActivity extends FragmentActivity {
 			// Load banner
 			loadBanner();
 
-			// Connecting message
-			Toast.makeText(getApplicationContext(), R.string.connecting, Toast.LENGTH_SHORT).show();
-
+			// If activity is visible, Connecting message
+			if (activityIsVisible) {
+				// Connecting message
+				Toast.makeText(this, R.string.connecting, Toast.LENGTH_SHORT).show();
+			}
 		} else {
 
 			// Connection Error message
@@ -717,6 +805,9 @@ public class MainActivity extends FragmentActivity {
 			// Select "All" torrents list
 			selectItem(0);
 
+			// Now it can be refreshed
+			canrefresh = true;
+
 		}
 
 		if (requestCode == OPTION_CODE) {
@@ -771,6 +862,9 @@ public class MainActivity extends FragmentActivity {
 			// Set preferences using this json object
 			setQBittorrentPrefefrences(json);
 
+			// Now it can be refreshed
+			canrefresh = true;
+
 		}
 
 	}
@@ -814,6 +908,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private void openSettings() {
+		canrefresh = false;
 		Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
 		// startActivity(intent);
 		startActivityForResult(intent, SETTINGS_CODE);
@@ -821,6 +916,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private void openOptions() {
+		canrefresh = false;
 		// Retrieve preferences for options
 		Intent intent = new Intent(getBaseContext(), OptionsActivity.class);
 		startActivityForResult(intent, OPTION_CODE);
@@ -1076,6 +1172,8 @@ public class MainActivity extends FragmentActivity {
 
 		// Get values from preferences
 		hostname = sharedPrefs.getString("hostname", "NULL");
+		subfolder = sharedPrefs.getString("subfolder", "");
+
 		protocol = sharedPrefs.getString("protocol", "NULL");
 
 		// If user leave the field empty, set 8080 port
@@ -1098,6 +1196,9 @@ public class MainActivity extends FragmentActivity {
 		} else {
 			protocol = "http";
 		}
+
+		auto_refresh = sharedPrefs.getBoolean("auto_refresh", true);
+		refresh_period = Integer.parseInt(sharedPrefs.getString("refresh_period", "60000"));
 	}
 
 	// Get Options
@@ -1140,7 +1241,7 @@ public class MainActivity extends FragmentActivity {
 			getSettings();
 
 			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, protocol, port, username, password);
+			JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password);
 
 			jParser.postCommand(params[0], params[1]);
 
@@ -1151,6 +1252,10 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		protected void onPostExecute(String result) {
 
+			// This delay is needed for resume action. Other actions have a
+			// fewer delay (1 second).
+			int delay = 1;
+
 			int messageId = R.string.connection_error;
 
 			if (result == null) {
@@ -1159,6 +1264,9 @@ public class MainActivity extends FragmentActivity {
 
 			if ("start".equals(result)) {
 				messageId = R.string.torrentStarted;
+
+				// Needed to refresh after a resume and see the change
+				delay = 3;
 			}
 
 			if ("pause".equals(result)) {
@@ -1187,6 +1295,9 @@ public class MainActivity extends FragmentActivity {
 
 			if ("resumeAll".equals(result)) {
 				messageId = R.string.AllTorrentsResumed;
+
+				// Needed to refresh after a resume and see the change
+				delay = 3;
 			}
 
 			if ("increasePrio".equals(result)) {
@@ -1220,27 +1331,27 @@ public class MainActivity extends FragmentActivity {
 			switch (drawerList.getCheckedItemPosition()) {
 			case 0:
 				// Log.i("qBittorrentCommand", "case 0");
-				refreshWithDelay("all", 3);
+				refreshWithDelay("all", delay);
 				break;
 			case 1:
 				// Log.i("qBittorrentCommand", "case 1");
-				refreshWithDelay("downloading", 3);
+				refreshWithDelay("downloading", delay);
 				break;
 			case 2:
 				// Log.i("qBittorrentCommand", "case 2");
-				refreshWithDelay("completed", 3);
+				refreshWithDelay("completed", delay);
 				break;
 			case 3:
 				// Log.i("qBittorrentCommand", "case 3");
-				refreshWithDelay("paused", 3);
+				refreshWithDelay("paused", delay);
 				break;
 			case 4:
 				// Log.i("qBittorrentCommand", "case 4");
-				refreshWithDelay("active", 3);
+				refreshWithDelay("active", delay);
 				break;
 			case 5:
 				// Log.i("qBittorrentCommand", "case 5");
-				refreshWithDelay("inactive", 3);
+				refreshWithDelay("inactive", delay);
 				break;
 			case 6:
 				// Log.i("qBittorrentCommand", "case 6");
@@ -1252,7 +1363,7 @@ public class MainActivity extends FragmentActivity {
 				break;
 			default:
 				// Log.i("qBittorrentCommand", "default");
-				refreshWithDelay("all", 3);
+				refreshWithDelay("all", delay);
 				break;
 			}
 
@@ -1267,7 +1378,7 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		protected Torrent[] doInBackground(String... params) {
 
-			String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, downloaded, eta;
+			String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, downloaded, eta, uploadSpeed, downloadSpeed;
 
 			Torrent[] torrents = null;
 
@@ -1276,7 +1387,7 @@ public class MainActivity extends FragmentActivity {
 
 			try {
 				// Creating new JSON Parser
-				JSONParser jParser = new JSONParser(hostname, protocol, port, username, password);
+				jParser = new JSONParser(hostname, subfolder, protocol, port, username, password);
 
 				JSONArray jArray = jParser.getJSONArrayFromUrl(params[0]);
 
@@ -1303,47 +1414,68 @@ public class MainActivity extends FragmentActivity {
 						seeds = json.getString(TAG_NUMSEEDS);
 						priority = json.getString(TAG_PRIORITY);
 						eta = json.getString(TAG_ETA);
+						downloadSpeed = json.getString(TAG_DLSPEED);
+						uploadSpeed = json.getString(TAG_UPSPEED);
 
-						torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta);
+						torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed);
 
 						MainActivity.names[i] = name;
 
 						// Get torrent generic properties
 
-						JSONObject json2 = jParser.getJSONFromUrl(params[3] + hash);
+						// JSONObject json2 = jParser.getJSONFromUrl(params[3] +
+						// hash);
+						//
+						// // If no data, throw exception
+						// if (json2.length() == 0) {
+						//
+						// throw (new Exception());
+						//
+						// }
 
-						// If no data, throw exception
-						if (json2.length() == 0) {
+						try {
+							// Calculate total downloaded
+							Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
+							String sizeUnit = size.substring(size.indexOf(" "), size.length());
 
-							throw (new Exception());
-
+							torrents[i].setDownloaded(String.format("%.2f", sizeScalar * json.getDouble(TAG_PROGRESS)) + sizeUnit);
+						} catch (Exception e) {
+							torrents[i].setDownloaded(size);
 						}
 
-						// Log.i("JSON", "param[3]: " + params[3] + hash);
-						// Log.i("JSON", "length: " + json2.length());
+						// Info
+						torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
+								+ Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
+								+ torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + progress + " " + Character.toString('\u2022') + " "
+								+ torrents[i].getEta());
 
-						for (int j = 0; j < json2.length(); j++) {
-
-							torrents[i].setSavePath(json2.getString(TAG_SAVE_PATH));
-							torrents[i].setCreationDate(json2.getString(TAG_CREATION_DATE));
-							torrents[i].setComment(json2.getString(TAG_COMMENT));
-							torrents[i].setTotalWasted(json2.getString(TAG_TOTAL_WASTED));
-							torrents[i].setTotalUploaded(json2.getString(TAG_TOTAL_UPLOADED));
-							torrents[i].setTotalDownloaded(json2.getString(TAG_TOTAL_DOWNLOADED));
-							torrents[i].setTimeElapsed(json2.getString(TAG_TIME_ELAPSED));
-							torrents[i].setNbConnections(json2.getString(TAG_NB_CONNECTIONS));
-							torrents[i].setShareRatio(json2.getString(TAG_SHARE_RATIO));
-							torrents[i].setUploadLimit(json2.getString(TAG_UPLOAD_LIMIT));
-							torrents[i].setDownloadLimit(json2.getString(TAG_DOWNLOAD_LIMIT));
-
-							// Info
-							downloaded = torrents[i].getTotalDownloaded();
-							downloaded = downloaded.substring(0, downloaded.indexOf("(") - 1);
-
-							torrents[i].setInfo(downloaded + " " + Character.toString('\u2193') + " " + json.getString(TAG_DLSPEED) + " "
-									+ Character.toString('\u2191') + " " + json.getString(TAG_UPSPEED) + " - " + progress + " - " + torrents[i].getEta());
-
-						}
+						// for (int j = 0; j < json2.length(); j++) {
+						//
+						// torrents[i].setSavePath(json2.getString(TAG_SAVE_PATH));
+						// torrents[i].setCreationDate(json2.getString(TAG_CREATION_DATE));
+						// torrents[i].setComment(json2.getString(TAG_COMMENT));
+						// torrents[i].setTotalWasted(json2.getString(TAG_TOTAL_WASTED));
+						// torrents[i].setTotalUploaded(json2.getString(TAG_TOTAL_UPLOADED));
+						// torrents[i].setTotalDownloaded(json2.getString(TAG_TOTAL_DOWNLOADED));
+						// torrents[i].setTimeElapsed(json2.getString(TAG_TIME_ELAPSED));
+						// torrents[i].setNbConnections(json2.getString(TAG_NB_CONNECTIONS));
+						// torrents[i].setShareRatio(json2.getString(TAG_SHARE_RATIO));
+						// torrents[i].setUploadLimit(json2.getString(TAG_UPLOAD_LIMIT));
+						// torrents[i].setDownloadLimit(json2.getString(TAG_DOWNLOAD_LIMIT));
+						//
+						// // Info
+						// downloaded = torrents[i].getTotalDownloaded();
+						// downloaded = downloaded.substring(0,
+						// downloaded.indexOf("(") - 1);
+						//
+						// torrents[i].setInfo(downloaded + " " +
+						// Character.toString('\u2193') + " " +
+						// json.getString(TAG_DLSPEED) + " "
+						// + Character.toString('\u2191') + " " +
+						// json.getString(TAG_UPSPEED) + " - " + progress +
+						// " - " + torrents[i].getEta());
+						//
+						// }
 
 					}
 				}
@@ -1577,7 +1709,7 @@ public class MainActivity extends FragmentActivity {
 			getSettings();
 
 			// Creating new JSON Parser
-			JSONParser jParser = new JSONParser(hostname, protocol, port, username, password);
+			JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password);
 
 			//
 			JSONObject json = jParser.getJSONFromUrl(params[0]);

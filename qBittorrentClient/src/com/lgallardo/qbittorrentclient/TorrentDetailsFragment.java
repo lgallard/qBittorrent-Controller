@@ -10,12 +10,15 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
+import org.json.JSONObject;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import android.app.Fragment;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,15 +38,17 @@ public class TorrentDetailsFragment extends Fragment {
 
 	// Torrent variables
 	String name, info, hash, ratio, size, progress, state, leechs, seeds, priority, savePath, creationDate, comment, totalWasted, totalUploaded,
-			totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit = "";
-
+			totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit, downloaded, eta, downloadSpeed, uploadSpeed = "";
 	String hostname;
 	String protocol;
 	int port;
 	String username;
 	String password;
+	String url;
 
 	int position;
+
+	JSONObject json2;
 
 	private AdView adView;
 	private View rootView;
@@ -68,7 +73,19 @@ public class TorrentDetailsFragment extends Fragment {
 
 		rootView = inflater.inflate(R.layout.torrent_details, container, false);
 
-		Log.i("TorrentDetails", "Position =>>> " + position);
+		// Log.i("TorrentDetails", "Position =>>> " + position);
+
+		savePath = "";
+		creationDate = "";
+		comment = "";
+		uploadRateLimit = "";
+		downloadRateLimit = "";
+		totalWasted = "";
+		totalUploaded = "";
+		totalDownloaded = "";
+		timeElapsed = "";
+		nbConnections = "";
+		shareRatio = "";
 
 		try {
 			if (MainActivity.lines != null && position != -1) {
@@ -82,8 +99,45 @@ public class TorrentDetailsFragment extends Fragment {
 				seeds = MainActivity.lines[position].getSeeds();
 				hash = MainActivity.lines[position].getHash();
 				priority = MainActivity.lines[position].getPriority();
-				savePath = MainActivity.lines[position].getSavePath();
+				eta = MainActivity.lines[position].getEta();
+				
+				uploadSpeed = MainActivity.lines[position].getUploadSpeed();
+				downloadSpeed = MainActivity.lines[position].getDownloadSpeed();
+				downloaded = MainActivity.lines[position].getDownloaded();
 
+				// Get torrent's extra info
+				url = "/json/propertiesGeneral/";
+
+				try {
+
+					JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
+							MainActivity.username, MainActivity.password);
+
+					json2 = jParser.getJSONFromUrl(url + hash);
+
+					// If no data, throw exception
+					if (json2.length() == 0) {
+
+						throw (new Exception());
+
+					}
+
+					MainActivity.lines[position].setSavePath(json2.getString(MainActivity.TAG_SAVE_PATH));
+					MainActivity.lines[position].setCreationDate(json2.getString(MainActivity.TAG_CREATION_DATE));
+					MainActivity.lines[position].setComment(json2.getString(MainActivity.TAG_COMMENT));
+					MainActivity.lines[position].setTotalWasted(json2.getString(MainActivity.TAG_TOTAL_WASTED));
+					MainActivity.lines[position].setTotalUploaded(json2.getString(MainActivity.TAG_TOTAL_UPLOADED));
+					MainActivity.lines[position].setTotalDownloaded(json2.getString(MainActivity.TAG_TOTAL_DOWNLOADED));
+					MainActivity.lines[position].setTimeElapsed(json2.getString(MainActivity.TAG_TIME_ELAPSED));
+					MainActivity.lines[position].setNbConnections(json2.getString(MainActivity.TAG_NB_CONNECTIONS));
+					MainActivity.lines[position].setShareRatio(json2.getString(MainActivity.TAG_SHARE_RATIO));
+					MainActivity.lines[position].setUploadLimit(json2.getString(MainActivity.TAG_UPLOAD_LIMIT));
+					MainActivity.lines[position].setDownloadLimit(json2.getString(MainActivity.TAG_DOWNLOAD_LIMIT));
+				} catch (Exception e) {
+					Log.e("MAIN:", e.toString());
+				}
+
+				savePath = MainActivity.lines[position].getSavePath();
 				creationDate = MainActivity.lines[position].getCreationDate();
 				comment = MainActivity.lines[position].getComment();
 				totalWasted = MainActivity.lines[position].getTotalWasted();
@@ -103,7 +157,10 @@ public class TorrentDetailsFragment extends Fragment {
 				TextView leechsTextView = (TextView) rootView.findViewById(R.id.torrentLeechs);
 				TextView seedsTextView = (TextView) rootView.findViewById(R.id.torrentSeeds);
 				TextView hashTextView = (TextView) rootView.findViewById(R.id.torrentHash);
+				TextView etaTextView = (TextView) rootView.findViewById(R.id.torrentEta);
 				TextView priorityTextView = (TextView) rootView.findViewById(R.id.torrentPriority);
+				TextView downloadSpeedTextView = (TextView) rootView.findViewById(R.id.torrentDownloadSpeed);
+				TextView uploadSpeedTextView = (TextView) rootView.findViewById(R.id.torrentUploadSpeed);
 				TextView pathTextView = (TextView) rootView.findViewById(R.id.torrentSavePath);
 				TextView creationDateTextView = (TextView) rootView.findViewById(R.id.torrentCreationDate);
 				TextView commentTextView = (TextView) rootView.findViewById(R.id.torrentComment);
@@ -117,14 +174,19 @@ public class TorrentDetailsFragment extends Fragment {
 				TextView downloadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentDownloadRateLimit);
 
 				nameTextView.setText(name);
-				sizeTextView.setText(size);				
+				sizeTextView.setText(size);
 				ratioTextView.setText(ratio);
 				stateTextView.setText(state);
 				leechsTextView.setText(leechs);
 				seedsTextView.setText(seeds);
 				progressTextView.setText(progress);
 				hashTextView.setText(hash);
+				etaTextView.setText(eta);				
 				priorityTextView.setText(priority);
+				downloadSpeedTextView.setText(downloadSpeed);
+				uploadSpeedTextView.setText(uploadSpeed);
+
+		
 				pathTextView.setText(savePath);
 				creationDateTextView.setText(creationDate);
 				commentTextView.setText(comment);
@@ -136,7 +198,7 @@ public class TorrentDetailsFragment extends Fragment {
 				shareRatioTextView.setText(shareRatio);
 				uploadRateLimitTextView.setText(uploadRateLimit);
 				downloadRateLimitTextView.setText(downloadRateLimit);
-				
+
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -145,6 +207,12 @@ public class TorrentDetailsFragment extends Fragment {
 
 		// Load banner
 		loadBanner();
+		
+		
+		// Execute the task in background
+		qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
+
+		qgit.execute(new View[] { rootView });
 		return rootView;
 	}
 
@@ -203,5 +271,116 @@ public class TorrentDetailsFragment extends Fragment {
 		adView.loadAd(adRequest);
 
 	}
+	
+	// Here is where the action happens
+	private class qBittorrentGeneralInfoTask extends AsyncTask<View, View, View[]> {
+
+		protected View[] doInBackground(View... rootViews) {
+			// Get torrent's extra info
+			url = "/json/propertiesGeneral/";
+
+			try {
+
+				// Log.i("TorrentFragment", "url: " + url);
+				//
+				// Log.i("TorrentFragment", "hash: " + hash);
+
+				JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port, MainActivity.username, MainActivity.password);
+
+				json2 = jParser.getJSONFromUrl(url + hash);
+
+				// // If no data, throw exception
+				// if (json2 == null || json2.length() == 0) {
+				//
+				// Log.i("TorrentFragment", "JSON Empty");
+				// // throw (new Exception());
+				// json2 = null;
+				//
+				// }
+
+				MainActivity.lines[position].setSavePath(json2.getString(MainActivity.TAG_SAVE_PATH));
+				MainActivity.lines[position].setCreationDate(json2.getString(MainActivity.TAG_CREATION_DATE));
+				MainActivity.lines[position].setComment(json2.getString(MainActivity.TAG_COMMENT));
+				MainActivity.lines[position].setTotalWasted(json2.getString(MainActivity.TAG_TOTAL_WASTED));
+				MainActivity.lines[position].setTotalUploaded(json2.getString(MainActivity.TAG_TOTAL_UPLOADED));
+				MainActivity.lines[position].setTotalDownloaded(json2.getString(MainActivity.TAG_TOTAL_DOWNLOADED));
+				MainActivity.lines[position].setTimeElapsed(json2.getString(MainActivity.TAG_TIME_ELAPSED));
+				MainActivity.lines[position].setNbConnections(json2.getString(MainActivity.TAG_NB_CONNECTIONS));
+				MainActivity.lines[position].setShareRatio(json2.getString(MainActivity.TAG_SHARE_RATIO));
+				MainActivity.lines[position].setUploadLimit(json2.getString(MainActivity.TAG_UPLOAD_LIMIT));
+				MainActivity.lines[position].setDownloadLimit(json2.getString(MainActivity.TAG_DOWNLOAD_LIMIT));
+
+			} catch (Exception e) {
+
+				MainActivity.lines[position].setSavePath(" ");
+				MainActivity.lines[position].setCreationDate(" ");
+				MainActivity.lines[position].setComment(" ");
+				MainActivity.lines[position].setTotalWasted(" ");
+				MainActivity.lines[position].setTotalUploaded(" ");
+				MainActivity.lines[position].setTotalDownloaded(" ");
+				MainActivity.lines[position].setTimeElapsed(" ");
+				MainActivity.lines[position].setNbConnections(" ");
+				MainActivity.lines[position].setShareRatio(" ");
+				MainActivity.lines[position].setUploadLimit(" ");
+				MainActivity.lines[position].setDownloadLimit(" ");
+
+				Log.e("TorrentFragment:", e.toString());
+
+			}
+
+			return rootViews;
+
+		}
+
+		@Override
+		protected void onPostExecute(View[] rootViews) {
+
+			View rootView = rootViews[0];
+
+			TextView pathTextView, creationDateTextView, commentTextView, uploadRateLimitTextView, downloadRateLimitTextView, totalWastedTextView, totalUploadedTextView, totalDownloadedTextView, timeElapsedTextView, nbConnectionsTextView, shareRatioTextView = null;
+
+			pathTextView = (TextView) rootView.findViewById(R.id.torrentSavePath);
+			creationDateTextView = (TextView) rootView.findViewById(R.id.torrentCreationDate);
+			commentTextView = (TextView) rootView.findViewById(R.id.torrentComment);
+			uploadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentUploadRateLimit);
+			downloadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentDownloadRateLimit);
+			totalWastedTextView = (TextView) rootView.findViewById(R.id.torrentTotalWasted);
+			totalUploadedTextView = (TextView) rootView.findViewById(R.id.torrentTotalUploaded);
+			totalDownloadedTextView = (TextView) rootView.findViewById(R.id.torrentTotalDownloaded);
+			timeElapsedTextView = (TextView) rootView.findViewById(R.id.torrentTimeElapsed);
+			nbConnectionsTextView = (TextView) rootView.findViewById(R.id.torrentNbConnections);
+			shareRatioTextView = (TextView) rootView.findViewById(R.id.torrentShareRatio);
+
+			Log.i("TorrentFragment - onPostExecute", "position: " + position);
+
+			savePath = MainActivity.lines[position].getSavePath();
+			creationDate = MainActivity.lines[position].getCreationDate();
+			comment = MainActivity.lines[position].getComment();
+			uploadRateLimit = MainActivity.lines[position].getUploadLimit();
+			downloadRateLimit = MainActivity.lines[position].getDownloadLimit();
+			totalWasted = MainActivity.lines[position].getTotalWasted();
+			totalUploaded = MainActivity.lines[position].getTotalUploaded();
+			totalDownloaded = MainActivity.lines[position].getTotalDownloaded();
+			timeElapsed = MainActivity.lines[position].getTimeElapsed();
+			nbConnections = MainActivity.lines[position].getNbConnections();
+			shareRatio = MainActivity.lines[position].getShareRatio();
+
+			pathTextView.setText(savePath);
+			creationDateTextView.setText(creationDate);
+			commentTextView.setText(comment);
+			uploadRateLimitTextView.setText(uploadRateLimit);
+			downloadRateLimitTextView.setText(downloadRateLimit);
+			totalWastedTextView.setText(totalWasted);
+			totalUploadedTextView.setText(totalUploaded);
+			totalDownloadedTextView.setText(totalDownloaded);
+			timeElapsedTextView.setText(timeElapsed);
+			nbConnectionsTextView.setText(nbConnections);
+			shareRatioTextView.setText(shareRatio);
+
+
+		}
+
+	}
+
 
 }

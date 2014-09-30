@@ -31,12 +31,16 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
 	private ListPreference currentServer;
 	private EditTextPreference hostname;
+	private EditTextPreference subfolder;
 	private CheckBoxPreference https;
 	private EditTextPreference port;
 	private EditTextPreference username;
 	private EditTextPreference password;
 	private CheckBoxPreference old_version;
 	private String currentServerValue;
+
+	private CheckBoxPreference auto_refresh;
+	private ListPreference refresh_period;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +51,14 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 		// Get preferences from screen
 		currentServer = (ListPreference) findPreference("currentServer");
 		hostname = (EditTextPreference) findPreference("hostname");
+		subfolder = (EditTextPreference) findPreference("subfolder");
 		https = (CheckBoxPreference) findPreference("https");
 		port = (EditTextPreference) findPreference("port");
 		username = (EditTextPreference) findPreference("username");
 		password = (EditTextPreference) findPreference("password");
 		old_version = (CheckBoxPreference) findPreference("old_version");
+		auto_refresh = (CheckBoxPreference) findPreference("auto_refresh");
+		refresh_period = (ListPreference) findPreference("refresh_period");
 
 		// Get values for server
 		getQBittorrentServerValues(currentServer.getValue());
@@ -126,6 +133,9 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 		currentServer.setSummary(currentServer.getEntry());
 		hostname.setText(sharedPrefs.getString("hostname" + value, "192.168.1.1"));
 		hostname.setSummary(sharedPrefs.getString("hostname" + value, "192.168.1.1"));
+		
+		subfolder.setText(sharedPrefs.getString("subfolder" + value, ""));
+		subfolder.setSummary(sharedPrefs.getString("subfolder" + value, ""));
 
 		https.setChecked(sharedPrefs.getBoolean("https" + value, false));
 
@@ -137,6 +147,11 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
 		password.setText(sharedPrefs.getString("password" + value, "adminadmin"));
 		old_version.setChecked(sharedPrefs.getBoolean("old_version" + value, false));
+		
+		Log.i("auto-refresh", "Refresg value: "+ refresh_period.getEntry());
+
+		refresh_period.setSummary(refresh_period.getEntry());
+		
 
 	}
 
@@ -144,8 +159,10 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
 		currentServer.setSummary(currentServer.getEntry());
 		hostname.setSummary(hostname.getText());
+		subfolder.setSummary(subfolder.getText());
 		port.setSummary(port.getText());
 		username.setSummary(username.getText());
+		refresh_period.setSummary(refresh_period.getEntry());
 
 	}
 
@@ -166,6 +183,10 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 			Log.i("Preferences", "Saving hostname" + currentServer.getValue());
 		}
 
+		if (subfolder.getText().toString() != null) {
+			editor.putString("subfolder" + currentServerValue, subfolder.getText().toString());
+		}
+		
 		editor.putBoolean("https" + currentServerValue, https.isChecked());
 
 		if (port.getText().toString() != null && port.getText().toString() != "") {

@@ -18,12 +18,15 @@ class Torrent {
 	private String state;
 	private String hash;
 	private String downloadSpeed;
+	private String uploadSpeed;
 	private String ratio;
 	private String progress;
+	private String downloaded;
 	private String leechs;
 	private String seeds;
 	private String priority;
 	private String eta;
+
 	private String savePath;
 	private String creationDate;
 	private String comment;
@@ -37,7 +40,7 @@ class Torrent {
 	private String downloadLimit;
 
 	public Torrent(String file, String size, String state, String hash, String info, String ratio, String progress, String leechs, String seeds,
-			String priority, String eta) {
+			String priority, String eta, String downloadSpeed, String uploadSpeed) {
 		this.file = file;
 		this.size = size;
 		this.state = state;
@@ -49,8 +52,9 @@ class Torrent {
 		this.seeds = seeds;
 		this.priority = priority;
 		this.eta = eta;
-		this.uploadLimit = null;
-		this.downloadLimit = null;
+		this.downloadSpeed = downloadSpeed;
+		this.uploadSpeed = uploadSpeed;
+
 	}
 
 	/**
@@ -96,6 +100,13 @@ class Torrent {
 	}
 
 	/**
+	 * @return the uploadSpeed
+	 */
+	public String getUploadSpeed() {
+		return uploadSpeed;
+	}
+
+	/**
 	 * @return the ratio
 	 */
 	public String getRatio() {
@@ -107,6 +118,13 @@ class Torrent {
 	 */
 	public String getProgress() {
 		return progress;
+	}
+
+	/**
+	 * @return the downloaded size
+	 */
+	public String getDownloaded() {
+		return downloaded;
 	}
 
 	/**
@@ -275,6 +293,14 @@ class Torrent {
 	}
 
 	/**
+	 * @param uploadSpeed
+	 *            the uploadSpeed to set
+	 */
+	public void setUploadSpeed(String uploadSpeed) {
+		this.uploadSpeed = uploadSpeed;
+	}
+
+	/**
 	 * @param ratio
 	 *            the ratio to set
 	 */
@@ -288,6 +314,13 @@ class Torrent {
 	 */
 	public void setProgress(String progress) {
 		this.progress = progress;
+	}
+
+	/*
+	 * @param downloaded the downloaded to set
+	 */
+	public void setDownloaded(String downloaded) {
+		this.downloaded = downloaded;
 	}
 
 	/**
@@ -315,7 +348,8 @@ class Torrent {
 	}
 
 	/**
-	 * @param priority the eta to set
+	 * @param priority
+	 *            the eta to set
 	 */
 	public void setEta(String eta) {
 		this.eta = eta;

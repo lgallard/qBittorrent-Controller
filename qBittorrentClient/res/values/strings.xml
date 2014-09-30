@@ -52,14 +52,6 @@
     <string name="setDownloadRateLimit">Download rate limit set</string>
     <string name="error">Error</string>
     <string name="global_value_error">Global value cannot be retrieved. Please check your connection settings!</string>
-    <string name="navigation_drawer_all">All</string>
-    <string name="navigation_drawer_downloading">Downloading</string>
-    <string name="navigation_drawer_completed">Completed</string>
-    <string name="navigation_drawer_paused">Paused</string>
-    <string name="navigation_drawer_active">Active</string>
-    <string name="navigation_drawer_inactive">Inactive</string>
-    <string name="navigation_drawer_options">Options</string>
-    <string name="navigation_drawer_settins">Settings</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>All</item>
@@ -82,7 +74,10 @@
     <string name="torrent_details_general_info">General info</string>
     <string name="torrent_details_save_path">Save path:</string>
     <string name="torrent_details_ratio">Ratio:</string>
+    <string name="torrent_details_eta">Eta:</string>
     <string name="torrent_details_priority">Priority:</string>
+    <string name="torrent_details_downloadSpeed">Download Speed:</string>
+    <string name="torrent_details_uploadSpeed">Upload Speed:</string>
     <string name="torrent_details_leechs">Leechs:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">State:</string>
@@ -98,13 +93,15 @@
     <string name="torrent_details_time_elapsed">Time Elapsed:</string>
     <string name="torrent_details_num_connections">Num. Connections:</string>
     <string name="torrent_details_share_ratio">Share Ratio:</string>
-    <string name="settings_account">Accounts</string>
+    <string name="settings_qbittorrent_account_category">Accounts</string>
     <string name="settings_qbittorrent_currentServer_title">Choose a qBittorrent server</string>
-        <string name="settings_qbittorrent_currentServer_dialog_title">Choose a server</string>
+    <string name="settings_qbittorrent_currentServer_dialog_title">Choose a server</string>
     <string name="settings_qbittorrent_currentServer_summary">qBitttorent Server</string>
     <string name="settings_qbittorrent_hostname_title">Connection Host</string>
     <string name="settings_qbittorrent_hostname_summary">Hostname or IP</string>
     <string name="settings_qbittorrent_hostname_dialog_title">Hostname or IP?</string>
+    <string name="settings_qbittorrent_subfolder_title">Subfolder</string>
+    <string name="settings_qbittorrent_subfolder_dialog_title">Subfolder? If you're in doubt, leave it blank!</string>
     <string name="settings_qbittorrent_https_title">Enable https</string>
     <string name="settings_qbittorrent_https_summary">Connect using https</string>
     <string name="settings_qbittorrent_port_title">Connection Port</string>
@@ -120,5 +117,32 @@
     <string name="settings_qbittorrent_version_summary">Use old qBittorrent server version</string>
     <string name="settings_qbittorrent_pro_title">Feature not available</string>
     <string name="settings_qbittorrent_pro_message">This feature is only available on qBittorrent PRO version!</string>
+    <string name="settings_qbittorrent_autorefresh_category">Auto Refresh</string>
+    <string name="settings_qbittorrent_autorefresh_title">Refresh automatically?</string>
+    <string name="settings_qbittorrent_autorefresh_summary">Update torrent list</string>
+    <string name="settings_qbittorrent_refresh_period_title">Refresh every...</string>
+    <string name="options_qbittorrent_connections_limits_category">Connections Limits</string>
+    <string name="options_qbittorrent_global_max_connections_title">Global max connections</string>
+    <string name="options_qbittorrent_global_max_connections_dialog_title">Global maximum number of connections?</string>
+    <string name="options_qbittorrent_max_num_conn_per_torrent_title">Max num conn per torrent</string>
+    <string name="options_qbittorrent_max_num_conn_per_torrent_dialog_title">Maximum number of connections per torrent?</string>
+    <string name="options_qbittorrent_global_rate_limits_category">Global Rate Limits</string>
+    <string name="options_qbittorrent_global_donwload_rate_title">Download rate</string>
+    <string name="options_qbittorrent_global_donwload_rate_dialog_title">Global download rate?</string>
+    <string name="options_qbittorrent_global_upload_rate_title">Upload rate</string>
+    <string name="options_qbittorrent_global_upload_rate_dialog_title">Global upload rate?</string>
+    <string name="options_qbittorrent_alternative_global_rate_limits_category">Alternative Global Rate Limits</string>
+    <string name="options_qbittorrent_alternative_global_donwload_rate_title">Alternative download rate</string>
+    <string name="options_qbittorrent_alternative_global_donwload_rate_dialog_title">Alternative global download rate?</string>
+    <string name="options_qbittorrent_alternative_global_upload_rate_title">Alternative upload rate</string>
+    <string name="options_qbittorrent_alternative_global_upload_rate_dialog_title">Alternative global upload rate?</string>
+    <string name="options_qbittorrent_torrent_queueing_category">Torrent Queueing</string>
+    <string name="options_qbittorrent_torrent_queueing_title">Torrent queueing?</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_downloads_title">Maximum active downloads</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_downloads_dialog_title">Maximum active downloads?</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_uploads_title">Maximum active uploads</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_uploads_dialog_title">Maximum active uploads?</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_torrents_title">Maximum active torrents</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_torrents_dialog_title">Maximum active torrents?</string>
 
 </resources>

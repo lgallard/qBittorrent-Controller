@@ -55,7 +55,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_weight="1"
                     android:paddingLeft="5dp"
-                    android:text="Size" />
+                    android:text="@string/torrent_details_size" />
 
                 <TextView
                     android:id="@+id/torrentSize"
@@ -65,7 +65,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_weight="1"
                     android:paddingLeft="5dp"
-                    android:text="@string/torrent_details_size" />
+                    android:text="Size" />
             </LinearLayout>
 
             <LinearLayout
@@ -193,6 +193,69 @@
                     android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="Priority" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/torrenDownloadSpeedLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:text="@string/torrent_details_downloadSpeed" />
+
+                <TextView
+                    android:id="@+id/torrentDownloadSpeed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:text="Download Speed" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/torrenUploadSpeedLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:text="@string/torrent_details_uploadSpeed" />
+
+                <TextView
+                    android:id="@+id/torrentUploadSpeed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:text="Upload Speed" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/torrenEtaLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:text="@string/torrent_details_eta" />
+
+                <TextView
+                    android:id="@+id/torrentEta"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:text="Eta" />
             </LinearLayout>
 
             <LinearLayout
@@ -448,8 +511,8 @@
                 <TextView
                     android:id="@+id/torrentShareRatioLabel"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="@string/torrent_details_share_ratio" />
 
@@ -460,7 +523,6 @@
                     android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:text="TextView" />
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

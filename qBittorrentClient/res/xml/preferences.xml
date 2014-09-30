@@ -12,7 +12,7 @@
 
     <PreferenceCategory
         android:key="Account"
-        android:title="@string/settings_account" >
+        android:title="@string/settings_qbittorrent_account_category" >
         <ListPreference
             android:defaultValue="1"
             android:dialogTitle="@string/settings_qbittorrent_currentServer_dialog_title"
@@ -28,6 +28,11 @@
             android:key="hostname"
             android:summary="@string/settings_qbittorrent_hostname_summary"
             android:title="@string/settings_qbittorrent_hostname_title" />
+        <EditTextPreference
+            android:defaultValue=""
+            android:dialogTitle="@string/settings_qbittorrent_subfolder_dialog_title"
+            android:key="subfolder"
+            android:title="@string/settings_qbittorrent_subfolder_title" />
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -61,6 +66,24 @@
             android:key="old_version"
             android:summary="@string/settings_qbittorrent_version_summary"
             android:title="@string/settings_qbittorrent_version_title" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="Autorefresh"
+        android:title="@string/settings_qbittorrent_autorefresh_category" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="auto_refresh"
+            android:summary="@string/settings_qbittorrent_autorefresh_summary"
+            android:title="@string/settings_qbittorrent_autorefresh_title" />
+
+        <ListPreference
+            android:defaultValue="120000"
+            android:dependency="auto_refresh"
+            android:entries="@array/autorefresh"
+            android:entryValues="@array/autorefreshValues"
+            android:key="refresh_period"
+            android:summary="@string/settings_qbittorrent_refresh_period_title"
+            android:title="@string/settings_qbittorrent_refresh_period_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>
