@@ -74,7 +74,10 @@
     <string name="torrent_details_general_info">General info</string>
     <string name="torrent_details_save_path">Save path:</string>
     <string name="torrent_details_ratio">Ratio:</string>
+    <string name="torrent_details_eta">Eta:</string>
     <string name="torrent_details_priority">Priority:</string>
+    <string name="torrent_details_downloadSpeed">Download Speed:</string>
+    <string name="torrent_details_uploadSpeed">Upload Speed:</string>
     <string name="torrent_details_leechs">Leechs:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">State:</string>
@@ -98,7 +101,7 @@
     <string name="settings_qbittorrent_hostname_summary">Hostname or IP</string>
     <string name="settings_qbittorrent_hostname_dialog_title">Hostname or IP?</string>
     <string name="settings_qbittorrent_subfolder_title">Subfolder</string>
-    <string name="settings_qbittorrent_subfolder_dialog_title">Subfolder? If not subfolder, leave blank</string>
+    <string name="settings_qbittorrent_subfolder_dialog_title">Subfolder? If you're in doubt, leave it blank!</string>
     <string name="settings_qbittorrent_https_title">Enable https</string>
     <string name="settings_qbittorrent_https_summary">Connect using https</string>
     <string name="settings_qbittorrent_port_title">Connection Port</string>

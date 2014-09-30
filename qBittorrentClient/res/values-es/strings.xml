@@ -7,7 +7,7 @@
   http://www.gnu.org/licenses/gpl.html
   
   Contributors:
-      Luis M. Gallardo D. - initial implementation
+      Luis M. Gallardo D. 
 -->
 <resources>
 
@@ -74,7 +74,10 @@
     <string name="torrent_details_general_info">Información general</string>
     <string name="torrent_details_save_path">Ruta:</string>
     <string name="torrent_details_ratio">Ratio:</string>
+    <string name="torrent_details_eta">Eta:</string>
     <string name="torrent_details_priority">Prioridad:</string>
+    <string name="torrent_details_downloadSpeed">Velocidad de Bajada:</string>
+    <string name="torrent_details_uploadSpeed">Velocidad de Subida :</string>
     <string name="torrent_details_leechs">Leechs:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">Estado:</string>
@@ -82,8 +85,8 @@
     <string name="torrent_details_torrent_hash">Torrent Hash:</string>
     <string name="torrent_details_created_date">Fecha de Creación:</string>
     <string name="torrent_details_comment">Comentario:</string>
-    <string name="torrent_details_upload_rate_limit">Límite de subida:</string>
-    <string name="torrent_details_download_rate_limit">Límite de bajada:</string>
+    <string name="torrent_details_upload_rate_limit">Límite de Subida:</string>
+    <string name="torrent_details_download_rate_limit">Límite de Bajada:</string>
     <string name="torrent_details_total_wasted">Total perdido:</string>
     <string name="torrent_details_total_uploaded">Total subido:</string>
     <string name="torrent_details_total_downloaded">Total descargado:</string>
@@ -96,12 +99,12 @@
     <string name="settings_qbittorrent_currentServer_summary">Servidor qBitttorent</string>
     <string name="settings_qbittorrent_hostname_title">Host de conexión</string>
     <string name="settings_qbittorrent_hostname_summary">Hostname o IP</string>
-    <string name="settings_qbittorrent_hostname_dialog_title">Hostname o IP?</string>   
-    <string name="settings_qbittorrent_subfolder_dialog_title">Subcarpeta? Si no deje en blanco</string>
+    <string name="settings_qbittorrent_hostname_dialog_title">Hostname o IP?</string>
+    <string name="settings_qbittorrent_subfolder_dialog_title">Subcarpeta? Si no tienes duda deja en blanco!</string>
     <string name="settings_qbittorrent_subfolder_title">Subcarpeta</string>
     <string name="settings_qbittorrent_https_title">Habilitar https</string>
     <string name="settings_qbittorrent_https_summary">Connectar usando https</string>
-    <string name="settings_qbittorrent_port_title">Puerto dde conexión</string>
+    <string name="settings_qbittorrent_port_title">Puerto de conexión</string>
     <string name="settings_qbittorrent_port_summary">Puerto (80, 8080, etc)</string>
     <string name="settings_qbittorrent_port_dialog_title">Puerto dde conexión?</string>
     <string name="settings_qbittorrent_username_title">Usuario</string>

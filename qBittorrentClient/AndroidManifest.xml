@@ -11,8 +11,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lgallardo.qbittorrentclient"
-    android:versionCode="211"
-    android:versionName="2.1.1" >
+    android:versionCode="220"
+    android:versionName="2.2.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
