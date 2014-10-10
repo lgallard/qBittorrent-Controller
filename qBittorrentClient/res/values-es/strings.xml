@@ -11,7 +11,8 @@
 -->
 <resources>
 
-    <string name="app_name">qBittorrent Client</string>
+    <string name="app_name">qBittorrent Client Pro</string>
+    <string name="app_shortname">Client Pro</string>
     <string name="action_settings">Ajustes</string>
     <string name="action_refresh">Actualizar</string>
     <string name="action_add">Añadir</string>
@@ -52,6 +53,14 @@
     <string name="setDownloadRateLimit">Límite de bajada cambiado</string>
     <string name="error">Error</string>
     <string name="global_value_error">Un valor global no puede ser recuperado. Por favor, revise la configuración de conexión!</string>
+    <string name="navigation_drawer_all">Todos</string>
+    <string name="navigation_drawer_downloading">Descargando</string>
+    <string name="navigation_drawer_completed">Completados</string>
+    <string name="navigation_drawer_paused">Pausads</string>
+    <string name="navigation_drawer_active">Activos</string>
+    <string name="navigation_drawer_inactive">Inactivos</string>
+    <string name="navigation_drawer_options">Opciones</string>
+    <string name="navigation_drawer_settins">Configuración</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Todos</item>
@@ -65,19 +74,15 @@
     </string-array>
 
     <string name="about_help1">Para empezar a utilizar el cliente, proporciona los datos de conexión  seleccionando \'Configuración\' en el menú desplegable</string>
-    <string name="about_help2">Pulsa el botón de actualización en el menú para obtener nuevos resultados, o elije una opción del menú de navegación para obtener la lista de torrents desde el servidor.</string>
-    <string name="about_motto">Gestiona todos tus torrents desde Android usando qBittorrent Client</string>
+    <string name="about_help2">Pulsa el botón de actualización en el menú para obtener nuevos resultados, o elige una opción del menú de navegación para obtener la lista de torrents desde el servidor.</string>
+    <string name="about_motto">Gestiona todos tus torrents desde Android usando qBittorrent Client Pro</string>
     <string name="icon">icono</string>
-    <string name="no_results">No hay resultados</string>
+    <string name="no_results">No se encontraron torrents</string>
     <string name="tablet_help">Utilice el menú de navegación para elegir una opción</string>
-    <string name="torrent_details_size">Tamaño</string>
     <string name="torrent_details_general_info">Información general</string>
     <string name="torrent_details_save_path">Ruta:</string>
     <string name="torrent_details_ratio">Ratio:</string>
-    <string name="torrent_details_eta">Eta:</string>
     <string name="torrent_details_priority">Prioridad:</string>
-    <string name="torrent_details_downloadSpeed">Velocidad de Bajada:</string>
-    <string name="torrent_details_uploadSpeed">Velocidad de Subida :</string>
     <string name="torrent_details_leechs">Leechs:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">Estado:</string>
@@ -85,23 +90,23 @@
     <string name="torrent_details_torrent_hash">Torrent Hash:</string>
     <string name="torrent_details_created_date">Fecha de Creación:</string>
     <string name="torrent_details_comment">Comentario:</string>
-    <string name="torrent_details_upload_rate_limit">Límite de Subida:</string>
-    <string name="torrent_details_download_rate_limit">Límite de Bajada:</string>
+    <string name="torrent_details_upload_rate_limit">Límite de subida:</string>
+    <string name="torrent_details_download_rate_limit">Límite de bajada:</string>
     <string name="torrent_details_total_wasted">Total perdido:</string>
     <string name="torrent_details_total_uploaded">Total subido:</string>
     <string name="torrent_details_total_downloaded">Total descargado:</string>
     <string name="torrent_details_time_elapsed">Tiempo transcurrido:</string>
     <string name="torrent_details_num_connections">Num. Conexiones:</string>
     <string name="torrent_details_share_ratio">Ratio:</string>
+    <string name="torrent_details_cant_general_ino">No pude obtener la información general</string>
     <string name="settings_qbittorrent_account_category">Cuentas</string>
-    <string name="settings_qbittorrent_currentServer_title">Servidor qBittorrent</string>
-    <string name="settings_qbittorrent_currentServer_dialog_title">Elige un servidor</string>
+    <string name="settings_qbittorrent_currentServer_title">Elige servidor qBittorrent</string>
     <string name="settings_qbittorrent_currentServer_summary">Servidor qBitttorent</string>
     <string name="settings_qbittorrent_hostname_title">Host de conexión</string>
     <string name="settings_qbittorrent_hostname_summary">Hostname o IP</string>
     <string name="settings_qbittorrent_hostname_dialog_title">Hostname o IP?</string>
-    <string name="settings_qbittorrent_subfolder_dialog_title">Subcarpeta? Si no tienes duda deja en blanco!</string>
     <string name="settings_qbittorrent_subfolder_title">Subcarpeta</string>
+    <string name="settings_qbittorrent_subfolder_dialog_title">Subcarpeta? Si tienes dudas déjalo en blanco!</string>
     <string name="settings_qbittorrent_https_title">Habilitar https</string>
     <string name="settings_qbittorrent_https_summary">Connectar usando https</string>
     <string name="settings_qbittorrent_port_title">Puerto de conexión</string>
@@ -115,12 +120,17 @@
     <string name="settings_qbittorrent_password_dialog_title">Contraseña?</string>
     <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
     <string name="settings_qbittorrent_version_summary">Usar servidor qBittorrent anterior</string>
-    <string name="settings_qbittorrent_pro_title">Opción no disponible</string>
-    <string name="settings_qbittorrent_pro_message">Esta opción está solo disponible en la versión qBittorrent PRO!</string>
     <string name="settings_qbittorrent_autorefresh_category">Refrescado automático</string>
     <string name="settings_qbittorrent_autorefresh_title">¿Refrescar automáticamente?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Actualizar listado de torrents </string>
     <string name="settings_qbittorrent_refresh_period_title">Refrescar cada...</string>
+    <string name="settings_qbittorrent_timeouts_category">Tiempos de espera</string>
+    <string name="settings_qbittorrent_connection_timeout_title">Tiempo de conexión</string>
+    <string name="settings_qbittorrent_connection_timeout_summary">Tiempo en segundos hasta que una conexión es establecida</string>
+    <string name="settings_qbittorrent_connection_timeout_dialog_title">Tiempo de conexión en segundos?</string>
+    <string name="settings_qbittorrent_data_timeout_title">Tiempo de espera de datos</string>
+    <string name="settings_qbittorrent_data_timeout_summary">Tiempo de espera en segundos por respuesta de datos</string>
+    <string name="settings_qbittorrent_data_timeout_dialog_title">Tiempo de espera de datos en segundos?</string>
     <string name="options_qbittorrent_connections_limits_category">Límites de Conexión</string>
     <string name="options_qbittorrent_global_max_connections_title">Conexiones max globales</string>
     <string name="options_qbittorrent_global_max_connections_dialog_title">Numero máximo de conexiones globales?</string>
@@ -144,5 +154,7 @@
     <string name="options_qbittorrent_torrent_queueing_max_active_uploads_dialog_title">Máximo de subidas activas?</string>
     <string name="options_qbittorrent_torrent_queueing_max_active_torrents_title">Máximo de torrents activos</string>
     <string name="options_qbittorrent_torrent_queueing_max_active_torrents_dialog_title">Máximo de torrents activos?</string>
+    <string name="search_title">Buscar</string>
+    <string name="search_hint">Buscar...</string>
 
 </resources>
