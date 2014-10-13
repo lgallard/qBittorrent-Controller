@@ -28,5 +28,6 @@ This is the repository for Android's [qBittorrent](http://www.qbittorrent.org/) 
 <img src="https://farm3.staticflickr.com/2930/14438782316_505386d3e6_c.jpg"/>&nbsp;
 
 <h2 id="download">Download</h2>
-* [F-Droid, a free/libre "market"](https://f-droid.org/repository/browse/?fdid=com.lgallardo.qbittorrentclient)
 * [Google Play Store](https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclient)
+* [F-Droid, a free/libre "market"](https://f-droid.org/repository/browse/?fdid=com.lgallardo.qbittorrentclient)
+* [GitHub](https://github.com/lgallard/qBittorrent-Client/releases)
