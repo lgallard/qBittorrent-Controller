@@ -88,9 +88,10 @@ public class ItemstFragment extends ListFragment {
 
 		if (menu != null) {
 			menu.findItem(R.id.action_refresh).setVisible(true);
-			menu.findItem(R.id.action_add).setVisible(true);
+			menu.findItem(R.id.action_search).setVisible(true);
 			menu.findItem(R.id.action_resume_all).setVisible(true);
 			menu.findItem(R.id.action_pause_all).setVisible(true);
+			menu.findItem(R.id.action_add).setVisible(true);
 
 			if (menu.findItem(R.id.action_resume) != null) {
 				menu.findItem(R.id.action_resume).setVisible(false);

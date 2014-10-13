@@ -16,20 +16,27 @@
         android:showAsAction="always"
         android:title="@string/action_refresh"/>
     <item
-        android:id="@+id/action_add"
-        android:icon="@drawable/ic_action_add"
-        android:showAsAction="always"
-        android:title="@string/action_add"/>
+        android:id="@+id/action_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@drawable/ic_action_search"
+        android:showAsAction="collapseActionView|ifRoom"
+        android:title="@string/search_title"/>
     <item
         android:id="@+id/action_resume_all"
         android:icon="@drawable/ic_action_resume"
-        android:showAsAction="ifRoom"
+        android:showAsAction="collapseActionView|ifRoom"
         android:title="@string/action_resume_all"/>
     <item
         android:id="@+id/action_pause_all"
         android:icon="@drawable/ic_action_pause"
-        android:showAsAction="ifRoom"
+        android:showAsAction="collapseActionView|ifRoom"
         android:title="@string/action_pause_all"/>
+        <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/ic_action_add"
+        android:showAsAction="collapseActionView|ifRoom"
+        android:title="@string/action_add"/>
+    
     <item
         android:id="@+id/action_resume"
         android:icon="@drawable/ic_action_resume"

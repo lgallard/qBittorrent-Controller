@@ -19,6 +19,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -45,6 +46,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -176,11 +178,17 @@ public class MainActivity extends FragmentActivity {
 	// Item list position
 	private int itemPosition = 0;
 
+	// Searching field
+	private String searchField = "";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
+
+		// Set App title
+		setTitle(R.string.app_shortname);
 
 		// Drawer menu
 		navigationDrawerItemTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
@@ -504,9 +512,28 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	@Override
+	protected void onNewIntent(Intent intent) {
+
+		handleIntent(intent);
+	}
+
+	private void handleIntent(Intent intent) {
+
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			// Use the query to search your data somehow
+			searchField = intent.getStringExtra(SearchManager.QUERY);
+		}
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+
+		// Associate searchable configuration with the SearchView
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
 		return true;
 	}
@@ -1168,7 +1195,7 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		auto_refresh = sharedPrefs.getBoolean("auto_refresh", true);
-		refresh_period = Integer.parseInt(sharedPrefs.getString("refresh_period", "60000"));
+		refresh_period = Integer.parseInt(sharedPrefs.getString("refresh_period", "120000"));
 	}
 
 	// Get Options
@@ -1422,37 +1449,37 @@ public class MainActivity extends FragmentActivity {
 
 				for (int i = 0; i < result.length; i++) {
 
-					if (params[1].equals("all")) {
+					if (params[1].equals("all") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
 						torrentsFiltered.add(result[i]);
 					}
 
-					if (params[1].equals("downloading")) {
+					if (params[1].equals("downloading") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
 						if ("downloading".equals(result[i].getState()) || "stalledDL".equals(result[i].getState()) || "pausedDL".equals(result[i].getState())
 								|| "queuedDL".equals(result[i].getState()) || "checkingDL".equals(result[i].getState())) {
 							torrentsFiltered.add(result[i]);
 						}
 					}
 
-					if (params[1].equals("completed")) {
+					if (params[1].equals("completed") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
 						if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())
 								|| "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState())) {
 							torrentsFiltered.add(result[i]);
 						}
 					}
 
-					if (params[1].equals("paused")) {
+					if (params[1].equals("paused") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
 						if ("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())) {
 							torrentsFiltered.add(result[i]);
 						}
 					}
 
-					if (params[1].equals("active")) {
+					if (params[1].equals("active") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
 						if ("uploading".equals(result[i].getState()) || "downloading".equals(result[i].getState())) {
 							torrentsFiltered.add(result[i]);
 						}
 					}
 
-					if (params[1].equals("inactive")) {
+					if (params[1].equals("inactive") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
 						if ("pausedUP".equals(result[i].getState()) || "pausedDL".equals(result[i].getState()) || "queueUP".equals(result[i].getState())
 								|| "queueDL".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())
 								|| "stalledDL".equals(result[i].getState())) {
@@ -1613,6 +1640,10 @@ public class MainActivity extends FragmentActivity {
 					// TODO: handle exception
 					Log.e("ADAPTER", e.toString());
 				}
+
+				// Clear serch field
+
+				searchField = "";
 
 			}
 		}

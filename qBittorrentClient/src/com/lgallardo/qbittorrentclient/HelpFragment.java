@@ -16,26 +16,21 @@ import android.os.*;
 
 public class HelpFragment extends Fragment {
 
-
-
-	public HelpFragment() {		
+	public HelpFragment() {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		// Tell the host activity that your fragment has menu options that it
 		// wants to add/replace/delete using the onCreateOptionsMenu method.
 		setHasOptionsMenu(true);
 
-
-		View rootView = inflater.inflate(R.layout.tablet_help, container,
-										 false);
+		View rootView = inflater.inflate(R.layout.tablet_help, container, false);
 
 		return rootView;
 	}
-	
+
 	// @Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// inflater.inflate(R.menu.main, menu);
@@ -43,17 +38,17 @@ public class HelpFragment extends Fragment {
 
 		if (menu != null) {
 			menu.findItem(R.id.action_refresh).setVisible(true);
+			menu.findItem(R.id.action_search).setVisible(true);
 			menu.findItem(R.id.action_add).setVisible(true);
 
 			if (menu.findItem(R.id.action_resume_all) != null) {
 				menu.findItem(R.id.action_resume_all).setVisible(false);
 			}
-			
+
 			if (menu.findItem(R.id.action_pause_all) != null) {
 				menu.findItem(R.id.action_pause_all).setVisible(false);
 			}
 
-			
 			if (menu.findItem(R.id.action_resume) != null) {
 				menu.findItem(R.id.action_resume).setVisible(false);
 			}
@@ -73,15 +68,14 @@ public class HelpFragment extends Fragment {
 			if (menu.findItem(R.id.action_delete_drive) != null) {
 				menu.findItem(R.id.action_delete_drive).setVisible(false);
 			}
-			
+
 			if (menu.findItem(R.id.action_upload_rate_limit) != null) {
 				menu.findItem(R.id.action_upload_rate_limit).setVisible(false);
 			}
-			
+
 			if (menu.findItem(R.id.action_download_rate_limit) != null) {
 				menu.findItem(R.id.action_download_rate_limit).setVisible(false);
 			}
-			
 
 		}
 	}

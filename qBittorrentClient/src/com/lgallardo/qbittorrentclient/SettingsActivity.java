@@ -150,6 +150,7 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 		
 		Log.i("auto-refresh", "Refresg value: "+ refresh_period.getEntry());
 
+		refresh_period.setValueIndex(2);
 		refresh_period.setSummary(refresh_period.getEntry());
 		
 
