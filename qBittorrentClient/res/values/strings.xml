@@ -12,7 +12,7 @@
 <resources>
 
     <string name="app_name">qBittorrent Client</string>
-    <string name="app_shortname">Client Pro</string>
+    <string name="app_shortname">Client</string>
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_add">Add</string>
@@ -79,10 +79,14 @@
     <string name="icon">icon</string>
     <string name="no_results">No torrents found</string>
     <string name="tablet_help">Use the drawer menu to choose an option</string>
+    <string name="torrent_details_size">Size</string>
     <string name="torrent_details_general_info">General info</string>
     <string name="torrent_details_save_path">Save path:</string>
     <string name="torrent_details_ratio">Ratio:</string>
+    <string name="torrent_details_eta">Eta:</string>
     <string name="torrent_details_priority">Priority:</string>
+    <string name="torrent_details_downloadSpeed">Download Speed:</string>
+    <string name="torrent_details_uploadSpeed">Upload Speed:</string>
     <string name="torrent_details_leechs">Leechs:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">State:</string>
@@ -98,9 +102,10 @@
     <string name="torrent_details_time_elapsed">Time Elapsed:</string>
     <string name="torrent_details_num_connections">Num. Connections:</string>
     <string name="torrent_details_share_ratio">Share Ratio:</string>
-    <string name="torrent_details_cant_general_ino">General info couldn\'t be retrieved</string>
     <string name="settings_qbittorrent_account_category">Accounts</string>
+    <string name="torrent_details_cant_general_info">General info couldn\'t be retrieved</string>
     <string name="settings_qbittorrent_currentServer_title">Choose a qBittorrent server</string>
+    <string name="settings_qbittorrent_currentServer_dialog_title">Choose a server</string>
     <string name="settings_qbittorrent_currentServer_summary">qBitttorent Server</string>
     <string name="settings_qbittorrent_hostname_title">Connection Host</string>
     <string name="settings_qbittorrent_hostname_summary">Hostname or IP</string>
@@ -120,6 +125,8 @@
     <string name="settings_qbittorrent_password_dialog_title">Password?</string>
     <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
     <string name="settings_qbittorrent_version_summary">Use old qBittorrent server version</string>
+    <string name="settings_qbittorrent_pro_title">Feature not available</string>
+    <string name="settings_qbittorrent_pro_message">This feature is only available on qBittorrent PRO version!</string>
     <string name="settings_qbittorrent_autorefresh_category">Auto Refresh</string>
     <string name="settings_qbittorrent_autorefresh_title">Refresh automatically?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Update torrent list</string>
