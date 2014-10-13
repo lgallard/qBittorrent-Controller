@@ -139,7 +139,7 @@ public class JSONParser {
 			// Log.i("parser", is.toString());
 
 			// Build JSON
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
 			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = reader.readLine()) != null) {
@@ -231,7 +231,7 @@ public class JSONParser {
 
 			// Build JSON
 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
 			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = reader.readLine()) != null) {

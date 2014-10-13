@@ -246,20 +246,12 @@ public class MainActivity extends FragmentActivity {
 		if (urlTorrent != null && urlTorrent.length() != 0) {
 
 			// File
-			Log.i("intent started", urlTorrent.substring(0, 4));
-
 			if (urlTorrent.substring(0, 4).equals("file")) {
 				// File
-				Log.i("FILE:", urlTorrent);
-
 				addTorrentFile(Uri.parse(urlTorrent).getPath());
 			} else {
-
 				// URL
 				addTorrent(intent.getDataString());
-
-				// File
-				Log.i("WEB", urlTorrent);
 			}
 		}
 
@@ -367,8 +359,6 @@ public class MainActivity extends FragmentActivity {
 			// Toast.makeText(MainActivity.this, "Refresh period: " +
 			// refresh_period, Toast.LENGTH_SHORT).show();
 
-			// Log.i("Autoefresh", "Refresh period: " + refresh_period);
-
 			if (auto_refresh == true && canrefresh == true && activityIsVisible == true) {
 
 				if (findViewById(R.id.fragment_container) != null) {
@@ -443,8 +433,6 @@ public class MainActivity extends FragmentActivity {
 		if (getFragmentManager().getBackStackEntryCount() == 0) {
 			this.finish();
 		} else {
-			// Log.i("onBackPressed", "getBackStackEntryCount: " +
-			// getFragmentManager().getBackStackEntryCount());
 			getFragmentManager().popBackStack();
 		}
 	}
@@ -592,9 +580,6 @@ public class MainActivity extends FragmentActivity {
 				if (findViewById(R.id.one_frame) != null) {
 					getFragmentManager().popBackStack();
 				}
-
-			} else {
-				// Log.i("pase", "tf is null :(");
 			}
 			return true;
 		case R.id.action_resume:
@@ -626,7 +611,6 @@ public class MainActivity extends FragmentActivity {
 					// User cancelled the dialog
 
 					okay = false;
-					// Log.i("Okay?", "FALSE");
 				}
 			});
 
@@ -758,18 +742,12 @@ public class MainActivity extends FragmentActivity {
 
 		case R.id.action_upload_rate_limit:
 
-			// Log.i("upload_rate_limit", "upload_rate_limit");
-
 			tf = this.getTorrentDetailsFragment();
 
 			if (tf != null) {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
-				// Log.i("upload_rate_limit", "hash: " + hash);
 				uploadRateLimitDialog(hash);
-				// if (findViewById(R.id.one_frame) != null) {
-				// getFragmentManager().popBackStack();
-				// }
 			}
 			return true;
 
@@ -781,9 +759,6 @@ public class MainActivity extends FragmentActivity {
 				position = tf.position;
 				hash = MainActivity.lines[position].getHash();
 				downloadRateLimitDialog(hash);
-				// if (findViewById(R.id.one_frame) != null) {
-				// getFragmentManager().popBackStack();
-				// }
 			}
 			return true;
 
@@ -1072,16 +1047,10 @@ public class MainActivity extends FragmentActivity {
 
 		if (uploadRateLimit != null && !uploadRateLimit.equals("")) {
 
-			// Log.i("upload_rate_limit", "global_upload: " + global_upload);
-			// Log.i("upload_rate_limit", "uploadRateLimit: " +
-			// uploadRateLimit);
-
 			if (global_upload != null) {
 
 				limit = (Integer.parseInt(uploadRateLimit) > Integer.parseInt(global_upload) && Integer.parseInt(global_upload) != 0) ? Integer
 						.parseInt(global_upload) : Integer.parseInt(uploadRateLimit);
-
-				// Log.i("upload_rate_limit", hash + "&limit=" + limit * 1024);
 
 				qBittorrentCommand qtc = new qBittorrentCommand();
 				qtc.execute(new String[] { "setUploadRateLimit", hash + "&" + limit * 1024 });
@@ -1100,18 +1069,10 @@ public class MainActivity extends FragmentActivity {
 
 		if (downloadRateLimit != null && !downloadRateLimit.equals("")) {
 
-			// Log.i("download_rate_limit", "global_download: " +
-			// global_download);
-			// Log.i("download_rate_limit", "downloadRateLimit: " +
-			// downloadRateLimit);
-
 			if (global_download != null) {
 
 				limit = (Integer.parseInt(downloadRateLimit) > Integer.parseInt(global_download)) ? Integer.parseInt(global_download) : Integer
 						.parseInt(downloadRateLimit);
-
-				// Log.i("download_rate_limit", hash + "&limit=" + limit *
-				// 1024);
 
 				qBittorrentCommand qtc = new qBittorrentCommand();
 				qtc.execute(new String[] { "setDownloadRateLimit", hash + "&" + limit * 1024 });
@@ -1330,44 +1291,33 @@ public class MainActivity extends FragmentActivity {
 
 			switch (drawerList.getCheckedItemPosition()) {
 			case 0:
-				// Log.i("qBittorrentCommand", "case 0");
 				refreshWithDelay("all", delay);
 				break;
 			case 1:
-				// Log.i("qBittorrentCommand", "case 1");
 				refreshWithDelay("downloading", delay);
 				break;
 			case 2:
-				// Log.i("qBittorrentCommand", "case 2");
 				refreshWithDelay("completed", delay);
 				break;
 			case 3:
-				// Log.i("qBittorrentCommand", "case 3");
 				refreshWithDelay("paused", delay);
 				break;
 			case 4:
-				// Log.i("qBittorrentCommand", "case 4");
 				refreshWithDelay("active", delay);
 				break;
 			case 5:
-				// Log.i("qBittorrentCommand", "case 5");
 				refreshWithDelay("inactive", delay);
 				break;
 			case 6:
-				// Log.i("qBittorrentCommand", "case 6");
 				// Select "All" torrents list
 				selectItem(0);
 				break;
 			case 7:
-				// Log.i("qBittorrentCommand", "case 7");
 				break;
 			default:
-				// Log.i("qBittorrentCommand", "default");
 				refreshWithDelay("all", delay);
 				break;
 			}
-
-			Log.i("refresh_done", "refresh_perfomed");
 
 		}
 	}
@@ -1423,16 +1373,6 @@ public class MainActivity extends FragmentActivity {
 
 						// Get torrent generic properties
 
-						// JSONObject json2 = jParser.getJSONFromUrl(params[3] +
-						// hash);
-						//
-						// // If no data, throw exception
-						// if (json2.length() == 0) {
-						//
-						// throw (new Exception());
-						//
-						// }
-
 						try {
 							// Calculate total downloaded
 							Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
@@ -1448,34 +1388,6 @@ public class MainActivity extends FragmentActivity {
 								+ Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
 								+ torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + progress + " " + Character.toString('\u2022') + " "
 								+ torrents[i].getEta());
-
-						// for (int j = 0; j < json2.length(); j++) {
-						//
-						// torrents[i].setSavePath(json2.getString(TAG_SAVE_PATH));
-						// torrents[i].setCreationDate(json2.getString(TAG_CREATION_DATE));
-						// torrents[i].setComment(json2.getString(TAG_COMMENT));
-						// torrents[i].setTotalWasted(json2.getString(TAG_TOTAL_WASTED));
-						// torrents[i].setTotalUploaded(json2.getString(TAG_TOTAL_UPLOADED));
-						// torrents[i].setTotalDownloaded(json2.getString(TAG_TOTAL_DOWNLOADED));
-						// torrents[i].setTimeElapsed(json2.getString(TAG_TIME_ELAPSED));
-						// torrents[i].setNbConnections(json2.getString(TAG_NB_CONNECTIONS));
-						// torrents[i].setShareRatio(json2.getString(TAG_SHARE_RATIO));
-						// torrents[i].setUploadLimit(json2.getString(TAG_UPLOAD_LIMIT));
-						// torrents[i].setDownloadLimit(json2.getString(TAG_DOWNLOAD_LIMIT));
-						//
-						// // Info
-						// downloaded = torrents[i].getTotalDownloaded();
-						// downloaded = downloaded.substring(0,
-						// downloaded.indexOf("(") - 1);
-						//
-						// torrents[i].setInfo(downloaded + " " +
-						// Character.toString('\u2193') + " " +
-						// json.getString(TAG_DLSPEED) + " "
-						// + Character.toString('\u2191') + " " +
-						// json.getString(TAG_UPSPEED) + " - " + progress +
-						// " - " + torrents[i].getEta());
-						//
-						// }
 
 					}
 				}
@@ -1592,8 +1504,6 @@ public class MainActivity extends FragmentActivity {
 						// Also update the second fragment (if it comes from the
 						// drawer)
 						if (params[2].equals("clear") && lv.getCount() > 0) {
-
-							// Log.i("Refresh >", "Clear init");
 
 							// Scroll to the first position
 							lv.smoothScrollToPosition(0);
