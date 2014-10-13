@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Luis M. Gallardo D..
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Public License v3.0
+  which accompanies this distribution, and is available at
+  https://www.gnu.org/licenses/gpl.html
+  
+  Contributors:
+      Luis M. Gallardo D. - initial implementation
+      Spanti Nicola (RyDroid) - beginning of the french translation
+-->
+<resources>
+
+    <string name="app_name">qBittorrent Client</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="action_refresh">Rafraichir</string>
+    <string name="action_add">Ajouter</string>
+    <string name="action_pause">Suspendre</string>
+    <string name="action_resume">Reprendre</string>
+    <string name="action_resume_all">Reprendre tout</string>
+    <string name="action_pause_all">Suspendre tout</string>
+    <string name="action_delete">Supprimer</string>
+    <string name="action_delete_drive">Supprimer les données</string>
+    <string name="action_increase_priority">Augmenter la priorité</string>
+    <string name="action_decrease_priority">Réduire la priorité</string>
+    <string name="action_download_rate_limit">Download rate limit</string>
+    <string name="action_upload_rate_limit">Upload rate limit</string>
+    <string name="connection_error">La connexion au réseau a échoué</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="connecting">Rafraichissement</string>
+    <string name="title_activity_torrent_actions">Action</string>
+    <string name="dm_deleteTorrent">Appuyer sur OK va supprimer le torrent</string>
+    <string name="dt_deleteTorrent">Supprimer le torrent</string>
+    <string name="dm_deleteDriveTorrent">Appuyer sur OK va supprimer le torrent et ses données du disque</string>
+    <string name="dt_deleteDriveTorrent">Supprimer le torrent et ses données</string>
+    <string name="torrentAdded">Torrent envoyé !</string>
+    <string name="torrentFileAdded">Fichier du torrent envoyé !</string>
+    <string name="torrentStarted">Torrent démarré !</string>
+    <string name="torrentPaused">Torrent suspendu !</string>
+    <string name="AllTorrentsPaused">Tous les torrents sont suspendus !</string>
+    <string name="AllTorrentsResumed">Tous les torrents sont repris !</string>
+    <string name="torrentDeleled">Torrent supprimé !</string>
+    <string name="torrentDeletedDrive">Torrent et ses données supprimés !</string>
+    <string name="increasePrioTorrent">Priority augmentée!</string>
+    <string name="decreasePrioTorrent">Priority réduite !</string>
+    <!--<string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="getQBittorrentPrefefrences">Getting options...</string>-->
+    <string name="setQBittorrentPrefefrences">Options sauvegardées</string>
+    <!--<string name="setUploadRateLimit">Upload rate limit set</string>
+    <string name="setDownloadRateLimit">Download rate limit set</string>-->
+    <string name="error">Erreur</string>
+    <!--<string name="global_value_error">Global value cannot be retrieved. Please check your connection settings!</string>-->
+
+    <string-array name="navigation_drawer_items_array">
+        <item>Tout</item>
+        <item>Téléchargement</item>
+        <item>Fini</item>
+        <item>Suspendu</item>
+        <item>Actif</item>
+        <item>Inactif</item>
+        <item>Options</item>
+        <item>Paramètres</item>
+    </string-array>
+
+    <!--<string name="about_help1">To start using the client, set your qBittorrent server\'s settings and account by selecting \'Settings\' from the drawer menu</string>
+    <string name="about_help2">Press the refresh button on the menu to get new results, or choose an option from the drawer menu to get the torrent list from the server.</string>-->
+    <string name="about_motto">Gérer vos torrents avec Android en utilisant qBittorrent Client</string>
+    <string name="icon">icône</string>
+    <string name="no_results">Pas de résultat</string>
+    <!--<string name="tablet_help">Use the drawer menu to choose an option</string>-->
+    <string name="torrent_details_size">Taille</string>
+    <string name="torrent_details_general_info">Infromations générales</string>
+    <string name="torrent_details_save_path">Chemin de sauvegarde :</string>
+    <string name="torrent_details_ratio">Ratio :</string>
+    <!--<string name="torrent_details_eta">Eta:</string>-->
+    <string name="torrent_details_priority">Priorité :</string>
+    <string name="torrent_details_downloadSpeed">Vitesse de download :</string>
+    <string name="torrent_details_uploadSpeed">Vitesse d\'upload :</string>
+    <!--<string name="torrent_details_leechs">Leechs:</string>
+    <string name="torrent_details_seeds">Seeds:</string>-->
+    <string name="torrent_details_state">État :</string>
+    <string name="torrent_details_progres">Progrès :</string>
+    <string name="torrent_details_torrent_hash">Hash du torrent:</string>
+    <string name="torrent_details_created_date">Date de création :</string>
+    <string name="torrent_details_comment">Commentaire :</string>
+    <!--<string name="torrent_details_upload_rate_limit">Upload Rate Limit:</string>
+    <string name="torrent_details_download_rate_limit">Download Rate Limit:</string>
+    <string name="torrent_details_total_wasted">Total wasted:</string>
+    <string name="torrent_details_total_uploaded">Total Uploaded:</string>
+    <string name="torrent_details_total_downloaded">Total Downloaded:</string>
+    <string name="torrent_details_time_elapsed">Time Elapsed:</string>
+    <string name="torrent_details_num_connections">Num. Connections:</string>
+    <string name="torrent_details_share_ratio">Share Ratio:</string>
+    <string name="settings_qbittorrent_account_category">Accounts</string>
+    <string name="settings_qbittorrent_currentServer_title">Choose a qBittorrent server</string>
+    <string name="settings_qbittorrent_currentServer_dialog_title">Choose a server</string>
+    <string name="settings_qbittorrent_currentServer_summary">qBitttorent Server</string>
+    <string name="settings_qbittorrent_hostname_title">Connection Host</string>
+    <string name="settings_qbittorrent_hostname_summary">Hostname or IP</string>
+    <string name="settings_qbittorrent_hostname_dialog_title">Hostname or IP?</string>
+    <string name="settings_qbittorrent_subfolder_title">Subfolder</string>
+    <string name="settings_qbittorrent_subfolder_dialog_title">Subfolder? If you\'re in doubt, leave it blank!</string>
+    <string name="settings_qbittorrent_https_title">Activer le HTTPS</string>
+    <string name="settings_qbittorrent_https_summary">Connect using https</string>
+    <string name="settings_qbittorrent_port_title">Connection Port</string>
+    <string name="settings_qbittorrent_port_summary">Port (80, 8080, etc)</string>
+    <string name="settings_qbittorrent_port_dialog_title">Connection Port?</string>
+    <string name="settings_qbittorrent_username_title">Nom d\'utilisateur</string>
+    <string name="settings_qbittorrent_username_summary">Fournisser un nom d\'utilisateur</string>
+    <string name="settings_qbittorrent_username_dialog_title">Nom d\'utilisateur ?</string>
+    <string name="settings_qbittorrent_password_title">Mot de passe </string>
+    <string name="settings_qbittorrent_password_summary">Provide password</string>
+    <string name="settings_qbittorrent_password_dialog_title">Mot de passe ?</string>
+    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
+    <string name="settings_qbittorrent_version_summary">Use old qBittorrent server version</string>
+    <string name="settings_qbittorrent_pro_title">Feature not available</string>
+    <string name="settings_qbittorrent_pro_message">This feature is only available on qBittorrent PRO version!</string>
+    <string name="settings_qbittorrent_autorefresh_category">Auto Refresh</string>
+    <string name="settings_qbittorrent_autorefresh_title">Refresh automatically?</string>
+    <string name="settings_qbittorrent_autorefresh_summary">Update torrent list</string>
+    <string name="settings_qbittorrent_refresh_period_title">Refresh every...</string>
+    <string name="options_qbittorrent_connections_limits_category">Connections Limits</string>
+    <string name="options_qbittorrent_global_max_connections_title">Global max connections</string>
+    <string name="options_qbittorrent_global_max_connections_dialog_title">Global maximum number of connections?</string>
+    <string name="options_qbittorrent_max_num_conn_per_torrent_title">Max num conn per torrent</string>
+    <string name="options_qbittorrent_max_num_conn_per_torrent_dialog_title">Maximum number of connections per torrent?</string>
+    <string name="options_qbittorrent_global_rate_limits_category">Global Rate Limits</string>
+    <string name="options_qbittorrent_global_donwload_rate_title">Download rate</string>
+    <string name="options_qbittorrent_global_donwload_rate_dialog_title">Global download rate?</string>
+    <string name="options_qbittorrent_global_upload_rate_title">Upload rate</string>
+    <string name="options_qbittorrent_global_upload_rate_dialog_title">Global upload rate?</string>
+    <string name="options_qbittorrent_alternative_global_rate_limits_category">Alternative Global Rate Limits</string>
+    <string name="options_qbittorrent_alternative_global_donwload_rate_title">Alternative download rate</string>
+    <string name="options_qbittorrent_alternative_global_donwload_rate_dialog_title">Alternative global download rate?</string>
+    <string name="options_qbittorrent_alternative_global_upload_rate_title">Alternative upload rate</string>
+    <string name="options_qbittorrent_alternative_global_upload_rate_dialog_title">Alternative global upload rate?</string>
+    <string name="options_qbittorrent_torrent_queueing_category">Torrent Queueing</string>
+    <string name="options_qbittorrent_torrent_queueing_title">Torrent queueing?</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_downloads_title">Maximum de téléchargements actifs</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_downloads_dialog_title">Maximum active downloads?</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_uploads_title">Maximum active uploads</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_uploads_dialog_title">Maximum active uploads?</string>-->
+    <string name="options_qbittorrent_torrent_queueing_max_active_torrents_title">Maximum de torrents actifs</string>
+    <string name="options_qbittorrent_torrent_queueing_max_active_torrents_dialog_title">Maximum de torrents actifs ?</string>
+
+</resources>

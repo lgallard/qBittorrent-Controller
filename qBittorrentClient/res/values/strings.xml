@@ -4,14 +4,14 @@
   All rights reserved. This program and the accompanying materials
   are made available under the terms of the GNU Public License v3.0
   which accompanies this distribution, and is available at
-  http://www.gnu.org/licenses/gpl.html
+  https://www.gnu.org/licenses/gpl.html
   
   Contributors:
       Luis M. Gallardo D.
 -->
 <resources>
 
-    <string name="app_name">qBittorrent Client Pro</string>
+    <string name="app_name">qBittorrent Client</string>
     <string name="app_shortname">Client Pro</string>
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Refresh</string>
@@ -27,14 +27,14 @@
     <string name="action_download_rate_limit">Download rate limit</string>
     <string name="action_upload_rate_limit">Upload rate limit</string>
     <string name="connection_error">Network connection failed</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="connecting">Refreshing</string>
     <string name="title_activity_torrent_actions">Action</string>
     <string name="dm_deleteTorrent">Pressing OK will delete the torrent</string>
     <string name="dt_deleteTorrent">Delete torrent</string>
-    <string name="dm_deleteDriveTorrent">Pressing OK will delete the torrent and its data from the hard drive</string>
-    <string name="dt_deleteDriveTorrent">Delete the torrent and its data </string>
+    <string name="dm_deleteDriveTorrent">Pressing OK will delete torrent and its data from the hard drive</string>
+    <string name="dt_deleteDriveTorrent">Delete torrent and its data</string>
     <string name="torrentAdded">Torrent sent!</string>
     <string name="torrentFileAdded">Torrent file sent!</string>
     <string name="torrentStarted">Torrent started!</string>
@@ -107,7 +107,7 @@
     <string name="settings_qbittorrent_hostname_dialog_title">Hostname or IP?</string>
     <string name="settings_qbittorrent_subfolder_title">Subfolder</string>
     <string name="settings_qbittorrent_subfolder_dialog_title">Subfolder? If in doubt, leave it blank!</string>
-    <string name="settings_qbittorrent_https_title">Enable https</string>
+    <string name="settings_qbittorrent_https_title">Enable HTTPS</string>
     <string name="settings_qbittorrent_https_summary">Connect using https</string>
     <string name="settings_qbittorrent_port_title">Connection Port</string>
     <string name="settings_qbittorrent_port_summary">Port (80, 8080, etc)</string>
