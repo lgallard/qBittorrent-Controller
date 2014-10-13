@@ -11,8 +11,8 @@
 -->
 <resources>
 
-    <string name="app_name">qBittorrent Client Pro</string>
-    <string name="app_shortname">Client Pro</string>
+    <string name="app_name">qBittorrent Client</string>
+    <string name="app_shortname">Client</string>
     <string name="action_settings">Ajustes</string>
     <string name="action_refresh">Actualizar</string>
     <string name="action_add">Añadir</string>
@@ -20,12 +20,12 @@
     <string name="action_resume">Reanudar</string>
     <string name="action_resume_all">Reanudar todos</string>
     <string name="action_pause_all">Pausar todos</string>
+    <string name="action_delete">Delete</string>
     <string name="action_delete_drive">Eliminar datos</string>
     <string name="action_increase_priority">Aumentar prioridad</string>
     <string name="action_decrease_priority">Disminuir prioridad</string>
     <string name="action_download_rate_limit">Configurar límite de bajada</string>
     <string name="action_upload_rate_limit">Configurar limite de subida</string>
-    <string name="action_delete">Eliminar</string>
     <string name="connection_error">Error de conexión</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancelar</string>
@@ -79,10 +79,14 @@
     <string name="icon">icono</string>
     <string name="no_results">No se encontraron torrents</string>
     <string name="tablet_help">Utilice el menú de navegación para elegir una opción</string>
+    <string name="torrent_details_size">Tamaño</string>
     <string name="torrent_details_general_info">Información general</string>
     <string name="torrent_details_save_path">Ruta:</string>
     <string name="torrent_details_ratio">Ratio:</string>
+    <string name="torrent_details_eta">Eta:</string>
     <string name="torrent_details_priority">Prioridad:</string>
+    <string name="torrent_details_downloadSpeed">Velocidad de Bajada:</string>
+    <string name="torrent_details_uploadSpeed">Velocidad de Subida :</string>
     <string name="torrent_details_leechs">Leechs:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">Estado:</string>
@@ -98,16 +102,17 @@
     <string name="torrent_details_time_elapsed">Tiempo transcurrido:</string>
     <string name="torrent_details_num_connections">Num. Conexiones:</string>
     <string name="torrent_details_share_ratio">Ratio:</string>
-    <string name="torrent_details_cant_general_ino">No pude obtener la información general</string>
+    <string name="torrent_details_cant_general_info">No pude obtener la información general</string>
     <string name="settings_qbittorrent_account_category">Cuentas</string>
     <string name="settings_qbittorrent_currentServer_title">Elige servidor qBittorrent</string>
+    <string name="settings_qbittorrent_currentServer_dialog_title">Elige un servidor</string>
     <string name="settings_qbittorrent_currentServer_summary">Servidor qBitttorent</string>
     <string name="settings_qbittorrent_hostname_title">Host de conexión</string>
     <string name="settings_qbittorrent_hostname_summary">Hostname o IP</string>
     <string name="settings_qbittorrent_hostname_dialog_title">Hostname o IP?</string>
     <string name="settings_qbittorrent_subfolder_title">Subcarpeta</string>
     <string name="settings_qbittorrent_subfolder_dialog_title">Subcarpeta? Si tienes dudas déjalo en blanco!</string>
-    <string name="settings_qbittorrent_https_title">Habilitar https</string>
+    <string name="settings_qbittorrent_https_title">Habilitar HTTPS</string>
     <string name="settings_qbittorrent_https_summary">Connectar usando https</string>
     <string name="settings_qbittorrent_port_title">Puerto de conexión</string>
     <string name="settings_qbittorrent_port_summary">Puerto (80, 8080, etc)</string>
@@ -120,6 +125,8 @@
     <string name="settings_qbittorrent_password_dialog_title">Contraseña?</string>
     <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
     <string name="settings_qbittorrent_version_summary">Usar servidor qBittorrent anterior</string>
+    <string name="settings_qbittorrent_pro_title">Opción no disponible</string>
+    <string name="settings_qbittorrent_pro_message">Esta opción está solo disponible en la versión qBittorrent PRO!</string>
     <string name="settings_qbittorrent_autorefresh_category">Refrescado automático</string>
     <string name="settings_qbittorrent_autorefresh_title">¿Refrescar automáticamente?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Actualizar listado de torrents </string>
