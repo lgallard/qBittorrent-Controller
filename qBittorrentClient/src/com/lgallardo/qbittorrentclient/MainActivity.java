@@ -330,7 +330,7 @@ public class MainActivity extends FragmentActivity {
 		super.onResume();
 		activityIsVisible = true;
 
-		refresh();
+		refreshCurrent();
 	}
 
 	@Override
