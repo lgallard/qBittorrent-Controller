@@ -173,6 +173,9 @@ public class MainActivity extends FragmentActivity {
 	// For checking if the app is visible
 	private boolean activityIsVisible = true;
 
+	// Item list position
+	private int itemPosition = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -349,6 +352,12 @@ public class MainActivity extends FragmentActivity {
 
 		// Start loading the ad in the background.
 		adView.loadAd(adRequest);
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt("itemPosition", itemPosition);
 	}
 
 	// Auto-refresh runnable

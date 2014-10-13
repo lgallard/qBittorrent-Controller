@@ -67,6 +67,12 @@ public class TorrentDetailsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+		// Restore last position from savedInstanceState
+		if (savedInstanceState != null) {
+			// Restore last state for checked position.
+			position = savedInstanceState.getInt("itemPosition", 0);
+		}
+
 		// Tell the host activity that your fragment has menu options that it
 		// wants to add/replace/delete using the onCreateOptionsMenu method.
 		setHasOptionsMenu(true);
@@ -100,7 +106,7 @@ public class TorrentDetailsFragment extends Fragment {
 				hash = MainActivity.lines[position].getHash();
 				priority = MainActivity.lines[position].getPriority();
 				eta = MainActivity.lines[position].getEta();
-				
+
 				uploadSpeed = MainActivity.lines[position].getUploadSpeed();
 				downloadSpeed = MainActivity.lines[position].getDownloadSpeed();
 				downloaded = MainActivity.lines[position].getDownloaded();
@@ -181,12 +187,11 @@ public class TorrentDetailsFragment extends Fragment {
 				seedsTextView.setText(seeds);
 				progressTextView.setText(progress);
 				hashTextView.setText(hash);
-				etaTextView.setText(eta);				
+				etaTextView.setText(eta);
 				priorityTextView.setText(priority);
 				downloadSpeedTextView.setText(downloadSpeed);
 				uploadSpeedTextView.setText(uploadSpeed);
 
-		
 				pathTextView.setText(savePath);
 				creationDateTextView.setText(creationDate);
 				commentTextView.setText(comment);
@@ -207,8 +212,7 @@ public class TorrentDetailsFragment extends Fragment {
 
 		// Load banner
 		loadBanner();
-		
-		
+
 		// Execute the task in background
 		qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
 
@@ -271,7 +275,7 @@ public class TorrentDetailsFragment extends Fragment {
 		adView.loadAd(adRequest);
 
 	}
-	
+
 	// Here is where the action happens
 	private class qBittorrentGeneralInfoTask extends AsyncTask<View, View, View[]> {
 
@@ -285,7 +289,8 @@ public class TorrentDetailsFragment extends Fragment {
 				//
 				// Log.i("TorrentFragment", "hash: " + hash);
 
-				JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port, MainActivity.username, MainActivity.password);
+				JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
+						MainActivity.username, MainActivity.password);
 
 				json2 = jParser.getJSONFromUrl(url + hash);
 
@@ -377,10 +382,12 @@ public class TorrentDetailsFragment extends Fragment {
 			nbConnectionsTextView.setText(nbConnections);
 			shareRatioTextView.setText(shareRatio);
 
+			if (json2 == null) {
+				Toast.makeText(getActivity(), R.string.torrent_details_cant_general_info, Toast.LENGTH_SHORT).show();
+			}
 
 		}
 
 	}
-
 
 }
