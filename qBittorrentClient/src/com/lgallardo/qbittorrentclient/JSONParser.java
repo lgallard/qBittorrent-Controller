@@ -65,19 +65,21 @@ public class JSONParser {
 	private String protocol;
 	private String username;
 	private String password;
+	private int connection_timeout;
+	private int data_timeout;
 
 	static boolean nohome = false;
 
 	// constructor
 	public JSONParser() {
-		this("", "", "", 0, "", "");
+		this("", "", "", 0, "", "", 5, 8);
 	}
 
 	public JSONParser(String hostname, String subfolder, int port, String username, String password) {
-		this(hostname, subfolder, "http", port, username, password);
+		this(hostname, subfolder, "http", port, username, password, 5, 8);
 	}
 
-	public JSONParser(String hostname, String subfolder, String protocol, int port, String username, String password) {
+	public JSONParser(String hostname, String subfolder, String protocol, int port, String username, String password, int connection_timeout, int data_timeout) {
 
 		this.hostname = hostname;
 		this.subfolder = subfolder;
@@ -85,6 +87,8 @@ public class JSONParser {
 		this.port = port;
 		this.username = username;
 		this.password = password;
+		this.connection_timeout = connection_timeout;
+		this.data_timeout = data_timeout;
 
 	}
 
@@ -102,11 +106,11 @@ public class JSONParser {
 
 		// Set the timeout in milliseconds until a connection is established.
 		// The default value is zero, that means the timeout is not used.
-		int timeoutConnection = 5000;
+		int timeoutConnection = connection_timeout * 1000;
 
 		// Set the default socket timeout (SO_TIMEOUT)
 		// in milliseconds which is the timeout for waiting for data.
-		int timeoutSocket = 8000;
+		int timeoutSocket = data_timeout * 1000;
 
 		// Set http parameters
 		HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
@@ -190,11 +194,11 @@ public class JSONParser {
 
 		// Set the timeout in milliseconds until a connection is established.
 		// The default value is zero, that means the timeout is not used.
-		int timeoutConnection = 5000;
+		int timeoutConnection = connection_timeout * 1000;
 
 		// Set the default socket timeout (SO_TIMEOUT)
 		// in milliseconds which is the timeout for waiting for data.
-		int timeoutSocket = 8000;
+		int timeoutSocket = data_timeout * 1000;
 
 		// Set http parameters
 		HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);

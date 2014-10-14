@@ -85,5 +85,23 @@
             android:summary="@string/settings_qbittorrent_refresh_period_title"
             android:title="@string/settings_qbittorrent_refresh_period_title" />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:key="timeouts"
+        android:title="@string/settings_qbittorrent_timeouts_category" >
+        <EditTextPreference
+            android:defaultValue="5"
+            android:dialogTitle="@string/settings_qbittorrent_connection_timeout_dialog_title"
+            android:inputType="number"
+            android:key="connection_timeout"
+            android:summary="@string/settings_qbittorrent_connection_timeout_summary"
+            android:title="@string/settings_qbittorrent_connection_timeout_title" />
+        <EditTextPreference
+            android:defaultValue="8"
+            android:dialogTitle="@string/settings_qbittorrent_data_timeout_dialog_title"
+            android:inputType="number"
+            android:key="data_timeout"
+            android:summary="@string/settings_qbittorrent_data_timeout_summary"
+            android:title="@string/settings_qbittorrent_data_timeout_title" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

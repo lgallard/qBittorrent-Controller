@@ -42,6 +42,9 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 	private CheckBoxPreference auto_refresh;
 	private ListPreference refresh_period;
 
+	private EditTextPreference connection_timeout;
+	private EditTextPreference data_timeout;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,6 +62,8 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 		old_version = (CheckBoxPreference) findPreference("old_version");
 		auto_refresh = (CheckBoxPreference) findPreference("auto_refresh");
 		refresh_period = (ListPreference) findPreference("refresh_period");
+		connection_timeout = (EditTextPreference) findPreference("connection_timeout");
+		data_timeout = (EditTextPreference) findPreference("data_timeout");
 
 		// Get values for server
 		getQBittorrentServerValues(currentServer.getValue());
@@ -133,7 +138,7 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 		currentServer.setSummary(currentServer.getEntry());
 		hostname.setText(sharedPrefs.getString("hostname" + value, "192.168.1.1"));
 		hostname.setSummary(sharedPrefs.getString("hostname" + value, "192.168.1.1"));
-		
+
 		subfolder.setText(sharedPrefs.getString("subfolder" + value, ""));
 		subfolder.setSummary(sharedPrefs.getString("subfolder" + value, ""));
 
@@ -147,12 +152,12 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
 		password.setText(sharedPrefs.getString("password" + value, "adminadmin"));
 		old_version.setChecked(sharedPrefs.getBoolean("old_version" + value, false));
-		
-		Log.i("auto-refresh", "Refresg value: "+ refresh_period.getEntry());
 
 		refresh_period.setValueIndex(2);
 		refresh_period.setSummary(refresh_period.getEntry());
-		
+
+		connection_timeout.setText(sharedPrefs.getString("connection_timeout", "5"));
+		data_timeout.setText(sharedPrefs.getString("data_timeout", "8"));
 
 	}
 
@@ -181,13 +186,12 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 		if (hostname.getText().toString() != null && hostname.getText().toString() != "") {
 
 			editor.putString("hostname" + currentServerValue, hostname.getText().toString());
-			Log.i("Preferences", "Saving hostname" + currentServer.getValue());
 		}
 
 		if (subfolder.getText().toString() != null) {
 			editor.putString("subfolder" + currentServerValue, subfolder.getText().toString());
 		}
-		
+
 		editor.putBoolean("https" + currentServerValue, https.isChecked());
 
 		if (port.getText().toString() != null && port.getText().toString() != "") {
@@ -206,6 +210,14 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 		}
 
 		editor.putBoolean("old_version" + currentServerValue, old_version.isChecked());
+
+		if (connection_timeout.getText().toString() != null && connection_timeout.getText().toString() != "") {
+			editor.putString("connection_timeout", connection_timeout.getText().toString());
+		}
+
+		if (data_timeout.getText().toString() != null && data_timeout.getText().toString() != "") {
+			editor.putString("data_timeout", data_timeout.getText().toString());
+		}
 
 		// Commit changes
 		editor.commit();
