@@ -234,7 +234,7 @@ public class TorrentDetailsFragment extends Fragment {
 			if (getActivity().findViewById(R.id.one_frame) != null) {
 				menu.findItem(R.id.action_refresh).setVisible(false);
 			}
-			
+
 			menu.findItem(R.id.action_search).setVisible(false);
 			menu.findItem(R.id.action_resume_all).setVisible(false);
 			menu.findItem(R.id.action_pause_all).setVisible(false);
@@ -287,10 +287,6 @@ public class TorrentDetailsFragment extends Fragment {
 			url = "/json/propertiesGeneral/";
 
 			try {
-
-				// Log.i("TorrentFragment", "url: " + url);
-				//
-				// Log.i("TorrentFragment", "hash: " + hash);
 
 				JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
 						MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
@@ -385,8 +381,13 @@ public class TorrentDetailsFragment extends Fragment {
 			nbConnectionsTextView.setText(nbConnections);
 			shareRatioTextView.setText(shareRatio);
 
-			if (json2 == null) {
-				Toast.makeText(getActivity(), R.string.torrent_details_cant_general_info, Toast.LENGTH_SHORT).show();
+			try {
+				if (json2 == null) {
+					Toast.makeText(getActivity(), R.string.torrent_details_cant_general_info, Toast.LENGTH_SHORT).show();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+
 			}
 
 		}
