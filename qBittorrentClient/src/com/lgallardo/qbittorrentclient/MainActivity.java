@@ -1454,7 +1454,7 @@ public class MainActivity extends FragmentActivity {
 			} else {
 
 				ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
-				
+
 				Log.i("qbTask", "Results (torrents): " + result.length);
 
 				for (int i = 0; i < result.length; i++) {
@@ -1504,7 +1504,7 @@ public class MainActivity extends FragmentActivity {
 				// Get names (delete in background method)
 				MainActivity.names = new String[torrentsFiltered.size()];
 				MainActivity.lines = new Torrent[torrentsFiltered.size()];
-				
+
 				Log.i("qbTask", "MainActivity.names: " + MainActivity.names.length);
 				Log.i("qbTask", "MainActivity.lines: " + MainActivity.names.length);
 
@@ -1522,7 +1522,7 @@ public class MainActivity extends FragmentActivity {
 						getFragmentManager().popBackStack();
 					}
 
-					firstFragment.setListAdapter(new myAdapter());
+					firstFragment.setListAdapter(new myAdapter(MainActivity.this,names,lines));
 
 					// Create the about fragment
 					AboutFragment aboutFragment = new AboutFragment();
@@ -1754,10 +1754,29 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	class myAdapter extends ArrayAdapter<String> {
-		public myAdapter() {
+		private String[] torrentsNames;
+		private Torrent[] torrentsData;
+		private Context context;
+
+		public myAdapter(Context context, String[] torrentsNames, Torrent[] torrentsData) {
 			// TODO Auto-generated constructor stub
-			super(MainActivity.this, R.layout.row, R.id.file, names);
+			super(context, R.layout.row, R.id.file, torrentsNames);
+
+			this.context = context;
+			this.torrentsNames = torrentsNames;
+			this.torrentsData = torrentsData;
+
 			// Log.i("myAdapter", "lines: " + lines.length);
+
+		}
+
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub}
+
+			Log.i("qbTask", "getCount: " + ((torrentsNames != null) ? torrentsNames.length : 0));
+
+			return (torrentsNames != null) ? torrentsNames.length : 0;
 		}
 
 		@Override
@@ -1765,11 +1784,11 @@ public class MainActivity extends FragmentActivity {
 
 			View row = super.getView(position, convertView, parent);
 
-			String state = lines[position].getState();
+			String state = torrentsData[position].getState();
 
 			TextView info = (TextView) row.findViewById(R.id.info);
 
-			info.setText("" + lines[position].getInfo());
+			info.setText("" + torrentsData[position].getInfo());
 
 			ImageView icon = (ImageView) row.findViewById(R.id.icon);
 
