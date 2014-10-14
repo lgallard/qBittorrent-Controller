@@ -42,6 +42,8 @@ public class ItemstFragment extends ListFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		
+		super.onCreateView(inflater, container, savedInstanceState);
 
 		// Tell the host activity that your fragment has menu options that it
 		// wants to add/replace/delete using the onCreateOptionsMenu method.
@@ -65,7 +67,7 @@ public class ItemstFragment extends ListFragment {
 
 		int count = lv.getCount();
 
-		if (count == 1 && lv.getItemAtPosition(0).equals(MainActivity.NO_RESULTS)) {
+		if (count == 1 && lv.getItemAtPosition(0).equals(getString(R.string.no_results))) {
 
 			return;
 		}

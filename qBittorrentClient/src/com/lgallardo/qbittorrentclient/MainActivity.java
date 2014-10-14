@@ -141,8 +141,6 @@ public class MainActivity extends FragmentActivity {
 	protected static String max_act_uploads;
 	protected static String max_act_torrents;
 
-	protected static String NO_RESULTS = "No torrents found";
-
 	// Preferences fields
 	private SharedPreferences sharedPrefs;
 	private StringBuilder builderPrefs;
@@ -1386,7 +1384,7 @@ public class MainActivity extends FragmentActivity {
 
 				if (jArray != null) {
 
-					// Log.i("jArray length", "" + jArray.length());
+					Log.i("qbTask", "jArray length: " + jArray.length());
 
 					torrents = new Torrent[jArray.length()];
 
@@ -1433,6 +1431,9 @@ public class MainActivity extends FragmentActivity {
 								+ torrents[i].getEta());
 
 					}
+					Log.i("qbTask", "jArray length: " + jArray.length());
+				} else {
+					Log.i("qbTask", "jArray is null");
 				}
 			} catch (Exception e) {
 				torrents = null;
@@ -1453,6 +1454,8 @@ public class MainActivity extends FragmentActivity {
 			} else {
 
 				ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
+				
+				Log.i("qbTask", "Results (torrents): " + result.length);
 
 				for (int i = 0; i < result.length; i++) {
 
@@ -1501,6 +1504,9 @@ public class MainActivity extends FragmentActivity {
 				// Get names (delete in background method)
 				MainActivity.names = new String[torrentsFiltered.size()];
 				MainActivity.lines = new Torrent[torrentsFiltered.size()];
+				
+				Log.i("qbTask", "MainActivity.names: " + MainActivity.names.length);
+				Log.i("qbTask", "MainActivity.lines: " + MainActivity.names.length);
 
 				try {
 
@@ -1616,7 +1622,7 @@ public class MainActivity extends FragmentActivity {
 					} else {
 
 						// No results
-						String[] emptyList = new String[] { NO_RESULTS };
+						String[] emptyList = new String[] { getString(R.string.no_results) };
 						firstFragment.setListAdapter(new ArrayAdapter<String>(MainActivity.this, R.layout.no_items_found, R.id.no_results, emptyList));
 
 						// Add the fragment to the 'list_frame' FrameLayout
