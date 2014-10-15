@@ -29,7 +29,6 @@
                 android:layout_below="@+id/qBittorrent_logo"
                 android:layout_centerHorizontal="true"
                 android:background="@android:color/white"
-                android:contentDescription="@string/app_name"
                 android:text="@string/app_name"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -40,6 +39,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="41dp"
+                android:contentDescription="@string/app_name"
                 android:paddingRight="10dp"
                 android:src="@drawable/ic_launcher" />
 
@@ -47,9 +47,9 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_below="@+id/textView2"
                 android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/arrow"
                 android:padding="10dp"
                 android:text="@string/about_help1" />
 
@@ -57,7 +57,7 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignLeft="@+id/textView3"
                 android:layout_below="@+id/textView3"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
@@ -71,6 +71,26 @@
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
                 android:text="@string/about_motto" />
+
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignTop="@+id/textView3"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/icon"
+                android:src="@drawable/ic_arrow" />
+
+            <ImageView
+                android:id="@+id/refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignTop="@+id/textView4"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/icon"
+                android:src="@drawable/ic_refresh" />
         </RelativeLayout>
     </ScrollView>
 

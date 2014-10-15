@@ -197,6 +197,10 @@ public class MainActivity extends FragmentActivity {
 
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 
+		drawerList.setItemChecked(0, true);
+		// drawerList.setSelection(0);
+		setTitle(navigationDrawerItemTitles[0]);
+
 		// Drawer item list objects
 		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[8];
 
@@ -1351,7 +1355,7 @@ public class MainActivity extends FragmentActivity {
 				break;
 			case 6:
 				// Select "All" torrents list
-				selectItem(0);
+				// selectItem(0);
 				break;
 			case 7:
 				break;
@@ -1384,7 +1388,7 @@ public class MainActivity extends FragmentActivity {
 
 				if (jArray != null) {
 
-					Log.i("qbTask", "jArray length: " + jArray.length());
+					// Log.i("qbTask", "jArray length: " + jArray.length());
 
 					torrents = new Torrent[jArray.length()];
 
@@ -1431,9 +1435,13 @@ public class MainActivity extends FragmentActivity {
 								+ torrents[i].getEta());
 
 					}
-					Log.i("qbTask", "jArray length: " + jArray.length());
+
+					// Log.i("qbTask", "jArray length: " + jArray.length());
+
 				} else {
-					Log.i("qbTask", "jArray is null");
+
+					// Log.i("qbTask", "jArray is null");
+
 				}
 			} catch (Exception e) {
 				torrents = null;
@@ -1451,11 +1459,19 @@ public class MainActivity extends FragmentActivity {
 
 				Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
+				// Set App title
+				setTitle(R.string.app_shortname);
+
+				// Uncheck any item on the drawer menu
+				for (int i = 0; i < drawerList.getCount(); i++) {
+					drawerList.setItemChecked(i, false);
+				}
+
 			} else {
 
 				ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
 
-				Log.i("qbTask", "Results (torrents): " + result.length);
+				// Log.i("qbTask", "Results (torrents): " + result.length);
 
 				for (int i = 0; i < result.length; i++) {
 
@@ -1505,8 +1521,10 @@ public class MainActivity extends FragmentActivity {
 				MainActivity.names = new String[torrentsFiltered.size()];
 				MainActivity.lines = new Torrent[torrentsFiltered.size()];
 
-				Log.i("qbTask", "MainActivity.names: " + MainActivity.names.length);
-				Log.i("qbTask", "MainActivity.lines: " + MainActivity.names.length);
+				// Log.i("qbTask", "MainActivity.names: " +
+				// MainActivity.names.length);
+				// Log.i("qbTask", "MainActivity.lines: " +
+				// MainActivity.names.length);
 
 				try {
 
@@ -1522,7 +1540,7 @@ public class MainActivity extends FragmentActivity {
 						getFragmentManager().popBackStack();
 					}
 
-					firstFragment.setListAdapter(new myAdapter(MainActivity.this,names,lines));
+					firstFragment.setListAdapter(new myAdapter(MainActivity.this, names, lines));
 
 					// Create the about fragment
 					AboutFragment aboutFragment = new AboutFragment();
@@ -1774,7 +1792,7 @@ public class MainActivity extends FragmentActivity {
 		public int getCount() {
 			// TODO Auto-generated method stub}
 
-			Log.i("qbTask", "getCount: " + ((torrentsNames != null) ? torrentsNames.length : 0));
+//			Log.i("qbTask", "getCount: " + ((torrentsNames != null) ? torrentsNames.length : 0));
 
 			return (torrentsNames != null) ? torrentsNames.length : 0;
 		}
@@ -1874,9 +1892,14 @@ public class MainActivity extends FragmentActivity {
 		// // fragmentManager.beginTransaction()
 		// // .replace(R.id.content_frame, fragment).commit();
 
-		drawerList.setItemChecked(position, true);
-		drawerList.setSelection(position);
-		setTitle(navigationDrawerItemTitles[position]);
+		// Log.i("qbTask", "drawer position: " + position);
+
+		if (position < 6) {
+			drawerList.setItemChecked(position, true);
+			drawerList.setSelection(position);
+			setTitle(navigationDrawerItemTitles[position]);
+		}
+		
 		drawerLayout.closeDrawer(drawerList);
 
 		// } else {
