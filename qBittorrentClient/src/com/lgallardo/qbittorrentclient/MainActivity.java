@@ -1792,7 +1792,8 @@ public class MainActivity extends FragmentActivity {
 		public int getCount() {
 			// TODO Auto-generated method stub}
 
-//			Log.i("qbTask", "getCount: " + ((torrentsNames != null) ? torrentsNames.length : 0));
+			// Log.i("qbTask", "getCount: " + ((torrentsNames != null) ?
+			// torrentsNames.length : 0));
 
 			return (torrentsNames != null) ? torrentsNames.length : 0;
 		}
@@ -1899,7 +1900,7 @@ public class MainActivity extends FragmentActivity {
 			drawerList.setSelection(position);
 			setTitle(navigationDrawerItemTitles[position]);
 		}
-		
+
 		drawerLayout.closeDrawer(drawerList);
 
 		// } else {
