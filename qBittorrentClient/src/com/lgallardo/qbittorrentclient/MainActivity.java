@@ -237,7 +237,7 @@ public class MainActivity extends FragmentActivity {
 			/** Called when a drawer has settled in a completely open state. */
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
-				getActionBar().setTitle(drawerTitle);
+				// getActionBar().setTitle(drawerTitle);
 			}
 		};
 
@@ -809,6 +809,10 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		// Set the drawer menu's item to All
+		drawerList.setItemChecked(0, true);
+		setTitle(navigationDrawerItemTitles[0]);
 
 		if (requestCode == SETTINGS_CODE) {
 
@@ -1555,7 +1559,11 @@ public class MainActivity extends FragmentActivity {
 						// Set the second fragments container
 						if (findViewById(R.id.fragment_container) != null) {
 							firstFragment.setSecondFragmentContainer(R.id.content_frame);
-							fragmentTransaction.replace(R.id.list_frame, firstFragment);
+
+							if (getFragmentManager().findFragmentByTag("firstFragment") == null) {
+
+								fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+							}
 
 						} else {
 							firstFragment.setSecondFragmentContainer(R.id.one_frame);
@@ -1584,7 +1592,7 @@ public class MainActivity extends FragmentActivity {
 								fragmentManager = getFragmentManager();
 
 								for (int i = 0; i < getFragmentManager().getBackStackEntryCount(); ++i) {
-									getFragmentManager().popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+									fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 								}
 
 								// Replace with the about fragment
@@ -1600,7 +1608,10 @@ public class MainActivity extends FragmentActivity {
 								}
 
 								// Replace with the about fragment
-								fragmentManager.beginTransaction().replace(R.id.one_frame, firstFragment, "firstFragment").commit();
+								if (fragmentManager.findFragmentByTag("firstFragment") == null) {
+									// Replace with the about fragment
+									fragmentManager.beginTransaction().replace(R.id.one_frame, firstFragment, "firstFragment").commit();
+								}
 							}
 
 						}
@@ -1630,7 +1641,10 @@ public class MainActivity extends FragmentActivity {
 
 									fragmentManager = getFragmentManager();
 
-									fragmentManager.beginTransaction().replace(R.id.one_frame, firstFragment, "firstFragment").commit();
+									if (fragmentManager.findFragmentByTag("firstFragment") == null) {
+
+										fragmentManager.beginTransaction().replace(R.id.one_frame, firstFragment, "firstFragment").commit();
+									}
 
 								}
 							}
@@ -1655,7 +1669,9 @@ public class MainActivity extends FragmentActivity {
 
 						} else {
 							firstFragment.setSecondFragmentContainer(R.id.one_frame);
-							fragmentTransaction.replace(R.id.one_frame, firstFragment);
+							if (getFragmentManager().findFragmentByTag("firstFragment") == null) {
+								fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+							}
 							fragmentTransaction.commit();
 						}
 
