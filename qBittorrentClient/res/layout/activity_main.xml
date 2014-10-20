@@ -21,28 +21,31 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
+        <ProgressBar
+            android:id="@+id/progressBarConnecting"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:indeterminate="true"
+            android:visibility="visible" />
+
+        <FrameLayout
+            android:id="@+id/one_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/progressBarConnecting"
+            android:background="@android:color/white"
+            android:paddingBottom="50dp" />
+
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            ads:adSize="SMART_BANNER"
+            ads:adSize="BANNER"
             ads:adUnitId="ca-app-pub-1035265933040074/6449288097"
             android:gravity="bottom" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/adView"
-            android:orientation="horizontal" >
-
-            <FrameLayout
-                android:id="@+id/one_frame"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white" />
-        </LinearLayout>
     </RelativeLayout>
 
     <ListView

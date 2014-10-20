@@ -46,6 +46,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -180,12 +181,17 @@ public class MainActivity extends FragmentActivity {
 
 	// Searching field
 	private String searchField = "";
+	
+	protected ProgressBar progressBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
+		
+		// Get progress bar
+		progressBar = (ProgressBar) findViewById(R.id.progressBarConnecting);
 
 		// Set App title
 		setTitle(R.string.app_shortname);
@@ -480,6 +486,11 @@ public class MainActivity extends FragmentActivity {
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
 		if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
+			
+			// Show progressBar
+			if (progressBar != null) {
+				progressBar.setVisibility(View.VISIBLE);
+			}
 
 			// Execute the task in background
 			qBittorrentTask qtt = new qBittorrentTask();
@@ -1194,8 +1205,17 @@ public class MainActivity extends FragmentActivity {
 		refresh_period = Integer.parseInt(sharedPrefs.getString("refresh_period", "120000"));
 
 		// Get connection and data timeouts
-		connection_timeout = Integer.parseInt(sharedPrefs.getString("connection_timeout", "5"));
-		data_timeout = Integer.parseInt(sharedPrefs.getString("data_timeout", "8"));
+		try {
+			connection_timeout = Integer.parseInt(sharedPrefs.getString("connection_timeout", "5"));
+		} catch (NumberFormatException e) {
+			connection_timeout = 5;
+		}
+
+		try {
+			data_timeout = Integer.parseInt(sharedPrefs.getString("data_timeout", "8"));
+		} catch (NumberFormatException e) {
+			data_timeout = 8;
+		}
 
 	}
 
@@ -1626,6 +1646,11 @@ public class MainActivity extends FragmentActivity {
 
 				searchField = "";
 
+			}
+			
+			// Hide progressBar
+			if (progressBar != null) {
+				progressBar.setVisibility(View.INVISIBLE);
 			}
 		}
 	}

@@ -19,7 +19,7 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
@@ -30,13 +30,21 @@
             ads:adUnitId="ca-app-pub-1035265933040074/6449288097"
             android:gravity="bottom" />
 
+        <ProgressBar
+            android:id="@+id/progressBarConnecting"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="visible" />
+
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/adView"
-            android:orientation="horizontal"
-            android:baselineAligned="false" >
+            android:baselineAligned="false"
+            android:orientation="horizontal" >
 
             <FrameLayout
                 android:id="@+id/list_frame"
