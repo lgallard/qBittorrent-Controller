@@ -284,7 +284,7 @@ public class TorrentDetailsFragment extends Fragment {
 
 		protected View[] doInBackground(View... rootViews) {
 			// Get torrent's extra info
-			url = "/json/propertiesGeneral/";
+			url = "json/propertiesGeneral/";
 
 			try {
 
