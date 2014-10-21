@@ -182,7 +182,7 @@ public class MainActivity extends FragmentActivity {
 	// Searching field
 	private String searchField = "";
 	
-	protected ProgressBar progressBar;
+	protected static ProgressBar progressBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

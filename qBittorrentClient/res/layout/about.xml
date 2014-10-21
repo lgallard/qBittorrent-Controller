@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="41dp"
+                android:layout_marginTop="25dp"
                 android:contentDescription="@string/app_name"
                 android:paddingRight="10dp"
                 android:src="@drawable/ic_launcher" />
@@ -70,6 +70,7 @@
                 android:layout_below="@+id/textView1"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
+                android:layout_marginLeft="5dp"
                 android:text="@string/about_motto" />
 
             <ImageView
@@ -78,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignTop="@+id/textView3"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="20dp"
                 android:contentDescription="@string/icon"
                 android:src="@drawable/ic_arrow" />
@@ -88,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignTop="@+id/textView4"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="20dp"
                 android:contentDescription="@string/icon"
                 android:src="@drawable/ic_refresh" />

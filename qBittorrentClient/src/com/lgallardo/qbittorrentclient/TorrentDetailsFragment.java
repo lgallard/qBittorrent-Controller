@@ -210,6 +210,11 @@ public class TorrentDetailsFragment extends Fragment {
 			// TODO Auto-generated catch block
 			Log.e("TorrentDetailsFragment - onCreateView", e.toString());
 		}
+		
+		// Show progressBar
+		if (MainActivity.progressBar != null) {
+			MainActivity.progressBar.setVisibility(View.VISIBLE);
+		}
 
 		// Load banner
 		loadBanner();
@@ -255,20 +260,6 @@ public class TorrentDetailsFragment extends Fragment {
 	// Load Banner
 	public void loadBanner() {
 
-		// LinearLayout linearLayout = null;
-
-		// linearLayout.removeView(adView);
-		//
-		// LinearLayout.LayoutParams adsParams = new
-		// LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-		// LinearLayout.LayoutParams.WRAP_CONTENT,
-		// android.view.Gravity.BOTTOM |
-		// android.view.Gravity.CENTER_HORIZONTAL);
-		//
-		//
-		// linearLayout.addView(adView, adsParams);
-		//
-
 		// Get the adView.
 		adView = (AdView) getActivity().findViewById(R.id.adView);
 
@@ -292,15 +283,6 @@ public class TorrentDetailsFragment extends Fragment {
 						MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
 
 				json2 = jParser.getJSONFromUrl(url + hash);
-
-				// // If no data, throw exception
-				// if (json2 == null || json2.length() == 0) {
-				//
-				// Log.i("TorrentFragment", "JSON Empty");
-				// // throw (new Exception());
-				// json2 = null;
-				//
-				// }
 
 				MainActivity.lines[position].setSavePath(json2.getString(MainActivity.TAG_SAVE_PATH));
 				MainActivity.lines[position].setCreationDate(json2.getString(MainActivity.TAG_CREATION_DATE));
@@ -388,6 +370,12 @@ public class TorrentDetailsFragment extends Fragment {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 
+			}
+			
+
+			// Hide progressBar
+			if (MainActivity.progressBar != null) {
+				MainActivity.progressBar.setVisibility(View.INVISIBLE);
 			}
 
 		}
