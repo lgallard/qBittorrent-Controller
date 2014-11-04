@@ -164,7 +164,8 @@ public class MainActivity extends FragmentActivity {
 	private ItemstFragment firstFragment;
 	private AboutFragment secondFragment;
 	private HelpFragment helpTabletFragment;
-
+	private AboutFragment aboutFragment;
+	
 	private boolean okay = false;
 
 	// Auto-refresh
@@ -181,7 +182,7 @@ public class MainActivity extends FragmentActivity {
 
 	// Searching field
 	private String searchField = "";
-	
+
 	protected static ProgressBar progressBar;
 
 	@Override
@@ -189,7 +190,7 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
-		
+
 		// Get progress bar
 		progressBar = (ProgressBar) findViewById(R.id.progressBarConnecting);
 
@@ -293,7 +294,9 @@ public class MainActivity extends FragmentActivity {
 			// }
 
 			// This fragment will hold the list of torrents
-			firstFragment = new ItemstFragment();
+			if (firstFragment == null) {
+				firstFragment = new ItemstFragment();
+			}
 
 			// This fragment will hold the list of torrents
 			helpTabletFragment = new HelpFragment();
@@ -309,8 +312,8 @@ public class MainActivity extends FragmentActivity {
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-			fragmentTransaction.add(R.id.list_frame, helpTabletFragment);
-			fragmentTransaction.add(R.id.content_frame, secondFragment);
+			fragmentTransaction.add(R.id.list_frame, helpTabletFragment, "firstFragment");
+			fragmentTransaction.add(R.id.content_frame, secondFragment, "secondFragment");
 			// .addToBackStack("secondFragment");
 
 			fragmentTransaction.commit();
@@ -323,24 +326,34 @@ public class MainActivity extends FragmentActivity {
 			// Phones handle just one fragment
 
 			// Create an instance of ItemsFragments
-			firstFragment = new ItemstFragment();
+			if (firstFragment == null) {
+				firstFragment = new ItemstFragment();
+			}
+			firstFragment.setSecondFragmentContainer(R.id.one_frame);
 
 			// This i the about fragment, holding a default message at the
 			// beginning
 
 			secondFragment = new AboutFragment();
 
-			firstFragment.setSecondFragmentContainer(R.id.one_frame);
+			// If we're being restored from a previous state,
+			// then we don't need to do anything and should return or else
+			// we could end up with overlapping fragments.
+			if (savedInstanceState != null) {
+				return;
+			}
 
 			// Add the fragment to the 'list_frame' FrameLayout
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-			fragmentTransaction.add(R.id.one_frame, secondFragment);
+			fragmentTransaction.add(R.id.one_frame, secondFragment, "firstFragment");
 
 			fragmentTransaction.commit();
 		}
 
+		// Activity is visble
+		activityIsVisible = true;
 		// Autorefresh
 
 		handler = new Handler();
@@ -486,7 +499,7 @@ public class MainActivity extends FragmentActivity {
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
 		if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
-			
+
 			// Show progressBar
 			if (progressBar != null) {
 				progressBar.setVisibility(View.VISIBLE);
@@ -1563,7 +1576,7 @@ public class MainActivity extends FragmentActivity {
 					// myadapter.notifyDataSetChanged();
 
 					// Create the about fragment
-					AboutFragment aboutFragment = new AboutFragment();
+					aboutFragment = new AboutFragment();
 
 					// Add the fragment to the 'list_frame' FrameLayout
 					FragmentManager fragmentManager = getFragmentManager();
@@ -1597,9 +1610,9 @@ public class MainActivity extends FragmentActivity {
 
 							// Set first and only fragment
 							fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
-							
+
 							// Destroy About fragment
-							fragmentTransaction.remove(secondFragment);					
+							fragmentTransaction.remove(secondFragment);
 
 							// Reset back button stack
 							for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
@@ -1622,7 +1635,7 @@ public class MainActivity extends FragmentActivity {
 						} else {
 							firstFragment.setSecondFragmentContainer(R.id.one_frame);
 							fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
-							
+
 							// Destroy About fragment
 							fragmentTransaction.remove(secondFragment);
 
@@ -1653,7 +1666,7 @@ public class MainActivity extends FragmentActivity {
 				searchField = "";
 
 			}
-			
+
 			// Hide progressBar
 			if (progressBar != null) {
 				progressBar.setVisibility(View.INVISIBLE);

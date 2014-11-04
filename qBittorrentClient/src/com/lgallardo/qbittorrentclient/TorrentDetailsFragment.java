@@ -32,7 +32,9 @@ public class TorrentDetailsFragment extends Fragment {
 
 	// Torrent variables
 	String name, info, hash, ratio, size, progress, state, leechs, seeds, priority, savePath, creationDate, comment, totalWasted, totalUploaded,
-			totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit, downloaded, eta, downloadSpeed, uploadSpeed = "";
+			totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit, downloaded, eta, downloadSpeed, uploadSpeed,
+			percentage = "";
+
 	String hostname;
 	String protocol;
 	int port;
@@ -56,6 +58,11 @@ public class TorrentDetailsFragment extends Fragment {
 
 	public int getPosition() {
 		return this.position;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
@@ -88,7 +95,28 @@ public class TorrentDetailsFragment extends Fragment {
 		shareRatio = "";
 
 		try {
-			if (MainActivity.lines != null && position != -1) {
+			
+			if (savedInstanceState != null) {
+
+				// Get saved values
+
+				name = savedInstanceState.getString("torrentDetailName", "");
+				size = savedInstanceState.getString("torrentDetailSize", "");
+				hash = savedInstanceState.getString("torrentDetailHash", "");
+				ratio = savedInstanceState.getString("torrentDetailRatio", "");
+				state = savedInstanceState.getString("torrentDetailState", "");
+				leechs = savedInstanceState.getString("torrentDetailLeechs", "");
+				seeds = savedInstanceState.getString("torrentDetailSeeds", "");
+				progress = savedInstanceState.getString("torrentDetailProgress", "");
+				priority = savedInstanceState.getString("torrentDetailPriority", "");
+				eta = savedInstanceState.getString("torrentDetailEta", "");
+				uploadSpeed = savedInstanceState.getString("torrentDetailUploadSpeed", "");
+				downloadSpeed = savedInstanceState.getString("torrentDetailDownloadSpeed", "");
+				downloaded = savedInstanceState.getString("torrentDetailDownloaded", "");
+			
+		} else {
+			
+			
 				name = MainActivity.lines[position].getFile();
 				size = MainActivity.lines[position].getSize();
 				hash = MainActivity.lines[position].getHash();
@@ -100,54 +128,12 @@ public class TorrentDetailsFragment extends Fragment {
 				hash = MainActivity.lines[position].getHash();
 				priority = MainActivity.lines[position].getPriority();
 				eta = MainActivity.lines[position].getEta();
-
 				uploadSpeed = MainActivity.lines[position].getUploadSpeed();
 				downloadSpeed = MainActivity.lines[position].getDownloadSpeed();
 				downloaded = MainActivity.lines[position].getDownloaded();
+		}
 
-				// Get torrent's extra info
-				url = "/json/propertiesGeneral/";
 
-				try {
-
-					JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
-							MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
-
-					json2 = jParser.getJSONFromUrl(url + hash);
-
-					// If no data, throw exception
-					if (json2.length() == 0) {
-
-						throw (new Exception());
-
-					}
-
-					MainActivity.lines[position].setSavePath(json2.getString(MainActivity.TAG_SAVE_PATH));
-					MainActivity.lines[position].setCreationDate(json2.getString(MainActivity.TAG_CREATION_DATE));
-					MainActivity.lines[position].setComment(json2.getString(MainActivity.TAG_COMMENT));
-					MainActivity.lines[position].setTotalWasted(json2.getString(MainActivity.TAG_TOTAL_WASTED));
-					MainActivity.lines[position].setTotalUploaded(json2.getString(MainActivity.TAG_TOTAL_UPLOADED));
-					MainActivity.lines[position].setTotalDownloaded(json2.getString(MainActivity.TAG_TOTAL_DOWNLOADED));
-					MainActivity.lines[position].setTimeElapsed(json2.getString(MainActivity.TAG_TIME_ELAPSED));
-					MainActivity.lines[position].setNbConnections(json2.getString(MainActivity.TAG_NB_CONNECTIONS));
-					MainActivity.lines[position].setShareRatio(json2.getString(MainActivity.TAG_SHARE_RATIO));
-					MainActivity.lines[position].setUploadLimit(json2.getString(MainActivity.TAG_UPLOAD_LIMIT));
-					MainActivity.lines[position].setDownloadLimit(json2.getString(MainActivity.TAG_DOWNLOAD_LIMIT));
-				} catch (Exception e) {
-					Log.e("MAIN:", e.toString());
-				}
-
-				savePath = MainActivity.lines[position].getSavePath();
-				creationDate = MainActivity.lines[position].getCreationDate();
-				comment = MainActivity.lines[position].getComment();
-				totalWasted = MainActivity.lines[position].getTotalWasted();
-				totalUploaded = MainActivity.lines[position].getTotalUploaded();
-				totalDownloaded = MainActivity.lines[position].getTotalDownloaded();
-				timeElapsed = MainActivity.lines[position].getTimeElapsed();
-				nbConnections = MainActivity.lines[position].getNbConnections();
-				shareRatio = MainActivity.lines[position].getShareRatio();
-				uploadRateLimit = MainActivity.lines[position].getUploadLimit();
-				downloadRateLimit = MainActivity.lines[position].getDownloadLimit();
 
 				TextView nameTextView = (TextView) rootView.findViewById(R.id.torrentName);
 				TextView sizeTextView = (TextView) rootView.findViewById(R.id.torrentSize);
@@ -197,13 +183,18 @@ public class TorrentDetailsFragment extends Fragment {
 				shareRatioTextView.setText(shareRatio);
 				uploadRateLimitTextView.setText(uploadRateLimit);
 				downloadRateLimitTextView.setText(downloadRateLimit);
+				
+				// Execute the task in background
+				qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
 
-			}
+				qgit.execute(new View[] { rootView });
+
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Log.e("TorrentDetailsFragment - onCreateView", e.toString());
 		}
-		
+
 		// Show progressBar
 		if (MainActivity.progressBar != null) {
 			MainActivity.progressBar.setVisibility(View.VISIBLE);
@@ -217,6 +208,25 @@ public class TorrentDetailsFragment extends Fragment {
 
 		qgit.execute(new View[] { rootView });
 		return rootView;
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString("torrentDetailName", name);
+		outState.putString("torrentDetailSize", size);
+		outState.putString("torrentDetailHash", hash);
+		outState.putString("torrentDetailRatio", ratio);
+		outState.putString("torrentDetailState", state);
+		outState.putString("torrentDetailLeechs", leechs);
+		outState.putString("torrentDetailSeeds", seeds);
+		outState.putString("torrentDetailProgress", progress);
+		outState.putString("torrentDetailPriority", priority);
+		outState.putString("torrentDetailEta", eta);
+		outState.putString("torrentDetailUploadSpeed", uploadSpeed);
+		outState.putString("torrentDetailDownloadSpeed", downloadSpeed);
+		outState.putString("torrentDetailDownloaded", downloaded);
+
 	}
 
 	// @Override
@@ -291,17 +301,17 @@ public class TorrentDetailsFragment extends Fragment {
 
 			} catch (Exception e) {
 
-				MainActivity.lines[position].setSavePath(" ");
-				MainActivity.lines[position].setCreationDate(" ");
-				MainActivity.lines[position].setComment(" ");
-				MainActivity.lines[position].setTotalWasted(" ");
-				MainActivity.lines[position].setTotalUploaded(" ");
-				MainActivity.lines[position].setTotalDownloaded(" ");
-				MainActivity.lines[position].setTimeElapsed(" ");
-				MainActivity.lines[position].setNbConnections(" ");
-				MainActivity.lines[position].setShareRatio(" ");
-				MainActivity.lines[position].setUploadLimit(" ");
-				MainActivity.lines[position].setDownloadLimit(" ");
+//				MainActivity.lines[position].setSavePath(" ");
+//				MainActivity.lines[position].setCreationDate(" ");
+//				MainActivity.lines[position].setComment(" ");
+//				MainActivity.lines[position].setTotalWasted(" ");
+//				MainActivity.lines[position].setTotalUploaded(" ");
+//				MainActivity.lines[position].setTotalDownloaded(" ");
+//				MainActivity.lines[position].setTimeElapsed(" ");
+//				MainActivity.lines[position].setNbConnections(" ");
+//				MainActivity.lines[position].setShareRatio(" ");
+//				MainActivity.lines[position].setUploadLimit(" ");
+//				MainActivity.lines[position].setDownloadLimit(" ");
 
 				Log.e("TorrentFragment:", e.toString());
 
@@ -364,7 +374,6 @@ public class TorrentDetailsFragment extends Fragment {
 				// TODO Auto-generated catch block
 
 			}
-			
 
 			// Hide progressBar
 			if (MainActivity.progressBar != null) {

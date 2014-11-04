@@ -7,7 +7,7 @@
   https://www.gnu.org/licenses/gpl.html
   
   Contributors:
-      Luis M. Gallardo D. - initial implementation
+      Luis M. Gallardo D.
       Spanti Nicola (RyDroid) - beginning of the french translation
 -->
 <resources>
@@ -45,14 +45,12 @@
     <string name="torrentDeletedDrive">Torrent et ses données supprimés !</string>
     <string name="increasePrioTorrent">Priority augmentée!</string>
     <string name="decreasePrioTorrent">Priority réduite !</string>
-    <!--<string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    <string name="getQBittorrentPrefefrences">Getting options...</string>-->
+    <string name="getQBittorrentPrefefrences">Obtenir les options...</string>
     <string name="setQBittorrentPrefefrences">Options sauvegardées</string>
-    <!--<string name="setUploadRateLimit">Upload rate limit set</string>
-    <string name="setDownloadRateLimit">Download rate limit set</string>-->
+    <string name="setUploadRateLimit">Upload limite de vitesse terminé</string>
+    <string name="setDownloadRateLimit">Limite de vitesse de téléchargement terminées</string>
     <string name="error">Erreur</string>
-    <!--<string name="global_value_error">Global value cannot be retrieved. Please check your connection settings!</string>-->
+    <!-- <string name="global_value_error">Global value cannot be retrieved. Please check your connection settings!</string> -->
 
     <string-array name="navigation_drawer_items_array">
         <item>Tout</item>
@@ -65,28 +63,31 @@
         <item>Paramètres</item>
     </string-array>
 
-    <!--<string name="about_help1">To start using the client, set your qBittorrent server\'s settings and account by selecting \'Settings\' from the drawer menu</string>
-    <string name="about_help2">Press the refresh button on the menu to get new results, or choose an option from the drawer menu to get the torrent list from the server.</string>-->
+    <string name="about_help1">Pour commencer à utiliser le client, définissez les paramètres de votre serveur qBittorent et compte en sélectionnant "Paramètres" dans le menu de gauche.</string>
+    <string name="about_help2">Appuyez sur le bouton de rafraîchissement dans le menu pour obtenir de nouveaux résultats, ou choisissez une option dans le menu de gauche pour obtenir la liste de torrent à partir du serveur.</string>
     <string name="about_motto">Gérer vos torrents avec Android en utilisant qBittorrent Client</string>
     <string name="icon">icône</string>
     <string name="no_results">Pas de résultat</string>
-    <!--<string name="tablet_help">Use the drawer menu to choose an option</string>-->
+    <!-- <string name="tablet_help">Use the drawer menu to choose an option</string> -->
     <string name="torrent_details_size">Taille</string>
     <string name="torrent_details_general_info">Infromations générales</string>
     <string name="torrent_details_save_path">Chemin de sauvegarde :</string>
     <string name="torrent_details_ratio">Ratio :</string>
-    <!--<string name="torrent_details_eta">Eta:</string>-->
+    <!-- <string name="torrent_details_eta">Eta:</string> -->
     <string name="torrent_details_priority">Priorité :</string>
     <string name="torrent_details_downloadSpeed">Vitesse de download :</string>
     <string name="torrent_details_uploadSpeed">Vitesse d\'upload :</string>
-    <!--<string name="torrent_details_leechs">Leechs:</string>
-    <string name="torrent_details_seeds">Seeds:</string>-->
+    <!--
+    <string name="torrent_details_leechs">Leechs:</string>
+    <string name="torrent_details_seeds">Seeds:</string>
+    -->
     <string name="torrent_details_state">État :</string>
     <string name="torrent_details_progres">Progrès :</string>
     <string name="torrent_details_torrent_hash">Hash du torrent:</string>
     <string name="torrent_details_created_date">Date de création :</string>
     <string name="torrent_details_comment">Commentaire :</string>
-    <!--<string name="torrent_details_upload_rate_limit">Upload Rate Limit:</string>
+    <!--
+    <string name="torrent_details_upload_rate_limit">Upload Rate Limit:</string>
     <string name="torrent_details_download_rate_limit">Download Rate Limit:</string>
     <string name="torrent_details_total_wasted">Total wasted:</string>
     <string name="torrent_details_total_uploaded">Total Uploaded:</string>
@@ -142,7 +143,8 @@
     <string name="options_qbittorrent_torrent_queueing_max_active_downloads_title">Maximum de téléchargements actifs</string>
     <string name="options_qbittorrent_torrent_queueing_max_active_downloads_dialog_title">Maximum active downloads?</string>
     <string name="options_qbittorrent_torrent_queueing_max_active_uploads_title">Maximum active uploads</string>
-    <string name="options_qbittorrent_torrent_queueing_max_active_uploads_dialog_title">Maximum active uploads?</string>-->
+    <string name="options_qbittorrent_torrent_queueing_max_active_uploads_dialog_title">Maximum active uploads?</string>
+    -->
     <string name="options_qbittorrent_torrent_queueing_max_active_torrents_title">Maximum de torrents actifs</string>
     <string name="options_qbittorrent_torrent_queueing_max_active_torrents_dialog_title">Maximum de torrents actifs ?</string>
 
