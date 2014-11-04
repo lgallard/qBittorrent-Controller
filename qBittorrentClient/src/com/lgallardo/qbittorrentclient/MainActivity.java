@@ -1597,6 +1597,9 @@ public class MainActivity extends FragmentActivity {
 
 							// Set first and only fragment
 							fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+							
+							// Destroy About fragment
+							fragmentTransaction.remove(secondFragment);					
 
 							// Reset back button stack
 							for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
@@ -1619,6 +1622,9 @@ public class MainActivity extends FragmentActivity {
 						} else {
 							firstFragment.setSecondFragmentContainer(R.id.one_frame);
 							fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+							
+							// Destroy About fragment
+							fragmentTransaction.remove(secondFragment);
 
 							// Reset back button stack
 							for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
