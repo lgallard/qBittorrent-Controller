@@ -11,8 +11,12 @@
 package com.lgallardo.qbittorrentclient;
 
 import android.app.Fragment;
-import android.view.*;
-import android.os.*;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 public class HelpFragment extends Fragment {
 
