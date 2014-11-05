@@ -132,8 +132,14 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 		SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
 
 		currentServer.setSummary(currentServer.getEntry());
-		hostname.setText(sharedPrefs.getString("hostname" + value, "192.168.1.1"));
-		hostname.setSummary(sharedPrefs.getString("hostname" + value, "192.168.1.1"));
+		hostname.setText(sharedPrefs.getString("hostname" + value, ""));
+		hostname.setSummary(sharedPrefs.getString("hostname" + value, ""));
+
+		if (hostname.getText().toString().equals("")) {
+
+			hostname.setSummary(getString(R.string.settings_qbittorrent_hostname_hint));
+
+		}
 
 		subfolder.setText(sharedPrefs.getString("subfolder" + value, ""));
 		subfolder.setSummary(sharedPrefs.getString("subfolder" + value, ""));

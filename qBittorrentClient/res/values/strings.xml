@@ -8,7 +8,6 @@
   
   Contributors:
       Luis M. Gallardo D.
-      
 -->
 <resources>
 
@@ -53,6 +52,7 @@
     <string name="setUploadRateLimit">Upload rate limit set</string>
     <string name="setDownloadRateLimit">Download rate limit set</string>
     <string name="error">Error</string>
+    <string name="info">Warning</string>
     <string name="global_value_error">Global value cannot be retrieved. Please check your connection settings!</string>
     <string name="navigation_drawer_all">All</string>
     <string name="navigation_drawer_downloading">Downloading</string>
@@ -62,6 +62,7 @@
     <string name="navigation_drawer_inactive">Inactive</string>
     <string name="navigation_drawer_options">Options</string>
     <string name="navigation_drawer_settins">Settings</string>
+    <string name="navigation_drawer_PRO">Get PRO</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>All</item>
@@ -72,9 +73,10 @@
         <item>Inactive</item>
         <item>Options</item>
         <item>Settings</item>
+        <item>Get Pro</item>
     </string-array>
 
-    <string name="about_help1">To start using the client, set your qBittorrent server\'s settings and account by selecting \'Settings\' from the drawer menu</string>
+    <string name="about_help1">To start using the client, set your qBittorrent server\'s settings and account by selecting \'Settings\' from the left drawer menu</string>
     <string name="about_help2">Press the refresh button on the menu to get new results, or choose an option from the drawer menu to get the torrent list from the server.</string>
     <string name="about_motto">Manage all your torrents from Android using qBittorrent Client</string>
     <string name="icon">icon</string>
@@ -111,6 +113,7 @@
     <string name="settings_qbittorrent_hostname_title">Connection Host</string>
     <string name="settings_qbittorrent_hostname_summary">Hostname or IP</string>
     <string name="settings_qbittorrent_hostname_dialog_title">Hostname or IP?</string>
+    <string name="settings_qbittorrent_hostname_hint">Example: 192.168.1.1</string>
     <string name="settings_qbittorrent_subfolder_title">Subfolder</string>
     <string name="settings_qbittorrent_subfolder_dialog_title">Subfolder? If in doubt, leave it blank!</string>
     <string name="settings_qbittorrent_https_title">Enable HTTPS</string>

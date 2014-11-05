@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:gravity="top"
             android:indeterminate="true"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <FrameLayout
             android:id="@+id/one_frame"

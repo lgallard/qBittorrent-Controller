@@ -114,6 +114,7 @@ public class MainActivity extends FragmentActivity {
 
 	protected static final int SETTINGS_CODE = 0;
 	protected static final int OPTION_CODE = 1;
+	protected static final int GETPRO_CODE = 2;
 
 	// Preferences properties
 	protected static String hostname;
@@ -165,7 +166,7 @@ public class MainActivity extends FragmentActivity {
 	private AboutFragment secondFragment;
 	private HelpFragment helpTabletFragment;
 	private AboutFragment aboutFragment;
-	
+
 	private boolean okay = false;
 
 	// Auto-refresh
@@ -205,7 +206,7 @@ public class MainActivity extends FragmentActivity {
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 
 		// Drawer item list objects
-		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[8];
+		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[9];
 
 		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_drawer_all, navigationDrawerItemTitles[0]);
 		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_drawer_downloading, navigationDrawerItemTitles[1]);
@@ -215,6 +216,7 @@ public class MainActivity extends FragmentActivity {
 		drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[5]);
 		drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[6]);
 		drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[7]);
+		drawerItem[8] = new ObjectDrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[8]);
 
 		// Create object for drawer item OnbjectDrawerItem
 		DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.listview_item_row, drawerItem);
@@ -422,28 +424,31 @@ public class MainActivity extends FragmentActivity {
 	};// runnable
 
 	public void refreshCurrent() {
-		switch (drawerList.getCheckedItemPosition()) {
-		case 0:
-			refresh("all");
-			break;
-		case 1:
-			refresh("downloading");
-			break;
-		case 2:
-			refresh("completed");
-			break;
-		case 3:
-			refresh("paused");
-			break;
-		case 4:
-			refresh("active");
-			break;
-		case 5:
-			refresh("inactive");
-			break;
-		default:
-			refresh();
-			break;
+		if (!hostname.equals("")) {
+
+			switch (drawerList.getCheckedItemPosition()) {
+			case 0:
+				refresh("all");
+				break;
+			case 1:
+				refresh("downloading");
+				break;
+			case 2:
+				refresh("completed");
+				break;
+			case 3:
+				refresh("paused");
+				break;
+			case 4:
+				refresh("active");
+				break;
+			case 5:
+				refresh("inactive");
+				break;
+			default:
+				refresh();
+				break;
+			}
 		}
 
 	}
@@ -500,23 +505,34 @@ public class MainActivity extends FragmentActivity {
 
 		if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
-			// Show progressBar
-			if (progressBar != null) {
-				progressBar.setVisibility(View.VISIBLE);
-			}
-
-			// Execute the task in background
-			qBittorrentTask qtt = new qBittorrentTask();
-
-			qtt.execute(params);
-
 			// Load banner
 			loadBanner();
 
-			// If activity is visible, Connecting message
-			if (activityIsVisible) {
-				// Connecting message
-				Toast.makeText(this, R.string.connecting, Toast.LENGTH_SHORT).show();
+			if (hostname.equals("")) {
+				// Hide progressBar
+				if (progressBar != null) {
+					progressBar.setVisibility(View.INVISIBLE);
+				}
+
+				//
+				genericOkDialog(R.string.info, R.string.about_help1);
+			} else {
+
+				// Show progressBar
+				if (progressBar != null) {
+					progressBar.setVisibility(View.VISIBLE);
+				}
+
+				// Execute the task in background
+				qBittorrentTask qtt = new qBittorrentTask();
+
+				qtt.execute(params);
+
+				// If activity is visible, Connecting message
+				if (activityIsVisible) {
+					// Connecting message
+					Toast.makeText(this, R.string.connecting, Toast.LENGTH_SHORT).show();
+				}
 			}
 		} else {
 
@@ -834,7 +850,7 @@ public class MainActivity extends FragmentActivity {
 			qso.execute(new String[] { "json/preferences", "getSettings" });
 
 			// Select "All" torrents list
-			selectItem(0);
+			 selectItem(0);
 
 			// Now it can be refreshed
 			canrefresh = true;
@@ -898,6 +914,11 @@ public class MainActivity extends FragmentActivity {
 
 		}
 
+		if (requestCode == GETPRO_CODE) {
+			// Select "All" torrents list
+			// selectItem(0);|
+		}
+
 	}
 
 	private void addUrlTorrent() {
@@ -952,6 +973,12 @@ public class MainActivity extends FragmentActivity {
 		Intent intent = new Intent(getBaseContext(), OptionsActivity.class);
 		startActivityForResult(intent, OPTION_CODE);
 
+	}
+
+	private void getPRO() {
+		Intent intent = new Intent(
+				new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclientpro")));
+		startActivityForResult(intent, GETPRO_CODE);
 	}
 
 	public void startTorrent(String hash) {
@@ -1876,6 +1903,10 @@ public class MainActivity extends FragmentActivity {
 		case 7:
 			// Settings
 			openSettings();
+			break;
+		case 8:
+			// Get Pro version
+			getPRO();
 			break;
 		default:
 			break;
