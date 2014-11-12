@@ -266,20 +266,7 @@ public class MainActivity extends FragmentActivity {
 
 		// If it were awaked from an intent-filter,
 		// get intent from the intent filter and Add URL torrent
-		Intent intent = getIntent();
-		String urlTorrent = intent.getDataString();
-
-		if (urlTorrent != null && urlTorrent.length() != 0) {
-
-			// File
-			if (urlTorrent.substring(0, 4).equals("file")) {
-				// File
-				addTorrentFile(Uri.parse(urlTorrent).getPath());
-			} else {
-				// URL
-				addTorrent(intent.getDataString());
-			}
-		}
+		addTorrentByIntent(getIntent());
 
 		// Fragments
 
@@ -356,7 +343,9 @@ public class MainActivity extends FragmentActivity {
 
 		// Activity is visble
 		activityIsVisible = true;
-		// Autorefresh
+
+		// // Autorefresh
+		refreshCurrent();
 
 		handler = new Handler();
 		handler.postDelayed(m_Runnable, refresh_period);
@@ -367,8 +356,6 @@ public class MainActivity extends FragmentActivity {
 	public void onResume() {
 		super.onResume();
 		activityIsVisible = true;
-
-		refreshCurrent();
 	}
 
 	@Override
@@ -555,6 +542,38 @@ public class MainActivity extends FragmentActivity {
 			// Use the query to search your data somehow
 			searchField = intent.getStringExtra(SearchManager.QUERY);
 		}
+		
+		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+
+			// Add torrent (file, url or magnet)
+			addTorrentByIntent(intent);
+			
+			// // // Autorefresh
+			refreshCurrent();
+
+		}
+	}
+	
+	
+	private void addTorrentByIntent(Intent intent){
+		
+		String urlTorrent = intent.getDataString();
+
+		if (urlTorrent != null && urlTorrent.length() != 0) {
+
+			if (urlTorrent.substring(0, 4).equals("file")) {
+
+				// File
+				addTorrentFile(Uri.parse(urlTorrent).getPath());
+				
+			} else {
+
+				// Web
+				addTorrent(Uri.decode(urlTorrent));
+			}
+
+		}
+		
 	}
 
 	@Override
