@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string-array name="qBittorrentServers">
+    <item>Serveur 1</item>
+    <item>Serveur 2</item>
+    <item>Serveur 3</item>
+  </string-array>
+  <string-array name="qBittorrentServersValues">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+  </string-array>
+  <string-array name="autorefresh">
+    <item>30 secondes</item>
+    <item>1 minute</item>
+    <item>2 minutes</item>
+    <item>5 minutes</item>
+    <item>10 minutes</item>
+    <item>15 minutes</item>
+  </string-array>
+  <string-array name="autorefreshValues">
+    <item>30000</item>
+    <item>60000</item>
+    <item>120000</item>
+    <item>300000</item>
+    <item>600000</item>
+    <item>900000</item>
+  </string-array>
+</resources>
