@@ -19,7 +19,7 @@
         android:id="@+id/textUrl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add URL here" />
+        android:text="@string/dialog_add_url" />
 
     <EditText
         android:id="@+id/url"
