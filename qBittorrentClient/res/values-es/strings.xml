@@ -96,7 +96,7 @@
   <string name="settings_qbittorrent_account_category">Cuentas</string>
   <string name="settings_qbittorrent_currentServer_title">Elige servidor qBittorrent</string>
   <string name="settings_qbittorrent_currentServer_dialog_title">Elige un servidor</string>
-  <string name="settings_qbittorrent_currentServer_summary">Servidor qBitttorent</string>
+  <string name="settings_qbittorrent_currentServer_summary">Servidor qBittorrent</string>
   <string name="settings_qbittorrent_hostname_title">Host de conexión</string>
   <string name="settings_qbittorrent_hostname_summary">Hostname o IP</string>
   <string name="settings_qbittorrent_hostname_dialog_title">Hostname o IP?</string>

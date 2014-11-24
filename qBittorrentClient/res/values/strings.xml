@@ -109,7 +109,7 @@
     <string name="settings_qbittorrent_account_category">Accounts</string>
     <string name="settings_qbittorrent_currentServer_title">Choose a qBittorrent server</string>
     <string name="settings_qbittorrent_currentServer_dialog_title">Choose a server</string>
-    <string name="settings_qbittorrent_currentServer_summary">qBitttorent Server</string>
+    <string name="settings_qbittorrent_currentServer_summary">qBittorrent Server</string>
     <string name="settings_qbittorrent_hostname_title">Connection Host</string>
     <string name="settings_qbittorrent_hostname_summary">Hostname or IP</string>
     <string name="settings_qbittorrent_hostname_dialog_title">Hostname or IP?</string>

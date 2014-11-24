@@ -394,6 +394,9 @@ public class MainActivity extends FragmentActivity {
 
 					fragmentTransaction.commit();
 
+					// Se titile
+					setTitle(navigationDrawerItemTitles[drawerList.getCheckedItemPosition()]);
+					
 					// Refresh current list
 					refreshCurrent();
 				}
