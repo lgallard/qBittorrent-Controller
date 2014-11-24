@@ -184,7 +184,11 @@ public class MainActivity extends FragmentActivity {
 	// Searching field
 	private String searchField = "";
 
+	// Progress bar
 	protected static ProgressBar progressBar;
+
+	// myAdapter myadapter
+	myAdapter myadapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -329,6 +333,16 @@ public class MainActivity extends FragmentActivity {
 			// then we don't need to do anything and should return or else
 			// we could end up with overlapping fragments.
 			if (savedInstanceState != null) {
+
+				// Handle Item list empty due to Fragment stack
+				FragmentManager fm = getFragmentManager();
+
+				if (fm.getBackStackEntryCount() == 1 && fm.findFragmentById(R.id.one_frame) instanceof TorrentDetailsFragment) {
+
+					refreshCurrent();
+
+				}
+
 				return;
 			}
 
@@ -356,6 +370,38 @@ public class MainActivity extends FragmentActivity {
 	public void onResume() {
 		super.onResume();
 		activityIsVisible = true;
+
+		// Handle Item list empty due to Fragment stack
+		try {
+
+			FragmentManager fm = getFragmentManager();
+			FragmentTransaction fragmentTransaction = fm.beginTransaction();
+
+			// Log.i("onResume", "Count: " + fm.getBackStackEntryCount());
+
+			if (fm.getBackStackEntryCount() == 0 && fm.findFragmentById(R.id.one_frame) instanceof ItemstFragment) {
+
+				Log.i("onResume", "ItemstFragment detected");
+
+				ItemstFragment fragment = (ItemstFragment) fm.findFragmentById(R.id.one_frame);
+
+				if (fragment.getListView().getCount() == 0) {
+
+					// Create the about fragment
+					aboutFragment = new AboutFragment();
+
+					fragmentTransaction.replace(R.id.one_frame, aboutFragment, "firstFragment");
+
+					fragmentTransaction.commit();
+
+					// Refresh current list
+					refreshCurrent();
+				}
+
+			}
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
@@ -542,21 +588,20 @@ public class MainActivity extends FragmentActivity {
 			// Use the query to search your data somehow
 			searchField = intent.getStringExtra(SearchManager.QUERY);
 		}
-		
+
 		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
 
 			// Add torrent (file, url or magnet)
 			addTorrentByIntent(intent);
-			
+
 			// // // Autorefresh
 			refreshCurrent();
 
 		}
 	}
-	
-	
-	private void addTorrentByIntent(Intent intent){
-		
+
+	private void addTorrentByIntent(Intent intent) {
+
 		String urlTorrent = intent.getDataString();
 
 		if (urlTorrent != null && urlTorrent.length() != 0) {
@@ -565,7 +610,7 @@ public class MainActivity extends FragmentActivity {
 
 				// File
 				addTorrentFile(Uri.parse(urlTorrent).getPath());
-				
+
 			} else {
 
 				// Web
@@ -573,7 +618,7 @@ public class MainActivity extends FragmentActivity {
 			}
 
 		}
-		
+
 	}
 
 	@Override
@@ -869,7 +914,7 @@ public class MainActivity extends FragmentActivity {
 			qso.execute(new String[] { "json/preferences", "getSettings" });
 
 			// Select "All" torrents list
-			 selectItem(0);
+			selectItem(0);
 
 			// Now it can be refreshed
 			canrefresh = true;
@@ -1616,7 +1661,7 @@ public class MainActivity extends FragmentActivity {
 					// firstFragment = new ItemstFragment();
 
 					// Log.i("Refresh >", "About to set Adapter");
-					myAdapter myadapter = new myAdapter(MainActivity.this, names, lines);
+					myadapter = new myAdapter(MainActivity.this, names, lines);
 					firstFragment.setListAdapter(myadapter);
 
 					// myadapter.notifyDataSetChanged();
