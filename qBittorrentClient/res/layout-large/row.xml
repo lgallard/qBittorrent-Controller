@@ -7,7 +7,7 @@
   http://www.gnu.org/licenses/gpl.html
   
   Contributors:
-      Luis M. Gallardo D. - initial implementation
+      Luis M. Gallardo D.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
@@ -23,7 +23,9 @@
             android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
             android:src="@drawable/downloading" />
 
         <LinearLayout
@@ -37,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="file"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -45,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="info"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 

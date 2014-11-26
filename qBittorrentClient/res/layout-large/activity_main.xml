@@ -56,6 +56,8 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="fill_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@android:color/darker_gray" />
 
             <FrameLayout

@@ -13,7 +13,7 @@
   <string name="action_delete_drive">Supprimer les données</string>
   <string name="action_increase_priority">Augmenter la priorité</string>
   <string name="action_decrease_priority">Réduire la priorité</string>
-  <string name="action_download_rate_limit">Download rate limit</string>
+  <string name="action_download_rate_limit">Limite de vitesse de téléchargement</string>
   <string name="action_upload_rate_limit">Upload rate limit</string>
   <string name="connection_error">La connexion au réseau a échoué</string>
   <string name="ok">OK</string>
@@ -38,7 +38,7 @@
   <string name="drawer_close">Fermer navigation tiroir</string>
   <string name="getQBittorrentPrefefrences">Obtenir les options...</string>
   <string name="setQBittorrentPrefefrences">Options sauvegardées</string>
-  <string name="setUploadRateLimit">Upload limite de vitesse terminé</string>
+  <string name="setUploadRateLimit">Limite de vitesse de charge </string>
   <string name="setDownloadRateLimit">Limite de vitesse de téléchargement terminées</string>
   <string name="error">Erreur</string>
   <string name="info">Avertissement</string>
@@ -154,4 +154,7 @@
   <string name="options_qbittorrent_torrent_queueing_max_active_torrents_dialog_title">Maximum de torrents actifs?</string>
   <string name="search_title">Rechercher</string>
   <string name="search_hint">Rechercher...</string>
+  <string name="dialog_add_url">Ajouter URL ici</string>
+  <string name="dialog_download_rate_limit">Limite de vitesse de téléchargement (KiB/s)</string>
+  <string name="dialog_upload_rate_limit">Limite de vitesse de charge (KiB/s)</string>
 </resources>

@@ -73,7 +73,7 @@
   <string name="torrent_details_general_info">Información general</string>
   <string name="torrent_details_save_path">Ruta:</string>
   <string name="torrent_details_ratio">Ratio:</string>
-  <string name="torrent_details_eta">Eta:</string>
+  <string name="torrent_details_eta">Tiempo estimado:</string>
   <string name="torrent_details_priority">Prioridad:</string>
   <string name="torrent_details_downloadSpeed">Velocidad de Bajada:</string>
   <string name="torrent_details_uploadSpeed">Velocidad de Subida :</string>
@@ -96,7 +96,7 @@
   <string name="settings_qbittorrent_account_category">Cuentas</string>
   <string name="settings_qbittorrent_currentServer_title">Elige servidor qBittorrent</string>
   <string name="settings_qbittorrent_currentServer_dialog_title">Elige un servidor</string>
-  <string name="settings_qbittorrent_currentServer_summary">Servidor qBittorrent</string>
+  <string name="settings_qbittorrent_currentServer_summary">Servidor qBitttorent</string>
   <string name="settings_qbittorrent_hostname_title">Host de conexión</string>
   <string name="settings_qbittorrent_hostname_summary">Hostname o IP</string>
   <string name="settings_qbittorrent_hostname_dialog_title">Hostname o IP?</string>
@@ -154,4 +154,7 @@
   <string name="options_qbittorrent_torrent_queueing_max_active_torrents_dialog_title">Máximo de torrents activos?</string>
   <string name="search_title">Buscar</string>
   <string name="search_hint">Buscar...</string>
+  <string name="dialog_add_url">Agregar URL aquí</string>
+  <string name="dialog_download_rate_limit">Límite de bajada (KiB/s)</string>
+  <string name="dialog_upload_rate_limit">Límite de subida (KiB/s)</string>
 </resources>

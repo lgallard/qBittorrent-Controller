@@ -96,7 +96,7 @@
   <string name="settings_qbittorrent_account_category">Contas</string>
   <string name="settings_qbittorrent_currentServer_title">Escolha um servidor qBittorrent</string>
   <string name="settings_qbittorrent_currentServer_dialog_title">Escolha um servidor</string>
-  <string name="settings_qbittorrent_currentServer_summary">Servidor qBittorrent </string>
+  <string name="settings_qbittorrent_currentServer_summary">Servidor qBitttorent </string>
   <string name="settings_qbittorrent_hostname_title">Conexão com o host</string>
   <string name="settings_qbittorrent_hostname_summary">Nome do host ou IP</string>
   <string name="settings_qbittorrent_hostname_dialog_title">Nome do host ou IP?</string>
@@ -154,4 +154,7 @@
   <string name="options_qbittorrent_torrent_queueing_max_active_torrents_dialog_title">Máximo de torrents ativos?</string>
   <string name="search_title">Pesquisar</string>
   <string name="search_hint">Pesquisar...</string>
+  <string name="dialog_add_url">Adicionar URL aqui</string>
+  <string name="dialog_download_rate_limit">Limite de taxa de download (KiB/s)</string>
+  <string name="dialog_upload_rate_limit">Limite da taxa de carga (KiB/s)</string>
 </resources>

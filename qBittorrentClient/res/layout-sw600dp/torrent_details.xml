@@ -15,7 +15,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context=".TorrentActionsActivity" >
 
     <ScrollView
@@ -33,19 +33,19 @@
                 android:id="@+id/torrentName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
                 android:text="Torrent Name"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="9dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="9dp"
-                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/container_dropshadow"
                 android:orientation="vertical" >
 
@@ -288,18 +288,19 @@
                 android:id="@+id/general"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:text="General info"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="9dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="9dp"
-                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/container_dropshadow"
                 android:orientation="vertical" >
 
