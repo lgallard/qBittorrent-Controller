@@ -593,6 +593,9 @@ public class MainActivity extends FragmentActivity {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			// Use the query to search your data somehow
 			searchField = intent.getStringExtra(SearchManager.QUERY);
+			
+			// Search results
+			refreshCurrent();
 		}
 
 		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -1564,7 +1567,7 @@ public class MainActivity extends FragmentActivity {
 						JSONObject json = jArray.getJSONObject(i);
 
 						name = json.getString(TAG_NAME);
-						size = json.getString(TAG_SIZE);
+						size = json.getString(TAG_SIZE).replace(",", ".");
 						progress = String.format("%.2f", json.getDouble(TAG_PROGRESS) * 100) + "%";
 						info = "";
 						state = json.getString(TAG_STATE);
@@ -1588,7 +1591,7 @@ public class MainActivity extends FragmentActivity {
 							Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
 							String sizeUnit = size.substring(size.indexOf(" "), size.length());
 
-							torrents[i].setDownloaded(String.format("%.2f", sizeScalar * json.getDouble(TAG_PROGRESS)) + sizeUnit);
+							torrents[i].setDownloaded(String.format("%.1f", sizeScalar * json.getDouble(TAG_PROGRESS)).replace(",", ".") + sizeUnit);
 						} catch (Exception e) {
 							torrents[i].setDownloaded(size);
 						}
@@ -1600,8 +1603,6 @@ public class MainActivity extends FragmentActivity {
 								+ torrents[i].getEta());
 
 					}
-
-				} else {
 
 				}
 			} catch (JSONParserStatusCodeException e) {
