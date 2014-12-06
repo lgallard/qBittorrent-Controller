@@ -190,6 +190,9 @@ public class MainActivity extends FragmentActivity {
 	// myAdapter myadapter
 	myAdapter myadapter;
 
+	// Http status code
+	public int httpStatusCode = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -381,11 +384,7 @@ public class MainActivity extends FragmentActivity {
 			FragmentManager fm = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
-			// Log.i("onResume", "Count: " + fm.getBackStackEntryCount());
-
 			if (fm.getBackStackEntryCount() == 0 && fm.findFragmentById(R.id.one_frame) instanceof ItemstFragment) {
-
-				Log.i("onResume", "ItemstFragment detected");
 
 				ItemstFragment fragment = (ItemstFragment) fm.findFragmentById(R.id.one_frame);
 
@@ -1388,7 +1387,16 @@ public class MainActivity extends FragmentActivity {
 			// Creating new JSON Parser
 			JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
 
-			jParser.postCommand(params[0], params[1]);
+			try {
+
+				jParser.postCommand(params[0], params[1]);
+
+			} catch (JSONParserStatusCodeException e) {
+
+				httpStatusCode = e.getCode();
+				Log.e("JSONParserStatusCodeException", e.toString());
+
+			}
 
 			return params[0];
 
@@ -1396,6 +1404,26 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		protected void onPostExecute(String result) {
+
+			// Handle HTTP status code
+			
+			if (httpStatusCode == 1) {
+				Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
+				httpStatusCode = 0;
+				return;
+			}
+
+			if (httpStatusCode == 401) {
+				Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
+				httpStatusCode = 0;
+				return;
+			}
+
+			if (httpStatusCode == 403) {
+				Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+				httpStatusCode = 0;
+				return;
+			}
 
 			// This delay is needed for resume action. Other actions have a
 			// fewer delay (1 second).
@@ -1527,8 +1555,6 @@ public class MainActivity extends FragmentActivity {
 
 				if (jArray != null) {
 
-					// Log.i("qbTask", "jArray length: " + jArray.length());
-
 					torrents = new Torrent[jArray.length()];
 
 					MainActivity.names = new String[jArray.length()];
@@ -1575,13 +1601,13 @@ public class MainActivity extends FragmentActivity {
 
 					}
 
-					// Log.i("qbTask", "jArray length: " + jArray.length());
-
 				} else {
 
-					// Log.i("qbTask", "jArray is null");
-
 				}
+			} catch (JSONParserStatusCodeException e) {
+				httpStatusCode = e.getCode();
+				torrents = null;
+				Log.e("JSONParserStatusCodeException", e.toString());
 			} catch (Exception e) {
 				torrents = null;
 				Log.e("MAIN:", e.toString());
@@ -1598,6 +1624,23 @@ public class MainActivity extends FragmentActivity {
 
 				Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
+				// Handle HTTP status code
+				
+				if (httpStatusCode == 1) {
+					Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
+					httpStatusCode = 0;
+				}
+
+				if (httpStatusCode == 401) {
+					Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
+					httpStatusCode = 0;
+				}
+
+				if (httpStatusCode == 403) {
+					Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+					httpStatusCode = 0;
+				}
+
 				// Set App title
 				setTitle(R.string.app_shortname);
 
@@ -1609,8 +1652,6 @@ public class MainActivity extends FragmentActivity {
 			} else {
 
 				ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
-
-				// Log.i("qbTask", "Results (torrents): " + result.length);
 
 				for (int i = 0; i < result.length; i++) {
 
@@ -1660,11 +1701,6 @@ public class MainActivity extends FragmentActivity {
 				MainActivity.names = new String[torrentsFiltered.size()];
 				MainActivity.lines = new Torrent[torrentsFiltered.size()];
 
-				// Log.i("qbTask", "MainActivity.names: " +
-				// MainActivity.names.length);
-				// Log.i("qbTask", "MainActivity.lines: " +
-				// MainActivity.names.length);
-
 				try {
 
 					for (int i = 0; i < torrentsFiltered.size(); i++) {
@@ -1683,7 +1719,6 @@ public class MainActivity extends FragmentActivity {
 
 					// firstFragment = new ItemstFragment();
 
-					// Log.i("Refresh >", "About to set Adapter");
 					myadapter = new myAdapter(MainActivity.this, names, lines);
 					firstFragment.setListAdapter(myadapter);
 
@@ -1800,8 +1835,16 @@ public class MainActivity extends FragmentActivity {
 			// Creating new JSON Parser
 			JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
 
-			//
-			JSONObject json = jParser.getJSONFromUrl(params[0]);
+			// Get the Json object
+			JSONObject json = null;
+			try {
+				json = jParser.getJSONFromUrl(params[0]);
+
+			} catch (JSONParserStatusCodeException e) {
+
+				httpStatusCode = e.getCode();
+				Log.e("JSONParserStatusCodeException", e.toString());
+			}
 
 			if (json != null) {
 
@@ -1858,6 +1901,23 @@ public class MainActivity extends FragmentActivity {
 
 				Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
+				// Handle HTTP status code
+				
+				if (httpStatusCode == 1) {
+					Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
+					httpStatusCode = 0;
+				}
+
+				if (httpStatusCode == 401) {
+					Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
+					httpStatusCode = 0;
+				}
+
+				if (httpStatusCode == 403) {
+					Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+					httpStatusCode = 0;
+				}
+
 			} else {
 
 				// Set options with the preference UI
@@ -1892,16 +1952,11 @@ public class MainActivity extends FragmentActivity {
 			this.torrentsNames = torrentsNames;
 			this.torrentsData = torrentsData;
 
-			// Log.i("myAdapter", "lines: " + lines.length);
-
 		}
 
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub}
-
-			// Log.i("qbTask", "getCount: " + ((torrentsNames != null) ?
-			// torrentsNames.length : 0));
 
 			return (torrentsNames != null) ? torrentsNames.length : 0;
 		}
@@ -2005,8 +2060,6 @@ public class MainActivity extends FragmentActivity {
 		// // fragmentManager.beginTransaction()
 		// // .replace(R.id.content_frame, fragment).commit();
 
-		// Log.i("qbTask", "drawer position: " + position);
-
 		if (position < 6) {
 			drawerList.setItemChecked(position, true);
 			drawerList.setSelection(position);
@@ -2015,8 +2068,5 @@ public class MainActivity extends FragmentActivity {
 
 		drawerLayout.closeDrawer(drawerList);
 
-		// } else {
-		// Log.e("MainActivity", "Error in creating fragment");
-		// }
 	}
 }

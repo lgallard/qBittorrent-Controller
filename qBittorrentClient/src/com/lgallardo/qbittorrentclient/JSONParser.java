@@ -67,6 +67,8 @@ public class JSONParser {
 	private String password;
 	private int connection_timeout;
 	private int data_timeout;
+	
+	private static final int TIMEOUT_ERROR = 1;
 
 	static boolean nohome = false;
 
@@ -92,7 +94,7 @@ public class JSONParser {
 
 	}
 
-	public JSONObject getJSONFromUrl(String url) {
+	public JSONObject getJSONFromUrl(String url) throws JSONParserStatusCodeException {
 
 		// if server is published in a subfolder, fix url
 		if (subfolder != null && subfolder != "") {
@@ -138,9 +140,16 @@ public class JSONParser {
 
 			httpResponse = httpclient.execute(targetHost, httpget);
 
+			StatusLine statusLine = httpResponse.getStatusLine();
+
+			int mStatusCode = statusLine.getStatusCode();
+
+			if (mStatusCode != 200) {
+				throw new JSONParserStatusCodeException(mStatusCode);
+			}
+
 			HttpEntity httpEntity = httpResponse.getEntity();
 			is = httpEntity.getContent();
-			// Log.i("parser", is.toString());
 
 			// Build JSON
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
@@ -164,7 +173,10 @@ public class JSONParser {
 			Log.e("JSON", "ClientProtocolException: " + e.toString());
 		} catch (IOException e) {
 			Log.e("JSON", "IOException: " + e.toString());
-			e.printStackTrace();
+//			e.printStackTrace();
+			throw new JSONParserStatusCodeException(TIMEOUT_ERROR);
+		} catch (JSONParserStatusCodeException e) {
+			throw new JSONParserStatusCodeException(e.getCode());
 		} catch (Exception e) {
 			Log.e("JSON", "Generic: " + e.toString());
 		}
@@ -180,7 +192,7 @@ public class JSONParser {
 		return jObj;
 	}
 
-	public JSONArray getJSONArrayFromUrl(String url) {
+	public JSONArray getJSONArrayFromUrl(String url) throws JSONParserStatusCodeException {
 
 		// if server is publish in a subfolder, fix url
 		if (subfolder != null && subfolder != "") {
@@ -226,12 +238,16 @@ public class JSONParser {
 
 			// This could help to detect if device is banned
 			StatusLine statusLine = httpResponse.getStatusLine();
+
 			int mStatusCode = statusLine.getStatusCode();
-			Log.i("Status", "CODE: " + mStatusCode);
+
+			if (mStatusCode != 200) {
+				throw new JSONParserStatusCodeException(mStatusCode);
+			}
+			;
 
 			HttpEntity httpEntity = httpResponse.getEntity();
 			is = httpEntity.getContent();
-			// Log.i("parser", is.toString());
 
 			// Build JSON
 
@@ -252,7 +268,10 @@ public class JSONParser {
 			Log.e("JSON", "Client: " + e.toString());
 		} catch (IOException e) {
 			Log.e("JSON", "IO: " + e.toString());
-			e.printStackTrace();
+//			e.printStackTrace();
+			throw new JSONParserStatusCodeException(TIMEOUT_ERROR);
+		} catch (JSONParserStatusCodeException e) {
+			throw new JSONParserStatusCodeException(e.getCode());
 		} catch (Exception e) {
 			Log.e("JSON", "Generic: " + e.toString());
 		}
@@ -261,7 +280,6 @@ public class JSONParser {
 			// When HttpClient instance is no longer needed,
 			// shut down the connection manager to ensure
 			// immediate deallocation of all system resources
-			// Log.i("qbittorrent", "finaly - goodbye!");
 			httpclient.getConnectionManager().shutdown();
 		}
 
@@ -269,7 +287,7 @@ public class JSONParser {
 		return jArray;
 	}
 
-	public void postCommand(String command, String hash) {
+	public void postCommand(String command, String hash) throws JSONParserStatusCodeException {
 
 		String key = "hash";
 
@@ -328,8 +346,6 @@ public class JSONParser {
 		if ("setQBittorrentPrefefrences".equals(command)) {
 			url = "command/setPreferences";
 			key = "json";
-			// Log.i("setQBittorrentPrefefrences",
-			// "setQBittorrentPrefefrences");
 		}
 
 		if ("setUploadRateLimit".equals(command)) {
@@ -338,8 +354,6 @@ public class JSONParser {
 			String[] tmpString = hash.split("&");
 			hash = tmpString[0];
 			limit = tmpString[1];
-
-			Log.i("upload_rate_limit", "limit: " + limit);
 		}
 
 		if ("setDownloadRateLimit".equals(command)) {
@@ -348,8 +362,6 @@ public class JSONParser {
 			String[] tmpString = hash.split("&");
 			hash = tmpString[0];
 			limit = tmpString[1];
-
-			Log.i("download_rate_limit", "limit: " + limit);
 		}
 
 		// if server is publish in a subfolder, fix url
@@ -373,8 +385,6 @@ public class JSONParser {
 
 			HttpPost httpget = new HttpPost(url);
 
-			// Log.i("qbittorrent", "1");
-
 			// In order to pass the has we must set the pair name value
 
 			BasicNameValuePair bnvp = new BasicNameValuePair(key, hash);
@@ -393,13 +403,11 @@ public class JSONParser {
 			// Set content type and urls
 			if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command)) {
 				httpget.setHeader("Content-Type", urlContentType);
-				// Log.i("qbittorrent", "urlContentType");
 			}
 
 			// Set content type and urls
 			if ("addTorrentFile".equals(command)) {
 
-				Log.i("addTorrentFile", "Sending file: " + hash);
 				httpget.setHeader("Content-Type", urlContentType);
 
 				MultipartEntityBuilder builder = MultipartEntityBuilder.create();
@@ -429,29 +437,19 @@ public class JSONParser {
 
 			}
 
-			// Log.i("qbittorrent", "2");
-
 			httpResponse = httpclient.execute(targetHost, httpget);
 
-			// Log.i("qbittorrent", "3");
+			StatusLine statusLine = httpResponse.getStatusLine();
+
+			int mStatusCode = statusLine.getStatusCode();
+
+			if (mStatusCode != 200) {
+				throw new JSONParserStatusCodeException(mStatusCode);
+			}
 
 			HttpEntity httpEntity = httpResponse.getEntity();
 
-			// Log.i("qbittorrent", "4");
-
 			is = httpEntity.getContent();
-
-			// Log.i("qbittorrent", "5");
-			//
-			// Log.i("parser", is.toString());
-			//
-			// Log.i("qbittorrent", "url:" + url);
-			// Log.i("qbittorrent", "hostname:" + this.hostname);
-			// Log.i("qbittorrent", "port:" + this.port);
-			// Log.i("qbittorrent", "protocol:" + this.protocol);
-			// Log.i("qbittorrent", "username:" + this.username);
-			// Log.i("qbittorrent", "password:" + this.password);
-			// Log.i("qbittorrent", "hash:" + hash);
 
 		}
 
@@ -460,7 +458,10 @@ public class JSONParser {
 			Log.e("qbittorrent", "Client: " + e.toString());
 		} catch (IOException e) {
 			Log.e("qbittorrent", "IO: " + e.toString());
-			e.printStackTrace();
+			// e.printStackTrace();
+			throw new JSONParserStatusCodeException(TIMEOUT_ERROR);
+		} catch (JSONParserStatusCodeException e) {
+			throw new JSONParserStatusCodeException(e.getCode());
 		} catch (Exception e) {
 			Log.e("qbittorrent", "Generic: " + e.toString());
 		}
@@ -469,7 +470,6 @@ public class JSONParser {
 			// When HttpClient instance is no longer needed,
 			// shut down the connection manager to ensure
 			// immediate deallocation of all system resources
-			// Log.i("qbittorrent", "finaly - goodbye!");
 			httpclient.getConnectionManager().shutdown();
 		}
 
