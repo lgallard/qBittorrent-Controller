@@ -21,8 +21,8 @@ This is the repository for Android's [qBittorrent](http://www.qbittorrent.org/) 
 <img src="https://farm6.staticflickr.com/5547/12764293595_4fd5078513.jpg">&nbsp;
 
 <h2>Tablet's view</h2>
-<img src="https://farm3.staticflickr.com/2908/14418942999_46ba83af02_c.jpg">&nbsp;
-<img src="https://farm4.staticflickr.com/3915/14458532641_f3175cc830_c.jpg"/>&nbsp;
+<img src="https://farm8.staticflickr.com/7573/15990853711_9ac92dc8a5_c.jpg">&nbsp;
+<img src="https://farm8.staticflickr.com/7554/15370588554_a0d297ff4e_c.jpg"/>&nbsp;
 <img src="https://farm4.staticflickr.com/3880/14275272160_3f7d8d5dba_c.jpg"/>&nbsp;
 <img src="https://farm3.staticflickr.com/2926/14482048333_9df77b4516_c.jpg"/>&nbsp;
 <img src="https://farm3.staticflickr.com/2930/14438782316_505386d3e6_c.jpg"/>&nbsp;
