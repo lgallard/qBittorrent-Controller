@@ -13,11 +13,11 @@ This is the repository for Android's [qBittorrent](http://www.qbittorrent.org/) 
 * Set and save a connection account
 
 <h2>Phone's view</h2>
-<img src="https://farm4.staticflickr.com/3859/14604852432_10fed2d4e9.jpg">&nbsp;
-<img src="https://farm6.staticflickr.com/5527/14366168477_8b8a5f5787.jpg">&nbsp;
-<img src="https://farm6.staticflickr.com/5538/14529545316_9f674aba2c.jpg">&nbsp;
+<img src="https://farm8.staticflickr.com/7533/15370949504_0343b0d714.jpg">&nbsp;
+<img src="https://farm8.staticflickr.com/7492/15806831859_84ac204a2c.jpg">&nbsp;
+<img src="https://farm8.staticflickr.com/7542/15807108457_0d15e11ed1.jpg">&nbsp;
 <img src="https://farm6.staticflickr.com/5596/14551722492_ae99d639b8.jpg">&nbsp;
-<img src="https://farm4.staticflickr.com/3731/12764293465_021d24ab48.jpg">&nbsp;
+<img src="https://farm8.staticflickr.com/7520/15370588224_4df591325b.jpg">&nbsp;
 <img src="https://farm6.staticflickr.com/5547/12764293595_4fd5078513.jpg">&nbsp;
 
 <h2>Tablet's view</h2>
