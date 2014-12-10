@@ -173,7 +173,6 @@ public class JSONParser {
 			Log.e("JSON", "ClientProtocolException: " + e.toString());
 		} catch (IOException e) {
 			Log.e("JSON", "IOException: " + e.toString());
-//			e.printStackTrace();
 			throw new JSONParserStatusCodeException(TIMEOUT_ERROR);
 		} catch (JSONParserStatusCodeException e) {
 			throw new JSONParserStatusCodeException(e.getCode());
@@ -268,7 +267,6 @@ public class JSONParser {
 			Log.e("JSON", "Client: " + e.toString());
 		} catch (IOException e) {
 			Log.e("JSON", "IO: " + e.toString());
-//			e.printStackTrace();
 			throw new JSONParserStatusCodeException(TIMEOUT_ERROR);
 		} catch (JSONParserStatusCodeException e) {
 			throw new JSONParserStatusCodeException(e.getCode());
@@ -458,7 +456,6 @@ public class JSONParser {
 			Log.e("qbittorrent", "Client: " + e.toString());
 		} catch (IOException e) {
 			Log.e("qbittorrent", "IO: " + e.toString());
-			// e.printStackTrace();
 			throw new JSONParserStatusCodeException(TIMEOUT_ERROR);
 		} catch (JSONParserStatusCodeException e) {
 			throw new JSONParserStatusCodeException(e.getCode());

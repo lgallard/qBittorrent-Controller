@@ -42,7 +42,7 @@
     <string name="setUploadRateLimit">Został ustawiony limit wysyłania</string>
     <string name="setDownloadRateLimit">Limit pobierania był ustawiony.</string>
     <string name="error">Błąd</string>
-    <string name="error1">Adres hosta lub  IP nie może być osiągnięty. Proszę sprawdzić ustawienia!!</string>
+    <string name="error1">Adres hosta lub  IP nie może być osiągnięty. Proszę sprawdzić ustawienia!</string>
     <string name="error401">Nieautoryzowany dostęp. Sprawdź ustawienia konta, aby uniknąć zakazów!</string>
     <string name="error403">Twój adres IP został zbanowany po zbyt wielu nieudanych prób uwierzytelnienia</string>
     <string name="info">Ostrzeżenie</string>
