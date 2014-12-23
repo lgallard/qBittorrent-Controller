@@ -35,8 +35,6 @@
     <string name="torrentDeletedDrive">Torrent et ses données supprimés!</string>
     <string name="increasePrioTorrent">Priority augmentée!</string>
     <string name="decreasePrioTorrent">Priority réduite!</string>
-    <string name="drawer_open">Ouvrez le tiroir de navigation</string>
-    <string name="drawer_close">Fermer navigation tiroir</string>
     <string name="getQBittorrentPrefefrences">Obtenir les options...</string>
     <string name="setQBittorrentPrefefrences">Options sauvegardées</string>
     <string name="setUploadRateLimit">Limite de vitesse de charge </string>
@@ -75,7 +73,7 @@
     <string name="icon">icône</string>
     <string name="no_results">Pas de résultat</string>
     <string name="tablet_help">Utilisez le menu de tiroir pour choisir une option</string>
-    <string name="torrent_details_size">Taille</string>
+    <string name="torrent_details_size">Taille:</string>
     <string name="torrent_details_general_info">Infromations générales</string>
     <string name="torrent_details_save_path">Chemin de sauvegarde :</string>
     <string name="torrent_details_ratio">Ratio:</string>
@@ -83,7 +81,7 @@
     <string name="torrent_details_priority">Priorité:</string>
     <string name="torrent_details_downloadSpeed">Vitesse de download:</string>
     <string name="torrent_details_uploadSpeed">Vitesse d\'upload:</string>
-    <string name="torrent_details_leechs">Leechs:</string>
+    <string name="torrent_details_leechs">Leeches:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">État:</string>
     <string name="torrent_details_progres">Progrès:</string>

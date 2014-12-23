@@ -35,8 +35,6 @@
     <string name="torrentDeletedDrive">Torrent i dane usunięte!</string>
     <string name="increasePrioTorrent">Priorytet wzrosła!</string>
     <string name="decreasePrioTorrent">Priorytet spadła!</string>
-    <string name="drawer_open">Otwórz szufladę nawigacji</string>
-    <string name="drawer_close">Blisko nawigacji szuflady</string>
     <string name="getQBittorrentPrefefrences">Uzyskiwanie opcje...</string>
     <string name="setQBittorrentPrefefrences">Opcje zapisany</string>
     <string name="setUploadRateLimit">Został ustawiony limit wysyłania</string>
@@ -75,7 +73,7 @@
     <string name="icon">Ikona</string>
     <string name="no_results">Nie znaleziono torrents</string>
     <string name="tablet_help">Użyj menu szuflady, aby wybrać opcję</string>
-    <string name="torrent_details_size">Rozmiar</string>
+    <string name="torrent_details_size">Rozmiar:</string>
     <string name="torrent_details_general_info">Informacje ogólne</string>
     <string name="torrent_details_save_path">Ścieżka:</string>
     <string name="torrent_details_ratio">Stosunek:</string>
@@ -83,7 +81,7 @@
     <string name="torrent_details_priority">Priorytet:</string>
     <string name="torrent_details_downloadSpeed">Szybkość pobierania:</string>
     <string name="torrent_details_uploadSpeed">Szybkość ładowania</string>
-    <string name="torrent_details_leechs">Leechs:</string>
+    <string name="torrent_details_leechs">Leeches:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">Państwo:</string>
     <string name="torrent_details_progres">Postęp:</string>
