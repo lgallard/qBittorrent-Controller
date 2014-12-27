@@ -163,5 +163,9 @@
     <string name="dialog_add_url">Adicionar URL aqui</string>
     <string name="dialog_download_rate_limit">Limite de taxa de download (KiB/s)</string>
     <string name="dialog_upload_rate_limit">Limite da taxa de carga (KiB/s)</string>
+    <string name="torrent_details_trackers">Trackers</string>
+    <string name="torrent_details_properties">Propriedades</string>
+    <string name="title_activity_settings">Definições</string>
+    <string name="torrent_details_content">Arquivos</string>
 
 </resources>

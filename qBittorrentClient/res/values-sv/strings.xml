@@ -157,4 +157,10 @@
     <string name="torrent_details_downloadSpeed">Hämta hastighet:</string>
     <string name="torrent_details_size">Storlek:</string>
     <string name="torrent_details_uploadSpeed">Uppladdningshastighet:</string>
+    <string name="drawer_close">Stäng navigering låda</string>
+    <string name="drawer_open">Öppen navigering låda</string>
+    <string name="torrent_details_content">Filer</string>
+    <string name="torrent_details_properties">Egenskaper</string>
+    <string name="torrent_details_trackers">Trackers</string>
+    <string name="title_activity_settings">Inställningar</string>
 </resources>

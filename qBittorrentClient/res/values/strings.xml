@@ -86,6 +86,9 @@
     <string name="no_results">No torrents found</string>
     <string name="tablet_help">Use the drawer menu to choose an option</string>
     <string name="torrent_details_size">Size:</string>
+    <string name="torrent_details_properties">Properties</string>
+    <string name="torrent_details_content">Files</string>
+    <string name="torrent_details_trackers">Trackers</string>
     <string name="torrent_details_general_info">General info</string>
     <string name="torrent_details_save_path">Save path:</string>
     <string name="torrent_details_ratio">Ratio:</string>

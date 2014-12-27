@@ -12,7 +12,6 @@ package com.lgallardo.qbittorrentclient;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,6 @@ public class DrawerItemCustomAdapter extends ArrayAdapter<ObjectDrawerItem> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Log.i("Adapter", "getView reached");
 		
 		View listItem =  convertView;
 
