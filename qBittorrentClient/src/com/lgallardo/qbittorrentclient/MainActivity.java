@@ -1574,7 +1574,7 @@ public class MainActivity extends FragmentActivity {
                         info = "";
                         state = json.getString(TAG_STATE);
                         hash = json.getString(TAG_HASH);
-                        ratio = json.getString(TAG_RATIO);
+                        ratio = json.getString(TAG_RATIO).replace(",", ".");
                         leechs = json.getString(TAG_NUMLEECHS);
                         seeds = json.getString(TAG_NUMSEEDS);
                         priority = json.getString(TAG_PRIORITY);
