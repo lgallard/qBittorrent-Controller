@@ -1,29 +1,47 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string-array name="qBittorrentServers">
-    <item>Server 1</item>
-    <item>Server 2</item>
-    <item>Server 3</item>
-  </string-array>
-  <string-array name="qBittorrentServersValues">
-    <item>1</item>
-    <item>2</item>
-    <item>3</item>
-  </string-array>
-  <string-array name="autorefresh">
-    <item>30 secondi</item>
-    <item>1 minuto</item>
-    <item>2 minuti</item>
-    <item>5 minuti</item>
-    <item>10 minuti</item>
-    <item>15 minuti</item>
-  </string-array>
-  <string-array name="autorefreshValues">
-    <item>30000</item>
-    <item>60000</item>
-    <item>120000</item>
-    <item>300000</item>
-    <item>600000</item>
-    <item>900000</item>
-  </string-array>
+    <string-array name="qBittorrentServers">
+        <item>Server 1</item>
+        <item>Server 2</item>
+        <item>Server 3</item>
+    </string-array>
+    <string-array name="qBittorrentServersValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="autorefresh">
+        <item>30 secondi</item>
+        <item>1 minuto</item>
+        <item>2 minuti</item>
+        <item>5 minuti</item>
+        <item>10 minuti</item>
+        <item>15 minuti</item>
+    </string-array>
+    <string-array name="autorefreshValues">
+        <item>30000</item>
+        <item>60000</item>
+        <item>120000</item>
+        <item>300000</item>
+        <item>600000</item>
+        <item>900000</item>
+    </string-array>
+    <string-array name="sortBy">
+        <item name="1">Nome</item>
+        <item name="2">Tempo stimato</item>
+        <item name="3">Priorità</item>
+        <item name="4">Progresso</item>
+        <item name="5">Rapporto</item>
+        <item name="6">Velocità di download</item>
+        <item name="7">Velocità di upload</item>
+    </string-array>
+    <string-array name="sortByValues">
+        <item name="1">Name</item>
+        <item name="2">ETA</item>
+        <item name="3">Priority</item>
+        <item name="4">Progress</item>
+        <item name="5">Ratio</item>
+        <item name="6">DownloadSpeed</item>
+        <item name="7">UploadSpeed</item>
+    </string-array>
 </resources>

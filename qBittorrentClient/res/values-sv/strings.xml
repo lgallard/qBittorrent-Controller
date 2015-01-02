@@ -75,7 +75,7 @@
     <string name="torrent_details_leechs">Leeches:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">Status:</string>
-    <string name="torrent_details_progres">Framsteg:</string>
+    <string name="torrent_details_progress">Framsteg:</string>
     <string name="torrent_details_torrent_hash">Torrent Hash:</string>
     <string name="torrent_details_created_date">Skapad den:</string>
     <string name="torrent_details_comment">Kommentar:</string>
@@ -120,6 +120,11 @@
     <string name="settings_qbittorrent_data_timeout_title">Timeout data</string>
     <string name="settings_qbittorrent_data_timeout_summary">Timeout i sekunder att vänta på uppgifter</string>
     <string name="settings_qbittorrent_data_timeout_dialog_title">Timeout data i sekunder?</string>
+    <string name="settings_qbittorrent_sort_category">Sortera listan</string>
+    <string name="settings_qbittorrent_sortby_dialog_title">Sortera efter...</string>
+    <string name="settings_qbittorrent_sortby_summary">Sortera efter...</string>
+    <string name="settings_qbittorrent_reverse_order_dialog_title">Omvänd ordning?</string>
+    <string name="settings_qbittorrent_reverse_order_summary">Omvänd ordning</string>
     <string name="options_qbittorrent_connections_limits_category">Gränser Anslutnings</string>
     <string name="options_qbittorrent_global_max_connections_title">Globala max anslutningar</string>
     <string name="options_qbittorrent_global_max_connections_dialog_title">Global maximala antalet anslutningar?</string>

@@ -42,7 +42,7 @@
     <string name="setUploadRateLimit">Límite de subida cambiado</string>
     <string name="setDownloadRateLimit">Límite de bajada cambiado</string>
     <string name="error">Error</string>
-    <string name="error1">El host o dirección IP no son alcanzables. Por favor revise su configuraciones!</string>
+    <string name="error1">El host o dirección IP no son alcanzables. Por favor revise su configuración!</string>
     <string name="error401">Acceso no autorizado. Compruebe la configuración de la cuenta para evitar ser baneado!</string>
     <string name="error403">Su dirección IP ha sido baneada después de demasiados intentos de autenticación fallidos</string>
     <string name="info">Atención</string>
@@ -86,7 +86,7 @@
     <string name="torrent_details_leechs">Leeches:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">Estado:</string>
-    <string name="torrent_details_progres">Progreso:</string>
+    <string name="torrent_details_progress">Progreso:</string>
     <string name="torrent_details_torrent_hash">Torrent Hash:</string>
     <string name="torrent_details_created_date">Fecha de Creación:</string>
     <string name="torrent_details_comment">Comentario:</string>
@@ -135,6 +135,11 @@
     <string name="settings_qbittorrent_data_timeout_title">Tiempo de espera de datos</string>
     <string name="settings_qbittorrent_data_timeout_summary">Tiempo de espera en segundos por respuesta de datos</string>
     <string name="settings_qbittorrent_data_timeout_dialog_title">Tiempo de espera de datos en segundos?</string>
+    <string name="settings_qbittorrent_sort_category">Ordenar lista de torrents</string>
+    <string name="settings_qbittorrent_sortby_summary">Ordenar por...</string>
+    <string name="settings_qbittorrent_sortby_dialog_title">Ordenar por...</string>
+    <string name="settings_qbittorrent_reverse_order_dialog_title">Invertir orden?</string>
+    <string name="settings_qbittorrent_reverse_order_summary">Invertir orden</string>
     <string name="options_qbittorrent_connections_limits_category">Límites de Conexión</string>
     <string name="options_qbittorrent_global_max_connections_title">Conexiones max globales</string>
     <string name="options_qbittorrent_global_max_connections_dialog_title">Numero máximo de conexiones globales?</string>
@@ -167,5 +172,4 @@
     <string name="torrent_details_properties">Propiedades</string>
     <string name="torrent_details_content">Archivos</string>
     <string name="title_activity_settings">Configuración</string>
-
 </resources>

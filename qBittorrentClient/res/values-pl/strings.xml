@@ -86,7 +86,7 @@
     <string name="torrent_details_leechs">Leeches:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">Państwo:</string>
-    <string name="torrent_details_progres">Postęp:</string>
+    <string name="torrent_details_progress">Postęp:</string>
     <string name="torrent_details_torrent_hash">Torrent Hash:</string>
     <string name="torrent_details_created_date">Data utworzenia:</string>
     <string name="torrent_details_comment">Komentarz:</string>
@@ -135,6 +135,11 @@
     <string name="settings_qbittorrent_data_timeout_title">Timeout danych</string>
     <string name="settings_qbittorrent_data_timeout_summary">Limit czasu w sekundach dla danych</string>
     <string name="settings_qbittorrent_data_timeout_dialog_title">Timeout danych w sekundach?</string>
+    <string name="settings_qbittorrent_sort_category">Sortować według</string>
+    <string name="settings_qbittorrent_sortby_dialog_title">Sortuj według...</string>
+    <string name="settings_qbittorrent_sortby_summary">Sortuj według...</string>
+    <string name="settings_qbittorrent_reverse_order_dialog_title">Kolejność odwrotna?</string>
+    <string name="settings_qbittorrent_reverse_order_summary">Kolejność odwrotna</string>
     <string name="options_qbittorrent_connections_limits_category">Limity połączeń</string>
     <string name="options_qbittorrent_global_max_connections_title">Maks. ogólne liczba połączeń</string>
     <string name="options_qbittorrent_global_max_connections_dialog_title">Maksymalna Ogólne liczba połączeń?</string>

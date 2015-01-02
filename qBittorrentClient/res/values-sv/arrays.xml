@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string-array name="qBittorrentServers">
-        <item>Serwer 1</item>
-        <item>Serwer 2</item>
-        <item>Serwer 3</item>
+        <item>Server 1</item>
+        <item>Server 2</item>
+        <item>Server 3</item>
     </string-array>
     <string-array name="qBittorrentServersValues">
         <item>1</item>
@@ -11,12 +11,12 @@
         <item>3</item>
     </string-array>
     <string-array name="autorefresh">
-        <item>30 sekundy</item>
-        <item>1 minuta</item>
-        <item>2 minuty</item>
-        <item>5 minuty</item>
-        <item>10 minuty</item>
-        <item>15 minuty</item>
+        <item>30 sekunder</item>
+        <item>1 minut</item>
+        <item>2 minuter</item>
+        <item>5 minuter</item>
+        <item>10 minuter</item>
+        <item>15 minuter</item>
     </string-array>
     <string-array name="autorefreshValues">
         <item>30000</item>
@@ -27,13 +27,13 @@
         <item>900000</item>
     </string-array>
     <string-array name="sortBy">
-        <item name="1">Nazwa</item>
-        <item name="2">Przewidywany czas</item>
-        <item name="3">Priorytet</item>
-        <item name="4">Postęp</item>
-        <item name="5">Stosunek</item>
-        <item name="6">Prędkość pobierania</item>
-        <item name="7">Prędkość wysyłania</item>
+        <item name="1">Namn</item>
+        <item name="2">Beräknad tid</item>
+        <item name="3">Prioritet</item>
+        <item name="4">Framsteg</item>
+        <item name="5">Förhå</item>
+        <item name="6">Nedladdningshastighet</item>
+        <item name="7">Uppladdningshastighet</item>
     </string-array>
     <string-array name="sortByValues">
         <item name="1">Name</item>

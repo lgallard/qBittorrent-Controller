@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (c) 2014 Luis M. Gallardo D..
   All rights reserved. This program and the accompanying materials
   are made available under the terms of the GNU Public License v3.0
@@ -99,7 +98,7 @@
     <string name="torrent_details_leechs">Leeches:</string>
     <string name="torrent_details_seeds">Seeds:</string>
     <string name="torrent_details_state">State:</string>
-    <string name="torrent_details_progres">Progress:</string>
+    <string name="torrent_details_progress">Progress:</string>
     <string name="torrent_details_torrent_hash">Torrent Hash:</string>
     <string name="torrent_details_created_date">Created Date:</string>
     <string name="torrent_details_comment">Comment:</string>
@@ -148,6 +147,11 @@
     <string name="settings_qbittorrent_data_timeout_title">Data timeout</string>
     <string name="settings_qbittorrent_data_timeout_summary">Timeout in seconds to wait for data</string>
     <string name="settings_qbittorrent_data_timeout_dialog_title">Data timeout in seconds?</string>
+    <string name="settings_qbittorrent_sort_category">Sort torrent list</string>
+    <string name="settings_qbittorrent_sortby_summary">Sort by...</string>
+    <string name="settings_qbittorrent_sortby_dialog_title">Sort by...</string>
+    <string name="settings_qbittorrent_reverse_order_summary">Reverse order</string>
+    <string name="settings_qbittorrent_reverse_order_dialog_title">Reverse order?</string>
     <string name="options_qbittorrent_connections_limits_category">Connections Limits</string>
     <string name="options_qbittorrent_global_max_connections_title">Global max connections</string>
     <string name="options_qbittorrent_global_max_connections_dialog_title">Global maximum number of connections?</string>
@@ -177,5 +181,4 @@
     <string name="dialog_download_rate_limit">Download rate limit (KiB/s)</string>
     <string name="dialog_upload_rate_limit">Upload rate limit (KiB/s)</string>
     <string name="title_activity_settings">Settings</string>
-
 </resources>
