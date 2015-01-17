@@ -21,7 +21,6 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 import android.view.Menu;
 
 public class SettingsActivity extends PreferenceActivity implements android.content.SharedPreferences.OnSharedPreferenceChangeListener {
@@ -162,9 +161,7 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         old_version.setChecked(sharedPrefs.getBoolean("old_version" + value, false));
 
         if (refresh_period.getEntry() == null) {
-            refresh_period.setValueIndex(2);
-        } else {
-            Log.i("Settings", "" + refresh_period.getEntry());
+            refresh_period.setValueIndex(6);
         }
 
         refresh_period.setSummary(refresh_period.getEntry());

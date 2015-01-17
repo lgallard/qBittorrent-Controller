@@ -11,20 +11,28 @@
         <item>3</item>
     </string-array>
     <string-array name="autorefresh">
-        <item>30 secondes</item>
-        <item>1 minute</item>
-        <item>2 minutes</item>
-        <item>5 minutes</item>
-        <item>10 minutes</item>
-        <item>15 minutes</item>
+        <item name="1">5 secondes</item>
+        <item name="2">10 secondes</item>
+        <item name="3">15 secondes</item>
+        <item name="4">20 secondes</item>
+        <item name="5">30 secondes</item>
+        <item name="6">1 minute</item>
+        <item name="7">2 minutes</item>
+        <item name="8">5 minutes</item>
+        <item name="9">10 minutes</item>
+        <item name="10">15 minutes</item>
     </string-array>
     <string-array name="autorefreshValues">
-        <item>30000</item>
-        <item>60000</item>
-        <item>120000</item>
-        <item>300000</item>
-        <item>600000</item>
-        <item>900000</item>
+        <item name="1">5000</item>
+        <item name="2">10000</item>
+        <item name="3">15000</item>
+        <item name="4">20000</item>
+        <item name="5">30000</item>
+        <item name="6">60000</item>
+        <item name="7">120000</item>
+        <item name="8">300000</item>
+        <item name="9">600000</item>
+        <item name="10">900000</item>
     </string-array>
     <string-array name="sortBy">
         <item name="1">Nom</item>

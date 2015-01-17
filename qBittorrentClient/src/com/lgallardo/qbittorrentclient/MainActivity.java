@@ -534,6 +534,12 @@ public class MainActivity extends FragmentActivity {
 
     private void refresh(String state) {
 
+        // If Contextual Action Bar is open, don't refresh
+        if (firstFragment != null && firstFragment.mActionMode != null) {
+            return;
+        }
+
+
         if (oldVersion == true) {
             params[0] = "json/events";
         } else {
@@ -1142,7 +1148,7 @@ public class MainActivity extends FragmentActivity {
 
         Toast.makeText(getApplicationContext(), R.string.torrentsSelectedDeletedDrive, Toast.LENGTH_SHORT).show();
 
-        // Delay of 3 second
+        // Delay of 1 second
         refreshAfterCommand(1);
     }
 
