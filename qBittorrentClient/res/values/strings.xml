@@ -40,7 +40,7 @@
     <string name="torrentPaused">Torrent paused!</string>
     <string name="AllTorrentsPaused">All torrents were paused!</string>
     <string name="AllTorrentsResumed">All torrents were resumed!</string>
-    <string name="torrentDeleled">Torrent deleted!</string>
+    <string name="torrentDeleted">Torrent deleted!</string>
     <string name="torrentDeletedDrive">Torrent and data deleted!</string>
     <string name="increasePrioTorrent">Priority increased!</string>
     <string name="decreasePrioTorrent">Priority decreased!</string>
@@ -181,4 +181,12 @@
     <string name="dialog_download_rate_limit">Download rate limit (KiB/s)</string>
     <string name="dialog_upload_rate_limit">Upload rate limit (KiB/s)</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="dm_deleteSelectedTorrents">Pressing OK will delete the torrents</string>
+    <string name="dt_deleteSelectedTorrents">Delete torrents</string>
+    <string name="dm_deleteDriveSelectedTorrents">Pressing OK will delete torrents and data from the hard drive</string>
+    <string name="dt_deleteDriveSelectedTorrents">Delete torrents and data</string>
+    <string name="torrentsSelectedStarted">Torrents started!</string>
+    <string name="torrentsSelectedPaused">Torrents paused!</string>
+    <string name="torrentsSelectedDeleted">Torrents deleted!</string>
+    <string name="torrentsSelectedDeletedDrive">Torrents and data deleted!</string>
 </resources>

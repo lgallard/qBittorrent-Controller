@@ -31,7 +31,7 @@
     <string name="torrentPaused">Torrent fermato!</string>
     <string name="AllTorrentsPaused">Tutti i torrenti sono stati messi in pausa!</string>
     <string name="AllTorrentsResumed">Tutti i torrents sono ripresi!</string>
-    <string name="torrentDeleled">Torrent cancellato!</string>
+    <string name="torrentDeleted">Torrent cancellato!</string>
     <string name="torrentDeletedDrive">Torrent e dati cancellati!</string>
     <string name="increasePrioTorrent">Priorità aumentato!</string>
     <string name="decreasePrioTorrent">Priorità è diminuito!</string>
@@ -172,5 +172,12 @@
     <string name="torrent_details_properties">Proprietà</string>
     <string name="title_activity_settings">Impostazioni</string>
     <string name="torrent_details_content">File</string>
-
+    <string name="torrentsSelectedDeleted">Torrents cancellati!</string>
+    <string name="torrentsSelectedDeletedDrive">Torrenti e dati cancellati!</string>
+    <string name="torrentsSelectedPaused">Torrents sono stati fermati!</string>
+    <string name="torrentsSelectedStarted">Torrents sono stati iniziato!</string>
+    <string name="dm_deleteDriveSelectedTorrents">Premendo OK cancellerà torrents e dati dal disco rigido</string>
+    <string name="dm_deleteSelectedTorrents">Premendo OK cancellerà torrents</string>
+    <string name="dt_deleteDriveSelectedTorrents">Eliminare torrents</string>
+    <string name="dt_deleteSelectedTorrents">Eliminare torrents</string>
 </resources>

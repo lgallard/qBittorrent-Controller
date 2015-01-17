@@ -30,7 +30,7 @@
     <string name="torrentPaused">Den torrent har pausats!</string>
     <string name="AllTorrentsPaused">Alla torrent stoppas!</string>
     <string name="AllTorrentsResumed">Alla torrent återupptogs!</string>
-    <string name="torrentDeleled">Torrent raderas!</string>
+    <string name="torrentDeleted">Torrent raderas!</string>
     <string name="torrentDeletedDrive">Torrent och uppgifterna raderas!</string>
     <string name="increasePrioTorrent">Prioritet ökat!</string>
     <string name="decreasePrioTorrent">Prioritet minskat!</string>
@@ -168,4 +168,12 @@
     <string name="torrent_details_properties">Egenskaper</string>
     <string name="torrent_details_trackers">Trackers</string>
     <string name="title_activity_settings">Inställningar</string>
+    <string name="torrentsSelectedDeleted">Torrents raderas!</string>
+    <string name="torrentsSelectedDeletedDrive">Torrents och data raderas!</string>
+    <string name="torrentsSelectedPaused">Torrents har pausats!</string>
+    <string name="torrentsSelectedStarted">Torrents har börjat!</string>
+    <string name="dm_deleteDriveSelectedTorrents">Genom att trycka på OK raderar torrents och data från hårddisken</string>
+    <string name="dm_deleteSelectedTorrents">Genom att trycka på OK raderas torrents</string>
+    <string name="dt_deleteDriveSelectedTorrents">Radera torrents och data</string>
+    <string name="dt_deleteSelectedTorrents">Radera torrents</string>
 </resources>

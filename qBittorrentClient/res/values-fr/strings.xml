@@ -27,11 +27,10 @@
     <string name="dt_deleteDriveTorrent">Supprimer le torrent et ses données</string>
     <string name="torrentAdded">Torrent envoyé!</string>
     <string name="torrentFileAdded">Fichier du torrent envoyé!</string>
-    <string name="torrentStarted">Torrent démarré!</string>
     <string name="torrentPaused">Torrent suspendu!</string>
     <string name="AllTorrentsPaused">Tous les torrents sont suspendus!</string>
     <string name="AllTorrentsResumed">Tous les torrents sont repris!</string>
-    <string name="torrentDeleled">Torrent supprimé!</string>
+    <string name="torrentDeleted">Torrent supprimé!</string>
     <string name="torrentDeletedDrive">Torrent et ses données supprimés!</string>
     <string name="increasePrioTorrent">Priority augmentée!</string>
     <string name="decreasePrioTorrent">Priority réduite!</string>
@@ -172,5 +171,14 @@
     <string name="torrent_details_properties">Propriétés</string>
     <string name="title_activity_settings">Paramètres</string>
     <string name="torrent_details_content">Fichiers</string>
+    <string name="torrentsSelectedDeleted">Torrents supprimés!</string>
+    <string name="torrentsSelectedDeletedDrive">Torrents et ses données supprimés!</string>
+    <string name="torrentStarted">Torrent démarré!</string>
+    <string name="torrentsSelectedStarted">Torrents ont commencé!</string>
+    <string name="torrentsSelectedPaused">Torrents suspendus!</string>
+    <string name="dm_deleteDriveSelectedTorrents">Appuyer sur OK supprimer torrents et des données depuis le disque dur</string>
+    <string name="dm_deleteSelectedTorrents">Appuyer sur OK supprimer torrents </string>
+    <string name="dt_deleteSelectedTorrents">Supprimer torrents</string>
+    <string name="dt_deleteDriveSelectedTorrents">Supprimer torrents et des données</string>
 
 </resources>

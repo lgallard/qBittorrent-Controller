@@ -10,16 +10,7 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.security.KeyStore;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -52,7 +43,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class JSONParser {
 	static InputStream is = null;
@@ -299,18 +299,18 @@ public class JSONParser {
 
 		String url = "";
 
-		if ("start".equals(command)) {
-			url = "command/resume";
+        if ("start".equals(command) || "startSelected".equals(command)) {
+            url = "command/resume";
 		}
-		if ("pause".equals(command)) {
-			url = "command/pause";
+        if ("pause".equals(command) || "pauseSelected".equals(command)) {
+            url = "command/pause";
 		}
-		if ("delete".equals(command)) {
-			url = "command/delete";
+        if ("delete".equals(command) || "deleteSelected".equals(command)) {
+            url = "command/delete";
 			key = "hashes";
 		}
-		if ("deleteDrive".equals(command)) {
-			url = "command/deletePerm";
+        if ("deleteDrive".equals(command) || "deleteDriveSelected".equals(command)) {
+            url = "command/deletePerm";
 			key = "hashes";
 		}
 		if ("addTorrent".equals(command)) {

@@ -31,13 +31,12 @@
     <string name="torrentPaused">Torrent pausado!</string>
     <string name="AllTorrentsPaused">Pausar todos os torrents!</string>
     <string name="AllTorrentsResumed">Continuar todos os torrents!</string>
-    <string name="torrentDeleled">Torrent deletado!</string>
+    <string name="torrentDeleted">Torrent deletado!</string>
     <string name="torrentDeletedDrive">Torrent e dados deletados!</string>
     <string name="increasePrioTorrent">Prioridade aumentada!</string>
     <string name="decreasePrioTorrent">Prioridade diminuida!</string>
     <string name="drawer_open">Abrir gaveta de navegação</string>
     <string name="drawer_close">Fechar gaveta de navegação</string>
-
     <string name="getQBittorrentPrefefrences">Obtendo opções...</string>
     <string name="setQBittorrentPrefefrences">Opções salvas</string>
     <string name="setUploadRateLimit">Limite da taxa de carga foi definida</string>
@@ -173,5 +172,13 @@
     <string name="torrent_details_properties">Propriedades</string>
     <string name="title_activity_settings">Definições</string>
     <string name="torrent_details_content">Arquivos</string>
+    <string name="torrentsSelectedDeleted">Torrents apagado!</string>
+    <string name="torrentsSelectedDeletedDrive">Torrents e dados apagados!</string>
+    <string name="torrentsSelectedStarted"> Torrents foram iniciados!</string>
+    <string name="torrentsSelectedPaused">Torrents ter sido pausado!</string>
+    <string name="dm_deleteDriveSelectedTorrents">Pressionando OK irá apagar torrents e dados do disco rígido</string>
+    <string name="dm_deleteSelectedTorrents">Pressionando OK irá apagar torrents</string>
+    <string name="dt_deleteDriveSelectedTorrents">Deletar torrents e dados</string>
+    <string name="dt_deleteSelectedTorrents">Deletar torrents</string>
 
 </resources>

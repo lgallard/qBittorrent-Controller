@@ -35,11 +35,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -191,7 +189,7 @@ public class MainActivity extends FragmentActivity {
     protected static ProgressBar progressBar;
 
     // myAdapter myadapter
-    myAdapter myadapter;
+    torrentListAdapter myadapter;
 
     // Http status code
     public int httpStatusCode = 0;
@@ -407,6 +405,11 @@ public class MainActivity extends FragmentActivity {
                     // Se titile
                     setTitle(navigationDrawerItemTitles[drawerList.getCheckedItemPosition()]);
 
+                    // Close Contextual Action Bar
+                    if (firstFragment != null && firstFragment.mActionMode != null) {
+                        firstFragment.mActionMode.finish();
+                    }
+
                     // Refresh current list
                     refreshCurrent();
                 }
@@ -567,11 +570,11 @@ public class MainActivity extends FragmentActivity {
 
                 qtt.execute(params);
 
-                // If activity is visible, Connecting message
-                if (activityIsVisible) {
-                    // Connecting message
-                    Toast.makeText(this, R.string.connecting, Toast.LENGTH_SHORT).show();
+                // Close Contextual Action Bar
+                if (firstFragment != null && firstFragment.mActionMode != null) {
+                    firstFragment.mActionMode.finish();
                 }
+
             }
         } else {
 
@@ -1067,7 +1070,22 @@ public class MainActivity extends FragmentActivity {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"start", hash});
+    }
 
+    public void startSelectedTorrents(String hashes) {
+        // Execute the task in background
+
+        String[] hashesArray = hashes.split("\\|");
+
+        for (int i = 0; hashesArray.length > i; i++) {
+            qBittorrentCommand qtc = new qBittorrentCommand();
+            qtc.execute(new String[]{"startSelected", hashesArray[i]});
+        }
+
+        Toast.makeText(getApplicationContext(), R.string.torrentsSelectedStarted, Toast.LENGTH_SHORT).show();
+
+        // Delay of 3 seconds
+        refreshAfterCommand(3);
     }
 
     public void pauseTorrent(String hash) {
@@ -1076,16 +1094,56 @@ public class MainActivity extends FragmentActivity {
         qtc.execute(new String[]{"pause", hash});
     }
 
+    public void pauseSelectedTorrents(String hashes) {
+        // Execute the task in background
+
+        String[] hashesArray = hashes.split("\\|");
+
+        for (int i = 0; hashesArray.length > i; i++) {
+            qBittorrentCommand qtc = new qBittorrentCommand();
+            qtc.execute(new String[]{"pauseSelected", hashesArray[i]});
+        }
+
+        Toast.makeText(getApplicationContext(), R.string.torrentsSelectedPaused, Toast.LENGTH_SHORT).show();
+
+        // Delay of 1 second
+        refreshAfterCommand(1);
+
+    }
+
     public void deleteTorrent(String hash) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"delete", hash});
     }
 
+    public void deleteSelectedTorrents(String hashes) {
+        // Execute the task in background
+        qBittorrentCommand qtc = new qBittorrentCommand();
+        qtc.execute(new String[]{"deleteSelected", hashes});
+
+        Toast.makeText(getApplicationContext(), R.string.torrentsSelectedDeleted, Toast.LENGTH_SHORT).show();
+
+        // Delay of 1 second
+        refreshAfterCommand(1);
+    }
+
+
     public void deleteDriveTorrent(String hash) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"deleteDrive", hash});
+    }
+
+    public void deleteDriveSelectedTorrents(String hashes) {
+        // Execute the task in background
+        qBittorrentCommand qtc = new qBittorrentCommand();
+        qtc.execute(new String[]{"deleteDriveSelected", hashes});
+
+        Toast.makeText(getApplicationContext(), R.string.torrentsSelectedDeletedDrive, Toast.LENGTH_SHORT).show();
+
+        // Delay of 3 second
+        refreshAfterCommand(1);
     }
 
     public void addTorrent(String url) {
@@ -1249,6 +1307,38 @@ public class MainActivity extends FragmentActivity {
                 genericOkDialog(R.string.error, R.string.global_value_error);
             }
 
+        }
+
+    }
+
+    public void refreshAfterCommand(int delay) {
+
+        switch (drawerList.getCheckedItemPosition()) {
+            case 0:
+                refreshWithDelay("all", delay);
+                break;
+            case 1:
+                refreshWithDelay("downloading", delay);
+                break;
+            case 2:
+                refreshWithDelay("completed", delay);
+                break;
+            case 3:
+                refreshWithDelay("paused", delay);
+                break;
+            case 4:
+                refreshWithDelay("active", delay);
+                break;
+            case 5:
+                refreshWithDelay("inactive", delay);
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            default:
+                refreshWithDelay("all", delay);
+                break;
         }
 
     }
@@ -1453,7 +1543,7 @@ public class MainActivity extends FragmentActivity {
             }
 
             if ("delete".equals(result)) {
-                messageId = R.string.torrentDeleled;
+                messageId = R.string.torrentDeleted;
             }
 
             if ("deleteDrive".equals(result)) {
@@ -1505,36 +1595,12 @@ public class MainActivity extends FragmentActivity {
                 }
             }
 
-            Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
+            if (!("startSelected".equals(result)) && !("pauseSelected".equals(result)) && !("deleteSelected".equals(result)) && !("deleteDriveSelected".equals(result))) {
+                Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
 
-            switch (drawerList.getCheckedItemPosition()) {
-                case 0:
-                    refreshWithDelay("all", delay);
-                    break;
-                case 1:
-                    refreshWithDelay("downloading", delay);
-                    break;
-                case 2:
-                    refreshWithDelay("completed", delay);
-                    break;
-                case 3:
-                    refreshWithDelay("paused", delay);
-                    break;
-                case 4:
-                    refreshWithDelay("active", delay);
-                    break;
-                case 5:
-                    refreshWithDelay("inactive", delay);
-                    break;
-                case 6:
-                    break;
-                case 7:
-                    break;
-                default:
-                    refreshWithDelay("all", delay);
-                    break;
+                // Refresh
+                refreshAfterCommand(delay);
             }
-
         }
     }
 
@@ -1743,9 +1809,19 @@ public class MainActivity extends FragmentActivity {
                         MainActivity.lines[i] = torrent;
                     }
 
-                    myadapter = new myAdapter(MainActivity.this, names, lines);
+                    firstFragment = new ItemstFragment();
+
+//                    if (myadapter == null) {
+                    myadapter = new torrentListAdapter(MainActivity.this, names, lines);
                     firstFragment.setListAdapter(myadapter);
 
+//                    }else{
+
+                    myadapter.setNames(names);
+                    myadapter.setData(lines);
+                    myadapter.notifyDataSetChanged();
+
+//                    }
                     // Create the about fragment
                     aboutFragment = new AboutFragment();
 
@@ -1952,69 +2028,6 @@ public class MainActivity extends FragmentActivity {
                 }
 
             }
-        }
-    }
-
-    class myAdapter extends ArrayAdapter<String> {
-        private String[] torrentsNames;
-        private Torrent[] torrentsData;
-        private Context context;
-
-        public myAdapter(Context context, String[] torrentsNames, Torrent[] torrentsData) {
-            // TODO Auto-generated constructor stub
-            super(context, R.layout.row, R.id.file, torrentsNames);
-
-            this.context = context;
-            this.torrentsNames = torrentsNames;
-            this.torrentsData = torrentsData;
-
-        }
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub}
-
-            return (torrentsNames != null) ? torrentsNames.length : 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            View row = super.getView(position, convertView, parent);
-
-            String state = torrentsData[position].getState();
-
-            TextView info = (TextView) row.findViewById(R.id.info);
-
-            info.setText("" + torrentsData[position].getInfo());
-
-            ImageView icon = (ImageView) row.findViewById(R.id.icon);
-
-            if ("pausedUP".equals(state) || "pausedDL".equals(state)) {
-                icon.setImageResource(R.drawable.paused);
-            }
-
-            if ("stalledUP".equals(state)) {
-                icon.setImageResource(R.drawable.stalledup);
-            }
-
-            if ("stalledDL".equals(state)) {
-                icon.setImageResource(R.drawable.stalleddl);
-            }
-
-            if ("downloading".equals(state)) {
-                icon.setImageResource(R.drawable.downloading);
-            }
-
-            if ("uploading".equals(state)) {
-                icon.setImageResource(R.drawable.uploading);
-            }
-
-            if ("queuedDL".equals(state) || "queuedUP".equals(state)) {
-                icon.setImageResource(R.drawable.queued);
-            }
-
-            return (row);
         }
     }
 
