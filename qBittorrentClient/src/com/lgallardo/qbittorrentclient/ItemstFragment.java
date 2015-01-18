@@ -243,6 +243,48 @@ public class ItemstFragment extends ListFragment {
                             }
 
                             return true;
+
+
+                        case R.id.action_increase_prio:
+                            m.increasePrioTorrent(hashes);
+
+                            // Clear selection
+                            nr = 0;
+                            mAdapter.clearSelection();
+                            mode.finish();
+
+                            return true;
+
+                        case R.id.action_decrease_prio:
+                            m.decreasePrioTorrent(hashes);
+
+                            // Clear selection
+                            nr = 0;
+                            mAdapter.clearSelection();
+                            mode.finish();
+
+                            return true;
+
+                        case R.id.action_max_prio:
+                            m.maxPrioTorrent(hashes);
+
+                            // Clear selection
+                            nr = 0;
+                            mAdapter.clearSelection();
+                            mode.finish();
+
+                            return true;
+
+                        case R.id.action_min_prio:
+                            m.minPrioTorrent(hashes);
+
+                            // Clear selection
+                            nr = 0;
+                            mAdapter.clearSelection();
+                            mode.finish();
+
+                            return true;
+
                         default:
                             return true;
 
@@ -331,8 +373,17 @@ public class ItemstFragment extends ListFragment {
 				menu.findItem(R.id.action_decrease_prio).setVisible(false);
 
 			}
-			if (menu.findItem(R.id.action_delete) != null) {
-				menu.findItem(R.id.action_delete).setVisible(false);
+
+            if (menu.findItem(R.id.action_max_prio) != null) {
+                menu.findItem(R.id.action_max_prio).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.action_min_prio) != null) {
+                menu.findItem(R.id.action_min_prio).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.action_delete) != null) {
+                menu.findItem(R.id.action_delete).setVisible(false);
 			}
 			if (menu.findItem(R.id.action_delete_drive) != null) {
 				menu.findItem(R.id.action_delete_drive).setVisible(false);

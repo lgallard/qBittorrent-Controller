@@ -8,72 +8,82 @@
   Contributors:
       Luis M. Gallardo D.
 -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/action_refresh"
         android:icon="@drawable/ic_action_refresh"
         android:showAsAction="always"
-        android:title="@string/action_refresh"/>
+        android:title="@string/action_refresh" />
     <item
         android:id="@+id/action_search"
         android:actionViewClass="android.widget.SearchView"
         android:icon="@drawable/ic_action_search"
         android:showAsAction="collapseActionView|ifRoom"
-        android:title="@string/search_title"/>
+        android:title="@string/search_title" />
     <item
         android:id="@+id/action_resume_all"
         android:icon="@drawable/ic_action_resume"
         android:showAsAction="collapseActionView|ifRoom"
-        android:title="@string/action_resume_all"/>
+        android:title="@string/action_resume_all" />
     <item
         android:id="@+id/action_pause_all"
         android:icon="@drawable/ic_action_pause"
         android:showAsAction="collapseActionView|ifRoom"
-        android:title="@string/action_pause_all"/>
-        <item
+        android:title="@string/action_pause_all" />
+    <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_add"
         android:showAsAction="collapseActionView|ifRoom"
-        android:title="@string/action_add"/>
-    
+        android:title="@string/action_add" />
+
     <item
         android:id="@+id/action_resume"
         android:icon="@drawable/ic_action_resume"
         android:showAsAction="always"
-        android:title="@string/action_resume"/>
+        android:title="@string/action_resume" />
     <item
         android:id="@+id/action_pause"
         android:icon="@drawable/ic_action_pause"
         android:showAsAction="always"
-        android:title="@string/action_pause"/>
+        android:title="@string/action_pause" />
     <item
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_action_delete"
         android:showAsAction="ifRoom"
-        android:title="@string/action_delete"/>
+        android:title="@string/action_delete" />
     <item
         android:id="@+id/action_delete_drive"
         android:icon="@drawable/ic_action_delete_drive"
         android:showAsAction="ifRoom"
-        android:title="@string/action_delete_drive"/>
+        android:title="@string/action_delete_drive" />
     <item
         android:id="@+id/action_increase_prio"
         android:icon="@drawable/ic_action_increase_prio"
         android:showAsAction="ifRoom"
-        android:title="@string/action_increase_priority"/>
+        android:title="@string/action_increase_priority" />
     <item
         android:id="@+id/action_decrease_prio"
         android:icon="@drawable/ic_action_decrease_prio"
         android:showAsAction="ifRoom"
-        android:title="@string/action_decrease_priority"/>
+        android:title="@string/action_decrease_priority" />
+    <item
+        android:id="@+id/action_max_prio"
+        android:icon="@drawable/ic_action_max_prio"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_maximum_priority" />
+    <item
+        android:id="@+id/action_min_prio"
+        android:icon="@drawable/ic_action_min_prio"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_minimum_priority" />
     <item
         android:id="@+id/action_download_rate_limit"
         android:showAsAction="ifRoom"
-        android:title="@string/action_download_rate_limit"/>
+        android:title="@string/action_download_rate_limit" />
     <item
         android:id="@+id/action_upload_rate_limit"
         android:showAsAction="ifRoom"
-        android:title="@string/action_upload_rate_limit"/>
+        android:title="@string/action_upload_rate_limit" />
 
 </menu>

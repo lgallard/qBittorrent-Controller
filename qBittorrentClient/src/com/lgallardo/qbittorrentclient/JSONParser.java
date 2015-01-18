@@ -302,22 +302,27 @@ public class JSONParser {
         if ("start".equals(command) || "startSelected".equals(command)) {
             url = "command/resume";
 		}
+
         if ("pause".equals(command) || "pauseSelected".equals(command)) {
             url = "command/pause";
 		}
+
         if ("delete".equals(command) || "deleteSelected".equals(command)) {
             url = "command/delete";
 			key = "hashes";
 		}
+
         if ("deleteDrive".equals(command) || "deleteDriveSelected".equals(command)) {
             url = "command/deletePerm";
 			key = "hashes";
 		}
-		if ("addTorrent".equals(command)) {
+
+        if ("addTorrent".equals(command)) {
 			url = "command/download";
 			key = "urls";
 		}
-		if ("addTorrentFile".equals(command)) {
+
+        if ("addTorrentFile".equals(command)) {
 			url = "command/upload";
 			key = "urls";
 
@@ -326,21 +331,37 @@ public class JSONParser {
 			urlContentType = "multipart/form-data; boundary=" + boundary;
 
 		}
-		if ("pauseAll".equals(command)) {
+
+        if ("pauseAll".equals(command)) {
 			url = "command/pauseall";
 		}
-		if ("resumeAll".equals(command)) {
+
+        if ("resumeAll".equals(command)) {
 			url = "command/resumeall";
 		}
-		if ("increasePrio".equals(command)) {
+
+        if ("increasePrio".equals(command)) {
 			url = "command/increasePrio";
 			key = "hashes";
 		}
-		if ("decreasePrio".equals(command)) {
+
+        if ("decreasePrio".equals(command)) {
 			url = "command/decreasePrio";
 			key = "hashes";
 			;
 		}
+
+        if ("maxPrio".equals(command)) {
+            url = "command/topPrio";
+            key = "hashes";
+        }
+
+        if ("minPrio".equals(command)) {
+            url = "command/bottomPrio";
+            key = "hashes";
+            ;
+        }
+
 		if ("setQBittorrentPrefefrences".equals(command)) {
 			url = "command/setPreferences";
 			key = "json";

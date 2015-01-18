@@ -23,6 +23,8 @@
     <string name="action_delete_drive">Delete data</string>
     <string name="action_increase_priority">Increase priority</string>
     <string name="action_decrease_priority">Decrease priority</string>
+    <string name="action_maximum_priority">Move to top</string>
+    <string name="action_minimum_priority">Move to bottom</string>
     <string name="action_download_rate_limit">Download rate limit</string>
     <string name="action_upload_rate_limit">Upload rate limit</string>
     <string name="connection_error">Network connection failed</string>
@@ -44,6 +46,8 @@
     <string name="torrentDeletedDrive">Torrent and data deleted!</string>
     <string name="increasePrioTorrent">Priority increased!</string>
     <string name="decreasePrioTorrent">Priority decreased!</string>
+    <string name="maxPrioTorrent">Torrent moved to top!</string>
+    <string name="minPrioTorrent">Priority moved to bottom!</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="getQBittorrentPrefefrences">Getting options...</string>

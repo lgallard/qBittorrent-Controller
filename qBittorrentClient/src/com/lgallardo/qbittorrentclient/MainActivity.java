@@ -889,6 +889,33 @@ public class MainActivity extends FragmentActivity {
                     }
                 }
                 return true;
+            case R.id.action_max_prio:
+
+                tf = this.getTorrentDetailsFragment();
+
+                if (tf != null) {
+                    position = tf.position;
+                    hash = MainActivity.lines[position].getHash();
+                    maxPrioTorrent(hash);
+                    if (findViewById(R.id.one_frame) != null) {
+                        getFragmentManager().popBackStack();
+                    }
+                }
+                return true;
+            case R.id.action_min_prio:
+
+                tf = this.getTorrentDetailsFragment();
+
+                if (tf != null) {
+                    position = tf.position;
+                    hash = MainActivity.lines[position].getHash();
+                    minPrioTorrent(hash);
+                    if (findViewById(R.id.one_frame) != null) {
+                        getFragmentManager().popBackStack();
+                    }
+                }
+                return true;
+
 
             case R.id.action_resume_all:
                 resumeAllTorrents();
@@ -1189,6 +1216,21 @@ public class MainActivity extends FragmentActivity {
         qtc.execute(new String[]{"decreasePrio", hash});
 
     }
+
+    public void maxPrioTorrent(String hash) {
+        // Execute the task in background
+        qBittorrentCommand qtc = new qBittorrentCommand();
+        qtc.execute(new String[]{"maxPrio", hash});
+
+    }
+
+    public void minPrioTorrent(String hash) {
+        // Execute the task in background
+        qBittorrentCommand qtc = new qBittorrentCommand();
+        qtc.execute(new String[]{"minPrio", hash});
+
+    }
+
 
     public void setQBittorrentPrefefrences(String hash) {
         // Execute the task in background
@@ -1582,6 +1624,16 @@ public class MainActivity extends FragmentActivity {
             if ("decreasePrio".equals(result)) {
                 messageId = R.string.decreasePrioTorrent;
             }
+
+            if ("maxPrio".equals(result)) {
+                messageId = R.string.maxPrioTorrent;
+            }
+
+            if ("minPrio".equals(result)) {
+                messageId = R.string.minPrioTorrent;
+            }
+
+
 
             if ("setQBittorrentPrefefrences".equals(result)) {
                 messageId = R.string.setQBittorrentPrefefrences;
