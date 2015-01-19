@@ -176,4 +176,7 @@
     <string name="dm_deleteSelectedTorrents">Genom att trycka på OK raderas torrents</string>
     <string name="dt_deleteDriveSelectedTorrents">Radera torrents och data</string>
     <string name="dt_deleteSelectedTorrents">Radera torrents</string>
+    <string name="priorityUpdated">Prioritet uppdaterad!</string>
+    <string name="action_maximum_priority">Flytta till toppen</string>
+    <string name="action_minimum_priority">Flytta till botten</string>
 </resources>

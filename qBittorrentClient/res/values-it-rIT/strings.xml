@@ -180,4 +180,7 @@
     <string name="dm_deleteSelectedTorrents">Premendo OK cancellerà torrents</string>
     <string name="dt_deleteDriveSelectedTorrents">Eliminare torrents</string>
     <string name="dt_deleteSelectedTorrents">Eliminare torrents</string>
+    <string name="priorityUpdated">Priorità aggiornato!</string>
+    <string name="action_maximum_priority">Muovi in cima</string>
+    <string name="action_minimum_priority">Muovi in fondo</string>
 </resources>

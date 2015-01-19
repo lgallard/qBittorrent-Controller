@@ -35,6 +35,7 @@
     <string name="torrentDeletedDrive">Torrent y datos borrados!</string>
     <string name="increasePrioTorrent">Prioridad incrementada!</string>
     <string name="decreasePrioTorrent">Prioridad disminuida!</string>
+    <string name="priorityUpdated">Prioridad actualizada!</string>
     <string name="drawer_open">Abrir menú de navegación</string>
     <string name="drawer_close">Cierre el menú de navegación</string>
     <string name="getQBittorrentPrefefrences">Obteniendo opciones ...</string>
@@ -180,4 +181,6 @@
     <string name="dm_deleteSelectedTorrents">Presionando OK eliminará los torrents</string>
     <string name="dt_deleteDriveSelectedTorrents">Eliminar los torrents y sus datos</string>
     <string name="dt_deleteSelectedTorrents">Eliminar torrents</string>
+    <string name="action_minimum_priority">Mover al final</string>
+    <string name="action_maximum_priority">Mover al inicio</string>
 </resources>
