@@ -20,68 +20,81 @@ import android.view.ViewGroup;
 
 public class AboutFragment extends Fragment {
 
-	public AboutFragment() {
-	}
+    public AboutFragment() {
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		// Tell the host activity that your fragment has menu options that it
-		// wants to add/replace/delete using the onCreateOptionsMenu method.
-		setHasOptionsMenu(true);
+        // Tell the host activity that your fragment has menu options that it
+        // wants to add/replace/delete using the onCreateOptionsMenu method.
+        setHasOptionsMenu(true);
 
-		View rootView = inflater.inflate(R.layout.about, container, false);
+        View rootView = inflater.inflate(R.layout.about, container, false);
 
-		return rootView;
-	}
+        return rootView;
+    }
 
-	// @Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// inflater.inflate(R.menu.main, menu);
-		// super.onCreateOptionsMenu(menu, inflater);
+    // @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // inflater.inflate(R.menu.main, menu);
+        // super.onCreateOptionsMenu(menu, inflater);
 
-		if (menu != null) {
-			menu.findItem(R.id.action_refresh).setVisible(true);
-			menu.findItem(R.id.action_search).setVisible(true);
-			menu.findItem(R.id.action_add).setVisible(true);
+        if (menu != null) {
+            menu.findItem(R.id.action_refresh).setVisible(true);
+            menu.findItem(R.id.action_search).setVisible(true);
+            menu.findItem(R.id.action_add).setVisible(true);
 
-			if (menu.findItem(R.id.action_resume_all) != null) {
-				menu.findItem(R.id.action_resume_all).setVisible(false);
-			}
+            if (menu.findItem(R.id.action_resume_all) != null) {
+                menu.findItem(R.id.action_resume_all).setVisible(false);
+            }
 
-			if (menu.findItem(R.id.action_pause_all) != null) {
-				menu.findItem(R.id.action_pause_all).setVisible(false);
-			}
+            if (menu.findItem(R.id.action_pause_all) != null) {
+                menu.findItem(R.id.action_pause_all).setVisible(false);
+            }
 
-			if (menu.findItem(R.id.action_resume) != null) {
-				menu.findItem(R.id.action_resume).setVisible(false);
-			}
-			if (menu.findItem(R.id.action_pause) != null) {
-				menu.findItem(R.id.action_pause).setVisible(false);
-			}
-			if (menu.findItem(R.id.action_increase_prio) != null) {
-				menu.findItem(R.id.action_increase_prio).setVisible(false);
-			}
-			if (menu.findItem(R.id.action_decrease_prio) != null) {
-				menu.findItem(R.id.action_decrease_prio).setVisible(false);
+            if (menu.findItem(R.id.action_resume) != null) {
+                menu.findItem(R.id.action_resume).setVisible(false);
+            }
 
-			}
-			if (menu.findItem(R.id.action_delete) != null) {
-				menu.findItem(R.id.action_delete).setVisible(false);
-			}
-			if (menu.findItem(R.id.action_delete_drive) != null) {
-				menu.findItem(R.id.action_delete_drive).setVisible(false);
-			}
+            if (menu.findItem(R.id.action_pause) != null) {
+                menu.findItem(R.id.action_pause).setVisible(false);
+            }
 
-			if (menu.findItem(R.id.action_upload_rate_limit) != null) {
-				menu.findItem(R.id.action_upload_rate_limit).setVisible(false);
-			}
+            if (menu.findItem(R.id.action_increase_prio) != null) {
+                menu.findItem(R.id.action_increase_prio).setVisible(false);
+            }
 
-			if (menu.findItem(R.id.action_download_rate_limit) != null) {
-				menu.findItem(R.id.action_download_rate_limit).setVisible(false);
-			}
+            if (menu.findItem(R.id.action_decrease_prio) != null) {
+                menu.findItem(R.id.action_decrease_prio).setVisible(false);
 
-		}
-	}
+            }
+
+            if (menu.findItem(R.id.action_max_prio) != null) {
+                menu.findItem(R.id.action_max_prio).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.action_min_prio) != null) {
+                menu.findItem(R.id.action_min_prio).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.action_delete) != null) {
+                menu.findItem(R.id.action_delete).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.action_delete_drive) != null) {
+                menu.findItem(R.id.action_delete_drive).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.action_upload_rate_limit) != null) {
+                menu.findItem(R.id.action_upload_rate_limit).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.action_download_rate_limit) != null) {
+                menu.findItem(R.id.action_download_rate_limit).setVisible(false);
+            }
+
+        }
+    }
 
 }

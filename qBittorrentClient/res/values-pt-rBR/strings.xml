@@ -183,5 +183,7 @@
     <string name="priorityUpdated">Prioridade atualizado!</string>
     <string name="action_maximum_priority">Mover para o topo</string>
     <string name="action_minimum_priority">Mover para o fim</string>
-
+    <string name="settings_qbittorrent_darkui_summary">Reinicie o aplicativo para aplicar o tema</string>
+    <string name="settings_qbittorrent_darkui_category">Tema escuro</string>
+    <string name="settings_qbittorrent_darkui_dialog_title">Use tema escuro</string>
 </resources>

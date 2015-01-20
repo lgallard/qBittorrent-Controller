@@ -11,16 +11,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView1"
@@ -28,7 +28,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/qBittorrent_logo"
                 android:layout_centerHorizontal="true"
-                android:background="@android:color/white"
                 android:text="@string/app_name"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 

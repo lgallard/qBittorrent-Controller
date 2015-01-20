@@ -12,7 +12,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
     android:orientation="horizontal"
     tools:context=".TorrentActionsActivity">
 
@@ -44,7 +43,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/container_dropshadow"
+                android:background="?dropShadowBackground"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -310,7 +309,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/container_dropshadow"
+                    android:background="?dropShadowBackground"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -357,7 +356,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/container_dropshadow"
+                    android:background="?dropShadowBackground"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -399,7 +398,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/container_dropshadow"
+                    android:background="?dropShadowBackground"
                     android:orientation="vertical">
 
                     <LinearLayout

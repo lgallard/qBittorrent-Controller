@@ -192,4 +192,7 @@
     <string name="torrentsSelectedPaused">Torrents paused!</string>
     <string name="torrentsSelectedDeleted">Torrents deleted!</string>
     <string name="torrentsSelectedDeletedDrive">Torrents and data deleted!</string>
+    <string name="settings_qbittorrent_darkui_category">Dark Theme</string>
+    <string name="settings_qbittorrent_darkui_dialog_title">Use dark theme </string>
+    <string name="settings_qbittorrent_darkui_summary">Restart the app to apply the theme</string>
 </resources>

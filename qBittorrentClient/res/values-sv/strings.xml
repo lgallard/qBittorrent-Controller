@@ -179,4 +179,7 @@
     <string name="priorityUpdated">Prioritet uppdaterad!</string>
     <string name="action_maximum_priority">Flytta till toppen</string>
     <string name="action_minimum_priority">Flytta till botten</string>
+    <string name="settings_qbittorrent_darkui_summary">Starta appen att tillämpa temat</string>
+    <string name="settings_qbittorrent_darkui_category">Mörkt tema</string>
+    <string name="settings_qbittorrent_darkui_dialog_title">Använd mörkt tema</string>
 </resources>

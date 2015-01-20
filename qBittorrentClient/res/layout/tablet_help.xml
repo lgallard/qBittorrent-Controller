@@ -11,7 +11,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView2"
@@ -19,7 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/arrow"
         android:layout_toRightOf="@+id/arrow"
-        android:background="@android:color/white"
         android:padding="10dp"
         android:text="@string/tablet_help" />
 

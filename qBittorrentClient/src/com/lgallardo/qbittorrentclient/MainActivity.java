@@ -130,6 +130,7 @@ public class MainActivity extends FragmentActivity {
     protected static int data_timeout;
     protected static String sortby;
     protected static boolean reverse_order;
+    protected static boolean dark_ui;
 
     // Option
     protected static String global_max_num_connections;
@@ -155,7 +156,7 @@ public class MainActivity extends FragmentActivity {
 
     // Drawer properties
     private String[] navigationDrawerItemTitles;
-    private DrawerLayout drawerLayout;
+    protected DrawerLayout drawerLayout;
     private ListView drawerList;
     private CharSequence drawerTitle;
     private CharSequence title;
@@ -197,6 +198,16 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Get preferences
+        getSettings();
+
+        // Set Theme (It must be fore inflating or setContentView)
+        if (dark_ui) {
+            this.setTheme(R.style.Theme_Dark);
+        } else {
+            this.setTheme(R.style.Theme_Light);
+        }
 
         setContentView(R.layout.activity_main);
 
@@ -268,9 +279,6 @@ public class MainActivity extends FragmentActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-
-        // Get preferences
-        getSettings();
 
         // Get options and save them as shared preferences
         qBittorrentOptions qso = new qBittorrentOptions();
@@ -1507,6 +1515,8 @@ public class MainActivity extends FragmentActivity {
         sortby = sharedPrefs.getString("sortby", "NULL");
         reverse_order = sharedPrefs.getBoolean("reverse_order", false);
 
+        dark_ui = sharedPrefs.getBoolean("dark_ui", false);
+
     }
 
     // Get Options
@@ -1652,7 +1662,6 @@ public class MainActivity extends FragmentActivity {
             if ("minPrio".equals(result)) {
                 messageId = R.string.priorityUpdated;
             }
-
 
 
             if ("setQBittorrentPrefefrences".equals(result)) {

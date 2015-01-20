@@ -44,6 +44,9 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
     private ListPreference sortBy;
     private CheckBoxPreference reverse_order;
 
+    private CheckBoxPreference dark_ui;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +68,8 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         data_timeout = (EditTextPreference) findPreference("data_timeout");
         sortBy = (ListPreference) findPreference("sortby");
         reverse_order = (CheckBoxPreference) findPreference("reverse_order");
+
+        dark_ui = (CheckBoxPreference) findPreference("dark_ui");
 
         // Get values for server
         getQBittorrentServerValues(currentServer.getValue());
@@ -176,6 +181,8 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         sortBy.setSummary(sortBy.getEntry());
         reverse_order.setChecked(sharedPrefs.getBoolean("reverse_order", false));
 
+        dark_ui.setChecked(sharedPrefs.getBoolean("dark_ui", false));
+
     }
 
     public void refreshScreenValues() {
@@ -235,6 +242,10 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         if (data_timeout.getText().toString() != null && data_timeout.getText().toString() != "") {
             editor.putString("data_timeout", data_timeout.getText().toString());
         }
+
+        editor.putBoolean("revserse_order" + currentServerValue, reverse_order.isChecked());
+
+        editor.putBoolean("dark_ui" + currentServerValue, dark_ui.isChecked());
 
         // Commit changes
         editor.commit();

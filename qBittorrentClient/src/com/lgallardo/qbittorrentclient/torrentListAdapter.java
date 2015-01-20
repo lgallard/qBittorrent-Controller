@@ -38,8 +38,6 @@ class torrentListAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Log.i("torrentListAdapter", "getView reached");
-
         View row = super.getView(position, convertView, parent);
 
         String state = torrentsData[position].getState();

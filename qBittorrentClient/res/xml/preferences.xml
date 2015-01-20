@@ -13,7 +13,7 @@
     <PreferenceCategory
         android:key="Account"
         android:title="@string/settings_qbittorrent_account_category">
-    <ListPreference
+        <ListPreference
             android:defaultValue="1"
             android:dialogTitle="@string/settings_qbittorrent_currentServer_dialog_title"
             android:entries="@array/qBittorrentServers"
@@ -71,7 +71,7 @@
     <PreferenceCategory
         android:key="Autorefresh"
         android:title="@string/settings_qbittorrent_autorefresh_category">
-    <CheckBoxPreference
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="auto_refresh"
             android:summary="@string/settings_qbittorrent_autorefresh_summary"
@@ -89,7 +89,7 @@
     <PreferenceCategory
         android:key="timeouts"
         android:title="@string/settings_qbittorrent_timeouts_category">
-    <EditTextPreference
+        <EditTextPreference
             android:defaultValue="5"
             android:dialogTitle="@string/settings_qbittorrent_connection_timeout_dialog_title"
             android:inputType="number"
@@ -119,6 +119,16 @@
             android:key="reverse_order"
             android:summary="@string/settings_qbittorrent_reverse_order_summary"
             android:title="@string/settings_qbittorrent_reverse_order_dialog_title" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="darui"
+        android:title="@string/settings_qbittorrent_darkui_category">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="dark_ui"
+            android:summary="@string/settings_qbittorrent_darkui_summary"
+            android:title="@string/settings_qbittorrent_darkui_dialog_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>
