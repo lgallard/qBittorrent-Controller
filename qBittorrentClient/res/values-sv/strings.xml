@@ -61,6 +61,7 @@
         <item>Inaktiva</item>
         <item>Alternativ</item>
         <item>Inställningar</item>
+        <item>Få PRO</item>
     </string-array>
     <string name="about_help1">För att börja använda klienten, ange ditt qBittorrent serverns inställningar och konto genom att välja \"Inställningar\" från den vänstra menyn</string>
     <string name="about_help2">Tryck på knappen Uppdatera i menyn för att få nya resultat, eller välj ett alternativ på menyn till vänster för att få torrent listan från servern.</string>
