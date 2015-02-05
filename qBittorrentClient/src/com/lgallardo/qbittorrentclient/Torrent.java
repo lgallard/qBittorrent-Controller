@@ -212,6 +212,9 @@ class Torrent {
      * @return the priority
      */
     public String getPriority() {
+        if (priority.equals("-1")) {
+            return "*";
+        }
         return priority;
     }
 
@@ -219,6 +222,9 @@ class Torrent {
      * @return the eta
      */
     public String getEta() {
+        if (eta.equals("8640000")) {
+            return "∞";
+        }
         return eta;
     }
 
@@ -286,10 +292,17 @@ class Torrent {
     }
 
     public String getUploadLimit() {
+
+        if (uploadLimit.equals("-1")) {
+            return "∞";
+        }
         return uploadLimit;
     }
 
     public String getDownloadLimit() {
+        if (downloadLimit.equals("-1")) {
+            return "∞";
+        }
         return downloadLimit;
     }
 

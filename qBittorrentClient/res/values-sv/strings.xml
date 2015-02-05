@@ -41,7 +41,7 @@
     <string name="error">Fel!</string>
     <string name="error1">Värd eller IP-adressen inte kan nås. Kontrollera dina inställningar!</string>
     <string name="error401">Obehörig åtkomst. Kontrollera dina kontoinställningar för att undvika förbud!</string>
-    <string name="error403">Din IP-adress har förbjudits efter för många misslyckade autentiseringsförsök</string>
+    <string name="error403">Autentisering misslyckades</string>
     <string name="info">Varning</string>
     <string name="global_value_error">Global värdet kan inte hämtas. Kontrollera anslutningsinställningarna!</string>
     <string name="navigation_drawer_all">Alla</string>
@@ -183,4 +183,6 @@
     <string name="settings_qbittorrent_darkui_summary">Starta appen att tillämpa temat</string>
     <string name="settings_qbittorrent_darkui_category">Mörkt tema</string>
     <string name="settings_qbittorrent_darkui_dialog_title">Använd mörkt tema</string>
+    <string name="action_force_recheck">Tvinga återkontroll</string>
+    <string name="torrentsRecheck">Verifiering initieras</string>
 </resources>

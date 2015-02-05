@@ -44,7 +44,7 @@
     <string name="error">Erro</string>
     <string name="error1">O nome do host ou o endereço IP não pode ser alcançado. Por favor, verifique suas configurações!</string>
     <string name="error401">O acesso não autorizado. Verifique as configurações da conta para evitar proibições!</string>
-    <string name="error403">O seu endereço de IP foi banido depois de muitas tentativas fracassadas de autenticação</string>
+    <string name="error403">Erro de autenticação</string>
     <string name="info">Aviso</string>
     <string name="global_value_error">Valor global não pode ser recuperado. Por favor, verifique as configurações de conexão!</string>
     <string name="navigation_drawer_all">Tudo</string>
@@ -186,4 +186,6 @@
     <string name="settings_qbittorrent_darkui_summary">Reinicie o aplicativo para aplicar o tema</string>
     <string name="settings_qbittorrent_darkui_category">Tema escuro</string>
     <string name="settings_qbittorrent_darkui_dialog_title">Use tema escuro</string>
+    <string name="action_force_recheck">Forçar rechecagem</string>
+    <string name="torrentsRecheck">Verificação iniciada</string>
 </resources>

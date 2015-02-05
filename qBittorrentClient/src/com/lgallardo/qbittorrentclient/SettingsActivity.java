@@ -45,6 +45,7 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
     private CheckBoxPreference reverse_order;
 
     private CheckBoxPreference dark_ui;
+    private ListPreference qb_version;
 
 
     @Override
@@ -61,7 +62,7 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         port = (EditTextPreference) findPreference("port");
         username = (EditTextPreference) findPreference("username");
         password = (EditTextPreference) findPreference("password");
-        old_version = (CheckBoxPreference) findPreference("old_version");
+//        old_version = (CheckBoxPreference) findPreference("old_version");
         auto_refresh = (CheckBoxPreference) findPreference("auto_refresh");
         refresh_period = (ListPreference) findPreference("refresh_period");
         connection_timeout = (EditTextPreference) findPreference("connection_timeout");
@@ -70,6 +71,8 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         reverse_order = (CheckBoxPreference) findPreference("reverse_order");
 
         dark_ui = (CheckBoxPreference) findPreference("dark_ui");
+
+        qb_version = (ListPreference) findPreference("qb_version");
 
         // Get values for server
         getQBittorrentServerValues(currentServer.getValue());
@@ -116,8 +119,6 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // TODO Auto-generated method stub
-
         // Update values on Screen
         refreshScreenValues();
     }
@@ -163,7 +164,7 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         username.setSummary(sharedPrefs.getString("username" + value, "admin"));
 
         password.setText(sharedPrefs.getString("password" + value, "adminadmin"));
-        old_version.setChecked(sharedPrefs.getBoolean("old_version" + value, false));
+//        old_version.setChecked(sharedPrefs.getBoolean("old_version" + value, false));
 
         if (refresh_period.getEntry() == null) {
             refresh_period.setValueIndex(6);
@@ -171,18 +172,25 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
         refresh_period.setSummary(refresh_period.getEntry());
 
-        connection_timeout.setText(sharedPrefs.getString("connection_timeout", "5"));
-        data_timeout.setText(sharedPrefs.getString("data_timeout", "8"));
+        connection_timeout.setText(sharedPrefs.getString("connection_timeout" + value, "5"));
+        data_timeout.setText(sharedPrefs.getString("data_timeout" + value, "8"));
 
         if (sortBy.getEntry() == null) {
             sortBy.setValueIndex(1);
         }
 
         sortBy.setSummary(sortBy.getEntry());
-        reverse_order.setChecked(sharedPrefs.getBoolean("reverse_order", false));
+        reverse_order.setChecked(sharedPrefs.getBoolean("reverse_order" + value, false));
 
         dark_ui.setChecked(sharedPrefs.getBoolean("dark_ui", false));
 
+        if (qb_version.getEntry() == null) {
+            qb_version.setValueIndex(1);
+        } else {
+            qb_version.setValueIndex(qb_version.findIndexOfValue(sharedPrefs.getString("qb_version" + value, "3.1.x")));
+        }
+
+        qb_version.setSummary(qb_version.getEntry());
     }
 
     public void refreshScreenValues() {
@@ -194,6 +202,7 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         username.setSummary(username.getText());
         refresh_period.setSummary(refresh_period.getEntry());
         sortBy.setSummary(sortBy.getEntry());
+        qb_version.setSummary(qb_version.getEntry());
     }
 
     public void saveQBittorrentServerValues() {
@@ -233,7 +242,7 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
             editor.putString("password" + currentServerValue, password.getText().toString());
         }
 
-        editor.putBoolean("old_version" + currentServerValue, old_version.isChecked());
+//        editor.putBoolean("old_version" + currentServerValue, old_version.isChecked());
 
         if (connection_timeout.getText().toString() != null && connection_timeout.getText().toString() != "") {
             editor.putString("connection_timeout", connection_timeout.getText().toString());
@@ -246,6 +255,8 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         editor.putBoolean("revserse_order" + currentServerValue, reverse_order.isChecked());
 
         editor.putBoolean("dark_ui" + currentServerValue, dark_ui.isChecked());
+
+        editor.putString("qb_version" + currentServerValue, qb_version.getValue());
 
         // Commit changes
         editor.commit();

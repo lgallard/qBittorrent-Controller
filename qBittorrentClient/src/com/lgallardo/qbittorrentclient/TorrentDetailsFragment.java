@@ -40,12 +40,8 @@ public class TorrentDetailsFragment extends Fragment {
             totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit, downloaded, eta, downloadSpeed, uploadSpeed,
             percentage = "";
 
-    String hostname;
-    String protocol;
-    int port;
-    String username;
-    String password;
     String url;
+    private String qbQueryString = "query";
 
     int position;
 
@@ -238,6 +234,11 @@ public class TorrentDetailsFragment extends Fragment {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.queued, 0, 0, 0);
             }
 
+
+            if ("checkingDL".equals(state) || "checkingUP".equals(state)) {
+                nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_recheck, 0, 0, 0);
+            }
+
             // Show progressBar
             if (MainActivity.progressBar != null) {
                 MainActivity.progressBar.setVisibility(View.VISIBLE);
@@ -313,6 +314,7 @@ public class TorrentDetailsFragment extends Fragment {
             menu.findItem(R.id.action_delete_drive).setVisible(true);
             menu.findItem(R.id.action_download_rate_limit).setVisible(true);
             menu.findItem(R.id.action_upload_rate_limit).setVisible(true);
+            menu.findItem(R.id.action_recheck).setVisible(true);
 
         }
     }
@@ -339,8 +341,22 @@ public class TorrentDetailsFragment extends Fragment {
         int priority;
 
         protected View[] doInBackground(View... rootViews) {
-            // Get torrent's extra info
-            url = "json/propertiesFiles/";
+
+            // Get torrent's files
+            if (MainActivity.qb_version.equals("2.x")) {
+                qbQueryString = "json";
+            }
+
+            if (MainActivity.qb_version.equals("3.1.x")) {
+                qbQueryString = "json";
+            }
+
+            if (MainActivity.qb_version.equals("3.2.x")) {
+                qbQueryString = "query";
+            }
+
+
+            url = qbQueryString + "/propertiesFiles/";
 
             files = null;
             names = null;
@@ -349,6 +365,8 @@ public class TorrentDetailsFragment extends Fragment {
 
                 JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
                         MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
+
+                jParser.setCookie(MainActivity.cookie);
 
                 JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
 
@@ -365,6 +383,10 @@ public class TorrentDetailsFragment extends Fragment {
                         size = json.getString(MainActivity.TAG_SIZE).replace(",", ".");
                         progress = json.getDouble(MainActivity.TAG_PROGRESS);
                         priority = json.getInt(MainActivity.TAG_PRIORITY);
+
+                        if (MainActivity.qb_version.equals("3.2.x")) {
+                            size = Common.calculateSize(json.getString(MainActivity.TAG_SIZE)).replace(",", ".");
+                        }
 
                         files[i] = new ContentFile(name, size, progress, priority);
                         names[i] = name;
@@ -414,9 +436,20 @@ public class TorrentDetailsFragment extends Fragment {
         String url;
 
         protected View[] doInBackground(View... rootViews) {
-            // Get torrent's extra info
-            url = "json/propertiesTrackers/";
+            // Get torrent's trackers
+            if (MainActivity.qb_version.equals("2.x")) {
+                qbQueryString = "json";
+            }
 
+            if (MainActivity.qb_version.equals("3.1.x")) {
+                qbQueryString = "json";
+            }
+
+            if (MainActivity.qb_version.equals("3.2.x")) {
+                qbQueryString = "query";
+            }
+
+            url = qbQueryString + "/propertiesTrackers/";
             trackers = null;
             trackerNames = null;
 
@@ -424,6 +457,8 @@ public class TorrentDetailsFragment extends Fragment {
 
                 JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
                         MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
+
+                jParser.setCookie(MainActivity.cookie);
 
                 JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
 
@@ -489,12 +524,26 @@ public class TorrentDetailsFragment extends Fragment {
 
         protected View[] doInBackground(View... rootViews) {
             // Get torrent's extra info
-            url = "json/propertiesGeneral/";
+            if (MainActivity.qb_version.equals("2.x")) {
+                qbQueryString = "json";
+            }
+
+            if (MainActivity.qb_version.equals("3.1.x")) {
+                qbQueryString = "json";
+            }
+
+            if (MainActivity.qb_version.equals("3.2.x")) {
+                qbQueryString = "query";
+            }
+
+            url = qbQueryString + "/propertiesGeneral/";
 
             try {
 
                 JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
                         MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
+
+                jParser.setCookie(MainActivity.cookie);
 
                 json2 = jParser.getJSONFromUrl(url + hash);
 
@@ -546,6 +595,44 @@ public class TorrentDetailsFragment extends Fragment {
                     // Download limit
                     labels[10] = getString(R.string.torrent_details_download_rate_limit);
                     values[10] = json2.getString(TAG_DOWNLOAD_LIMIT);
+
+
+                    if (MainActivity.qb_version.equals("3.2.x")) {
+
+                        // Creation date
+                        values[1] = Common.unixTimestampToDate(json2.getString(TAG_CREATION_DATE));
+                        // Total wasted
+                        values[3] = Common.calculateSize(json2.getString(TAG_TOTAL_WASTED)).replace(",", ".");
+
+                        // Total uploaded
+                        values[4] = Common.calculateSize(json2.getString(TAG_TOTAL_UPLOADED)).replace(",", ".");
+
+                        // Time elapsed
+                        values[6] = Common.secondsToEta(json2.getString(TAG_TIME_ELAPSED));
+
+                        // Total downloaded
+                        values[5] = Common.calculateSize(json2.getString(TAG_TOTAL_DOWNLOADED)).replace(",", ".");
+
+                        // Upload limit
+                        values[9] = json2.getString(TAG_UPLOAD_LIMIT);
+
+                        if (!values[9].equals("-1")) {
+                            values[9] = Common.calculateSize(values[9]) + "/s";
+                        } else {
+                            values[9] = "∞";
+                        }
+
+                        // Download limit
+                        values[10] = json2.getString(TAG_DOWNLOAD_LIMIT);
+
+                        if (!values[10].equals("-1")) {
+                            values[10] = Common.calculateSize(values[10]) + "/s";
+                        } else {
+                            values[10] = "∞";
+                        }
+
+                    }
+
 
                 }
 

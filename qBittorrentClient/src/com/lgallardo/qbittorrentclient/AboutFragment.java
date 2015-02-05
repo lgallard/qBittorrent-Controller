@@ -94,6 +94,10 @@ public class AboutFragment extends Fragment {
                 menu.findItem(R.id.action_download_rate_limit).setVisible(false);
             }
 
+            if (menu.findItem(R.id.action_recheck) != null) {
+                menu.findItem(R.id.action_recheck).setVisible(false);
+            }
+
         }
     }
 

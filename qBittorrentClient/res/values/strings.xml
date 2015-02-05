@@ -27,6 +27,7 @@
     <string name="action_minimum_priority">Move to bottom</string>
     <string name="action_download_rate_limit">Download rate limit</string>
     <string name="action_upload_rate_limit">Upload rate limit</string>
+    <string name="action_force_recheck">Force recheck</string>
     <string name="connection_error">Network connection failed</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -56,7 +57,7 @@
     <string name="error">Error</string>
     <string name="error1">The host or IP address cannot be reached. Please check your settings!</string>
     <string name="error401">Unauthorized access. Check your account settings to avoid bans!</string>
-    <string name="error403">Your IP address has been banned after too many failed authentication attempts</string>
+    <string name="error403">Authentication error</string>
     <string name="info">Warning</string>
     <string name="global_value_error">Global value cannot be retrieved. Please check your connection settings!</string>
     <string name="navigation_drawer_all">All</string>
@@ -192,6 +193,7 @@
     <string name="torrentsSelectedPaused">Torrents paused!</string>
     <string name="torrentsSelectedDeleted">Torrents deleted!</string>
     <string name="torrentsSelectedDeletedDrive">Torrents and data deleted!</string>
+    <string name="torrentsRecheck">Recheck started</string>
     <string name="settings_qbittorrent_darkui_category">Dark Theme</string>
     <string name="settings_qbittorrent_darkui_dialog_title">Use dark theme </string>
     <string name="settings_qbittorrent_darkui_summary">Restart the app to apply the theme</string>

@@ -10,10 +10,10 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lgallardo.qbittorrentclient"
-    android:versionCode="343"
-    android:versionName="3.4.3">
+    android:versionCode="351"
+    android:versionName="3.5.1">
 
-<uses-sdk
+    <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
 
@@ -157,6 +157,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         />
+        <service android:name="QBService" />
     </application>
 
 </manifest>

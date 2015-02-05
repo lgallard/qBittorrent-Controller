@@ -52,5 +52,14 @@
         <item name="6">DownloadSpeed</item>
         <item name="7">UploadSpeed</item>
     </string-array>
-
+    <string-array name="qbVersion">
+        <item name="1">2.x</item>
+        <item name="2">3.1.x</item>
+        <item name="3">3.2.x</item>
+    </string-array>
+    <string-array name="qbVersionValues">
+        <item name="1">2.x</item>
+        <item name="2">3.1.x</item>
+        <item name="3">3.2.x</item>
+    </string-array>
 </resources>

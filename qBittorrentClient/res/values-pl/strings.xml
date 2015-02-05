@@ -44,7 +44,7 @@
     <string name="error">Błąd</string>
     <string name="error1">Adres hosta lub  IP nie może być osiągnięty. Proszę sprawdzić ustawienia!</string>
     <string name="error401">Nieautoryzowany dostęp. Sprawdź ustawienia konta, aby uniknąć zakazów!</string>
-    <string name="error403">Twój adres IP został zbanowany po zbyt wielu nieudanych prób uwierzytelnienia</string>
+    <string name="error403">Błąd uwierzytelniania</string>
     <string name="info">Ostrzeżenie</string>
     <string name="global_value_error">Wartość globalnego nie może zostać odzyskane. Proszę sprawdzić ustawienia połączenia!</string>
     <string name="navigation_drawer_all">Wszystko</string>
@@ -186,4 +186,6 @@
     <string name="settings_qbittorrent_darkui_summary">Uruchom ponownie program, aby zastosować motyw</string>
     <string name="settings_qbittorrent_darkui_category">Ciemny motyw</string>
     <string name="settings_qbittorrent_darkui_dialog_title">Użyj ciemny motyw</string>
+    <string name="action_force_recheck">Sprawdź pobrane dane</string>
+    <string name="torrentsRecheck">Weryfikacja zainicjowany</string>
 </resources>

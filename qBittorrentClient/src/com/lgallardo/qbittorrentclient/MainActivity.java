@@ -14,10 +14,15 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
@@ -26,6 +31,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
@@ -52,6 +58,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class MainActivity extends FragmentActivity {
 
@@ -59,10 +66,10 @@ public class MainActivity extends FragmentActivity {
     private static String[] params = new String[2];
 
     // JSON Node Names
-    protected static final String TAG_USER = "user";
-    protected static final String TAG_ID = "id";
-    protected static final String TAG_ALTDWLIM = "alt_dl_limit";
-    protected static final String TAG_DWLIM = "dl_limit";
+//    protected static final String TAG_USER = "user";
+//    protected static final String TAG_ID = "id";
+//    protected static final String TAG_ALTDWLIM = "alt_dl_limit";
+//    protected static final String TAG_DWLIM = "dl_limit";
 
     // Torrent Info TAGs
     protected static final String TAG_NAME = "name";
@@ -77,25 +84,6 @@ public class MainActivity extends FragmentActivity {
     protected static final String TAG_RATIO = "ratio";
     protected static final String TAG_PRIORITY = "priority";
     protected static final String TAG_ETA = "eta";
-    protected static final String TAG_SAVE_PATH = "save_path";
-    protected static final String TAG_CREATION_DATE = "creation_date";
-    protected static final String TAG_COMMENT = "comment";
-    protected static final String TAG_TOTAL_WASTED = "total_wasted";
-    protected static final String TAG_TOTAL_UPLOADED = "total_uploaded";
-    protected static final String TAG_TOTAL_DOWNLOADED = "total_downloaded";
-    protected static final String TAG_TIME_ELAPSED = "time_elapsed";
-    protected static final String TAG_NB_CONNECTIONS = "nb_connections";
-    protected static final String TAG_SHARE_RATIO = "share_ratio";
-    protected static final String TAG_UPLOAD_LIMIT = "up_limit";
-    protected static final String TAG_DOWNLOAD_LIMIT = "dl_limit";
-
-    protected static final String TAG_INFO = "info";
-
-    protected static final String TAG_ACTION = "action";
-    protected static final String TAG_START = "start";
-    protected static final String TAG_PAUSE = "pause";
-    protected static final String TAG_DELETE = "delete";
-    protected static final String TAG_DELETE_DRIVE = "deleteDrive";
 
     protected static final String TAG_GLOBAL_MAX_NUM_CONNECTIONS = "max_connec";
     protected static final String TAG_MAX_NUM_CONN_PER_TORRENT = "max_connec_per_torrent";
@@ -190,17 +178,43 @@ public class MainActivity extends FragmentActivity {
     protected static ProgressBar progressBar;
 
     // myAdapter myadapter
-    torrentListAdapter myadapter;
+    TorrentListAdapter myadapter;
 
     // Http status code
     public int httpStatusCode = 0;
+
+    // Cookie (SID - Session ID)
+    public static String cookie = null;
+    // qb Version
+    public static String qb_version = "3.1.x";
+
+    // Service
+    private State qbServiceConnection = null;
+
+    private String qbQueryString = "query";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Test service
+//        qbServiceConnection = new State();
+//
+//        getApplicationContext().bindService(new Intent(this, QBService.class), qbServiceConnection, BIND_AUTO_CREATE);
+//
+//        qbServiceConnection.attach(this);
+
+
         // Get preferences
         getSettings();
+
+        if (qb_version.equals("3.2.x")) {
+            if (cookie == null || cookie.equals("")) {
+                new qBittorrentCookie().execute();
+            }
+        } else {
+            cookie = "";
+        }
 
         // Set Theme (It must be fore inflating or setContentView)
         if (dark_ui) {
@@ -282,7 +296,7 @@ public class MainActivity extends FragmentActivity {
 
         // Get options and save them as shared preferences
         qBittorrentOptions qso = new qBittorrentOptions();
-        qso.execute(new String[]{"json/preferences", "getSettings"});
+        qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
 
         // If it were awaked from an intent-filter,
         // get intent from the intent filter and Add URL torrent
@@ -385,6 +399,14 @@ public class MainActivity extends FragmentActivity {
         handler.postDelayed(m_Runnable, refresh_period);
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+//        getApplicationContext().unbindService(qbServiceConnection);
+    }
+
 
     @Override
     public void onResume() {
@@ -548,10 +570,27 @@ public class MainActivity extends FragmentActivity {
         }
 
 
-        if (oldVersion == true) {
-            params[0] = "json/events";
-        } else {
-            params[0] = "json/torrents";
+        if (qb_version.equals("2.x")) {
+            qbQueryString = "json";
+            params[0] = qbQueryString + "/events";
+        }
+
+        if (qb_version.equals("3.1.x")) {
+            qbQueryString = "json";
+            params[0] = qbQueryString + "/torrents";
+        }
+
+        if (qb_version.equals("3.2.x")) {
+            qbQueryString = "query";
+            params[0] = qbQueryString + "/torrents";
+
+
+            if (cookie == null || cookie.equals("")) {
+                new qBittorrentCookie().execute();
+            }
+
+//            Log.i("REFRESH", "Cookie:" + cookie);
+
         }
 
         params[1] = state;
@@ -953,6 +992,19 @@ public class MainActivity extends FragmentActivity {
                     downloadRateLimitDialog(hash);
                 }
                 return true;
+            case R.id.action_recheck:
+
+                tf = this.getTorrentDetailsFragment();
+
+                if (tf != null) {
+                    position = tf.position;
+                    hash = MainActivity.lines[position].getHash();
+                    recheckTorrents(hash);
+                    // if (findViewById(R.id.one_frame) != null) {
+                    // getFragmentManager().popBackStack();
+                    // }
+                }
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -968,13 +1020,27 @@ public class MainActivity extends FragmentActivity {
 
         if (requestCode == SETTINGS_CODE) {
 
+            // Get values from preferences
+            getSettings();
+
+            if (qb_version.equals("3.2.x")) {
+                if (cookie == null || cookie.equals("")) {
+                    new qBittorrentCookie().execute();
+                }
+            } else {
+                cookie = "";
+            }
+
+
+            // Select "All" torrents list
+//            selectItem(0);
+            refresh();
+
+
             // Get options from server and save them as shared preferences
             // locally
             qBittorrentOptions qso = new qBittorrentOptions();
-            qso.execute(new String[]{"json/preferences", "getSettings"});
-
-            // Select "All" torrents list
-            selectItem(0);
+            qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
 
             // Now it can be refreshed
             canrefresh = true;
@@ -1239,6 +1305,21 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    public void recheckTorrents(String hashes) {
+        // Execute the task in background
+
+        String[] hashesArray = hashes.split("\\|");
+
+        for (int i = 0; hashesArray.length > i; i++) {
+            qBittorrentCommand qtc = new qBittorrentCommand();
+            qtc.execute(new String[]{"recheckSelected", hashesArray[i]});
+        }
+
+        Toast.makeText(getApplicationContext(), R.string.torrentsRecheck, Toast.LENGTH_SHORT).show();
+
+        // Delay of 3 seconds
+        refreshAfterCommand(3);
+    }
 
     public void setQBittorrentPrefefrences(String hash) {
         // Execute the task in background
@@ -1332,8 +1413,14 @@ public class MainActivity extends FragmentActivity {
 
             if (global_upload != null) {
 
-                limit = (Integer.parseInt(uploadRateLimit) > Integer.parseInt(global_upload) && Integer.parseInt(global_upload) != 0) ? Integer
-                        .parseInt(global_upload) : Integer.parseInt(uploadRateLimit);
+                if (Integer.parseInt(global_upload) > 0) {
+
+                    limit = (Integer.parseInt(uploadRateLimit) > Integer.parseInt(global_upload) && Integer.parseInt(global_upload) != 0) ? Integer
+                            .parseInt(global_upload) : Integer.parseInt(uploadRateLimit);
+
+                } else {
+                    limit = Integer.parseInt(uploadRateLimit);
+                }
 
                 String[] hashesArray = hash.split("\\|");
 
@@ -1364,9 +1451,12 @@ public class MainActivity extends FragmentActivity {
 
             if (global_download != null) {
 
-                limit = (Integer.parseInt(downloadRateLimit) > Integer.parseInt(global_download)) ? Integer.parseInt(global_download) : Integer
-                        .parseInt(downloadRateLimit);
-
+                if (Integer.parseInt(global_download) > 0) {
+                    limit = (Integer.parseInt(downloadRateLimit) > Integer.parseInt(global_download)) ? Integer.parseInt(global_download) : Integer
+                            .parseInt(downloadRateLimit);
+                } else {
+                    limit = Integer.parseInt(downloadRateLimit);
+                }
                 String[] hashesArray = hash.split("\\|");
 
                 for (int i = 0; hashesArray.length > i; i++) {
@@ -1470,7 +1560,7 @@ public class MainActivity extends FragmentActivity {
         builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
 
         // Get values from preferences
-        hostname = sharedPrefs.getString("hostname", "NULL");
+        hostname = sharedPrefs.getString("hostname", "");
         subfolder = sharedPrefs.getString("subfolder", "");
 
         protocol = sharedPrefs.getString("protocol", "NULL");
@@ -1517,6 +1607,11 @@ public class MainActivity extends FragmentActivity {
 
         dark_ui = sharedPrefs.getBoolean("dark_ui", false);
 
+        qb_version = sharedPrefs.getString("qb_version", "3.1.x");
+
+        MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
+
+
     }
 
     // Get Options
@@ -1549,6 +1644,77 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    private class qBittorrentCookie extends AsyncTask<Void, Integer, String[]> {
+
+        @Override
+        protected String[] doInBackground(Void... params) {
+
+            // Get values from preferences
+            getSettings();
+
+
+            // Creating new JSON Parser
+            JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+
+            String cookie = "";
+            String api = "";
+
+
+//            Log.i("qBittorrentCookie =>", "qBittorrentCookie");
+
+            try {
+
+                cookie = jParser.getNewCookie();
+//                api = jParser.getApiVersion();
+
+            } catch (JSONParserStatusCodeException e) {
+
+                httpStatusCode = e.getCode();
+
+//                Log.i("qBittorrentCookie", "httpStatusCode: " + httpStatusCode);
+//                Log.e("qBittorrentCookie", e.toString());
+
+            }
+
+            if (cookie == null) {
+                cookie = "";
+
+            }
+
+            if (api == null) {
+                api = "";
+
+            }
+//
+//            Log.i("qBittorrentCookie", "COOKIE: " + ">" + cookie + "<");
+//            Log.i("qBittorrentCookie", "API: >" + api + "<");
+
+            return new String[]{cookie, api};
+
+        }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+//            Log.i("qBittorrentCookie", "httpStatusCode:" + httpStatusCode);
+
+
+            MainActivity.cookie = result[0];
+
+
+            // Save options locally
+            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+            Editor editor = sharedPrefs.edit();
+
+            // Save key-values
+            editor.putString("qbCookie", result[0]);
+
+
+            // Commit changes
+            editor.apply();
+
+        }
+    }
+
     // Here is where the action happens
     private class qBittorrentCommand extends AsyncTask<String, Integer, String> {
 
@@ -1560,6 +1726,8 @@ public class MainActivity extends FragmentActivity {
 
             // Creating new JSON Parser
             JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+
+            jParser.setCookie(cookie);
 
             try {
 
@@ -1594,7 +1762,16 @@ public class MainActivity extends FragmentActivity {
             }
 
             if (httpStatusCode == 403) {
+                if (qb_version.equals("3.2.x")) {
+
+                    // Get new Cookie
+                    cookie = "";
+                    new qBittorrentCookie().execute();
+
+                }
+
                 Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+
                 httpStatusCode = 0;
                 return;
             }
@@ -1682,7 +1859,11 @@ public class MainActivity extends FragmentActivity {
                 }
             }
 
-            if (!("startSelected".equals(result)) && !("pauseSelected".equals(result)) && !("deleteSelected".equals(result)) && !("deleteDriveSelected".equals(result)) && !("setUploadRateLimit".equals(result)) && !("setDownloadRateLimit".equals(result))) {
+            if ("recheckSelected".equals(result)) {
+                messageId = R.string.torrentsRecheck;
+            }
+
+            if (!("startSelected".equals(result)) && !("pauseSelected".equals(result)) && !("deleteSelected".equals(result)) && !("deleteDriveSelected".equals(result)) && !("setUploadRateLimit".equals(result)) && !("setDownloadRateLimit".equals(result)) && !("recheckSelected".equals(result))) {
                 Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
 
                 // Refresh
@@ -1708,7 +1889,10 @@ public class MainActivity extends FragmentActivity {
                 // Creating new JSON Parser
                 jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
 
+                jParser.setCookie(MainActivity.cookie);
+
                 JSONArray jArray = jParser.getJSONArrayFromUrl(params[0]);
+
 
                 if (jArray != null) {
 
@@ -1734,6 +1918,14 @@ public class MainActivity extends FragmentActivity {
                         eta = json.getString(TAG_ETA);
                         downloadSpeed = json.getString(TAG_DLSPEED);
                         uploadSpeed = json.getString(TAG_UPSPEED);
+
+                        if (qb_version.equals("3.2.x")) {
+
+                            size = Common.calculateSize(size);
+                            eta = Common.secondsToEta(eta);
+                            downloadSpeed = Common.calculateSize(downloadSpeed) + "/s";
+                            uploadSpeed = Common.calculateSize(uploadSpeed) + "/s";
+                        }
 
                         torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed);
 
@@ -1793,6 +1985,14 @@ public class MainActivity extends FragmentActivity {
                 }
 
                 if (httpStatusCode == 403) {
+
+                    if (qb_version.equals("3.2.x")) {
+
+                        // Get new Cookie
+                        cookie = "";
+                        new qBittorrentCookie().execute();
+                    }
+
                     Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
                 }
@@ -1899,7 +2099,7 @@ public class MainActivity extends FragmentActivity {
                     firstFragment = new ItemstFragment();
 
 //                    if (myadapter == null) {
-                    myadapter = new torrentListAdapter(MainActivity.this, names, lines);
+                    myadapter = new TorrentListAdapter(MainActivity.this, names, lines);
                     firstFragment.setListAdapter(myadapter);
 
 //                    }else{
@@ -2014,6 +2214,8 @@ public class MainActivity extends FragmentActivity {
             // Creating new JSON Parser
             JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
 
+            jParser.setCookie(cookie);
+
             // Get the Json object
             JSONObject json = null;
             try {
@@ -2095,6 +2297,15 @@ public class MainActivity extends FragmentActivity {
                 if (httpStatusCode == 403) {
                     Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
+
+                    if (qb_version.equals("3.2.x")) {
+
+                        // Get new Cookie
+                        cookie = "";
+                        new qBittorrentCookie().execute();
+
+                    }
+
                 }
 
             } else {
@@ -2129,6 +2340,62 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    // Print torrent list from Service
+    protected void printTorrentList(Torrent[] torrents) {
+
+        try {
+            for (int i = 0; i < torrents.length; i++) {
+                Log.i("QBService", "Name: " + torrents[i].getFile());
+            }
+        } catch (Exception e) {
+            Log.e("QBService", e.toString());
+        }
+    }
+
+    protected void notifyCompleted(HashMap completedTorrents) {
+
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+// build notification
+// the addAction re-use the same intent to keep the example short
+        Notification.Builder builder = new Notification.Builder(this)
+                .setContentTitle("qBittorrent")
+                .setContentText("Torrent(s) completed")
+                .setSmallIcon(R.drawable.ic_stat_completed)
+                .setNumber(completedTorrents.size())
+                .setContentIntent(pIntent)
+                .setAutoCancel(true);
+
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        Notification notification;
+
+        notification = builder.getNotification();
+
+        notificationManager.notify(0, notification);
+
+
+//        // Notify individually and remove form completed list
+//        Iterator it = completedTorrents.entrySet().iterator();
+//        while (it.hasNext()) {
+//
+//            HashMap.Entry pairs = (HashMap.Entry) it.next();
+//
+//            Torrent t = (Torrent) pairs.getValue();
+//
+//            Log.i("Completed", t.getFile() + " - completed");
+//
+//            // Remove it
+//            completedTorrents.remove(pairs.getKey());
+//
+//            it.remove(); // avoids a ConcurrentModificationException
+//        }
+    }
+
+
     private void selectItem(int position) {
 
         // Fragment fragment = null;
@@ -2156,7 +2423,7 @@ public class MainActivity extends FragmentActivity {
                 // Options - Execute the task in background
                 Toast.makeText(getApplicationContext(), R.string.getQBittorrentPrefefrences, Toast.LENGTH_SHORT).show();
                 qBittorrentOptions qso = new qBittorrentOptions();
-                qso.execute(new String[]{"json/preferences", "setOptions"});
+                qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
                 break;
             case 7:
                 // Settings
@@ -2183,6 +2450,52 @@ public class MainActivity extends FragmentActivity {
         }
 
         drawerLayout.closeDrawer(drawerList);
+
+    }
+
+    static class State implements QBServiceListener, ServiceConnection {
+
+        QBServiceBinder binder = null;
+        MainActivity activity = null;
+
+
+        void attach(MainActivity activity) {
+            this.activity = activity;
+
+            Log.i("State", "Attached");
+
+        }
+
+        // This method update the torrent list (it prints the torrents names for now)
+        public void updateTorrentList(Torrent[] torrents) {
+            activity.printTorrentList(torrents);
+        }
+
+        @Override
+        public void notifyCompleted(HashMap completedTorrents) {
+            activity.notifyCompleted(completedTorrents);
+        }
+
+        public void onServiceConnected(ComponentName className, IBinder rawBinder) {
+
+
+            Log.i("State", "Trying to connect to service");
+
+
+            binder = (QBServiceBinder) rawBinder;
+
+            Log.i("State", "Connected to service");
+
+
+            // Here we are connected to the service, so we can ask for the torrent list
+            binder.getTorrentList(this);
+
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            binder = null;
+        }
+
 
     }
 }

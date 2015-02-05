@@ -17,7 +17,7 @@
     <string name="action_download_rate_limit">Configurar límite de bajada</string>
     <string name="action_upload_rate_limit">Configurar limite de subida</string>
     <string name="connection_error">Error de conexión</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
     <string name="connecting">Actualizando</string>
     <string name="title_activity_torrent_actions">Acción</string>
@@ -45,7 +45,7 @@
     <string name="error">Error</string>
     <string name="error1">El host o dirección IP no son alcanzables. Por favor revise su configuración!</string>
     <string name="error401">Acceso no autorizado. Compruebe la configuración de la cuenta para evitar ser baneado!</string>
-    <string name="error403">Su dirección IP ha sido baneada después de demasiados intentos de autenticación fallidos</string>
+    <string name="error403">Error de autenticación</string>
     <string name="info">Atención</string>
     <string name="global_value_error">Un valor global no puede ser recuperado. Por favor, revise la configuración de conexión!</string>
     <string name="navigation_drawer_all">Todos</string>
@@ -186,4 +186,6 @@
     <string name="settings_qbittorrent_darkui_category">Tema Oscuro</string>
     <string name="settings_qbittorrent_darkui_summary">Reinicie la aplicación para aplicar el tema</string>
     <string name="settings_qbittorrent_darkui_dialog_title">Usar tema oscuro</string>
+    <string name="action_force_recheck">Forzar verificación</string>
+    <string name="torrentsRecheck">Verificación iniciada</string>
 </resources>

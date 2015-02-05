@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Set;
 
-class torrentListAdapter extends ArrayAdapter<String> {
+class TorrentListAdapter extends ArrayAdapter<String> {
 
     private String[] torrentsNames;
     private Torrent[] torrentsData;
@@ -19,8 +19,7 @@ class torrentListAdapter extends ArrayAdapter<String> {
 
     private static HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
 
-    public torrentListAdapter(Context context, String[] torrentsNames, Torrent[] torrentsData) {
-        // TODO Auto-generated constructor stub
+    public TorrentListAdapter(Context context, String[] torrentsNames, Torrent[] torrentsData) {
         super(context, R.layout.row, R.id.file, torrentsNames);
 
         this.context = context;
@@ -70,6 +69,10 @@ class torrentListAdapter extends ArrayAdapter<String> {
 
         if ("queuedDL".equals(state) || "queuedUP".equals(state)) {
             icon.setImageResource(R.drawable.queued);
+        }
+
+        if ("checkingDL".equals(state) || "checkingUP".equals(state)) {
+            icon.setImageResource(R.drawable.ic_action_recheck);
         }
 
         row.setBackgroundColor(getContext().getResources().getColor(android.R.color.background_light)); //default color
