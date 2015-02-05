@@ -62,4 +62,15 @@
         <item name="2">3.1.x</item>
         <item name="3">3.2.x</item>
     </string-array>
+    <string-array name="navigation_drawer_items_array">
+        <item>Todos</item>
+        <item>Descargando</item>
+        <item>Completados</item>
+        <item>Pausados</item>
+        <item>Activos</item>
+        <item>Inactivos</item>
+        <item>Opciones</item>
+        <item>Configuración</item>
+        <item>Obtener PRO</item>
+    </string-array>
 </resources>

@@ -56,19 +56,6 @@
     <string name="navigation_drawer_options">Opções</string>
     <string name="navigation_drawer_settins">Configurações</string>
     <string name="navigation_drawer_PRO">Obter PRO</string>
-
-    <string-array name="navigation_drawer_items_array">
-        <item>Tudo</item>
-        <item>Baixando</item>
-        <item>Completo</item>
-        <item>Pausado</item>
-        <item>Ativo</item>
-        <item>Inativo</item>
-        <item>Opções</item>
-        <item>Configurações</item>
-        <item>Obter Pro</item>
-    </string-array>
-
     <string name="about_help1">Para começar a usar o cliente, defina as configurações e a conta do seu servidor qBittorrent, selecionando \"Configurações\" no menu esquerdo da gaveta</string>
     <string name="about_help2">Pressione o botão de atualização no menu para obter novos resultados, ou escolha uma opção no menu de gaveta para obter a lista de torrents do servidor.</string>
     <string name="about_motto">Gerenciar todos os seus torrents de Android usando qBittorrent Client</string>

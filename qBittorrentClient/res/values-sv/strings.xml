@@ -52,17 +52,6 @@
     <string name="navigation_drawer_inactive">Inaktiva</string>
     <string name="navigation_drawer_options">Alternativ</string>
     <string name="navigation_drawer_settins">Inställningar</string>
-    <string-array name="navigation_drawer_items_array">
-        <item>Alla</item>
-        <item>Hämtar</item>
-        <item>Färdiga</item>
-        <item>Pausad</item>
-        <item>Aktiva</item>
-        <item>Inaktiva</item>
-        <item>Alternativ</item>
-        <item>Inställningar</item>
-        <item>Få PRO</item>
-    </string-array>
     <string name="about_help1">För att börja använda klienten, ange ditt qBittorrent serverns inställningar och konto genom att välja \"Inställningar\" från den vänstra menyn</string>
     <string name="about_help2">Tryck på knappen Uppdatera i menyn för att få nya resultat, eller välj ett alternativ på menyn till vänster för att få torrent listan från servern.</string>
     <string name="about_motto">Hantera alla dina torrents från Android använder qBittorrent Client Pro</string>
