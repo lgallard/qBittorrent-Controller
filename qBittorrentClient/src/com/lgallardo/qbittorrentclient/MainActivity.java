@@ -57,6 +57,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -584,7 +585,7 @@ public class MainActivity extends FragmentActivity {
 
         if (qb_version.equals("3.2.x")) {
             qbQueryString = "query";
-            params[0] = qbQueryString + "/torrents";
+            params[0] = qbQueryString + "/torrents?filter=" + state;
 
 
             if (cookie == null || cookie.equals("")) {
@@ -2074,50 +2075,57 @@ public class MainActivity extends FragmentActivity {
 
             } else {
 
-                ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
+                ArrayList<Torrent> torrentsFiltered;
 
-                for (int i = 0; i < result.length; i++) {
+                if (qb_version.equals("3.2.x")) {
+                    torrentsFiltered = new ArrayList<Torrent>(Arrays.asList(result));
+                } else {
 
-                    if (params[1].equals("all") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        torrentsFiltered.add(result[i]);
-                    }
 
-                    if (params[1].equals("downloading") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("downloading".equals(result[i].getState()) || "stalledDL".equals(result[i].getState()) || "pausedDL".equals(result[i].getState())
-                                || "queuedDL".equals(result[i].getState()) || "checkingDL".equals(result[i].getState())) {
+                    torrentsFiltered = new ArrayList<Torrent>();
+
+                    for (int i = 0; i < result.length; i++) {
+
+                        if (params[1].equals("all") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
                             torrentsFiltered.add(result[i]);
                         }
-                    }
 
-                    if (params[1].equals("completed") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())
-                                || "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
+                        if (params[1].equals("downloading") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                            if ("downloading".equals(result[i].getState()) || "stalledDL".equals(result[i].getState()) || "pausedDL".equals(result[i].getState())
+                                    || "queuedDL".equals(result[i].getState()) || "checkingDL".equals(result[i].getState())) {
+                                torrentsFiltered.add(result[i]);
+                            }
                         }
-                    }
 
-                    if (params[1].equals("paused") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
+                        if (params[1].equals("completed") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                            if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())
+                                    || "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState())) {
+                                torrentsFiltered.add(result[i]);
+                            }
                         }
-                    }
 
-                    if (params[1].equals("active") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("uploading".equals(result[i].getState()) || "downloading".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
+                        if (params[1].equals("paused") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                            if ("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())) {
+                                torrentsFiltered.add(result[i]);
+                            }
                         }
-                    }
 
-                    if (params[1].equals("inactive") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("pausedUP".equals(result[i].getState()) || "pausedDL".equals(result[i].getState()) || "queueUP".equals(result[i].getState())
-                                || "queueDL".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())
-                                || "stalledDL".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
+                        if (params[1].equals("active") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                            if ("uploading".equals(result[i].getState()) || "downloading".equals(result[i].getState())) {
+                                torrentsFiltered.add(result[i]);
+                            }
                         }
-                    }
 
+                        if (params[1].equals("inactive") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                            if ("pausedUP".equals(result[i].getState()) || "pausedDL".equals(result[i].getState()) || "queueUP".equals(result[i].getState())
+                                    || "queueDL".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())
+                                    || "stalledDL".equals(result[i].getState())) {
+                                torrentsFiltered.add(result[i]);
+                            }
+                        }
+
+                    }
                 }
-
                 // Sort by filename
                 if (sortby.equals("Name")) {
                     Collections.sort(torrentsFiltered, new TorrentNameComparator(reverse_order));
