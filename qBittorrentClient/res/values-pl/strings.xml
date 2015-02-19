@@ -175,4 +175,6 @@
     <string name="settings_qbittorrent_darkui_dialog_title">Użyj ciemny motyw</string>
     <string name="action_force_recheck">Sprawdź pobrane dane</string>
     <string name="torrentsRecheck">Weryfikacja zainicjowany</string>
+    <string name="torrent_details_torrent_first_last_piece_first">Pobierz pierwszy i ostatni kawałek pierwszy</string>
+    <string name="torrent_details_torrent_sequential">Pobierz kolejno</string>
 </resources>

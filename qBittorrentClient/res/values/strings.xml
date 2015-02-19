@@ -91,6 +91,8 @@
     <string name="torrent_details_state">State:</string>
     <string name="torrent_details_progress">Progress:</string>
     <string name="torrent_details_torrent_hash">Torrent Hash:</string>
+    <string name="torrent_details_torrent_sequential">Download in sequential order </string>
+    <string name="torrent_details_torrent_first_last_piece_first">Download first and last piece first</string>
     <string name="torrent_details_created_date">Created Date:</string>
     <string name="torrent_details_comment">Comment:</string>
     <string name="torrent_details_upload_rate_limit">Upload Rate Limit:</string>

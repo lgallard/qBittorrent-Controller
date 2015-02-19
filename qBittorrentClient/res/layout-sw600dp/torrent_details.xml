@@ -278,6 +278,52 @@
                         android:paddingLeft="5dp"
                         android:text="hash" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="5dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/torrentSequentialDownload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:gravity="start" />
+
+                    <TextView
+                        android:id="@+id/torrentSequentialDownloadLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/torrent_details_torrent_sequential"
+                        android:layout_gravity="center" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="5dp"
+                    android:orientation="horizontal">
+
+
+                    <CheckBox
+                        android:id="@+id/torrentFirstLastPiecePrio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:gravity="start" />
+
+                    <TextView
+                        android:id="@+id/torrentFirstLastPiecePrioLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/torrent_details_torrent_first_last_piece_first"
+                        android:layout_gravity="center" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

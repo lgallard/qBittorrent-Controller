@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -169,17 +170,8 @@ public class TorrentDetailsFragment extends Fragment {
             TextView downloadSpeedTextView = (TextView) rootView.findViewById(R.id.torrentDownloadSpeed);
             TextView uploadSpeedTextView = (TextView) rootView.findViewById(R.id.torrentUploadSpeed);
 
-//			TextView pathTextView = (TextView) rootView.findViewById(R.id.torrentSavePath);
-//			TextView creationDateTextView = (TextView) rootView.findViewById(R.id.torrentCreationDate);
-//			TextView commentTextView = (TextView) rootView.findViewById(R.id.torrentComment);
-//			TextView totalWastedTextView = (TextView) rootView.findViewById(R.id.torrentTotalWasted);
-//			TextView totalUploadedTextView = (TextView) rootView.findViewById(R.id.torrentTotalUploaded);
-//			TextView totalDownloadedTextView = (TextView) rootView.findViewById(R.id.torrentTotalDownloaded);
-//			TextView timeElapsedTextView = (TextView) rootView.findViewById(R.id.torrentTimeElapsed);
-//			TextView nbConnectionsTextView = (TextView) rootView.findViewById(R.id.torrentNbConnections);
-//			TextView shareRatioTextView = (TextView) rootView.findViewById(R.id.torrentShareRatio);
-//			TextView uploadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentUploadRateLimit);
-//			TextView downloadRateLimitTextView = (TextView) rootView.findViewById(R.id.torrentDownloadRateLimit);
+            CheckBox sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
+            CheckBox firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
             nameTextView.setText(name);
             sizeTextView.setText(size);
@@ -194,17 +186,9 @@ public class TorrentDetailsFragment extends Fragment {
             downloadSpeedTextView.setText(downloadSpeed);
             uploadSpeedTextView.setText(uploadSpeed);
 
-//			pathTextView.setText(savePath);
-//			creationDateTextView.setText(creationDate);
-//			commentTextView.setText(comment);
-//			totalWastedTextView.setText(totalWasted);
-//			totalUploadedTextView.setText(totalUploaded);
-//			totalDownloadedTextView.setText(totalDownloaded);
-//			timeElapsedTextView.setText(timeElapsed);
-//			nbConnectionsTextView.setText(nbConnections);
-//			shareRatioTextView.setText(shareRatio);
-//			uploadRateLimitTextView.setText(uploadRateLimit);
-//			downloadRateLimitTextView.setText(downloadRateLimit);
+            sequentialDownloadCheckBox.setChecked(MainActivity.lines[position].getSequentialDownload());
+            firstLAstPiecePrioCheckBox.setChecked(MainActivity.lines[position].getisFirstLastPiecePrio());
+
 
             // Set status icon
 

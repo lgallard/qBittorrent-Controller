@@ -175,4 +175,6 @@
     <string name="settings_qbittorrent_darkui_dialog_title">Usar tema oscuro</string>
     <string name="action_force_recheck">Forzar verificación</string>
     <string name="torrentsRecheck">Verificación iniciada</string>
+    <string name="torrent_details_torrent_first_last_piece_first">Descargar primera y última pieza primero</string>
+    <string name="torrent_details_torrent_sequential">Descargar en orden secuencial</string>
 </resources>
