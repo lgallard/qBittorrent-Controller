@@ -301,6 +301,7 @@ public class TorrentDetailsFragment extends Fragment {
 
             menu.findItem(R.id.action_resume).setVisible(true);
             menu.findItem(R.id.action_pause).setVisible(true);
+            menu.findItem(R.id.action_priority_menu).setVisible(true);
             menu.findItem(R.id.action_increase_prio).setVisible(true);
             menu.findItem(R.id.action_decrease_prio).setVisible(true);
             menu.findItem(R.id.action_max_prio).setVisible(true);
