@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -806,12 +807,39 @@ public class TorrentDetailsFragment extends Fragment {
         View view = null;
 
         for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
+            long numOfLines = 1;
+
+            view = listAdapter.getView(i, view, listView);
+
+            if (i == 0) {
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+
+            view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
+
+            TextView file = (TextView) view.findViewById(R.id.file);
+            TextView info = (TextView) view.findViewById(R.id.info);
+
+            if (view.getMeasuredWidth() > desiredWidth) {
+
+                double viewWidthLong = Double.valueOf(view.getMeasuredWidth());
+                double desiredWidthLong = Double.valueOf(desiredWidth);
+
+                //Log.i("Height", "viewWidthLong: " + viewWidthLong);
+                //Log.i("Height", "desiredWidthLong: " + desiredWidthLong);
+
+
+                numOfLines = Math.round(viewWidthLong / desiredWidthLong) + 1;
+
+
+                totalHeight += file.getMeasuredHeight() * numOfLines + info.getMeasuredHeight();
+
+            } else {
+                totalHeight += view.getMeasuredHeight();
+            }
+
+
         }
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();

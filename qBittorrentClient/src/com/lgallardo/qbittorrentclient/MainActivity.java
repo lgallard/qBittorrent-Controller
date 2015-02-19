@@ -1156,7 +1156,6 @@ public class MainActivity extends FragmentActivity {
     private void openSettings() {
         canrefresh = false;
         Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-        // startActivity(intent);
         startActivityForResult(intent, SETTINGS_CODE);
 
     }
@@ -1930,8 +1929,18 @@ public class MainActivity extends FragmentActivity {
                             downloadSpeed = Common.calculateSize(downloadSpeed) + "/s";
                             uploadSpeed = Common.calculateSize(uploadSpeed) + "/s";
 
-                            sequentialDownload = json.getBoolean(TAG_SEQDL);
-                            firstLastPiecePrio = json.getBoolean(TAG_FLPIECEPRIO);
+                            try {
+                                sequentialDownload = json.getBoolean(TAG_SEQDL);
+                            } catch (Exception e) {
+                                firstLastPiecePrio = false;
+                            }
+
+
+                            try {
+                                firstLastPiecePrio = json.getBoolean(TAG_FLPIECEPRIO);
+                            } catch (Exception e) {
+                                firstLastPiecePrio = false;
+                            }
                         }
 
                         torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, sequentialDownload, firstLastPiecePrio);
