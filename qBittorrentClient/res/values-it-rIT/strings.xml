@@ -177,4 +177,7 @@
     <string name="torrentsRecheck">Verifica avviato</string>
     <string name="torrent_details_torrent_first_last_piece_first">Scarica il primo e l\'ultimo pezzo prima</string>
     <string name="torrent_details_torrent_sequential">Scarica in ordine sequenziale</string>
+    <string name="torrent_priority_menu">Priorità:...</string>
+    <string name="torrent_details_first_last">Pezzi prima e l\'ultima</string>
+    <string name="torrent_details_seq_download">Scaricare sequenziale</string>
 </resources>

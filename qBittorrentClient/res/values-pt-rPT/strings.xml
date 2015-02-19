@@ -177,5 +177,7 @@
     <string name="torrentsRecheck">Verificação iniciada</string>
     <string name="torrent_details_torrent_first_last_piece_first">Baixe o primeiro eo último pedaço de primeira</string>
     <string name="torrent_details_torrent_sequential">Baixar sequencialmente</string>
-
+    <string name="torrent_priority_menu">Prioridade...</string>
+    <string name="torrent_details_first_last">Peças primeiro e último</string>
+    <string name="torrent_details_seq_download">Transferência seqüencial</string>
 </resources>

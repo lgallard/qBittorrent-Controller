@@ -106,7 +106,12 @@ public class TorrentDetailsFragment extends Fragment {
         // wants to add/replace/delete using the onCreateOptionsMenu method.
         setHasOptionsMenu(true);
 
-        rootView = inflater.inflate(R.layout.torrent_details, container, false);
+        if (MainActivity.qb_version.equals("3.2.x")) {
+            rootView = inflater.inflate(R.layout.torrent_details, container, false);
+        } else {
+            rootView = inflater.inflate(R.layout.torrent_details_old, container, false);
+
+        }
 
         savePath = "";
         creationDate = "";
@@ -300,6 +305,14 @@ public class TorrentDetailsFragment extends Fragment {
             menu.findItem(R.id.action_download_rate_limit).setVisible(true);
             menu.findItem(R.id.action_upload_rate_limit).setVisible(true);
             menu.findItem(R.id.action_recheck).setVisible(true);
+
+            if (MainActivity.qb_version.equals("3.2.x")) {
+                menu.findItem(R.id.action_firts_last_piece_prio).setVisible(true);
+                menu.findItem(R.id.action_sequential_download).setVisible(true);
+            } else {
+                menu.findItem(R.id.action_firts_last_piece_prio).setVisible(false);
+                menu.findItem(R.id.action_sequential_download).setVisible(false);
+            }
 
         }
     }

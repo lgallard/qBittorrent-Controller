@@ -103,6 +103,9 @@
     <string name="torrent_details_time_elapsed">Time Elapsed:</string>
     <string name="torrent_details_num_connections">Num. Connections:</string>
     <string name="torrent_details_share_ratio">Share Ratio:</string>
+    <string name="torrent_details_first_last">First and last pieces</string>
+    <string name="torrent_priority_menu">Priority...</string>
+    <string name="torrent_details_seq_download">Sequential download</string>
     <string name="torrent_details_cant_general_info">General info couldn\'t be retrieved</string>
     <string name="settings_qbittorrent_account_category">Accounts</string>
     <string name="settings_qbittorrent_currentServer_title">Choose a qBittorrent server</string>

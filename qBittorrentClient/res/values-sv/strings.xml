@@ -176,4 +176,7 @@
     <string name="torrentsRecheck">Verifiering initieras</string>
     <string name="torrent_details_torrent_first_last_piece_first">Hämta första och sista biten först</string>
     <string name="torrent_details_torrent_sequential">Hämta sekventiellt</string>
+    <string name="torrent_priority_menu">Prioritet...</string>
+    <string name="torrent_details_first_last">Första och sista bitarna</string>
+    <string name="torrent_details_seq_download">Sekventiell nedladdning</string>
 </resources>
