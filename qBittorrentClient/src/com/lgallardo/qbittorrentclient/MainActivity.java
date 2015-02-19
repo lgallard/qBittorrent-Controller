@@ -122,6 +122,7 @@ public class MainActivity extends FragmentActivity {
     protected static String sortby;
     protected static boolean reverse_order;
     protected static boolean dark_ui;
+    protected static String lastState;
 
     // Option
     protected static String global_max_num_connections;
@@ -258,12 +259,46 @@ public class MainActivity extends FragmentActivity {
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.listview_item_row, drawerItem);
         drawerList.setAdapter(adapter);
 
-        // Set All checked
-        drawerList.setItemChecked(0, true);
+        // Set selecction according to last state
+        if (lastState != null) {
 
-        // Set title to All
-        setTitle(navigationDrawerItemTitles[0]);
+            if (lastState.equals("all")) {
+                drawerList.setItemChecked(0, true);
+                setTitle(navigationDrawerItemTitles[0]);
+            }
 
+            if (lastState.equals("downloading")) {
+                drawerList.setItemChecked(1, true);
+                setTitle(navigationDrawerItemTitles[1]);
+            }
+
+            if (lastState.equals("completed")) {
+                drawerList.setItemChecked(2, true);
+                setTitle(navigationDrawerItemTitles[2]);
+            }
+
+            if (lastState.equals("paused")) {
+                drawerList.setItemChecked(3, true);
+                setTitle(navigationDrawerItemTitles[3]);
+            }
+
+            if (lastState.equals("active")) {
+                drawerList.setItemChecked(4, true);
+                setTitle(navigationDrawerItemTitles[4]);
+            }
+
+            if (lastState.equals("inactive")) {
+                drawerList.setItemChecked(5, true);
+                setTitle(navigationDrawerItemTitles[5]);
+            }
+
+        } else {
+            // Set "All" checked
+            drawerList.setItemChecked(0, true);
+
+            // Set title to All
+            setTitle(navigationDrawerItemTitles[0]);
+        }
         // Set the item click listener
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -1656,6 +1691,9 @@ public class MainActivity extends FragmentActivity {
 
         MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
 
+        // Get last state
+        lastState = sharedPrefs.getString("lastState", null);
+
 
     }
 
@@ -2471,6 +2509,20 @@ public class MainActivity extends FragmentActivity {
     }
 
 
+    private void saveLastState(String state) {
+        // Save options locally
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        Editor editor = sharedPrefs.edit();
+
+        // Save key-values
+        editor.putString("lastState", state);
+
+
+        // Commit changes
+        editor.apply();
+
+    }
+
     private void selectItem(int position) {
 
         // Fragment fragment = null;
@@ -2478,21 +2530,27 @@ public class MainActivity extends FragmentActivity {
         switch (position) {
             case 0:
                 refresh("all");
+                saveLastState("all");
                 break;
             case 1:
                 refresh("downloading");
+                saveLastState("downloading");
                 break;
             case 2:
                 refresh("completed");
+                saveLastState("completed");
                 break;
             case 3:
                 refresh("paused");
+                saveLastState("paused");
                 break;
             case 4:
                 refresh("active");
+                saveLastState("active");
                 break;
             case 5:
                 refresh("inactive");
+                saveLastState("inactive");
                 break;
             case 6:
                 // Options - Execute the task in background
