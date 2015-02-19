@@ -405,6 +405,18 @@ public class JSONParser {
             url = "command/recheck";
         }
 
+        if ("toggleFirstLastPiecePrio".equals(command)) {
+            url = "command/toggleFirstLastPiecePrio";
+            key = "hashes";
+
+        }
+
+        if ("toggleSequentialDownload".equals(command)) {
+            url = "command/toggleSequentialDownload";
+            key = "hashes";
+
+        }
+
         // if server is publish in a subfolder, fix url
         if (subfolder != null && subfolder != "") {
             url = subfolder + "/" + url;

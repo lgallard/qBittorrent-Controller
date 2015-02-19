@@ -176,8 +176,8 @@ public class TorrentDetailsFragment extends Fragment {
             TextView downloadSpeedTextView = (TextView) rootView.findViewById(R.id.torrentDownloadSpeed);
             TextView uploadSpeedTextView = (TextView) rootView.findViewById(R.id.torrentUploadSpeed);
 
-            CheckBox sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
-            CheckBox firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
+            CheckBox sequentialDownloadCheckBox;
+            CheckBox firstLAstPiecePrioCheckBox;
 
             nameTextView.setText(name);
             sizeTextView.setText(size);
@@ -192,8 +192,13 @@ public class TorrentDetailsFragment extends Fragment {
             downloadSpeedTextView.setText(downloadSpeed);
             uploadSpeedTextView.setText(uploadSpeed);
 
-            sequentialDownloadCheckBox.setChecked(MainActivity.lines[position].getSequentialDownload());
-            firstLAstPiecePrioCheckBox.setChecked(MainActivity.lines[position].getisFirstLastPiecePrio());
+            if (MainActivity.qb_version.equals("3.2.x")) {
+                sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
+                firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
+
+                sequentialDownloadCheckBox.setChecked(MainActivity.lines[position].getSequentialDownload());
+                firstLAstPiecePrioCheckBox.setChecked(MainActivity.lines[position].getisFirstLastPiecePrio());
+            }
 
 
             // Set status icon

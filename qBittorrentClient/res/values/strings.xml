@@ -186,6 +186,8 @@
     <string name="torrentsSelectedDeleted">Torrents deleted!</string>
     <string name="torrentsSelectedDeletedDrive">Torrents and data deleted!</string>
     <string name="torrentsRecheck">Recheck started</string>
+    <string name="torrentstogglefisrtLastPiecePrio">Toggled first and last piece download</string>
+    <string name="torrentstoggleSequentialDownload">Toggled sequential download</string>
     <string name="settings_qbittorrent_darkui_category">Dark Theme</string>
     <string name="settings_qbittorrent_darkui_dialog_title">Use dark theme </string>
     <string name="settings_qbittorrent_darkui_summary">Restart the app to apply the theme</string>
