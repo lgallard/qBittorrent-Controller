@@ -470,6 +470,48 @@ public class ItemstFragment extends ListFragment {
                 menu.findItem(R.id.action_priority_menu).setVisible(false);
             }
 
+            menu.findItem(R.id.action_sortby_name).setVisible(true);
+            menu.findItem(R.id.action_sortby_eta).setVisible(true);
+            menu.findItem(R.id.action_sortby_priority).setVisible(true);
+            menu.findItem(R.id.action_sortby_progress).setVisible(true);
+            menu.findItem(R.id.action_sortby_ratio).setVisible(true);
+            menu.findItem(R.id.action_sortby_downloadSpeed).setVisible(true);
+            menu.findItem(R.id.action_sortby_uploadSpeed).setVisible(true);
+
+
+            if (MainActivity.sortby.equals("Name")) {
+                menu.findItem(R.id.action_sortby_name).setIcon(R.drawable.ic_stat_completed);
+
+            }
+
+
+            if (MainActivity.sortby.equals("ETA")) {
+                menu.findItem(R.id.action_sortby_eta).setIcon(R.drawable.ic_stat_completed);
+            }
+
+            if (MainActivity.sortby.equals("Priority")) {
+                ;
+                menu.findItem(R.id.action_sortby_priority).setIcon(R.drawable.ic_stat_completed);
+            }
+
+            if (MainActivity.sortby.equals("Progress")) {
+                menu.findItem(R.id.action_sortby_progress).setIcon(R.drawable.ic_stat_completed);
+            }
+
+            if (MainActivity.sortby.equals("Ratio")) {
+
+                menu.findItem(R.id.action_sortby_ratio).setIcon(R.drawable.ic_stat_completed);
+            }
+
+            if (MainActivity.sortby.equals("DownloadSpeed")) {
+                menu.findItem(R.id.action_sortby_downloadSpeed).setIcon(R.drawable.ic_stat_completed);
+            }
+
+            if (MainActivity.sortby.equals("UploadSpeed")) {
+                menu.findItem(R.id.action_sortby_uploadSpeed).setIcon(R.drawable.ic_stat_completed);
+            }
+
+
         }
     }
 

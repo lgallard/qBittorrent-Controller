@@ -179,4 +179,14 @@
     <string name="torrent_priority_menu">Prioritet...</string>
     <string name="torrent_details_first_last">Första och sista bitarna</string>
     <string name="torrent_details_seq_download">Sekventiell nedladdning</string>
+    <string name="sortby_menu_name">Namn</string>
+    <string name="sortby_menu_eta">Beräknad tid</string>
+    <string name="sortby_menu_priority">Prioritet</string>
+    <string name="sortby_menu_progress">Framsteg</string>
+    <string name="sortby_menu_ratio">Förhå</string>
+    <string name="sortby_menu_download_speed">Nedladdningshastighet</string>
+    <string name="sortby_menu_upload_speed">Uppladdningshastighet</string>
+    <string name="torrentstoggleSequentialDownload">Ändra sekventiell nedladdning!</string>
+    <string name="torrentstogglefisrtLastPiecePrio">Ändra prioritet!</string>
+
 </resources>

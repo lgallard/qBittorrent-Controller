@@ -180,4 +180,13 @@
     <string name="torrent_details_first_last">Primera y últimas partes</string>
     <string name="torrent_priority_menu">Prioridad...</string>
     <string name="torrent_details_seq_download">Decarga secuencial</string>
+    <string name="sortby_menu_name">Nombre</string>
+    <string name="sortby_menu_eta">Tiempo estimado</string>
+    <string name="sortby_menu_upload_speed">Velocidad de subida</string>
+    <string name="sortby_menu_ratio">Ratio</string>
+    <string name="sortby_menu_progress">Progreso</string>
+    <string name="sortby_menu_priority">Prioridad</string>
+    <string name="sortby_menu_download_speed">Velocidad de bajada</string>
+    <string name="torrentstoggleSequentialDownload">Cambiando descarga secuencial</string>
+    <string name="torrentstogglefisrtLastPiecePrio">Cambiando prioridad!</string>
 </resources>
