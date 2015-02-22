@@ -10,8 +10,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lgallardo.qbittorrentclient"
-    android:versionCode="361"
-    android:versionName="3.6.1">
+    android:versionCode="362"
+    android:versionName="3.6.2">
 
 <uses-sdk
         android:minSdkVersion="14"
