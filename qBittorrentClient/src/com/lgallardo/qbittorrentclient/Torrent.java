@@ -380,7 +380,7 @@ class Torrent {
         if (words.length == 2) {
 
             try {
-                scalar = words[0];
+                scalar = words[0].replace(",", ".");
             } catch (Exception e) {
             }
 
