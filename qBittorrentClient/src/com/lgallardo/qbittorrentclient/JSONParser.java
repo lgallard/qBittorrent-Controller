@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Date;
@@ -444,8 +445,12 @@ public class JSONParser {
 
             HttpPost httpget = new HttpPost(url);
 
-            // In order to pass the has we must set the pair name value
+            if ("addTorrent".equals(command)) {
+                URI hash_uri = new URI(hash);
+                hash = hash_uri.toString();
+            }
 
+            // In order to pass the has we must set the pair name value
             BasicNameValuePair bnvp = new BasicNameValuePair(key, hash);
 
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();

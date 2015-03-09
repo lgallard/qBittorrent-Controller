@@ -47,6 +47,9 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
     private CheckBoxPreference dark_ui;
     private ListPreference qb_version;
 
+    private CheckBoxPreference enable_notifications;
+    private ListPreference notification_period;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,9 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         dark_ui = (CheckBoxPreference) findPreference("dark_ui");
 
         qb_version = (ListPreference) findPreference("qb_version");
+
+        enable_notifications = (CheckBoxPreference) findPreference("enable_notifications");
+        notification_period = (ListPreference) findPreference("notification_period");
 
         // Get values for server
         getQBittorrentServerValues(currentServer.getValue());
@@ -164,7 +170,6 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         username.setSummary(sharedPrefs.getString("username" + value, "admin"));
 
         password.setText(sharedPrefs.getString("password" + value, "adminadmin"));
-//        old_version.setChecked(sharedPrefs.getBoolean("old_version" + value, false));
 
         if (refresh_period.getEntry() == null) {
             refresh_period.setValueIndex(6);
@@ -191,6 +196,15 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         }
 
         qb_version.setSummary(qb_version.getEntry());
+
+
+        if (notification_period.getEntry() == null) {
+            notification_period.setValueIndex(1);
+        }
+
+        notification_period.setSummary(notification_period.getEntry());
+
+
     }
 
     public void refreshScreenValues() {
@@ -203,6 +217,8 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         refresh_period.setSummary(refresh_period.getEntry());
         sortBy.setSummary(sortBy.getEntry());
         qb_version.setSummary(qb_version.getEntry());
+        notification_period.setSummary(notification_period.getEntry());
+
     }
 
     public void saveQBittorrentServerValues() {
@@ -212,8 +228,6 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         // Save options locally
         SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
 
-        // SharedPreferences sharedPrefs =
-        // PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Editor editor = sharedPrefs.edit();
 
         if (hostname.getText().toString() != null && hostname.getText().toString() != "") {
@@ -242,7 +256,6 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
             editor.putString("password" + currentServerValue, password.getText().toString());
         }
 
-//        editor.putBoolean("old_version" + currentServerValue, old_version.isChecked());
 
         if (connection_timeout.getText().toString() != null && connection_timeout.getText().toString() != "") {
             editor.putString("connection_timeout", connection_timeout.getText().toString());

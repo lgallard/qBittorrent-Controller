@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.FragmentManager;
@@ -18,11 +19,9 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
@@ -31,7 +30,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
@@ -123,6 +122,7 @@ public class MainActivity extends FragmentActivity {
     protected static boolean reverse_order;
     protected static boolean dark_ui;
     protected static String lastState;
+    protected static long notification_period;
 
     // Option
     protected static String global_max_num_connections;
@@ -192,25 +192,41 @@ public class MainActivity extends FragmentActivity {
     // qb Version
     public static String qb_version = "3.1.x";
 
-    // Service
-    private State qbServiceConnection = null;
-
     private String qbQueryString = "query";
+
+    // Alarm manager
+    private AlarmManager alarmMgr;
+    private PendingIntent alarmIntent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Test service
-//        qbServiceConnection = new State();
-//
-//        getApplicationContext().bindService(new Intent(this, QBService.class), qbServiceConnection, BIND_AUTO_CREATE);
-//
-//        qbServiceConnection.attach(this);
-
-
         // Get preferences
         getSettings();
+
+        // Set alarm for checking completed torrents, if not set
+        if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), NotifierService.class), PendingIntent.FLAG_NO_CREATE) == null) {
+
+            // Set Alarm for checking completed torrents
+            alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(getApplication(), NotifierService.class);
+            alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
+
+            alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + 5000,
+                    notification_period, alarmIntent);
+
+            Log.d("Debug", "Alarm was set!");
+//            Log.d("Notifier", "notification_period: " + notification_period);
+
+
+        } else {
+//            Log.d("Notifier", "Alarm is already active");
+//            Log.d("Notifier", "notification_period: " + notification_period);
+
+        }
 
         if (qb_version.equals("3.2.x")) {
             if (cookie == null || cookie.equals("")) {
@@ -1145,6 +1161,26 @@ public class MainActivity extends FragmentActivity {
             // Now it can be refreshed
             canrefresh = true;
 
+            // Save completedHashes
+            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+
+            // Save hashes
+            editor.putString("completed_hashes", "");
+
+
+            // Commit changes
+            editor.apply();
+
+            alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(getApplication(), NotifierService.class);
+            alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
+
+            alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + 5000,
+                    notification_period, alarmIntent);
+
+
         }
 
         if (requestCode == OPTION_CODE) {
@@ -1433,6 +1469,7 @@ public class MainActivity extends FragmentActivity {
         qtc.execute(new String[]{"toggleSequentialDownload", hashes});
 
     }
+
     public void setQBittorrentPrefefrences(String hash) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
@@ -1726,6 +1763,12 @@ public class MainActivity extends FragmentActivity {
         // Get last state
         lastState = sharedPrefs.getString("lastState", null);
 
+        // Notification check
+        try {
+            notification_period = Long.parseLong(sharedPrefs.getString("notification_period", "120000L"));
+        } catch (NumberFormatException e) {
+            notification_period = 120000L;
+        }
 
     }
 
@@ -1851,7 +1894,7 @@ public class MainActivity extends FragmentActivity {
             } catch (JSONParserStatusCodeException e) {
 
                 httpStatusCode = e.getCode();
-                Log.e("JSONParserStatusCodeException", e.toString());
+                Log.e("JSONParserStatusCode", e.toString());
 
             }
 
@@ -2093,7 +2136,7 @@ public class MainActivity extends FragmentActivity {
             } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
                 torrents = null;
-                Log.e("JSONParserStatusCodeException", e.toString());
+                Log.e("JSONParserStatusCode", e.toString());
             } catch (Exception e) {
                 torrents = null;
                 Log.e("MAIN:", e.toString());
@@ -2369,7 +2412,7 @@ public class MainActivity extends FragmentActivity {
             } catch (JSONParserStatusCodeException e) {
 
                 httpStatusCode = e.getCode();
-                Log.e("JSONParserStatusCodeException", e.toString());
+                Log.e("JSONParserStatusCode", e.toString());
             }
 
             if (json != null) {
@@ -2485,18 +2528,6 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-    // Print torrent list from Service
-    protected void printTorrentList(Torrent[] torrents) {
-
-        try {
-            for (int i = 0; i < torrents.length; i++) {
-                Log.i("QBService", "Name: " + torrents[i].getFile());
-            }
-        } catch (Exception e) {
-            Log.e("QBService", e.toString());
-        }
-    }
-
     protected void notifyCompleted(HashMap completedTorrents) {
 
         Intent intent = new Intent(this, MainActivity.class);
@@ -2569,6 +2600,7 @@ public class MainActivity extends FragmentActivity {
         editor.apply();
 
     }
+
     private void selectItem(int position) {
 
         // Fragment fragment = null;
@@ -2632,49 +2664,5 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-    static class State implements QBServiceListener, ServiceConnection {
 
-        QBServiceBinder binder = null;
-        MainActivity activity = null;
-
-
-        void attach(MainActivity activity) {
-            this.activity = activity;
-
-            Log.i("State", "Attached");
-
-        }
-
-        // This method update the torrent list (it prints the torrents names for now)
-        public void updateTorrentList(Torrent[] torrents) {
-            activity.printTorrentList(torrents);
-        }
-
-        @Override
-        public void notifyCompleted(HashMap completedTorrents) {
-            activity.notifyCompleted(completedTorrents);
-        }
-
-        public void onServiceConnected(ComponentName className, IBinder rawBinder) {
-
-
-            Log.i("State", "Trying to connect to service");
-
-
-            binder = (QBServiceBinder) rawBinder;
-
-            Log.i("State", "Connected to service");
-
-
-            // Here we are connected to the service, so we can ask for the torrent list
-            binder.getTorrentList(this);
-
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-            binder = null;
-        }
-
-
-    }
 }

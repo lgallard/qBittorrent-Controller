@@ -90,6 +90,25 @@
             android:title="@string/settings_qbittorrent_refresh_period_title" />
     </PreferenceCategory>
     <PreferenceCategory
+        android:key="Notifications"
+        android:title="@string/settings_qbittorrent_notifications_category">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="enable_notifications"
+            android:summary="@string/settings_qbittorrent_notifications_summary"
+            android:title="@string/settings_qbittorrent_notifications_title" />
+
+        <ListPreference
+            android:defaultValue="2"
+            android:dependency="enable_notifications"
+            android:entries="@array/notification"
+            android:entryValues="@array/notificationValues"
+            android:key="notification_period"
+            android:summary="@string/settings_qbittorrent_notifications_period_summary"
+            android:title="@string/settings_qbittorrent_notifications_period_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="timeouts"
         android:title="@string/settings_qbittorrent_timeouts_category">
         <EditTextPreference

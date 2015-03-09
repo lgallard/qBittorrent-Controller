@@ -198,4 +198,11 @@
     <string name="sortby_menu_ratio">Ratio</string>
     <string name="sortby_menu_download_speed">Download speed</string>
     <string name="sortby_menu_upload_speed">Upload speed</string>
+    <string name="settings_qbittorrent_notifications_category">Notifications</string>
+    <string name="settings_qbittorrent_notifications_summary">Background checking</string>
+    <string name="settings_qbittorrent_notifications_period_title">Check torrents every...</string>
+    <string name="settings_qbittorrent_notifications_period_summary">Check every...</string>
+    <string name="settings_qbittorrent_notifications_title">Enable notifications</string>
+    <string name="notifications_completed_torrents">Completed torrents</string>
+    <string name="notifications_total">Total</string>
 </resources>

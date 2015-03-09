@@ -34,6 +34,26 @@
         <item name="9">600000</item>
         <item name="10">900000</item>
     </string-array>
+    <string-array name="notification">
+        <item name="1">2 minuty</item>
+        <item name="2">5 minuty</item>
+        <item name="3">15 minuty</item>
+        <item name="4">30 minuty</item>
+        <item name="5">1 godzina</item>
+        <item name="6">6 godzin</item>
+        <item name="7">12 godzin</item>
+        <item name="8">1 dzień</item>
+    </string-array>
+    <string-array name="notificationValues">
+        <item name="1">120000</item>
+        <item name="2">300000</item>
+        <item name="3">900000</item>
+        <item name="4">1800000</item>
+        <item name="5">3600000</item>
+        <item name="6">21600000</item>
+        <item name="7">43200000</item>
+        <item name="8">86400000</item>
+    </string-array>
     <string-array name="sortBy">
         <item name="1">Nazwa</item>
         <item name="2">Przewidywany czas</item>

@@ -189,4 +189,11 @@
     <string name="sortby_menu_upload_speed">Velocità di download</string>
     <string name="torrentstoggleSequentialDownload">Cambiare scaricare sequenziale!</string>
     <string name="torrentstogglefisrtLastPiecePrio">Modifica della priorità!</string>
+    <string name="settings_qbittorrent_notifications_category">Notifiche</string>
+    <string name="settings_qbittorrent_notifications_period_summary">Verificare ogni...</string>
+    <string name="settings_qbittorrent_notifications_period_title">Verificare torrenti ogni...</string>
+    <string name="settings_qbittorrent_notifications_summary">Controllo dei precedenti</string>
+    <string name="settings_qbittorrent_notifications_title">Attiva notifiche</string>
+    <string name="notifications_total">Totale</string>
+    <string name="notifications_completed_torrents">Torrents completato</string>
 </resources>
