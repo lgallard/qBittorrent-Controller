@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string-array name="qBittorrentServers">
+    <item>Сервер 1</item>
+    <item>Сервер 2</item>
+    <item>Сервер 3</item>
+  </string-array>
+  <string-array name="qBittorrentServersValues">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+  </string-array>
+  <string-array name="autorefresh">
+    <item>5 секунд</item>
+    <item>10 секунд</item>
+    <item>15 секунд</item>
+    <item>20 секунд</item>
+    <item>30 секунд</item>
+    <item>1 минута</item>
+    <item>2 минуты</item>
+    <item>5 минут</item>
+    <item>10 минут</item>
+    <item>15 минут</item>
+  </string-array>
+  <string-array name="autorefreshValues">
+    <item>5000</item>
+    <item>10000</item>
+    <item>15000</item>
+    <item>20000</item>
+    <item>30000</item>
+    <item>60000</item>
+    <item>120000</item>
+    <item>300000</item>
+    <item>600000</item>
+    <item>900000</item>
+  </string-array>
+  <string-array name="notification">
+    <item>2 минуты</item>
+    <item>5 минут</item>
+    <item>15 минут</item>
+    <item>30 минут</item>
+    <item>1 час</item>
+    <item>6 часов</item>
+    <item>12 часов</item>
+    <item>1 день</item>
+  </string-array>
+  <string-array name="notificationValues">
+    <item>120000</item>
+    <item>300000</item>
+    <item>900000</item>
+    <item>1800000</item>
+    <item>3600000</item>
+    <item>21600000</item>
+    <item>43200000</item>
+    <item>86400000</item>
+  </string-array>
+  <string-array name="sortBy">
+    <item>Имя</item>
+    <item>Осталось</item>
+    <item>Приоритет</item>
+    <item>Завершено</item>
+    <item>Коэфф.</item>
+    <item>Прием</item>
+    <item>Отдача</item>
+  </string-array>
+  <string-array name="sortByValues">
+    <item>Name</item>
+    <item>ETA</item>
+    <item>Priority</item>
+    <item>Progress</item>
+    <item>Ratio</item>
+    <item>DownloadSpeed</item>
+    <item>UploadSpeed</item>
+  </string-array>
+  <string-array name="qbVersion">
+    <item>2.x</item>
+    <item>3.1.x</item>
+    <item>3.2.x</item>
+  </string-array>
+  <string-array name="qbVersionValues">
+    <item>2.x</item>
+    <item>3.1.x</item>
+    <item>3.2.x</item>
+  </string-array>
+  <string-array name="navigation_drawer_items_array">
+    <item>Все</item>
+    <item>Скачивающиеся</item>
+    <item>Завершенные</item>
+    <item>Приостановленные</item>
+    <item>Активные</item>
+    <item>Неактивные</item>
+    <item>Настройки сервера</item>
+    <item>Настройки приложения</item>
+    <item>Получить Pro</item>
+  </string-array>
+</resources>

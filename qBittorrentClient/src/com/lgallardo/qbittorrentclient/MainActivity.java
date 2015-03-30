@@ -758,7 +758,13 @@ public class MainActivity extends FragmentActivity {
         TorrentDetailsFragment tf = null;
 
         if (findViewById(R.id.fragment_container) != null) {
-            tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
+            // Changed in Pro
+            try {
+                tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
+            } catch (Exception e) {
+                tf= null;
+                Log.d("Debug", e.toString());
+            };
         } else {
 
             if (getFragmentManager().findFragmentById(R.id.one_frame) instanceof TorrentDetailsFragment) {
@@ -877,7 +883,14 @@ public class MainActivity extends FragmentActivity {
                             String hash;
 
                             if (findViewById(R.id.fragment_container) != null) {
-                                tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
+
+                                // Changed in Pro
+                                try {
+                                    tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
+                                } catch (Exception e) {
+                                    tf= null;
+                                    Log.d("Debug", e.toString());
+                                }
                             } else {
 
                                 if (getFragmentManager().findFragmentById(R.id.one_frame) instanceof TorrentDetailsFragment) {
@@ -886,6 +899,7 @@ public class MainActivity extends FragmentActivity {
                                 }
 
                             }
+
 
                             if (tf != null) {
                                 position = tf.position;
@@ -934,7 +948,13 @@ public class MainActivity extends FragmentActivity {
                             String hash;
 
                             if (findViewById(R.id.fragment_container) != null) {
-                                tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
+                                // Changed in Pro
+                                try {
+                                    tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
+                                } catch (Exception e) {
+                                    tf= null;
+                                    Log.d("Debug", e.toString());
+                                }
                             } else {
 
                                 if (getFragmentManager().findFragmentById(R.id.one_frame) instanceof TorrentDetailsFragment) {
