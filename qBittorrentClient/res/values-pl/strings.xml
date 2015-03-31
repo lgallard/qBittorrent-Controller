@@ -171,7 +171,7 @@
     <string name="action_maximum_priority">Przenieść na początek</string>
     <string name="action_minimum_priority">Przenieść na koniec</string>
     <string name="settings_qbittorrent_darkui_summary">Uruchom ponownie program, aby zastosować motyw</string>
-    <string name="settings_qbittorrent_darkui_category">Ciemny motyw</string>
+
     <string name="settings_qbittorrent_darkui_dialog_title">Użyj ciemny motyw</string>
     <string name="action_force_recheck">Sprawdź pobrane dane</string>
     <string name="torrentsRecheck">Weryfikacja zainicjowany</string>
@@ -196,4 +196,5 @@
     <string name="settings_qbittorrent_notifications_title">Włącz powiadomienia</string>
     <string name="notifications_total">Całkowity</string>
     <string name="notifications_completed_torrents">Torrents zakończona</string>
+    <string name="settings_qbittorrent_appearance_category">Wygląd</string>
 </resources>

@@ -32,6 +32,46 @@ public class Common {
 
     }
 
+    public static double humanSizeToBytes(String value) {
+        String scalar;
+        int unit = 1024;
+        int exp;
+        char c;
+        double returnValue = 0;
+
+
+        String[] words = value.split("\\s+");
+
+//        Log.d("Debug", "words length:" + words.length);
+
+        if (words.length == 2) {
+
+//            Log.d("Debug", "words[0]:" + words[0]);
+//            Log.d("Debug", "words[1]:" + words[1]);
+
+
+            try {
+                scalar = words[0].replace(",", ".");
+
+//                Log.d("Debug", "scalar:" + scalar);
+
+
+                exp = "BKMGTPE".indexOf((words[1]).toCharArray()[0]);
+
+//                Log.d("Debug", "exp:" + exp);
+
+
+                returnValue = Double.parseDouble(scalar) * Math.pow(unit, exp);
+
+            } catch (Exception e) {
+            }
+
+
+        }
+
+        return returnValue;
+    }
+
     public static String unixTimestampToDate(String unixDate) {
 
 

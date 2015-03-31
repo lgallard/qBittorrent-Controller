@@ -144,7 +144,7 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:key="darui"
-        android:title="@string/settings_qbittorrent_darkui_category">
+        android:title="@string/settings_qbittorrent_appearance_category">
 
         <CheckBoxPreference
             android:defaultValue="false"

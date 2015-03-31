@@ -170,7 +170,6 @@
     <string name="dt_deleteSelectedTorrents">Eliminar torrents</string>
     <string name="action_minimum_priority">Mover al final</string>
     <string name="action_maximum_priority">Mover al inicio</string>
-    <string name="settings_qbittorrent_darkui_category">Tema Oscuro</string>
     <string name="settings_qbittorrent_darkui_summary">Reinicie la aplicación para aplicar el tema</string>
     <string name="settings_qbittorrent_darkui_dialog_title">Usar tema oscuro</string>
     <string name="action_force_recheck">Forzar verificación</string>
@@ -196,4 +195,5 @@
     <string name="settings_qbittorrent_notifications_title">Habilitar notificaciones</string>
     <string name="notifications_total">Total</string>
     <string name="notifications_completed_torrents">Torrents completados</string>
+    <string name="settings_qbittorrent_appearance_category">Apariencia</string>
 </resources>

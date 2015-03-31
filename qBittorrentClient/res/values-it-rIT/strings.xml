@@ -171,7 +171,6 @@
     <string name="action_maximum_priority">Muovi in cima</string>
     <string name="action_minimum_priority">Muovi in fondo</string>
     <string name="settings_qbittorrent_darkui_summary">Riavviare l\'applicazione per applicare il tema</string>
-    <string name="settings_qbittorrent_darkui_category">Tema scuro</string>
     <string name="settings_qbittorrent_darkui_dialog_title">Utilizzare tema scuro</string>
     <string name="action_force_recheck">Forza ricontrollo</string>
     <string name="torrentsRecheck">Verifica avviato</string>
@@ -196,4 +195,5 @@
     <string name="settings_qbittorrent_notifications_title">Attiva notifiche</string>
     <string name="notifications_total">Totale</string>
     <string name="notifications_completed_torrents">Torrents completato</string>
+    <string name="settings_qbittorrent_appearance_category">Aspetto</string>
 </resources>

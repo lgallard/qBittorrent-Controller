@@ -43,6 +43,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -123,6 +124,7 @@ public class MainActivity extends FragmentActivity {
     protected static boolean dark_ui;
     protected static String lastState;
     protected static long notification_period;
+    protected static boolean header;
 
     // Option
     protected static String global_max_num_connections;
@@ -198,6 +200,15 @@ public class MainActivity extends FragmentActivity {
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
 
+    protected static long uploadSpeedCount;
+    protected static long downloadSpeedCount;
+
+    protected static int uploadCount;
+    protected static int downloadCount;
+
+    public static LinearLayout headerInfo;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,13 +229,9 @@ public class MainActivity extends FragmentActivity {
                     SystemClock.elapsedRealtime() + 5000,
                     notification_period, alarmIntent);
 
-            Log.d("Debug", "Alarm was set!");
+//            Log.d("Debug", "Alarm was set!");
 //            Log.d("Notifier", "notification_period: " + notification_period);
 
-
-        } else {
-//            Log.d("Notifier", "Alarm is already active");
-//            Log.d("Notifier", "notification_period: " + notification_period);
 
         }
 
@@ -1790,6 +1797,8 @@ public class MainActivity extends FragmentActivity {
             notification_period = 120000L;
         }
 
+        header = sharedPrefs.getBoolean("header", true);
+
     }
 
     // Get Options
@@ -2294,6 +2303,12 @@ public class MainActivity extends FragmentActivity {
                 MainActivity.names = new String[torrentsFiltered.size()];
                 MainActivity.lines = new Torrent[torrentsFiltered.size()];
 
+                uploadSpeedCount = 0;
+                downloadSpeedCount = 0;
+
+                uploadCount = 0;
+                downloadCount = 0;
+
                 try {
 
                     for (int i = 0; i < torrentsFiltered.size(); i++) {
@@ -2302,6 +2317,17 @@ public class MainActivity extends FragmentActivity {
 
                         MainActivity.names[i] = torrent.getFile();
                         MainActivity.lines[i] = torrent;
+
+                        uploadSpeedCount += (int) Common.humanSizeToBytes(torrent.getUploadSpeed());
+                        downloadSpeedCount += (int) Common.humanSizeToBytes(torrent.getDownloadSpeed());
+
+                        if ("uploading".equals(torrent.getState())) {
+                            uploadCount = uploadCount + 1;
+                        }
+
+                        if ("downloading".equals(torrent.getState())) {
+                            downloadCount = downloadCount + 1;
+                        }
                     }
 
                     firstFragment = new ItemstFragment();
@@ -2388,6 +2414,30 @@ public class MainActivity extends FragmentActivity {
                         }
 
                     }
+
+
+                    // Set headerInfo
+
+                    //                    TextView uploadCountTextView = (TextView) findViewById(R.id.uploadCount);
+//                    TextView downloadCountTextView = (TextView) findViewById(R.id.downloadCount);
+
+
+                    TextView uploadSpeedTextView = (TextView) findViewById(R.id.uploadSpeed);
+                    TextView downloadSpeedTextView = (TextView) findViewById(R.id.downloadSpeed);
+
+
+                    headerInfo = (LinearLayout) findViewById(R.id.header);
+
+
+                    if (header) {
+                        headerInfo.setVisibility(View.VISIBLE);
+                    } else {
+                        headerInfo.setVisibility(View.GONE);
+                    }
+
+
+                    uploadSpeedTextView.setText(Character.toString('\u2191') + " " + Common.calculateSize(""+uploadSpeedCount) + "/s " + "(" + uploadCount +")");
+                    downloadSpeedTextView.setText(Character.toString('\u2193') + " " + Common.calculateSize(""+downloadSpeedCount) + "/s "  + "(" + downloadCount +")" );
 
                     // Commit
                     fragmentTransaction.commit();
