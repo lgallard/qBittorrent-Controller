@@ -105,6 +105,7 @@ public class MainActivity extends FragmentActivity {
     protected static final int SETTINGS_CODE = 0;
     protected static final int OPTION_CODE = 1;
     protected static final int GETPRO_CODE = 2;
+    protected static final int HELP_CODE = 3;
 
     // Preferences properties
     protected static String hostname;
@@ -208,6 +209,9 @@ public class MainActivity extends FragmentActivity {
 
     public static LinearLayout headerInfo;
 
+    // Current state
+    public static String currentState;
+
 
 
     @Override
@@ -266,7 +270,7 @@ public class MainActivity extends FragmentActivity {
         drawerList = (ListView) findViewById(R.id.left_drawer);
 
         // Drawer item list objects
-        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[9];
+        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[10];
 
         drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_drawer_all, navigationDrawerItemTitles[0]);
         drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_drawer_downloading, navigationDrawerItemTitles[1]);
@@ -277,51 +281,15 @@ public class MainActivity extends FragmentActivity {
         drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[6]);
         drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[7]);
         drawerItem[8] = new ObjectDrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[8]);
+        drawerItem[9] = new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9]);
 
         // Create object for drawer item OnbjectDrawerItem
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.listview_item_row, drawerItem);
         drawerList.setAdapter(adapter);
 
-        // Set selecction according to last state
-        if (lastState != null) {
+        // Set selection according to last state
+        setSelectionAndTitle(lastState);
 
-            if (lastState.equals("all")) {
-                drawerList.setItemChecked(0, true);
-                setTitle(navigationDrawerItemTitles[0]);
-            }
-
-            if (lastState.equals("downloading")) {
-                drawerList.setItemChecked(1, true);
-                setTitle(navigationDrawerItemTitles[1]);
-            }
-
-            if (lastState.equals("completed")) {
-                drawerList.setItemChecked(2, true);
-                setTitle(navigationDrawerItemTitles[2]);
-            }
-
-            if (lastState.equals("paused")) {
-                drawerList.setItemChecked(3, true);
-                setTitle(navigationDrawerItemTitles[3]);
-            }
-
-            if (lastState.equals("active")) {
-                drawerList.setItemChecked(4, true);
-                setTitle(navigationDrawerItemTitles[4]);
-            }
-
-            if (lastState.equals("inactive")) {
-                drawerList.setItemChecked(5, true);
-                setTitle(navigationDrawerItemTitles[5]);
-            }
-
-        } else {
-            // Set "All" checked
-            drawerList.setItemChecked(0, true);
-
-            // Set title to All
-            setTitle(navigationDrawerItemTitles[0]);
-        }
         // Set the item click listener
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -459,6 +427,52 @@ public class MainActivity extends FragmentActivity {
         handler = new Handler();
         handler.postDelayed(m_Runnable, refresh_period);
 
+    }
+
+    // Set selection and title on drawer
+    public void setSelectionAndTitle(String state) {
+        // Set selection according to last state
+        if (state != null) {
+
+            currentState = state;
+
+            if (state.equals("all")) {
+                drawerList.setItemChecked(0, true);
+                setTitle(navigationDrawerItemTitles[0]);
+            }
+
+            if (state.equals("downloading")) {
+                drawerList.setItemChecked(1, true);
+                setTitle(navigationDrawerItemTitles[1]);
+            }
+
+            if (state.equals("completed")) {
+                drawerList.setItemChecked(2, true);
+                setTitle(navigationDrawerItemTitles[2]);
+            }
+
+            if (state.equals("paused")) {
+                drawerList.setItemChecked(3, true);
+                setTitle(navigationDrawerItemTitles[3]);
+            }
+
+            if (state.equals("active")) {
+                drawerList.setItemChecked(4, true);
+                setTitle(navigationDrawerItemTitles[4]);
+            }
+
+            if (state.equals("inactive")) {
+                drawerList.setItemChecked(5, true);
+                setTitle(navigationDrawerItemTitles[5]);
+            }
+
+        } else {
+            // Set "All" checked
+            drawerList.setItemChecked(0, true);
+
+            // Set title to All
+            setTitle(navigationDrawerItemTitles[0]);
+        }
     }
 
     @Override
@@ -1177,7 +1191,7 @@ public class MainActivity extends FragmentActivity {
 
             // Select "All" torrents list
 //            selectItem(0);
-            refresh();
+//            refresh();
 
 
             // Get options from server and save them as shared preferences
@@ -1272,6 +1286,33 @@ public class MainActivity extends FragmentActivity {
             // selectItem(0);|
         }
 
+        if (requestCode == HELP_CODE) {
+
+            // Now it can be refreshed
+            canrefresh = true;
+
+        }
+
+        if (resultCode == RESULT_OK) {
+
+            String stateBefore = data.getStringExtra("currentState");
+
+            if (stateBefore != null) {
+
+                // Set selection according to last state
+                setSelectionAndTitle(stateBefore);
+
+                // Refresh state
+                refresh(stateBefore);
+            }
+
+        }
+        if (resultCode == RESULT_CANCELED) {
+            // Refresh
+            refresh();
+        }
+
+
     }
 
     private void addUrlTorrent() {
@@ -1318,6 +1359,16 @@ public class MainActivity extends FragmentActivity {
         canrefresh = false;
         Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
         startActivityForResult(intent, SETTINGS_CODE);
+
+    }
+
+    private void openHelp() {
+        canrefresh = false;
+
+        Intent intent = new Intent(getBaseContext(), HelpActivity.class);
+        intent.putExtra("current", lastState);
+//        startActivity(intent);
+        startActivityForResult(intent, HELP_CODE);
 
     }
 
@@ -2643,6 +2694,9 @@ public class MainActivity extends FragmentActivity {
 
 
     private void saveLastState(String state) {
+
+        currentState = state;
+
         // Save options locally
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         Editor editor = sharedPrefs.edit();
@@ -2713,6 +2767,9 @@ public class MainActivity extends FragmentActivity {
             case 8:
                 // Get Pro version
                 getPRO();
+                break;
+            case 9:
+                openHelp();
                 break;
             default:
                 break;

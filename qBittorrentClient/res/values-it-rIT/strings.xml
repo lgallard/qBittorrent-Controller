@@ -196,4 +196,11 @@
     <string name="notifications_total">Totale</string>
     <string name="notifications_completed_torrents">Torrents completato</string>
     <string name="settings_qbittorrent_appearance_category">Aspetto</string>
+    <string name="help_about_title">Informazioni</string>
+    <string name="help_category">Aiuto</string>
+    <string name="help_documentation_summary">Disponibile su GitHub</string>
+    <string name="help_documentation_title">Documentazione in linea</string>
+    <string name="help_version_title">Versione</string>
+    <string name="help_contributors">Collaboratori:</string>
+    <string name="help_license">© Luis M. Gallardo D. \n\nPubblicato sotto licenza GPL</string>
 </resources>

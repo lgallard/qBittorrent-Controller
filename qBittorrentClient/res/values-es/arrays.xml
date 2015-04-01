@@ -11,10 +11,10 @@
         <item name="3">3</item>
     </string-array>
     <string-array name="autorefresh">
-        <item name="1">5 segundos</item>
-        <item name="2">10 segundos</item>
-        <item name="3">15 segundos</item>
-        <item name="4">20 seconds</item>
+        <item name="1">1 segundo</item>
+        <item name="2">2 segundos</item>
+        <item name="3">5 segundos</item>
+        <item name="4">10 seconds</item>
         <item name="5">30 segundos</item>
         <item name="6">1 minuto</item>
         <item name="7">2 minutos</item>
@@ -92,5 +92,6 @@
         <item>Opciones</item>
         <item>Configuración</item>
         <item>Obtener PRO</item>
+        <item>Ayuda</item>
     </string-array>
 </resources>

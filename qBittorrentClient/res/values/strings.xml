@@ -205,4 +205,11 @@
     <string name="settings_qbittorrent_notifications_title">Enable notifications</string>
     <string name="notifications_completed_torrents">Completed torrents</string>
     <string name="notifications_total">Total</string>
+    <string name="help_category">Help</string>
+    <string name="help_version_title">Version</string>
+    <string name="help_about_title">About</string>
+    <string name="help_documentation_title">Online documentation</string>
+    <string name="help_documentation_summary">Available on GitHub</string>
+    <string name="help_contributors">Contributors:</string>
+    <string name="help_license">© Luis M. Gallardo D. \n\nPublished under GPL v3</string>
 </resources>

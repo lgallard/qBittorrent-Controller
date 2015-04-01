@@ -10,9 +10,11 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -114,6 +116,12 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
                 return true;
             }
         });
+
+        // Set last state in intent result
+        Intent result = new Intent();
+        result.putExtra("currentState", MainActivity.currentState);
+        setResult(Activity.RESULT_OK, result);
+
     }
 
     @Override

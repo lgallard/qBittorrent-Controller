@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.Menu;
@@ -21,6 +23,11 @@ public class OptionsActivity extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 
 		addPreferencesFromResource(R.xml.options);
+
+        // Set last state in intent result
+        Intent result = new Intent();
+        result.putExtra("currentState", MainActivity.currentState);
+        setResult(Activity.RESULT_OK, result);
 	}
 
 	@Override
