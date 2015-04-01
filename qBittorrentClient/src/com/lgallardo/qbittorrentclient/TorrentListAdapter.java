@@ -2,6 +2,7 @@ package com.lgallardo.qbittorrentclient;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -37,9 +38,21 @@ class TorrentListAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View row = super.getView(position, convertView, parent);
+
+//        View row = super.getView(position, convertView, parent);
+
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View row = inflater.inflate(R.layout.row, parent, false);
+
+        String file = torrentsData[position].getFile();
 
         String state = torrentsData[position].getState();
+
+        TextView name = (TextView) row.findViewById(R.id.file);
+        name.setText(file);
+
 
         TextView info = (TextView) row.findViewById(R.id.info);
 
@@ -116,6 +129,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
     }
 
     public void setNames(String[] names) {
+        this.torrentsNames = null;
         this.torrentsNames = names;
     }
 
