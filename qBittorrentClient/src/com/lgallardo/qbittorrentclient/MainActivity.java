@@ -558,18 +558,19 @@ public class MainActivity extends FragmentActivity {
             // refresh_period, Toast.LENGTH_SHORT).show();
 
             if (auto_refresh == true && canrefresh == true && activityIsVisible == true) {
-
-                if (findViewById(R.id.fragment_container) != null) {
-                    refreshCurrent();
-                } else {
-
-                    FragmentManager fm = getFragmentManager();
-
-                    if (fm.findFragmentById(R.id.one_frame) instanceof ItemstFragment || fm.findFragmentById(R.id.one_frame) instanceof AboutFragment) {
-                        refreshCurrent();
-                    }
-
-                }
+//
+//                if (findViewById(R.id.fragment_container) != null) {
+//                    refreshCurrent();
+//                } else {
+//
+//                    FragmentManager fm = getFragmentManager();
+//
+//                    if (fm.findFragmentById(R.id.one_frame) instanceof ItemstFragment || fm.findFragmentById(R.id.one_frame) instanceof AboutFragment) {
+//                        refreshCurrent();
+//                    }
+//
+//                }
+                refreshCurrent();
             }
 
             MainActivity.this.handler.postDelayed(m_Runnable, refresh_period);
@@ -2367,12 +2368,18 @@ public class MainActivity extends FragmentActivity {
 
                 try {
 
+                    Torrent torrentToUpdate = null;
+
                     for (int i = 0; i < torrentsFiltered.size(); i++) {
 
                         Torrent torrent = torrentsFiltered.get(i);
 
                         MainActivity.names[i] = torrent.getFile();
                         MainActivity.lines[i] = torrent;
+
+                        if (torrent.getHash().equals(TorrentDetailsFragment.hashToUpdate)) {
+                            torrentToUpdate = torrent;
+                        }
 
                         uploadSpeedCount += (int) Common.humanSizeToBytes(torrent.getUploadSpeed());
                         downloadSpeedCount += (int) Common.humanSizeToBytes(torrent.getDownloadSpeed());
@@ -2416,41 +2423,90 @@ public class MainActivity extends FragmentActivity {
                     // Got some results
                     if (torrentsFiltered.size() > 0) {
 
-                        // Assign the first and second fragment, and
-                        // set the second fragment container
+                        // Set headerInfo
+                        TextView uploadSpeedTextView = (TextView) findViewById(R.id.uploadSpeed);
+                        TextView downloadSpeedTextView = (TextView) findViewById(R.id.downloadSpeed);
+
+                        headerInfo = (LinearLayout) findViewById(R.id.header);
+
+                        if (header) {
+                            headerInfo.setVisibility(View.VISIBLE);
+                        } else {
+                            headerInfo.setVisibility(View.GONE);
+                        }
+
+                        uploadSpeedTextView.setText(Character.toString('\u2191') + " " + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
+                        downloadSpeedTextView.setText(Character.toString('\u2193') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
+
+
+                        //Set first and second fragments
                         if (findViewById(R.id.fragment_container) != null) {
 
                             // Set where is the second container
                             firstFragment.setSecondFragmentContainer(R.id.content_frame);
 
                             // Set first fragment
-                            fragmentTransaction.replace(R.id.list_frame, firstFragment);
-
-                            // Reset back button stack
-                            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof HelpFragment) {
+                                fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
                             }
 
-                            // Set second fragment with About fragment
-                            fragmentTransaction.replace(R.id.content_frame, aboutFragment);
+                            // Set second fragment
+                            if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
+
+                                TorrentDetailsFragment detailsFragment = (TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
+
+                                if (torrentToUpdate != null) {
+                                    // Update torrent details
+                                    detailsFragment.updateDetails(torrentToUpdate);
+                                } else {
+
+                                    // Torrent no longer found
+
+                                    // Set second fragment with About fragment
+                                    fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
+
+                                    // Reset back button stack
+                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                        fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                    }
+                                }
+
+
+                            } else {
+                                // Reset back button stack
+                                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                    fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                }
+
+                            }
 
                         } else {
 
                             // Set where is the second container
                             firstFragment.setSecondFragmentContainer(R.id.one_frame);
 
-                            // Set first and only fragment
-                            fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+                            // Set first fragment
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
+                                fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+                            } else {
 
-                            // Destroy About fragment
-                            fragmentTransaction.remove(secondFragment);
+                                TorrentDetailsFragment detailsFragment = (TorrentDetailsFragment) fragmentManager.findFragmentByTag("firstFragment");
 
-                            // Reset back button stack
-                            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                fragmentManager.popBackStack();
+                                if (torrentToUpdate != null) {
+                                    // Update torrent
+                                    detailsFragment.updateDetails(torrentToUpdate);
+                                } else {
+
+                                    // Torrent no longer found
+
+                                    // Reset back button stack
+                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                        fragmentManager.popBackStack();
+                                    }
+
+                                }
                             }
                         }
-
                     } else {
 
                         // No results
@@ -2478,29 +2534,6 @@ public class MainActivity extends FragmentActivity {
 
                     }
 
-
-                    // Set headerInfo
-
-                    //                    TextView uploadCountTextView = (TextView) findViewById(R.id.uploadCount);
-//                    TextView downloadCountTextView = (TextView) findViewById(R.id.downloadCount);
-
-
-                    TextView uploadSpeedTextView = (TextView) findViewById(R.id.uploadSpeed);
-                    TextView downloadSpeedTextView = (TextView) findViewById(R.id.downloadSpeed);
-
-
-                    headerInfo = (LinearLayout) findViewById(R.id.header);
-
-
-                    if (header) {
-                        headerInfo.setVisibility(View.VISIBLE);
-                    } else {
-                        headerInfo.setVisibility(View.GONE);
-                    }
-
-
-                    uploadSpeedTextView.setText(Character.toString('\u2191') + " " + Common.calculateSize(""+uploadSpeedCount) + "/s " + "(" + uploadCount +")");
-                    downloadSpeedTextView.setText(Character.toString('\u2193') + " " + Common.calculateSize(""+downloadSpeedCount) + "/s "  + "(" + downloadCount +")" );
 
                     // Commit
                     fragmentTransaction.commit();
@@ -2742,7 +2775,16 @@ public class MainActivity extends FragmentActivity {
 
     private void selectItem(int position) {
 
-        // Fragment fragment = null;
+        if (findViewById(R.id.one_frame) != null) {
+            FragmentManager fragmentManager = getFragmentManager();
+
+            if (fragmentManager.findFragmentByTag("firstFragment") instanceof TorrentDetailsFragment) {
+                // Reset back button stack
+                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                    fragmentManager.popBackStack();
+                }
+            }
+        }
 
         switch (position) {
             case 0:
