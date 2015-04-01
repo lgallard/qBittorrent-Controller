@@ -478,11 +478,6 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_sequential_download).setVisible(false);
             }
 
-            if (menu.findItem(R.id.action_sort_menu) != null) {
-                menu.findItem(R.id.action_sort_menu).setVisible(false);
-            }
-
-
         }
     }
 

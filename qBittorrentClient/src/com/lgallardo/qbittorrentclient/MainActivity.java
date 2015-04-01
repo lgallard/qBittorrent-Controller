@@ -775,35 +775,9 @@ public class MainActivity extends FragmentActivity {
         return true;
     }
 
-    public TorrentDetailsFragment getTorrentDetailsFragment() {
-
-        TorrentDetailsFragment tf = null;
-
-        if (findViewById(R.id.fragment_container) != null) {
-            // Changed in Pro
-            try {
-                tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
-            } catch (Exception e) {
-                tf= null;
-                Log.d("Debug", e.toString());
-            };
-        } else {
-
-            if (getFragmentManager().findFragmentById(R.id.one_frame) instanceof TorrentDetailsFragment) {
-
-                tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.one_frame);
-            }
-
-        }
-        return tf;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        TorrentDetailsFragment tf = null;
-        int position;
-        String hash;
         AlertDialog.Builder builder;
         AlertDialog dialog;
 
@@ -846,15 +820,9 @@ public class MainActivity extends FragmentActivity {
                 // Add URL torrent
                 addUrlTorrent();
                 return true;
-
             case R.id.action_pause:
-
-                tf = this.getTorrentDetailsFragment();
-
-                if (tf != null) {
-                    position = tf.position;
-                    hash = MainActivity.lines[position].getHash();
-                    pauseTorrent(hash);
+                if (TorrentDetailsFragment.hashToUpdate != null) {
+                    pauseTorrent(TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
@@ -862,13 +830,8 @@ public class MainActivity extends FragmentActivity {
                 }
                 return true;
             case R.id.action_resume:
-
-                tf = this.getTorrentDetailsFragment();
-
-                if (tf != null) {
-                    position = tf.position;
-                    hash = MainActivity.lines[position].getHash();
-                    startTorrent(hash);
+                if (TorrentDetailsFragment.hashToUpdate != null) {
+                    startTorrent(TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
@@ -900,33 +863,9 @@ public class MainActivity extends FragmentActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             // User accepted the dialog
 
-                            TorrentDetailsFragment tf = null;
-                            int position;
-                            String hash;
+                            if (TorrentDetailsFragment.hashToUpdate != null) {
+                                deleteTorrent(TorrentDetailsFragment.hashToUpdate);
 
-                            if (findViewById(R.id.fragment_container) != null) {
-
-                                // Changed in Pro
-                                try {
-                                    tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
-                                } catch (Exception e) {
-                                    tf= null;
-                                    Log.d("Debug", e.toString());
-                                }
-                            } else {
-
-                                if (getFragmentManager().findFragmentById(R.id.one_frame) instanceof TorrentDetailsFragment) {
-
-                                    tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.one_frame);
-                                }
-
-                            }
-
-
-                            if (tf != null) {
-                                position = tf.position;
-                                hash = MainActivity.lines[position].getHash();
-                                deleteTorrent(hash);
                                 if (findViewById(R.id.one_frame) != null) {
                                     getFragmentManager().popBackStack();
                                 }
@@ -940,14 +879,11 @@ public class MainActivity extends FragmentActivity {
 
                     // Show dialog
                     dialog.show();
-
                 }
-
                 return true;
             case R.id.action_delete_drive:
 
                 if (!isFinishing()) {
-
                     builder = new AlertDialog.Builder(this);
 
                     // Message
@@ -964,32 +900,9 @@ public class MainActivity extends FragmentActivity {
                     builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // User accepted the dialog
+                            if (TorrentDetailsFragment.hashToUpdate != null) {
+                                deleteDriveTorrent(TorrentDetailsFragment.hashToUpdate);
 
-                            TorrentDetailsFragment tf = null;
-                            int position;
-                            String hash;
-
-                            if (findViewById(R.id.fragment_container) != null) {
-                                // Changed in Pro
-                                try {
-                                    tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.content_frame);
-                                } catch (Exception e) {
-                                    tf= null;
-                                    Log.d("Debug", e.toString());
-                                }
-                            } else {
-
-                                if (getFragmentManager().findFragmentById(R.id.one_frame) instanceof TorrentDetailsFragment) {
-
-                                    tf = (TorrentDetailsFragment) getFragmentManager().findFragmentById(R.id.one_frame);
-                                }
-
-                            }
-
-                            if (tf != null) {
-                                position = tf.position;
-                                hash = MainActivity.lines[position].getHash();
-                                deleteDriveTorrent(hash);
                                 if (findViewById(R.id.one_frame) != null) {
                                     getFragmentManager().popBackStack();
                                 }
@@ -1003,134 +916,92 @@ public class MainActivity extends FragmentActivity {
 
                     // Show dialog
                     dialog.show();
-                }
 
+                }
                 return true;
             case R.id.action_increase_prio:
+                if (TorrentDetailsFragment.hashToUpdate != null) {
+                    increasePrioTorrent(TorrentDetailsFragment.hashToUpdate);
 
-                tf = this.getTorrentDetailsFragment();
-
-                if (tf != null) {
-                    position = tf.position;
-                    hash = MainActivity.lines[position].getHash();
-                    increasePrioTorrent(hash);
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
                     }
                 }
                 return true;
             case R.id.action_decrease_prio:
+                if (TorrentDetailsFragment.hashToUpdate != null) {
+                    decreasePrioTorrent(TorrentDetailsFragment.hashToUpdate);
 
-                tf = this.getTorrentDetailsFragment();
-
-                if (tf != null) {
-                    position = tf.position;
-                    hash = MainActivity.lines[position].getHash();
-                    decreasePrioTorrent(hash);
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
                     }
                 }
                 return true;
             case R.id.action_max_prio:
+                if (TorrentDetailsFragment.hashToUpdate != null) {
+                    maxPrioTorrent(TorrentDetailsFragment.hashToUpdate);
 
-                tf = this.getTorrentDetailsFragment();
-
-                if (tf != null) {
-                    position = tf.position;
-                    hash = MainActivity.lines[position].getHash();
-                    maxPrioTorrent(hash);
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
                     }
                 }
                 return true;
             case R.id.action_min_prio:
+                if (TorrentDetailsFragment.hashToUpdate != null) {
+                    minPrioTorrent(TorrentDetailsFragment.hashToUpdate);
 
-                tf = this.getTorrentDetailsFragment();
-
-                if (tf != null) {
-                    position = tf.position;
-                    hash = MainActivity.lines[position].getHash();
-                    minPrioTorrent(hash);
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
                     }
                 }
                 return true;
-
-
             case R.id.action_resume_all:
                 resumeAllTorrents();
                 return true;
             case R.id.action_pause_all:
                 pauseAllTorrents();
                 return true;
-
             case R.id.action_upload_rate_limit:
-
-                tf = this.getTorrentDetailsFragment();
-
-                if (tf != null) {
-                    position = tf.position;
-                    hash = MainActivity.lines[position].getHash();
-                    uploadRateLimitDialog(hash);
+                if (TorrentDetailsFragment.hashToUpdate != null) {
+                    uploadRateLimitDialog(TorrentDetailsFragment.hashToUpdate);
+                    if (findViewById(R.id.one_frame) != null) {
+                        getFragmentManager().popBackStack();
+                    }
                 }
                 return true;
 
             case R.id.action_download_rate_limit:
-
-                tf = this.getTorrentDetailsFragment();
-
-                if (tf != null) {
-                    position = tf.position;
-                    hash = MainActivity.lines[position].getHash();
-                    downloadRateLimitDialog(hash);
+                if (TorrentDetailsFragment.hashToUpdate != null) {
+                    downloadRateLimitDialog(TorrentDetailsFragment.hashToUpdate);
+                    if (findViewById(R.id.one_frame) != null) {
+                        getFragmentManager().popBackStack();
+                    }
                 }
                 return true;
             case R.id.action_recheck:
-
-                tf = this.getTorrentDetailsFragment();
-
-                if (tf != null) {
-                    position = tf.position;
-                    hash = MainActivity.lines[position].getHash();
-                    recheckTorrents(hash);
-                    // if (findViewById(R.id.one_frame) != null) {
-                    // getFragmentManager().popBackStack();
-                    // }
+                if (TorrentDetailsFragment.hashToUpdate != null) {
+                    recheckTorrents(TorrentDetailsFragment.hashToUpdate);
+                    if (findViewById(R.id.one_frame) != null) {
+                        getFragmentManager().popBackStack();
+                    }
                 }
                 return true;
             case R.id.action_firts_last_piece_prio:
-
-                tf = this.getTorrentDetailsFragment();
-
-                if (tf != null) {
-                    position = tf.position;
-                    hash = MainActivity.lines[position].getHash();
-                    toggleFirstLastPiecePrio(hash);
+                if (TorrentDetailsFragment.hashToUpdate != null) {
+                    toggleFirstLastPiecePrio(TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
                     }
                 }
                 return true;
-
-
             case R.id.action_sequential_download:
-
-                tf = this.getTorrentDetailsFragment();
-
-                if (tf != null) {
-                    position = tf.position;
-                    hash = MainActivity.lines[position].getHash();
-                    toggleSequentialDownload(hash);
+                if (TorrentDetailsFragment.hashToUpdate != null) {
+                    toggleSequentialDownload(TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
                     }
                 }
                 return true;
-
-
             case R.id.action_sortby_name:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[0]);
                 invalidateOptionsMenu();
