@@ -203,4 +203,6 @@
     <string name="help_version_title">Versione</string>
     <string name="help_contributors">Collaboratori:</string>
     <string name="help_license">© Luis M. Gallardo D. \n\nPubblicato sotto licenza GPL</string>
+    <string name="settings_qbittorrent_header_dialog_title">Mostra velocità e totali</string>
+    <string name="settings_qbittorrent_header_dialog_sumary">Carica / velocità di download e totali</string>
 </resources>

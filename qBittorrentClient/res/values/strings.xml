@@ -212,4 +212,6 @@
     <string name="help_documentation_summary">Available on GitHub</string>
     <string name="help_contributors">Contributors:</string>
     <string name="help_license">© Luis M. Gallardo D. \n\nPublished under GPL v3</string>
+    <string name="settings_qbittorrent_header_dialog_title">Show speeds and totals</string>
+    <string name="settings_qbittorrent_header_dialog_sumary">Upload/download speeds and totals</string>
 </resources>
