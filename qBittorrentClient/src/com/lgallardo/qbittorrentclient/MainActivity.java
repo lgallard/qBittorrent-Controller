@@ -55,6 +55,8 @@ import com.google.android.gms.ads.AdView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -754,7 +756,14 @@ public class MainActivity extends FragmentActivity {
             } else {
 
                 // Web
-                addTorrent(Uri.decode(urlTorrent));
+//                addTorrent(Uri.decode(urlTorrent));
+
+                try {
+                    addTorrent(Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8")));
+                }catch(UnsupportedEncodingException e){
+                    Log.e("Debug", "Check URL: "+e.toString());
+                }
+
             }
 
         }
