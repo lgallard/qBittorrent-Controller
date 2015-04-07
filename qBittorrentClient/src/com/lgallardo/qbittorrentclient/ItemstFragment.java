@@ -32,7 +32,7 @@ public class ItemstFragment extends ListFragment {
     static public ActionMode mActionMode;
     public int nr = 0;
     int secondContainer;
-    TorrentDetailsFragment detailFragment;
+    TorrentDetailsFragment detailsFragment;
     ;
 
     public ItemstFragment() {
@@ -394,19 +394,50 @@ public class ItemstFragment extends ListFragment {
             return;
         }
 
-        detailFragment = new TorrentDetailsFragment();
+        Torrent torrent = MainActivity.lines[position];
+
+        if (torrent.getHash().equals(TorrentDetailsFragment.hashToUpdate) && getActivity().findViewById(R.id.fragment_container) != null) {
+
+            // Update torrent details
+
+            FragmentManager fragmentManager = getFragmentManager();
+            if(!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
+
+
+
+                detailsFragment = (TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
+
+                if (detailsFragment != null && torrent != null) {
+
+                    detailsFragment.updateDetails(torrent);
+                }
+            }
+            else{
+                newDetailsFragment(position);
+            }
+        } else {
+
+            newDetailsFragment(position);
+
+        }
+    }
+
+    private void newDetailsFragment(int position){
+
+        detailsFragment = new TorrentDetailsFragment();
 
         // Get torrent from MainActivity
-        detailFragment.setTorrent(MainActivity.lines[position]);
+        detailsFragment.setTorrent(MainActivity.lines[position]);
 
-        detailFragment.setPosition(position);
+        detailsFragment.setPosition(position);
 
-        if (detailFragment != null) {
+        if (detailsFragment != null) {
             FragmentManager fragmentManager = getFragmentManager();
-            if (getActivity().findViewById(R.id.one_frame) != null){
-                fragmentManager.beginTransaction().replace(this.getSecondFragmentContainer(), detailFragment, "firstFragment").addToBackStack("secondFragment").commit();
-            }else{
-                fragmentManager.beginTransaction().replace(this.getSecondFragmentContainer(), detailFragment, "secondFragment").addToBackStack("secondFragment").commit();
+
+            if (getActivity().findViewById(R.id.one_frame) != null) {
+                fragmentManager.beginTransaction().replace(this.getSecondFragmentContainer(), detailsFragment, "firstFragment").addToBackStack("secondFragment").commit();
+            } else {
+                fragmentManager.beginTransaction().replace(this.getSecondFragmentContainer(), detailsFragment, "secondFragment").addToBackStack("secondFragment").commit();
             }
         }
 
