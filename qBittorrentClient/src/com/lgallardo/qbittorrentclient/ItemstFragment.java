@@ -389,10 +389,10 @@ public class ItemstFragment extends ListFragment {
 
         int count = lv.getCount();
 
-        if (count == 1 && lv.getItemAtPosition(0).equals(getString(R.string.no_results))) {
-
-            return;
-        }
+//        if (count == 1 && lv.getItemAtPosition(0).equals(getString(R.string.no_results))) {
+//
+//            return;
+//        }
 
         Torrent torrent = MainActivity.lines[position];
 

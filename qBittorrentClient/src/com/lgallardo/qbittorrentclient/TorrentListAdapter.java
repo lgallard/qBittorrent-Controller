@@ -31,8 +31,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub}
-        return (torrentsNames != null) ? torrentsNames.length : 0;
+        return (torrentsNames != null) ? torrentsNames.length : 1;
     }
 
     @Override
@@ -46,58 +45,79 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
         View row = inflater.inflate(R.layout.row, parent, false);
 
-        String file = torrentsData[position].getFile();
+        if (torrentsData != null) {
 
-        String state = torrentsData[position].getState();
+            String file = torrentsData[position].getFile();
 
-        TextView name = (TextView) row.findViewById(R.id.file);
-        name.setText(file);
+            String state = torrentsData[position].getState();
+
+            TextView name = (TextView) row.findViewById(R.id.file);
+            name.setText(file);
 
 
-        TextView info = (TextView) row.findViewById(R.id.info);
+            TextView info = (TextView) row.findViewById(R.id.info);
 
-        info.setText("" + torrentsData[position].getInfo());
+            info.setText("" + torrentsData[position].getInfo());
 
-        ImageView icon = (ImageView) row.findViewById(R.id.icon);
+            ImageView icon = (ImageView) row.findViewById(R.id.icon);
 
-        if ("pausedUP".equals(state) || "pausedDL".equals(state)) {
-            icon.setImageResource(R.drawable.paused);
-        }
+            if ("pausedUP".equals(state) || "pausedDL".equals(state)) {
+                icon.setImageResource(R.drawable.paused);
+            }
 
-        if ("stalledUP".equals(state)) {
-            icon.setImageResource(R.drawable.stalledup);
-        }
+            if ("stalledUP".equals(state)) {
+                icon.setImageResource(R.drawable.stalledup);
+            }
 
-        if ("stalledDL".equals(state)) {
-            icon.setImageResource(R.drawable.stalleddl);
-        }
+            if ("stalledDL".equals(state)) {
+                icon.setImageResource(R.drawable.stalleddl);
+            }
 
-        if ("downloading".equals(state)) {
-            icon.setImageResource(R.drawable.downloading);
-        }
+            if ("downloading".equals(state)) {
+                icon.setImageResource(R.drawable.downloading);
+            }
 
-        if ("uploading".equals(state)) {
-            icon.setImageResource(R.drawable.uploading);
-        }
+            if ("uploading".equals(state)) {
+                icon.setImageResource(R.drawable.uploading);
+            }
 
-        if ("queuedDL".equals(state) || "queuedUP".equals(state)) {
-            icon.setImageResource(R.drawable.queued);
-        }
+            if ("queuedDL".equals(state) || "queuedUP".equals(state)) {
+                icon.setImageResource(R.drawable.queued);
+            }
 
-        if ("checkingDL".equals(state) || "checkingUP".equals(state)) {
-            icon.setImageResource(R.drawable.ic_action_recheck);
-        }
+            if ("checkingDL".equals(state) || "checkingUP".equals(state)) {
+                icon.setImageResource(R.drawable.ic_action_recheck);
+            }
 
-        row.setBackgroundColor(getContext().getResources().getColor(android.R.color.background_light)); //default color
+            row.setBackgroundColor(getContext().getResources().getColor(android.R.color.background_light)); //default color
 
-        if (mSelection.get(position) != null) {
-            row.setBackgroundColor(getContext().getResources().getColor(android.R.color.holo_blue_light));// this is a selected position so make it blue
+            if (mSelection.get(position) != null) {
+                row.setBackgroundColor(getContext().getResources().getColor(android.R.color.holo_blue_light));// this is a selected position so make it blue
+            }
         } else {
-//            Log.i("torrentListAdapter","size: "+mSelection.size());
-//            Log.i("torrentListAdapter","position: "+position);
+
+            //            Log.d("Debug", "No results");
+
+            TextView name = (TextView) row.findViewById(R.id.file);
+            name.setText(context.getString(R.string.no_results));
+
+            // Hide torrent layout
+//            ProgressBar progressBar = (ProgressBar) row.findViewById(R.id.progressBar1);
+//            TextView percentageTV = (TextView) row.findViewById(R.id.percentage);
+            ImageView icon = (ImageView) row.findViewById(R.id.icon);
+            TextView info = (TextView) row.findViewById(R.id.info);
+
+//            progressBar.setVisibility(View.GONE);
+//            percentageTV.setVisibility(View.GONE);
+            icon.setVisibility(View.GONE);
+            info.setVisibility(View.GONE);
+
+            row.setBackgroundColor(getContext().getResources().getColor(android.R.color.background_light)); //default color
+
         }
 
         return (row);
+
     }
 
 
@@ -139,5 +159,23 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
     public Torrent[] getData() {
         return this.torrentsData;
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        if (areAllItemsEnabled()) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    @Override
+    public boolean areAllItemsEnabled() {
+        if (torrentsData != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
