@@ -2358,7 +2358,9 @@ public class MainActivity extends FragmentActivity {
                             // Set first fragment
                             if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
                                 fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
-                            } else {
+                            }
+
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof TorrentDetailsFragment) {
 
                                 TorrentDetailsFragment detailsFragment = (TorrentDetailsFragment) fragmentManager.findFragmentByTag("firstFragment");
 
