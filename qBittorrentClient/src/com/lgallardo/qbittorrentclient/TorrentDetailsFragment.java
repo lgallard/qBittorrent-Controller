@@ -348,8 +348,8 @@ public class TorrentDetailsFragment extends Fragment {
             }
 
 
-            downloadSpeedTextView.setText(Character.toString('\u2193') + " " + downloadSpeed);
-            uploadSpeedTextView.setText(Character.toString('\u2191') + " " + uploadSpeed);
+            downloadSpeedTextView.setText(downloadSpeed);
+            uploadSpeedTextView.setText(uploadSpeed);
 
             // Set progress bar
             ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar1);
