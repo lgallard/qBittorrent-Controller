@@ -204,5 +204,6 @@
     <string name="help_version_title">Version</string>
     <string name="help_contributors">Bidragande:</string>
     <string name="help_license">© Luis M. Gallardo D. \n\nPublicerad under GPL v3</string>
-
+    <string name="help_rate_summary">Bedöm appen i Google Play</string>
+    <string name="help_rate_title">Betygsätt den här appen</string>
 </resources>

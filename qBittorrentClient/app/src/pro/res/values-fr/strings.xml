@@ -199,5 +199,6 @@
     <string name="help_version_title">Version</string>
     <string name="help_contributors">Collaborateurs:</string>
     <string name="help_license">© Luis M. Gallardo D. \n\nPublished under GPL v3</string>
-
+    <string name="help_rate_summary">Se il vous plaît évaluer l\'application dans Google Play</string>
+    <string name="help_rate_title">Évaluer l\'application</string>
 </resources>

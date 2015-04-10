@@ -205,4 +205,6 @@
     <string name="help_license">© Luis M. Gallardo D. \n\nPubblicato sotto licenza GPL</string>
     <string name="settings_qbittorrent_header_dialog_title">Mostra velocità e totali</string>
     <string name="settings_qbittorrent_header_dialog_sumary">Carica / velocità di download e totali</string>
+    <string name="help_rate_summary">Si prega di valutare l\'applicazione in Google PlayPoPl</string>
+    <string name="help_rate_title">Valuta questa applicazione</string>
 </resources>

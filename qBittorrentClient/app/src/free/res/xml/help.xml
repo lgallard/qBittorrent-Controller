@@ -28,7 +28,7 @@
             android:title="@string/help_rate_title">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclient" />
+                android:data="market://details?id=com.lgallardo.qbittorrentclientpro" />
         </Preference>
         <Preference
             android:summary="@string/app_name"

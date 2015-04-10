@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
     <string name="app_name">qBittorrent Client Pro</string>
     <string name="app_shortname">Client Pro</string>
     <string name="action_settings">Inställningar</string>
@@ -199,5 +198,6 @@
     <string name="help_version_title">Version</string>
     <string name="help_contributors">Bidragande:</string>
     <string name="help_license">© Luis M. Gallardo D. \n\nPublicerad under GPL v3</string>
-
+    <string name="help_rate_summary">Bedöm appen i Google Play</string>
+    <string name="help_rate_title">Betygsätt den här appen</string>
 </resources>

@@ -204,4 +204,6 @@
     <string name="help_license">© Luis M. Gallardo D. \n\nВыпущено под лицензией GPL v3</string>
     <string name="settings_qbittorrent_header_dialog_title">Показывать общую скорость передачи</string>
     <string name="settings_qbittorrent_header_dialog_sumary">Общая скорость скачивания\отдачи</string>
+    <string name="help_rate_summary">Оцените приложение в Google Play</string>
+    <string name="help_rate_title">Оцените это приложение</string>
 </resources>

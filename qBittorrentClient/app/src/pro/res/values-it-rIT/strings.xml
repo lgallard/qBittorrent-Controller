@@ -199,5 +199,6 @@
     <string name="help_version_title">Versione</string>
     <string name="help_contributors">Collaboratori:</string>
     <string name="help_license">© Luis M. Gallardo D. \n\nPubblicato sotto licenza GPL</string>
-
+    <string name="help_rate_summary">Si prega di valutare l\'applicazione in Google PlayPoPl</string>
+    <string name="help_rate_title">Valuta questa applicazione</string>
 </resources>
