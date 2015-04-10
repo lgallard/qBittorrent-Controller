@@ -26,6 +26,7 @@ qBittorrentClient/proguard/
 # Log Files
 qBittorrentClient/*.log
 
+qBittorrentClient/.idea
 qBittorrentClient/.idea/workspace.xml
 qBittorrentClient/app/app.iml
 
