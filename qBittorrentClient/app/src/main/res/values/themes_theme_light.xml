@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="Theme_Light" parent="android:Theme.Holo.Light.DarkActionBar">
+
+        <item name="android:windowBackground">@android:color/background_light</item>
+
+        <!-- dropshadow background (for torrent details)-->
+        <item name="dropShadowBackground">@drawable/container_dropshadow_light</item>
+
+        <!-- backgroundSelector (for row listView)-->
+        <item name="backgroundSelector">@drawable/background_selector_light</item>
+
+        <item name="android:editTextBackground">@drawable/theme_light_edit_text_holo_light</item>
+
+        <item name="android:textColorHighlight">#990099cc</item>
+        <item name="android:textSelectHandleLeft">@drawable/theme_light_text_select_handle_left
+        </item>
+        <item name="android:textSelectHandleRight">@drawable/theme_light_text_select_handle_right
+        </item>
+        <item name="android:textSelectHandle">@drawable/theme_light_text_select_handle_middle</item>
+
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewTheme_Light</item>
+
+        <item name="android:listChoiceIndicatorMultiple">
+            @drawable/theme_light_btn_check_holo_light
+        </item>
+
+        <item name="android:listChoiceIndicatorSingle">@drawable/theme_light_btn_radio_holo_light
+        </item>
+
+        <item name="android:buttonStyle">@style/ButtonTheme_Light</item>
+
+        <item name="android:imageButtonStyle">@style/ImageButtonTheme_Light</item>
+
+        <item name="android:dropDownSpinnerStyle">@style/SpinnerTheme_Light</item>
+
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Light</item>
+
+        <item name="android:seekBarStyle">@style/SeekBarTheme_Light</item>
+
+        <item name="android:ratingBarStyle">@style/RatingBarTheme_Light</item>
+
+        <item name="android:ratingBarStyleIndicator">@style/RatingBarBigTheme_Light</item>
+
+        <item name="android:ratingBarStyleSmall">@style/RatingBarSmallTheme_Light</item>
+
+        <item name="android:buttonStyleToggle">@style/ToggleTheme_Light</item>
+
+        <item name="android:listChoiceBackgroundIndicator">
+            @drawable/theme_light_list_selector_holo_light
+        </item>
+
+        <item name="android:activatedBackgroundIndicator">
+            @drawable/theme_light_activated_background_holo_light
+        </item>
+
+        <item name="android:fastScrollThumbDrawable">@drawable/theme_light_fastscroll_thumb_holo
+        </item>
+
+    </style>
+
+</resources>

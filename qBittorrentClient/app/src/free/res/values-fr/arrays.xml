@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string-array name="qBittorrentServers">
+        <item>Serveur 1</item>
+        <item>Serveur 2</item>
+        <item>Serveur 3</item>
+    </string-array>
+    <string-array name="qBittorrentServersValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="autorefresh">
+        <item name="1">1 seconde</item>
+        <item name="2">2 secondes</item>
+        <item name="3">5 secondes</item>
+        <item name="4">10 secondes</item>
+        <item name="5">30 secondes</item>
+        <item name="6">1 minute</item>
+        <item name="7">2 minutes</item>
+        <item name="8">5 minutes</item>
+        <item name="9">10 minutes</item>
+        <item name="10">15 minutes</item>
+    </string-array>
+    <string-array name="autorefreshValues">
+        <item name="1">1000</item>
+        <item name="2">2000</item>
+        <item name="3">5000</item>
+        <item name="4">10000</item>
+        <item name="5">30000</item>
+        <item name="6">60000</item>
+        <item name="7">120000</item>
+        <item name="8">300000</item>
+        <item name="9">600000</item>
+        <item name="10">900000</item>
+    </string-array>
+    <string-array name="notification">
+        <item name="1">2 minutes</item>
+        <item name="2">5 minutes</item>
+        <item name="3">15 minutes</item>
+        <item name="4">30 minutes</item>
+        <item name="5">1 heure</item>
+        <item name="6">6 heures</item>
+        <item name="7">12 heures</item>
+        <item name="8">1 jour</item>
+    </string-array>
+    <string-array name="notificationValues">
+        <item name="1">120000</item>
+        <item name="2">300000</item>
+        <item name="3">900000</item>
+        <item name="4">1800000</item>
+        <item name="5">3600000</item>
+        <item name="6">21600000</item>
+        <item name="7">43200000</item>
+        <item name="8">86400000</item>
+    </string-array>
+    <string-array name="sortBy">
+        <item name="1">Nom</item>
+        <item name="2">Durée estimée</item>
+        <item name="3">Priorité</item>
+        <item name="4">Progrès</item>
+        <item name="5">Ratio</item>
+        <item name="6">Vitesse DL</item>
+        <item name="7">Vitesse UP</item>
+    </string-array>
+    <string-array name="sortByValues">
+        <item name="1">Name</item>
+        <item name="2">ETA</item>
+        <item name="3">Priority</item>
+        <item name="4">Progress</item>
+        <item name="5">Ratio</item>
+        <item name="6">DownloadSpeed</item>
+        <item name="7">UploadSpeed</item>
+    </string-array>
+    <string-array name="qbVersion">
+        <item name="1">2.x</item>
+        <item name="2">3.1.x</item>
+        <item name="3">3.2.x</item>
+    </string-array>
+    <string-array name="qbVersionValues">
+        <item name="1">2.x</item>
+        <item name="2">3.1.x</item>
+        <item name="3">3.2.x</item>
+    </string-array>
+    <string-array name="navigation_drawer_items_array">
+        <item>Tout</item>
+        <item>Téléchargement</item>
+        <item>Fini</item>
+        <item>Suspendu</item>
+        <item>Actif</item>
+        <item>Inactif</item>
+        <item>Options</item>
+        <item>Paramètres</item>
+        <item>Obtenir Pro</item>
+        <item>Aide</item>
+    </string-array>
+</resources>

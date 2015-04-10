@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="AutoCompleteTextViewTheme_Dark" parent="android:Widget.Holo.AutoCompleteTextView">
+      <item name="android:dropDownSelector">@drawable/theme_dark_list_selector_holo_dark</item>
+	    <item name="android:background">@drawable/theme_dark_edit_text_holo_dark</item>
+  </style>
+
+  <style name="ButtonTheme_Dark" parent="android:Widget.Holo.Button">
+	  <item name="android:background">@drawable/theme_dark_btn_default_holo_dark</item>
+  </style>
+
+  <style name="ImageButtonTheme_Dark" parent="android:Widget.Holo.ImageButton">
+	  <item name="android:background">@drawable/theme_dark_btn_default_holo_dark</item>
+  </style>
+
+  <style name="SpinnerTheme_Dark" parent="android:Widget.Holo.Spinner">
+      <item name="android:background">@drawable/theme_dark_spinner_background_holo_dark</item>
+      <item name="android:dropDownSelector">@drawable/theme_dark_list_selector_holo_dark</item>
+  </style>
+
+  <style name="TabTheme_Dark">
+      <item name="android:gravity">center_horizontal</item>
+      <item name="android:paddingLeft">16dip</item>
+      <item name="android:paddingRight">16dip</item>
+      <item name="android:background">@drawable/theme_dark_tab_indicator_holo</item>
+      <item name="android:layout_width">0dip</item>
+      <item name="android:layout_weight">1</item>
+      <item name="android:minWidth">80dip</item>
+  </style>
+
+  <style name="TabTextTheme_Dark">
+	  <item name="android:textColor">#ffffff</item>
+      <item name="android:textSize">12sp</item>
+      <item name="android:textStyle">bold</item>
+      <!-- v14 <item name="android:textAllCaps">true</item> -->
+      <item name="android:ellipsize">marquee</item>
+      <item name="android:maxLines">2</item>
+      <item name="android:maxWidth">180dip</item>
+  </style>
+
+  <style name="ProgressBarTheme_Dark" parent="android:Widget.Holo.ProgressBar.Horizontal">
+      <item name="android:progressDrawable">@drawable/theme_dark_progress_horizontal_holo_dark</item>
+      <item name="android:indeterminateDrawable">@drawable/theme_dark_progress_indeterminate_horizontal_holo_dark</item>
+  </style>
+
+  <style name="SeekBarTheme_Dark" parent="android:Widget.Holo.SeekBar">
+      <item name="android:progressDrawable">@drawable/theme_dark_scrubber_progress_horizontal_holo_dark</item>
+      <item name="android:indeterminateDrawable">@drawable/theme_dark_scrubber_progress_horizontal_holo_dark</item>
+      <item name="android:thumb">@drawable/theme_dark_scrubber_control_selector_holo_dark</item>
+  </style>
+
+  <style name="RatingBarTheme_Dark" parent="android:Widget.Holo.RatingBar">
+      <item name="android:progressDrawable">@drawable/theme_dark_ratingbar_full_holo_dark</item>
+      <item name="android:indeterminateDrawable">@drawable/theme_dark_ratingbar_full_holo_dark</item>
+  </style>
+
+  <style name="RatingBarBigTheme_Dark" parent="android:Widget.Holo.RatingBar.Indicator">
+      <item name="android:progressDrawable">@drawable/theme_dark_ratingbar_holo_dark</item>
+      <item name="android:indeterminateDrawable">@drawable/theme_dark_ratingbar_holo_dark</item>
+  </style>
+
+  <style name="RatingBarSmallTheme_Dark" parent="android:Widget.Holo.RatingBar.Small">
+      <item name="android:progressDrawable">@drawable/theme_dark_ratingbar_small_holo_dark</item>
+      <item name="android:indeterminateDrawable">@drawable/theme_dark_ratingbar_small_holo_dark</item>
+  </style>
+
+  <style name="ToggleTheme_Dark" parent="android:Widget.Holo.Button.Toggle">
+      <item name="android:background">@drawable/theme_dark_btn_toggle_holo_dark</item>
+  </style>
+
+
+</resources>
