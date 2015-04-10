@@ -41,7 +41,7 @@
             android:id="@+id/header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/header"
+            android:layout_below="@+id/progressBarConnecting"
             android:gravity="end"
             android:orientation="horizontal"
             android:paddingBottom="5dp">
@@ -88,7 +88,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/adView"
-            android:layout_below="@+id/progressBarConnecting"
+            android:layout_below="@+id/header"
             android:baselineAligned="false"
             android:orientation="horizontal">
 
