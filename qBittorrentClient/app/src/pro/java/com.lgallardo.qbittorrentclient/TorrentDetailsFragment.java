@@ -168,7 +168,7 @@ public class TorrentDetailsFragment extends Fragment {
 
         View rootView;
 
-        if (MainActivity.qb_version.equals("3.2.x")) {
+        if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
 
             rootView = inflater.inflate(R.layout.torrent_details, container, false);
         } else {
@@ -284,7 +284,7 @@ public class TorrentDetailsFragment extends Fragment {
             priorityTextView.setText(priority);
             etaTextView.setText(eta);
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
                 firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
@@ -338,8 +338,8 @@ public class TorrentDetailsFragment extends Fragment {
 
 
             // Show progressBar
-            if (MainActivity.progressBar != null) {
-                MainActivity.progressBar.setVisibility(View.VISIBLE);
+            if (com.lgallardo.qbittorrentclient.MainActivity.progressBar != null) {
+                com.lgallardo.qbittorrentclient.MainActivity.progressBar.setVisibility(View.VISIBLE);
             }
 
             // Get Content files in background
@@ -435,7 +435,7 @@ public class TorrentDetailsFragment extends Fragment {
             priorityTextView.setText(priority);
             etaTextView.setText(eta);
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
                 firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
@@ -489,8 +489,8 @@ public class TorrentDetailsFragment extends Fragment {
 
 
             // Show progressBar
-            if (MainActivity.progressBar != null) {
-                MainActivity.progressBar.setVisibility(View.VISIBLE);
+            if (com.lgallardo.qbittorrentclient.MainActivity.progressBar != null) {
+                com.lgallardo.qbittorrentclient.MainActivity.progressBar.setVisibility(View.VISIBLE);
             }
 
             // Get Content files in background
@@ -551,7 +551,13 @@ public class TorrentDetailsFragment extends Fragment {
             menu.findItem(R.id.action_add).setVisible(false);
 
             menu.findItem(R.id.action_refresh).setVisible(true);
-            menu.findItem(R.id.action_sort_menu).setVisible(true);
+
+            if (getActivity().findViewById(R.id.one_frame) != null) {
+                menu.findItem(R.id.action_sort_menu).setVisible(false);
+            }else{
+                menu.findItem(R.id.action_sort_menu).setVisible(true);
+            }
+
             menu.findItem(R.id.action_resume).setVisible(true);
             menu.findItem(R.id.action_pause).setVisible(true);
             menu.findItem(R.id.action_priority_menu).setVisible(true);
@@ -571,7 +577,7 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_search).setVisible(true);
             }
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                 menu.findItem(R.id.action_firts_last_piece_prio).setVisible(true);
                 menu.findItem(R.id.action_sequential_download).setVisible(true);
             }
@@ -596,15 +602,15 @@ public class TorrentDetailsFragment extends Fragment {
 
         protected View[] doInBackground(View... rootViews) {
             // Get torrent's files
-            if (MainActivity.qb_version.equals("2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("2.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.1.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.1.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                 qbQueryString = "query";
             }
 
@@ -616,10 +622,10 @@ public class TorrentDetailsFragment extends Fragment {
 
             try {
 
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
-                        MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
+                com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(com.lgallardo.qbittorrentclient.MainActivity.hostname, com.lgallardo.qbittorrentclient.MainActivity.subfolder, com.lgallardo.qbittorrentclient.MainActivity.protocol, com.lgallardo.qbittorrentclient.MainActivity.port,
+                        com.lgallardo.qbittorrentclient.MainActivity.username, com.lgallardo.qbittorrentclient.MainActivity.password, com.lgallardo.qbittorrentclient.MainActivity.connection_timeout, com.lgallardo.qbittorrentclient.MainActivity.data_timeout);
 
-                jParser.setCookie(MainActivity.cookie);
+                jParser.setCookie(com.lgallardo.qbittorrentclient.MainActivity.cookie);
 
                 JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
 
@@ -632,13 +638,13 @@ public class TorrentDetailsFragment extends Fragment {
 
                         JSONObject json = jArray.getJSONObject(i);
 
-                        name = json.getString(MainActivity.TAG_NAME);
-                        size = json.getString(MainActivity.TAG_SIZE).replace(",", ".");
-                        progress = json.getDouble(MainActivity.TAG_PROGRESS);
-                        priority = json.getInt(MainActivity.TAG_PRIORITY);
+                        name = json.getString(com.lgallardo.qbittorrentclient.MainActivity.TAG_NAME);
+                        size = json.getString(com.lgallardo.qbittorrentclient.MainActivity.TAG_SIZE).replace(",", ".");
+                        progress = json.getDouble(com.lgallardo.qbittorrentclient.MainActivity.TAG_PROGRESS);
+                        priority = json.getInt(com.lgallardo.qbittorrentclient.MainActivity.TAG_PRIORITY);
 
-                        if (MainActivity.qb_version.equals("3.2.x")) {
-                            size = Common.calculateSize(json.getString(MainActivity.TAG_SIZE)).replace(",", ".");
+                        if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
+                            size = Common.calculateSize(json.getString(com.lgallardo.qbittorrentclient.MainActivity.TAG_SIZE)).replace(",", ".");
                         }
 
                         files[i] = new ContentFile(name, size, progress, priority);
@@ -690,15 +696,15 @@ public class TorrentDetailsFragment extends Fragment {
 
         protected View[] doInBackground(View... rootViews) {
             // Get torrent's trackers
-            if (MainActivity.qb_version.equals("2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("2.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.1.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.1.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                 qbQueryString = "query";
             }
 
@@ -709,10 +715,10 @@ public class TorrentDetailsFragment extends Fragment {
 
             try {
 
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
-                        MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
+                com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(com.lgallardo.qbittorrentclient.MainActivity.hostname, com.lgallardo.qbittorrentclient.MainActivity.subfolder, com.lgallardo.qbittorrentclient.MainActivity.protocol, com.lgallardo.qbittorrentclient.MainActivity.port,
+                        com.lgallardo.qbittorrentclient.MainActivity.username, com.lgallardo.qbittorrentclient.MainActivity.password, com.lgallardo.qbittorrentclient.MainActivity.connection_timeout, com.lgallardo.qbittorrentclient.MainActivity.data_timeout);
 
-                jParser.setCookie(MainActivity.cookie);
+                jParser.setCookie(com.lgallardo.qbittorrentclient.MainActivity.cookie);
 
                 JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
 
@@ -725,7 +731,7 @@ public class TorrentDetailsFragment extends Fragment {
 
                         JSONObject json = jArray.getJSONObject(i);
 
-                        url = json.getString(MainActivity.TAG_URL);
+                        url = json.getString(com.lgallardo.qbittorrentclient.MainActivity.TAG_URL);
 
                         trackers[i] = new Tracker(url);
                         trackerNames[i] = url;
@@ -779,15 +785,15 @@ public class TorrentDetailsFragment extends Fragment {
 
         protected View[] doInBackground(View... rootViews) {
             // Get torrent's extra info
-            if (MainActivity.qb_version.equals("2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("2.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.1.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.1.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                 qbQueryString = "query";
             }
 
@@ -795,10 +801,10 @@ public class TorrentDetailsFragment extends Fragment {
 
             try {
 
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
-                        MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
+                com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(com.lgallardo.qbittorrentclient.MainActivity.hostname, com.lgallardo.qbittorrentclient.MainActivity.subfolder, com.lgallardo.qbittorrentclient.MainActivity.protocol, com.lgallardo.qbittorrentclient.MainActivity.port,
+                        com.lgallardo.qbittorrentclient.MainActivity.username, com.lgallardo.qbittorrentclient.MainActivity.password, com.lgallardo.qbittorrentclient.MainActivity.connection_timeout, com.lgallardo.qbittorrentclient.MainActivity.data_timeout);
 
-                jParser.setCookie(MainActivity.cookie);
+                jParser.setCookie(com.lgallardo.qbittorrentclient.MainActivity.cookie);
 
                 json2 = jParser.getJSONFromUrl(url + hash);
 
@@ -852,7 +858,7 @@ public class TorrentDetailsFragment extends Fragment {
                     values[10] = json2.getString(TAG_DOWNLOAD_LIMIT);
 
 
-                    if (MainActivity.qb_version.equals("3.2.x")) {
+                    if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
 
                         // Creation date
                         values[1] = Common.unixTimestampToDate(json2.getString(TAG_CREATION_DATE));
@@ -923,8 +929,8 @@ public class TorrentDetailsFragment extends Fragment {
             }
 
             // Hide progressBar
-            if (MainActivity.progressBar != null) {
-                MainActivity.progressBar.setVisibility(View.INVISIBLE);
+            if (com.lgallardo.qbittorrentclient.MainActivity.progressBar != null) {
+                com.lgallardo.qbittorrentclient.MainActivity.progressBar.setVisibility(View.INVISIBLE);
             }
 
         }

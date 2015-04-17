@@ -29,4 +29,5 @@ qBittorrentClient/*.log
 qBittorrentClient/.idea
 qBittorrentClient/.idea/workspace.xml
 qBittorrentClient/app/app.iml
+qBittorrentClient/app/build.gradle
 
