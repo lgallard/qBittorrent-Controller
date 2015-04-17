@@ -18,6 +18,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <include android:id="@+id/app_bar" layout="@layout/app_bar"/>
+
         <ProgressBar
             android:id="@+id/progressBarConnecting"
             style="?android:attr/progressBarStyleHorizontal"
@@ -51,7 +53,8 @@
         <FrameLayout
             android:id="@+id/one_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@android:color/white"/>
     </LinearLayout>
 
     <ListView

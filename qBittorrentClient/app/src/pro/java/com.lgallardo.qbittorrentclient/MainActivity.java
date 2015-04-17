@@ -35,6 +35,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -59,7 +61,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends ActionBarActivity {
 
     // Torrent Info TAGs
     protected static final String TAG_NAME = "name";
@@ -101,7 +103,7 @@ public class MainActivity extends FragmentActivity {
     public static LinearLayout headerInfo;
     // Current state
     public static String currentState;
-    protected static JSONParser jParser;
+    protected static com.lgallardo.qbittorrentclient.JSONParser jParser;
     // Preferences properties
     protected static String hostname;
     protected static String subfolder;
@@ -141,7 +143,7 @@ public class MainActivity extends FragmentActivity {
     static String[] names;
     // Params to get JSON Array
     private static String[] params = new String[2];
-    public ItemstFragment firstFragment;
+    public com.lgallardo.qbittorrentclient.ItemstFragment firstFragment;
     // myAdapter myadapter
     public TorrentListAdapter myadapter;
     // Http status code
@@ -176,6 +178,9 @@ public class MainActivity extends FragmentActivity {
     // Alarm manager
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
+
+    // New ToolBar in Material Desing
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,14 +220,18 @@ public class MainActivity extends FragmentActivity {
             cookie = "";
         }
 
-        // Set Theme (It must be fore inflating or setContentView)
-        if (dark_ui) {
-            this.setTheme(R.style.Theme_Dark);
-        } else {
-            this.setTheme(R.style.Theme_Light);
-        }
+//        // Set Theme (It must be fore inflating or setContentView)
+//        if (dark_ui) {
+//            this.setTheme(R.style.Theme_Dark);
+//        } else {
+//            this.setTheme(R.style.Theme_Light);
+//        }
 
         setContentView(R.layout.activity_main);
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        
+        setSupportActionBar(toolbar);
 
         // Get progress bar
         progressBar = (ProgressBar) findViewById(R.id.progressBarConnecting);
@@ -274,7 +283,7 @@ public class MainActivity extends FragmentActivity {
              */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                // getActionBar().setTitle(title);
+                // getSupportActionBar().setTitle(title);
             }
 
             /**
@@ -282,7 +291,7 @@ public class MainActivity extends FragmentActivity {
              */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                // getActionBar().setTitle(drawerTitle);
+                // getSupportActionBar().setTitle(drawerTitle);
                 // setTitle(R.string.app_shortname);
             }
         };
@@ -290,8 +299,8 @@ public class MainActivity extends FragmentActivity {
         drawerLayout.setDrawerListener(drawerToggle);
 
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
 
         // Get options and save them as shared preferences
@@ -318,7 +327,7 @@ public class MainActivity extends FragmentActivity {
 
             // This fragment will hold the list of torrents
             if (firstFragment == null) {
-                firstFragment = new ItemstFragment();
+                firstFragment = new com.lgallardo.qbittorrentclient.ItemstFragment();
             }
             // This fragment will hold the list of torrents
             helpTabletFragment = new HelpFragment();
@@ -357,7 +366,7 @@ public class MainActivity extends FragmentActivity {
 
             // Create an instance of ItemsFragments
             if (firstFragment == null) {
-                firstFragment = new ItemstFragment();
+                firstFragment = new com.lgallardo.qbittorrentclient.ItemstFragment();
             }
             firstFragment.setSecondFragmentContainer(R.id.one_frame);
 
@@ -375,7 +384,7 @@ public class MainActivity extends FragmentActivity {
                 try {
                     FragmentManager fm = getFragmentManager();
 
-                    if (fm.getBackStackEntryCount() == 1 && fm.findFragmentById(R.id.one_frame) instanceof TorrentDetailsFragment) {
+                    if (fm.getBackStackEntryCount() == 1 && fm.findFragmentById(R.id.one_frame) instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
 
                         refreshCurrent();
 
@@ -481,9 +490,9 @@ public class MainActivity extends FragmentActivity {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
-            if (fm.getBackStackEntryCount() == 0 && fm.findFragmentById(R.id.one_frame) instanceof ItemstFragment) {
+            if (fm.getBackStackEntryCount() == 0 && fm.findFragmentById(R.id.one_frame) instanceof com.lgallardo.qbittorrentclient.ItemstFragment) {
 
-                ItemstFragment fragment = (ItemstFragment) fm.findFragmentById(R.id.one_frame);
+                com.lgallardo.qbittorrentclient.ItemstFragment fragment = (com.lgallardo.qbittorrentclient.ItemstFragment) fm.findFragmentById(R.id.one_frame);
 
                 if (fragment.getListView().getCount() == 0) {
 
@@ -561,7 +570,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void setTitle(CharSequence title) {
         this.title = title;
-        getActionBar().setTitle(title);
+        getSupportActionBar().setTitle(title);
     }
 
     @Override
@@ -749,9 +758,9 @@ public class MainActivity extends FragmentActivity {
         getMenuInflater().inflate(R.menu.main, menu);
 
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return true;
     }
@@ -802,8 +811,8 @@ public class MainActivity extends FragmentActivity {
                 addUrlTorrent();
                 return true;
             case R.id.action_pause:
-                if (TorrentDetailsFragment.hashToUpdate != null) {
-                    pauseTorrent(TorrentDetailsFragment.hashToUpdate);
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    pauseTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
@@ -811,8 +820,8 @@ public class MainActivity extends FragmentActivity {
                 }
                 return true;
             case R.id.action_resume:
-                if (TorrentDetailsFragment.hashToUpdate != null) {
-                    startTorrent(TorrentDetailsFragment.hashToUpdate);
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    startTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
@@ -844,8 +853,8 @@ public class MainActivity extends FragmentActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             // User accepted the dialog
 
-                            if (TorrentDetailsFragment.hashToUpdate != null) {
-                                deleteTorrent(TorrentDetailsFragment.hashToUpdate);
+                            if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                                deleteTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                                 if (findViewById(R.id.one_frame) != null) {
                                     getFragmentManager().popBackStack();
@@ -881,8 +890,8 @@ public class MainActivity extends FragmentActivity {
                     builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // User accepted the dialog
-                            if (TorrentDetailsFragment.hashToUpdate != null) {
-                                deleteDriveTorrent(TorrentDetailsFragment.hashToUpdate);
+                            if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                                deleteDriveTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                                 if (findViewById(R.id.one_frame) != null) {
                                     getFragmentManager().popBackStack();
@@ -901,8 +910,8 @@ public class MainActivity extends FragmentActivity {
                 }
                 return true;
             case R.id.action_increase_prio:
-                if (TorrentDetailsFragment.hashToUpdate != null) {
-                    increasePrioTorrent(TorrentDetailsFragment.hashToUpdate);
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    increasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
@@ -910,8 +919,8 @@ public class MainActivity extends FragmentActivity {
                 }
                 return true;
             case R.id.action_decrease_prio:
-                if (TorrentDetailsFragment.hashToUpdate != null) {
-                    decreasePrioTorrent(TorrentDetailsFragment.hashToUpdate);
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    decreasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
@@ -919,8 +928,8 @@ public class MainActivity extends FragmentActivity {
                 }
                 return true;
             case R.id.action_max_prio:
-                if (TorrentDetailsFragment.hashToUpdate != null) {
-                    maxPrioTorrent(TorrentDetailsFragment.hashToUpdate);
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    maxPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
@@ -928,8 +937,8 @@ public class MainActivity extends FragmentActivity {
                 }
                 return true;
             case R.id.action_min_prio:
-                if (TorrentDetailsFragment.hashToUpdate != null) {
-                    minPrioTorrent(TorrentDetailsFragment.hashToUpdate);
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    minPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
@@ -943,8 +952,8 @@ public class MainActivity extends FragmentActivity {
                 pauseAllTorrents();
                 return true;
             case R.id.action_upload_rate_limit:
-                if (TorrentDetailsFragment.hashToUpdate != null) {
-                    uploadRateLimitDialog(TorrentDetailsFragment.hashToUpdate);
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    uploadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
                     }
@@ -952,32 +961,32 @@ public class MainActivity extends FragmentActivity {
                 return true;
 
             case R.id.action_download_rate_limit:
-                if (TorrentDetailsFragment.hashToUpdate != null) {
-                    downloadRateLimitDialog(TorrentDetailsFragment.hashToUpdate);
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    downloadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
                     }
                 }
                 return true;
             case R.id.action_recheck:
-                if (TorrentDetailsFragment.hashToUpdate != null) {
-                    recheckTorrents(TorrentDetailsFragment.hashToUpdate);
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    recheckTorrents(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
                     }
                 }
                 return true;
             case R.id.action_firts_last_piece_prio:
-                if (TorrentDetailsFragment.hashToUpdate != null) {
-                    toggleFirstLastPiecePrio(TorrentDetailsFragment.hashToUpdate);
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    toggleFirstLastPiecePrio(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
                     }
                 }
                 return true;
             case R.id.action_sequential_download:
-                if (TorrentDetailsFragment.hashToUpdate != null) {
-                    toggleSequentialDownload(TorrentDetailsFragment.hashToUpdate);
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    toggleSequentialDownload(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
                         getFragmentManager().popBackStack();
                     }
@@ -1221,7 +1230,7 @@ public class MainActivity extends FragmentActivity {
     private void openSettings() {
         canrefresh = false;
 
-        Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+        Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.SettingsActivity.class);
         // startActivity(intent);
         startActivityForResult(intent, SETTINGS_CODE);
 
@@ -1866,7 +1875,7 @@ public class MainActivity extends FragmentActivity {
         if (findViewById(R.id.one_frame) != null) {
             FragmentManager fragmentManager = getFragmentManager();
 
-            if (fragmentManager.findFragmentByTag("firstFragment") instanceof TorrentDetailsFragment) {
+            if (fragmentManager.findFragmentByTag("firstFragment") instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
                 // Reset back button stack
                 for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
                     fragmentManager.popBackStack();
@@ -1949,7 +1958,7 @@ public class MainActivity extends FragmentActivity {
 
 
             // Creating new JSON Parser
-            JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
 
             String cookie = "";
             String api = "";
@@ -2021,7 +2030,7 @@ public class MainActivity extends FragmentActivity {
 
 
             // Creating new JSON Parser
-            JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
 
             jParser.setCookie(cookie);
 
@@ -2200,7 +2209,7 @@ public class MainActivity extends FragmentActivity {
 
 
                 // Creating new JSON Parser
-                jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+                jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
 
                 jParser.setCookie(MainActivity.cookie);
 
@@ -2443,7 +2452,7 @@ public class MainActivity extends FragmentActivity {
                         MainActivity.names[i] = torrent.getFile();
                         MainActivity.lines[i] = torrent;
 
-                        if (torrent.getHash().equals(TorrentDetailsFragment.hashToUpdate)) {
+                        if (torrent.getHash().equals(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate)) {
 
                             torrentToUpdate = torrent;
 
@@ -2527,7 +2536,7 @@ public class MainActivity extends FragmentActivity {
                             // Set second fragment
                             if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
 
-                                TorrentDetailsFragment detailsFragment = (TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
+                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
 
                                 if (torrentToUpdate != null) {
                                     // Update torrent details
@@ -2566,10 +2575,10 @@ public class MainActivity extends FragmentActivity {
                                 fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
                             }
 
-                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof TorrentDetailsFragment) {
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
 
 
-                                TorrentDetailsFragment detailsFragment = (TorrentDetailsFragment) fragmentManager.findFragmentByTag("firstFragment");
+                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("firstFragment");
 
                                 if (torrentToUpdate != null) {
                                     // Update torrent
@@ -2698,7 +2707,7 @@ public class MainActivity extends FragmentActivity {
             getSettings();
 
             // Creating new JSON Parser
-            JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
 
             jParser.setCookie(cookie);
 
