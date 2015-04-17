@@ -15,9 +15,7 @@
     android:layout_height="match_parent"
 
     android:paddingBottom="5dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp" >
+    android:paddingLeft="10dp">
 
     <ListView
         android:id="@android:id/list"

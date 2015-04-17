@@ -18,7 +18,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="?backgroundSelector">
+        android:background="?backgroundSelector"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp" >
 
         <ImageView
             android:id="@+id/icon"
