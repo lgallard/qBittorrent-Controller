@@ -9,16 +9,15 @@
       Luis M. Gallardo D. - initial implementation
 -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollView1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".TorrentActionsActivity">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?windowBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +30,7 @@
                 android:id="@+id/torrentName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:layout_weight="1"
                 android:text="Torrent Name"
                 android:textSize="18sp"
@@ -41,10 +40,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
             android:background="?dropShadowBackground"
+            android:elevation="5dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -131,8 +132,8 @@
             android:id="@+id/properties"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="5dp"
             android:text="@string/torrent_details_properties"
             android:textSize="18sp"
@@ -141,9 +142,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
             android:background="?dropShadowBackground"
+            android:elevation="5dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -297,6 +300,7 @@
                     android:layout_weight="1"
                     android:text="hash" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -309,14 +313,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:gravity="start"/>
+                    android:gravity="start" />
 
                 <TextView
                     android:id="@+id/torrentSequentialDownloadLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/torrent_details_torrent_sequential"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center" />
 
             </LinearLayout>
 
@@ -333,14 +337,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:gravity="start"/>
+                    android:gravity="start" />
 
                 <TextView
                     android:id="@+id/torrentFirstLastPiecePrioLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/torrent_details_torrent_first_last_piece_first"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center" />
             </LinearLayout>
 
         </LinearLayout>
@@ -362,8 +366,8 @@
                     android:id="@+id/content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:text="@string/torrent_details_content"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -372,9 +376,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="10dp"
                 android:background="?dropShadowBackground"
+                android:elevation="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -409,8 +415,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:text="@string/torrent_details_trackers"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -419,9 +425,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="10dp"
                 android:background="?dropShadowBackground"
+                android:elevation="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -450,8 +458,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:text="@string/torrent_details_general_info"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -460,10 +468,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="10dp"
                 android:background="?dropShadowBackground"
+                android:elevation="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout

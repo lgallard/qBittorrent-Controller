@@ -16,7 +16,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?windowBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,22 +31,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:text="Torrent Name"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="center_vertical" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/gmd_shadow"
+            android:layout_marginBottom="10dp"
+            android:background="?dropShadowBackground"
             android:elevation="5dp"
             android:orientation="vertical">
 
@@ -133,8 +136,8 @@
             android:id="@+id/properties"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="5dp"
             android:text="@string/torrent_details_properties"
             android:textSize="18sp"
@@ -143,9 +146,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/gmd_shadow"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="?dropShadowBackground"
             android:elevation="5dp"
             android:orientation="vertical">
 
@@ -320,8 +323,8 @@
                     android:id="@+id/content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:text="@string/torrent_details_content"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -330,9 +333,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/gmd_shadow"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="?dropShadowBackground"
                 android:elevation="5dp"
                 android:orientation="vertical">
 
@@ -368,8 +371,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:text="@string/torrent_details_trackers"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -378,9 +381,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/gmd_shadow"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp                "
+                android:layout_marginBottom="10dp"
+                android:background="?dropShadowBackground"
                 android:elevation="5dp"
                 android:orientation="vertical">
 
@@ -410,8 +414,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:text="@string/torrent_details_general_info"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -421,9 +425,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/gmd_shadow"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="?dropShadowBackground"
                 android:elevation="5dp"
                 android:orientation="vertical">
 
@@ -431,8 +435,8 @@
                     android:id="@+id/lines"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:orientation="vertical"></LinearLayout>
             </LinearLayout>
         </LinearLayout>

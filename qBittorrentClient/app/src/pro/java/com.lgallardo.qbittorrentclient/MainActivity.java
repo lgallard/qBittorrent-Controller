@@ -28,12 +28,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,7 +47,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -220,16 +219,31 @@ public class MainActivity extends ActionBarActivity {
             cookie = "";
         }
 
-//        // Set Theme (It must be fore inflating or setContentView)
-//        if (dark_ui) {
-//            this.setTheme(R.style.Theme_Dark);
-//        } else {
-//            this.setTheme(R.style.Theme_Light);
-//        }
+        // Set Theme (It must be fore inflating or setContentView)
+        if (dark_ui) {
+            this.setTheme(R.style.Theme_Dark);
+
+            if (Build.VERSION.SDK_INT >= 21) {
+                getWindow().setNavigationBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground));
+                getWindow().setStatusBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground  ));
+            }
+        } else {
+            this.setTheme(R.style.Theme_Light);
+
+            if (Build.VERSION.SDK_INT >= 21) {
+                getWindow().setNavigationBarColor(getResources().getColor(R.color.primary));
+                getWindow().setStatusBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground  ));
+            }
+
+        }
 
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
+
+        if(dark_ui) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.Theme_Dark_primary));
+        }
         
         setSupportActionBar(toolbar);
 
@@ -582,12 +596,23 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
 
-        if (getFragmentManager().getBackStackEntryCount() == 0) {
+        FragmentManager fragmentManager = getFragmentManager();
+
+        if (fragmentManager.getBackStackEntryCount() == 0) {
             this.finish();
         } else {
 
-            getFragmentManager().popBackStack();
+            fragmentManager.popBackStack();
         }
+
+        if (findViewById(R.id.one_frame) != null) {
+            if (header) {
+                headerInfo.setVisibility(View.VISIBLE);
+            } else {
+                headerInfo.setVisibility(View.GONE);
+            }
+        }
+
     }
 
     private void refresh() {

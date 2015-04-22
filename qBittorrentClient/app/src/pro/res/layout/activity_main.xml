@@ -16,9 +16,12 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?windowBackground">
 
-        <include android:id="@+id/app_bar" layout="@layout/app_bar"/>
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
 
         <ProgressBar
             android:id="@+id/progressBarConnecting"
@@ -54,7 +57,7 @@
             android:id="@+id/one_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"/>
+            android:padding="5dp"/>
     </LinearLayout>
 
     <ListView

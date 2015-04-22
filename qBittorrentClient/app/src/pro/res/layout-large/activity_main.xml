@@ -17,7 +17,12 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="?windowBackground">
+
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
 
         <ProgressBar
             android:id="@+id/progressBarConnecting"
@@ -25,7 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:layout_below="@+id/app_bar"/>
 
         <LinearLayout
             android:id="@+id/header"
@@ -35,6 +41,7 @@
             android:gravity="end"
             android:orientation="horizontal"
             android:paddingBottom="5dp">
+
 
 
             <LinearLayout
@@ -90,7 +97,7 @@
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@android:color/darker_gray" />

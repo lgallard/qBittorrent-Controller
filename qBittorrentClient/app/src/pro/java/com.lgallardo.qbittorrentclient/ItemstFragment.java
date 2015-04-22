@@ -15,6 +15,7 @@ import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +32,8 @@ public class ItemstFragment extends ListFragment {
     static public ActionMode mActionMode;
     public int nr = 0;
     int secondContainer;
-    TorrentDetailsFragment detailsFragment;
+    com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment;
+    private RecyclerView recyclerView;
 
 
     public ItemstFragment() {
@@ -59,6 +61,8 @@ public class ItemstFragment extends ListFragment {
         setHasOptionsMenu(true);
 
         View rootView = inflater.inflate(R.layout.activity_main_original, container, false);
+
+//        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewList);
 
         return rootView;
     }
@@ -112,7 +116,7 @@ public class ItemstFragment extends ListFragment {
 
                 @Override
                 public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                    if (MainActivity.qb_version.equals("3.2.x")) {
+                    if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                         menu.findItem(R.id.action_firts_last_piece_prio).setVisible(true);
                         menu.findItem(R.id.action_sequential_download).setVisible(true);
                     } else {
@@ -131,7 +135,7 @@ public class ItemstFragment extends ListFragment {
                     final String hashesStr;
 
                     // Get MainActivity
-                    final MainActivity m = (MainActivity) getActivity();
+                    final com.lgallardo.qbittorrentclient.MainActivity m = (com.lgallardo.qbittorrentclient.MainActivity) getActivity();
 
                     // Get hashes
                     for (int i = 0; mAdapter.getCount() > i; i++) {
@@ -399,9 +403,9 @@ public class ItemstFragment extends ListFragment {
 //        }
 
 
-        Torrent torrent = MainActivity.lines[position];
+        Torrent torrent = com.lgallardo.qbittorrentclient.MainActivity.lines[position];
 
-        if (torrent.getHash().equals(TorrentDetailsFragment.hashToUpdate) && getActivity().findViewById(R.id.fragment_container) != null) {
+        if (torrent.getHash().equals(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate) && getActivity().findViewById(R.id.fragment_container) != null) {
 
             // Update torrent details
 
@@ -410,7 +414,7 @@ public class ItemstFragment extends ListFragment {
 
 
 
-                detailsFragment = (TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
+                detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
 
                 if (detailsFragment != null && torrent != null) {
 
@@ -429,10 +433,10 @@ public class ItemstFragment extends ListFragment {
 
     private void newDetailsFragment(int position){
 
-        detailsFragment = new TorrentDetailsFragment();
+        detailsFragment = new com.lgallardo.qbittorrentclient.TorrentDetailsFragment();
 
         // Get torrent from MainActivity
-        detailsFragment.setTorrent(MainActivity.lines[position]);
+        detailsFragment.setTorrent(com.lgallardo.qbittorrentclient.MainActivity.lines[position]);
 
         detailsFragment.setPosition(position);
 
@@ -527,35 +531,35 @@ public class ItemstFragment extends ListFragment {
             menu.findItem(R.id.action_sortby_uploadSpeed).setVisible(true);
 
 
-            if (MainActivity.sortby.equals("Name")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("Name")) {
                 menu.findItem(R.id.action_sortby_name).setIcon(R.drawable.ic_stat_completed);
 
             }
 
 
-            if (MainActivity.sortby.equals("ETA")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("ETA")) {
                 menu.findItem(R.id.action_sortby_eta).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (MainActivity.sortby.equals("Priority")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("Priority")) {
                 ;
                 menu.findItem(R.id.action_sortby_priority).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (MainActivity.sortby.equals("Progress")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("Progress")) {
                 menu.findItem(R.id.action_sortby_progress).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (MainActivity.sortby.equals("Ratio")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("Ratio")) {
 
                 menu.findItem(R.id.action_sortby_ratio).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (MainActivity.sortby.equals("DownloadSpeed")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("DownloadSpeed")) {
                 menu.findItem(R.id.action_sortby_downloadSpeed).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (MainActivity.sortby.equals("UploadSpeed")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("UploadSpeed")) {
                 menu.findItem(R.id.action_sortby_uploadSpeed).setIcon(R.drawable.ic_stat_completed);
             }
 

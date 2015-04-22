@@ -176,6 +176,12 @@ public class TorrentDetailsFragment extends Fragment {
 
         }
 
+        // Hide herderInfo in phone's view
+        if (getActivity().findViewById(R.id.one_frame) != null) {
+            com.lgallardo.qbittorrentclient.MainActivity.headerInfo.setVisibility(View.GONE);
+        }
+
+
         savePath = "";
         creationDate = "";
         comment = "";
