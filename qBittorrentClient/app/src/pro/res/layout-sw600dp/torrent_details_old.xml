@@ -11,7 +11,7 @@
 <android.support.v4.widget.SwipeRefreshLayout
     android:id="@+id/details_refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ScrollView
@@ -28,15 +28,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/torrentName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
                     android:layout_weight="1"
                     android:text="Torrent Name"
                     android:textSize="18sp"

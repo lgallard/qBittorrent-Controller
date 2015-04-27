@@ -575,7 +575,11 @@ public class TorrentDetailsFragment extends Fragment {
             menu.findItem(R.id.action_pause_all).setVisible(false);
             menu.findItem(R.id.action_add).setVisible(false);
 
-            menu.findItem(R.id.action_refresh).setVisible(true);
+            if (getActivity().findViewById(R.id.one_frame) != null) {
+                menu.findItem(R.id.action_refresh).setVisible(false);
+            }else{
+                menu.findItem(R.id.action_refresh).setVisible(true);
+            }
 
             if (getActivity().findViewById(R.id.one_frame) != null) {
                 menu.findItem(R.id.action_sort_menu).setVisible(false);

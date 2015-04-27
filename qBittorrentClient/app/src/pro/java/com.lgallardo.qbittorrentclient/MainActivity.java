@@ -597,44 +597,44 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     public void onBackPressed() {
 
 
-        if (!com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.isRefreshing()) {
+//        if (!com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.isRefreshing()) {
 
 
-            FragmentManager fm = getFragmentManager();
-            com.lgallardo.qbittorrentclient.ItemstFragment fragment = null;
+        FragmentManager fm = getFragmentManager();
+        com.lgallardo.qbittorrentclient.ItemstFragment fragment = null;
 
-            // Close Contextual Action Bar
-            if (com.lgallardo.qbittorrentclient.ItemstFragment.mActionMode != null) {
+        // Close Contextual Action Bar
+        if (com.lgallardo.qbittorrentclient.ItemstFragment.mActionMode != null) {
 
-                com.lgallardo.qbittorrentclient.ItemstFragment.mActionMode.finish();
+            com.lgallardo.qbittorrentclient.ItemstFragment.mActionMode.finish();
+
+        } else {
+
+
+            if (fm.getBackStackEntryCount() == 0) {
+
+                // Close the app
+                this.finish();
+
 
             } else {
 
-
-                if (fm.getBackStackEntryCount() == 0) {
-
-                    // Close the app
-                    this.finish();
-
-
-                } else {
-
-                    fm.popBackStack();
-                }
-
-            }
-
-            if (findViewById(R.id.one_frame) != null) {
-                if (headerInfo != null) {
-                    if (header) {
-                        headerInfo.setVisibility(View.VISIBLE);
-                    } else {
-                        headerInfo.setVisibility(View.GONE);
-                    }
-                }
+                fm.popBackStack();
             }
 
         }
+
+        if (findViewById(R.id.one_frame) != null) {
+            if (headerInfo != null) {
+                if (header) {
+                    headerInfo.setVisibility(View.VISIBLE);
+                } else {
+                    headerInfo.setVisibility(View.GONE);
+                }
+            }
+        }
+
+//        }
 
     }
 
