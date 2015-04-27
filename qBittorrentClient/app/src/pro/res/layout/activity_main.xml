@@ -17,19 +17,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="?windowBackground">
+        android:background="?backgroundSelector">
 
         <include
             android:id="@+id/app_bar"
             layout="@layout/app_bar" />
-
-        <ProgressBar
-            android:id="@+id/progressBarConnecting"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="invisible" />
 
         <LinearLayout
             android:id="@+id/header"

@@ -15,7 +15,9 @@ import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,7 +36,9 @@ public class ItemstFragment extends ListFragment {
     int secondContainer;
     com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment;
     private RecyclerView recyclerView;
+    private com.lgallardo.qbittorrentclient.RefreshListener refreshListener;
 
+    public static SwipeRefreshLayout mSwipeRefreshLayout;
 
     public ItemstFragment() {
     }
@@ -60,7 +64,30 @@ public class ItemstFragment extends ListFragment {
         // wants to add/replace/delete using the onCreateOptionsMenu method.
         setHasOptionsMenu(true);
 
+        // Get Refresh Listener
+        refreshListener = (com.lgallardo.qbittorrentclient.RefreshListener) getActivity();
+
         View rootView = inflater.inflate(R.layout.activity_main_original, container, false);
+
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
+
+        mSwipeRefreshLayout.setColorSchemeColors(R.color.primary,                R.color.primary_dark, R.color.primary_text);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+//                com.lgallardo.qbittorrentclient.MainActivity.refreshCurrent();
+                Log.d("Debug", "Swipe!");
+
+                refreshListener.swipeRefresh();
+
+            }
+        });
+
+
+
+
 
 //        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewList);
 
@@ -77,6 +104,7 @@ public class ItemstFragment extends ListFragment {
         super.onViewCreated(view, savedInstanceState);
 
         try {
+
             getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
             // Get adapter
@@ -87,6 +115,15 @@ public class ItemstFragment extends ListFragment {
 
                 @Override
                 public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+
+                    if(com.lgallardo.qbittorrentclient.MainActivity.listViewRefreshing) {
+                        Log.d("Debug", "onViewCreated - listview is refreshing pal");
+                    }
+                    else{
+                        Log.d("Debug", "onViewCreated - listview is NOT refreshing dude");
+                    }
+
 
                     if (checked) {
                         nr++;
@@ -107,6 +144,8 @@ public class ItemstFragment extends ListFragment {
                     nr = 0;
                     MenuInflater inflater = getActivity().getMenuInflater();
                     inflater.inflate(R.menu.main_contextual_action_bar, menu);
+
+                    mSwipeRefreshLayout.setEnabled(false);
 
                     ItemstFragment.mActionMode = actionMode;
 
@@ -162,6 +201,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -173,6 +216,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -210,6 +257,10 @@ public class ItemstFragment extends ListFragment {
 
                                 // Clear selection
                                 nr = 0;
+
+                                // Enable SwipeRefresh
+                                mSwipeRefreshLayout.setEnabled(true);
+
                                 mAdapter.clearSelection();
                                 mode.finish();
 
@@ -248,6 +299,10 @@ public class ItemstFragment extends ListFragment {
 
                                 // Clear selection
                                 nr = 0;
+
+                                // Enable SwipeRefresh
+                                mSwipeRefreshLayout.setEnabled(true);
+
                                 mAdapter.clearSelection();
                                 mode.finish();
 
@@ -260,6 +315,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -270,6 +329,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -280,6 +343,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -290,6 +357,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -301,6 +372,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -312,6 +387,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -322,6 +401,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -332,6 +415,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -342,12 +429,18 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
                             return true;
 
                         default:
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
                             return true;
 
 
@@ -361,6 +454,7 @@ public class ItemstFragment extends ListFragment {
                         mAdapter.clearSelection();
                     }
                     ItemstFragment.mActionMode = null;
+                    mSwipeRefreshLayout.setEnabled(true);
 
 
                 }
@@ -369,6 +463,10 @@ public class ItemstFragment extends ListFragment {
             getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+                    if(com.lgallardo.qbittorrentclient.MainActivity.listViewRefreshing) {
+                        return true;
+                    }
                     getListView().setItemChecked(position, !mAdapter.isPositionChecked(position));
                     return false;
                 }
@@ -385,7 +483,11 @@ public class ItemstFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView parent, View v, int position, long id) {
-        ListItemClicked(position);
+        if(!com.lgallardo.qbittorrentclient.MainActivity.listViewRefreshing) {
+            ListItemClicked(position);
+
+            Log.d("Debug", "onListItemClick -  not refreshing");
+        }
     }
 
     public void ListItemClicked(int position) {

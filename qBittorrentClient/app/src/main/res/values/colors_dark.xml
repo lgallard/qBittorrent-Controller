@@ -10,5 +10,6 @@
     <color name="Theme_Dark_divider">#B6B6B6</color>
 
     <color name="Theme_Dark_windowBackground">#ff434343</color>
+    <color name="Theme_Dark_drawerBackground">#111</color>
     <color name="Theme_Dark_toolbarBackground">#212121</color>
 </resources>

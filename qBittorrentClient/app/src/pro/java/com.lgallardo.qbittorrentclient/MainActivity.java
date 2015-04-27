@@ -60,7 +60,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class MainActivity extends ActionBarActivity {
+interface RefreshListener {
+    public void swipeRefresh();
+}
+
+public class MainActivity extends ActionBarActivity implements RefreshListener {
 
     // Torrent Info TAGs
     protected static final String TAG_NAME = "name";
@@ -133,7 +137,6 @@ public class MainActivity extends ActionBarActivity {
     protected static String max_act_downloads;
     protected static String max_act_uploads;
     protected static String max_act_torrents;
-    protected static ProgressBar progressBar;
     protected static long uploadSpeedCount;
     protected static long downloadSpeedCount;
     protected static int uploadCount;
@@ -180,6 +183,7 @@ public class MainActivity extends ActionBarActivity {
 
     // New ToolBar in Material Desing
     Toolbar toolbar;
+    public static boolean listViewRefreshing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,30 +229,27 @@ public class MainActivity extends ActionBarActivity {
 
             if (Build.VERSION.SDK_INT >= 21) {
                 getWindow().setNavigationBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground));
-                getWindow().setStatusBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground  ));
+                getWindow().setStatusBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground));
             }
         } else {
             this.setTheme(R.style.Theme_Light);
 
             if (Build.VERSION.SDK_INT >= 21) {
                 getWindow().setNavigationBarColor(getResources().getColor(R.color.primary));
-                getWindow().setStatusBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground  ));
             }
 
         }
 
         setContentView(R.layout.activity_main);
 
+
         toolbar = (Toolbar) findViewById(R.id.app_bar);
 
-        if(dark_ui) {
+        if (dark_ui) {
             toolbar.setBackgroundColor(getResources().getColor(R.color.Theme_Dark_primary));
         }
-        
-        setSupportActionBar(toolbar);
 
-        // Get progress bar
-        progressBar = (ProgressBar) findViewById(R.id.progressBarConnecting);
+        setSupportActionBar(toolbar);
 
         // Set App title
         setTitle(R.string.app_shortname);
@@ -274,7 +275,7 @@ public class MainActivity extends ActionBarActivity {
         drawerItem[8] = new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[8]);
 
         // Create object for drawer item OnbjectDrawerItem
-        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.listview_item_row, drawerItem);
+        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.drawer_row, drawerItem);
         drawerList.setAdapter(adapter);
 
 
@@ -596,21 +597,29 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
 
-        FragmentManager fragmentManager = getFragmentManager();
 
-        if (fragmentManager.getBackStackEntryCount() == 0) {
-            this.finish();
-        } else {
+        if (!com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.isRefreshing()) {
 
-            fragmentManager.popBackStack();
-        }
 
-        if (findViewById(R.id.one_frame) != null) {
-            if (header) {
-                headerInfo.setVisibility(View.VISIBLE);
+            FragmentManager fragmentManager = getFragmentManager();
+
+            if (fragmentManager.getBackStackEntryCount() == 0) {
+                this.finish();
             } else {
-                headerInfo.setVisibility(View.GONE);
+
+                fragmentManager.popBackStack();
             }
+
+            if (findViewById(R.id.one_frame) != null) {
+                if (headerInfo != null) {
+                    if (header) {
+                        headerInfo.setVisibility(View.VISIBLE);
+                    } else {
+                        headerInfo.setVisibility(View.GONE);
+                    }
+                }
+            }
+
         }
 
     }
@@ -662,20 +671,20 @@ public class MainActivity extends ActionBarActivity {
         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
             if (hostname.equals("")) {
-                // Hide progressBar
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
 
-                //
                 genericOkDialog(R.string.info, R.string.about_help1);
 
             } else {
 
-                // Show progressBar
-                if (progressBar != null && refresh_period != 1000) {
-                    progressBar.setVisibility(View.VISIBLE);
+
+                if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
+                    com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(true);
                 }
+
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
+                    com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(true);
+                }
+
 
                 // Execute the task in background
                 qBittorrentTask qtt = new qBittorrentTask();
@@ -757,8 +766,8 @@ public class MainActivity extends ActionBarActivity {
 //                addTorrent(Uri.decode(urlTorrent));
                 try {
                     addTorrent(Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8")));
-                }catch(UnsupportedEncodingException e){
-                    Log.e("Debug", "Check URL: "+e.toString());
+                } catch (UnsupportedEncodingException e) {
+                    Log.e("Debug", "Check URL: " + e.toString());
                 }
 
             }
@@ -1972,6 +1981,17 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    @Override
+    public void swipeRefresh() {
+        Log.d("Debug", "Swipe 2!");
+
+        listViewRefreshing = true;
+
+        com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(false);
+
+        refreshCurrent();
+    }
+
     // Here is where the action happens
     private class qBittorrentCookie extends AsyncTask<Void, Integer, String[]> {
 
@@ -2548,7 +2568,7 @@ public class MainActivity extends ActionBarActivity {
                         //Set first and second fragments
                         if (findViewById(R.id.fragment_container) != null) {
 
-                            Log.d("Debug","fragment_container");
+                            Log.d("Debug", "fragment_container");
 
                             // Set where is the second container
                             firstFragment.setSecondFragmentContainer(R.id.content_frame);
@@ -2590,7 +2610,7 @@ public class MainActivity extends ActionBarActivity {
 
                         } else {
 
-                            Log.d("Debug","one_frame");
+                            Log.d("Debug", "one_frame");
 
                             // Set where is the second container
                             firstFragment.setSecondFragmentContainer(R.id.one_frame);
@@ -2639,7 +2659,6 @@ public class MainActivity extends ActionBarActivity {
                         downloadSpeedTextView.setText("");
 
 
-
                         //Set first and second fragments
                         if (findViewById(R.id.fragment_container) != null) {
 
@@ -2661,7 +2680,7 @@ public class MainActivity extends ActionBarActivity {
                                 }
 
                             }
-                        }else{
+                        } else {
 
                             // Set where is the second container
                             firstFragment.setSecondFragmentContainer(R.id.one_frame);
@@ -2714,10 +2733,21 @@ public class MainActivity extends ActionBarActivity {
 
             }
 
-            // Hide progressBar
-            if (progressBar != null) {
-                progressBar.setVisibility(View.INVISIBLE);
+            if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
+                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(false);
+                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.clearAnimation();
+                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(true);
             }
+
+            if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
+                com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(false);
+                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.clearAnimation();
+                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(true);
+            }
+
+            listViewRefreshing = false;
+
+
 
         }
     }

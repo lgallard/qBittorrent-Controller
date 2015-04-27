@@ -181,7 +181,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
     @Override
     public boolean areAllItemsEnabled() {
-        if (torrentsData != null) {
+        if (torrentsData != null && !com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.isRefreshing()) {
             return true;
         } else {
             return false;

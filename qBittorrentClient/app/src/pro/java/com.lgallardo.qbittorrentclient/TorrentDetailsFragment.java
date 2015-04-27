@@ -15,6 +15,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -67,6 +68,8 @@ public class TorrentDetailsFragment extends Fragment {
     myPropertyAdapter propertyAdapter;
     private String qbQueryString = "query";
     private Torrent torrent;
+    public static  SwipeRefreshLayout mSwipeRefreshLayout;
+    private com.lgallardo.qbittorrentclient.RefreshListener refreshListener;
 
 
     public TorrentDetailsFragment() {
@@ -174,6 +177,22 @@ public class TorrentDetailsFragment extends Fragment {
         } else {
             rootView = inflater.inflate(R.layout.torrent_details_old, container, false);
 
+        }
+
+        // Get Refresh Listener
+        refreshListener = (com.lgallardo.qbittorrentclient.RefreshListener) getActivity();
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.details_refresh_layout);
+
+        if(mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+//                com.lgallardo.qbittorrentclient.MainActivity.refreshCurrent();
+                    Log.d("Debug", "Swipe!");
+                    refreshListener.swipeRefresh();
+
+                }
+            });
         }
 
         // Hide herderInfo in phone's view
@@ -343,10 +362,10 @@ public class TorrentDetailsFragment extends Fragment {
             }
 
 
-            // Show progressBar
-            if (com.lgallardo.qbittorrentclient.MainActivity.progressBar != null) {
-                com.lgallardo.qbittorrentclient.MainActivity.progressBar.setVisibility(View.VISIBLE);
-            }
+//            // Show progressBar
+//            if (com.lgallardo.qbittorrentclient.MainActivity.progressBar != null) {
+//                com.lgallardo.qbittorrentclient.MainActivity.progressBar.setVisibility(View.VISIBLE);
+//            }
 
             // Get Content files in background
             qBittorrentContentFile qcf = new qBittorrentContentFile();
@@ -494,10 +513,10 @@ public class TorrentDetailsFragment extends Fragment {
             }
 
 
-            // Show progressBar
-            if (com.lgallardo.qbittorrentclient.MainActivity.progressBar != null) {
-                com.lgallardo.qbittorrentclient.MainActivity.progressBar.setVisibility(View.VISIBLE);
-            }
+//            // Show progressBar
+//            if (com.lgallardo.qbittorrentclient.MainActivity.progressBar != null) {
+//                com.lgallardo.qbittorrentclient.MainActivity.progressBar.setVisibility(View.VISIBLE);
+//            }
 
             // Get Content files in background
             qBittorrentContentFile qcf = new qBittorrentContentFile();
@@ -934,10 +953,10 @@ public class TorrentDetailsFragment extends Fragment {
                 Log.e("TorrentFragment:", e.toString());
             }
 
-            // Hide progressBar
-            if (com.lgallardo.qbittorrentclient.MainActivity.progressBar != null) {
-                com.lgallardo.qbittorrentclient.MainActivity.progressBar.setVisibility(View.INVISIBLE);
-            }
+//            // Hide progressBar
+//            if (com.lgallardo.qbittorrentclient.MainActivity.progressBar != null) {
+//                com.lgallardo.qbittorrentclient.MainActivity.progressBar.setVisibility(View.INVISIBLE);
+//            }
 
         }
 

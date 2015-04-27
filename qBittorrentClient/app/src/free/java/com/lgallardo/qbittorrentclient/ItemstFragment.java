@@ -27,6 +27,8 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.lgallardo.qbittorrentclient.MainActivity;
+
 public class ItemstFragment extends ListFragment {
 
     static public ActionMode mActionMode;
@@ -60,6 +62,16 @@ public class ItemstFragment extends ListFragment {
         setHasOptionsMenu(true);
 
         View rootView = inflater.inflate(R.layout.activity_main_original, container, false);
+
+        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
+
+        mSwipeRefreshLayout.setColo
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                MainActivity.refreshCurrent();
+            }
+        });
 
         return rootView;
     }

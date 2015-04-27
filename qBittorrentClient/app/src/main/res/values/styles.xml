@@ -33,10 +33,13 @@
         <item name="android:windowBackground">@color/Theme_Light_windowBackground</item>
         <item name="windowBackground">@color/Theme_Light_windowBackground</item>
 
-
-
         <!-- backgroundSelector (for row listView)-->
         <item name="backgroundSelector">@drawable/background_selector_light</item>
+
+        <!-- backgroundDrawerSelector (for drawer rows)-->
+        <item name="backgroundDrawerSelector">@drawable/background_drawer_selector_light</item>
+
+        backgroundDrawerSelector
 
         <!-- dropShadowBackground (for cardviews)-->
         <item name="dropShadowBackground">@drawable/gmd_shadow_light</item>
@@ -70,6 +73,9 @@
 
         <!-- backgroundSelector (for row listView)-->
         <item name="backgroundSelector">@drawable/background_selector_dark</item>
+
+        <!-- backgroundDrawerSelector (for drawer rows)-->
+        <item name="backgroundDrawerSelector">@drawable/background_drawer_selector_dark</item>
 
         <!-- dropShadowBackground (for cardviews)-->
         <item name="dropShadowBackground">@drawable/gmd_shadow_dark</item>

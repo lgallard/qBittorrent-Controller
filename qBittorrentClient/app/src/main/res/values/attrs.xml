@@ -2,6 +2,7 @@
 <resources>
     <attr name="dropShadowBackground" format="reference" />
     <attr name="backgroundSelector" format="reference" />
+    <attr name="backgroundDrawerSelector" format="reference" />
     <attr name="windowBackground" format="reference" />
 
 </resources>

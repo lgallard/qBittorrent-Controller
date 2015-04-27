@@ -257,9 +257,6 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-        // Get progress bar
-        progressBar = (ProgressBar) findViewById(R.id.progressBarConnecting);
-
         // Set App title
         setTitle(R.string.app_shortname);
 
@@ -285,7 +282,7 @@ public class MainActivity extends FragmentActivity {
         drawerItem[9] = new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9]);
 
         // Create object for drawer item OnbjectDrawerItem
-        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.listview_item_row, drawerItem);
+        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.drawer_row, drawerItem);
         drawerList.setAdapter(adapter);
 
         // Set selection according to last state
@@ -681,19 +678,8 @@ public class MainActivity extends FragmentActivity {
             loadBanner();
 
             if (hostname.equals("")) {
-                // Hide progressBar
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-
-                //
                 genericOkDialog(R.string.info, R.string.about_help1);
             } else {
-
-                // Show progressBar
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
 
                 // Execute the task in background
                 qBittorrentTask qtt = new qBittorrentTask();
@@ -2484,10 +2470,6 @@ public class MainActivity extends FragmentActivity {
 
             }
 
-            // Hide progressBar
-            if (progressBar != null) {
-                progressBar.setVisibility(View.INVISIBLE);
-            }
         }
     }
 

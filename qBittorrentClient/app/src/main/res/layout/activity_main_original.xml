@@ -8,15 +8,15 @@
   Contributors:
       Luis M. Gallardo D. 
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/activity_main_swipe_refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+
     android:paddingBottom="5dp"
     android:paddingTop="0dp"
-    android:background="?windowBackground">
+    android:background="?windowBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- android.support.v7.widget.RecyclerView
 
@@ -36,4 +36,4 @@
     </ListView>
 
 
-</LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>
