@@ -46,7 +46,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -601,13 +600,28 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         if (!com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.isRefreshing()) {
 
 
-            FragmentManager fragmentManager = getFragmentManager();
+            FragmentManager fm = getFragmentManager();
+            com.lgallardo.qbittorrentclient.ItemstFragment fragment = null;
 
-            if (fragmentManager.getBackStackEntryCount() == 0) {
-                this.finish();
+            // Close Contextual Action Bar
+            if (com.lgallardo.qbittorrentclient.ItemstFragment.mActionMode != null) {
+
+                com.lgallardo.qbittorrentclient.ItemstFragment.mActionMode.finish();
+
             } else {
 
-                fragmentManager.popBackStack();
+
+                if (fm.getBackStackEntryCount() == 0) {
+
+                    // Close the app
+                    this.finish();
+
+
+                } else {
+
+                    fm.popBackStack();
+                }
+
             }
 
             if (findViewById(R.id.one_frame) != null) {
@@ -2746,7 +2760,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             }
 
             listViewRefreshing = false;
-
 
 
         }

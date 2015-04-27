@@ -15,12 +15,12 @@
     <item
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_action_delete"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="@string/action_delete" />
     <item
         android:id="@+id/action_delete_drive"
         android:icon="@drawable/ic_action_delete_drive"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="@string/action_delete_drive" />
     <item
         android:id="@+id/action_priority_menu"
