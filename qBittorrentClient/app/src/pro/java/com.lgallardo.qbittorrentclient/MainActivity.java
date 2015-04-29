@@ -691,16 +691,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             } else {
 
 
-                if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
-                    com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(true);
-                }
-
-                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
-                    com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(true);
-                }
-
-
-                // Execute the task in background
+               // Execute the task in background
                 qBittorrentTask qtt = new qBittorrentTask();
 
                 qtt.execute(params);
@@ -825,34 +816,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                // Refresh option clicked.
-                switch (drawerList.getCheckedItemPosition()) {
-                    case 0:
-                        refresh("all");
-                        break;
-                    case 1:
-                        refresh("downloading");
-                        break;
-                    case 2:
-                        refresh("completed");
-                        break;
-                    case 3:
-                        refresh("paused");
-                        break;
-                    case 4:
-                        refresh("active");
-                        break;
-                    case 5:
-                        refresh("inactive");
-                        break;
-                    case 6:
-                        break;
-                    case 7:
-                        break;
-                    default:
-                        selectItem(0);
-                        break;
-                }
+                swipeRefresh();
                 return true;
             case R.id.action_add:
                 // Add URL torrent
@@ -2001,7 +1965,20 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         listViewRefreshing = true;
 
-        com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(false);
+
+        if (AboutFragment.mSwipeRefreshLayout != null) {
+            AboutFragment.mSwipeRefreshLayout.setRefreshing(true);
+        }
+
+        if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
+            com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(true);
+            com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(false);
+        }
+
+        if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
+            com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(true);
+        }
+
 
         refreshCurrent();
     }
@@ -2747,6 +2724,13 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
             }
 
+
+            if (com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout != null) {
+                com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setRefreshing(false);
+                com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.clearAnimation();
+                com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setEnabled(true);
+            }
+
             if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
                 com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(false);
                 com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.clearAnimation();
@@ -2755,8 +2739,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
             if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
                 com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(false);
-                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.clearAnimation();
-                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(true);
+                com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.clearAnimation();
+                com.lgallardo.qbittorrentclient.TorrentDetailsFragment  .mSwipeRefreshLayout.setEnabled(true);
             }
 
             listViewRefreshing = false;

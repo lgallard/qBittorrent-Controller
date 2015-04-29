@@ -8,19 +8,21 @@
   Contributors:
       Luis M. Gallardo D. - initial implementation
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/about_refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView1"
@@ -37,9 +39,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="100dp"
                 android:contentDescription="@string/app_name"
-                android:paddingRight="10dp"
                 android:src="@drawable/ic_launcher" />
 
             <TextView
@@ -94,5 +95,4 @@
                 android:src="@drawable/ic_refresh" />
         </RelativeLayout>
     </ScrollView>
-
-</RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

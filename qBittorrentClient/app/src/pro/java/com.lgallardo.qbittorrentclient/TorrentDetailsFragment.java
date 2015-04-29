@@ -187,7 +187,6 @@ public class TorrentDetailsFragment extends Fragment {
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-//                com.lgallardo.qbittorrentclient.MainActivity.refreshCurrent();
                     Log.d("Debug", "Swipe!");
                     refreshListener.swipeRefresh();
 

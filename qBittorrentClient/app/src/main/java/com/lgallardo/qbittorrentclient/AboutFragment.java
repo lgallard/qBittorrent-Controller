@@ -12,6 +12,8 @@ package com.lgallardo.qbittorrentclient;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +21,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class AboutFragment extends Fragment {
+
+    public static SwipeRefreshLayout mSwipeRefreshLayout;
+    private com.lgallardo.qbittorrentclient.RefreshListener refreshListener;
 
     public AboutFragment() {
     }
@@ -31,6 +36,23 @@ public class AboutFragment extends Fragment {
         setHasOptionsMenu(true);
 
         View rootView = inflater.inflate(R.layout.about, container, false);
+
+        // Get Refresh Listener
+        refreshListener = (com.lgallardo.qbittorrentclient.RefreshListener) getActivity();
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.about_refresh_layout);
+
+        if(mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Log.d("Debug", "Swipe!");
+                    refreshListener.swipeRefresh();
+
+                }
+            });
+        }
+
 
         return rootView;
     }
