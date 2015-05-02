@@ -124,6 +124,9 @@ public class JSONParser {
         // Set http parameters
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
+        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(this.hostname, this.port, this.protocol);
@@ -142,6 +145,8 @@ public class JSONParser {
             httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
 
             // set http parameters
+
+            url = protocol + "://" + hostname + ":" + port +"/" +url;
 
             HttpGet httpget = new HttpGet(url);
 
@@ -227,12 +232,13 @@ public class JSONParser {
         // Set http parameters
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
+        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(hostname, port, protocol);
 
-        // httpclient = new DefaultHttpClient(httpParameters);
-        // httpclient = new DefaultHttpClient();
         httpclient = getNewHttpClient();
 
         httpclient.setParams(httpParameters);
@@ -244,13 +250,12 @@ public class JSONParser {
 
             httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
 
-            HttpGet httpget = new HttpGet(url);
+            url = protocol + "://" + hostname + ":" + port +"/" +url;
 
-//            Log.i("getJSONArrayFromUrl", "Cookie [1]: " + this.cookie);
+            HttpGet httpget = new HttpGet(url);
 
             if (this.cookie != null) {
                 httpget.setHeader("Cookie", this.cookie);
-//                Log.i("getJSONArrayFromUrl", "Cookie: [2]" + this.cookie);
             }
 
             httpResponse = httpclient.execute(targetHost, httpget);
@@ -429,6 +434,24 @@ public class JSONParser {
             url = subfolder + "/" + url;
         }
 
+        HttpParams httpParameters = new BasicHttpParams();
+
+        // Set the timeout in milliseconds until a connection is established.
+        // The default value is zero, that means the timeout is not used.
+        int timeoutConnection = connection_timeout * 1000;
+
+        // Set the default socket timeout (SO_TIMEOUT)
+        // in milliseconds which is the timeout for waiting for data.
+        int timeoutSocket = data_timeout * 1000;
+
+        // Set http parameters
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
+        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
+
+
         // Making HTTP request
         HttpHost targetHost = new HttpHost(this.hostname, this.port, this.protocol);
 
@@ -442,6 +465,8 @@ public class JSONParser {
             UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.username, this.password);
 
             httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
+
+            url = protocol + "://" + hostname + ":" + port +"/" +url;
 
             HttpPost httpget = new HttpPost(url);
 
@@ -552,8 +577,8 @@ public class JSONParser {
 
             HttpParams params = new BasicHttpParams();
 
-            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+//            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+//            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
 
             SchemeRegistry registry = new SchemeRegistry();
             registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
@@ -596,6 +621,10 @@ public class JSONParser {
         // Set http parameters
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
+        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
+
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(hostname, port, protocol);
@@ -610,6 +639,8 @@ public class JSONParser {
 //            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.username, this.password);
 //
 //            httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
+
+            url = protocol + "://" + hostname + ":" + port +"/" +url;
 
             HttpPost httpget = new HttpPost(url);
 
@@ -710,6 +741,10 @@ public class JSONParser {
         // Set http parameters
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
+        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
+
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(hostname, port, protocol);
@@ -718,6 +753,8 @@ public class JSONParser {
         httpclient = getNewHttpClient();
 
         try {
+
+            url = protocol + "://" + hostname + ":" + port +"/" +url;
 
             HttpGet httpget = new HttpGet(url);
 
