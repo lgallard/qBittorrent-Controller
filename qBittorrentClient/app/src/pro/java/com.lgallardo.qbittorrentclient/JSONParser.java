@@ -57,7 +57,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 public class JSONParser {
     private static final int TIMEOUT_ERROR = 1;
     static InputStream is = null;
