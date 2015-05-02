@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -33,7 +34,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -149,19 +150,18 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     public TorrentListAdapter myadapter;
     // Http status code
     public int httpStatusCode = 0;
-    protected DrawerLayout drawerLayout;
+
     TextView name1, size1;
     // Preferences fields
     private SharedPreferences sharedPrefs;
     private StringBuilder builderPrefs;
     // Drawer properties
-    private String[] navigationDrawerItemTitles;
-    private ListView drawerList;
     private CharSequence drawerTitle;
     private CharSequence title;
-    // For app icon control for navigation drawer, add new property on
-    // MainActivity
-    private ActionBarDrawerToggle drawerToggle;
+    private String[] navigationDrawerItemTitles;
+    private ListView drawerList;
+    public static DrawerLayout drawerLayout;
+    public static ActionBarDrawerToggle drawerToggle;
     private AboutFragment secondFragment;
     private HelpFragment helpTabletFragment;
     private AboutFragment aboutFragment;
@@ -290,7 +290,10 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         // Add the application icon control code inside MainActivity onCreate
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
+
+        // New ActionBarDrawerToggle for Google Material Desing (v7)
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+
 
             /**
              * Called when a drawer has settled in a completely closed state.

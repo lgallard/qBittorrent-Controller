@@ -234,8 +234,8 @@ public class JSONParser {
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
-        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
-        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
+        HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(hostname, port, protocol);
@@ -639,8 +639,8 @@ public class JSONParser {
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
-        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
-        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
+        HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(hostname, port, protocol);
@@ -758,8 +758,8 @@ public class JSONParser {
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
-        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
-        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
+        HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(hostname, port, protocol);

@@ -29,6 +29,8 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.Set;
+
 public class ItemstFragment extends ListFragment {
 
     static public ActionMode mActionMode;
@@ -37,6 +39,7 @@ public class ItemstFragment extends ListFragment {
     com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment;
     private RecyclerView recyclerView;
     private com.lgallardo.qbittorrentclient.RefreshListener refreshListener;
+    private View.OnClickListener originalListener;
 
     public static SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -547,6 +550,25 @@ public class ItemstFragment extends ListFragment {
 
             if (getActivity().findViewById(R.id.one_frame) != null) {
                 fragmentManager.beginTransaction().replace(this.getSecondFragmentContainer(), detailsFragment, "firstFragment").addToBackStack("secondFragment").commit();
+
+                // Change toolbal home button behaviour
+                originalListener = com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.getToolbarNavigationClickListener();
+
+                com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setDrawerIndicatorEnabled(false);
+                com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setHomeAsUpIndicator(R.drawable.ic_drawer);
+                com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        // Set default toolbar behaviour
+                        com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setDrawerIndicatorEnabled(true);
+                        com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setToolbarNavigationClickListener(originalListener);
+                        FragmentManager fm = getFragmentManager();
+                        fm.popBackStack();
+                    }
+                });
+
+
             } else {
                 fragmentManager.beginTransaction().replace(this.getSecondFragmentContainer(), detailsFragment, "secondFragment").addToBackStack("secondFragment").commit();
             }
