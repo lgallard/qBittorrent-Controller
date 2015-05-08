@@ -105,7 +105,7 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
         // Set last state in intent result
         Intent result = new Intent();
-        result.putExtra("currentState", MainActivity.currentState);
+        result.putExtra("currentState", com.lgallardo.qbittorrentclient.MainActivity.currentState);
         setResult(Activity.RESULT_OK, result);
 
 
@@ -186,9 +186,9 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         dark_ui.setChecked(sharedPrefs.getBoolean("dark_ui", false));
 
         if (qb_version.getEntry() == null) {
-            qb_version.setValueIndex(1);
+            qb_version.setValueIndex(2);
         }else{
-            qb_version.setValueIndex(qb_version.findIndexOfValue(sharedPrefs.getString("qb_version" + value, "3.1.x")));
+            qb_version.setValueIndex(qb_version.findIndexOfValue(sharedPrefs.getString("qb_version" + value, "3.2.x")));
         }
 
         qb_version.setSummary(qb_version.getEntry());
