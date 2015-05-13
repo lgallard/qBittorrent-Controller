@@ -44,9 +44,9 @@
         <!-- dropShadowBackground (for cardviews)-->
         <item name="dropShadowBackground">@drawable/gmd_shadow_light</item>
 
-
         <!-- Overlay Contextual menu-->
         <item name="windowActionModeOverlay">true</item>
+
     </style>
 
     <!-- Dark theme. -->

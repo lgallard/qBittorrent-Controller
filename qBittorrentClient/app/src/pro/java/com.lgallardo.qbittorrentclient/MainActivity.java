@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -34,9 +33,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -184,6 +185,11 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     Toolbar toolbar;
     public static boolean listViewRefreshing;
 
+    // Search bar in Material Design
+    private MenuItem mSearchAction;
+    private boolean isSearchOpened = false;
+    private EditText editSearch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -316,8 +322,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         drawerLayout.setDrawerListener(drawerToggle);
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
 
 
         // Get options and save them as shared preferences
@@ -443,6 +449,14 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         handler.postDelayed(m_Runnable, refresh_period);
 
     }
+
+    // Search bar in Material Design
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        mSearchAction = menu.findItem(R.id.action_search);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
 
     // Set selection and title on drawer
     public void setSelectionAndTitle(String state) {
@@ -599,10 +613,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     @Override
     public void onBackPressed() {
 
-
-//        if (!com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.isRefreshing()) {
-
-
         FragmentManager fm = getFragmentManager();
         com.lgallardo.qbittorrentclient.ItemstFragment fragment = null;
 
@@ -637,7 +647,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             }
         }
 
-//        }
 
     }
 
@@ -797,12 +806,30 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+//        getMenuInflater().inflate(R.menu.main, menu);
 
-        // Associate searchable configuration with the SearchView
+//        // Associate searchable configuration with the SearchView
 //        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 //        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 //        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+//        return true;
+
+
+
+        getMenuInflater().inflate(R.menu.main, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
+            Log.d("Debug", "searchView is not NULL");
+
+        }
 
         return true;
     }
@@ -818,6 +845,11 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         }
 
         switch (item.getItemId()) {
+
+            case R.id.action_search:
+                Log.d("Debug", "Search in Main");
+                onSearchRequested();
+                return true;
             case R.id.action_refresh:
                 swipeRefresh();
                 return true;
