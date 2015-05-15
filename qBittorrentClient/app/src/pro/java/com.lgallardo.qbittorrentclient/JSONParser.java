@@ -473,6 +473,8 @@ public class JSONParser {
 
             url = protocol + "://" + hostname + ":" + port +"/" +url;
 
+//            Log.d("Debug", "Post command - url: " + url);
+
             HttpPost httpget = new HttpPost(url);
 
             if ("addTorrent".equals(command)) {
@@ -600,11 +602,11 @@ public class JSONParser {
 
             ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
 
-            Log.e("Debug", "JSON - getNewHttpClient NO error");
+//            Log.e("Debug", "JSON - getNewHttpClient NO error");
 
             return new DefaultHttpClient(ccm, params);
         } catch (Exception e) {
-            Log.e("Debug", "JSON - getNewHttpClient error");
+//            Log.e("Debug", "JSON - getNewHttpClient error");
             return new DefaultHttpClient();
         }
     }
@@ -613,7 +615,7 @@ public class JSONParser {
     public String getNewCookie() throws JSONParserStatusCodeException {
 
 
-        String url = "/login";
+        String url = "login";
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && subfolder != "") {
@@ -658,6 +660,8 @@ public class JSONParser {
 
             url = protocol + "://" + hostname + ":" + port +"/" +url;
 
+//            Log.i("Debug", "Cookies - url: " + url);
+
             HttpPost httpget = new HttpPost(url);
 
 //            // In order to pass the username and password we must set the pair name value
@@ -674,7 +678,7 @@ public class JSONParser {
             HttpResponse response = httpclient.execute(targetHost, httpget);
             HttpEntity entity = response.getEntity();
 
-//            Log.i("Cookies", "Login form get: " + response.getStatusLine());
+//            Log.i("Debug", "Cookies - Login form get: " + response.getStatusLine());
 
             StatusLine statusLine = response.getStatusLine();
 
@@ -718,7 +722,7 @@ public class JSONParser {
 
         } catch (Exception e) {
 
-//            Log.i("Cookies", "Exception " + e.toString());
+//            Log.d("Debug", "Cookies - Exception " + e.toString());
         }
 
         if (cookieString == null) {
