@@ -613,7 +613,7 @@ public class JSONParser {
     public String getNewCookie() throws JSONParserStatusCodeException {
 
 
-        String url = "/login";
+        String url = "login";
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && subfolder != "") {
