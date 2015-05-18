@@ -364,12 +364,21 @@ public class JSONParser {
 
         }
 
-        if ("pauseAll".equals(command)) {
+        if ("pauseall".equals(command)) {
             url = "command/pauseall";
         }
 
-        if ("resumeAll".equals(command)) {
+        if ("pauseAll".equals(command)) {
+            url = "command/pauseAll";
+        }
+
+
+        if ("resumeall".equals(command)) {
             url = "command/resumeall";
+        }
+
+        if ("resumeAll".equals(command)) {
+            url = "command/resumeAll";
         }
 
         if ("increasePrio".equals(command)) {

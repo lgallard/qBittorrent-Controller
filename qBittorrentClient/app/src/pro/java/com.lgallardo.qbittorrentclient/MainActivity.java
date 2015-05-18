@@ -1428,13 +1428,24 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     public void pauseAllTorrents() {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"pauseAll", null});
+
+        if (qb_version.equals("3.2.x")) {
+            qtc.execute(new String[]{"pauseAll", null});
+        }
+        else{
+            qtc.execute(new String[]{"pauseall", null});
+        }
     }
 
     public void resumeAllTorrents() {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"resumeAll", null});
+
+        if (qb_version.equals("3.2.x")) {
+            qtc.execute(new String[]{"resumeAll", null});
+        }else{
+            qtc.execute(new String[]{"resumeall", null});
+        }
     }
 
     public void increasePrioTorrent(String hash) {
