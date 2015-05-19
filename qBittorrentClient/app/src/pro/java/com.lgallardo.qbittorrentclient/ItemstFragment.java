@@ -551,7 +551,7 @@ public class ItemstFragment extends ListFragment {
             if (getActivity().findViewById(R.id.one_frame) != null) {
                 fragmentManager.beginTransaction().replace(this.getSecondFragmentContainer(), detailsFragment, "firstFragment").addToBackStack("secondFragment").commit();
 
-                // Change toolbal home button behaviour
+                // Change toolbar home button behaviour
                 originalListener = com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.getToolbarNavigationClickListener();
 
                 com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setDrawerIndicatorEnabled(false);
@@ -561,8 +561,10 @@ public class ItemstFragment extends ListFragment {
                     public void onClick(View v) {
 
                         // Set default toolbar behaviour
+                        ((com.lgallardo.qbittorrentclient.MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
                         com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setDrawerIndicatorEnabled(true);
                         com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setToolbarNavigationClickListener(originalListener);
+
                         FragmentManager fm = getFragmentManager();
                         fm.popBackStack();
                     }

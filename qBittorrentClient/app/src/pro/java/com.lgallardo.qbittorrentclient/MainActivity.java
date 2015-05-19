@@ -657,6 +657,9 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
             } else {
 
+                // Enable toolbar title
+                getSupportActionBar().setDisplayShowTitleEnabled(true);
+
                 fm.popBackStack();
             }
 
