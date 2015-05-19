@@ -442,8 +442,17 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         // Activity is visble
         activityIsVisible = true;
 
-        // // Autorefresh
+
+//        // Set the refresh layout (refresh icon, etc)
+//        refreshSwipeLayout();
+//        if (secondFragment.mSwipeRefreshLayout != null) {
+//            secondFragment.mSwipeRefreshLayout.setRefreshing(true);
+//        }
+
+        // First refresh
         refreshCurrent();
+
+        Log.d("Debug","First refresh done");
 
         handler = new Handler();
         handler.postDelayed(m_Runnable, refresh_period);
@@ -556,11 +565,24 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        activityIsVisible = false;
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        activityIsVisible = false;
+//    }
+
+//    @Override
+//    public void onStart(){
+//        // Set the refresh layout (refresh icon, etc)
+//        refreshSwipeLayout();
+//
+//        // First refresh
+////        refreshCurrent();
+//
+//        Log.d("Debug","First refresh done");
+//
+//        super.onStart();
+//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -626,6 +648,9 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
             if (fm.getBackStackEntryCount() == 0) {
 
+                // Set About first load to true
+                AboutFragment.isFragmentFirstLoaded = true;
+
                 // Close the app
                 this.finish();
 
@@ -662,7 +687,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         if (firstFragment != null && firstFragment.mActionMode != null) {
             return;
         }
-
 
         if (qb_version.equals("2.x")) {
             qbQueryString = "json";
@@ -701,7 +725,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 genericOkDialog(R.string.info, R.string.about_help1);
 
             } else {
-
 
                // Execute the task in background
                 qBittorrentTask qtt = new qBittorrentTask();
@@ -1130,6 +1153,27 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
             // Commit changes
             editor.apply();
+
+
+            // Set theme
+
+            if (dark_ui) {
+                this.setTheme(R.style.Theme_Dark);
+
+                if (Build.VERSION.SDK_INT >= 21) {
+                    getWindow().setNavigationBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground));
+                    getWindow().setStatusBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground));
+                }
+            } else {
+                this.setTheme(R.style.Theme_Light);
+
+                if (Build.VERSION.SDK_INT >= 21) {
+                    getWindow().setNavigationBarColor(getResources().getColor(R.color.primary));
+                }
+
+            }
+
+//            this.recreate();
 
             alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getApplication(), NotifierService.class);
@@ -1945,27 +1989,38 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         switch (position) {
             case 0:
-
+                // Set the refresh layout (refresh icon, etc)
+                refreshSwipeLayout();
                 refresh("all");
                 saveLastState("all");
                 break;
             case 1:
+                // Set the refresh layout (refresh icon, etc)
+                refreshSwipeLayout();
                 refresh("downloading");
                 saveLastState("downloading");
                 break;
             case 2:
+                // Set the refresh layout (refresh icon, etc)
+                refreshSwipeLayout();
                 refresh("completed");
                 saveLastState("completed");
                 break;
             case 3:
+                // Set the refresh layout (refresh icon, etc)
+                refreshSwipeLayout();
                 refresh("paused");
                 saveLastState("paused");
                 break;
             case 4:
+                // Set the refresh layout (refresh icon, etc)
+                refreshSwipeLayout();
                 refresh("active");
                 saveLastState("active");
                 break;
             case 5:
+                // Set the refresh layout (refresh icon, etc)
+                refreshSwipeLayout();
                 refresh("inactive");
                 saveLastState("inactive");
                 break;
@@ -2007,6 +2062,16 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
     @Override
     public void swipeRefresh() {
+
+        // Set the refresh layout (refresh icon, etc)
+        refreshSwipeLayout();
+
+        // Actually refresh data
+        refreshCurrent();
+    }
+
+    public void refreshSwipeLayout() {
+
         Log.d("Debug", "Swipe 2!");
 
         listViewRefreshing = true;
@@ -2014,19 +2079,26 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         if (AboutFragment.mSwipeRefreshLayout != null) {
             AboutFragment.mSwipeRefreshLayout.setRefreshing(true);
+        }else{
+            Log.d("Debug", "AboutFragment.mSwipeRefreshLayout is NULL");
+
         }
 
         if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
             com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(true);
             com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(false);
+        }else{
+            Log.d("Debug", "ItemstFragment.mSwipeRefreshLayout is NULL");
+
         }
 
         if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(true);
+        }else{
+            Log.d("Debug", "TorrentDetailsFragment.mSwipeRefreshLayout is NULL");
+
         }
 
-
-        refreshCurrent();
     }
 
     // Here is where the action happens
@@ -2765,11 +2837,13 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     Log.e("ADAPTER", e.toString());
                 }
 
+
+                Log.d("Debug"," qBittorrentTask - post execute completed");
+
                 // Clear serch field
                 searchField = "";
 
             }
-
 
             if (com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout != null) {
                 com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setRefreshing(false);

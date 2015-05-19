@@ -14,6 +14,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,7 @@ public class AboutFragment extends Fragment {
 
     public static SwipeRefreshLayout mSwipeRefreshLayout;
     private com.lgallardo.qbittorrentclient.RefreshListener refreshListener;
+    public static boolean isFragmentFirstLoaded = true;
 
     public AboutFragment() {
     }
@@ -42,6 +44,23 @@ public class AboutFragment extends Fragment {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.about_refresh_layout);
 
+        // This fix the SwipeRefreshLayout setRefreshing not showing indicator initially issue
+        // by calling setProgressViewOffset() on the SwipeRefreshLayout that invalidtes the circle view of the layout causing
+        // SwipeRefreshLayout.onMeasure() to be called immediately.
+
+        if(isFragmentFirstLoaded) {
+
+            TypedValue typed_value = new TypedValue();
+            getActivity().getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, typed_value, true);
+            mSwipeRefreshLayout.setProgressViewOffset(false, 0, getResources().getDimensionPixelSize(typed_value.resourceId) * 2);
+
+            mSwipeRefreshLayout.setColorSchemeColors(R.color.primary, R.color.primary_dark, R.color.primary_text);
+
+            mSwipeRefreshLayout.setRefreshing(true);
+
+            isFragmentFirstLoaded = false;
+        }
+
         if(mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -52,6 +71,7 @@ public class AboutFragment extends Fragment {
                 }
             });
         }
+
 
 
         return rootView;
