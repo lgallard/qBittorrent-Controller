@@ -870,6 +870,9 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             return true;
         }
 
+        // Enable title (just in case)
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+
         switch (item.getItemId()) {
 
             case R.id.action_search:

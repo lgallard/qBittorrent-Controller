@@ -194,7 +194,7 @@ public class TorrentDetailsFragment extends Fragment {
             });
         }
 
-        // Hide herderInfo in phone's view
+        // Hide herderInfo and title in phone's view
         if (getActivity().findViewById(R.id.one_frame) != null) {
             com.lgallardo.qbittorrentclient.MainActivity.headerInfo.setVisibility(View.GONE);
             ((com.lgallardo.qbittorrentclient.MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -391,6 +391,11 @@ public class TorrentDetailsFragment extends Fragment {
 
 
         try {
+
+            // Hide herderInfo in phone's view
+            if (getActivity().findViewById(R.id.one_frame) != null) {
+                com.lgallardo.qbittorrentclient.MainActivity.headerInfo.setVisibility(View.GONE);
+            }
 
             // Get values from current activity
             name = torrent.getFile();

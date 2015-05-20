@@ -197,6 +197,8 @@ public class ItemstFragment extends ListFragment {
 
                     hashesStr = hashes;
 
+                    ((com.lgallardo.qbittorrentclient.MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+
                     switch (item.getItemId()) {
 
                         case R.id.action_pause:
@@ -564,6 +566,20 @@ public class ItemstFragment extends ListFragment {
                         ((com.lgallardo.qbittorrentclient.MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
                         com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setDrawerIndicatorEnabled(true);
                         com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setToolbarNavigationClickListener(originalListener);
+
+                        // Show herderInfo in phone's view
+                        if (getActivity().findViewById(R.id.one_frame) != null) {
+
+                            if (com.lgallardo.qbittorrentclient.MainActivity.headerInfo != null) {
+                                if (com.lgallardo.qbittorrentclient.MainActivity.header) {
+                                    com.lgallardo.qbittorrentclient.MainActivity.headerInfo.setVisibility(View.VISIBLE);
+                                } else {
+                                    com.lgallardo.qbittorrentclient.MainActivity.headerInfo.setVisibility(View.GONE);
+                                }
+                            }
+
+                        }
+
 
                         FragmentManager fm = getFragmentManager();
                         fm.popBackStack();
