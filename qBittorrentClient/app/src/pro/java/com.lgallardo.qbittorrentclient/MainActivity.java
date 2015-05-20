@@ -1161,26 +1161,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             editor.apply();
 
 
-            // Set theme
-
-            if (dark_ui) {
-                this.setTheme(R.style.Theme_Dark);
-
-                if (Build.VERSION.SDK_INT >= 21) {
-                    getWindow().setNavigationBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground));
-                    getWindow().setStatusBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground));
-                }
-            } else {
-                this.setTheme(R.style.Theme_Light);
-
-                if (Build.VERSION.SDK_INT >= 21) {
-                    getWindow().setNavigationBarColor(getResources().getColor(R.color.primary));
-                }
-
-            }
-
-//            this.recreate();
-
             alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getApplication(), NotifierService.class);
             alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
