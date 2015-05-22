@@ -33,7 +33,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -860,6 +859,11 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         return true;
     }
 
+    public void popBackStackPhoneView(){
+        getFragmentManager().popBackStack();
+        headerInfo.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -891,7 +895,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     pauseTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
-                        getFragmentManager().popBackStack();
+                        popBackStackPhoneView();
                     }
                 }
                 return true;
@@ -900,7 +904,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     startTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
-                        getFragmentManager().popBackStack();
+                        popBackStackPhoneView();
                     }
                 }
                 return true;
@@ -933,7 +937,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                                 deleteTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                                 if (findViewById(R.id.one_frame) != null) {
-                                    getFragmentManager().popBackStack();
+                                    popBackStackPhoneView();
                                 }
                             }
 
@@ -970,7 +974,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                                 deleteDriveTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                                 if (findViewById(R.id.one_frame) != null) {
-                                    getFragmentManager().popBackStack();
+                                    popBackStackPhoneView();
                                 }
                             }
 
@@ -990,7 +994,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     increasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
-                        getFragmentManager().popBackStack();
+                        popBackStackPhoneView();
                     }
                 }
                 return true;
@@ -999,7 +1003,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     decreasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
-                        getFragmentManager().popBackStack();
+                        popBackStackPhoneView();
                     }
                 }
                 return true;
@@ -1008,7 +1012,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     maxPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
-                        getFragmentManager().popBackStack();
+                        popBackStackPhoneView();
                     }
                 }
                 return true;
@@ -1017,7 +1021,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     minPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
-                        getFragmentManager().popBackStack();
+                        popBackStackPhoneView();
                     }
                 }
                 return true;
@@ -1031,7 +1035,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     uploadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
-                        getFragmentManager().popBackStack();
+                        popBackStackPhoneView();
                     }
                 }
                 return true;
@@ -1040,7 +1044,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     downloadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
-                        getFragmentManager().popBackStack();
+                        popBackStackPhoneView();
                     }
                 }
                 return true;
@@ -1048,7 +1052,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     recheckTorrents(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
-                        getFragmentManager().popBackStack();
+                        popBackStackPhoneView();
                     }
                 }
                 return true;
@@ -1056,7 +1060,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleFirstLastPiecePrio(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
-                        getFragmentManager().popBackStack();
+                        popBackStackPhoneView();
                     }
                 }
                 return true;
@@ -1064,7 +1068,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleSequentialDownload(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                     if (findViewById(R.id.one_frame) != null) {
-                        getFragmentManager().popBackStack();
+                        popBackStackPhoneView();
                     }
                 }
                 return true;
@@ -2295,14 +2299,14 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             if ("setUploadRateLimit".equals(result)) {
                 messageId = R.string.setUploadRateLimit;
                 if (findViewById(R.id.one_frame) != null) {
-                    getFragmentManager().popBackStack();
+                    popBackStackPhoneView();
                 }
             }
 
             if ("setDownloadRateLimit".equals(result)) {
                 messageId = R.string.setDownloadRateLimit;
                 if (findViewById(R.id.one_frame) != null) {
-                    getFragmentManager().popBackStack();
+                    popBackStackPhoneView();
                 }
             }
 
