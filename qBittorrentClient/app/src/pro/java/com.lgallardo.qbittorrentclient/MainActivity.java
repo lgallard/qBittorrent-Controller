@@ -81,7 +81,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     protected static final String TAG_ETA = "eta";
     protected static final String TAG_SEQDL = "seq_dl";
     protected static final String TAG_FLPIECEPRIO = "f_l_piece_prio";
-
     protected static final String TAG_GLOBAL_MAX_NUM_CONNECTIONS = "max_connec";
     protected static final String TAG_MAX_NUM_CONN_PER_TORRENT = "max_connec_per_torrent";
     protected static final String TAG_MAX_NUM_UPSLOTS_PER_TORRENT = "max_uploads_per_torrent";
@@ -93,20 +92,23 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     protected static final String TAG_MAX_ACT_DOWNLOADS = "max_active_downloads";
     protected static final String TAG_MAX_ACT_UPLOADS = "max_active_uploads";
     protected static final String TAG_MAX_ACT_TORRENTS = "max_active_torrents";
-
-
     protected static final String TAG_URL = "url";
+
     protected static final int SETTINGS_CODE = 0;
     protected static final int OPTION_CODE = 1;
-    protected static final int HELP_CODE = 2;
+    protected static final int GETPRO_CODE = 2;
+    protected static final int HELP_CODE = 3;
 
     // Cookie (SID - Session ID)
     public static String cookie = null;
     public static String qb_version = "3.1.x";
     public static LinearLayout headerInfo;
+
     // Current state
     public static String currentState;
+
     protected static com.lgallardo.qbittorrentclient.JSONParser jParser;
+
     // Preferences properties
     protected static String hostname;
     protected static String subfolder;
@@ -125,6 +127,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     protected static String lastState;
     protected static long notification_period;
     protected static boolean header;
+
     // Option
     protected static String global_max_num_connections;
     protected static String max_num_conn_per_torrent;
@@ -141,20 +144,24 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     protected static long downloadSpeedCount;
     protected static int uploadCount;
     protected static int downloadCount;
+
     static Torrent[] lines;
     static String[] names;
+
     // Params to get JSON Array
     private static String[] params = new String[2];
     public com.lgallardo.qbittorrentclient.ItemstFragment firstFragment;
+
     // myAdapter myadapter
     public TorrentListAdapter myadapter;
+
     // Http status code
     public int httpStatusCode = 0;
 
-    TextView name1, size1;
     // Preferences fields
     private SharedPreferences sharedPrefs;
     private StringBuilder builderPrefs;
+
     // Drawer properties
     private CharSequence drawerTitle;
     private CharSequence title;
@@ -162,20 +169,31 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     private ListView drawerList;
     public static DrawerLayout drawerLayout;
     public static ActionBarDrawerToggle drawerToggle;
+
+    // Fragments
     private AboutFragment secondFragment;
     private HelpFragment helpTabletFragment;
     private AboutFragment aboutFragment;
+
     private boolean okay = false;
+
     // Auto-refresh
     private Handler handler;
     private boolean canrefresh = true;
+
+//    // Ads View
+//    private AdView adView;
+
     // For checking if the app is visible
     private boolean activityIsVisible = true;
+
     // Item list position
     private int itemPosition = 0;
+
     // Searching field
     private String searchField = "";
     private String qbQueryString = "query";
+
     // Alarm manager
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
@@ -196,7 +214,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         // Get preferences
         getSettings();
 
-
         // Set alarm for checking completed torrents, if not set
         if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), NotifierService.class), PendingIntent.FLAG_NO_CREATE) == null) {
 
@@ -208,15 +225,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + 5000,
                     notification_period, alarmIntent);
-
-//            Log.d("Debug", "Alarm was set!");
-//            Log.d("Debug", "notification_period: " + notification_period);
-
-
-        } else {
-//            Log.d("Debug", "Alarm is already active");
-//            Log.d("Debug", "notification_period: " + notification_period);
-
         }
 
         if (qb_version.equals("3.2.x")) {
@@ -246,7 +254,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         setContentView(R.layout.activity_main);
 
-
         toolbar = (Toolbar) findViewById(R.id.app_bar);
 
         if (dark_ui) {
@@ -265,6 +272,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         drawerList = (ListView) findViewById(R.id.left_drawer);
 
+        // TODO: Edit code for Free and Pro versions
+
         // Drawer item list objects
         ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[9];
 
@@ -277,11 +286,11 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[6]);
         drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[7]);
         drawerItem[8] = new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[8]);
+//        drawerItem[9] = new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9]);
 
         // Create object for drawer item OnbjectDrawerItem
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.drawer_row, drawerItem);
         drawerList.setAdapter(adapter);
-
 
         // Set selection according to last state
         setSelectionAndTitle(lastState);
@@ -298,7 +307,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         // New ActionBarDrawerToggle for Google Material Desing (v7)
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
-
 
             /**
              * Called when a drawer has settled in a completely closed state.
@@ -319,7 +327,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         };
 
         drawerLayout.setDrawerListener(drawerToggle);
-
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(false);
@@ -351,6 +358,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             if (firstFragment == null) {
                 firstFragment = new com.lgallardo.qbittorrentclient.ItemstFragment();
             }
+
             // This fragment will hold the list of torrents
             helpTabletFragment = new HelpFragment();
 
@@ -360,14 +368,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             // This i the second fragment, holding a default message at the
             // beginning
             secondFragment = new AboutFragment();
-
-            // If we're being restored from a previous state,
-            // then we don't need to do anything and should return or else
-            // we could end up with overlapping fragments.
-            if (savedInstanceState != null) {
-
-                // return;
-            }
 
             // Add the fragment to the 'list_frame' FrameLayout
             FragmentManager fragmentManager = getFragmentManager();
@@ -402,7 +402,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             if (savedInstanceState != null) {
 
                 // Handle Item list empty due to Fragment stack
-
                 try {
                     FragmentManager fm = getFragmentManager();
 
@@ -411,7 +410,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                         refreshCurrent();
 
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                 }
 
                 return;
@@ -426,32 +426,11 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             fragmentTransaction.commit();
         }
 
-//        // Force overflow menu on all devices
-//        try {
-//            ViewConfiguration config = ViewConfiguration.get(this);
-//            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-//            if(menuKeyField != null) {
-//                menuKeyField.setAccessible(true);
-//                menuKeyField.setBoolean(config, false);
-//            }
-//        } catch (Exception ex) {
-//            // Ignore
-//        }
-
         // Activity is visble
         activityIsVisible = true;
 
-
-//        // Set the refresh layout (refresh icon, etc)
-//        refreshSwipeLayout();
-//        if (secondFragment.mSwipeRefreshLayout != null) {
-//            secondFragment.mSwipeRefreshLayout.setRefreshing(true);
-//        }
-
         // First refresh
         refreshCurrent();
-
-        Log.d("Debug","First refresh done");
 
         handler = new Handler();
         handler.postDelayed(m_Runnable, refresh_period);
@@ -512,7 +491,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         }
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -547,9 +525,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                     // Close Contextual Action Bar
                     if (firstFragment != null && firstFragment.mActionMode != null) {
-
                         firstFragment.mActionMode.finish();
-
                     }
 
                     // Refresh current list
@@ -570,25 +546,28 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 //        activityIsVisible = false;
 //    }
 
-//    @Override
-//    public void onStart(){
-//        // Set the refresh layout (refresh icon, etc)
-//        refreshSwipeLayout();
-//
-//        // First refresh
-////        refreshCurrent();
-//
-//        Log.d("Debug","First refresh done");
-//
-//        super.onStart();
-//    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        // TODO: Delete
         outState.putInt("itemPosition", itemPosition);
-
     }
+
+    // Auto-refresh runnable
+    private final Runnable m_Runnable = new Runnable() {
+        public void run()
+
+        {
+
+            if (auto_refresh == true && canrefresh == true && activityIsVisible == true) {
+
+                refreshCurrent();
+            }
+
+            MainActivity.this.handler.postDelayed(m_Runnable, refresh_period);
+        }
+
+    };// runnable
 
     public void refreshCurrent() {
         if (!hostname.equals("")) {
@@ -617,7 +596,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     break;
             }
         }
-    }    // Auto-refresh runnable
+    }
 
     @Override
     public void setTitle(CharSequence title) {
@@ -674,7 +653,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             }
         }
 
-
     }
 
     private void refresh() {
@@ -707,13 +685,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             if (cookie == null || cookie.equals("")) {
                 new qBittorrentCookie().execute();
             }
-
-//            Log.i("REFRESH", "Cookie:" + cookie);
-
         }
-
-
-//        Log.i("REFRESH", params[0]);
 
         params[1] = state;
 
@@ -722,10 +694,11 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
+//            // Load banner
+//            loadBanner();
+
             if (hostname.equals("")) {
-
                 genericOkDialog(R.string.info, R.string.about_help1);
-
             } else {
 
                // Execute the task in background
@@ -733,6 +706,11 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                 qtt.execute(params);
 
+                // TODO: Delete
+//                // Close Contextual Action Bar
+//                if (firstFragment != null && firstFragment.mActionMode != null) {
+//                    firstFragment.mActionMode.finish();
+//                }
 
             }
 
@@ -759,7 +737,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
             // Autorefresh
             refreshCurrent();
-
         }
 
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -793,8 +770,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         String urlTorrent = intent.getDataString();
 
-//        Log.d("Debug", "urlTorrent: " + urlTorrent);
-
         if (urlTorrent != null && urlTorrent.length() != 0) {
 
             if (urlTorrent.substring(0, 4).equals("file")) {
@@ -804,8 +779,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
             } else {
 
-                // Web
-//                addTorrent(Uri.decode(urlTorrent));
                 try {
                     addTorrent(Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8")));
                 } catch (UnsupportedEncodingException e) {
@@ -851,9 +824,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         if (searchView != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-
-            Log.d("Debug", "searchView is not NULL");
-
         }
 
         return true;
@@ -880,7 +850,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         switch (item.getItemId()) {
 
             case R.id.action_search:
-                Log.d("Debug", "Search in Main");
                 onSearchRequested();
                 return true;
             case R.id.action_refresh:
@@ -1034,6 +1003,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             case R.id.action_upload_rate_limit:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     uploadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+
                     if (findViewById(R.id.one_frame) != null) {
                         popBackStackPhoneView();
                     }
@@ -1043,6 +1013,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             case R.id.action_download_rate_limit:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     downloadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+
                     if (findViewById(R.id.one_frame) != null) {
                         popBackStackPhoneView();
                     }
@@ -1051,6 +1022,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             case R.id.action_recheck:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     recheckTorrents(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+
                     if (findViewById(R.id.one_frame) != null) {
                         popBackStackPhoneView();
                     }
@@ -1059,6 +1031,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             case R.id.action_firts_last_piece_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleFirstLastPiecePrio(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+
                     if (findViewById(R.id.one_frame) != null) {
                         popBackStackPhoneView();
                     }
@@ -1067,6 +1040,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             case R.id.action_sequential_download:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleSequentialDownload(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+
                     if (findViewById(R.id.one_frame) != null) {
                         popBackStackPhoneView();
                     }
@@ -1107,7 +1081,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 invalidateOptionsMenu();
                 refreshCurrent();
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -1146,12 +1119,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             qBittorrentOptions qso = new qBittorrentOptions();
             qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
 
-
             // Now it can be refreshed
             canrefresh = true;
-
-            // Set notification alarm service
-            // Set Alarm for checking completed torrents
 
             // Save completedHashes
             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -1164,7 +1133,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             // Commit changes
             editor.apply();
 
-
             alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getApplication(), NotifierService.class);
             alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
@@ -1172,10 +1140,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + 5000,
                     notification_period, alarmIntent);
-
-
-//            Log.d("Notifier", "notification_period 2: " + notification_period);
-
 
         }
 
@@ -1236,15 +1200,17 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         }
 
-        if (requestCode == HELP_CODE) {
-
+        if (requestCode == GETPRO_CODE) {
             // Now it can be refreshed
             canrefresh = true;
+        }
 
+        if (requestCode == HELP_CODE) {
+            // Now it can be refreshed
+            canrefresh = true;
         }
 
         if (resultCode == RESULT_OK) {
-//            Log.d("Debug", "CurrentState: " + data.getStringExtra("currentState"));
 
             String stateBefore = data.getStringExtra("currentState");
 
@@ -1259,9 +1225,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         }
         if (resultCode == RESULT_CANCELED) {
-            //Write your code if there's no result
-//            Log.d("Debug", "No result");
-
             // Refresh
             refresh();
         }
@@ -1312,7 +1275,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         canrefresh = false;
 
         Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.SettingsActivity.class);
-        // startActivity(intent);
         startActivityForResult(intent, SETTINGS_CODE);
 
     }
@@ -1322,24 +1284,28 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         Intent intent = new Intent(getBaseContext(), HelpActivity.class);
         intent.putExtra("current", lastState);
-//        startActivity(intent);
         startActivityForResult(intent, HELP_CODE);
 
     }
 
     private void openOptions() {
-        // Retrieve preferences for options
         canrefresh = false;
+        // Retrieve preferences for options
         Intent intent = new Intent(getBaseContext(), OptionsActivity.class);
         startActivityForResult(intent, OPTION_CODE);
 
     }
 
+//    private void getPRO() {
+//        Intent intent = new Intent(
+//                new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclientpro")));
+//        startActivityForResult(intent, GETPRO_CODE);
+//    }
+
     public void startTorrent(String hash) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"start", hash});
-
     }
 
     public void startSelectedTorrents(String hashes) {
@@ -1356,14 +1322,12 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         // Delay of 3 seconds
         refreshAfterCommand(3);
-
     }
 
     public void pauseTorrent(String hash) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"pause", hash});
-
     }
 
     public void pauseSelectedTorrents(String hashes) {
@@ -1406,34 +1370,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         qtc.execute(new String[]{"deleteDrive", hash});
     }
 
-    private final Runnable m_Runnable = new Runnable() {
-        public void run()
-
-        {
-            // Toast.makeText(MainActivity.this, "Refresh period: " +
-            // refresh_period, Toast.LENGTH_SHORT).show();
-
-            if (auto_refresh == true && canrefresh == true && activityIsVisible == true) {
-
-//                if (findViewById(R.id.fragment_container) != null) {
-//                    refreshCurrent();
-//                } else {
-//
-//                    FragmentManager fm = getFragmentManager();
-//
-//                    if (fm.findFragmentById(R.id.one_frame) instanceof ItemstFragment || fm.findFragmentById(R.id.one_frame) instanceof AboutFragment) {
-//                        refreshCurrent();
-//                    }
-//                }
-
-                refreshCurrent();
-            }
-
-            MainActivity.this.handler.postDelayed(m_Runnable, refresh_period);
-        }
-
-    };// runnable
-
     public void deleteDriveSelectedTorrents(String hashes) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
@@ -1444,8 +1380,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         // Delay of 1 second
         refreshAfterCommand(1);
     }
-
-    // Drawer's method
 
     public void addTorrent(String url) {
         // Execute the task in background
@@ -1640,6 +1574,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 } else {
                     limit = Integer.parseInt(uploadRateLimit);
                 }
+
                 String[] hashesArray = hash.split("\\|");
 
                 for (int i = 0; hashesArray.length > i; i++) {
@@ -1666,12 +1601,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         if (downloadRateLimit != null && !downloadRateLimit.equals("")) {
 
-//            Log.i("setDownloadRateLimit", "downloadRateLimit: " + downloadRateLimit);
-
             if (global_download != null) {
-
-//                Log.i("setDownloadRateLimit", "global_download: " + Integer.parseInt(global_download));
-
 
                 if (Integer.parseInt(global_download) > 0) {
                     limit = (Integer.parseInt(downloadRateLimit) > Integer.parseInt(global_download)) ? Integer.parseInt(global_download) : Integer
@@ -1683,10 +1613,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 String[] hashesArray = hash.split("\\|");
 
                 for (int i = 0; hashesArray.length > i; i++) {
-
-//                    Log.i("setDownloadRateLimit", "hash: " + hashesArray[i]);
-//                    Log.i("setDownloadRateLimit", "limit: " + limit * 1024);
-
                     qBittorrentCommand qtc = new qBittorrentCommand();
                     qtc.execute(new String[]{"setDownloadRateLimit", hashesArray[i] + "&" + limit * 1024});
                 }
@@ -1696,12 +1622,11 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 // Delay of 1 second
                 refreshAfterCommand(1);
 
-
-            } else {
+            }
+            else {
                 genericOkDialog(R.string.error, R.string.global_value_error);
             }
         }
-
     }
 
     public void refreshAfterCommand(int delay) {
@@ -1806,7 +1731,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         // Check https
         if (https) {
             protocol = "https";
-
         } else {
             protocol = "http";
         }
@@ -1839,7 +1763,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         dark_ui = sharedPrefs.getBoolean("dark_ui", false);
 
         qb_version = sharedPrefs.getString("qb_version", "3.1.x");
-
 
         MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
 
@@ -1892,8 +1815,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-// build notification
-// the addAction re-use the same intent to keep the example short
+        // build notification
+        // the addAction re-use the same intent to keep the example short
         Notification.Builder builder = new Notification.Builder(this)
                 .setContentTitle("qBittorrent")
                 .setContentText("Torrent(s) completed")
@@ -1913,21 +1836,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         notificationManager.notify(0, notification);
 
 
-//        // Notify individually and remove form completed list
-//        Iterator it = notify.entrySet().iterator();
-//        while (it.hasNext()) {
-//
-//            HashMap.Entry pairs = (HashMap.Entry) it.next();
-//
-//            Torrent t = (Torrent) pairs.getValue();
-//
-//            Log.i("Completed", t.getFile() + " - completed");
-//
-//            // Remove it
-//            notify.remove(pairs.getKey());
-//
-//            it.remove(); // avoids a ConcurrentModificationException
-//        }
     }
 
     private void saveLastState(String state) {
@@ -2033,13 +1941,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         }
 
-        // if (fragment != null || listFragment != null || contentFragment !=
-        // null) {
-        // // FragmentManager fragmentManager = getFragmentManager();
-        // // fragmentManager.beginTransaction()
-        // // .replace(R.id.content_frame, fragment).commit();
-
-
         if (position < 6) {
             drawerList.setItemChecked(position, true);
             drawerList.setSelection(position);
@@ -2062,31 +1963,20 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
     public void refreshSwipeLayout() {
 
-        Log.d("Debug", "Swipe 2!");
-
         listViewRefreshing = true;
 
 
         if (AboutFragment.mSwipeRefreshLayout != null) {
             AboutFragment.mSwipeRefreshLayout.setRefreshing(true);
-        }else{
-            Log.d("Debug", "AboutFragment.mSwipeRefreshLayout is NULL");
-
         }
 
         if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
             com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(true);
             com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(false);
-        }else{
-            Log.d("Debug", "ItemstFragment.mSwipeRefreshLayout is NULL");
-
         }
 
         if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(true);
-        }else{
-            Log.d("Debug", "TorrentDetailsFragment.mSwipeRefreshLayout is NULL");
-
         }
 
     }
@@ -2107,21 +1997,12 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             String cookie = "";
             String api = "";
 
-
-//            Log.i("qBittorrentCookie =>", "qBittorrentCookie");
-
             try {
-
                 cookie = jParser.getNewCookie();
-//                api = jParser.getApiVersion();
 
-            } catch (JSONParserStatusCodeException e) {
-
+            }
+            catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
-
-//                Log.i("qBittorrentCookie", "httpStatusCode: " + httpStatusCode);
-//                Log.e("qBittorrentCookie", e.toString());
-
             }
 
             if (cookie == null) {
@@ -2133,9 +2014,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 api = "";
 
             }
-//
-//            Log.i("qBittorrentCookie", "COOKIE: " + ">" + cookie + "<");
-//            Log.i("qBittorrentCookie", "API: >" + api + "<");
 
             return new String[]{cookie, api};
 
@@ -2143,8 +2021,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         @Override
         protected void onPostExecute(String[] result) {
-            Log.i("qBittorrentCookie", "httpStatusCode:" + httpStatusCode);
-
 
             MainActivity.cookie = result[0];
 
@@ -2172,7 +2048,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             // Get values from preferences
             getSettings();
 
-
             // Creating new JSON Parser
             com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
 
@@ -2195,7 +2070,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         @Override
         protected void onPostExecute(String result) {
-//            Log.i("httpStatusCode", "" + httpStatusCode);
+
+            // Handle HTTP status code
 
             if (httpStatusCode == 1) {
                 Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
@@ -2207,7 +2083,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
                 httpStatusCode = 0;
                 return;
-
             }
 
             if (httpStatusCode == 403) {
@@ -2272,7 +2147,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                 // Needed to refresh after a "resume all" and see the changes
                 delay = 3;
-
             }
 
             if ("increasePrio".equals(result)) {
@@ -2310,7 +2184,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 }
             }
 
-
             if ("recheckSelected".equals(result)) {
                 messageId = R.string.torrentsRecheck;
             }
@@ -2329,7 +2202,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 // Refresh
                 refreshAfterCommand(delay);
             }
-
         }
     }
 
@@ -2343,14 +2215,12 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             boolean sequentialDownload = false;
             boolean firstLastPiecePrio = false;
 
-
             Torrent[] torrents = null;
 
             // Get settings
             getSettings();
 
             try {
-
 
                 // Creating new JSON Parser
                 jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
@@ -2384,13 +2254,13 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                         downloadSpeed = json.getString(TAG_DLSPEED);
                         uploadSpeed = json.getString(TAG_UPSPEED);
 
-
                         if (qb_version.equals("3.2.x")) {
 
                             size = Common.calculateSize(size);
                             eta = Common.secondsToEta(eta);
                             downloadSpeed = Common.calculateSize(downloadSpeed) + "/s";
                             uploadSpeed = Common.calculateSize(uploadSpeed) + "/s";
+
                             try {
                                 sequentialDownload = json.getBoolean(TAG_SEQDL);
                             } catch (Exception e) {
@@ -2403,7 +2273,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                             } catch (Exception e) {
                                 firstLastPiecePrio = false;
                             }
-
                         }
 
                         torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, sequentialDownload, firstLastPiecePrio);
@@ -2423,7 +2292,13 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                             torrents[i].setDownloaded(size);
                         }
 
-                        // Info
+//                        // Info free
+//                        torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
+//                                + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
+//                                + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + progress + " " + Character.toString('\u2022') + " "
+//                                + torrents[i].getEta());
+
+                        // Info pro
                         torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
                                 + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
                                 + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + torrents[i].getEta());
@@ -2452,6 +2327,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                 Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
+                // Handle HTTP status code
+
                 if (httpStatusCode == 1) {
                     Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
@@ -2474,18 +2351,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
 
-
                 }
 
-//                Log.i("httpStatusCode", "" + httpStatusCode);
-
-//                // Set App title
-//                setTitle(R.string.app_shortname);
-//
-//                // Uncheck any item on the drawer menu
-//                for (int i = 0; i < drawerList.getCount(); i++) {
-//                    drawerList.setItemChecked(i, false);
-//                }
 
             } else {
 
@@ -2573,7 +2440,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     Collections.sort(torrentsFiltered, new TorrentUploadSpeedComparator(reverse_order));
                 }
 
-
                 // Get names (delete in background method)
                 MainActivity.names = new String[torrentsFiltered.size()];
                 MainActivity.lines = new Torrent[torrentsFiltered.size()];
@@ -2583,7 +2449,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                 uploadCount = 0;
                 downloadCount = 0;
-
 
                 try {
 
@@ -2597,9 +2462,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                         MainActivity.lines[i] = torrent;
 
                         if (torrent.getHash().equals(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate)) {
-
                             torrentToUpdate = torrent;
-
                         }
 
                         uploadSpeedCount += (int) Common.humanSizeToBytes(torrent.getUploadSpeed());
@@ -2612,7 +2475,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                         if ("downloading".equals(torrent.getState())) {
                             downloadCount = downloadCount + 1;
                         }
-
 
                     }
 
@@ -2636,7 +2498,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                         Log.e("Debug", "IllegalStateException: " + le.toString());
                     }
 
-
                     // Create the about fragment
                     aboutFragment = new AboutFragment();
 
@@ -2646,7 +2507,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                     // Got some results
                     if (torrentsFiltered.size() > 0) {
-
 
                         // Set headerInfo
                         TextView uploadSpeedTextView = (TextView) findViewById(R.id.uploadSpeed);
@@ -2666,8 +2526,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                         //Set first and second fragments
                         if (findViewById(R.id.fragment_container) != null) {
-
-                            Log.d("Debug", "fragment_container");
 
                             // Set where is the second container
                             firstFragment.setSecondFragmentContainer(R.id.content_frame);
@@ -2709,8 +2567,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                         } else {
 
-                            Log.d("Debug", "one_frame");
-
                             // Set where is the second container
                             firstFragment.setSecondFragmentContainer(R.id.one_frame);
 
@@ -2720,7 +2576,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                             }
 
                             if (fragmentManager.findFragmentByTag("firstFragment") instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
-
 
                                 com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("firstFragment");
 
@@ -2739,8 +2594,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                                 }
                             }
                         }
-
-                    } else {
+                    }
+                    else {
 
                         // No results
 //                        myadapter = null;
@@ -2794,30 +2649,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                                 fragmentManager.popBackStack();
                             }
                         }
-
-
-//                        String[] emptyList = new String[]{getString(R.string.no_results)};
-//                        firstFragment.setListAdapter(new ArrayAdapter<String>(MainActivity.this, R.layout.no_items_found, R.id.no_results, emptyList));
-//
-//
-//                        // Set the second fragments container
-//                        if (findViewById(R.id.fragment_container) != null) {
-//                            firstFragment.setSecondFragmentContainer(R.id.content_frame);
-//                            fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
-//                            fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
-//
-//                        } else {
-//                            firstFragment.setSecondFragmentContainer(R.id.one_frame);
-//                            fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
-//
-//
-//                            // Reset back button stack
-//                            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-//                                fragmentManager.popBackStack();
-//                            }
-//
-//                        }
-
                     }
 
                     // Commit
@@ -2826,9 +2657,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 } catch (Exception e) {
                     Log.e("ADAPTER", e.toString());
                 }
-
-
-                Log.d("Debug"," qBittorrentTask - post execute completed");
 
                 // Clear serch field
                 searchField = "";
@@ -2854,7 +2682,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             }
 
             listViewRefreshing = false;
-
 
         }
     }
@@ -2939,6 +2766,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                 Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
+                // Handle HTTP status code
+
                 if (httpStatusCode == 1) {
                     Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
@@ -2947,7 +2776,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 if (httpStatusCode == 401) {
                     Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
                     httpStatusCode = 0;
-
                 }
 
                 if (httpStatusCode == 403) {
@@ -2959,7 +2787,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                         // Get new Cookie
                         cookie = "";
                         new qBittorrentCookie().execute();
-
                     }
                 }
 
@@ -2979,11 +2806,11 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     // Do nothing
 
                 }
-
             }
         }
     }
 
+    // Drawer classes
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
 
         @Override
@@ -2992,7 +2819,4 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         }
 
     }
-
-
 }
-

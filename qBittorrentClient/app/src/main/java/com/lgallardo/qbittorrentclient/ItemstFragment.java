@@ -17,7 +17,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,16 +28,14 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.Set;
-
 public class ItemstFragment extends ListFragment {
 
     static public ActionMode mActionMode;
     public int nr = 0;
     int secondContainer;
-    com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment;
+    TorrentDetailsFragment detailsFragment;
     private RecyclerView recyclerView;
-    private com.lgallardo.qbittorrentclient.RefreshListener refreshListener;
+    private RefreshListener refreshListener;
     private View.OnClickListener originalListener;
 
     public static SwipeRefreshLayout mSwipeRefreshLayout;
@@ -46,15 +43,15 @@ public class ItemstFragment extends ListFragment {
     public ItemstFragment() {
     }
 
-    public int getSecondFragmentContainer() {
-
-        return this.secondContainer;
-
-    }
-
     public void setSecondFragmentContainer(int container) {
 
         this.secondContainer = container;
+
+    }
+
+    public int getSecondFragmentContainer() {
+
+        return this.secondContainer;
 
     }
 
@@ -68,7 +65,7 @@ public class ItemstFragment extends ListFragment {
         setHasOptionsMenu(true);
 
         // Get Refresh Listener
-        refreshListener = (com.lgallardo.qbittorrentclient.RefreshListener) getActivity();
+        refreshListener = (RefreshListener) getActivity();
 
         View rootView = inflater.inflate(R.layout.activity_main_original, container, false);
 
@@ -80,19 +77,9 @@ public class ItemstFragment extends ListFragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                com.lgallardo.qbittorrentclient.MainActivity.refreshCurrent();
-                Log.d("Debug", "Swipe!");
-
                 refreshListener.swipeRefresh();
-
             }
         });
-
-
-
-
-
-//        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewList);
 
         return rootView;
     }
@@ -119,15 +106,6 @@ public class ItemstFragment extends ListFragment {
                 @Override
                 public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 
-
-                    if(com.lgallardo.qbittorrentclient.MainActivity.listViewRefreshing) {
-                        Log.d("Debug", "onViewCreated - listview is refreshing pal");
-                    }
-                    else{
-                        Log.d("Debug", "onViewCreated - listview is NOT refreshing dude");
-                    }
-
-
                     if (checked) {
                         nr++;
                         mAdapter.setNewSelection(position, checked);
@@ -136,10 +114,9 @@ public class ItemstFragment extends ListFragment {
                         nr--;
                         mAdapter.removeSelection(position);
                     }
-//                    mode.setTitle(nr + " selected");
+
+                    // Set title with number of items selected
                     mode.setTitle("" + nr);
-
-
                 }
 
                 @Override
@@ -158,7 +135,7 @@ public class ItemstFragment extends ListFragment {
 
                 @Override
                 public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                    if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
+                    if (MainActivity.qb_version.equals("3.2.x")) {
                         menu.findItem(R.id.action_firts_last_piece_prio).setVisible(true);
                         menu.findItem(R.id.action_sequential_download).setVisible(true);
                     } else {
@@ -177,7 +154,7 @@ public class ItemstFragment extends ListFragment {
                     final String hashesStr;
 
                     // Get MainActivity
-                    final com.lgallardo.qbittorrentclient.MainActivity m = (com.lgallardo.qbittorrentclient.MainActivity) getActivity();
+                    final MainActivity m = (MainActivity) getActivity();
 
                     // Get hashes
                     for (int i = 0; mAdapter.getCount() > i; i++) {
@@ -190,14 +167,12 @@ public class ItemstFragment extends ListFragment {
                             } else {
                                 hashes = hashes + "|" + mAdapter.getData()[i].getHash();
                             }
-
                         }
-
                     }
 
                     hashesStr = hashes;
 
-                    ((com.lgallardo.qbittorrentclient.MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+                    ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
 
                     switch (item.getItemId()) {
 
@@ -442,15 +417,11 @@ public class ItemstFragment extends ListFragment {
                             mode.finish();
 
                             return true;
-
                         default:
                             // Enable SwipeRefresh
                             mSwipeRefreshLayout.setEnabled(true);
                             return true;
-
-
                     }
-
                 }
 
                 @Override
@@ -459,8 +430,8 @@ public class ItemstFragment extends ListFragment {
                         mAdapter.clearSelection();
                     }
                     ItemstFragment.mActionMode = null;
-                    mSwipeRefreshLayout.setEnabled(true);
 
+                    mSwipeRefreshLayout.setEnabled(true);
 
                 }
             });
@@ -469,7 +440,7 @@ public class ItemstFragment extends ListFragment {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
-                    if(com.lgallardo.qbittorrentclient.MainActivity.listViewRefreshing) {
+                    if(MainActivity.listViewRefreshing) {
                         return true;
                     }
                     getListView().setItemChecked(position, !mAdapter.isPositionChecked(position));
@@ -477,21 +448,15 @@ public class ItemstFragment extends ListFragment {
                 }
             });
 
-
         } catch (Exception e) {
             getListView().setChoiceMode(ListView.CHOICE_MODE_NONE);
-
         }
-
     }
-
 
     @Override
     public void onListItemClick(ListView parent, View v, int position, long id) {
-        if(!com.lgallardo.qbittorrentclient.MainActivity.listViewRefreshing) {
+        if(!MainActivity.listViewRefreshing) {
             ListItemClicked(position);
-
-            Log.d("Debug", "onListItemClick -  not refreshing");
         }
     }
 
@@ -501,27 +466,16 @@ public class ItemstFragment extends ListFragment {
 
         int count = lv.getCount();
 
+        Torrent torrent = MainActivity.lines[position];
 
-//        if (count == 1 && lv.getItemAtPosition(0).equals(getString(R.string.no_results))) {
-//
-//            Log.d("Debug", "Torrents not found");
-//
-//            return;
-//        }
-
-
-        Torrent torrent = com.lgallardo.qbittorrentclient.MainActivity.lines[position];
-
-        if (torrent.getHash().equals(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate) && getActivity().findViewById(R.id.fragment_container) != null) {
+        if (torrent.getHash().equals(TorrentDetailsFragment.hashToUpdate) && getActivity().findViewById(R.id.fragment_container) != null) {
 
             // Update torrent details
 
             FragmentManager fragmentManager = getFragmentManager();
             if(!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
 
-
-
-                detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
+                detailsFragment = (TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
 
                 if (detailsFragment != null && torrent != null) {
 
@@ -540,10 +494,10 @@ public class ItemstFragment extends ListFragment {
 
     private void newDetailsFragment(int position){
 
-        detailsFragment = new com.lgallardo.qbittorrentclient.TorrentDetailsFragment();
+        detailsFragment = new TorrentDetailsFragment();
 
         // Get torrent from MainActivity
-        detailsFragment.setTorrent(com.lgallardo.qbittorrentclient.MainActivity.lines[position]);
+        detailsFragment.setTorrent(MainActivity.lines[position]);
 
         detailsFragment.setPosition(position);
 
@@ -554,27 +508,27 @@ public class ItemstFragment extends ListFragment {
                 fragmentManager.beginTransaction().replace(this.getSecondFragmentContainer(), detailsFragment, "firstFragment").addToBackStack("secondFragment").commit();
 
                 // Change toolbar home button behaviour
-                originalListener = com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.getToolbarNavigationClickListener();
+                originalListener = MainActivity.drawerToggle.getToolbarNavigationClickListener();
 
-                com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setDrawerIndicatorEnabled(false);
-                com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setHomeAsUpIndicator(R.drawable.ic_drawer);
-                com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                MainActivity.drawerToggle.setDrawerIndicatorEnabled(false);
+                MainActivity.drawerToggle.setHomeAsUpIndicator(R.drawable.ic_drawer);
+                MainActivity.drawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         // Set default toolbar behaviour
-                        ((com.lgallardo.qbittorrentclient.MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
-                        com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setDrawerIndicatorEnabled(true);
-                        com.lgallardo.qbittorrentclient.MainActivity.drawerToggle.setToolbarNavigationClickListener(originalListener);
+                        ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+                        MainActivity.drawerToggle.setDrawerIndicatorEnabled(true);
+                        MainActivity.drawerToggle.setToolbarNavigationClickListener(originalListener);
 
                         // Show herderInfo in phone's view
                         if (getActivity().findViewById(R.id.one_frame) != null) {
 
-                            if (com.lgallardo.qbittorrentclient.MainActivity.headerInfo != null) {
-                                if (com.lgallardo.qbittorrentclient.MainActivity.header) {
-                                    com.lgallardo.qbittorrentclient.MainActivity.headerInfo.setVisibility(View.VISIBLE);
+                            if (MainActivity.headerInfo != null) {
+                                if (MainActivity.header) {
+                                    MainActivity.headerInfo.setVisibility(View.VISIBLE);
                                 } else {
-                                    com.lgallardo.qbittorrentclient.MainActivity.headerInfo.setVisibility(View.GONE);
+                                    MainActivity.headerInfo.setVisibility(View.GONE);
                                 }
                             }
 
@@ -598,7 +552,6 @@ public class ItemstFragment extends ListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // inflater.inflate(R.menu.main, menu);
         // super.onCreateOptionsMenu(menu, inflater);
-
 
         if (menu != null) {
             menu.findItem(R.id.action_refresh).setVisible(true);
@@ -672,36 +625,31 @@ public class ItemstFragment extends ListFragment {
             menu.findItem(R.id.action_sortby_downloadSpeed).setVisible(true);
             menu.findItem(R.id.action_sortby_uploadSpeed).setVisible(true);
 
-
-            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("Name")) {
+            if (MainActivity.sortby.equals("Name")) {
                 menu.findItem(R.id.action_sortby_name).setIcon(R.drawable.ic_stat_completed);
-
             }
 
-
-            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("ETA")) {
+            if (MainActivity.sortby.equals("ETA")) {
                 menu.findItem(R.id.action_sortby_eta).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("Priority")) {
-                ;
+            if (MainActivity.sortby.equals("Priority")) {
                 menu.findItem(R.id.action_sortby_priority).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("Progress")) {
+            if (MainActivity.sortby.equals("Progress")) {
                 menu.findItem(R.id.action_sortby_progress).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("Ratio")) {
-
+            if (MainActivity.sortby.equals("Ratio")) {
                 menu.findItem(R.id.action_sortby_ratio).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("DownloadSpeed")) {
+            if (MainActivity.sortby.equals("DownloadSpeed")) {
                 menu.findItem(R.id.action_sortby_downloadSpeed).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (com.lgallardo.qbittorrentclient.MainActivity.sortby.equals("UploadSpeed")) {
+            if (MainActivity.sortby.equals("UploadSpeed")) {
                 menu.findItem(R.id.action_sortby_uploadSpeed).setIcon(R.drawable.ic_stat_completed);
             }
 
