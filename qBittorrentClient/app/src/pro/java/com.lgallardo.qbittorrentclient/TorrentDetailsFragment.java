@@ -49,9 +49,11 @@ public class TorrentDetailsFragment extends Fragment {
     protected static final String TAG_SHARE_RATIO = "share_ratio";
     protected static final String TAG_UPLOAD_LIMIT = "up_limit";
     protected static final String TAG_DOWNLOAD_LIMIT = "dl_limit";
+
     static ContentFile[] files;
     static Tracker[] trackers;
     static String[] names, trackerNames;
+
     // Torrent variables
     String name, info, hash, ratio, size, state, leechs, seeds, progress, priority, savePath, creationDate, comment, totalWasted, totalUploaded,
             totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit, downloaded, eta, downloadSpeed, uploadSpeed,
@@ -62,95 +64,22 @@ public class TorrentDetailsFragment extends Fragment {
     String url;
     int position;
     JSONObject json2;
+
     // Adapters
     myFileAdapter fileAdpater;
     myTrackerAdapter trackerAdapter;
     myPropertyAdapter propertyAdapter;
+
     private String qbQueryString = "query";
     private Torrent torrent;
     public static  SwipeRefreshLayout mSwipeRefreshLayout;
     private com.lgallardo.qbittorrentclient.RefreshListener refreshListener;
 
+    // TODO: Unify free & Pro
+//    private AdView adView;
+//    private View rootView;
 
     public TorrentDetailsFragment() {
-    }
-
-    /**
-     * *
-     * Method for Setting the Height of the ListView dynamically. Hack to fix
-     * the issue of not showing all the items of the ListView when placed inside
-     * a ScrollView
-     * **
-     */
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
-
-        int desiredWidth = MeasureSpec.makeMeasureSpec(listView.getWidth(), MeasureSpec.UNSPECIFIED);
-
-        //Log.i("Height","desiredWidth: "+desiredWidth);
-
-
-        int totalHeight = 0;
-
-        View view = null;
-
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-
-            long numOfLines = 1;
-            view = listAdapter.getView(i, view, listView);
-
-            if (i == 0) {
-                view.setLayoutParams(new LayoutParams(desiredWidth, LayoutParams.WRAP_CONTENT));
-            }
-
-            view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
-
-            TextView file = (TextView) view.findViewById(R.id.file);
-            TextView info = (TextView) view.findViewById(R.id.info);
-
-            if (view.getMeasuredWidth() > desiredWidth) {
-
-                double viewWidthLong = Double.valueOf(view.getMeasuredWidth());
-                double desiredWidthLong = Double.valueOf(desiredWidth);
-
-                //Log.i("Height", "viewWidthLong: " + viewWidthLong);
-                //Log.i("Height", "desiredWidthLong: " + desiredWidthLong);
-
-
-                numOfLines = Math.round(viewWidthLong / desiredWidthLong) + 1;
-
-
-                totalHeight += file.getMeasuredHeight() * numOfLines + info.getMeasuredHeight();
-
-            } else {
-                totalHeight += view.getMeasuredHeight();
-            }
-
-            //Log.i("Height", "numOfLines: " + numOfLines);
-
-            //Log.i("Height", "getMeasuredHeight: " + view.getMeasuredHeight());
-            //Log.i("Height", "getMeasuredWidth: " + view.getMeasuredWidth());
-
-        }
-
-        LayoutParams params = listView.getLayoutParams();
-
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-
-
-        //Log.i("Height","height: "+params.height);
-
-
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-
-    }
-
-    public int getPosition() {
-        return this.position;
     }
 
     public void setPosition(int position) {
@@ -172,11 +101,9 @@ public class TorrentDetailsFragment extends Fragment {
         View rootView;
 
         if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
-
             rootView = inflater.inflate(R.layout.torrent_details, container, false);
         } else {
             rootView = inflater.inflate(R.layout.torrent_details_old, container, false);
-
         }
 
         // Get Refresh Listener
@@ -187,9 +114,7 @@ public class TorrentDetailsFragment extends Fragment {
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    Log.d("Debug", "Swipe!");
                     refreshListener.swipeRefresh();
-
                 }
             });
         }
@@ -199,7 +124,6 @@ public class TorrentDetailsFragment extends Fragment {
             com.lgallardo.qbittorrentclient.MainActivity.headerInfo.setVisibility(View.GONE);
             ((com.lgallardo.qbittorrentclient.MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-
 
         savePath = "";
         creationDate = "";
@@ -218,7 +142,6 @@ public class TorrentDetailsFragment extends Fragment {
             if (savedInstanceState != null) {
 
                 // Get saved values
-
                 name = savedInstanceState.getString("torrentDetailName", "");
                 size = savedInstanceState.getString("torrentDetailSize", "");
                 hash = savedInstanceState.getString("torrentDetailHash", "");
@@ -232,9 +155,9 @@ public class TorrentDetailsFragment extends Fragment {
                 uploadSpeed = savedInstanceState.getString("torrentDetailUploadSpeed", "");
                 downloadSpeed = savedInstanceState.getString("torrentDetailDownloadSpeed", "");
                 downloaded = savedInstanceState.getString("torrentDetailDownloaded", "");
-
                 hashToUpdate = hash;
 
+                // TODO: Unify free & Pro
                 int index = progress.indexOf(".");
 
                 if (index == -1) {
@@ -246,8 +169,6 @@ public class TorrentDetailsFragment extends Fragment {
                 }
 
                 percentage = progress.substring(0, index);
-
-                // return rootView;
 
             } else {
 
@@ -265,9 +186,9 @@ public class TorrentDetailsFragment extends Fragment {
                 uploadSpeed = this.torrent.getUploadSpeed();
                 downloadSpeed = this.torrent.getDownloadSpeed();
                 downloaded = this.torrent.getDownloaded();
-
                 hashToUpdate = hash;
 
+                // TODO: Unify free & Pro
                 int index = this.torrent.getProgress().indexOf(".");
 
                 if (index == -1) {
@@ -285,13 +206,12 @@ public class TorrentDetailsFragment extends Fragment {
             TextView nameTextView = (TextView) rootView.findViewById(R.id.torrentName);
             TextView sizeTextView = (TextView) rootView.findViewById(R.id.downloadedVsTotal);
             TextView ratioTextView = (TextView) rootView.findViewById(R.id.torrentRatio);
-            TextView priorityTextView = (TextView) rootView.findViewById(R.id.torrentPriority);
+            TextView progressTextView = (TextView) rootView.findViewById(R.id.torrentProgress);
             TextView stateTextView = (TextView) rootView.findViewById(R.id.torrentState);
+            TextView priorityTextView = (TextView) rootView.findViewById(R.id.torrentPriority);
             TextView leechsTextView = (TextView) rootView.findViewById(R.id.torrentLeechs);
             TextView seedsTextView = (TextView) rootView.findViewById(R.id.torrentSeeds);
-            TextView progressTextView = (TextView) rootView.findViewById(R.id.torrentProgress);
             TextView hashTextView = (TextView) rootView.findViewById(R.id.torrentHash);
-
             TextView etaTextView = (TextView) rootView.findViewById(R.id.eta);
             TextView uploadSpeedTextView = (TextView) rootView.findViewById(R.id.uploadSpeed);
             TextView downloadSpeedTextView = (TextView) rootView.findViewById(R.id.DownloadSpeed);
@@ -300,14 +220,17 @@ public class TorrentDetailsFragment extends Fragment {
             CheckBox firstLAstPiecePrioCheckBox;
 
             nameTextView.setText(name);
+//            sizeTextView.setText(size);
             ratioTextView.setText(ratio);
             stateTextView.setText(state);
             leechsTextView.setText(leechs);
             seedsTextView.setText(seeds);
             progressTextView.setText(progress);
             hashTextView.setText(hash);
-            priorityTextView.setText(priority);
             etaTextView.setText(eta);
+            priorityTextView.setText(priority);
+//            downloadSpeedTextView.setText(downloadSpeed);
+//            uploadSpeedTextView.setText(uploadSpeed);
 
             if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
@@ -316,7 +239,6 @@ public class TorrentDetailsFragment extends Fragment {
                 sequentialDownloadCheckBox.setChecked(this.torrent.getSequentialDownload());
                 firstLAstPiecePrioCheckBox.setChecked(this.torrent.getisFirstLastPiecePrio());
             }
-
 
             downloadSpeedTextView.setText(Character.toString('\u2193') + " " + downloadSpeed);
             uploadSpeedTextView.setText(Character.toString('\u2191') + " " + uploadSpeed);
@@ -333,6 +255,7 @@ public class TorrentDetailsFragment extends Fragment {
 
             nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.error, 0, 0, 0);
 
+            // Set status icon
             if ("pausedUP".equals(state) || "pausedDL".equals(state)) {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.paused, 0, 0, 0);
             }
@@ -361,12 +284,6 @@ public class TorrentDetailsFragment extends Fragment {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_recheck, 0, 0, 0);
             }
 
-
-//            // Show progressBar
-//            if (com.lgallardo.qbittorrentclient.MainActivity.progressBar != null) {
-//                com.lgallardo.qbittorrentclient.MainActivity.progressBar.setVisibility(View.VISIBLE);
-//            }
-
             // Get Content files in background
             qBittorrentContentFile qcf = new qBittorrentContentFile();
             qcf.execute(new View[]{rootView});
@@ -380,15 +297,17 @@ public class TorrentDetailsFragment extends Fragment {
             qgit.execute(new View[]{rootView});
 
         } catch (Exception e) {
-
             Log.e("Debug", "TorrentDetailsFragment - onCreateView: " + e.toString());
         }
+
+        // TODO: Unify free & Pro
+//        // Load banner
+//        loadBanner();
 
         return rootView;
     }
 
     public void updateDetails(Torrent torrent) {
-
 
         try {
 
@@ -431,12 +350,11 @@ public class TorrentDetailsFragment extends Fragment {
 
             if (getActivity().findViewById(R.id.one_frame) != null) {
                 detailsFragment = (TorrentDetailsFragment) fragmentManager.findFragmentByTag("firstFragment");
-            }else{
+            } else{
                 detailsFragment = (TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
             }
 
             View rootView = detailsFragment.getView();
-
 
             TextView nameTextView = (TextView) rootView.findViewById(R.id.torrentName);
             TextView sizeTextView = (TextView) rootView.findViewById(R.id.downloadedVsTotal);
@@ -1098,4 +1016,80 @@ public class TorrentDetailsFragment extends Fragment {
             return (row);
         }
     }
+
+
+    /**
+     * *
+     * Method for Setting the Height of the ListView dynamically. Hack to fix
+     * the issue of not showing all the items of the ListView when placed inside
+     * a ScrollView
+     * **
+     */
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = MeasureSpec.makeMeasureSpec(listView.getWidth(), MeasureSpec.UNSPECIFIED);
+
+        //Log.i("Height","desiredWidth: "+desiredWidth);
+
+
+        int totalHeight = 0;
+
+        View view = null;
+
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+
+            long numOfLines = 1;
+            view = listAdapter.getView(i, view, listView);
+
+            if (i == 0) {
+                view.setLayoutParams(new LayoutParams(desiredWidth, LayoutParams.WRAP_CONTENT));
+            }
+
+            view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
+
+            TextView file = (TextView) view.findViewById(R.id.file);
+            TextView info = (TextView) view.findViewById(R.id.info);
+
+            if (view.getMeasuredWidth() > desiredWidth) {
+
+                double viewWidthLong = Double.valueOf(view.getMeasuredWidth());
+                double desiredWidthLong = Double.valueOf(desiredWidth);
+
+                //Log.i("Height", "viewWidthLong: " + viewWidthLong);
+                //Log.i("Height", "desiredWidthLong: " + desiredWidthLong);
+
+
+                numOfLines = Math.round(viewWidthLong / desiredWidthLong) + 1;
+
+
+                totalHeight += file.getMeasuredHeight() * numOfLines + info.getMeasuredHeight();
+
+            } else {
+                totalHeight += view.getMeasuredHeight();
+            }
+
+            //Log.i("Height", "numOfLines: " + numOfLines);
+
+            //Log.i("Height", "getMeasuredHeight: " + view.getMeasuredHeight());
+            //Log.i("Height", "getMeasuredWidth: " + view.getMeasuredWidth());
+
+        }
+
+        LayoutParams params = listView.getLayoutParams();
+
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+
+
+        //Log.i("Height","height: "+params.height);
+
+
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+
+    }
+
 }
