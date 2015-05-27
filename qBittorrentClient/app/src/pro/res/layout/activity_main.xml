@@ -32,7 +32,8 @@
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:background="?dropShadowBackground"
-            android:elevation="1dp">
+            android:elevation="1dp"
+            >
 
             <TextView
                 android:id="@+id/uploadSpeed"

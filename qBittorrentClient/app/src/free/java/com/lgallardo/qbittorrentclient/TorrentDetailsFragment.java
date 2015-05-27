@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -45,7 +46,7 @@ public class TorrentDetailsFragment extends Fragment {
     protected static final String TAG_COMMENT = "comment";
     protected static final String TAG_TOTAL_WASTED = "total_wasted";
     protected static final String TAG_TOTAL_UPLOADED = "total_uploaded";
-    protected static final String TAG_TOTAL_DOWNLOADED = "tot|al_downloaded";
+    protected static final String TAG_TOTAL_DOWNLOADED = "total_downloaded";
     protected static final String TAG_TIME_ELAPSED = "time_elapsed";
     protected static final String TAG_NB_CONNECTIONS = "nb_connections";
     protected static final String TAG_SHARE_RATIO = "share_ratio";
@@ -179,11 +180,10 @@ public class TorrentDetailsFragment extends Fragment {
                 size = this.torrent.getSize();
                 hash = this.torrent.getHash();
                 ratio = this.torrent.getRatio();
-                progress = this.torrent.getProgress();
                 state = this.torrent.getState();
                 leechs = this.torrent.getLeechs();
                 seeds = this.torrent.getSeeds();
-                hash = this.torrent.getHash();
+                progress = this.torrent.getProgress();
                 priority = this.torrent.getPriority();
                 eta = this.torrent.getEta();
                 uploadSpeed = this.torrent.getUploadSpeed();
@@ -243,6 +243,7 @@ public class TorrentDetailsFragment extends Fragment {
                 firstLAstPiecePrioCheckBox.setChecked(this.torrent.getisFirstLastPiecePrio());
             }
 
+            // TODO: Unify free & Pro
 //            downloadSpeedTextView.setText(Character.toString('\u2193') + " " + downloadSpeed);
 //            uploadSpeedTextView.setText(Character.toString('\u2191') + " " + uploadSpeed);
 //
@@ -256,7 +257,7 @@ public class TorrentDetailsFragment extends Fragment {
 //            progressBar.setProgress(Integer.parseInt(percentage));
 //            percentageTV.setText(percentage + "%");
 
-            nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.checking, 0, 0, 0);
+            nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.error, 0, 0, 0);
 
             // Set status icon
             if ("pausedUP".equals(state) || "pausedDL".equals(state)) {
@@ -360,6 +361,7 @@ public class TorrentDetailsFragment extends Fragment {
             View rootView = detailsFragment.getView();
 
             TextView nameTextView = (TextView) rootView.findViewById(R.id.torrentName);
+//            TextView sizeTextView = (TextView) rootView.findViewById(R.id.downloadedVsTotal);
             TextView ratioTextView = (TextView) rootView.findViewById(R.id.torrentRatio);
             TextView priorityTextView = (TextView) rootView.findViewById(R.id.torrentPriority);
             TextView stateTextView = (TextView) rootView.findViewById(R.id.torrentState);
@@ -385,7 +387,7 @@ public class TorrentDetailsFragment extends Fragment {
             priorityTextView.setText(priority);
             etaTextView.setText(eta);
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
                 firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
@@ -393,9 +395,15 @@ public class TorrentDetailsFragment extends Fragment {
                 firstLAstPiecePrioCheckBox.setChecked(torrent.getisFirstLastPiecePrio());
             }
 
-
+            // TODO: Unify free & Pro
+//            downloadSpeedTextView.setText(Character.toString('\u2193') + " " + downloadSpeed);
+//            uploadSpeedTextView.setText(Character.toString('\u2191') + " " + uploadSpeed);
             downloadSpeedTextView.setText(downloadSpeed);
             uploadSpeedTextView.setText(uploadSpeed);
+
+            // TODO: Unify free & Pro
+//            // Set Downloaded vs Total size
+//            sizeTextView.setText(downloaded + " / " + size);
 
             // Set progress bar
             ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar1);
@@ -433,12 +441,6 @@ public class TorrentDetailsFragment extends Fragment {
             if ("checkingDL".equals(state) || "checkingUP".equals(state)) {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_recheck, 0, 0, 0);
             }
-
-
-//            // Show progressBar
-//            if (MainActivity.progressBar != null) {
-//                MainActivity.progressBar.setVisibility(View.VISIBLE);
-//            }
 
             // Get Content files in background
             qBittorrentContentFile qcf = new qBittorrentContentFile();
@@ -487,16 +489,15 @@ public class TorrentDetailsFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (menu != null) {
 
-//            if (getActivity().findViewById(R.id.one_frame) != null) {
-//                menu.findItem(R.id.action_refresh).setVisible(false);
-//            }
-
-            menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.action_resume_all).setVisible(false);
             menu.findItem(R.id.action_pause_all).setVisible(false);
             menu.findItem(R.id.action_add).setVisible(false);
 
-            menu.findItem(R.id.action_refresh).setVisible(true);
+            if (getActivity().findViewById(R.id.one_frame) != null) {
+                menu.findItem(R.id.action_refresh).setVisible(false);
+            }else{
+                menu.findItem(R.id.action_refresh).setVisible(true);
+            }
 
             if (getActivity().findViewById(R.id.one_frame) != null) {
                 menu.findItem(R.id.action_sort_menu).setVisible(false);
@@ -523,10 +524,11 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_search).setVisible(true);
             }
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                 menu.findItem(R.id.action_firts_last_piece_prio).setVisible(true);
                 menu.findItem(R.id.action_sequential_download).setVisible(true);
-            } else {
+            }
+            else {
                 menu.findItem(R.id.action_firts_last_piece_prio).setVisible(false);
                 menu.findItem(R.id.action_sequential_download).setVisible(false);
             }
@@ -534,6 +536,7 @@ public class TorrentDetailsFragment extends Fragment {
         }
     }
 
+    // TODO: Unify free & Pro
     // Load Banner
     public void loadBanner() {
 
@@ -551,7 +554,6 @@ public class TorrentDetailsFragment extends Fragment {
         this.torrent = torrent;
     }
 
-
     // // Here is where the action happens
     private class qBittorrentContentFile extends AsyncTask<View, View, View[]> {
 
@@ -562,15 +564,15 @@ public class TorrentDetailsFragment extends Fragment {
         protected View[] doInBackground(View... rootViews) {
 
             // Get torrent's files
-            if (MainActivity.qb_version.equals("2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("2.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.1.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.1.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (com.lgallardo.qbittorrentclient. MainActivity.qb_version.equals("3.2.x")) {
                 qbQueryString = "query";
             }
 
@@ -582,10 +584,10 @@ public class TorrentDetailsFragment extends Fragment {
 
             try {
 
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
-                        MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
+                com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(com.lgallardo.qbittorrentclient.MainActivity.hostname, com.lgallardo.qbittorrentclient.MainActivity.subfolder, com.lgallardo.qbittorrentclient.MainActivity.protocol, com.lgallardo.qbittorrentclient.MainActivity.port,
+                        com.lgallardo.qbittorrentclient.MainActivity.username, com.lgallardo.qbittorrentclient.MainActivity.password, com.lgallardo.qbittorrentclient.MainActivity.connection_timeout, com.lgallardo.qbittorrentclient.MainActivity.data_timeout);
 
-                jParser.setCookie(MainActivity.cookie);
+                jParser.setCookie(com.lgallardo.qbittorrentclient.MainActivity.cookie);
 
                 JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
 
@@ -598,13 +600,13 @@ public class TorrentDetailsFragment extends Fragment {
 
                         JSONObject json = jArray.getJSONObject(i);
 
-                        name = json.getString(MainActivity.TAG_NAME);
-                        size = json.getString(MainActivity.TAG_SIZE).replace(",", ".");
-                        progress = json.getDouble(MainActivity.TAG_PROGRESS);
-                        priority = json.getInt(MainActivity.TAG_PRIORITY);
+                        name = json.getString(com.lgallardo.qbittorrentclient.MainActivity.TAG_NAME);
+                        size = json.getString(com.lgallardo.qbittorrentclient.MainActivity.TAG_SIZE).replace(",", ".");
+                        progress = json.getDouble(com.lgallardo.qbittorrentclient.MainActivity.TAG_PROGRESS);
+                        priority = json.getInt(com.lgallardo.qbittorrentclient.MainActivity.TAG_PRIORITY);
 
-                        if (MainActivity.qb_version.equals("3.2.x")) {
-                            size = Common.calculateSize(json.getString(MainActivity.TAG_SIZE)).replace(",", ".");
+                        if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
+                            size = Common.calculateSize(json.getString(com.lgallardo.qbittorrentclient.MainActivity.TAG_SIZE)).replace(",", ".");
                         }
 
                         files[i] = new ContentFile(name, size, progress, priority);
@@ -656,28 +658,29 @@ public class TorrentDetailsFragment extends Fragment {
 
         protected View[] doInBackground(View... rootViews) {
             // Get torrent's trackers
-            if (MainActivity.qb_version.equals("2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("2.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.1.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.1.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                 qbQueryString = "query";
             }
 
             url = qbQueryString + "/propertiesTrackers/";
+
             trackers = null;
             trackerNames = null;
 
             try {
 
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
-                        MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
+                com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(com.lgallardo.qbittorrentclient.MainActivity.hostname, com.lgallardo.qbittorrentclient.MainActivity.subfolder, com.lgallardo.qbittorrentclient.MainActivity.protocol, com.lgallardo.qbittorrentclient.MainActivity.port,
+                        com.lgallardo.qbittorrentclient.MainActivity.username, com.lgallardo.qbittorrentclient.MainActivity.password, com.lgallardo.qbittorrentclient.MainActivity.connection_timeout, com.lgallardo.qbittorrentclient.MainActivity.data_timeout);
 
-                jParser.setCookie(MainActivity.cookie);
+                jParser.setCookie(com.lgallardo.qbittorrentclient.MainActivity.cookie);
 
                 JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
 
@@ -690,7 +693,7 @@ public class TorrentDetailsFragment extends Fragment {
 
                         JSONObject json = jArray.getJSONObject(i);
 
-                        url = json.getString(TAG_URL);
+                        url = json.getString(com.lgallardo.qbittorrentclient.MainActivity.TAG_URL);
 
                         trackers[i] = new Tracker(url);
                         trackerNames[i] = url;
@@ -744,15 +747,15 @@ public class TorrentDetailsFragment extends Fragment {
 
         protected View[] doInBackground(View... rootViews) {
             // Get torrent's extra info
-            if (MainActivity.qb_version.equals("2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("2.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.1.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.1.x")) {
                 qbQueryString = "json";
             }
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
                 qbQueryString = "query";
             }
 
@@ -760,10 +763,10 @@ public class TorrentDetailsFragment extends Fragment {
 
             try {
 
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
-                        MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
+                com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(com.lgallardo.qbittorrentclient.MainActivity.hostname, com.lgallardo.qbittorrentclient.MainActivity.subfolder, com.lgallardo.qbittorrentclient.MainActivity.protocol, com.lgallardo.qbittorrentclient.MainActivity.port,
+                        com.lgallardo.qbittorrentclient.MainActivity.username, com.lgallardo.qbittorrentclient.MainActivity.password, com.lgallardo.qbittorrentclient.MainActivity.connection_timeout, com.lgallardo.qbittorrentclient.MainActivity.data_timeout);
 
-                jParser.setCookie(MainActivity.cookie);
+                jParser.setCookie(com.lgallardo.qbittorrentclient.MainActivity.cookie);
 
                 json2 = jParser.getJSONFromUrl(url + hash);
 
@@ -817,7 +820,7 @@ public class TorrentDetailsFragment extends Fragment {
                     values[10] = json2.getString(TAG_DOWNLOAD_LIMIT);
 
 
-                    if (MainActivity.qb_version.equals("3.2.x")) {
+                    if (com.lgallardo.qbittorrentclient.MainActivity.qb_version.equals("3.2.x")) {
 
                         // Creation date
                         values[1] = Common.unixTimestampToDate(json2.getString(TAG_CREATION_DATE));
@@ -884,14 +887,8 @@ public class TorrentDetailsFragment extends Fragment {
                 }
 
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 Log.e("TorrentFragment:", e.toString());
             }
-
-//            // Hide progressBar
-//            if (MainActivity.progressBar != null) {
-//                MainActivity.progressBar.setVisibility(View.INVISIBLE);
-//            }
 
         }
 
@@ -905,7 +902,6 @@ public class TorrentDetailsFragment extends Fragment {
         private Context context;
 
         public myPropertyAdapter(Context context, String[] labels, String[] values) {
-            // TODO Auto-generated constructor stub
             super(context, R.layout.property_row, R.id.label, values);
 
             this.context = context;
@@ -916,7 +912,6 @@ public class TorrentDetailsFragment extends Fragment {
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub}
             return (labels != null) ? labels.length : 0;
         }
 
@@ -942,7 +937,6 @@ public class TorrentDetailsFragment extends Fragment {
         private Context context;
 
         public myFileAdapter(Context context, String[] filesNames, ContentFile[] files) {
-            // TODO Auto-generated constructor stub
             super(context, R.layout.contentfile_row, R.id.file, filesNames);
 
             this.context = context;
@@ -953,7 +947,6 @@ public class TorrentDetailsFragment extends Fragment {
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub}
             return (filesNames != null) ? filesNames.length : 0;
         }
 
@@ -997,7 +990,6 @@ public class TorrentDetailsFragment extends Fragment {
         private Context context;
 
         public myTrackerAdapter(Context context, String[] trackersNames, Tracker[] trackers) {
-            // TODO Auto-generated constructor stub
             super(context, R.layout.tracker_row, R.id.tracker, trackersNames);
 
             this.context = context;
@@ -1008,7 +1000,6 @@ public class TorrentDetailsFragment extends Fragment {
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub}
             return (trackersNames != null) ? trackersNames.length : 0;
         }
 
@@ -1045,11 +1036,10 @@ public class TorrentDetailsFragment extends Fragment {
         for (int i = 0; i < listAdapter.getCount(); i++) {
 
             long numOfLines = 1;
-
             view = listAdapter.getView(i, view, listView);
 
             if (i == 0) {
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+                view.setLayoutParams(new LayoutParams(desiredWidth, LayoutParams.WRAP_CONTENT));
             }
 
             view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
@@ -1062,12 +1052,7 @@ public class TorrentDetailsFragment extends Fragment {
                 double viewWidthLong = Double.valueOf(view.getMeasuredWidth());
                 double desiredWidthLong = Double.valueOf(desiredWidth);
 
-                //Log.i("Height", "viewWidthLong: " + viewWidthLong);
-                //Log.i("Height", "desiredWidthLong: " + desiredWidthLong);
-
-
                 numOfLines = Math.round(viewWidthLong / desiredWidthLong) + 1;
-
 
                 totalHeight += file.getMeasuredHeight() * numOfLines + info.getMeasuredHeight();
 
@@ -1075,10 +1060,9 @@ public class TorrentDetailsFragment extends Fragment {
                 totalHeight += view.getMeasuredHeight();
             }
 
-
         }
 
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        LayoutParams params = listView.getLayoutParams();
 
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
 
@@ -1086,6 +1070,5 @@ public class TorrentDetailsFragment extends Fragment {
         listView.requestLayout();
 
     }
-
 
 }
