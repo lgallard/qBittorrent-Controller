@@ -69,7 +69,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/downloadedVsTotal"
+                            android:id="@+id/torrentSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="357 MiB / 600 MiB"
@@ -106,7 +106,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/eta"
+                        android:id="@+id/torrentEta"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
@@ -115,7 +115,7 @@
                         android:textSize="15sp" />
 
                     <TextView
-                        android:id="@+id/DownloadSpeed"
+                        android:id="@+id/torrentDownloadSpeed"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
@@ -124,7 +124,7 @@
                         android:textSize="15sp" />
 
                     <TextView
-                        android:id="@+id/uploadSpeed"
+                        android:id="@+id/torrentUploadSpeed"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"

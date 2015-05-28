@@ -185,8 +185,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         refresh_period.setSummary(refresh_period.getEntry());
 
-        connection_timeout.setText(sharedPrefs.getString("connection_timeout" + value, "5"));
-        data_timeout.setText(sharedPrefs.getString("data_timeout" + value, "8"));
+        connection_timeout.setText(sharedPrefs.getString("connection_timeout" + value, "10"));
+        data_timeout.setText(sharedPrefs.getString("data_timeout" + value, "20"));
 
         if (sortBy.getEntry() == null) {
             sortBy.setValueIndex(1);

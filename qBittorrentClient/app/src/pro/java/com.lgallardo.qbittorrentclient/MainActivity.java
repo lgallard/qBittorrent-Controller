@@ -24,6 +24,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -206,6 +208,9 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     private MenuItem mSearchAction;
     private boolean isSearchOpened = false;
     private EditText editSearch;
+
+    // Packge info
+    public static String packageName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1746,9 +1751,9 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         // Get connection and data timeouts
         try {
-            connection_timeout = Integer.parseInt(sharedPrefs.getString("connection_timeout", "5"));
+            connection_timeout = Integer.parseInt(sharedPrefs.getString("connection_timeout", "10"));
         } catch (NumberFormatException e) {
-            connection_timeout = 5;
+            connection_timeout = 20;
         }
 
         try {
@@ -1777,6 +1782,19 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         }
 
         header = sharedPrefs.getBoolean("header", true);
+
+        // Get packge info
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Get package name
+        packageName = pInfo.packageName;
+
+        Log.d("Debug", "Package name:" + packageName);
 
     }
 
@@ -2520,11 +2538,13 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                             headerInfo.setVisibility(View.GONE);
                         }
 
+                        Log.d("Debug", "uploadSpeedCount: " + uploadSpeedCount);
+
                         uploadSpeedTextView.setText(Character.toString('\u2191') + " " + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
                         downloadSpeedTextView.setText(Character.toString('\u2193') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
 
 
-                        //Set first and second fragments
+                        //Set first and seco                                                nd fragments
                         if (findViewById(R.id.fragment_container) != null) {
 
                             // Set where is the second container
@@ -2656,6 +2676,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                 } catch (Exception e) {
                     Log.e("ADAPTER", e.toString());
+//                    e.printStackTrace();
                 }
 
                 // Clear serch field
