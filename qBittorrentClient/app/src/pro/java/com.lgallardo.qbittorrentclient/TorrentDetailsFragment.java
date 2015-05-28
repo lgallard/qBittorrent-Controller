@@ -633,6 +633,8 @@ public class TorrentDetailsFragment extends Fragment {
 
                 ListView lv = (ListView) rootView.findViewById(R.id.theList);
 
+                lv.setFocusable(false);
+
                 lv.setAdapter(fileAdpater);
 
                 setListViewHeightBasedOnChildren(lv);
