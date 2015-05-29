@@ -493,7 +493,32 @@
                         android:orientation="vertical"></LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
+            <!-- Hidden fields -->
+            <TextView
+                android:id="@+id/downloadedVsTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/eta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/uploadSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"/>
+
+            <TextView
+                android:id="@+id/DownloadSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+        </LinearLayout>
     </ScrollView>
 </android.support.v4.widget.SwipeRefreshLayout>

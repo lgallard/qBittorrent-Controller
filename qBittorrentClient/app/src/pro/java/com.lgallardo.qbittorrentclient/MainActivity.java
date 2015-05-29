@@ -1,13 +1,15 @@
-/*******************************************************************************
+/**
+ * ****************************************************************************
  * Copyright (c) 2014 Luis M. Gallardo D..
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p/>
  * Contributors:
- *     Luis M. Gallardo D.
- ******************************************************************************/
+ * Luis M. Gallardo D.
+ * ****************************************************************************
+ */
 package com.lgallardo.qbittorrentclient;
 
 import android.app.AlarmManager;
@@ -449,7 +451,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         return super.onPrepareOptionsMenu(menu);
     }
 
-
     // Set selection and title on drawer
     public void setSelectionAndTitle(String state) {
         // Set selection according to last state
@@ -538,17 +539,28 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 }
 
             }
-
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
 
         }
-
     }
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        activityIsVisible = false;
+    @Override
+    public void onPause() {
+        super.onPause();
+        activityIsVisible = false;
+    }
+
+    // TODO: Unify free & pro
+//    // Load Banner
+//    public void loadBanner() {
+//
+//        // Look up the AdView as a resource and load a request.
+//        adView = (AdView) this.findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//
+//        // Start loading the ad in the background.
+//        adView.loadAd(adRequest);
 //    }
 
     @Override
@@ -649,6 +661,11 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         }
 
         if (findViewById(R.id.one_frame) != null) {
+
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            MainActivity.drawerToggle.setDrawerIndicatorEnabled(true);
+            MainActivity.drawerToggle.setToolbarNavigationClickListener(ItemstFragment.originalListener);
+
             if (headerInfo != null) {
                 if (header) {
                     headerInfo.setVisibility(View.VISIBLE);
@@ -706,7 +723,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 genericOkDialog(R.string.info, R.string.about_help1);
             } else {
 
-               // Execute the task in background
+                // Execute the task in background
                 qBittorrentTask qtt = new qBittorrentTask();
 
                 qtt.execute(params);
@@ -765,10 +782,10 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 refresh("completed");
 
             }
-        } catch (NullPointerException npe) {
+        }
+        catch (NullPointerException npe) {
 
         }
-
     }
 
     private void addTorrentByIntent(Intent intent) {
@@ -819,7 +836,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 //        return true;
 
 
-
         getMenuInflater().inflate(R.menu.main, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -834,7 +850,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         return true;
     }
 
-    public void popBackStackPhoneView(){
+    public void popBackStackPhoneView() {
         getFragmentManager().popBackStack();
         headerInfo.setVisibility(View.VISIBLE);
     }
@@ -1205,10 +1221,10 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         }
 
-        if (requestCode == GETPRO_CODE) {
-            // Now it can be refreshed
-            canrefresh = true;
-        }
+//        if (requestCode == GETPRO_CODE) {
+//            // Now it can be refreshed
+//            canrefresh = true;
+//        }
 
         if (requestCode == HELP_CODE) {
             // Now it can be refreshed
@@ -1405,7 +1421,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         if (qb_version.equals("3.2.x")) {
             qtc.execute(new String[]{"pauseAll", null});
         }
-        else{
+        else {
             qtc.execute(new String[]{"pauseall", null});
         }
     }
@@ -1416,7 +1432,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         if (qb_version.equals("3.2.x")) {
             qtc.execute(new String[]{"resumeAll", null});
-        }else{
+        } else {
             qtc.execute(new String[]{"resumeall", null});
         }
     }
@@ -1752,14 +1768,25 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         // Get connection and data timeouts
         try {
             connection_timeout = Integer.parseInt(sharedPrefs.getString("connection_timeout", "10"));
+
+            // New default value to make it work with qBittorrent 3.2.x
+            if (connection_timeout < 10) {
+                connection_timeout = 10;
+            }
         } catch (NumberFormatException e) {
-            connection_timeout = 20;
+            connection_timeout = 10;
         }
 
         try {
-            data_timeout = Integer.parseInt(sharedPrefs.getString("data_timeout", "8"));
+            data_timeout = Integer.parseInt(sharedPrefs.getString("data_timeout", "20"));
+
+            // New default value to make it work with qBittorrent 3.2.x
+            if (data_timeout < 20) {
+                data_timeout = 20;
+            }
+
         } catch (NumberFormatException e) {
-            data_timeout = 8;
+            data_timeout = 20;
         }
 
         sortby = sharedPrefs.getString("sortby", "NULL");
@@ -1793,8 +1820,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         // Get package name
         packageName = pInfo.packageName;
-
-        Log.d("Debug", "Package name:" + packageName);
 
     }
 
@@ -1972,29 +1997,64 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     @Override
     public void swipeRefresh() {
 
-        // Set the refresh layout (refresh icon, etc)
-        refreshSwipeLayout();
 
-        // Actually refresh data
-        refreshCurrent();
+        if (hostname.equals("")) {
+            genericOkDialog(R.string.info, R.string.about_help1);
+            disableRefreshSwipeLayout();
+
+        } else {
+
+            // Set the refresh layout (refresh icon, etc)
+            refreshSwipeLayout();
+            // Actually refresh data
+            refreshCurrent();
+
+        }
+
     }
 
-    public void refreshSwipeLayout() {
+    public void disableRefreshSwipeLayout(){
 
-        listViewRefreshing = true;
-
-
-        if (AboutFragment.mSwipeRefreshLayout != null) {
-            AboutFragment.mSwipeRefreshLayout.setRefreshing(true);
+        if (com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout != null) {
+            com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setRefreshing(false);
+            com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.clearAnimation();
+            com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setEnabled(true);
         }
 
         if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
-            com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(true);
-            com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(false);
+            com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(false);
+            com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.clearAnimation();
+            com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(true);
         }
 
         if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
-            com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(true);
+            com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(false);
+            com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.clearAnimation();
+            com.lgallardo.qbittorrentclient.TorrentDetailsFragment  .mSwipeRefreshLayout.setEnabled(true);
+        }
+
+        listViewRefreshing = false;
+    }
+
+
+    public void refreshSwipeLayout() {
+
+        if (!hostname.equals("")) {
+
+            listViewRefreshing = true;
+
+            if (AboutFragment.mSwipeRefreshLayout != null) {
+                AboutFragment.mSwipeRefreshLayout.setRefreshing(true);
+            }
+
+            if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
+                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(true);
+                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(false);
+            }
+
+            if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
+                com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(true);
+            }
         }
 
     }
@@ -2008,23 +2068,21 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             // Get values from preferences
             getSettings();
 
-
             // Creating new JSON Parser
             com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
 
-            String cookie = "";
+            String newCookie = "";
             String api = "";
 
             try {
-                cookie = jParser.getNewCookie();
+                newCookie = jParser.getNewCookie();
 
-            }
-            catch (JSONParserStatusCodeException e) {
+            } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
             }
 
-            if (cookie == null) {
-                cookie = "";
+            if (newCookie == null) {
+                newCookie = "";
 
             }
 
@@ -2033,7 +2091,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
             }
 
-            return new String[]{cookie, api};
+            return new String[]{newCookie, api};
 
         }
 
@@ -2078,7 +2136,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             } catch (JSONParserStatusCodeException e) {
 
                 httpStatusCode = e.getCode();
-                Log.e("JSONParserStatusCode", e.toString());
 
             }
 
@@ -2103,7 +2160,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 return;
             }
 
-            if (httpStatusCode == 403) {
+            if (httpStatusCode == 403 || httpStatusCode == 404) {
 
                 if (qb_version.equals("3.2.x")) {
 
@@ -2357,7 +2414,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     httpStatusCode = 0;
                 }
 
-                if (httpStatusCode == 403) {
+                if (httpStatusCode == 403 || httpStatusCode == 404) {
 
                     if (qb_version.equals("3.2.x")) {
 
@@ -2538,13 +2595,11 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                             headerInfo.setVisibility(View.GONE);
                         }
 
-                        Log.d("Debug", "uploadSpeedCount: " + uploadSpeedCount);
-
                         uploadSpeedTextView.setText(Character.toString('\u2191') + " " + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
                         downloadSpeedTextView.setText(Character.toString('\u2193') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
 
 
-                        //Set first and seco                                                nd fragments
+                        //Set first and second fragments
                         if (findViewById(R.id.fragment_container) != null) {
 
                             // Set where is the second container
@@ -2618,7 +2673,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     else {
 
                         // No results
-//                        myadapter = null;
 
                         myadapter.setNames(null);
                         myadapter.setData(null);
@@ -2676,7 +2730,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                 } catch (Exception e) {
                     Log.e("ADAPTER", e.toString());
-//                    e.printStackTrace();
                 }
 
                 // Clear serch field
@@ -2684,26 +2737,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
             }
 
-            if (com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout != null) {
-                com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setRefreshing(false);
-                com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.clearAnimation();
-                com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setEnabled(true);
-            }
-
-            if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
-                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(false);
-                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.clearAnimation();
-                com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(true);
-            }
-
-            if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
-                com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(false);
-                com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.clearAnimation();
-                com.lgallardo.qbittorrentclient.TorrentDetailsFragment  .mSwipeRefreshLayout.setEnabled(true);
-            }
-
-            listViewRefreshing = false;
-
+            // Disable refreshSwipeLayout
+            disableRefreshSwipeLayout();
         }
     }
 
@@ -2799,7 +2834,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                     httpStatusCode = 0;
                 }
 
-                if (httpStatusCode == 403) {
+                if (httpStatusCode == 403 || httpStatusCode == 404) {
                     Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
 

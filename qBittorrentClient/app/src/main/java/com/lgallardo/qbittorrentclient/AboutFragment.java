@@ -56,7 +56,9 @@ public class AboutFragment extends Fragment {
 
             mSwipeRefreshLayout.setColorSchemeColors(R.color.primary, R.color.primary_dark, R.color.primary_text);
 
-            mSwipeRefreshLayout.setRefreshing(true);
+            if(!MainActivity.hostname.equals("")) {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
 
             isFragmentFirstLoaded = false;
         }

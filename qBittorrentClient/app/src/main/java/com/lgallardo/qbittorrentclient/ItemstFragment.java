@@ -36,7 +36,7 @@ public class ItemstFragment extends ListFragment {
     TorrentDetailsFragment detailsFragment;
     private RecyclerView recyclerView;
     private RefreshListener refreshListener;
-    private View.OnClickListener originalListener;
+    public static View.OnClickListener originalListener;
 
     public static SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -117,6 +117,7 @@ public class ItemstFragment extends ListFragment {
 
                     // Set title with number of items selected
                     mode.setTitle("" + nr);
+
                 }
 
                 @Override
