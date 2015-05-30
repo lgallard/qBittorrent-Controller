@@ -5,6 +5,6 @@
     <!-- selected -->
     <item android:drawable="@android:color/holo_blue_dark" android:state_activated="true" />
     <!-- default -->
-    <item android:drawable="@android:color/background_dark" />
+    <item android:drawable="@color/Theme_Dark_windowBackground" />
 
 </selector>
