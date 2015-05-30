@@ -17,25 +17,25 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?backgroundSelector">
 
-        <ProgressBar
-            android:id="@+id/progressBarConnecting"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="top"
-            android:indeterminate="true"
-            android:visibility="invisible" />
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
 
         <LinearLayout
             android:id="@+id/header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:layout_below="@+id/progressBarConnecting"
             android:orientation="horizontal"
-            android:paddingBottom="5dp">
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:background="?dropShadowBackground"
+            android:elevation="1dp"
+            android:layout_below="@+id/app_bar"
+            >
 
             <TextView
                 android:id="@+id/uploadSpeed"

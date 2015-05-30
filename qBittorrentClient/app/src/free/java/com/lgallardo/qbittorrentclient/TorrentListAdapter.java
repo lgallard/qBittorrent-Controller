@@ -14,11 +14,10 @@ import java.util.Set;
 
 class TorrentListAdapter extends ArrayAdapter<String> {
 
+    private static HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
     private String[] torrentsNames;
     private Torrent[] torrentsData;
     private Context context;
-
-    private static HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
 
     public TorrentListAdapter(Context context, String[] torrentsNames, Torrent[] torrentsData) {
         super(context, R.layout.row, R.id.file, torrentsNames);
@@ -53,7 +52,6 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
             TextView name = (TextView) row.findViewById(R.id.file);
             name.setText(file);
-
 
             TextView info = (TextView) row.findViewById(R.id.info);
 
@@ -153,12 +151,12 @@ class TorrentListAdapter extends ArrayAdapter<String> {
         this.torrentsNames = names;
     }
 
-    public void setData(Torrent[] data) {
-        this.torrentsData = data;
-    }
-
     public Torrent[] getData() {
         return this.torrentsData;
+    }
+
+    public void setData(Torrent[] data) {
+        this.torrentsData = data;
     }
 
     @Override
@@ -172,7 +170,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
     @Override
     public boolean areAllItemsEnabled() {
-        if (torrentsData != null) {
+        if (torrentsData != null && !com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.isRefreshing()) {
             return true;
         } else {
             return false;

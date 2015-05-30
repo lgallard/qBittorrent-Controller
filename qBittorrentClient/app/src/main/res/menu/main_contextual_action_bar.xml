@@ -14,16 +14,17 @@
     <item
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_action_delete"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/action_delete" />
     <item
         android:id="@+id/action_delete_drive"
         android:icon="@drawable/ic_action_delete_drive"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/action_delete_drive" />
     <item
         android:id="@+id/action_priority_menu"
         android:icon="@drawable/ic_action_increase_prio"
+        android:showAsAction="ifRoom"
         android:title="@string/torrent_priority_menu">
 
         <menu>

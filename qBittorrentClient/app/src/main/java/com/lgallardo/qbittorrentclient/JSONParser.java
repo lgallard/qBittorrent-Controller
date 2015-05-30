@@ -102,7 +102,7 @@ public class JSONParser {
     public JSONObject getJSONFromUrl(String url) throws JSONParserStatusCodeException {
 
         // if server is publish in a subfolder, fix url
-        if (subfolder != null && subfolder != "") {
+        if (subfolder != null && !subfolder.equals("")) {
             url = subfolder + "/" + url;
         }
 
@@ -150,7 +150,6 @@ public class JSONParser {
             HttpGet httpget = new HttpGet(url);
 
             if (this.cookie != null) {
-
                 httpget.setHeader("Cookie", this.cookie);
             }
 
@@ -213,7 +212,7 @@ public class JSONParser {
     public JSONArray getJSONArrayFromUrl(String url) throws JSONParserStatusCodeException {
 
         // if server is published in a subfolder, fix url
-        if (subfolder != null && subfolder != "") {
+        if (subfolder != null && !subfolder.equals("")) {
             url = subfolder + "/" + url;
         }
 
@@ -234,8 +233,8 @@ public class JSONParser {
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
-        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
-        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
+        HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(hostname, port, protocol);
@@ -258,7 +257,6 @@ public class JSONParser {
             if (this.cookie != null) {
                 httpget.setHeader("Cookie", this.cookie);
             }
-
 
             httpResponse = httpclient.execute(targetHost, httpget);
 
@@ -364,12 +362,21 @@ public class JSONParser {
 
         }
 
-        if ("pauseAll".equals(command)) {
+        if ("pauseall".equals(command)) {
             url = "command/pauseall";
         }
 
-        if ("resumeAll".equals(command)) {
+        if ("pauseAll".equals(command)) {
+            url = "command/pauseAll";
+        }
+
+
+        if ("resumeall".equals(command)) {
             url = "command/resumeall";
+        }
+
+        if ("resumeAll".equals(command)) {
+            url = "command/resumeAll";
         }
 
         if ("increasePrio".equals(command)) {
@@ -433,7 +440,7 @@ public class JSONParser {
 
 
         // if server is publish in a subfolder, fix url
-        if (subfolder != null && subfolder != "") {
+        if (subfolder != null && !subfolder.equals("")) {
             url = subfolder + "/" + url;
         }
 
@@ -472,8 +479,6 @@ public class JSONParser {
             httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
 
             url = protocol + "://" + hostname + ":" + port +"/" +url;
-
-//            Log.d("Debug", "Post command - url: " + url);
 
             HttpPost httpget = new HttpPost(url);
 
@@ -602,11 +607,8 @@ public class JSONParser {
 
             ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
 
-//            Log.e("Debug", "JSON - getNewHttpClient NO error");
-
             return new DefaultHttpClient(ccm, params);
         } catch (Exception e) {
-//            Log.e("Debug", "JSON - getNewHttpClient error");
             return new DefaultHttpClient();
         }
     }
@@ -618,7 +620,7 @@ public class JSONParser {
         String url = "login";
 
         // if server is publish in a subfolder, fix url
-        if (subfolder != null && subfolder != "") {
+        if (subfolder != null && !subfolder.equals("")) {
             url = subfolder + "/" + url;
         }
 
@@ -640,9 +642,9 @@ public class JSONParser {
         // Set http parameters
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-        HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
-        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
-        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
+        HttpProtocolParams.setUserAgent(httpParameters, "qBittorrent for Android");
+        HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(hostname, port, protocol);
@@ -658,9 +660,9 @@ public class JSONParser {
 //
 //            httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
 
-            url = protocol + "://" + hostname + ":" + port +"/" +url;
 
-//            Log.i("Debug", "Cookies - url: " + url);
+
+            url = protocol + "://" + hostname + ":" + port + "/" +url;
 
             HttpPost httpget = new HttpPost(url);
 
@@ -676,9 +678,7 @@ public class JSONParser {
 
 
             HttpResponse response = httpclient.execute(targetHost, httpget);
-            HttpEntity entity = response.getEntity();
-
-//            Log.i("Debug", "Cookies - Login form get: " + response.getStatusLine());
+            HttpEntity entity = response.getEntity( );
 
             StatusLine statusLine = response.getStatusLine();
 
@@ -687,25 +687,11 @@ public class JSONParser {
             if (mStatusCode == 200) {
 
                 // Save cookie
-
-
-//                Log.i("Cookies", "Initial set of cookies");
-
                 List<Cookie> cookies = httpclient.getCookieStore().getCookies();
-                if (cookies.isEmpty()) {
-//                    Log.i("Cookies", "None");
 
-                } else {
-
-
-//                    Log.i("Cookies", "Cookie=>" + cookies.get(0).toString());
-
-                    // Save cookie
+                if (!cookies.isEmpty()) {
                     cookieString = cookies.get(0).getName() + "=" + cookies.get(0).getValue() + "; domain=" + cookies.get(0).getDomain();
-
                     cookieString = cookies.get(0).getName() + "=" + cookies.get(0).getValue();
-
-
                 }
 
             }
@@ -722,7 +708,7 @@ public class JSONParser {
 
         } catch (Exception e) {
 
-//            Log.d("Debug", "Cookies - Exception " + e.toString());
+            Log.e("Debug", "Exception " + e.toString());
         }
 
         if (cookieString == null) {
@@ -739,7 +725,7 @@ public class JSONParser {
         String url = "/version/api";
 
         // if server is publish in a subfolder, fix url
-        if (subfolder != null && subfolder != "") {
+        if (subfolder != null && !subfolder.equals("")) {
             url = subfolder + "/" + url;
         }
 
@@ -762,8 +748,8 @@ public class JSONParser {
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
-        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
-        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
+        HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(hostname, port, protocol);
@@ -779,8 +765,6 @@ public class JSONParser {
 
             HttpResponse response = httpclient.execute(targetHost, httpget);
             HttpEntity entity = response.getEntity();
-
-//            Log.i("APIVer", "API Ver Status: " + response.getStatusLine());
 
             StatusLine statusLine = response.getStatusLine();
 

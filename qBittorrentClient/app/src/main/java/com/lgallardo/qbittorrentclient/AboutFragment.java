@@ -12,6 +12,9 @@ package com.lgallardo.qbittorrentclient;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class AboutFragment extends Fragment {
+
+    public static SwipeRefreshLayout mSwipeRefreshLayout;
+    private com.lgallardo.qbittorrentclient.RefreshListener refreshListener;
+    public static boolean isFragmentFirstLoaded = true;
 
     public AboutFragment() {
     }
@@ -31,6 +38,43 @@ public class AboutFragment extends Fragment {
         setHasOptionsMenu(true);
 
         View rootView = inflater.inflate(R.layout.about, container, false);
+
+        // Get Refresh Listener
+        refreshListener = (com.lgallardo.qbittorrentclient.RefreshListener) getActivity();
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.about_refresh_layout);
+
+        // This fix the SwipeRefreshLayout setRefreshing not showing indicator initially issue
+        // by calling setProgressViewOffset() on the SwipeRefreshLayout that invalidtes the circle view of the layout causing
+        // SwipeRefreshLayout.onMeasure() to be called immediately.
+
+        if(isFragmentFirstLoaded) {
+
+            TypedValue typed_value = new TypedValue();
+            getActivity().getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, typed_value, true);
+            mSwipeRefreshLayout.setProgressViewOffset(false, 0, getResources().getDimensionPixelSize(typed_value.resourceId) * 2);
+
+            mSwipeRefreshLayout.setColorSchemeColors(R.color.primary, R.color.primary_dark, R.color.primary_text);
+
+            if(!MainActivity.hostname.equals("")) {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+
+            isFragmentFirstLoaded = false;
+        }
+
+        if(mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Log.d("Debug", "Swipe!");
+                    refreshListener.swipeRefresh();
+
+                }
+            });
+        }
+
+
 
         return rootView;
     }

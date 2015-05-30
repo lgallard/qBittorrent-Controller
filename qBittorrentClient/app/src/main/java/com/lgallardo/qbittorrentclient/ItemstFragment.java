@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/gpl.html
  *
  * Contributors:
- *     Luis M. Gallardo D. 
+ *     Luis M. Gallardo D.
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
@@ -15,7 +15,8 @@ import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,7 +34,11 @@ public class ItemstFragment extends ListFragment {
     public int nr = 0;
     int secondContainer;
     TorrentDetailsFragment detailsFragment;
-    ;
+    private RecyclerView recyclerView;
+    private RefreshListener refreshListener;
+    public static View.OnClickListener originalListener;
+
+    public static SwipeRefreshLayout mSwipeRefreshLayout;
 
     public ItemstFragment() {
     }
@@ -59,9 +64,29 @@ public class ItemstFragment extends ListFragment {
         // wants to add/replace/delete using the onCreateOptionsMenu method.
         setHasOptionsMenu(true);
 
+        // Get Refresh Listener
+        refreshListener = (RefreshListener) getActivity();
+
         View rootView = inflater.inflate(R.layout.activity_main_original, container, false);
 
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
+
+        mSwipeRefreshLayout.setColorSchemeColors(R.color.primary,                R.color.primary_dark, R.color.primary_text);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshListener.swipeRefresh();
+            }
+        });
+
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -69,6 +94,7 @@ public class ItemstFragment extends ListFragment {
         super.onViewCreated(view, savedInstanceState);
 
         try {
+
             getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
             // Get adapter
@@ -88,9 +114,9 @@ public class ItemstFragment extends ListFragment {
                         nr--;
                         mAdapter.removeSelection(position);
                     }
-//                    mode.setTitle(nr + " selected");
-                    mode.setTitle("" + nr);
 
+                    // Set title with number of items selected
+                    mode.setTitle("" + nr);
 
                 }
 
@@ -99,6 +125,8 @@ public class ItemstFragment extends ListFragment {
                     nr = 0;
                     MenuInflater inflater = getActivity().getMenuInflater();
                     inflater.inflate(R.menu.main_contextual_action_bar, menu);
+
+                    mSwipeRefreshLayout.setEnabled(false);
 
                     ItemstFragment.mActionMode = actionMode;
 
@@ -134,23 +162,18 @@ public class ItemstFragment extends ListFragment {
 
 
                         if (mAdapter.isPositionChecked(i)) {
-                            Log.i("ItemsFragment", "Name: " + mAdapter.getData()[i].getFile());
-                            Log.i("ItemsFragment", "Hash: " + mAdapter.getData()[i].getHash());
 
                             if (hashes == null) {
                                 hashes = mAdapter.getData()[i].getHash();
                             } else {
                                 hashes = hashes + "|" + mAdapter.getData()[i].getHash();
                             }
-
                         }
-
                     }
 
                     hashesStr = hashes;
 
-
-                    Log.i("ItemsFragment", "Hashes: " + hashes);
+                    ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
 
                     switch (item.getItemId()) {
 
@@ -159,6 +182,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -170,6 +197,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -207,6 +238,10 @@ public class ItemstFragment extends ListFragment {
 
                                 // Clear selection
                                 nr = 0;
+
+                                // Enable SwipeRefresh
+                                mSwipeRefreshLayout.setEnabled(true);
+
                                 mAdapter.clearSelection();
                                 mode.finish();
 
@@ -245,6 +280,10 @@ public class ItemstFragment extends ListFragment {
 
                                 // Clear selection
                                 nr = 0;
+
+                                // Enable SwipeRefresh
+                                mSwipeRefreshLayout.setEnabled(true);
+
                                 mAdapter.clearSelection();
                                 mode.finish();
 
@@ -252,12 +291,15 @@ public class ItemstFragment extends ListFragment {
 
                             return true;
 
-
                         case R.id.action_increase_prio:
                             m.increasePrioTorrent(hashes);
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -268,6 +310,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -278,6 +324,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -288,6 +338,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -299,6 +353,10 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -310,24 +368,38 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
+                            return true;
                         case R.id.action_recheck:
 
                             m.recheckTorrents(hashes);
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
+                            return true;
                         case R.id.action_sequential_download:
 
                             m.toggleSequentialDownload(hashes);
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
@@ -338,17 +410,19 @@ public class ItemstFragment extends ListFragment {
 
                             // Clear selection
                             nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
                             mAdapter.clearSelection();
                             mode.finish();
 
                             return true;
                         default:
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
                             return true;
-
-
                     }
-
-
                 }
 
                 @Override
@@ -358,6 +432,7 @@ public class ItemstFragment extends ListFragment {
                     }
                     ItemstFragment.mActionMode = null;
 
+                    mSwipeRefreshLayout.setEnabled(true);
 
                 }
             });
@@ -365,22 +440,25 @@ public class ItemstFragment extends ListFragment {
             getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+                    if(MainActivity.listViewRefreshing) {
+                        return true;
+                    }
                     getListView().setItemChecked(position, !mAdapter.isPositionChecked(position));
                     return false;
                 }
             });
+
         } catch (Exception e) {
             getListView().setChoiceMode(ListView.CHOICE_MODE_NONE);
-
         }
-
     }
 
-    // @Override
+    @Override
     public void onListItemClick(ListView parent, View v, int position, long id) {
-
-        ListItemClicked(position);
-
+        if(!MainActivity.listViewRefreshing) {
+            ListItemClicked(position);
+        }
     }
 
     public void ListItemClicked(int position) {
@@ -388,11 +466,6 @@ public class ItemstFragment extends ListFragment {
         ListView lv = this.getListView();
 
         int count = lv.getCount();
-
-//        if (count == 1 && lv.getItemAtPosition(0).equals(getString(R.string.no_results))) {
-//
-//            return;
-//        }
 
         Torrent torrent = MainActivity.lines[position];
 
@@ -402,8 +475,6 @@ public class ItemstFragment extends ListFragment {
 
             FragmentManager fragmentManager = getFragmentManager();
             if(!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
-
-
 
                 detailsFragment = (TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
 
@@ -436,6 +507,41 @@ public class ItemstFragment extends ListFragment {
 
             if (getActivity().findViewById(R.id.one_frame) != null) {
                 fragmentManager.beginTransaction().replace(this.getSecondFragmentContainer(), detailsFragment, "firstFragment").addToBackStack("secondFragment").commit();
+
+                // Change toolbar home button behaviour
+                originalListener = MainActivity.drawerToggle.getToolbarNavigationClickListener();
+
+                MainActivity.drawerToggle.setDrawerIndicatorEnabled(false);
+                MainActivity.drawerToggle.setHomeAsUpIndicator(R.drawable.ic_drawer);
+                MainActivity.drawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        // Set default toolbar behaviour
+                        ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+                        MainActivity.drawerToggle.setDrawerIndicatorEnabled(true);
+                        MainActivity.drawerToggle.setToolbarNavigationClickListener(originalListener);
+
+                        // Show herderInfo in phone's view
+                        if (getActivity().findViewById(R.id.one_frame) != null) {
+
+                            if (MainActivity.headerInfo != null) {
+                                if (MainActivity.header) {
+                                    MainActivity.headerInfo.setVisibility(View.VISIBLE);
+                                } else {
+                                    MainActivity.headerInfo.setVisibility(View.GONE);
+                                }
+                            }
+
+                        }
+
+
+                        FragmentManager fm = getFragmentManager();
+                        fm.popBackStack();
+                    }
+                });
+
+
             } else {
                 fragmentManager.beginTransaction().replace(this.getSecondFragmentContainer(), detailsFragment, "secondFragment").addToBackStack("secondFragment").commit();
             }
@@ -458,15 +564,17 @@ public class ItemstFragment extends ListFragment {
             if (menu.findItem(R.id.action_resume) != null) {
                 menu.findItem(R.id.action_resume).setVisible(false);
             }
+
             if (menu.findItem(R.id.action_pause) != null) {
                 menu.findItem(R.id.action_pause).setVisible(false);
             }
+
             if (menu.findItem(R.id.action_increase_prio) != null) {
                 menu.findItem(R.id.action_increase_prio).setVisible(false);
             }
+
             if (menu.findItem(R.id.action_decrease_prio) != null) {
                 menu.findItem(R.id.action_decrease_prio).setVisible(false);
-
             }
 
             if (menu.findItem(R.id.action_max_prio) != null) {
@@ -480,6 +588,7 @@ public class ItemstFragment extends ListFragment {
             if (menu.findItem(R.id.action_delete) != null) {
                 menu.findItem(R.id.action_delete).setVisible(false);
             }
+
             if (menu.findItem(R.id.action_delete_drive) != null) {
                 menu.findItem(R.id.action_delete_drive).setVisible(false);
             }
@@ -508,6 +617,7 @@ public class ItemstFragment extends ListFragment {
                 menu.findItem(R.id.action_priority_menu).setVisible(false);
             }
 
+
             menu.findItem(R.id.action_sortby_name).setVisible(true);
             menu.findItem(R.id.action_sortby_eta).setVisible(true);
             menu.findItem(R.id.action_sortby_priority).setVisible(true);
@@ -516,19 +626,15 @@ public class ItemstFragment extends ListFragment {
             menu.findItem(R.id.action_sortby_downloadSpeed).setVisible(true);
             menu.findItem(R.id.action_sortby_uploadSpeed).setVisible(true);
 
-
             if (MainActivity.sortby.equals("Name")) {
                 menu.findItem(R.id.action_sortby_name).setIcon(R.drawable.ic_stat_completed);
-
             }
-
 
             if (MainActivity.sortby.equals("ETA")) {
                 menu.findItem(R.id.action_sortby_eta).setIcon(R.drawable.ic_stat_completed);
             }
 
             if (MainActivity.sortby.equals("Priority")) {
-                ;
                 menu.findItem(R.id.action_sortby_priority).setIcon(R.drawable.ic_stat_completed);
             }
 
@@ -537,7 +643,6 @@ public class ItemstFragment extends ListFragment {
             }
 
             if (MainActivity.sortby.equals("Ratio")) {
-
                 menu.findItem(R.id.action_sortby_ratio).setIcon(R.drawable.ic_stat_completed);
             }
 
@@ -548,7 +653,6 @@ public class ItemstFragment extends ListFragment {
             if (MainActivity.sortby.equals("UploadSpeed")) {
                 menu.findItem(R.id.action_sortby_uploadSpeed).setIcon(R.drawable.ic_stat_completed);
             }
-
 
         }
     }

@@ -8,10 +8,11 @@
   Contributors:
       Luis M. Gallardo D.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/about_refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -95,4 +96,4 @@
         </RelativeLayout>
     </ScrollView>
 
-</RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

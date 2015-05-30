@@ -17,25 +17,23 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="?windowBackground">
 
-        <ProgressBar
-            android:id="@+id/progressBarConnecting"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="invisible" />
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
 
         <LinearLayout
             android:id="@+id/header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/progressBarConnecting"
+            android:layout_below="@+id/app_bar"
             android:gravity="end"
             android:orientation="horizontal"
-            android:paddingBottom="5dp">
-
+            android:paddingBottom="5dp"
+            android:background="?dropShadowBackground"
+            android:elevation="1dp">
 
             <LinearLayout
 
@@ -90,7 +88,7 @@
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@android:color/darker_gray" />

@@ -34,7 +34,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private EditTextPreference port;
     private EditTextPreference username;
     private EditTextPreference password;
-    private CheckBoxPreference old_version;
     private String currentServerValue;
 
     private CheckBoxPreference auto_refresh;
@@ -55,6 +54,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Set Theme
+        this.setTheme(R.style.Theme_Light);
+
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.preferences);
@@ -67,7 +70,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         port = (EditTextPreference) findPreference("port");
         username = (EditTextPreference) findPreference("username");
         password = (EditTextPreference) findPreference("password");
-//        old_version = (CheckBoxPreference) findPreference("old_version");
         auto_refresh = (CheckBoxPreference) findPreference("auto_refresh");
         refresh_period = (ListPreference) findPreference("refresh_period");
         connection_timeout = (EditTextPreference) findPreference("connection_timeout");
@@ -185,8 +187,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         refresh_period.setSummary(refresh_period.getEntry());
 
-        connection_timeout.setText(sharedPrefs.getString("connection_timeout" + value, "5"));
-        data_timeout.setText(sharedPrefs.getString("data_timeout" + value, "8"));
+        connection_timeout.setText(sharedPrefs.getString("connection_timeout" + value, "10"));
+        data_timeout.setText(sharedPrefs.getString("data_timeout" + value, "20"));
 
         if (sortBy.getEntry() == null) {
             sortBy.setValueIndex(1);
