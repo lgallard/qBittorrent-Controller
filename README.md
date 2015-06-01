@@ -12,19 +12,12 @@ This is the repository for Android's [qBittorrent](http://www.qbittorrent.org/) 
 * Pause, resume, or delete individual torrents with its downloaded data
 * Set and save a connection account
 
-<h2>Phone's view</h2>
-<img src="https://farm8.staticflickr.com/7533/15370949504_0343b0d714.jpg">&nbsp;
-<img src="https://farm8.staticflickr.com/7492/15806831859_84ac204a2c.jpg">&nbsp;
-<img src="https://farm8.staticflickr.com/7542/15807108457_0d15e11ed1.jpg">&nbsp;
-<img src="https://farm6.staticflickr.com/5596/14551722492_ae99d639b8.jpg">&nbsp;
-<img src="https://farm8.staticflickr.com/7520/15370588224_4df591325b.jpg">&nbsp;
-<img src="https://farm6.staticflickr.com/5547/12764293595_4fd5078513.jpg">&nbsp;
-
-<h2>Tablet's view</h2>
-<img src="https://farm8.staticflickr.com/7573/15990853711_9ac92dc8a5_c.jpg">&nbsp;
-<img src="https://farm8.staticflickr.com/7554/15370588554_a0d297ff4e_c.jpg"/>&nbsp;
-<img src="https://farm9.staticflickr.com/8583/15992159912_b9aa6baef3_c.jpg"/>&nbsp;
-<img src="https://farm8.staticflickr.com/7522/15992833195_01c6b2ef22_c.jpg"/>&nbsp;
+<h2>Phone version</h2>
+<img src="https://farm9.staticflickr.com/8886/18331280546_7a4f39bb82.jpg">&nbsp;<img src="https://farm9.staticflickr.com/8773/18353677102_b254bb39fc.jpg"><img src="https://farm9.staticflickr.com/8802/18353676772_6679143ba1.jpg">&nbsp;<img src="https://farm1.staticflickr.com/557/17737072013_ea18530489.jpg">
+<img src="https://farm8.staticflickr.com/7798/17737457213_f7a29c30f2.jpg">&nbsp;<img src="https://farm1.staticflickr.com/257/18354102312_75b1245b66.jpg">
+<h2>Tablet version</h2>
+<img src="https://farm9.staticflickr.com/8844/18359764561_8646748449_z.jpg"/>&nbsp;
+<img src="https://farm1.staticflickr.com/386/18170408148_001dc2105b_z.jpg">&nbsp;
 
 <h2 id="download">Download</h2>
 * [Google Play Store](https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclient)
