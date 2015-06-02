@@ -51,7 +51,7 @@ public class RSSFeedParser {
 
     }
 
-    public XmlPullParser getFeed(String url){
+    public XmlPullParser getRSSFeed(String url){
 
         HttpResponse httpResponse;
         DefaultHttpClient httpclient;
