@@ -75,11 +75,11 @@ public class JSONParser {
 
     // constructor
     public JSONParser() {
-        this("", "", "", 0, "", "", 5, 8);
+        this("", "", "", 0, "", "", 10, 20);
     }
 
     public JSONParser(String hostname, String subfolder, int port, String username, String password) {
-        this(hostname, subfolder, "http", port, username, password, 5, 8);
+        this(hostname, subfolder, "http", port, username, password, 10, 20);
     }
 
     public JSONParser(String hostname, String subfolder, String protocol, int port, String username, String password, int connection_timeout, int data_timeout) {
