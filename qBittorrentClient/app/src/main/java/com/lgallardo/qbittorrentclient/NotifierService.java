@@ -150,15 +150,15 @@ public class NotifierService extends BroadcastReceiver {
 
         // Get connection and data timeouts
         try {
-            connection_timeout = Integer.parseInt(sharedPrefs.getString("connection_timeout", "5"));
+            connection_timeout = Integer.parseInt(sharedPrefs.getString("connection_timeout", "10"));
         } catch (NumberFormatException e) {
-            connection_timeout = 5;
+            connection_timeout = 10;
         }
 
         try {
-            data_timeout = Integer.parseInt(sharedPrefs.getString("data_timeout", "8"));
+            data_timeout = Integer.parseInt(sharedPrefs.getString("data_timeout", "20"));
         } catch (NumberFormatException e) {
-            data_timeout = 8;
+            data_timeout = 20;
         }
 
 

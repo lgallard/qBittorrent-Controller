@@ -1,64 +1,50 @@
 package com.lgallardo.qbittorrentclient;
 
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by lgallard on 02/06/15.
  */
 public class RSSFeed {
 
-    public String channel;
-    public String title;
-    public String link;
-
+    public String channelTitle;
+    public String channelDescription;
+    public String channelLink;
+    public List<RSSFeedItem> items;
 
     public void RSSFeed() {
 
     }
 
-    public String getChannel() {
-        return channel;
+    public String getChannelTitle() {
+        return channelTitle;
     }
 
-    public void setChannel(String channel) {
-        this.channel = channel;
+    public void setChannelTitle(String channelTitle) {
+        this.channelTitle = channelTitle;
     }
 
-    public String getTitle() {
-        return title;
+    public String getChannelDescription() {
+        return channelDescription;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setChannelDescription(String channelDescription) {
+        this.channelDescription = channelDescription;
     }
 
-    public String getLink() {
-        return link;
+    public String getChannelLink() {
+        return channelLink;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setChannelLink(String channelLink) {
+        this.channelLink = channelLink;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public HashMap getItems() {
+    public List<RSSFeedItem> getItems() {
         return items;
     }
 
-    public void setItems(HashMap items) {
+    public void setItems(List<RSSFeedItem> items) {
         this.items = items;
     }
-
-    public String description;
-
-    public HashMap items;
-
-
 }

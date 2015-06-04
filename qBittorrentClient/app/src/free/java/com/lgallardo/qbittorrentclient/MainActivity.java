@@ -56,7 +56,6 @@ import com.google.android.gms.ads.AdView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -734,6 +733,9 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 //                if (firstFragment != null && firstFragment.mActionMode != null) {
 //                    firstFragment.mActionMode.finish();
 //                }
+
+                qBittorrentRssFeed qrf = new qBittorrentRssFeed();
+                qrf.execute();
 
             }
 
@@ -2292,64 +2294,43 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         @Override
         protected RSSFeed doInBackground(String... params) {
 
-            int event;
-            String text=null;
-
             RSSFeed rssFeed = new RSSFeed();
 
             try {
 
                 RSSFeedParser rssFeedParser = new RSSFeedParser();
-
-                XmlPullParser myParser = rssFeedParser.getRSSFeed("https://yts.to/rss/0/all/all/7");
-
-                event = myParser.getEventType();
-
-                while (event != XmlPullParser.END_DOCUMENT) {
-                    String name=myParser.getName();
-
-                    switch (event){
-                        case XmlPullParser.START_TAG:
-                            break;
-
-                        case XmlPullParser.TEXT:
-                            text = myParser.getText();
-                            break;
-
-                        case XmlPullParser.END_TAG:
-
-                            if(name.equals("title")){
-                                rssFeed.setTitle(text);
-                            }
-
-                            else if(name.equals("link")){
-                                rssFeed.setLink(text);
-                            }
-
-                            else if(name.equals("description")){
-                                rssFeed.setDescription(text);
-                            }
-
-                            else{
-                            }
-
-                            break;
-                    }
-
-                    event = myParser.next();
-                }
+                rssFeed = rssFeedParser.getRSSFeed("https://yts.to/rss/0/all/all/7");
 
             }
 
             catch (Exception e) {
+                Log.e("Debug", e.getMessage());
+                Log.e("Debug", e.toString());
                 e.printStackTrace();
             }
 
-            return null;
+            return rssFeed;
         }
 
         @Override
         protected void onPostExecute(RSSFeed result) {
+
+            if(result != null){
+
+                Log.d("4Debug", "> Channel Title: " + result.getChannelTitle());
+                Log.d("4Debug", "> Channel Link: " + result.getChannelLink());
+                Log.d("4Debug", "> Channel Description: " + result.getChannelDescription());
+
+
+                for(RSSFeedItem item: result.getItems()){
+
+                    Log.d("4Debug", "    > Title: " + item.getTitle());
+                    Log.d("4Debug", "    > Description: " + item.getDescription());
+                    Log.d("4Debug", "    > Link: " + item.getLink());
+                    Log.d("4Debug", "    > Torrent: " + item.getTorrentUrl());
+
+                }
+            }
         }
 
         }

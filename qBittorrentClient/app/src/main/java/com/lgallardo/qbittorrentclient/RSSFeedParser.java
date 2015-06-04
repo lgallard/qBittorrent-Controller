@@ -1,5 +1,6 @@
 package com.lgallardo.qbittorrentclient;
 
+import android.net.Uri;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -22,10 +23,10 @@ import org.apache.http.protocol.HTTP;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by lgallard on 02/06/15.
@@ -38,7 +39,7 @@ public class RSSFeedParser {
     static InputStream is = null;
 
 
-    public void RSSFeedParser() {
+    public RSSFeedParser() {
 
         RSSFeedParser(10,20);
 
@@ -51,7 +52,16 @@ public class RSSFeedParser {
 
     }
 
-    public XmlPullParser getRSSFeed(String url){
+    public RSSFeed getRSSFeed(String url){
+
+        // Parse url
+        Uri uri = Uri.parse(url);
+        int event;
+        String text=null;
+        String torrent = null;
+        boolean header = true;
+
+
 
         HttpResponse httpResponse;
         DefaultHttpClient httpclient;
@@ -76,8 +86,11 @@ public class RSSFeedParser {
         HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
         HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
+
+        Log.d("Debug", "Host: " + uri.getAuthority());
+
         // Making HTTP request
-        HttpHost targetHost = new HttpHost(url);
+        HttpHost targetHost = new HttpHost(uri.getAuthority());
 
         // httpclient = new DefaultHttpClient(httpParameters);
         // httpclient = new DefaultHttpClient();
@@ -85,6 +98,8 @@ public class RSSFeedParser {
 
         httpclient.setParams(httpParameters);
 
+
+        RSSFeed rssFeed = new RSSFeed();
 
         try {
 
@@ -111,21 +126,96 @@ public class RSSFeedParser {
             HttpEntity httpEntity = httpResponse.getEntity();
             is = httpEntity.getContent();
 
-            // Build JSON
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-
             xmlFactoryObject = XmlPullParserFactory.newInstance();
             xmlParser = xmlFactoryObject.newPullParser();
 
             xmlParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             xmlParser.setInput(is, null);
+
+
+            event = xmlParser.getEventType();
+
+            // Get Channel info
+            String name;
+            RSSFeedItem item = null;
+            List<RSSFeedItem> items = new ArrayList<RSSFeedItem>();
+
+            // Get items
+            while (event != XmlPullParser.END_DOCUMENT) {
+
+
+                name=xmlParser.getName();
+
+                switch (event){
+                    case XmlPullParser.START_TAG:
+
+                        if (name != null && name.equals("item")) {
+                            header = false;
+                            item = new RSSFeedItem();
+                        }
+
+                        try {
+                            torrent = xmlParser.getAttributeValue(0);
+                        } catch (Exception e) {
+
+                        }
+
+                        break;
+
+                    case XmlPullParser.TEXT:
+                        text = xmlParser.getText();
+                        break;
+
+                    case XmlPullParser.END_TAG:
+
+                        if(name.equals("title")) {
+                            if (header) {
+                                rssFeed.setChannelTitle(text);
+                                Log.d("Debug", " Channel Title: " + text);
+                            } else{
+                                item.setTitle(text);
+                                Log.d("Debug", "Title: " + text);
+                            }
+                        }
+
+                        else if(name.equals("description")){
+                            if(header){
+                                rssFeed.setChannelDescription(text);
+                                Log.d("Debug", "Channel Description: " + text);
+                            }else{
+                                item.setDescription(text);
+                                Log.d("Debug", "Description: " + text);
+                            }
+                        }
+                        else if(name.equals("link")){
+                            if(header) {
+                                rssFeed.setChannelLink(text);
+                                Log.d("Debug", "Channel Link: " + text);
+                            }else{
+                                item.setLink(text);
+                                Log.d("Debug", "Link: " + text);
+                            }
+
+                        }
+
+                        else if(name.equals("enclosure")){
+//                            rssFeed.setDescription(text);
+                            item.setTorrentUrl(torrent);
+                            Log.d("Debug", "Enclosure: " + torrent);
+                        }
+
+                        break;
+                }
+
+                event = xmlParser.next();
+
+                if(!header){
+                    items.add(item);
+                }
+
+            }
+
+            rssFeed.setItems(items);
 
 
             is.close();
@@ -139,7 +229,7 @@ public class RSSFeedParser {
         }
 
         // return JSON String
-        return xmlParser;
+        return rssFeed;
 
 
 
