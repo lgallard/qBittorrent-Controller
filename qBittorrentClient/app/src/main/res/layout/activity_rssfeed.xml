@@ -8,22 +8,28 @@
   Contributors:
       Luis M. Gallardo D. 
 -->
-<android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/details_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ScrollView
-        android:id="@+id/scrollView1"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="?backgroundSelector"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
+
 
         <ListView
-            android:id="@android:id/list"
+            android:id="@+id/channel_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/app_bar">
 
         </ListView>
-     </ScrollView>
+    </RelativeLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

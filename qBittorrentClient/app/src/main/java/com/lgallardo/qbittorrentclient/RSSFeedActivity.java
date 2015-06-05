@@ -1,16 +1,47 @@
 package com.lgallardo.qbittorrentclient;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
-public class RSSFeedActivity extends ActionBarActivity {
+public class RSSFeedActivity extends AppCompatActivity {
+
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rssfeed);
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+
+        if (MainActivity.dark_ui) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.Theme_Dark_primary));
+        }
+
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(false);
+
+        // Set App title
+        setTitle(R.string.action_rss);
+
+
+        String[] channels = new String[]{"https://yts.to/rss/0/all/all/7", "https://kat.cr/movies/?rss=1",
+                "https://kat.cr/movies/?rss=2"};
+
+        // Get ListView object from xml
+        ListView listView = (ListView) findViewById(R.id.channel_list);
+
+        RSSFeedChannelListAdapter myadapter = new RSSFeedChannelListAdapter(this, channels);
+
+        listView.setAdapter(myadapter);
+
+        myadapter.notifyDataSetChanged();
     }
 
     @Override

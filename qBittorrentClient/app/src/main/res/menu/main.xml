@@ -67,11 +67,6 @@
         android:title="@string/action_add" />
 
     <item
-        android:id="@+id/action_addRss"
-        android:icon="@drawable/ic_action_add"
-        app:showAsAction="collapseActionView|ifRoom"
-        android:title="@string/action_addRss" />
-    <item
         android:id="@+id/action_resume"
         android:icon="@drawable/ic_action_resume"
         app:showAsAction="always"
@@ -149,5 +144,11 @@
         android:icon="@drawable/ic_action_search"
         app:showAsAction="collapseActionView"
         android:title="@string/search_title" />
+
+    <item
+        android:id="@+id/action_rss"
+        android:icon="@drawable/ic_action_add"
+        app:showAsAction="collapseActionView|ifRoom"
+        android:title="@string/action_rss" />
 
 </menu>

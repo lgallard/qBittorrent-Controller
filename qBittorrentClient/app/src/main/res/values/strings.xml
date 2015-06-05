@@ -4,5 +4,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_addRss">Add RSS</string>
+    <string name="action_rss">RSS</string>
 
 </resources>

@@ -883,6 +883,10 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 // Add URL torrent
                 addUrlTorrent();
                 return true;
+            case R.id.action_rss:
+                // Open RSS Activity
+                startActivity(new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class));
+                return true;
             case R.id.action_pause:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     pauseTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
