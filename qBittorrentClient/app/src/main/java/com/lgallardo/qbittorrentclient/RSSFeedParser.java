@@ -235,6 +235,156 @@ public class RSSFeedParser {
 
     }
 
+    public RSSFeed getRSSChannelInfo(String url){
+
+        // Parse url
+        Uri uri = Uri.parse(url);
+        int event;
+        String text=null;
+        String torrent = null;
+        boolean header = true;
+
+
+
+        HttpResponse httpResponse;
+        DefaultHttpClient httpclient;
+
+        XmlPullParserFactory xmlFactoryObject;
+        XmlPullParser xmlParser = null;
+
+        HttpParams httpParameters = new BasicHttpParams();
+
+        // Set the timeout in milliseconds until a connection is established.
+        // The default value is zero, that means the timeout is not used.
+        int timeoutConnection = connection_timeout * 1000;
+
+        // Set the default socket timeout (SO_TIMEOUT)
+        // in milliseconds which is the timeout for waiting for data.
+        int timeoutSocket = data_timeout * 1000;
+
+        // Set http parameters
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpProtocolParams.setUserAgent(httpParameters, "qBittorrent for Android");
+        HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
+
+
+        Log.d("Debug", "Host: " + uri.getAuthority());
+
+        // Making HTTP request
+        HttpHost targetHost = new HttpHost(uri.getAuthority());
+
+        // httpclient = new DefaultHttpClient(httpParameters);
+        // httpclient = new DefaultHttpClient();
+        httpclient = getNewHttpClient();
+
+        httpclient.setParams(httpParameters);
+
+
+        RSSFeed rssFeed = new RSSFeed();
+
+        try {
+
+//            AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
+//            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.username, this.password);
+//
+//            httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
+
+            // set http parameters
+
+            HttpGet httpget = new HttpGet(url);
+
+            httpResponse = httpclient.execute(targetHost, httpget);
+
+            StatusLine statusLine = httpResponse.getStatusLine();
+
+            int mStatusCode = statusLine.getStatusCode();
+
+            if (mStatusCode != 200) {
+                httpclient.getConnectionManager().shutdown();
+                throw new JSONParserStatusCodeException(mStatusCode);
+            }
+
+            HttpEntity httpEntity = httpResponse.getEntity();
+            is = httpEntity.getContent();
+
+            xmlFactoryObject = XmlPullParserFactory.newInstance();
+            xmlParser = xmlFactoryObject.newPullParser();
+
+            xmlParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            xmlParser.setInput(is, null);
+
+
+            event = xmlParser.getEventType();
+
+            // Get Channel info
+            String name;
+            RSSFeedItem item = null;
+            List<RSSFeedItem> items = new ArrayList<RSSFeedItem>();
+
+            // Get items
+            while (event != XmlPullParser.END_DOCUMENT && header) {
+
+
+                name=xmlParser.getName();
+
+                switch (event){
+                    case XmlPullParser.START_TAG:
+
+                        if (name != null && name.equals("item")) {
+                            header = false;
+                        }
+
+                        break;
+
+                    case XmlPullParser.TEXT:
+                        text = xmlParser.getText();
+                        break;
+
+                    case XmlPullParser.END_TAG:
+
+                        if(name.equals("title")) {
+                            if (header) {
+                                rssFeed.setChannelTitle(text);
+                            }
+                        }
+
+                        else if(name.equals("description")){
+                            if(header){
+                                rssFeed.setChannelDescription(text);
+                            }
+                        }
+                        else if(name.equals("link")){
+                            if(header) {
+                                rssFeed.setChannelLink(text);
+                            }
+
+                        }
+
+                        break;
+                }
+
+                event = xmlParser.next();
+
+
+            }
+            is.close();
+        } catch (Exception e) {
+            Log.e("Debug", "RSSFeedParser - : " + e.toString());
+        } finally {
+            // When HttpClient instance is no longer needed,
+            // shut down the connection manager to ensure
+            // immediate deallocation of all system resources
+            httpclient.getConnectionManager().shutdown();
+        }
+
+        // return JSON String
+        return rssFeed;
+
+
+
+    }
 
     public DefaultHttpClient getNewHttpClient() {
         try {

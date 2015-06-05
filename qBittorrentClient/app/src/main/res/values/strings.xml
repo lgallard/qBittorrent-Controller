@@ -5,5 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="action_addRss">Add RSS</string>
     <string name="action_rss">RSS</string>
+    <string name="dialog_add_rss">Add RSS feed here</string>
 
 </resources>
