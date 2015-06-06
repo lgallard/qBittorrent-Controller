@@ -45,9 +45,6 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         ArrayList<String> channels = new ArrayList<String>();
 
-//        channels.add("https://yts.to/rss/0/all/all/7");
-//        channels.add("https://kat.cr/movies/?rss=1");
-//        channels.add("https://kat.cr/movies/?rss=2");
 
         // Get ListView object from xml
         ListView listView = (ListView) findViewById(R.id.channel_list);
@@ -97,42 +94,43 @@ public class RSSFeedActivity extends AppCompatActivity {
         // URL input
         final EditText urlInput = (EditText) addTorrentView.findViewById(R.id.url);
 
-        if(url != null){
+        if (url != null) {
             urlInput.setText(url);
-        }
 
-        if (!isFinishing()) {
-            // Dialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            // Set add_torrent.xml to AlertDialog builder
-            builder.setView(addTorrentView);
+            if (!isFinishing()) {
+                // Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            // Cancel
-            builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // User cancelled the dialog
-                }
-            });
+                // Set add_torrent.xml to AlertDialog builder
+                builder.setView(addTorrentView);
 
-            // Ok
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // User accepted the dialog
-                    Log.d("Debug", "RSS feed: " + urlInput.getText().toString());
+                // Cancel
+                builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
 
-                    // Get Rss info and update listview
-                    RSSChannelInfoTask rssInfo = new RSSChannelInfoTask();
-                    rssInfo.execute(urlInput.getText().toString());
+                // Ok
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User accepted the dialog
+                        Log.d("Debug", "RSS feed: " + urlInput.getText().toString());
 
-                }
-            });
+                        // Get Rss info and update listview
+                        RSSChannelInfoTask rssInfo = new RSSChannelInfoTask();
+                        rssInfo.execute(urlInput.getText().toString());
 
-            // Create dialog
-            AlertDialog dialog = builder.create();
+                    }
+                });
 
-            // Show dialog
-            dialog.show();
+                // Create dialog
+                AlertDialog dialog = builder.create();
+
+                // Show dialog
+                dialog.show();
+            }
         }
 
     }
@@ -158,6 +156,7 @@ public class RSSFeedActivity extends AppCompatActivity {
         }
 
     }
+
     // Here is where the action happens
     private class RSSChannelInfoTask extends AsyncTask<String, Integer, RSSFeed> {
         @Override
@@ -192,7 +191,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                 myadapter.addChannel(result.getChannelTitle());
                 myadapter.notifyDataSetChanged();
 
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
             }
 
@@ -213,9 +212,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                 RSSFeedParser rssFeedParser = new RSSFeedParser();
                 rssFeed = rssFeedParser.getRSSFeed("https://yts.to/rss/0/all/all/7");
 
-            }
-
-            catch (Exception e) {
+            } catch (Exception e) {
                 Log.e("Debug", e.getMessage());
                 Log.e("Debug", e.toString());
                 e.printStackTrace();
@@ -227,14 +224,14 @@ public class RSSFeedActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(RSSFeed result) {
 
-            if(result != null){
+            if (result != null) {
 
                 Log.d("4Debug", "> Channel Title: " + result.getChannelTitle());
                 Log.d("4Debug", "> Channel Link: " + result.getChannelLink());
                 Log.d("4Debug", "> Channel Description: " + result.getChannelDescription());
 
 
-                for(RSSFeedItem item: result.getItems()){
+                for (RSSFeedItem item : result.getItems()) {
 
                     Log.d("4Debug", "    > Title: " + item.getTitle());
                     Log.d("4Debug", "    > Description: " + item.getDescription());
