@@ -180,7 +180,6 @@ public class RSSFeedParser {
 
                         else if(name.equals("description")){
                             if(header){
-                                rssFeed.setChannelDescription(text);
                                 Log.d("Debug", "Channel Description: " + text);
                             }else{
                                 item.setDescription(text);
@@ -352,7 +351,6 @@ public class RSSFeedParser {
 
                         else if(name.equals("description")){
                             if(header){
-                                rssFeed.setChannelDescription(text);
                             }
                         }
                         else if(name.equals("link")){

@@ -6,5 +6,6 @@
     <string name="action_addRss">Add RSS</string>
     <string name="action_rss">RSS</string>
     <string name="dialog_add_rss">Add RSS feed here</string>
+    <string name="dialog_label_rss">Name (optional)</string>
 
 </resources>

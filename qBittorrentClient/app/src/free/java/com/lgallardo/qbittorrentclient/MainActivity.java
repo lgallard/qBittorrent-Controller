@@ -2323,7 +2323,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
                 Log.d("4Debug", "> Channel Title: " + result.getChannelTitle());
                 Log.d("4Debug", "> Channel Link: " + result.getChannelLink());
-                Log.d("4Debug", "> Channel Description: " + result.getChannelDescription());
 
 
                 for(RSSFeedItem item: result.getItems()){

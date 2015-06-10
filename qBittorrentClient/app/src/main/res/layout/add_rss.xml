@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:text="@string/dialog_add_rss" />
+        android:text="@string/dialog_label_rss" />
 
     <EditText
         android:id="@+id/rssFeedName"

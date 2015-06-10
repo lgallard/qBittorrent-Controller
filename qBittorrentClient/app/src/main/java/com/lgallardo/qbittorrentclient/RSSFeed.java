@@ -8,8 +8,8 @@ import java.util.List;
 public class RSSFeed {
 
     public String channelTitle;
-    public String channelDescription;
     public String channelLink;
+    public String channelPubDate;
     public List<RSSFeedItem> items;
 
     public void RSSFeed() {
@@ -22,14 +22,6 @@ public class RSSFeed {
 
     public void setChannelTitle(String channelTitle) {
         this.channelTitle = channelTitle;
-    }
-
-    public String getChannelDescription() {
-        return channelDescription;
-    }
-
-    public void setChannelDescription(String channelDescription) {
-        this.channelDescription = channelDescription;
     }
 
     public String getChannelLink() {
@@ -46,5 +38,13 @@ public class RSSFeed {
 
     public void setItems(List<RSSFeedItem> items) {
         this.items = items;
+    }
+
+    public String getChannelPubDate() {
+        return channelPubDate;
+    }
+
+    public void setChannelPubDate(String channelPubDate) {
+        this.channelPubDate = channelPubDate;
     }
 }
