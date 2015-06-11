@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,6 +28,9 @@ public class RSSFeedActivity extends AppCompatActivity {
     private SharedPreferences sharedPrefs;
     private StringBuilder builderPrefs;
     private static String rss_feeds;
+    public static SwipeRefreshLayout mSwipeRefreshLayout;
+
+    public static ArrayList<RSSFeed> rssFeeds = new ArrayList<RSSFeed>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,21 @@ public class RSSFeedActivity extends AppCompatActivity {
         // Set App title
         setTitle(R.string.action_rss);
 
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.rss_refresh_layout);
+
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+
+                    // Refresh all RSS feeds
+//                    refreshFeeds();
+                }
+            });
+        }
+
+
         ArrayList<String> titles = new ArrayList<String>();
         ArrayList<String> links = new ArrayList<String>();
         ArrayList<String> pubDates = new ArrayList<String>();
@@ -61,9 +80,9 @@ public class RSSFeedActivity extends AppCompatActivity {
         // Get values from options
         rss_feeds = sharedPrefs.getString("rss_feeds", "");
 
-        Log.d("Debug", "rss_feeds: " +rss_feeds.toString());
+        Log.d("Debug", "rss_feeds: " + rss_feeds.toString());
 
-        String [] rss_feeds_lines = rss_feeds.split("\\|");
+        String[] rss_feeds_lines = rss_feeds.split("\\|");
 
 
         for (int i = 0; rss_feeds_lines.length > i; i++) {
@@ -73,16 +92,16 @@ public class RSSFeedActivity extends AppCompatActivity {
 
 
             // Add line
-            if(feedValues.length > 0 && !feedValues[0].isEmpty()) {
+            if (feedValues.length > 0 && !feedValues[0].isEmpty()) {
                 titles.add(feedValues[0]);
 
 
-                if(feedValues.length > 1 ) {
+                if (feedValues.length > 1) {
 
                     links.add(feedValues[1]);
                 }
 
-                if(feedValues.length > 2 ) {
+                if (feedValues.length > 2) {
 
                     pubDates.add(feedValues[2]);
                 }
@@ -106,14 +125,14 @@ public class RSSFeedActivity extends AppCompatActivity {
     }
 
 
-    public void saveRssFeed(String title, String link){
+    public void saveRssFeed(String title, String link) {
 
         // Save options locally
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
         // Save rss_feeds
-        editor.putString("rss_feeds", rss_feeds + "|"  + title + ";" + link + ";" + ";");
+        editor.putString("rss_feeds", rss_feeds + "|" + title + ";" + link + ";" + ";");
 
         // Commit changes
         editor.commit();
@@ -191,22 +210,20 @@ public class RSSFeedActivity extends AppCompatActivity {
 
                         //Save RSS feed
 
-                        if(link != null && !link.isEmpty()){
+                        if (link != null && !link.isEmpty()) {
 
-                            if(title == null || title.isEmpty()){
+                            if (title == null || title.isEmpty()) {
                                 title = link;
                             }
 
-                            saveRssFeed(title,link);
+                            saveRssFeed(title, link);
 
-                            myadapter.addChannel(title,link);
+                            myadapter.addChannel(title, link);
 
                             myadapter.notifyDataSetChanged();
 
 
                         }
-
-
 
 
                     }
@@ -287,46 +304,64 @@ public class RSSFeedActivity extends AppCompatActivity {
     }
 
     // Here is where the action happens
-    private class rssFeedTask extends AsyncTask<String, Integer, RSSFeed> {
+    private class rssFeedsTask extends AsyncTask<String, Integer, ArrayList<RSSFeed>> {
         @Override
-        protected RSSFeed doInBackground(String... params) {
+        protected ArrayList<RSSFeed> doInBackground(String... params) {
 
-            RSSFeed rssFeed = new RSSFeed();
+            ArrayList<RSSFeed> feeds = new ArrayList<RSSFeed>();
 
-            try {
+            String[] rss_feeds_lines = rss_feeds.split("\\|");
 
-                RSSFeedParser rssFeedParser = new RSSFeedParser();
-                rssFeed = rssFeedParser.getRSSFeed("https://yts.to/rss/0/all/all/7");
 
-            } catch (Exception e) {
-                Log.e("Debug", e.getMessage());
-                Log.e("Debug", e.toString());
-                e.printStackTrace();
+            for (int i = 0; rss_feeds_lines.length > i; i++) {
+
+
+                String[] feedValues = rss_feeds_lines[i].split(";");
+
+
+                // Rtrive feed
+                if (feedValues.length > 0 && !feedValues[0].isEmpty()) {
+
+                    if (feedValues.length > 1) {
+
+                        RSSFeed rssFeed = new RSSFeed();
+
+                        try {
+
+                            RSSFeedParser rssFeedParser = new RSSFeedParser();
+                            rssFeed = rssFeedParser.getRSSFeed(feedValues[1]);
+
+                        } catch (Exception e) {
+                            Log.e("Debug", e.getMessage());
+                            Log.e("Debug", e.toString());
+                            e.printStackTrace();
+                        }
+
+                        // Add feed, no matter if it's empty
+                        feeds.add(rssFeed);
+
+
+                    }
+
+                }
+
             }
 
-            return rssFeed;
+            return feeds;
         }
 
         @Override
-        protected void onPostExecute(RSSFeed result) {
+        protected void onPostExecute(ArrayList<RSSFeed> result) {
 
             if (result != null) {
 
-                Log.d("4Debug", "> Channel Title: " + result.getChannelTitle());
-                Log.d("4Debug", "> Channel Link: " + result.getChannelLink());
+                //TODO; Change adapter to update using an object instead of a set of ArrayLists,
+                // update adater
 
 
-                for (RSSFeedItem item : result.getItems()) {
-
-                    Log.d("4Debug", "    > Title: " + item.getTitle());
-                    Log.d("4Debug", "    > Description: " + item.getDescription());
-                    Log.d("4Debug", "    > Link: " + item.getLink());
-                    Log.d("4Debug", "    > Torrent: " + item.getTorrentUrl());
-
-                }
             }
         }
-
     }
 
 }
+
