@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ public class RSSFeedActivity extends AppCompatActivity {
     private StringBuilder builderPrefs;
     private static String rss_feeds;
     public static SwipeRefreshLayout mSwipeRefreshLayout;
+    public static RSSFeed rssInfo;
 
     public static ArrayList<RSSFeed> rssFeeds = new ArrayList<RSSFeed>();
 
@@ -66,9 +68,9 @@ public class RSSFeedActivity extends AppCompatActivity {
         }
 
 
-        ArrayList<String> titles = new ArrayList<String>();
-        ArrayList<String> links = new ArrayList<String>();
-        ArrayList<String> pubDates = new ArrayList<String>();
+
+        ArrayList<RSSFeed> rssChannels = new ArrayList<RSSFeed>();
+        RSSFeed rssFeed;
 
         // Preferences stuff
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -90,30 +92,56 @@ public class RSSFeedActivity extends AppCompatActivity {
 
             String[] feedValues = rss_feeds_lines[i].split(";");
 
+            // New RSSFeed
+
+            rssFeed = new RSSFeed();
+
 
             // Add line
             if (feedValues.length > 0 && !feedValues[0].isEmpty()) {
-                titles.add(feedValues[0]);
 
+                rssFeed.setChannelTitle(feedValues[0]);
 
                 if (feedValues.length > 1) {
-
-                    links.add(feedValues[1]);
+                    rssFeed.setChannelLink(feedValues[1]);
                 }
 
                 if (feedValues.length > 2) {
-
-                    pubDates.add(feedValues[2]);
+                    rssFeed.setChannelPubDate(feedValues[2]);
                 }
 
+                if (feedValues.length > 3) {
+
+                    if(feedValues[3].equals("true")){
+                        rssFeed.setAutodDownload(true);
+                    }
+                    else{
+                        rssFeed.setAutodDownload(false);
+                    }
+                }
+
+                if (feedValues.length > 4) {
+
+                    if(feedValues[4].equals("true")){
+                        rssFeed.setNotifyNew(true);
+                    }
+                    else{
+                        rssFeed.setNotifyNew(false);
+                    }
+                }
+
+
+                rssChannels.add(rssFeed);
+
             }
+
 
         }
 
         // Get ListView object from xml
         ListView listView = (ListView) findViewById(R.id.channel_list);
 
-        myadapter = new RSSFeedChannelListAdapter(this, titles, links, pubDates);
+        myadapter = new RSSFeedChannelListAdapter(this, rssChannels);
 
         listView.setAdapter(myadapter);
 
@@ -125,14 +153,19 @@ public class RSSFeedActivity extends AppCompatActivity {
     }
 
 
-    public void saveRssFeed(String title, String link) {
+    public void saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
+
+        String autoDownloadValue= Boolean.toString(autoDownload);
+        String notifyNewValue = Boolean.toString(notifyNew);
+
+
 
         // Save options locally
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
         // Save rss_feeds
-        editor.putString("rss_feeds", rss_feeds + "|" + title + ";" + link + ";" + ";");
+        editor.putString("rss_feeds", rss_feeds + "|" + title + ";" + link + ";" +pubDate +  ";" + autoDownloadValue + ";" + notifyNew);
 
         // Commit changes
         editor.commit();
@@ -156,7 +189,12 @@ public class RSSFeedActivity extends AppCompatActivity {
 
             case R.id.action_addRss:
                 // Add URL torrent
-                addRssFeed("");
+                addRssFeed(new RSSFeed());
+                return true;
+            case R.id.action_refreshRss:
+
+                new rssFeedsTask().execute();
+
                 return true;
             case R.id.action_settings:
                 return true;
@@ -165,18 +203,25 @@ public class RSSFeedActivity extends AppCompatActivity {
         }
     }
 
-    private void addRssFeed(String url) {
+    private void addRssFeed(RSSFeed rssFeed) {
 
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(this);
         View addTorrentView = li.inflate(R.layout.add_rss, null);
 
         // URL input
-        final EditText urlInput = (EditText) addTorrentView.findViewById(R.id.url);
+        final EditText rssFeedUrlInput = (EditText) addTorrentView.findViewById(R.id.rssFeedUrl);
         final EditText rssFeedNameInput = (EditText) addTorrentView.findViewById(R.id.rssFeedName);
+        final CheckBox rssFeedAutoDownloadInput = (CheckBox) addTorrentView.findViewById(R.id.rssFeedAutodownload);
+        final CheckBox rssFeedNotifyNewInput = (CheckBox) addTorrentView.findViewById(R.id.rssFeedNotifyNew);
 
-        if (url != null) {
-            urlInput.setText(url);
+        if (rssFeed != null) {
+
+            rssFeedUrlInput.setText(rssFeed.getChannelLink());
+
+            if(rssFeed.getChannelTitle() != null){
+                rssFeedNameInput.setText(rssFeed.getChannelTitle());
+            }
 
 
             if (!isFinishing()) {
@@ -197,15 +242,13 @@ public class RSSFeedActivity extends AppCompatActivity {
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User accepted the dialog
-                        Log.d("Debug", "RSS feed: " + urlInput.getText().toString());
+                        Log.d("Debug", "RSS feed: " + rssFeedUrlInput.getText().toString());
 
-//                        // Get Rss info and update listview
-//                        RSSChannelInfoTask rssInfo = new RSSChannelInfoTask();
-//                        rssInfo.execute(urlInput.getText().toString());
-
-
+                        // Get values from dialog view
                         String title = rssFeedNameInput.getText().toString();
-                        String link = urlInput.getText().toString();
+                        String link = rssFeedUrlInput.getText().toString();
+                        boolean autoDownload = rssFeedAutoDownloadInput.isChecked() ? true:false;
+                        boolean notifyNew = rssFeedNotifyNewInput.isChecked() ? true:false;
 
 
                         //Save RSS feed
@@ -216,10 +259,11 @@ public class RSSFeedActivity extends AppCompatActivity {
                                 title = link;
                             }
 
-                            saveRssFeed(title, link);
+                            saveRssFeed(title, link, "", autoDownload, notifyNew);
 
-                            myadapter.addChannel(title, link);
+                            // Add channel to adapter
 
+                            myadapter.addChannel(new RSSFeed(title, link, autoDownload, notifyNew));
                             myadapter.notifyDataSetChanged();
 
 
@@ -255,7 +299,12 @@ public class RSSFeedActivity extends AppCompatActivity {
 
             Log.d("Debug", "RSS url: " + rssUrl);
 
-            addRssFeed(rssUrl);
+            if(rssUrl != null) {
+
+                RSSChannelInfoTask rssInfoTask = new RSSChannelInfoTask();
+
+                rssInfoTask.execute(rssUrl);
+            }
 
         }
 
@@ -280,19 +329,29 @@ public class RSSFeedActivity extends AppCompatActivity {
                 rssFeed = null;
             }
 
+            // Set rss link
+            rssFeed.setChannelLink(params[0]);
+
             return rssFeed;
         }
 
         @Override
         protected void onPostExecute(RSSFeed result) {
 
+
             if (result != null) {
+                Log.d("Debug", "> Channel Title: " + result.getChannelTitle());
+                Log.d("Debug", "> Channel Link: " + result.getChannelLink());
 
-                Log.d("4Debug", "> Channel Title: " + result.getChannelTitle());
-                Log.d("4Debug", "> Channel Link: " + result.getChannelLink());
 
-                myadapter.addChannel(result.getChannelTitle(), result.getChannelLink());
-                myadapter.notifyDataSetChanged();
+                rssInfo = result;
+
+                // Add rssInfoTask result
+                addRssFeed(rssInfo);
+
+
+//                myadapter.addChannel(result);
+//                myadapter.notifyDataSetChanged();
 
             } else {
                 Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
@@ -329,7 +388,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                         try {
 
                             RSSFeedParser rssFeedParser = new RSSFeedParser();
-                            rssFeed = rssFeedParser.getRSSFeed(feedValues[1]);
+                            rssFeed = rssFeedParser.getRSSFeed(feedValues[0], feedValues[1]);
 
                         } catch (Exception e) {
                             Log.e("Debug", e.getMessage());
@@ -357,6 +416,9 @@ public class RSSFeedActivity extends AppCompatActivity {
 
                 //TODO; Change adapter to update using an object instead of a set of ArrayLists,
                 // update adater
+
+                myadapter.setRssChannels(result);
+                myadapter.notifyDataSetChanged();
 
 
             }

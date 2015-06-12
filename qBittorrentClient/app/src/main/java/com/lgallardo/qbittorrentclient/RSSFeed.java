@@ -11,10 +11,26 @@ public class RSSFeed {
     public String channelLink;
     public String channelPubDate;
     public List<RSSFeedItem> items;
+    public boolean autodDownload;
+    public boolean notifyNew;
+    public int itemCount;
 
-    public void RSSFeed() {
+    public RSSFeed() {
 
     }
+
+    public RSSFeed(String title, String link, boolean autodDownload, boolean notifyNew) {
+        this.channelTitle = title;
+        this.channelLink = link;
+        this.autodDownload = autodDownload;
+        this.notifyNew = notifyNew;
+    }
+
+    public RSSFeed(String title, String link) {
+         this(title, link, true, false);
+    }
+
+
 
     public String getChannelTitle() {
         return channelTitle;
@@ -47,4 +63,29 @@ public class RSSFeed {
     public void setChannelPubDate(String channelPubDate) {
         this.channelPubDate = channelPubDate;
     }
+
+    public boolean isAutodDownload() {
+        return autodDownload;
+    }
+
+    public void setAutodDownload(boolean autodDownload) {
+        this.autodDownload = autodDownload;
+    }
+
+    public boolean isNotifyNew() {
+        return notifyNew;
+    }
+
+    public void setNotifyNew(boolean notifyNew) {
+        this.notifyNew = notifyNew;
+    }
+
+    public int getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(int itemCount) {
+        this.itemCount = itemCount;
+    }
+
 }

@@ -7,33 +7,34 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by lgallard on 6/4/15.
  */
-public class RSSFeedChannelListAdapter extends ArrayAdapter<String> {
+public class RSSFeedChannelListAdapter extends ArrayAdapter<RSSFeed> {
 
     private Context context;
-    private ArrayList<String> rssChannelTitles;
-    private ArrayList<String> rssChannelLinks;
-    private ArrayList<String> rssChannelPubDates;
+    ArrayList<RSSFeed> rssChannels;
 
-    public RSSFeedChannelListAdapter(Context context, ArrayList<String> rssChannelTitles, ArrayList<String> rssChannelLinks, ArrayList<String> rssChannelPubDates) {
 
-        super(context, R.layout.rss_channel_row, R.id.rss_channel_title, rssChannelTitles);
+    public RSSFeedChannelListAdapter(Context context, ArrayList<RSSFeed> rssChannels) {
+
+        super(context, R.layout.rss_channel_row, R.id.rss_channel_title, rssChannels);
 
         this.context = context;
-        this.rssChannelTitles = rssChannelTitles;
-        this.rssChannelLinks = rssChannelLinks;
-        this.rssChannelPubDates = rssChannelPubDates;
+        this.rssChannels = rssChannels;
 
     }
 
 
     @Override
     public int getCount() {
-        return (rssChannelTitles != null) ? rssChannelTitles.size() : 0;
+        return (rssChannels != null) ? rssChannels.size() : 0;
     }
 
     @Override
@@ -43,8 +44,10 @@ public class RSSFeedChannelListAdapter extends ArrayAdapter<String> {
 
         View row = inflater.inflate(R.layout.rss_channel_row, parent, false);
 
-        String rssChannelTitle = rssChannelTitles.get(position);
-        String rssChannelLink = rssChannelLinks.get(position);
+        String rssChannelTitle = rssChannels.get(position).getChannelTitle();
+        String rssChannelLink = rssChannels.get(position).getChannelLink();
+        String rssChannelPubDate = rssChannels.get(position).getChannelPubDate();
+        String rssCahnnelNewItems = rssChannels.get(position).getItemCount() + "";
 
 
         TextView title = (TextView) row.findViewById(R.id.rss_channel_title);
@@ -54,42 +57,50 @@ public class RSSFeedChannelListAdapter extends ArrayAdapter<String> {
         link.setText(rssChannelLink);
 
 
+        Date predefined = new Date();
+
+        String dateAsString = "";
+
+        try {
+
+            // Tue, 02 Jun 2015 17:37:32
+            predefined = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").parse(rssChannelPubDate);
+
+            dateAsString = new SimpleDateFormat("dd/MM/yyyy - hh:mm a", Locale.getDefault()).format(predefined);
+
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        TextView pubDate = (TextView) row.findViewById(R.id.rss_channel_pudDate);
+        pubDate.setText(dateAsString);
+
+
+        TextView items = (TextView) row.findViewById(R.id.rss_channel_item_count);
+        items.setText(rssCahnnelNewItems);
+
+
+
         return row;
     }
 
-    public ArrayList<String> getRssChannelTitles() {
-        return rssChannelTitles;
-    }
-
-    public void setRssChannelTitles(ArrayList<String> rssChannelTitles) {
-        this.rssChannelTitles = rssChannelTitles;
-    }
-
-    private void addChannelTitle(String channelTitle){
-
-        this.rssChannelTitles.add(channelTitle);
-    }
 
 
-    private void addChannelLink(String channelLink){
+    public void addChannel(RSSFeed rssFeed){
 
-        this.rssChannelLinks.add(channelLink);
-    }
-
-    private void addChannelPubDates(String channelPubDates){
-
-        this.rssChannelLinks.add(channelPubDates);
-    }
-
-    public void addChannel(String title, String link){
-
-        this.addChannelTitle(title);
-        this.addChannelLink(link);
-        this.addChannelPubDates("");
+        this.rssChannels.add(rssFeed);
 
     }
 
 
+    public ArrayList<RSSFeed> getRssChannels() {
+        return rssChannels;
+    }
 
-
+    public void setRssChannels(ArrayList<RSSFeed> rssChannels) {
+        this.rssChannels = rssChannels;
+    }
 }

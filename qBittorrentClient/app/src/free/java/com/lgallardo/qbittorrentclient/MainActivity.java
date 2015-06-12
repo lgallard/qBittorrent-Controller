@@ -2293,51 +2293,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     }
 
 
-    // Here is where the action happens
-    private class qBittorrentRssFeed extends AsyncTask<String, Integer, RSSFeed> {
-        @Override
-        protected RSSFeed doInBackground(String... params) {
-
-            RSSFeed rssFeed = new RSSFeed();
-
-            try {
-
-                RSSFeedParser rssFeedParser = new RSSFeedParser();
-                rssFeed = rssFeedParser.getRSSFeed("https://yts.to/rss/0/all/all/7");
-
-            }
-
-            catch (Exception e) {
-                Log.e("Debug", e.getMessage());
-                Log.e("Debug", e.toString());
-                e.printStackTrace();
-            }
-
-            return rssFeed;
-        }
-
-        @Override
-        protected void onPostExecute(RSSFeed result) {
-
-            if(result != null){
-
-                Log.d("4Debug", "> Channel Title: " + result.getChannelTitle());
-                Log.d("4Debug", "> Channel Link: " + result.getChannelLink());
-
-
-                for(RSSFeedItem item: result.getItems()){
-
-                    Log.d("4Debug", "    > Title: " + item.getTitle());
-                    Log.d("4Debug", "    > Description: " + item.getDescription());
-                    Log.d("4Debug", "    > Link: " + item.getLink());
-                    Log.d("4Debug", "    > Torrent: " + item.getTorrentUrl());
-
-                }
-            }
-        }
-
-        }
-
         // Here is where the action happens
     private class qBittorrentTask extends AsyncTask<String, Integer, Torrent[]> {
 

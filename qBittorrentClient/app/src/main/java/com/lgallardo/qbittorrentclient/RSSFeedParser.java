@@ -38,10 +38,12 @@ public class RSSFeedParser {
 
     static InputStream is = null;
 
+    private int itemCount;
+
 
     public RSSFeedParser() {
 
-        RSSFeedParser(10,20);
+        RSSFeedParser(10, 20);
 
     }
 
@@ -52,15 +54,16 @@ public class RSSFeedParser {
 
     }
 
-    public RSSFeed getRSSFeed(String url){
+    public RSSFeed getRSSFeed(String channelTitle, String channelUrl) {
 
         // Parse url
-        Uri uri = Uri.parse(url);
+        Uri uri = Uri.parse(channelUrl);
         int event;
-        String text=null;
+        String text = null;
         String torrent = null;
         boolean header = true;
 
+        this.itemCount = 0;
 
 
         HttpResponse httpResponse;
@@ -110,7 +113,7 @@ public class RSSFeedParser {
 
             // set http parameters
 
-            HttpGet httpget = new HttpGet(url);
+            HttpGet httpget = new HttpGet(channelUrl);
 
             httpResponse = httpclient.execute(targetHost, httpget);
 
@@ -144,21 +147,24 @@ public class RSSFeedParser {
             while (event != XmlPullParser.END_DOCUMENT) {
 
 
-                name=xmlParser.getName();
+                name = xmlParser.getName();
 
-                switch (event){
+                switch (event) {
                     case XmlPullParser.START_TAG:
 
                         if (name != null && name.equals("item")) {
                             header = false;
                             item = new RSSFeedItem();
+                            itemCount = itemCount +1;
                         }
+
 
                         try {
                             torrent = xmlParser.getAttributeValue(0);
                         } catch (Exception e) {
 
                         }
+
 
                         break;
 
@@ -168,37 +174,39 @@ public class RSSFeedParser {
 
                     case XmlPullParser.END_TAG:
 
-                        if(name.equals("title")) {
+
+                        if (name.equals("title")) {
                             if (header) {
-                                rssFeed.setChannelTitle(text);
-                                Log.d("Debug", " Channel Title: " + text);
-                            } else{
+                                rssFeed.setChannelTitle(channelTitle);
+                            } else {
                                 item.setTitle(text);
                                 Log.d("Debug", "Title: " + text);
                             }
-                        }
-
-                        else if(name.equals("description")){
-                            if(header){
+                        } else if (name.equals("description")) {
+                            if (header) {
                                 Log.d("Debug", "Channel Description: " + text);
-                            }else{
+                            } else {
                                 item.setDescription(text);
                                 Log.d("Debug", "Description: " + text);
                             }
-                        }
-                        else if(name.equals("link")){
-                            if(header) {
-                                rssFeed.setChannelLink(text);
-                                Log.d("Debug", "Channel Link: " + text);
-                            }else{
+                        } else if (name.equals("link")) {
+                            if (header) {
+
+                                rssFeed.setChannelLink(channelUrl);
+                            } else {
                                 item.setLink(text);
                                 Log.d("Debug", "Link: " + text);
                             }
 
-                        }
+                        } else if (name.equals("pubDate")) {
 
-                        else if(name.equals("enclosure")){
-//                            rssFeed.setDescription(text);
+                            Log.d("Debug", "pubDate - item: " + items.size());
+                            Log.d("Debug", "pubDate - text: " + text);
+
+                            // Set item pubDate
+                            item.setPubDate(text);
+
+                        } else if (name.equals("enclosure")) {
                             item.setTorrentUrl(torrent);
                             Log.d("Debug", "Enclosure: " + torrent);
                         }
@@ -208,13 +216,18 @@ public class RSSFeedParser {
 
                 event = xmlParser.next();
 
-                if(!header){
+                if (!header) {
                     items.add(item);
                 }
 
             }
 
             rssFeed.setItems(items);
+
+            rssFeed.setItemCount(itemCount);
+
+            rssFeed.setChannelPubDate(items.get(0).getPubDate());
+
 
 
             is.close();
@@ -231,18 +244,16 @@ public class RSSFeedParser {
         return rssFeed;
 
 
-
     }
 
-    public RSSFeed getRSSChannelInfo(String url){
+    public RSSFeed getRSSChannelInfo(String url) {
 
         // Parse url
         Uri uri = Uri.parse(url);
         int event;
-        String text=null;
+        String text = null;
         String torrent = null;
         boolean header = true;
-
 
 
         HttpResponse httpResponse;
@@ -326,9 +337,9 @@ public class RSSFeedParser {
             while (event != XmlPullParser.END_DOCUMENT && header) {
 
 
-                name=xmlParser.getName();
+                name = xmlParser.getName();
 
-                switch (event){
+                switch (event) {
                     case XmlPullParser.START_TAG:
 
                         if (name != null && name.equals("item")) {
@@ -343,18 +354,15 @@ public class RSSFeedParser {
 
                     case XmlPullParser.END_TAG:
 
-                        if(name.equals("title")) {
+                        if (name.equals("title")) {
                             if (header) {
                                 rssFeed.setChannelTitle(text);
                             }
-                        }
-
-                        else if(name.equals("description")){
-                            if(header){
+                        } else if (name.equals("description")) {
+                            if (header) {
                             }
-                        }
-                        else if(name.equals("link")){
-                            if(header) {
+                        } else if (name.equals("link")) {
+                            if (header) {
                                 rssFeed.setChannelLink(text);
                             }
 
@@ -379,7 +387,6 @@ public class RSSFeedParser {
 
         // return JSON String
         return rssFeed;
-
 
 
     }

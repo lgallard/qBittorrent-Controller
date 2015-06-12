@@ -24,7 +24,7 @@
         android:text="@string/dialog_add_rss" />
 
     <EditText
-        android:id="@+id/url"
+        android:id="@+id/rssFeedUrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -50,6 +50,19 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:ems="10" />
+
+    <CheckBox
+        android:id="@+id/rssFeedAutodownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/checkbox_autodownload_rss" />
+
+    <CheckBox
+        android:id="@+id/rssFeedNotifyNew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/checkbox_notifynew_rss" />
 
 
 </LinearLayout>

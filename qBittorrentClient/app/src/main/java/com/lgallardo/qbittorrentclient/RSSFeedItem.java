@@ -10,6 +10,8 @@ public class RSSFeedItem {
     public String description;
     public String link;
     public String torrentUrl;
+    public String pubDate;
+
 
     public RSSFeedItem() {
     }
@@ -44,5 +46,13 @@ public class RSSFeedItem {
 
     public void setTorrentUrl(String torrentUrl) {
         this.torrentUrl = torrentUrl;
+    }
+
+    public String getPubDate() {
+        return pubDate;
+    }
+
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
     }
 }
