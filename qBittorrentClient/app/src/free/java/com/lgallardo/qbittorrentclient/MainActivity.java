@@ -2042,7 +2042,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(false);
             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.clearAnimation();
-            com.lgallardo.qbittorrentclient.TorrentDetailsFragment  .mSwipeRefreshLayout.setEnabled(true);
+            com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setEnabled(true);
         }
 
         listViewRefreshing = false;

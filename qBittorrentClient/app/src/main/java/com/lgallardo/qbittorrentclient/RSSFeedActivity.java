@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,9 +60,16 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         if (mSwipeRefreshLayout != null) {
 
+            TypedValue typed_value = new TypedValue();
+            getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, typed_value, true);
+            mSwipeRefreshLayout.setProgressViewOffset(false, 0, getResources().getDimensionPixelSize(typed_value.resourceId) * 2);
+
+            mSwipeRefreshLayout.setEnabled(false);
+
             mSwipeRefreshLayout.setColorSchemeColors(R.color.primary, R.color.primary_dark, R.color.primary_text);
 
             mSwipeRefreshLayout.setRefreshing(true);
+
 
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -468,6 +476,8 @@ public class RSSFeedActivity extends AppCompatActivity {
 
 
             mSwipeRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setEnabled(true);
+
         }
     }
 
