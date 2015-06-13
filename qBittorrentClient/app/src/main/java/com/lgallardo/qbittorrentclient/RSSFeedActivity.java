@@ -56,13 +56,19 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.rss_refresh_layout);
 
+
         if (mSwipeRefreshLayout != null) {
+
+            mSwipeRefreshLayout.setColorSchemeColors(R.color.primary, R.color.primary_dark, R.color.primary_text);
+
+            mSwipeRefreshLayout.setRefreshing(true);
+
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
 
                     // Refresh all RSS feeds
-//                    refreshFeeds();
+                    new rssFeedsTask().execute();
                 }
             });
         }
@@ -70,73 +76,73 @@ public class RSSFeedActivity extends AppCompatActivity {
 
 
         ArrayList<RSSFeed> rssChannels = new ArrayList<RSSFeed>();
-        RSSFeed rssFeed;
-
-        // Preferences stuff
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        builderPrefs = new StringBuilder();
-
-        builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
-
-        // Get values from options
-        rss_feeds = sharedPrefs.getString("rss_feeds", "");
-
-        Log.d("Debug", "rss_feeds: " + rss_feeds.toString());
-
-        String[] rss_feeds_lines = rss_feeds.split("\\|");
-
-
-        for (int i = 0; rss_feeds_lines.length > i; i++) {
-
-
-            String[] feedValues = rss_feeds_lines[i].split(";");
-
-            // New RSSFeed
-
-            rssFeed = new RSSFeed();
-
-
-            // Add line
-            if (feedValues.length > 0 && !feedValues[0].isEmpty()) {
-
-                rssFeed.setChannelTitle(feedValues[0]);
-
-                if (feedValues.length > 1) {
-                    rssFeed.setChannelLink(feedValues[1]);
-                }
-
-                if (feedValues.length > 2) {
-                    rssFeed.setChannelPubDate(feedValues[2]);
-                }
-
-                if (feedValues.length > 3) {
-
-                    if(feedValues[3].equals("true")){
-                        rssFeed.setAutodDownload(true);
-                    }
-                    else{
-                        rssFeed.setAutodDownload(false);
-                    }
-                }
-
-                if (feedValues.length > 4) {
-
-                    if(feedValues[4].equals("true")){
-                        rssFeed.setNotifyNew(true);
-                    }
-                    else{
-                        rssFeed.setNotifyNew(false);
-                    }
-                }
-
-
-                rssChannels.add(rssFeed);
-
-            }
-
-
-        }
+//        RSSFeed rssFeed;
+//
+//        // Preferences stuff
+//        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+//
+//        builderPrefs = new StringBuilder();
+//
+//        builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
+//
+//        // Get values from options
+//        rss_feeds = sharedPrefs.getString("rss_feeds", "");
+//
+//        Log.d("Debug", "rss_feeds: " + rss_feeds.toString());
+//
+//        String[] rss_feeds_lines = rss_feeds.split("\\|");
+//
+//
+//        for (int i = 0; rss_feeds_lines.length > i; i++) {
+//
+//
+//            String[] feedValues = rss_feeds_lines[i].split(";");
+//
+//            // New RSSFeed
+//
+//            rssFeed = new RSSFeed();
+//
+//
+//            // Add line
+//            if (feedValues.length > 0 && !feedValues[0].isEmpty()) {
+//
+//                rssFeed.setChannelTitle(feedValues[0]);
+//
+//                if (feedValues.length > 1) {
+//                    rssFeed.setChannelLink(feedValues[1]);
+//                }
+//
+//                if (feedValues.length > 2) {
+//                    rssFeed.setChannelPubDate(feedValues[2]);
+//                }
+//
+//                if (feedValues.length > 3) {
+//
+//                    if(feedValues[3].equals("true")){
+//                        rssFeed.setAutodDownload(true);
+//                    }
+//                    else{
+//                        rssFeed.setAutodDownload(false);
+//                    }
+//                }
+//
+//                if (feedValues.length > 4) {
+//
+//                    if(feedValues[4].equals("true")){
+//                        rssFeed.setNotifyNew(true);
+//                    }
+//                    else{
+//                        rssFeed.setNotifyNew(false);
+//                    }
+//                }
+//
+//
+//                rssChannels.add(rssFeed);
+//
+//            }
+//
+//
+//        }
 
         // Get ListView object from xml
         ListView listView = (ListView) findViewById(R.id.channel_list);
@@ -145,7 +151,12 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         listView.setAdapter(myadapter);
 
-        myadapter.notifyDataSetChanged();
+//        myadapter.notifyDataSetChanged();
+
+
+
+        new rssFeedsTask().execute();
+
 
         // If it were awaked from an intent-filter,
         // get intent from the intent filter and Add URL torrent
@@ -165,7 +176,16 @@ public class RSSFeedActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
         // Save rss_feeds
-        editor.putString("rss_feeds", rss_feeds + "|" + title + ";" + link + ";" +pubDate +  ";" + autoDownloadValue + ";" + notifyNew);
+
+
+        if(rss_feeds == null || rss_feeds.equals("")){
+            editor.putString("rss_feeds", title + ";" + link + ";" +pubDate +  ";" + autoDownloadValue + ";" + notifyNew);
+
+        }
+        else{
+            editor.putString("rss_feeds", rss_feeds + "|" + title + ";" + link + ";" +pubDate +  ";" + autoDownloadValue + ";" + notifyNew);
+
+        }
 
         // Commit changes
         editor.commit();
@@ -367,6 +387,17 @@ public class RSSFeedActivity extends AppCompatActivity {
         @Override
         protected ArrayList<RSSFeed> doInBackground(String... params) {
 
+
+            // Preferences stuff
+            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
+
+            builderPrefs = new StringBuilder();
+
+            builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
+
+            // Get values from options
+            rss_feeds = sharedPrefs.getString("rss_feeds", "");
+
             ArrayList<RSSFeed> feeds = new ArrayList<RSSFeed>();
 
             String[] rss_feeds_lines = rss_feeds.split("\\|");
@@ -377,8 +408,23 @@ public class RSSFeedActivity extends AppCompatActivity {
 
                 String[] feedValues = rss_feeds_lines[i].split(";");
 
+//                Log.d("3Debug", "rss_feeds_lines[i]: " + rss_feeds_lines[i]);
+//                Log.d("3Debug", "feedValues[0]: " + feedValues[0]);
+//
+//                try {
+//                    Log.d("3Debug", "feedValues[1]: " + feedValues[1]);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//                try {
+//                    Log.d("3Debug", "feedValues[2]: " + feedValues[2]);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
 
-                // Rtrive feed
+
+                // Retrive feed
                 if (feedValues.length > 0 && !feedValues[0].isEmpty()) {
 
                     if (feedValues.length > 1) {
@@ -391,8 +437,8 @@ public class RSSFeedActivity extends AppCompatActivity {
                             rssFeed = rssFeedParser.getRSSFeed(feedValues[0], feedValues[1]);
 
                         } catch (Exception e) {
-                            Log.e("Debug", e.getMessage());
-                            Log.e("Debug", e.toString());
+                            Log.e("3Debug", e.getMessage());
+                            Log.e("3Debug", e.toString());
                             e.printStackTrace();
                         }
 
@@ -414,14 +460,14 @@ public class RSSFeedActivity extends AppCompatActivity {
 
             if (result != null) {
 
-                //TODO; Change adapter to update using an object instead of a set of ArrayLists,
-                // update adater
-
                 myadapter.setRssChannels(result);
                 myadapter.notifyDataSetChanged();
 
 
             }
+
+
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 

@@ -19,7 +19,7 @@ import java.util.Locale;
 public class RSSFeedChannelListAdapter extends ArrayAdapter<RSSFeed> {
 
     private Context context;
-    ArrayList<RSSFeed> rssChannels;
+    public static ArrayList<RSSFeed> rssChannels;
 
 
     public RSSFeedChannelListAdapter(Context context, ArrayList<RSSFeed> rssChannels) {
@@ -63,10 +63,12 @@ public class RSSFeedChannelListAdapter extends ArrayAdapter<RSSFeed> {
 
         try {
 
-            // Tue, 02 Jun 2015 17:37:32
-            predefined = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").parse(rssChannelPubDate);
+            if(rssChannelPubDate != null) {
+                // Tue, 02 Jun 2015 17:37:32
+                predefined = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").parse(rssChannelPubDate);
 
-            dateAsString = new SimpleDateFormat("dd/MM/yyyy - hh:mm a", Locale.getDefault()).format(predefined);
+                dateAsString = new SimpleDateFormat("dd/MM/yyyy - hh:mm a", Locale.getDefault()).format(predefined);
+            }
 
 
 
@@ -101,6 +103,6 @@ public class RSSFeedChannelListAdapter extends ArrayAdapter<RSSFeed> {
     }
 
     public void setRssChannels(ArrayList<RSSFeed> rssChannels) {
-        this.rssChannels = rssChannels;
+        RSSFeedChannelListAdapter.rssChannels = rssChannels;
     }
 }

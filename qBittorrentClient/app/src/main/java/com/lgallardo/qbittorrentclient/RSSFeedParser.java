@@ -200,9 +200,6 @@ public class RSSFeedParser {
 
                         } else if (name.equals("pubDate")) {
 
-                            Log.d("Debug", "pubDate - item: " + items.size());
-                            Log.d("Debug", "pubDate - text: " + text);
-
                             // Set item pubDate
                             item.setPubDate(text);
 
