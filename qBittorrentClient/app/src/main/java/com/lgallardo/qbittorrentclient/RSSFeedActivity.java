@@ -12,10 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -82,86 +84,26 @@ public class RSSFeedActivity extends AppCompatActivity {
         }
 
 
-
         ArrayList<RSSFeed> rssChannels = new ArrayList<RSSFeed>();
-//        RSSFeed rssFeed;
-//
-//        // Preferences stuff
-//        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-//
-//        builderPrefs = new StringBuilder();
-//
-//        builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
-//
-//        // Get values from options
-//        rss_feeds = sharedPrefs.getString("rss_feeds", "");
-//
-//        Log.d("Debug", "rss_feeds: " + rss_feeds.toString());
-//
-//        String[] rss_feeds_lines = rss_feeds.split("\\|");
-//
-//
-//        for (int i = 0; rss_feeds_lines.length > i; i++) {
-//
-//
-//            String[] feedValues = rss_feeds_lines[i].split(";");
-//
-//            // New RSSFeed
-//
-//            rssFeed = new RSSFeed();
-//
-//
-//            // Add line
-//            if (feedValues.length > 0 && !feedValues[0].isEmpty()) {
-//
-//                rssFeed.setChannelTitle(feedValues[0]);
-//
-//                if (feedValues.length > 1) {
-//                    rssFeed.setChannelLink(feedValues[1]);
-//                }
-//
-//                if (feedValues.length > 2) {
-//                    rssFeed.setChannelPubDate(feedValues[2]);
-//                }
-//
-//                if (feedValues.length > 3) {
-//
-//                    if(feedValues[3].equals("true")){
-//                        rssFeed.setAutodDownload(true);
-//                    }
-//                    else{
-//                        rssFeed.setAutodDownload(false);
-//                    }
-//                }
-//
-//                if (feedValues.length > 4) {
-//
-//                    if(feedValues[4].equals("true")){
-//                        rssFeed.setNotifyNew(true);
-//                    }
-//                    else{
-//                        rssFeed.setNotifyNew(false);
-//                    }
-//                }
-//
-//
-//                rssChannels.add(rssFeed);
-//
-//            }
-//
-//
-//        }
 
         // Get ListView object from xml
         ListView listView = (ListView) findViewById(R.id.channel_list);
+
+        // Listener for listview
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
+                onListItemClick(v, pos, id);
+            }
+        });
+
 
         myadapter = new RSSFeedChannelListAdapter(this, rssChannels);
 
         listView.setAdapter(myadapter);
 
-//        myadapter.notifyDataSetChanged();
-
-
+        // This is need for the Contextual menu
+        registerForContextMenu(listView);
 
         new rssFeedsTask().execute();
 
@@ -172,11 +114,15 @@ public class RSSFeedActivity extends AppCompatActivity {
     }
 
 
+    private void onListItemClick(View v, int pos, long id) {
+        Log.i("Debug", "onListItemClick id=" + id);
+    }
+
+
     public void saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
 
-        String autoDownloadValue= Boolean.toString(autoDownload);
+        String autoDownloadValue = Boolean.toString(autoDownload);
         String notifyNewValue = Boolean.toString(notifyNew);
-
 
 
         // Save options locally
@@ -184,21 +130,80 @@ public class RSSFeedActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
         // Save rss_feeds
+        if (rss_feeds.equals("")) {
 
+            rss_feeds = title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
 
-        if(rss_feeds == null || rss_feeds.equals("")){
-            editor.putString("rss_feeds", title + ";" + link + ";" +pubDate +  ";" + autoDownloadValue + ";" + notifyNew);
-
-        }
-        else{
-            editor.putString("rss_feeds", rss_feeds + "|" + title + ";" + link + ";" +pubDate +  ";" + autoDownloadValue + ";" + notifyNew);
+        } else {
+            rss_feeds = rss_feeds + "|" + title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
 
         }
 
+        Log.d("Debug", "rss_feeds: " + rss_feeds);
+
+        editor.putString("rss_feeds", rss_feeds);
         // Commit changes
-        editor.commit();
+        editor.apply();
 
 
+    }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            return;
+        }
+
+        if (v.getId() == R.id.channel_list) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+
+            Log.d("Debug", "Chosen: " + info.id);
+            Log.d("Debug", "Chosen: " + info.position);
+
+
+            getMenuInflater().inflate(R.menu.menu_rssrow_contextual, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        Log.d("Debug", "Item: " + getResources().getResourceEntryName(item.getItemId()));
+
+        switch (item.getItemId()) {
+
+            case R.id.action_edit:
+                Log.d("Debug", "Edit!");
+                return true;
+            case R.id.action_delete:
+                Log.d("Debug", "Delete!");
+
+                ArrayList<RSSFeed> rssChannels = myadapter.getRssChannels();
+                rssChannels.remove(info.position);
+
+                myadapter.setRssChannels(rssChannels);
+                myadapter.notifyDataSetChanged();
+
+                // Save all;
+                rss_feeds = "";
+                for(int i =0; i < rssChannels.size(); i++){
+                    RSSFeed rssFeed = rssChannels.get(i);
+
+                    Log.d("Debug", "Saving: " + rssFeed.getChannelTitle() + ";" +  rssFeed.getChannelLink() + ";" +  rssFeed.getChannelPubDate() + ";" +  rssFeed.getAutodDownload() + ";" + rssFeed.getNotifyNew());
+
+
+                    saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
+                }
+
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -221,10 +226,19 @@ public class RSSFeedActivity extends AppCompatActivity {
                 return true;
             case R.id.action_refreshRss:
 
+                mSwipeRefreshLayout.setRefreshing(true);
+
                 new rssFeedsTask().execute();
 
                 return true;
             case R.id.action_settings:
+                return true;
+            case R.id.action_edit:
+                return true;
+            case R.id.action_delete:
+                Log.d("Debug", "Delete!");
+
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -247,7 +261,7 @@ public class RSSFeedActivity extends AppCompatActivity {
 
             rssFeedUrlInput.setText(rssFeed.getChannelLink());
 
-            if(rssFeed.getChannelTitle() != null){
+            if (rssFeed.getChannelTitle() != null) {
                 rssFeedNameInput.setText(rssFeed.getChannelTitle());
             }
 
@@ -275,8 +289,8 @@ public class RSSFeedActivity extends AppCompatActivity {
                         // Get values from dialog view
                         String title = rssFeedNameInput.getText().toString();
                         String link = rssFeedUrlInput.getText().toString();
-                        boolean autoDownload = rssFeedAutoDownloadInput.isChecked() ? true:false;
-                        boolean notifyNew = rssFeedNotifyNewInput.isChecked() ? true:false;
+                        boolean autoDownload = rssFeedAutoDownloadInput.isChecked() ? true : false;
+                        boolean notifyNew = rssFeedNotifyNewInput.isChecked() ? true : false;
 
 
                         //Save RSS feed
@@ -327,7 +341,7 @@ public class RSSFeedActivity extends AppCompatActivity {
 
             Log.d("Debug", "RSS url: " + rssUrl);
 
-            if(rssUrl != null) {
+            if (rssUrl != null) {
 
                 RSSChannelInfoTask rssInfoTask = new RSSChannelInfoTask();
 
@@ -432,7 +446,7 @@ public class RSSFeedActivity extends AppCompatActivity {
 //                }
 
 
-                // Retrive feed
+                // Retrieve feed
                 if (feedValues.length > 0 && !feedValues[0].isEmpty()) {
 
                     if (feedValues.length > 1) {
@@ -443,6 +457,11 @@ public class RSSFeedActivity extends AppCompatActivity {
 
                             RSSFeedParser rssFeedParser = new RSSFeedParser();
                             rssFeed = rssFeedParser.getRSSFeed(feedValues[0], feedValues[1]);
+
+//                            saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
+                            // Set downlaod and notify flags
+                            rssFeed.setAutodDownload(Boolean.getBoolean(feedValues[3]));
+                            rssFeed.setNotifyNew(Boolean.getBoolean(feedValues[4]));
 
                         } catch (Exception e) {
                             Log.e("3Debug", e.getMessage());

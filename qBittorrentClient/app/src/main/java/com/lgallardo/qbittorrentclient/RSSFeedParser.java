@@ -90,7 +90,7 @@ public class RSSFeedParser {
         HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
 
-        Log.d("Debug", "Host: " + uri.getAuthority());
+//        Log.d("Debug", "Host: " + uri.getAuthority());
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(uri.getAuthority());
@@ -180,14 +180,14 @@ public class RSSFeedParser {
                                 rssFeed.setChannelTitle(channelTitle);
                             } else {
                                 item.setTitle(text);
-                                Log.d("Debug", "Title: " + text);
+//                                Log.d("Debug", "Title: " + text);
                             }
                         } else if (name.equals("description")) {
                             if (header) {
-                                Log.d("Debug", "Channel Description: " + text);
+//                                Log.d("Debug", "Channel Description: " + text);
                             } else {
                                 item.setDescription(text);
-                                Log.d("Debug", "Description: " + text);
+//                                Log.d("Debug", "Description: " + text);
                             }
                         } else if (name.equals("link")) {
                             if (header) {
@@ -195,7 +195,7 @@ public class RSSFeedParser {
                                 rssFeed.setChannelLink(channelUrl);
                             } else {
                                 item.setLink(text);
-                                Log.d("Debug", "Link: " + text);
+//                                Log.d("Debug", "Link: " + text);
                             }
 
                         } else if (name.equals("pubDate")) {
@@ -205,7 +205,7 @@ public class RSSFeedParser {
 
                         } else if (name.equals("enclosure")) {
                             item.setTorrentUrl(torrent);
-                            Log.d("Debug", "Enclosure: " + torrent);
+//                            Log.d("Debug", "Enclosure: " + torrent);
                         }
 
                         break;
@@ -277,7 +277,7 @@ public class RSSFeedParser {
         HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
 
-        Log.d("Debug", "Host: " + uri.getAuthority());
+//        Log.d("Debug", "Host: " + uri.getAuthority());
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(uri.getAuthority());

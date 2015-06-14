@@ -27,9 +27,8 @@ public class RSSFeed {
     }
 
     public RSSFeed(String title, String link) {
-         this(title, link, true, false);
+        this(title, link, true, false);
     }
-
 
 
     public String getChannelTitle() {
@@ -64,7 +63,7 @@ public class RSSFeed {
         this.channelPubDate = channelPubDate;
     }
 
-    public boolean isAutodDownload() {
+    public boolean getAutodDownload() {
         return autodDownload;
     }
 
@@ -72,7 +71,7 @@ public class RSSFeed {
         this.autodDownload = autodDownload;
     }
 
-    public boolean isNotifyNew() {
+    public boolean getNotifyNew() {
         return notifyNew;
     }
 
@@ -87,5 +86,6 @@ public class RSSFeed {
     public void setItemCount(int itemCount) {
         this.itemCount = itemCount;
     }
+
 
 }

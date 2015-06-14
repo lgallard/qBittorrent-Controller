@@ -9,5 +9,6 @@
     <string name="dialog_label_rss" translatable="false">Name (optional)</string>
     <string name="checkbox_autodownload_rss">Download new torrents automatically?</string>
     <string name="checkbox_notifynew_rss">Notify new torrents?</string>
+    <string name="action_edit">Edit</string>
 
 </resources>
