@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -77,6 +78,7 @@ public class RSSFeedChannelListAdapter extends ArrayAdapter<RSSFeed> {
         }
 
 
+
         TextView pubDate = (TextView) row.findViewById(R.id.rss_channel_pudDate);
         pubDate.setText(dateAsString);
 
@@ -84,6 +86,15 @@ public class RSSFeedChannelListAdapter extends ArrayAdapter<RSSFeed> {
         TextView items = (TextView) row.findViewById(R.id.rss_channel_item_count);
         items.setText(rssCahnnelNewItems);
 
+
+        ImageView icon = (ImageView) row.findViewById(R.id.icon);
+
+        if (rssChannels.get(position).isResultOk()){
+            icon.setImageResource(R.drawable.okay);
+        }else{
+            icon.setImageResource(R.drawable.error2);
+            pubDate.setText(context.getResources().getString(R.string.error_rss));
+        }
 
 
         return row;

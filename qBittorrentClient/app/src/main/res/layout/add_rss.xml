@@ -14,6 +14,24 @@
 
     android:orientation="vertical">
 
+
+    <TextView
+        android:id="@+id/textRssFeedName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:text="@string/dialog_label_rss"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/rssFeedName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:ems="10" />
+
     <TextView
         android:id="@+id/textUrl"
         android:layout_width="wrap_content"
@@ -21,7 +39,8 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
-        android:text="@string/dialog_add_rss" />
+        android:text="@string/dialog_add_rss"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/rssFeedUrl"
@@ -33,23 +52,6 @@
 
         <requestFocus />
     </EditText>
-
-
-    <TextView
-        android:id="@+id/textRssFeedName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:text="@string/dialog_label_rss" />
-
-    <EditText
-        android:id="@+id/rssFeedName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:ems="10" />
 
     <CheckBox
         android:id="@+id/rssFeedAutodownload"

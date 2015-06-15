@@ -14,6 +14,7 @@ public class RSSFeed {
     public boolean autodDownload;
     public boolean notifyNew;
     public int itemCount;
+    public boolean resultOk;
 
     public RSSFeed() {
 
@@ -87,5 +88,11 @@ public class RSSFeed {
         this.itemCount = itemCount;
     }
 
+    public boolean isResultOk() {
+        return resultOk;
+    }
 
+    public void setResultOk(boolean resultOk) {
+        this.resultOk = resultOk;
+    }
 }

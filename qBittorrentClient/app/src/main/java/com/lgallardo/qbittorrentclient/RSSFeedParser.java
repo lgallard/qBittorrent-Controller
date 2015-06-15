@@ -90,21 +90,23 @@ public class RSSFeedParser {
         HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
 
-//        Log.d("Debug", "Host: " + uri.getAuthority());
-
-        // Making HTTP request
-        HttpHost targetHost = new HttpHost(uri.getAuthority());
-
-        // httpclient = new DefaultHttpClient(httpParameters);
-        // httpclient = new DefaultHttpClient();
-        httpclient = getNewHttpClient();
-
-        httpclient.setParams(httpParameters);
-
-
         RSSFeed rssFeed = new RSSFeed();
+        rssFeed.setChannelTitle(channelTitle);
+        rssFeed.setChannelLink(channelUrl);
+
+        httpclient = null;
 
         try {
+
+            // Making HTTP request
+            HttpHost targetHost = new HttpHost(uri.getAuthority());
+
+            // httpclient = new DefaultHttpClient(httpParameters);
+            // httpclient = new DefaultHttpClient();
+            httpclient = getNewHttpClient();
+
+            httpclient.setParams(httpParameters);
+
 
 //            AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
 //            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.username, this.password);
@@ -155,7 +157,7 @@ public class RSSFeedParser {
                         if (name != null && name.equals("item")) {
                             header = false;
                             item = new RSSFeedItem();
-                            itemCount = itemCount +1;
+                            itemCount = itemCount + 1;
                         }
 
 
@@ -176,9 +178,7 @@ public class RSSFeedParser {
 
 
                         if (name.equals("title")) {
-                            if (header) {
-                                rssFeed.setChannelTitle(channelTitle);
-                            } else {
+                            if (!header) {
                                 item.setTitle(text);
 //                                Log.d("Debug", "Title: " + text);
                             }
@@ -190,10 +190,7 @@ public class RSSFeedParser {
 //                                Log.d("Debug", "Description: " + text);
                             }
                         } else if (name.equals("link")) {
-                            if (header) {
-
-                                rssFeed.setChannelLink(channelUrl);
-                            } else {
+                            if (!header) {
                                 item.setLink(text);
 //                                Log.d("Debug", "Link: " + text);
                             }
@@ -220,21 +217,21 @@ public class RSSFeedParser {
             }
 
             rssFeed.setItems(items);
-
             rssFeed.setItemCount(itemCount);
-
             rssFeed.setChannelPubDate(items.get(0).getPubDate());
-
-
+            rssFeed.setResultOk(true);
 
             is.close();
         } catch (Exception e) {
             Log.e("Debug", "RSSFeedParser - : " + e.toString());
+            rssFeed.setResultOk(false);
         } finally {
             // When HttpClient instance is no longer needed,
             // shut down the connection manager to ensure
             // immediate deallocation of all system resources
-            httpclient.getConnectionManager().shutdown();
+            if (httpclient != null) {
+                httpclient.getConnectionManager().shutdown();
+            }
         }
 
         // return JSON String

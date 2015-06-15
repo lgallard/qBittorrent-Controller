@@ -1,14 +1,13 @@
 <resources>
     <string name="title_activity_rssfeed" translatable="false">RSSFeedActivity</string>
-
-    <string name="hello_world" translatable="false">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_addRss" translatable="false">Add RSS</string>
     <string name="action_rss" translatable="false">RSS</string>
-    <string name="dialog_add_rss" translatable="false">Add RSS feed</string>
+    <string name="dialog_add_rss" translatable="false">RSS url</string>
     <string name="dialog_label_rss" translatable="false">Name (optional)</string>
     <string name="checkbox_autodownload_rss">Download new torrents automatically?</string>
     <string name="checkbox_notifynew_rss">Notify new torrents?</string>
+    <string name="error_rss">Could not retrieve feed</string>
     <string name="action_edit">Edit</string>
 
 </resources>
