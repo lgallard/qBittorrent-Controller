@@ -50,7 +50,6 @@
         android:layout_marginRight="5dp"
         android:ems="10">
 
-        <requestFocus />
     </EditText>
 
     <CheckBox
