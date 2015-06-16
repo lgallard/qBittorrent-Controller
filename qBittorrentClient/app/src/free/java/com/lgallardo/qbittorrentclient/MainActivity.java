@@ -734,9 +734,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 //                    firstFragment.mActionMode.finish();
 //                }
 
-//                qBittorrentRssFeed qrf = new qBittorrentRssFeed();
-//                qrf.execute();
-
             }
 
         } else {

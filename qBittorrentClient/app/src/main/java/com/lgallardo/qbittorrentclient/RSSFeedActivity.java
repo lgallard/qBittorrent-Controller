@@ -116,6 +116,13 @@ public class RSSFeedActivity extends AppCompatActivity {
 
     private void onListItemClick(View v, int pos, long id) {
         Log.i("Debug", "onListItemClick id=" + id);
+        Log.i("Debug", "onListItemClick pos=" + pos);
+
+        Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSItemActivity.class);
+        intent.putExtra("position", pos);
+
+        startActivity(intent);
+
     }
 
 
@@ -277,6 +284,9 @@ public class RSSFeedActivity extends AppCompatActivity {
                 builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        new rssFeedsTask().execute();
+
                     }
                 });
 

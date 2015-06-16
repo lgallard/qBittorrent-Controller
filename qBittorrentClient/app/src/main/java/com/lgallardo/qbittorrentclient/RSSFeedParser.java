@@ -143,7 +143,7 @@ public class RSSFeedParser {
             // Get Channel info
             String name;
             RSSFeedItem item = null;
-            List<RSSFeedItem> items = new ArrayList<RSSFeedItem>();
+            ArrayList<RSSFeedItem> items = new ArrayList<RSSFeedItem>();
 
             // Get items
             while (event != XmlPullParser.END_DOCUMENT) {
@@ -180,7 +180,7 @@ public class RSSFeedParser {
                         if (name.equals("title")) {
                             if (!header) {
                                 item.setTitle(text);
-//                                Log.d("Debug", "Title: " + text);
+                                Log.d("Debug", "PARSER - Title: " + text);
                             }
                         } else if (name.equals("description")) {
                             if (header) {
@@ -203,16 +203,22 @@ public class RSSFeedParser {
                         } else if (name.equals("enclosure")) {
                             item.setTorrentUrl(torrent);
 //                            Log.d("Debug", "Enclosure: " + torrent);
-                        }
+                        } else if(name.equals("item") && !header){
+
+                            if(items != null & item != null){
+                                items.add(item);
+                            }
+
+                    }
 
                         break;
                 }
 
                 event = xmlParser.next();
 
-                if (!header) {
-                    items.add(item);
-                }
+//                if (!header) {
+//                    items.add(item);
+//                }
 
             }
 

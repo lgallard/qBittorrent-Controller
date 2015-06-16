@@ -1,6 +1,6 @@
 package com.lgallardo.qbittorrentclient;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by lgallard on 02/06/15.
@@ -10,7 +10,7 @@ public class RSSFeed {
     public String channelTitle;
     public String channelLink;
     public String channelPubDate;
-    public List<RSSFeedItem> items;
+    public ArrayList<RSSFeedItem> items;
     public boolean autodDownload;
     public boolean notifyNew;
     public int itemCount;
@@ -48,11 +48,11 @@ public class RSSFeed {
         this.channelLink = channelLink;
     }
 
-    public List<RSSFeedItem> getItems() {
+    public ArrayList<RSSFeedItem> getItems() {
         return items;
     }
 
-    public void setItems(List<RSSFeedItem> items) {
+    public void setItems(ArrayList<RSSFeedItem> items) {
         this.items = items;
     }
 
