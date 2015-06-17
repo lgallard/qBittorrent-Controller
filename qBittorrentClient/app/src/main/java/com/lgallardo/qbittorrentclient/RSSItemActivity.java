@@ -1,6 +1,7 @@
 package com.lgallardo.qbittorrentclient;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -96,6 +97,25 @@ public class RSSItemActivity extends AppCompatActivity {
     private void onListItemClick(View v, int pos, long id) {
         Log.i("Debug", "RSS Item - onListItemClick id=" + id);
         Log.i("Debug", "RSS Item - onListItemClick pos=" + pos);
+
+        RSSFeedItem item= myItemsAdapter.getItems().get(pos);
+
+        Log.i("Debug", "RSS Item - Title =" + item.getTitle());
+        Log.i("Debug", "RSS Item - Torrent URL =" + item.getTorrentUrl());
+        Log.i("Debug", "RSS Item - PubDate =" + item.getPubDate());
+
+        Uri uri = Uri.parse(item.getTorrentUrl());
+
+
+        // Send torrent to qBittorrent App
+        Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.MainActivity.class);
+
+//        // Send torrent to generic torrent app
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+        intent.setData(uri);
+        startActivity(intent);
+
 
     }
 

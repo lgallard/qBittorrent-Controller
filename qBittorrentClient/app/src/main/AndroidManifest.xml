@@ -198,18 +198,18 @@
                 <data android:pathPattern=".*\\.xml" />
                 <data android:pathPattern=".*\\.rss" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
 
-                <data android:scheme="http" />
-                <data android:host="feeds.feedburner.com" />
-                <data android:host="feedproxy.google.com" />
-                <data android:host="feeds2.feedburner.com" />
-                <data android:host="feedsproxy.google.com" />
-            </intent-filter>
+                <!--<data android:scheme="http" />-->
+                <!--<data android:host="feeds.feedburner.com" />-->
+                <!--<data android:host="feedproxy.google.com" />-->
+                <!--<data android:host="feeds2.feedburner.com" />-->
+                <!--<data android:host="feedsproxy.google.com" />-->
+            <!--</intent-filter>-->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -233,18 +233,18 @@
                 <data android:pathPattern=".*\\.xml" />
                 <data android:pathPattern=".*\\.rss" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
 
-                <data android:scheme="https" />
-                <data android:host="feeds.feedburner.com" />
-                <data android:host="feedproxy.google.com" />
-                <data android:host="feeds2.feedburner.com" />
-                <data android:host="feedsproxy.google.com" />
-            </intent-filter>
+                <!--<data android:scheme="https" />-->
+                <!--<data android:host="feeds.feedburner.com" />-->
+                <!--<data android:host="feedproxy.google.com" />-->
+                <!--<data android:host="feeds2.feedburner.com" />-->
+                <!--<data android:host="feedsproxy.google.com" />-->
+            <!--</intent-filter>-->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -263,6 +263,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
+                <data android:host="*" />
                 <data android:scheme="itpc" />
                 <data android:scheme="pcast" />
                 <data android:scheme="feed" />
