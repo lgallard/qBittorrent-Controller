@@ -57,6 +57,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.1.1'
     compile 'com.android.support:cardview-v7:22.1.1'
     compile 'com.google.android.gms:play-services:7.3.0'
-    compile files('libs/httpcore-4.3.2.jar')
-    compile files('libs/httpmime-4.3.5.jar')
+    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
+    compile (group: 'org.apache.httpcomponents' , name: 'httpmime' , version: '4.3.5') {
+        exclude module: 'org.apache.httpcomponents:httpclient'}
 }
