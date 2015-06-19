@@ -189,7 +189,7 @@ public class RSSFeedActivity extends AppCompatActivity {
             case R.id.action_edit:
                 Log.d("Debug", "Edit!");
 
-                editRssFeed(info.position, rssChannels.get(info.position));
+                    editRssFeed(info.position, rssChannels.get(info.position));
 
                 return true;
             case R.id.action_delete:

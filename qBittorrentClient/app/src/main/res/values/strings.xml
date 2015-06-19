@@ -9,7 +9,8 @@
     <string name="checkbox_notifynew_rss">Notify new torrents?</string>
     <string name="error_rss">Could not retrieve feed</string>
     <string name="action_edit">Edit</string>
-    <string name="title_activity_rssitem">RSSItemActivity</string>>
+    <string name="title_activity_rssitem">RSSItemActivity</string>
+    <string name="notifications_rss_available">New torrent available</string>>
 
 
 </resources>
