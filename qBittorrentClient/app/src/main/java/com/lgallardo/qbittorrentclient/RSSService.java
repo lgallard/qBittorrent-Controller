@@ -12,7 +12,9 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -162,6 +164,38 @@ public class RSSService extends BroadcastReceiver {
 
 
     }
+
+
+
+    public void saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
+
+        String autoDownloadValue = Boolean.toString(autoDownload);
+        String notifyNewValue = Boolean.toString(notifyNew);
+
+
+        // Save options locally
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+
+        // Save rss_feeds
+        if (rss_feeds.equals("")) {
+
+            rss_feeds = title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
+
+        } else {
+            rss_feeds = rss_feeds + "|" + title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
+
+        }
+
+        Log.d("Debug", "rss_feeds: " + rss_feeds);
+
+        editor.putString("rss_feeds", rss_feeds);
+        // Commit changes
+        editor.apply();
+
+
+    }
+
 
 
     private class qBittorrentCommand extends AsyncTask<String, Integer, String> {
@@ -327,7 +361,7 @@ public class RSSService extends BroadcastReceiver {
                         .setContentTitle(RSSService.context.getString(R.string.notifications_rss_available))
                         .setContentText(info)
                         .setNumber(notify.size())
-                        .setSmallIcon(R.drawable.ic_notification)
+                        .setSmallIcon(R.drawable.ic_rss_notification)
                         .setContentIntent(pIntent)
                         .setAutoCancel(true);
 
@@ -346,22 +380,43 @@ public class RSSService extends BroadcastReceiver {
                     for (int i = 0; i < result.size(); i++) {
 
                         // Notify new torrents
+                        RSSFeed rssFeed = result.get(i);
 
-                        RSSFeed RSSfeed = result.get(i);
-
-                        ArrayList<RSSFeedItem> items = RSSfeed.getItems();
+                        ArrayList<RSSFeedItem> items = rssFeed.getItems();
 
 
                         for (int j = 0; j < items.size(); j++) {
 
                             // Notify new available torrents
-                            if (RSSfeed.getNotifyNew() && j < 4) {
-                                inbox.addLine(items.get(j).getTitle());
+                            if (rssFeed.getNotifyNew() && j < 4) {
+
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
+                                boolean notifyFeed = false;
+
+                                try {
+
+                                    Date channelPubDate = sdf.parse(rssFeed.getChannelPubDate());
+                                    Date itemPubDate = sdf.parse(items.get(j).getPubDate());
+
+                                    // itemPubDate is after channelPubDate
+                                    if(itemPubDate.compareTo(channelPubDate) > 0) {
+                                        notifyFeed = true;
+                                    }
+
+                                }
+                                catch (Exception e){
+                                    Log.e("Debug", "RSS Service: " + e.toString());
+                                }
+
+                                if(notifyFeed) {
+                                    inbox.addLine(items.get(j).getTitle());
+                                }
                             }
 
 
                             // Send torrent for autodownload
-                            if (RSSfeed.getAutodDownload()) {
+                            if (rssFeed.getAutodDownload()) {
 
                                 // Execute the task in background
                                 qBittorrentCommand qtc = new qBittorrentCommand();
@@ -369,16 +424,56 @@ public class RSSService extends BroadcastReceiver {
 
                             }
 
+                            // Save new Channel pubDate
+                            rssFeed.setChannelPubDate(items.get(0).getPubDate());
+
+                            //Save modified feed into result
+                            result.set(i, rssFeed);
+
+
+
+
                         }
 
+                    }
+
+                    // Save all;
+                    rss_feeds = "";
+                    for (int k = 0; k < result.size(); k++) {
+                        RSSFeed rssFeed = result.get(k);
+
+                        saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
                     }
 
 
                     inbox.setSummaryText(RSSService.context.getString(R.string.notifications_total));
 
                     notification = inbox.build();
+
                 } else {
                     notification = builder.getNotification();
+
+                    for (int i = 0; i < result.size(); i++) {
+                        // Notify new torrents
+                        RSSFeed rssFeed = result.get(i);
+
+                        ArrayList<RSSFeedItem> items = rssFeed.getItems();
+
+                        // Save new Channel pubDate
+                        rssFeed.setChannelPubDate(items.get(0).getPubDate());
+
+                        //Save modified feed into result
+                        result.set(i, rssFeed);
+                    }
+
+
+                    // Save all;
+                    rss_feeds = "";
+                    for (int k = 0; k < result.size(); k++) {
+                        RSSFeed rssFeed = result.get(k);
+
+                        saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
+                    }
                 }
 
 

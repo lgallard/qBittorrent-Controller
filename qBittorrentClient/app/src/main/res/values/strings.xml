@@ -5,12 +5,12 @@
     <string name="action_rss" translatable="false">RSS</string>
     <string name="dialog_add_rss" translatable="false">RSS url</string>
     <string name="dialog_label_rss" translatable="false">Name</string>
-    <string name="checkbox_autodownload_rss">Download new torrents automatically?</string>
-    <string name="checkbox_notifynew_rss">Notify new torrents?</string>
-    <string name="error_rss">Could not retrieve feed</string>
-    <string name="action_edit">Edit</string>
-    <string name="title_activity_rssitem">RSSItemActivity</string>
-    <string name="notifications_rss_available">New torrent available</string>>
+    <string name="checkbox_autodownload_rss" translatable="false">Download new torrents automatically?</string>
+    <string name="checkbox_notifynew_rss" translatable="false">Notify new torrents?</string>
+    <string name="error_rss" translatable="false">Could not retrieve feed</string>
+    <string name="action_edit" translatable="false">Edit</string>
+    <string name="title_activity_rssitem" translatable="false">RSSItemActivity</string>
+    <string name="notifications_rss_available" translatable="false">New torrent available</string>>
 
 
 </resources>
