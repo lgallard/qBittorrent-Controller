@@ -226,17 +226,16 @@ public class RSSFeedActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.action_addRss:
                 // Add URL torrent
                 addRssFeed(new RSSFeed());
                 return true;
             case R.id.action_refreshRss:
-
                 mSwipeRefreshLayout.setRefreshing(true);
-
                 new rssFeedsTask().execute();
-
                 return true;
             case R.id.action_settings:
                 return true;
@@ -244,8 +243,6 @@ public class RSSFeedActivity extends AppCompatActivity {
                 return true;
             case R.id.action_delete:
                 Log.d("Debug", "Delete!");
-
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -360,7 +360,6 @@ public class RSSService extends BroadcastReceiver {
                 Notification.Builder builder = new Notification.Builder(context)
                         .setContentTitle(RSSService.context.getString(R.string.notifications_rss_available))
                         .setContentText(info)
-                        .setNumber(notify.size())
                         .setSmallIcon(R.drawable.ic_rss_notification)
                         .setContentIntent(pIntent)
                         .setAutoCancel(true);
@@ -446,7 +445,7 @@ public class RSSService extends BroadcastReceiver {
                     }
 
 
-                    inbox.setSummaryText(RSSService.context.getString(R.string.notifications_total));
+//                    inbox.setSummaryText(RSSService.context.getString(R.string.notifications_total));
 
                     notification = inbox.build();
 

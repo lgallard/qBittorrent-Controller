@@ -1,7 +1,0 @@
-<!-- res/values-v21/styles.xml -->
-<resources>
-    <!-- your theme inherits from the material theme -->
-    <style name="AppTheme" parent="AppTheme.Base">
-        <!-- theme customizations -->
-    </style>
-</resources>

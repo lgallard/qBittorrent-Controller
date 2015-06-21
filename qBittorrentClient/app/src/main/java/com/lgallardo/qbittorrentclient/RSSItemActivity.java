@@ -55,12 +55,12 @@ public class RSSItemActivity extends AppCompatActivity {
 
         ArrayList<RSSFeedItem> items = rssFeed.getItems();
 
-        Log.d("Debug", "Items size: " + items.size());
-
-        for(int i=0; i < items.size(); i++){
-
-            Log.d("Debug", "Item Title: " + items.get(i).getTitle());
-        }
+//        Log.d("Debug", "Items size: " + items.size());
+//
+//        for(int i=0; i < items.size(); i++){
+//
+//            Log.d("Debug", "Item Title: " + items.get(i).getTitle());
+//        }
 
 
         // Get ListView object from xml
@@ -114,6 +114,8 @@ public class RSSItemActivity extends AppCompatActivity {
 //        Intent intent = new Intent(Intent.ACTION_VIEW);
 
         intent.setData(uri);
+
+        intent.putExtra("from", "RSSItemActivity");
         startActivity(intent);
 
 
@@ -131,14 +133,14 @@ public class RSSItemActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
 

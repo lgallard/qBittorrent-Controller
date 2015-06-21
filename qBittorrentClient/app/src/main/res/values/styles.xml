@@ -39,13 +39,14 @@
         <!-- backgroundDrawerSelector (for drawer rows)-->
         <item name="backgroundDrawerSelector">@drawable/background_drawer_selector_light</item>
 
-        backgroundDrawerSelector
-
         <!-- dropShadowBackground (for cardviews)-->
         <item name="dropShadowBackground">@drawable/gmd_shadow_light</item>
 
         <!-- Overlay Contextual menu-->
         <item name="windowActionModeOverlay">true</item>
+
+        <!-- Contextual menu style -->
+        <item name="actionModeStyle">@style/ContextualActionBar</item>
 
     </style>
 
@@ -82,6 +83,10 @@
 
         <!-- Overlay Contextual menu-->
         <item name="windowActionModeOverlay">true</item>
+
+        <!-- Contextual menu style -->
+        <item name="actionModeStyle">@style/ContextualActionBar</item>
+
     </style>
 
     <!-- Toolbar theme -->
@@ -90,5 +95,15 @@
 
 
     </style>
+
+    <!-- Contextual menu style -->
+    <style name="ContextualActionBar" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="background">@color/primary_dark_material_light</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textAppearance">@color/primary</item>
+        <item name="actionMenuTextColor">#fff4f4f4</item>
+
+    </style>
+
 
 </resources>

@@ -38,8 +38,8 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -68,7 +68,7 @@ interface RefreshListener {
     public void swipeRefresh();
 }
 
-public class MainActivity extends ActionBarActivity implements RefreshListener {
+public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Torrent Info TAGs
     protected static final String TAG_NAME = "name";
@@ -232,6 +232,19 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + 5000,
                     notification_period, alarmIntent);
+        }
+
+        // Set alarm for RSS checking, if not set
+        if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), RSSService.class), PendingIntent.FLAG_NO_CREATE) == null) {
+
+            // Set Alarm for checking completed torrents
+            alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(getApplication(), RSSService.class);
+            alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
+
+            alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + 5000,
+                    AlarmManager.INTERVAL_DAY, alarmIntent);
         }
 
         if (qb_version.equals("3.2.x")) {
@@ -782,8 +795,21 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 refresh("completed");
 
             }
-        }
-        catch (NullPointerException npe) {
+
+            if (intent.getStringExtra("from").equals("RSSItemActivity")) {
+
+                // Add torrent (file, url or magnet)
+                addTorrentByIntent(intent);
+
+                // // Activity is visble
+                activityIsVisible = true;
+
+                // Autorefresh
+                refreshCurrent();
+            }
+
+
+        } catch (NullPointerException npe) {
 
         }
     }
@@ -879,6 +905,10 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             case R.id.action_add:
                 // Add URL torrent
                 addUrlTorrent();
+                return true;
+            case R.id.action_rss:
+                // Open RSS Activity
+                startActivity(new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class));
                 return true;
             case R.id.action_pause:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
