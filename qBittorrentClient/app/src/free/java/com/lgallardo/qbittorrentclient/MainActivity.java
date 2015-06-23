@@ -455,6 +455,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         handler = new Handler();
         handler.postDelayed(m_Runnable, refresh_period);
 
+
+        // Load banner
+        loadBanner();
+
     }
 
     // Search bar in Material Design
@@ -728,9 +732,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
-
-            // Load banner
-            loadBanner();
 
             if (hostname.equals("")) {
                 genericOkDialog(R.string.info, R.string.about_help1);
@@ -2041,8 +2042,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             // Set the refresh layout (refresh icon, etc)
             refreshSwipeLayout();
+
             // Actually refresh data
             refreshCurrent();
+
+            // Load banner
+            loadBanner();
 
         }
 

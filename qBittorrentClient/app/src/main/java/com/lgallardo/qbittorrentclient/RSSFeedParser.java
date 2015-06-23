@@ -162,7 +162,13 @@ public class RSSFeedParser {
 
 
                         try {
-                            torrent = xmlParser.getAttributeValue(0);
+                            for(int i =0; i < xmlParser.getAttributeCount(); i++) {
+
+                                if(xmlParser.getAttributeName(i).equals("url")) {
+                                    torrent = xmlParser.getAttributeValue(i);
+                                    break;
+                                }
+                            }
                         } catch (Exception e) {
 
                         }
