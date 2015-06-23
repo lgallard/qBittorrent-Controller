@@ -8,28 +8,21 @@
   Contributors:
       Luis M. Gallardo D. 
 -->
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rss_refresh_layout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?backgroundSelector"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
+
+    <ListView
+        android:id="@+id/items_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?backgroundSelector"
-        android:orientation="vertical">
+        android:layout_below="@id/app_bar">
 
-        <include
-            android:id="@+id/app_bar"
-            layout="@layout/app_bar" />
-
-
-        <ListView
-            android:id="@+id/items_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/app_bar">
-
-        </ListView>
-    </RelativeLayout>
-</android.support.v4.widget.SwipeRefreshLayout>
+    </ListView>
+</RelativeLayout>

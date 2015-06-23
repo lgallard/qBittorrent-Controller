@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -95,14 +94,14 @@ public class RSSItemActivity extends AppCompatActivity {
     }
 
     private void onListItemClick(View v, int pos, long id) {
-        Log.i("Debug", "RSS Item - onListItemClick id=" + id);
-        Log.i("Debug", "RSS Item - onListItemClick pos=" + pos);
+//        Log.i("Debug", "RSS Item - onListItemClick id=" + id);
+//        Log.i("Debug", "RSS Item - onListItemClick pos=" + pos);
 
         RSSFeedItem item= myItemsAdapter.getItems().get(pos);
 
-        Log.i("Debug", "RSS Item - Title =" + item.getTitle());
-        Log.i("Debug", "RSS Item - Torrent URL =" + item.getTorrentUrl());
-        Log.i("Debug", "RSS Item - PubDate =" + item.getPubDate());
+//        Log.i("Debug", "RSS Item - Title =" + item.getTitle());
+//        Log.i("Debug", "RSS Item - Torrent URL =" + item.getTorrentUrl());
+//        Log.i("Debug", "RSS Item - PubDate =" + item.getPubDate());
 
         Uri uri = Uri.parse(item.getTorrentUrl());
 

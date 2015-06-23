@@ -66,7 +66,7 @@ public class RSSFeedChannelListAdapter extends ArrayAdapter<RSSFeed> {
 
             if(rssChannelPubDate != null) {
                 // Tue, 02 Jun 2015 17:37:32
-                predefined = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").parse(rssChannelPubDate);
+                predefined = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss", Locale.ENGLISH).parse(rssChannelPubDate);
 
                 dateAsString = new SimpleDateFormat("dd/MM/yyyy - hh:mm a", Locale.getDefault()).format(predefined);
             }

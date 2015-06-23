@@ -206,4 +206,12 @@
     <string name="settings_qbittorrent_header_dialog_sumary">Общая скорость скачивания\отдачи</string>
     <string name="help_rate_summary">Оцените приложение в Google Play</string>
     <string name="help_rate_title">Оцените это приложение</string>
+    <string name="action_addRss">Добавить RSS</string>
+    <string name="action_edit">Редактировать </string>
+    <string name="action_rss">RSS</string>
+    <string name="checkbox_autodownload_rss">Автоматически скачивать новые торренты?</string>
+    <string name="checkbox_notifynew_rss">Сообщите новые торренты?</string>
+    <string name="dialog_add_rss">RSS url</string>
+    <string name="dialog_label_rss">Имя</string>
+    <string name="error_rss">Не удалось получить RSS</string>
 </resources>

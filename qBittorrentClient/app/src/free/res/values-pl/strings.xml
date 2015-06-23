@@ -208,4 +208,12 @@
     <string name="settings_qbittorrent_header_dialog_sumary"> Załaduj prędkości/pobierz i sumy</string>
     <string name="help_rate_summary">Proszę ocenić aplikację w Google Play</string>
     <string name="help_rate_title">Oceń ten APP</string>
+    <string name="action_addRss">Dodaj RSS</string>
+    <string name="action_edit">Edycja </string>
+    <string name="action_rss">RSS</string>
+    <string name="checkbox_autodownload_rss">Automatyczne pobieranie nowych torrents?</string>
+    <string name="checkbox_notifynew_rss">Informuj nowych torrents?</string>
+    <string name="dialog_add_rss">RSS url</string>
+    <string name="dialog_label_rss">Nazwa</string>
+    <string name="error_rss">Nie udało się uzyskać RSS</string>
 </resources>

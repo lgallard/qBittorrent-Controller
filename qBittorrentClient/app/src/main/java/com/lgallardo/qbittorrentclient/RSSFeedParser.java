@@ -180,7 +180,7 @@ public class RSSFeedParser {
                         if (name.equals("title")) {
                             if (!header) {
                                 item.setTitle(text);
-                                Log.d("Debug", "PARSER - Title: " + text);
+//                                Log.d("Debug", "PARSER - Title: " + text);
                             }
                         } else if (name.equals("description")) {
                             if (header) {

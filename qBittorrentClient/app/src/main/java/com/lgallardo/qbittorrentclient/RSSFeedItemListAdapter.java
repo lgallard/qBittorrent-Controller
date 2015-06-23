@@ -60,7 +60,7 @@ public class RSSFeedItemListAdapter extends ArrayAdapter<RSSFeedItem> {
 
             if(itemPubDate != null) {
                 // Tue, 02 Jun 2015 17:37:32
-                predefined = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").parse(itemPubDate);
+                predefined = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss", Locale.ENGLISH).parse(itemPubDate);
 
                 dateAsString = new SimpleDateFormat("dd/MM/yyyy - hh:mm a", Locale.getDefault()).format(predefined);
             }

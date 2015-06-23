@@ -53,16 +53,16 @@
     </EditText>
 
     <CheckBox
-        android:id="@+id/rssFeedAutodownload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/checkbox_autodownload_rss" />
-
-    <CheckBox
         android:id="@+id/rssFeedNotifyNew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/checkbox_notifynew_rss" />
+
+    <CheckBox
+        android:id="@+id/rssFeedAutodownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/checkbox_autodownload_rss" />
 
 
 </LinearLayout>

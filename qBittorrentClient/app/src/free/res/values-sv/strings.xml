@@ -34,6 +34,8 @@
     <string name="torrentDeletedDrive">Torrent och uppgifterna raderas!</string>
     <string name="increasePrioTorrent">Prioritet ökat!</string>
     <string name="decreasePrioTorrent">Prioritet minskat!</string>
+    <string name="drawer_open">Öppen navigering låda</string>
+    <string name="drawer_close">Stäng navigering låda</string>
     <string name="getQBittorrentPrefefrences">Att få alternativ...</string>
     <string name="setQBittorrentPrefefrences">Alternativ sparade!</string>
     <string name="setUploadRateLimit">Uppladdningshastighetsgränsen har satts</string>
@@ -206,4 +208,12 @@
     <string name="help_license">© Luis M. Gallardo D. \n\nPublicerad under GPL v3</string>
     <string name="help_rate_summary">Bedöm appen i Google Play</string>
     <string name="help_rate_title">Betygsätt den här appen</string>
+    <string name="action_addRss">lägg RSS</string>
+    <string name="action_edit">Redigera</string>
+    <string name="action_rss">RSS</string>
+    <string name="checkbox_autodownload_rss">Ladda ner nya torrents automatiskt?</string>
+    <string name="checkbox_notifynew_rss">Meddela nya torrents?</string>
+    <string name="dialog_add_rss">RSS url</string>
+    <string name="dialog_label_rss">Namn</string>
+    <string name="error_rss">Det gick inte att få RSS</string>
 </resources>

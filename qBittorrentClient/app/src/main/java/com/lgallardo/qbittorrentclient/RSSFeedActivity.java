@@ -115,13 +115,16 @@ public class RSSFeedActivity extends AppCompatActivity {
 
 
     private void onListItemClick(View v, int pos, long id) {
-        Log.i("Debug", "onListItemClick id=" + id);
-        Log.i("Debug", "onListItemClick pos=" + pos);
+//        Log.i("Debug", "onListItemClick id=" + id);
+//        Log.i("Debug", "onListItemClick pos=" + pos);
 
-        Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSItemActivity.class);
-        intent.putExtra("position", pos);
+        if(myadapter.getRssChannels().get(pos).getItemCount() > 0) {
 
-        startActivity(intent);
+            Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSItemActivity.class);
+            intent.putExtra("position", pos);
+
+            startActivity(intent);
+        }
 
     }
 
@@ -146,7 +149,7 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         }
 
-        Log.d("Debug", "rss_feeds: " + rss_feeds);
+//        Log.d("Debug", "rss_feeds: " + rss_feeds);
 
         editor.putString("rss_feeds", rss_feeds);
         // Commit changes
@@ -167,8 +170,8 @@ public class RSSFeedActivity extends AppCompatActivity {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
 
-            Log.d("Debug", "Chosen: " + info.id);
-            Log.d("Debug", "Chosen: " + info.position);
+//            Log.d("Debug", "Chosen: " + info.id);
+//            Log.d("Debug", "Chosen: " + info.position);
 
 
             getMenuInflater().inflate(R.menu.menu_rssrow_contextual, menu);
@@ -179,7 +182,7 @@ public class RSSFeedActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        Log.d("Debug", "Item: " + getResources().getResourceEntryName(item.getItemId()));
+//        Log.d("Debug", "Item: " + getResources().getResourceEntryName(item.getItemId()));
 
 
         ArrayList<RSSFeed> rssChannels = myadapter.getRssChannels();
@@ -187,13 +190,13 @@ public class RSSFeedActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.action_edit:
-                Log.d("Debug", "Edit!");
+//                Log.d("Debug", "Edit!");
 
                     editRssFeed(info.position, rssChannels.get(info.position));
 
                 return true;
             case R.id.action_delete:
-                Log.d("Debug", "Delete!");
+//                Log.d("Debug", "Delete!");
 
                 rssChannels.remove(info.position);
 
@@ -242,7 +245,7 @@ public class RSSFeedActivity extends AppCompatActivity {
             case R.id.action_edit:
                 return true;
             case R.id.action_delete:
-                Log.d("Debug", "Delete!");
+//                Log.d("Debug", "Delete!");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -291,7 +294,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User accepted the dialog
-                        Log.d("Debug", "RSS feed: " + rssFeedUrlInput.getText().toString());
+//                        Log.d("Debug", "RSS feed: " + rssFeedUrlInput.getText().toString());
 
                         // Get values from dialog view
                         String title = rssFeedNameInput.getText().toString();
@@ -372,7 +375,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User accepted the dialog
-                        Log.d("Debug", "RSS feed: " + rssFeedUrlInput.getText().toString());
+//                        Log.d("Debug", "RSS feed: " + rssFeedUrlInput.getText().toString());
 
                         // Get values from dialog view
                         String title = rssFeedNameInput.getText().toString();
@@ -450,7 +453,7 @@ public class RSSFeedActivity extends AppCompatActivity {
             // Add Rss from url
             String rssUrl = intent.getDataString();
 
-            Log.d("Debug", "RSS url: " + rssUrl);
+//            Log.d("Debug", "RSS url: " + rssUrl);
 
             if (rssUrl != null) {
 
@@ -503,8 +506,8 @@ public class RSSFeedActivity extends AppCompatActivity {
 
 
             if (result != null) {
-                Log.d("Debug", "> Channel Title: " + result.getChannelTitle());
-                Log.d("Debug", "> Channel Link: " + result.getChannelLink());
+//                Log.d("Debug", "> Channel Title: " + result.getChannelTitle());
+//                Log.d("Debug", "> Channel Link: " + result.getChannelLink());
 
 
                 rssInfo = result;
@@ -567,11 +570,11 @@ public class RSSFeedActivity extends AppCompatActivity {
 //                            saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
                             // Set downlaod and notify flags
 
-                            Log.d("Debug", "feedValues[0]: " + feedValues[0]);
-                            Log.d("Debug", "feedValues[1]: " + feedValues[1]);
-                            Log.d("Debug", "feedValues[2]: " + feedValues[2]);
-                            Log.d("Debug", "feedValues[3]: " + feedValues[3]);
-                            Log.d("Debug", "feedValues[4]: " + feedValues[4]);
+//                            Log.d("Debug", "feedValues[0]: " + feedValues[0]);
+//                            Log.d("Debug", "feedValues[1]: " + feedValues[1]);
+//                            Log.d("Debug", "feedValues[2]: " + feedValues[2]);
+//                            Log.d("Debug", "feedValues[3]: " + feedValues[3]);
+//                            Log.d("Debug", "feedValues[4]: " + feedValues[4]);
 
 
                             rssFeed.setAutodDownload(Boolean.parseBoolean(feedValues[3]));

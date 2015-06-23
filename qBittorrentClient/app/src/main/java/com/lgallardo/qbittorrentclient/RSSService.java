@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Created by lgallard on 2/22/15.
@@ -390,7 +391,7 @@ public class RSSService extends BroadcastReceiver {
                             if (rssFeed.getNotifyNew() && j < 4) {
 
 
-                                SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
+                                SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
                                 boolean notifyFeed = false;
 
                                 try {
@@ -445,7 +446,7 @@ public class RSSService extends BroadcastReceiver {
                     }
 
 
-//                    inbox.setSummaryText(RSSService.context.getString(R.string.notifications_total));
+                    inbox.setSummaryText(result.get(0).getChannelTitle());
 
                     notification = inbox.build();
 
