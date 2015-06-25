@@ -552,6 +552,28 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
             }
+            if (fm.getBackStackEntryCount() == 0 && (fm.findFragmentByTag("secondFragment") instanceof TorrentDetailsFragment)) {
+
+                // Create the about fragment
+                aboutFragment = new AboutFragment();
+
+                fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
+
+                fragmentTransaction.commit();
+
+                // Se titile
+                setTitle(navigationDrawerItemTitles[drawerList.getCheckedItemPosition()]);
+
+                // Close Contextual Action Bar
+                if (firstFragment != null && firstFragment.mActionMode != null) {
+                    firstFragment.mActionMode.finish();
+                }
+
+                // Refresh current list
+                refreshCurrent();
+
+            }
+
         }
         catch (Exception e) {
 
@@ -2160,6 +2182,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             jParser.setCookie(cookie);
 
             try {
+
+                httpStatusCode = 0;
 
                 jParser.postCommand(params[0], params[1]);
 
