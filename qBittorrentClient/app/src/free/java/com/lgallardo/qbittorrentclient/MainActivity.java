@@ -563,7 +563,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     @Override
-    public void onPause() {
+        public void onPause() {
         super.onPause();
         activityIsVisible = false;
     }

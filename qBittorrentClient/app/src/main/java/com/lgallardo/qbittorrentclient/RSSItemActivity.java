@@ -2,6 +2,7 @@ package com.lgallardo.qbittorrentclient;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,25 @@ public class RSSItemActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        // Set Theme (It must be fore inflating or setContentView)
+        if (MainActivity.dark_ui) {
+            this.setTheme(R.style.Theme_Dark);
+
+            if (Build.VERSION.SDK_INT >= 21) {
+                getWindow().setNavigationBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground));
+                getWindow().setStatusBarColor(getResources().getColor(R.color.Theme_Dark_toolbarBackground));
+            }
+        } else {
+            this.setTheme(R.style.Theme_Light);
+
+            if (Build.VERSION.SDK_INT >= 21) {
+                getWindow().setNavigationBarColor(getResources().getColor(R.color.primary));
+            }
+
+        }
+
         setContentView(R.layout.activity_rssitem);
 
 
@@ -31,7 +51,17 @@ public class RSSItemActivity extends AppCompatActivity {
 
         if (MainActivity.dark_ui) {
             toolbar.setBackgroundColor(getResources().getColor(R.color.Theme_Dark_primary));
+
+            // Force backgroud (for some weird reason this activity is not taking the dark background)
+
+            // Find the root view
+            View root = toolbar.getRootView();
+
+            // Set the color
+            root.setBackgroundColor(getResources().getColor(R.color.Theme_Dark_windowBackground));
         }
+
+
 
         setSupportActionBar(toolbar);
 

@@ -167,7 +167,6 @@ public class RSSService extends BroadcastReceiver {
     }
 
 
-
     public void saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
 
         String autoDownloadValue = Boolean.toString(autoDownload);
@@ -196,7 +195,6 @@ public class RSSService extends BroadcastReceiver {
 
 
     }
-
 
 
     private class qBittorrentCommand extends AsyncTask<String, Integer, String> {
@@ -348,7 +346,7 @@ public class RSSService extends BroadcastReceiver {
         @Override
         protected void onPostExecute(ArrayList<RSSFeed> result) {
 
-            if (result != null) {
+            if (result != null && result.size() > 0) {
 
                 String info = "";
 
@@ -400,16 +398,15 @@ public class RSSService extends BroadcastReceiver {
                                     Date itemPubDate = sdf.parse(items.get(j).getPubDate());
 
                                     // itemPubDate is after channelPubDate
-                                    if(itemPubDate.compareTo(channelPubDate) > 0) {
+                                    if (itemPubDate.compareTo(channelPubDate) > 0) {
                                         notifyFeed = true;
                                     }
 
-                                }
-                                catch (Exception e){
+                                } catch (Exception e) {
                                     Log.e("Debug", "RSS Service: " + e.toString());
                                 }
 
-                                if(notifyFeed) {
+                                if (notifyFeed) {
                                     inbox.addLine(items.get(j).getTitle());
                                 }
                             }
@@ -429,8 +426,6 @@ public class RSSService extends BroadcastReceiver {
 
                             //Save modified feed into result
                             result.set(i, rssFeed);
-
-
 
 
                         }

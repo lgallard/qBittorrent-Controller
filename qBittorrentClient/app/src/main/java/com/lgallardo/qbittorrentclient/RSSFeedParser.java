@@ -60,7 +60,7 @@ public class RSSFeedParser {
         Uri uri = Uri.parse(channelUrl);
         int event;
         String text = null;
-        String torrent = null;
+        String  torrent = null;
         boolean header = true;
 
         this.itemCount = 0;
