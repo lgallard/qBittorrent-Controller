@@ -20,6 +20,7 @@
     <string name="action_resume_all">Resume all</string>
     <string name="action_pause_all">Pause all</string>
     <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
     <string name="action_delete_drive">Delete data</string>
     <string name="action_increase_priority">Increase priority</string>
     <string name="action_decrease_priority">Decrease priority</string>
@@ -214,5 +215,12 @@
     <string name="help_license">© Luis M. Gallardo D. \n\nPublished under GPL v3</string>
     <string name="help_rate_title">Rate this app</string>
     <string name="help_rate_summary">Please rate the app in Google play</string>
-
+    <string name="action_addRss" >Add RSS</string>
+    <string name="action_rss">RSS</string>
+    <string name="dialog_add_rss">RSS url</string>
+    <string name="dialog_label_rss">Name</string>
+    <string name="checkbox_autodownload_rss">Download new torrents automatically?</string>
+    <string name="checkbox_notifynew_rss">Notify new torrents?</string>
+    <string name="notifications_rss_available" translatable="false">New torrents available</string>
+    <string name="error_rss">Could not get RSS</string>
 </resources>

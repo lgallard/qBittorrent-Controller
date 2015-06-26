@@ -39,13 +39,15 @@
         <!-- backgroundDrawerSelector (for drawer rows)-->
         <item name="backgroundDrawerSelector">@drawable/background_drawer_selector_light</item>
 
-        backgroundDrawerSelector
-
         <!-- dropShadowBackground (for cardviews)-->
         <item name="dropShadowBackground">@drawable/gmd_shadow_light</item>
 
         <!-- Overlay Contextual menu-->
         <item name="windowActionModeOverlay">true</item>
+
+        <!-- Contextual menu style -->
+        <item name="actionModeBackground">@color/primary</item>
+        <item name="actionModeStyle">@style/ContextualActionBar</item>
 
     </style>
 
@@ -82,13 +84,28 @@
 
         <!-- Overlay Contextual menu-->
         <item name="windowActionModeOverlay">true</item>
+
+        <!-- Contextual menu style -->
+        <item name="actionModeBackground">?attr/colorAccent</item>
+        <item name="actionModeStyle">@style/ContextualActionBar</item>
+
     </style>
 
     <!-- Toolbar theme -->
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">#fff4f4f4</item>
 
+    </style>
+
+    <!-- Contextual menu style -->
+    <style name="ContextualActionBar" parent="Widget.AppCompat.ActionMode">
+        <!--<item name="background">@color/primary_dark_material_light</item>-->
+        <item name="titleTextStyle">@style/my_actionmode_title_style</item>
 
     </style>
 
+
+    <style name="my_actionmode_title_style" parent="TextAppearance.AppCompat.Widget.ActionMode.Title">
+        <item name="android:textColor">#fff4f4f4</item>
+    </style>
 </resources>

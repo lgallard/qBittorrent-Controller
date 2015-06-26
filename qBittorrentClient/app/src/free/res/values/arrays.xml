@@ -11,10 +11,10 @@
         <item name="3">3</item>
     </string-array>
     <string-array name="autorefresh">
-        <item name="1">5 seconds</item>
-        <item name="2">10 seconds</item>
-        <item name="3">15 seconds</item>
-        <item name="4">20 seconds</item>
+        <item name="1">1 seconds</item>
+        <item name="2">2 seconds</item>
+        <item name="3">5 seconds</item>
+        <item name="4">10 seconds</item>
         <item name="5">30 seconds</item>
         <item name="6">1 minute</item>
         <item name="7">2 minutes</item>
@@ -94,5 +94,4 @@
         <item>Get Pro</item>
         <item>Help</item>
     </string-array>
-
 </resources>

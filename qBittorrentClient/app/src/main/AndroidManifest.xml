@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   Copyright (c) 2014.2015 Luis M. Gallardo D..
   All rights reserved. This program and the accompanying materials
   are made available under the terms of the GNU Public License v3.0
@@ -9,7 +10,7 @@
       Luis M. Gallardo D.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lgallardo.qbittorrentclient">
+    package="com.lgallardo.qbittorrentclient" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -20,18 +21,21 @@
     <!-- Permission to start Alarm on device reboot -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- Permission needed to open downloaded .torrent files -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -145,29 +149,31 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/Theme_Light"></activity>
+            android:theme="@style/Theme_Light" />
         <activity
             android:name=".OptionsActivity"
             android:label="Options"
-            android:theme="@style/Theme_Light"></activity>
+            android:theme="@style/Theme_Light" />
         <activity android:name=".HelpActivity" />
-        <activity android:name=".AboutActivity">
+        <activity android:name=".AboutActivity" >
             <intent-filter>
                 <action android:name="${applicationId}.AboutActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent"></activity>
+            android:theme="@android:style/Theme.Translucent" />
 
-        <receiver android:name=".NotifierService"></receiver>
+        <receiver android:name=".NotifierService" />
+        <receiver android:name=".RSSService" />
 
-        <!--Set alarm on boot -->
+        <!-- Set alarm on boot -->
         <receiver
             android:name=".DeviceBootReceiver"
-            android:enabled="true">
+            android:enabled="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -177,6 +183,176 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         />
+
+        <!-- RSS activity -->
+        <activity
+            android:name=".RSSFeedActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.xml" />
+                <data android:pathPattern=".*\\.rss" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:mimeType="text/xml" />
+                <data android:mimeType="application/rss+xml" />
+                <data android:mimeType="application/atom+xml" />
+                <data android:mimeType="application/xml" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.xml" />
+                <data android:pathPattern=".*\\.rss" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:mimeType="text/xml" />
+                <data android:mimeType="application/rss+xml" />
+                <data android:mimeType="application/atom+xml" />
+                <data android:mimeType="application/xml" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:host="*" />
+                <data android:scheme="itpc" />
+                <data android:scheme="pcast" />
+                <data android:scheme="feed" />
+                <data android:scheme="rss" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="*"
+                    android:pathPattern=".*xml"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*rss"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*feed.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*podcast.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*Podcast.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*rss.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*RSS.*"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="*"
+                    android:pathPattern=".*xml"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*rss"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*feed.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*podcast.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*Podcast.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*rss.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*RSS.*"
+                    android:scheme="https" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:mimeType="text/xml"
+                    android:scheme="http" />
+                <data
+                    android:mimeType="application/rss+xml"
+                    android:scheme="http" />
+                <data
+                    android:mimeType="application/atom+xml"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:mimeType="text/xml"
+                    android:scheme="https" />
+                <data
+                    android:mimeType="application/rss+xml"
+                    android:scheme="https" />
+                <data
+                    android:mimeType="application/atom+xml"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".RSSItemActivity"
+            android:label="@string/app_name">
+        </activity>
     </application>
 
 </manifest>

@@ -8,12 +8,11 @@
   Contributors:
       Luis M. Gallardo D. 
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    tools:context=".TorrentActionsActivity">
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/details_refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -465,4 +464,4 @@
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

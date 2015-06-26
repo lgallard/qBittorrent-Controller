@@ -36,8 +36,8 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,7 +68,7 @@ interface RefreshListener {
     public void swipeRefresh();
 }
 
-public class MainActivity extends ActionBarActivity implements RefreshListener {
+public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Torrent Info TAGs
     protected static final String TAG_NAME = "name";
@@ -232,6 +232,19 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + 5000,
                     notification_period, alarmIntent);
+        }
+
+        // Set alarm for RSS checking, if not set
+        if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), RSSService.class), PendingIntent.FLAG_NO_CREATE) == null) {
+
+            // Set Alarm for checking completed torrents
+            alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(getApplication(), RSSService.class);
+            alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
+
+            alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + 5000,
+                    AlarmManager.INTERVAL_DAY, alarmIntent);
         }
 
         if (qb_version.equals("3.2.x")) {
@@ -442,6 +455,10 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         handler = new Handler();
         handler.postDelayed(m_Runnable, refresh_period);
 
+
+        // Load banner
+        loadBanner();
+
     }
 
     // Search bar in Material Design
@@ -539,6 +556,28 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 }
 
             }
+
+            if (fm.getBackStackEntryCount() == 0 && (fm.findFragmentByTag("secondFragment") instanceof TorrentDetailsFragment)) {
+
+                // Create the about fragment
+                aboutFragment = new AboutFragment();
+
+                fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
+
+                fragmentTransaction.commit();
+
+                // Se titile
+                setTitle(navigationDrawerItemTitles[drawerList.getCheckedItemPosition()]);
+
+                // Close Contextual Action Bar
+                if (firstFragment != null && firstFragment.mActionMode != null) {
+                    firstFragment.mActionMode.finish();
+                }
+
+                // Refresh current list
+                refreshCurrent();
+
+            }
         }
         catch (Exception e) {
 
@@ -546,7 +585,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
     }
 
     @Override
-    public void onPause() {
+        public void onPause() {
         super.onPause();
         activityIsVisible = false;
     }
@@ -716,9 +755,6 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
-            // Load banner
-            loadBanner();
-
             if (hostname.equals("")) {
                 genericOkDialog(R.string.info, R.string.about_help1);
             } else {
@@ -782,8 +818,21 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
                 refresh("completed");
 
             }
-        }
-        catch (NullPointerException npe) {
+
+            if (intent.getStringExtra("from").equals("RSSItemActivity")) {
+
+                // Add torrent (file, url or magnet)
+                addTorrentByIntent(intent);
+
+                // // Activity is visble
+                activityIsVisible = true;
+
+                // Autorefresh
+                refreshCurrent();
+            }
+
+
+        } catch (NullPointerException npe) {
 
         }
     }
@@ -879,6 +928,10 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             case R.id.action_add:
                 // Add URL torrent
                 addUrlTorrent();
+                return true;
+            case R.id.action_rss:
+                // Open RSS Activity
+                startActivity(new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class));
                 return true;
             case R.id.action_pause:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
@@ -2011,8 +2064,12 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
 
             // Set the refresh layout (refresh icon, etc)
             refreshSwipeLayout();
+
             // Actually refresh data
             refreshCurrent();
+
+            // Load banner
+            loadBanner();
 
         }
 
@@ -2035,7 +2092,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(false);
             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.clearAnimation();
-            com.lgallardo.qbittorrentclient.TorrentDetailsFragment  .mSwipeRefreshLayout.setEnabled(true);
+            com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setEnabled(true);
         }
 
         listViewRefreshing = false;
@@ -2135,6 +2192,8 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             jParser.setCookie(cookie);
 
             try {
+
+                httpStatusCode = 0;
 
                 jParser.postCommand(params[0], params[1]);
 
@@ -2285,7 +2344,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
         }
     }
 
-    // Here is where the action happens
+        // Here is where the action happens
     private class qBittorrentTask extends AsyncTask<String, Integer, Torrent[]> {
 
         @Override
@@ -2389,7 +2448,7 @@ public class MainActivity extends ActionBarActivity implements RefreshListener {
             } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
                 torrents = null;
-                Log.e("JSONParserStatusCode", e.toString());
+                Log.e("JSONParserStatusCode >", e.toString());
 
             } catch (Exception e) {
                 torrents = null;

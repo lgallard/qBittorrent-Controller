@@ -201,4 +201,12 @@
     <string name="help_license">© Luis M. Gallardo D. \n\nPublicado sob GPL v3</string>
     <string name="help_rate_summary">Por favor, classifique o aplicativo no Google Play</string>
     <string name="help_rate_title">Avalie este aplicativo</string>
+    <string name="action_addRss">Adicionar RSS</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_rss">RSS</string>
+    <string name="checkbox_autodownload_rss">Baixar automaticamente novos torrents?</string>
+    <string name="checkbox_notifynew_rss">Notificar novos torrents?</string>
+    <string name="dialog_add_rss">RSS url</string>
+    <string name="dialog_label_rss">Nome</string>
+    <string name="error_rss">Não foi possível obter RSS</string>
 </resources>
