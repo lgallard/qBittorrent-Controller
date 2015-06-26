@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
     <string name="app_name">qBittorrent Client</string>
     <string name="app_shortname">Client</string>
     <string name="action_settings">Ustawienia</string>
@@ -216,4 +215,5 @@
     <string name="dialog_add_rss">RSS url</string>
     <string name="dialog_label_rss">Nazwa</string>
     <string name="error_rss">Nie udało się uzyskać RSS</string>
+    <string name="settings_qbittorrent_advanced">Opcje zaawansowane...</string>
 </resources>

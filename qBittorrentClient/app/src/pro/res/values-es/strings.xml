@@ -9,7 +9,6 @@
       Luis M. Gallardo D.
 -->
 <resources>
-
     <string name="app_name">qBittorrent Client Pro</string>
     <string name="app_shortname">Client Pro</string>
     <string name="action_settings">Ajustes</string>
@@ -218,4 +217,5 @@
     <string name="dialog_add_rss">RSS url</string>
     <string name="dialog_label_rss">Nombre </string>
     <string name="error_rss">No se pudo obtener RSS</string>
+    <string name="settings_qbittorrent_advanced">Opciones avanzadas...</string>
 </resources>

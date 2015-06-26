@@ -208,4 +208,5 @@
     <string name="dialog_add_rss">RSS url</string>
     <string name="dialog_label_rss">Namn</string>
     <string name="error_rss">Det gick inte att få RSS</string>
+    <string name="settings_qbittorrent_advanced">Alternativ avancerat...</string>
 </resources>

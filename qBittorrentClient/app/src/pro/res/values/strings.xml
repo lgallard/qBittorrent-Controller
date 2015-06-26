@@ -116,6 +116,7 @@
     <string name="torrent_priority_menu">Priority...</string>
     <string name="torrent_details_seq_download">Sequential download</string>
     <string name="torrent_details_cant_general_ino">General info couldn\'t be retrieved</string>
+    <string name="settings_qbittorrent_advanced">Advanced...</string>
     <string name="settings_qbittorrent_account_category">Accounts</string>
     <string name="settings_qbittorrent_currentServer_title">Choose a qBittorrent server</string>
     <string name="settings_qbittorrent_currentServer_summary">qBittorrent Server</string>
