@@ -346,6 +346,8 @@ public class RSSService extends BroadcastReceiver {
         @Override
         protected void onPostExecute(ArrayList<RSSFeed> result) {
 
+            boolean gotItems= false;
+
             if (result != null && result.size() > 0) {
 
                 String info = "";
@@ -366,7 +368,7 @@ public class RSSService extends BroadcastReceiver {
 
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 
-                Notification notification;
+                Notification notification = null;
 
                 if (android.os.Build.VERSION.SDK_INT >= 16) {
 
@@ -381,6 +383,10 @@ public class RSSService extends BroadcastReceiver {
                         RSSFeed rssFeed = result.get(i);
 
                         ArrayList<RSSFeedItem> items = rssFeed.getItems();
+
+                        if(items.size() > 0){
+                            gotItems = true;
+                        }
 
 
                         for (int j = 0; j < items.size(); j++) {
@@ -441,9 +447,10 @@ public class RSSService extends BroadcastReceiver {
                     }
 
 
-                    inbox.setSummaryText(result.get(0).getChannelTitle());
-
-                    notification = inbox.build();
+                    if(gotItems) {
+                        inbox.setSummaryText(result.get(0).getChannelTitle());
+                        notification = inbox.build();
+                    }
 
                 } else {
                     notification = builder.getNotification();
@@ -471,8 +478,9 @@ public class RSSService extends BroadcastReceiver {
                     }
                 }
 
-
-                notificationManager.notify(0, notification);
+                if(gotItems && notification != null) {
+                    notificationManager.notify(0, notification);
+                }
 
             }
 
