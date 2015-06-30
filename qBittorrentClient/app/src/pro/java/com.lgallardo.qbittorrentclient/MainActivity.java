@@ -247,13 +247,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     AlarmManager.INTERVAL_DAY, alarmIntent);
         }
 
-        if (qb_version.equals("3.2.x")) {
-            if (cookie == null || cookie.equals("")) {
-                new qBittorrentCookie().execute();
-            }
-        } else {
-            cookie = "";
-        }
+//        if (qb_version.equals("3.2.x")) {
+//            if (cookie == null || cookie.equals("")) {
+//                new qBittorrentCookie().execute();
+//            }
+//        } else {
+//            cookie = "";
+//        }
 
         // Set Theme (It must be fore inflating or setContentView)
         if (dark_ui) {
@@ -739,9 +739,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             qbQueryString = "query";
             params[0] = qbQueryString + "/torrents?filter=" + state;
 
-            if (cookie == null || cookie.equals("")) {
-                new qBittorrentCookie().execute();
-            }
         }
 
         params[1] = state;
@@ -758,10 +755,21 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 genericOkDialog(R.string.info, R.string.about_help1);
             } else {
 
-                // Execute the task in background
-                qBittorrentTask qtt = new qBittorrentTask();
 
-                qtt.execute(params);
+                if (qb_version.equals("3.2.x") && (cookie == null || cookie.equals(""))) {
+                    new qBittorrentCookieTask().execute(params);
+
+
+
+                }else {
+
+                    // Execute the task in background
+                    qBittorrentTask qtt = new qBittorrentTask();
+
+                    qtt.execute(params);
+                }
+
+
 
                 // TODO: Delete
 //                // Close Contextual Action Bar
@@ -1171,20 +1179,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Get values from preferences
             getSettings();
 
-            if (qb_version.equals("3.2.x")) {
-                if (cookie == null || cookie.equals("")) {
-                    new qBittorrentCookie().execute();
-                }
-            } else {
-                cookie = "";
-            }
+            // Get new cookie
+                cookie = null;
 
             // redraw menu
             invalidateOptionsMenu();
 
-            // Select "All" torrents list
-//            selectItem(0);
-//            refresh();
 
 
             // Get options from server and save them as shared preferences
@@ -1194,6 +1194,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             // Now it can be refreshed
             canrefresh = true;
+
 
             // Save completedHashes
             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -1279,6 +1280,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //        }
 
         if (requestCode == HELP_CODE) {
+
             // Now it can be refreshed
             canrefresh = true;
         }
@@ -1294,10 +1296,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 // Refresh state
                 refresh(stateBefore);
+
+            }else{
+
+                refresh();
             }
 
         }
         if (resultCode == RESULT_CANCELED) {
+
             // Refresh
             refresh();
         }
@@ -2112,10 +2119,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Here is where the action happens
-    private class qBittorrentCookie extends AsyncTask<Void, Integer, String[]> {
+    private class qBittorrentCookieTask extends AsyncTask<String, Integer, String[]> {
 
         @Override
-        protected String[] doInBackground(Void... params) {
+        protected String[] doInBackground(String... params) {
 
             // Get values from preferences
             getSettings();
@@ -2163,6 +2170,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             // Commit changes
             editor.apply();
+
+
+//            Log.d("Debug", "qBittorrentCookieTask: " + cookie);
+
+            // Execute the task in background
+            qBittorrentTask qtt = new qBittorrentTask();
+
+            qtt.execute(params);
 
         }
     }
@@ -2220,7 +2235,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     // Get new Cookie
                     cookie = "";
-                    new qBittorrentCookie().execute();
+//                    new qBittorrentCookie().execute();
 
                 }
 
@@ -2474,7 +2489,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         // Get new Cookie
                         cookie = "";
-                        new qBittorrentCookie().execute();
+//                        new qBittorrentCookie().execute();
                     }
 
                     Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
@@ -2896,7 +2911,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         // Get new Cookie
                         cookie = "";
-                        new qBittorrentCookie().execute();
+//                        new qBittorrentCookie().execute();
                     }
                 }
 

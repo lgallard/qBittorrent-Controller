@@ -722,7 +722,7 @@ public class JSONParser {
     public String getApiVersion() throws JSONParserStatusCodeException {
 
 
-        String url = "/version/api";
+                String url = "/version/api";
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && !subfolder.equals("")) {
@@ -770,11 +770,16 @@ public class JSONParser {
 
             int mStatusCode = statusLine.getStatusCode();
 
+            Log.d("Debug", "API/Version - mStatusCode: " + mStatusCode );
+
             if (mStatusCode == 200) {
 
                 // Save API
 
                 APIVersionString = EntityUtils.toString(response.getEntity());
+
+                Log.d("Debug", "API/Version - APIVersionString: " + APIVersionString );
+
 
             }
 
