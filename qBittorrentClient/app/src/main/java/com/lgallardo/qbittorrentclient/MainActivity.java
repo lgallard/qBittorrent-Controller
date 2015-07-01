@@ -2343,9 +2343,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         @Override
         protected Torrent[] doInBackground(String... params) {
 
-            Log.d("Debug", "params[0]: " + params[0]);
-            Log.d("Debug", "params[1]: " + params[1]);
-
             String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed;
             boolean sequentialDownload = false;
             boolean firstLastPiecePrio = false;
