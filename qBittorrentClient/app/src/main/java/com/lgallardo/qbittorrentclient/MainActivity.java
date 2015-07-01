@@ -1,13 +1,15 @@
-/*******************************************************************************
+/**
+ * ****************************************************************************
  * Copyright (c) 2014 Luis M. Gallardo D..
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p/>
  * Contributors:
- *     Luis M. Gallardo D.
- ******************************************************************************/
+ * Luis M. Gallardo D.
+ * ****************************************************************************
+ */
 package com.lgallardo.qbittorrentclient;
 
 import android.app.AlarmManager;
@@ -38,6 +40,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,7 +63,6 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -247,14 +249,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     AlarmManager.INTERVAL_DAY, alarmIntent);
         }
 
-        if (qb_version.equals("3.2.x")) {
-            if (cookie == null || cookie.equals("")) {
-                new qBittorrentCookie().execute();
-            }
-        } else {
-            cookie = "";
-        }
-
         // Set Theme (It must be fore inflating or setContentView)
         if (dark_ui) {
             this.setTheme(R.style.Theme_Dark);
@@ -294,8 +288,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // TODO: Edit code for Free and Pro versions
 
+        int drawerItemSize;
+
         // Drawer item list objects
-        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[10];
+        if (packageName.equals("com.lgallardo.qbittorrentclient")) {
+            drawerItemSize = 10;
+        } else {
+            drawerItemSize = 9;
+
+        }
+
+        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[drawerItemSize];
 
         drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_drawer_all, navigationDrawerItemTitles[0]);
         drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_drawer_downloading, navigationDrawerItemTitles[1]);
@@ -305,8 +308,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[5]);
         drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[6]);
         drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[7]);
-        drawerItem[8] = new ObjectDrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[8]);
-        drawerItem[9] = new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9]);
+        drawerItem[8] = new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[8]);
+
+        if (packageName.equals("com.lgallardo.qbittorrentclient")) {
+            drawerItem[8] = new ObjectDrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[8]);
+            drawerItem[9] = new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9]);
+        }
 
         // Create object for drawer item OnbjectDrawerItem
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.drawer_row, drawerItem);
@@ -326,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         // New ActionBarDrawerToggle for Google Material Desing (v7)
-        drawerToggle = new android.support.v7.app.ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
             /**
              * Called when a drawer has settled in a completely closed state.
@@ -412,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
             firstFragment.setSecondFragmentContainer(R.id.one_frame);
 
-            // This i the about fragment, holding a default message at the
+            // This is the about fragment, holding a default message at the
             // beginning
             secondFragment = new AboutFragment();
 
@@ -449,12 +456,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Activity is visble
         activityIsVisible = true;
 
-        // // First refresh
+        // First refresh
         refreshCurrent();
 
         handler = new Handler();
         handler.postDelayed(m_Runnable, refresh_period);
-
 
         // Load banner
         loadBanner();
@@ -490,7 +496,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 setTitle(navigationDrawerItemTitles[2]);
             }
 
-            if (state.equals("paused")) {
+            if (state.equals("pause")) {
                 drawerList.setItemChecked(3, true);
                 setTitle(navigationDrawerItemTitles[3]);
             }
@@ -556,7 +562,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
             }
-
             if (fm.getBackStackEntryCount() == 0 && (fm.findFragmentByTag("secondFragment") instanceof TorrentDetailsFragment)) {
 
                 // Create the about fragment
@@ -585,7 +590,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     @Override
-        public void onPause() {
+    public void onPause() {
         super.onPause();
         activityIsVisible = false;
     }
@@ -594,12 +599,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Load Banner
     public void loadBanner() {
 
-        // Look up the AdView as a resource and load a request.
-        adView = (AdView) this.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        if (packageName.equals("com.lgallardo.qbittorrentclient")) {
 
-        // Start loading the ad in the background.
-        adView.loadAd(adRequest);
+            // Look up the AdView as a resource and load a request.
+            adView = (AdView) this.findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+
+            // Start loading the ad in the background.
+            adView.loadAd(adRequest);
+        }
     }
 
     @Override
@@ -639,7 +647,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     refresh("completed");
                     break;
                 case 3:
-                    refresh("paused");
+                    refresh("pause");
                     break;
                 case 4:
                     refresh("active");
@@ -668,6 +676,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     @Override
     public void onBackPressed() {
+
+        // If drawer is opened, close it
+        if(drawerLayout.isDrawerOpen(drawerList)){
+            drawerLayout.closeDrawer(drawerList);
+            return;
+        }
 
         FragmentManager fm = getFragmentManager();
         com.lgallardo.qbittorrentclient.ItemstFragment fragment = null;
@@ -743,9 +757,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             qbQueryString = "query";
             params[0] = qbQueryString + "/torrents?filter=" + state;
 
-            if (cookie == null || cookie.equals("")) {
-                new qBittorrentCookie().execute();
-            }
         }
 
         params[1] = state;
@@ -759,16 +770,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 genericOkDialog(R.string.info, R.string.about_help1);
             } else {
 
-                // Execute the task in background
-                qBittorrentTask qtt = new qBittorrentTask();
+                if (qb_version.equals("3.2.x") && (cookie == null || cookie.equals(""))) {
+                    // Request new cookie and execute task in background
+                    new qBittorrentCookieTask().execute(params);
 
-                qtt.execute(params);
-
-                // TODO: Delete
-//                // Close Contextual Action Bar
-//                if (firstFragment != null && firstFragment.mActionMode != null) {
-//                    firstFragment.mActionMode.finish();
-//                }
+                } else {
+                    // Execute the task in background
+                    new qBittorrentTask().execute(params);
+                }
 
             }
 
@@ -793,7 +802,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Use the query to search your data somehow
             searchField = intent.getStringExtra(SearchManager.QUERY);
 
-            // Search results
+            // Autorefresh
             refreshCurrent();
         }
 
@@ -805,7 +814,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // // Activity is visble
             activityIsVisible = true;
 
-            // // // Autorefresh
+            // Autorefresh
             refreshCurrent();
 
         }
@@ -852,8 +861,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 try {
                     addTorrent(Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8")));
-                }catch(UnsupportedEncodingException e){
-                    Log.e("Debug", "Check URL: "+e.toString());
+                } catch (UnsupportedEncodingException e) {
+                    Log.e("Debug", "Check URL: " + e.toString());
                 }
 
             }
@@ -875,21 +884,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-
-//        // Associate searchable configuration with the SearchView
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
-//        return true;
-
-
         getMenuInflater().inflate(R.menu.main, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
         if (searchView != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -899,7 +898,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         return true;
     }
 
-    public void popBackStackPhoneView(){
+    public void popBackStackPhoneView() {
         getFragmentManager().popBackStack();
         headerInfo.setVisibility(View.VISIBLE);
     }
@@ -1086,7 +1085,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             case R.id.action_download_rate_limit:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                    downloadRateLimitDialog(TorrentDetailsFragment.hashToUpdate);
+                    downloadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                     if (findViewById(R.id.one_frame) != null) {
                         popBackStackPhoneView();
@@ -1172,21 +1171,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Get values from preferences
             getSettings();
 
-            if (qb_version.equals("3.2.x")) {
-                if (cookie == null || cookie.equals("")) {
-                    new qBittorrentCookie().execute();
-                }
-            } else {
-                cookie = "";
-            }
+            // Get new cookie
+            cookie = null;
 
             // redraw menu
             invalidateOptionsMenu();
-
-            // Select "All" torrents list
-//            selectItem(0);
-//            refresh();
-
 
             // Get options from server and save them as shared preferences
             // locally
@@ -1274,11 +1263,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         }
 
-//        if (requestCode == GETPRO_CODE) {
-//            // Now it can be refreshed
-//            canrefresh = true;
-//        }
-
         if (requestCode == HELP_CODE) {
             // Now it can be refreshed
             canrefresh = true;
@@ -1295,10 +1279,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 // Refresh state
                 refresh(stateBefore);
+
+            }else{
+
+                refresh();
             }
 
         }
         if (resultCode == RESULT_CANCELED) {
+
             // Refresh
             refresh();
         }
@@ -1474,7 +1463,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         if (qb_version.equals("3.2.x")) {
             qtc.execute(new String[]{"pauseAll", null});
         }
-        else{
+        else {
             qtc.execute(new String[]{"pauseall", null});
         }
     }
@@ -1485,7 +1474,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (qb_version.equals("3.2.x")) {
             qtc.execute(new String[]{"resumeAll", null});
-        }else{
+        } else {
             qtc.execute(new String[]{"resumeall", null});
         }
     }
@@ -1716,7 +1705,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 refreshWithDelay("completed", delay);
                 break;
             case 3:
-                refreshWithDelay("paused", delay);
+                refreshWithDelay("pause", delay);
                 break;
             case 4:
                 refreshWithDelay("active", delay);
@@ -1823,7 +1812,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             connection_timeout = Integer.parseInt(sharedPrefs.getString("connection_timeout", "10"));
 
             // New default value to make it work with qBittorrent 3.2.x
-            if(connection_timeout < 10){
+            if (connection_timeout < 10) {
                 connection_timeout = 10;
             }
         } catch (NumberFormatException e) {
@@ -1834,7 +1823,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             data_timeout = Integer.parseInt(sharedPrefs.getString("data_timeout", "20"));
 
             // New default value to make it work with qBittorrent 3.2.x
-            if(data_timeout< 20){
+            if (data_timeout < 20) {
                 data_timeout = 20;
             }
 
@@ -1980,7 +1969,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         }
 
-
         switch (position) {
             case 0:
                 // Set the refresh layout (refresh icon, etc)
@@ -2003,8 +1991,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case 3:
                 // Set the refresh layout (refresh icon, etc)
                 refreshSwipeLayout();
-                refresh("paused");
-                saveLastState("paused");
+                refresh("pause");
+                saveLastState("pause");
                 break;
             case 4:
                 // Set the refresh layout (refresh icon, etc)
@@ -2029,16 +2017,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 openSettings();
                 break;
             case 8:
-                // TODO: Unify free & pro
-                // Get Pro version
-                getPRO();
+                if (packageName.equals("com.lgallardo.qbittorrentclient")) {
+                    // Get Pro version
+                    getPRO();
+                }else {
+                    openHelp();
+                }
                 break;
             case 9:
                 openHelp();
                 break;
             default:
                 break;
-
 
         }
 
@@ -2049,6 +2039,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
         drawerLayout.closeDrawer(drawerList);
+
+        // Load banner
+        loadBanner();
+
 
     }
 
@@ -2092,7 +2086,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(false);
             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.clearAnimation();
-            com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setEnabled(true);
+            com.lgallardo.qbittorrentclient.TorrentDetailsFragment  .mSwipeRefreshLayout.setEnabled(true);
         }
 
         listViewRefreshing = false;
@@ -2122,10 +2116,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Here is where the action happens
-    private class qBittorrentCookie extends AsyncTask<Void, Integer, String[]> {
+    private class qBittorrentCookieTask extends AsyncTask<String, Integer, String[]> {
 
         @Override
-        protected String[] doInBackground(Void... params) {
+        protected String[] doInBackground(String... params) {
 
             // Get values from preferences
             getSettings();
@@ -2133,18 +2127,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Creating new JSON Parser
             com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
 
-            String cookie = "";
+            String newCookie = "";
             String api = "";
 
             try {
-                cookie = jParser.getNewCookie();
+                newCookie = jParser.getNewCookie();
 
             } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
             }
 
-            if (cookie == null) {
-                cookie = "";
+            if (newCookie == null) {
+                newCookie = "";
 
             }
 
@@ -2153,7 +2147,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             }
 
-            return new String[]{cookie, api};
+            return new String[]{newCookie, api};
 
         }
 
@@ -2173,6 +2167,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             // Commit changes
             editor.apply();
+
+            // Execute the task in background
+            new qBittorrentTask().execute(params);
 
         }
     }
@@ -2224,14 +2221,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 return;
             }
 
-            if (httpStatusCode == 403) {
+            if (httpStatusCode == 403 || httpStatusCode == 404) {
 
                 if (qb_version.equals("3.2.x")) {
-
-                    // Get new Cookie
-                    cookie = "";
-                    new qBittorrentCookie().execute();
-
+                    cookie = null;
                 }
 
                 Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
@@ -2344,13 +2337,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
-        // Here is where the action happens
+    // Here is where the action happens
     private class qBittorrentTask extends AsyncTask<String, Integer, Torrent[]> {
 
         @Override
         protected Torrent[] doInBackground(String... params) {
 
-            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, downloaded, eta, uploadSpeed, downloadSpeed;
+            Log.d("Debug", "params[0]: " + params[0]);
+            Log.d("Debug", "params[1]: " + params[1]);
+
+            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed;
             boolean sequentialDownload = false;
             boolean firstLastPiecePrio = false;
 
@@ -2431,24 +2427,26 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             torrents[i].setDownloaded(size);
                         }
 
-                        // Info free
-                        torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
-                                + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
-                                + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + progress + " " + Character.toString('\u2022') + " "
-                                + torrents[i].getEta());
+                        if (packageName.equals("com.lgallardo.qbittorrentclient")) {
+                            // Info free
+                            torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
+                                    + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
+                                    + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + progress + " " + Character.toString('\u2022') + " "
+                                    + torrents[i].getEta());
 
-//                        // Info pro
-//                        torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
-//                                + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
-//                                + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + torrents[i].getEta());
-
+                        } else {
+                            // Info pro
+                            torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
+                                    + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
+                                    + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + torrents[i].getEta());
+                        }
                     }
 
                 }
             } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
                 torrents = null;
-                Log.e("JSONParserStatusCode >", e.toString());
+                Log.e("JSONParserStatusCode", e.toString());
 
             } catch (Exception e) {
                 torrents = null;
@@ -2478,13 +2476,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     httpStatusCode = 0;
                 }
 
-                if (httpStatusCode == 403) {
+                if (httpStatusCode == 403 || httpStatusCode == 404) {
 
                     if (qb_version.equals("3.2.x")) {
-
                         // Get new Cookie
-                        cookie = "";
-                        new qBittorrentCookie().execute();
+                        cookie = null;
                     }
 
                     Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
@@ -2495,57 +2491,50 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             } else {
 
-                ArrayList<Torrent> torrentsFiltered;
+                ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
 
-                if (qb_version.equals("3.2.x")) {
-                    torrentsFiltered = new ArrayList<Torrent>(Arrays.asList(result));
+                for (int i = 0; i < result.length; i++) {
 
-                } else {
+                    if (params[1].equals("all") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                        torrentsFiltered.add(result[i]);
+                    }
 
-                    torrentsFiltered = new ArrayList<Torrent>();
-
-                    for (int i = 0; i < result.length; i++) {
-
-                        if (params[1].equals("all") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                    if (params[1].equals("downloading") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("downloading".equals(result[i].getState()) || "stalledDL".equals(result[i].getState()) || "pausedDL".equals(result[i].getState())
+                                || "queuedDL".equals(result[i].getState()) || "checkingDL".equals(result[i].getState())) {
                             torrentsFiltered.add(result[i]);
                         }
-
-                        if (params[1].equals("downloading") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                            if ("downloading".equals(result[i].getState()) || "stalledDL".equals(result[i].getState()) || "pausedDL".equals(result[i].getState())
-                                    || "queuedDL".equals(result[i].getState()) || "checkingDL".equals(result[i].getState())) {
-                                torrentsFiltered.add(result[i]);
-                            }
-                        }
-
-                        if (params[1].equals("completed") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                            if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())
-                                    || "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState())) {
-                                torrentsFiltered.add(result[i]);
-                            }
-                        }
-
-                        if (params[1].equals("paused") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                            if ("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())) {
-                                torrentsFiltered.add(result[i]);
-                            }
-                        }
-
-                        if (params[1].equals("active") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                            if ("uploading".equals(result[i].getState()) || "downloading".equals(result[i].getState())) {
-                                torrentsFiltered.add(result[i]);
-                            }
-                        }
-
-                        if (params[1].equals("inactive") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                            if ("pausedUP".equals(result[i].getState()) || "pausedDL".equals(result[i].getState()) || "queueUP".equals(result[i].getState())
-                                    || "queueDL".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())
-                                    || "stalledDL".equals(result[i].getState())) {
-                                torrentsFiltered.add(result[i]);
-                            }
-                        }
-
                     }
+
+                    if (params[1].equals("completed") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())
+                                || "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState())) {
+                            torrentsFiltered.add(result[i]);
+                        }
+                    }
+
+                    if (params[1].equals("pause") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())) {
+                            torrentsFiltered.add(result[i]);
+                        }
+                    }
+
+                    if (params[1].equals("active") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("uploading".equals(result[i].getState()) || "downloading".equals(result[i].getState())) {
+                            torrentsFiltered.add(result[i]);
+                        }
+                    }
+
+                    if (params[1].equals("inactive") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("pausedUP".equals(result[i].getState()) || "pausedDL".equals(result[i].getState()) || "queueUP".equals(result[i].getState())
+                                || "queueDL".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())
+                                || "stalledDL".equals(result[i].getState())) {
+                            torrentsFiltered.add(result[i]);
+                        }
+                    }
+
                 }
+
 
                 // Sort by filename
                 if (sortby.equals("Name")) {
@@ -2772,7 +2761,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 }
 
                             }
-                        }else{
+                        } else {
 
                             // Set where is the second container
                             firstFragment.setSecondFragmentContainer(R.id.one_frame);
@@ -2796,7 +2785,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     Log.e("ADAPTER", e.toString());
                 }
 
-                // Clear search field
+                // Clear serch field
                 searchField = "";
 
             }
@@ -2898,15 +2887,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     httpStatusCode = 0;
                 }
 
-                if (httpStatusCode == 403) {
+                if (httpStatusCode == 403 || httpStatusCode == 404) {
                     Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
 
                     if (qb_version.equals("3.2.x")) {
-
                         // Get new Cookie
-                        cookie = "";
-                        new qBittorrentCookie().execute();
+                        cookie = null;
                     }
                 }
 
