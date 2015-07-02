@@ -215,4 +215,5 @@
   <string name="checkbox_notifynew_rss">Уведомлять о новых торрентах?</string>
   <string name="error_rss">Не удалось получить RSS</string>
   <string name="settings_qbittorrent_advanced">Расширенные опции...</string>
+  <string name="notifications_rss_available">Новые торренты доступны</string>
 </resources>

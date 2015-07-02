@@ -170,7 +170,6 @@
     <string name="action_maximum_priority">Przenieść na początek</string>
     <string name="action_minimum_priority">Przenieść na koniec</string>
     <string name="settings_qbittorrent_darkui_summary">Uruchom ponownie program, aby zastosować motyw</string>
-
     <string name="settings_qbittorrent_darkui_dialog_title">Użyj ciemny motyw</string>
     <string name="action_force_recheck">Sprawdź pobrane dane</string>
     <string name="torrentsRecheck">Weryfikacja zainicjowany</string>
@@ -216,4 +215,5 @@
     <string name="dialog_label_rss">Nazwa</string>
     <string name="error_rss">Nie udało się uzyskać RSS</string>
     <string name="settings_qbittorrent_advanced">Opcje zaawansowane...</string>
+    <string name="notifications_rss_available">Nowe torrents dostępne</string>
 </resources>

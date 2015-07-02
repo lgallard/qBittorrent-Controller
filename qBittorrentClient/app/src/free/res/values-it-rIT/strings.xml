@@ -216,4 +216,5 @@
     <string name="dialog_label_rss">Nome</string>
     <string name="error_rss">Impossibile ottenere RSS</string>
     <string name="settings_qbittorrent_advanced">Opzioni avanzate...</string>
+    <string name="notifications_rss_available">Nuove torrents disponibili</string>
 </resources>
