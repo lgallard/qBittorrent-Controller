@@ -767,7 +767,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
             if (hostname.equals("")) {
-                genericOkDialog(R.string.info, R.string.about_help1);
+                qBittorrentNoSettingsFoundDialog(R.string.info, R.string.about_help1);
             } else {
 
                 if (qb_version.equals("3.2.x") && (cookie == null || cookie.equals(""))) {
@@ -1738,8 +1738,47 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 public void onClick(DialogInterface dialog, int id) {
                     // User accepted the dialog
+
                 }
             });
+
+            // Create dialog
+            AlertDialog dialog = builder.create();
+
+            // Show dialog
+            dialog.show();
+        }
+
+    }
+
+
+    public void qBittorrentNoSettingsFoundDialog(int title, int message) {
+
+        if (!isFinishing()) {
+
+            Builder builder = new Builder(this);
+
+            // Message
+            builder.setMessage(message).setTitle(title);
+
+            // Ok
+            builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int id) {
+                    // User accepted the dialog
+                }
+            });
+
+            // Settings
+            builder.setPositiveButton(R.string.navigation_drawer_settins, new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int id) {
+                    // User accepted the dialog
+                    openSettings();
+                }
+            });
+
+
 
             // Create dialog
             AlertDialog dialog = builder.create();
@@ -2051,7 +2090,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
         if (hostname.equals("")) {
-            genericOkDialog(R.string.info, R.string.about_help1);
+            qBittorrentNoSettingsFoundDialog(R.string.info, R.string.about_help1);
             disableRefreshSwipeLayout();
 
         } else {

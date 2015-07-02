@@ -60,7 +60,7 @@
   <string name="navigation_drawer_options">Aukerak</string>
   <string name="navigation_drawer_settins">Ezarpenak</string>
   <string name="navigation_drawer_PRO">Lortu PRO</string>
-  <string name="about_help1">Bezeroa erabiltzen hasteko, ezarri zure qBittorrent zerbitzariaren ezarpenak eta kontua \'Ezarpenak\' hautatuz ezkerreko hedagarria menuan</string>
+  <string name="about_help1">Bezeroak erabiltzen hasteko, zure qBittorrent zerbitzari ezarpenak ezarri</string>
   <string name="about_help2">Sakatu berritu botoia menuan emaitza berriak lortzeko, edo hautatu aukera bat hedagarria menutik zerbitzariko torrent zerrenda lortzeko.</string>
   <string name="about_motto">Kudeatu zure torrent guztiak Android-etik qBittorrent Client erabiliz</string>
   <string name="icon">ikurra</string>

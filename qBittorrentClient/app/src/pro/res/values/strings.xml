@@ -80,7 +80,7 @@
     <string name="navigation_drawer_inactive">Inactive</string>
     <string name="navigation_drawer_options">Options</string>
     <string name="navigation_drawer_settins">Settings</string>
-    <string name="about_help1">To start using the client, set your qBittorrent server\'s settings and account by selecting \'Settings\' from the left menu</string>
+    <string name="about_help1">To start using the client, set your qBittorrent server settings</string>
     <string name="about_help2">Press the refresh button on the menu to get new results, or choose an option from the left menu to get the torrent list from the server.</string>
     <string name="about_motto">Manage all your torrents from Android using qBittorrent Client</string>
     <string name="icon">icon</string>

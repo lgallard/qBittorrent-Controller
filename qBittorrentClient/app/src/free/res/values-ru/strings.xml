@@ -60,7 +60,7 @@
   <string name="navigation_drawer_options">Настройки сервера</string>
   <string name="navigation_drawer_settins">Настройки</string>
   <string name="navigation_drawer_PRO">Получить PRO-версию</string>
-  <string name="about_help1">Для начала, настройте подключение к веб-серверу qBittorrent, выбрав пункт \"Настройки программы\" в выезжающем меню слева</string>
+  <string name="about_help1">Для начала с помощью клиента набор настроек сервера qBittorrent</string>
   <string name="about_help2">Нажмите кнопку \"обновление\" в меню, чтобы получить обновленные данные, или воспользуйтесь выезжающим меню слева для получения списка торрентов с сервера</string>
   <string name="about_motto">Управляйте своими торрентами с Android-устройства, используя qBittorrent Client</string>
   <string name="icon">Значок</string>

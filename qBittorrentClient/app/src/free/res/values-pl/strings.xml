@@ -55,7 +55,7 @@
     <string name="navigation_drawer_options">Opcje</string>
     <string name="navigation_drawer_settins">Ustawienia</string>
     <string name="navigation_drawer_PRO">Uzyskaj PRO</string>
-    <string name="about_help1">Aby rozpocząć korzystanie z klienta, przejdź do ustawień i umieścić swoje ustawienia qBittorrent wybierając \"Ustawienia\" z menu po lewej szuflady</string>
+    <string name="about_help1">Aby rozpocząć korzystanie z klienta, ustawić ustawienia serwera qBittorrent</string>
     <string name="about_help2">Naciśnij przycisk odświeżania w menu, aby nowe wyniki, lub wybierz opcję z menu szuflady lewej aby otrzymać listę z serwera torrent</string>
     <string name="about_motto">Zarządzanie wszystkie torrenty z Androida za pomocą qBittorrent Client</string>
     <string name="icon">Ikona</string>
