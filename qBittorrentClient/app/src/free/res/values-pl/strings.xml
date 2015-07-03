@@ -106,8 +106,6 @@
     <string name="settings_qbittorrent_password_title">Hasło</string>
     <string name="settings_qbittorrent_password_summary">Podaj hasło</string>
     <string name="settings_qbittorrent_password_dialog_title">Hasło?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Użyj starą wersję serwera qBittorrent</string>
     <string name="settings_qbittorrent_pro_title">Funkcja nie jest dostępna</string>
     <string name="settings_qbittorrent_pro_message">Ta funkcja jest dostępna tylko w wersji qBittorrent PRO!</string>
     <string name="settings_qbittorrent_autorefresh_category">Automatyczne odświeżanie</string>

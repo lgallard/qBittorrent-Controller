@@ -124,8 +124,6 @@
   <string name="settings_qbittorrent_password_title">Sarhitza</string>
   <string name="settings_qbittorrent_password_summary">Eman sarhitza</string>
   <string name="settings_qbittorrent_password_dialog_title">Sarhitza?</string>
-  <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-  <string name="settings_qbittorrent_version_summary">Erabili qBittorrent zerbitzari bertsio zaharra</string>
   <string name="settings_qbittorrent_autorefresh_category">Berez Berritu</string>
   <string name="settings_qbittorrent_autorefresh_title">Berezgaitasunez berritu?</string>
   <string name="settings_qbittorrent_autorefresh_summary">Eguneratu torrent zerrenda</string>

@@ -105,8 +105,6 @@
     <string name="settings_qbittorrent_password_title">Mot de passe</string>
     <string name="settings_qbittorrent_password_summary">Fournir un mot de passe</string>
     <string name="settings_qbittorrent_password_dialog_title">Mot de passe?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Utilisez la version du serveur qBittorrent vieux</string>
     <string name="settings_qbittorrent_pro_title">Fonction non disponible</string>
     <string name="settings_qbittorrent_pro_message">Cette fonctionnalité est disponible uniquement sur la version PRO qBittorrent!</string>
     <string name="settings_qbittorrent_autorefresh_category">Actualisation Automatique</string>

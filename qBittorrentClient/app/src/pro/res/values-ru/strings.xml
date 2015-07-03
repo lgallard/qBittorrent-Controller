@@ -124,8 +124,6 @@
   <string name="settings_qbittorrent_password_title">Пароль</string>
   <string name="settings_qbittorrent_password_summary">Укажите пароль</string>
   <string name="settings_qbittorrent_password_dialog_title">Укажите пароль</string>
-  <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-  <string name="settings_qbittorrent_version_summary">Использовать старую версию сервера qBittorrent</string>
   <string name="settings_qbittorrent_autorefresh_category">Автообновление</string>
   <string name="settings_qbittorrent_autorefresh_title">Обновлять автоматически?</string>
   <string name="settings_qbittorrent_autorefresh_summary">Обновить список торренков</string>

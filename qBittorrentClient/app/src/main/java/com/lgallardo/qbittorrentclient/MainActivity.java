@@ -1162,10 +1162,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // Set the drawer menu's item to All
-        drawerList.setItemChecked(0, true);
-        setTitle(navigationDrawerItemTitles[0]);
-
         if (requestCode == SETTINGS_CODE) {
 
             // Get values from preferences
@@ -1203,6 +1199,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + 5000,
                     notification_period, alarmIntent);
+
+
+            // Refresh
+            canrefresh = true;
 
         }
 
@@ -1268,28 +1268,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             canrefresh = true;
         }
 
+
         if (resultCode == RESULT_OK) {
-
-            String stateBefore = data.getStringExtra("currentState");
-
-            if (stateBefore != null) {
-
-                // Set selection according to last state
-                setSelectionAndTitle(stateBefore);
-
-                // Refresh state
-                refresh(stateBefore);
-
-            }else{
-
-                refresh();
-            }
-
-        }
-        if (resultCode == RESULT_CANCELED) {
-
-            // Refresh
-            refresh();
+            new qBittorrentApiTask().execute(new Intent[]{data});
         }
 
     }
@@ -2212,6 +2193,109 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         }
     }
+
+    // Here is where the action happens
+    private class qBittorrentApiTask extends AsyncTask<Intent, Integer, String[]> {
+
+        @Override
+        protected String[] doInBackground(Intent... intents) {
+
+            // Get values from preferences
+            getSettings();
+
+            // Creating new JSON Parser
+            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+
+            String apiVersion = "";
+
+            httpStatusCode = 0;
+
+            // Try to get the API number
+            try {
+                apiVersion = jParser.getApi();
+
+            } catch (JSONParserStatusCodeException e) {
+                httpStatusCode = e.getCode();
+            }
+
+
+//            Log.d("Debug", "<ApiVersion>: "+ apiVersion);
+
+            // If < 3.2.x, get qBittorrent version
+            if (httpStatusCode > 200 || apiVersion == null) {
+
+//                Log.d("Debug", "> ApiVersion httpStatusCode: "+ httpStatusCode);
+
+                try {
+                    apiVersion = jParser.getVersion();
+
+                } catch (JSONParserStatusCodeException e) {
+                    httpStatusCode = e.getCode();
+                }
+
+            }
+
+            return new String[]{apiVersion, intents[0].getStringExtra("currentState")};
+
+        }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+
+
+            String apiVersion = result[0];
+
+
+//            Log.d("Debug", "API: " + apiVersion);
+
+            if (apiVersion != null && (apiVersion.equals("2") || apiVersion.contains("3.2") || apiVersion.contains("3.3"))) {
+
+                qb_version = "3.2.x";
+
+                // Get new cookie
+                cookie = null;
+
+            } else if (apiVersion.contains("3.1")) {
+
+                qb_version = "3.1.x";
+
+            } else {
+
+                qb_version = "2.x";
+
+            }
+
+            // Save options locally
+            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+            Editor editor = sharedPrefs.edit();
+
+            // Save key-values
+            editor.putString("qb_version", qb_version);
+
+            // Commit changes
+            editor.apply();
+
+
+            // Refresh
+            String stateBefore = result[1];
+
+            if (stateBefore != null) {
+
+                // Set selection according to last state
+                setSelectionAndTitle(stateBefore);
+
+                // Refresh state
+                refresh(stateBefore);
+
+            } else {
+
+                refresh();
+            }
+
+
+        }
+    }
+
 
     // Here is where the action happens
     private class qBittorrentCommand extends AsyncTask<String, Integer, String> {

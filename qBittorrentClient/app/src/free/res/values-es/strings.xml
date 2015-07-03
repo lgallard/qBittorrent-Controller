@@ -108,8 +108,6 @@
     <string name="settings_qbittorrent_password_title">Contraseña</string>
     <string name="settings_qbittorrent_password_summary">Indique contraseña</string>
     <string name="settings_qbittorrent_password_dialog_title">Contraseña?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Usar servidor qBittorrent anterior</string>
     <string name="settings_qbittorrent_pro_title">Opción no disponible</string>
     <string name="settings_qbittorrent_pro_message">Esta opción está solo disponible en la versión qBittorrent PRO!</string>
     <string name="settings_qbittorrent_autorefresh_category">Refrescado automático</string>

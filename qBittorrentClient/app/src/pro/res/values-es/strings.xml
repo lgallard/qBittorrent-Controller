@@ -114,8 +114,6 @@
     <string name="settings_qbittorrent_password_title">Contraseña</string>
     <string name="settings_qbittorrent_password_summary">Indique contraseña</string>
     <string name="settings_qbittorrent_password_dialog_title">Contraseña?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Usar servidor qBittorrent anterior</string>
     <string name="settings_qbittorrent_autorefresh_category">Refrescado automático</string>
     <string name="settings_qbittorrent_autorefresh_title">¿Refrescar automáticamente?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Actualizar listado de torrents </string>

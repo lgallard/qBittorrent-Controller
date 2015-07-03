@@ -68,14 +68,6 @@
                 android:summary="@string/settings_qbittorrent_https_summary"
                 android:title="@string/settings_qbittorrent_https_title" />
 
-            <ListPreference
-                android:defaultValue="3.1.x"
-                android:entries="@array/qbVersion"
-                android:entryValues="@array/qbVersionValues"
-                android:key="qb_version"
-                android:summary="qBittorrent version?"
-                android:title="qBittorrent version" />
-
             <EditTextPreference
                 android:defaultValue=""
                 android:dialogTitle="@string/settings_qbittorrent_subfolder_dialog_title"

@@ -44,8 +44,6 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
     private CheckBoxPreference dark_ui;
 
-    private ListPreference qb_version;
-
     private CheckBoxPreference enable_notifications;
     private ListPreference notification_period;
 
@@ -80,8 +78,6 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         reverse_order = (CheckBoxPreference) findPreference("reverse_order");
 
         dark_ui = (CheckBoxPreference) findPreference("dark_ui");
-
-        qb_version = (ListPreference) findPreference("qb_version");
 
         enable_notifications = (CheckBoxPreference) findPreference("enable_notifications");
         notification_period = (ListPreference) findPreference("notification_period");
@@ -184,14 +180,6 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
         dark_ui.setChecked(sharedPrefs.getBoolean("dark_ui", false));
 
-        if (qb_version.getEntry() == null) {
-            qb_version.setValueIndex(2);
-        }else{
-            qb_version.setValueIndex(qb_version.findIndexOfValue(sharedPrefs.getString("qb_version" + value, "3.2.x")));
-        }
-
-        qb_version.setSummary(qb_version.getEntry());
-
 
         if (notification_period.getEntry() == null) {
             notification_period.setValueIndex(1);
@@ -211,7 +199,6 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         username.setSummary(username.getText());
         refresh_period.setSummary(refresh_period.getEntry());
         sortBy.setSummary(sortBy.getEntry());
-        qb_version.setSummary(qb_version.getEntry());
         notification_period.setSummary(notification_period.getEntry());
 
     }
@@ -261,8 +248,6 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         editor.putBoolean("revserse_order" + currentServerValue, reverse_order.isChecked());
 
         editor.putBoolean("dark_ui" + currentServerValue, dark_ui.isChecked());
-
-        editor.putString("qb_version" + currentServerValue, qb_version.getValue());
 
         // Commit changes
         editor.commit();

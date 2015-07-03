@@ -102,8 +102,6 @@
     <string name="settings_qbittorrent_password_title">Senha</string>
     <string name="settings_qbittorrent_password_summary">Fornecer senha</string>
     <string name="settings_qbittorrent_password_dialog_title">Senha?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Utilizar versão antiga do servidor qBittorrent</string>
     <string name="settings_qbittorrent_autorefresh_category">Atualização Automática</string>
     <string name="settings_qbittorrent_autorefresh_title">Atualizar automaticamente ?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Atualizar lista de torrent</string>

@@ -103,8 +103,6 @@
     <string name="settings_qbittorrent_password_title">Hasło</string>
     <string name="settings_qbittorrent_password_summary">Podaj hasło</string>
     <string name="settings_qbittorrent_password_dialog_title">Hasło?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Użyj starą wersję serwera qBittorrent</string>
     <string name="settings_qbittorrent_autorefresh_category">Automatyczne odświeżanie</string>
     <string name="settings_qbittorrent_autorefresh_title">Odśwież automatycznie?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Aktualizacja listy torrent</string>

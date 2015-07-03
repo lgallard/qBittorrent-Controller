@@ -119,8 +119,6 @@
   <string name="settings_qbittorrent_password_title">Sarhitza</string>
   <string name="settings_qbittorrent_password_summary">Eman sarhitza</string>
   <string name="settings_qbittorrent_password_dialog_title">Sarhitza?</string>
-  <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-  <string name="settings_qbittorrent_version_summary">Erabili qBittorrent zerbitzari bertsio zaharra</string>
   <string name="settings_qbittorrent_pro_title">Ezaugarria ez dago eskuragarri</string>
   <string name="settings_qbittorrent_pro_message">Ezaugarri hau qBittorrent PRO bertsioan bakarrik dago eskuragarri!</string>
   <string name="settings_qbittorrent_autorefresh_category">Berez Berritu</string>

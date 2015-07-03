@@ -61,7 +61,6 @@
     <string name="increasePrioTorrent">Priority increased!</string>
     <string name="decreasePrioTorrent">Priority decreased!</string>
     <string name="priorityUpdated">Priority updated!</string>
-
     <string name="getQBittorrentPrefefrences">Getting options...</string>
     <string name="setQBittorrentPrefefrences">Options saved</string>
     <string name="setUploadRateLimit">Upload rate limit set</string>
@@ -137,8 +136,6 @@
     <string name="settings_qbittorrent_password_title">Password</string>
     <string name="settings_qbittorrent_password_summary">Provide password</string>
     <string name="settings_qbittorrent_password_dialog_title">Password?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Use old qBittorrent server version</string>
     <string name="settings_qbittorrent_autorefresh_category">Auto Refresh</string>
     <string name="settings_qbittorrent_autorefresh_title">Refresh automatically?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Update torrent list</string>

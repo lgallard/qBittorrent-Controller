@@ -4,9 +4,9 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p/>
  * Contributors:
- *     Luis M. Gallardo D.
+ * Luis M. Gallardo D.
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
@@ -122,9 +122,9 @@ public class JSONParser {
         // Set http parameters
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-        HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
-        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
-        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
+        HttpProtocolParams.setUserAgent(httpParameters, "qBittorrent for Android");
+        HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
         // Making HTTP request
         HttpHost targetHost = new HttpHost(this.hostname, this.port, this.protocol);
@@ -145,7 +145,7 @@ public class JSONParser {
 
             // set http parameters
 
-            url = protocol + "://" + hostname + ":" + port +"/" +url;
+            url = protocol + "://" + hostname + ":" + port + "/" + url;
 
             HttpGet httpget = new HttpGet(url);
 
@@ -232,7 +232,7 @@ public class JSONParser {
         // Set http parameters
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-        HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
+        HttpProtocolParams.setUserAgent(httpParameters, "qBittorrent for Android");
         HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
         HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
@@ -250,7 +250,7 @@ public class JSONParser {
 
             httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
 
-            url = protocol + "://" + hostname + ":" + port +"/" +url;
+            url = protocol + "://" + hostname + ":" + port + "/" + url;
 
             HttpGet httpget = new HttpGet(url);
 
@@ -457,9 +457,9 @@ public class JSONParser {
         // Set http parameters
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-        HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
-        HttpProtocolParams.setVersion(httpParameters,HttpVersion.HTTP_1_1);
-        HttpProtocolParams.setContentCharset(httpParameters,HTTP.UTF_8);
+        HttpProtocolParams.setUserAgent(httpParameters, "qBittorrent for Android");
+        HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
 
         // Making HTTP request
@@ -478,7 +478,7 @@ public class JSONParser {
 
             httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
 
-            url = protocol + "://" + hostname + ":" + port +"/" +url;
+            url = protocol + "://" + hostname + ":" + port + "/" + url;
 
             HttpPost httpget = new HttpPost(url);
 
@@ -661,8 +661,7 @@ public class JSONParser {
 //            httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
 
 
-
-            url = protocol + "://" + hostname + ":" + port + "/" +url;
+            url = protocol + "://" + hostname + ":" + port + "/" + url;
 
             HttpPost httpget = new HttpPost(url);
 
@@ -678,7 +677,7 @@ public class JSONParser {
 
 
             HttpResponse response = httpclient.execute(targetHost, httpget);
-            HttpEntity entity = response.getEntity( );
+            HttpEntity entity = response.getEntity();
 
             StatusLine statusLine = response.getStatusLine();
 
@@ -719,10 +718,10 @@ public class JSONParser {
 
     }
 
-    public String getApiVersion() throws JSONParserStatusCodeException {
+    public String getApi() throws JSONParserStatusCodeException {
 
 
-                String url = "/version/api";
+        String url = "version/api";
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && !subfolder.equals("")) {
@@ -747,7 +746,7 @@ public class JSONParser {
         // Set http parameters
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-        HttpProtocolParams.setUserAgent(httpParameters,"qBittorrent for Android");
+        HttpProtocolParams.setUserAgent(httpParameters, "qBittorrent for Android");
         HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
         HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
 
@@ -759,7 +758,15 @@ public class JSONParser {
 
         try {
 
-            url = protocol + "://" + hostname + ":" + port +"/" +url;
+            AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
+            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.username, this.password);
+
+            httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
+
+            // set http parameters
+
+
+            url = protocol + "://" + hostname + ":" + port + "/" + url;
 
             HttpGet httpget = new HttpGet(url);
 
@@ -770,7 +777,7 @@ public class JSONParser {
 
             int mStatusCode = statusLine.getStatusCode();
 
-            Log.d("Debug", "API/Version - mStatusCode: " + mStatusCode );
+//            Log.d("Debug", "API - mStatusCode: " + mStatusCode);
 
             if (mStatusCode == 200) {
 
@@ -778,7 +785,7 @@ public class JSONParser {
 
                 APIVersionString = EntityUtils.toString(response.getEntity());
 
-                Log.d("Debug", "API/Version - APIVersionString: " + APIVersionString );
+//                Log.d("Debug", "API - ApiString: " + APIVersionString);
 
 
             }
@@ -798,11 +805,129 @@ public class JSONParser {
 //            Log.i("APIVer", "Exception " + e.toString());
         }
 
-        if (APIVersionString == null) {
-            APIVersionString = "";
-        }
+//        if (APIVersionString == null) {
+//            APIVersionString = "";
+//        }
         return APIVersionString;
     }
+
+
+    public String getVersion() throws JSONParserStatusCodeException {
+
+
+        String url = "about.html";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        String aboutHtml = null;
+        String version = null;
+
+        HttpResponse httpResponse;
+        DefaultHttpClient httpclient;
+
+        HttpParams httpParameters = new BasicHttpParams();
+
+        // Set the timeout in milliseconds until a connection is established.
+        // The default value is zero, that means the timeout is not used.
+        int timeoutConnection = connection_timeout * 1000;
+
+        // Set the default socket timeout (SO_TIMEOUT)
+        // in milliseconds which is the timeout for waiting for data.
+        int timeoutSocket = data_timeout * 1000;
+
+        // Set http parameters
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpProtocolParams.setUserAgent(httpParameters, "qBittorrent for Android");
+        HttpProtocolParams.setVersion(httpParameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
+
+        // Making HTTP request
+        HttpHost targetHost = new HttpHost(hostname, port, protocol);
+
+        // httpclient = new DefaultHttpClient();
+        httpclient = getNewHttpClient();
+
+        try {
+
+            AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
+            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.username, this.password);
+
+            httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
+
+            // set http parameters
+
+
+            url = protocol + "://" + hostname + ":" + port + "/" + url;
+
+
+//            Log.d("Debug", "URL: " + url);
+
+            HttpGet httpget = new HttpGet(url);
+
+            HttpResponse response = httpclient.execute(targetHost, httpget);
+            HttpEntity entity = response.getEntity();
+
+            StatusLine statusLine = response.getStatusLine();
+
+            int mStatusCode = statusLine.getStatusCode();
+
+//            Log.d("Debug", "Version - mStatusCode: " + mStatusCode);
+
+            if (mStatusCode == 200) {
+
+                // Save API
+
+                aboutHtml = EntityUtils.toString(response.getEntity());
+
+
+
+                String aboutStartText = "qBittorrent v";
+                String aboutEndText = " (Web UI)";
+
+                int aboutStart = aboutHtml.indexOf(aboutStartText);
+
+                int aboutEnd = aboutHtml.indexOf(aboutEndText);
+
+                if(aboutEnd == -1){
+                    aboutEndText = " Web UI";
+                    aboutEnd = aboutHtml.indexOf(aboutEndText);
+                }
+
+                if (aboutStart >= 0 && aboutEnd > aboutStart) {
+
+                    version = aboutHtml.substring(aboutStart + aboutStartText.length(), aboutEnd);
+                }
+
+//                Log.d("Debug", "Version - VersionString: " + version);
+
+
+            }
+
+
+            if (entity != null) {
+                entity.consumeContent();
+            }
+
+            // When HttpClient instance is no longer needed,
+            // shut down the connection manager to ensure
+            // immediate deallocation of all system resources
+            httpclient.getConnectionManager().shutdown();
+
+        } catch (Exception e) {
+
+//            Log.i("APIVer", "Exception " + e.toString());
+        }
+
+        if (version == null) {
+            version = "";
+        }
+        return version;
+    }
+
 
 
 }
