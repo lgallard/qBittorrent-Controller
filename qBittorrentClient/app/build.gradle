@@ -22,25 +22,26 @@ android {
     productFlavors {
         pro {
             applicationId 'com.lgallardo.qbittorrentclientpro'
-            versionName '4.1.1'
+            versionName '4.1.2'
             minSdkVersion 14
             targetSdkVersion 21
-            versionCode 411
+            versionCode 412
             archivesBaseName = "qBittorrentClient_v" + versionName
         }
         free {
             applicationId "com.lgallardo.qbittorrentclient"
-            versionName '4.1.1'
+            versionName '4.1.2'
             minSdkVersion 14
             targetSdkVersion 21
-            versionCode 411
+            versionCode 412
             archivesBaseName = "qBittorrentClient_v" + versionName
         }
     }
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/license.txt'
@@ -48,6 +49,7 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LGPL2.1'
     }
 }
 

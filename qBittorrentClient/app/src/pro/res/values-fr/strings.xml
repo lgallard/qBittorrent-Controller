@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
     <string name="app_name">qBittorrent Client Pro</string>
     <string name="app_shortname">Client Pro</string>
     <string name="action_settings">Paramètres</string>
@@ -54,7 +53,7 @@
     <string name="navigation_drawer_inactive">Inactif</string>
     <string name="navigation_drawer_options">Options</string>
     <string name="navigation_drawer_settins">Paramètres</string>
-    <string name="about_help1">Pour commencer à utiliser le client, définissez les paramètres de votre serveur qBittorent et compte en sélectionnant \"Paramètres\" dans le menu de gauche.</string>
+    <string name="about_help1">Pour commencer à utiliser le client, définissez les paramètres de votre serveur qBittorent</string>
     <string name="about_help2">Appuyez sur le bouton de rafraîchissement dans le menu pour obtenir de nouveaux résultats, ou choisissez une option dans le menu de gauche pour obtenir la liste de torrent à partir du serveur.</string>
     <string name="about_motto">Gérer vos torrents avec Android en utilisant qBittorrent Client Pro</string>
     <string name="icon">icône</string>
@@ -103,8 +102,6 @@
     <string name="settings_qbittorrent_password_title">Mot de passe</string>
     <string name="settings_qbittorrent_password_summary">Fournir un mot de passe</string>
     <string name="settings_qbittorrent_password_dialog_title">Mot de passe?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Utilisez la version du serveur qBittorrent vieux</string>
     <string name="settings_qbittorrent_autorefresh_category">Actualisation Automatique</string>
     <string name="settings_qbittorrent_autorefresh_title">Actualiser automatiquement?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Mettre à jour la liste des torrents</string>
@@ -209,4 +206,6 @@
     <string name="dialog_add_rss">RSS url</string>
     <string name="dialog_label_rss">Nom</string>
     <string name="error_rss">Impossible d\'obtenir RSS</string>
+    <string name="settings_qbittorrent_advanced">Options avancées...</string>
+    <string name="notifications_rss_available">Torrentak berriak eskuragarri</string>
 </resources>

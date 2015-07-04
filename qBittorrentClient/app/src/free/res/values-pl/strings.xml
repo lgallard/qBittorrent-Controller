@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
     <string name="app_name">qBittorrent Client</string>
     <string name="app_shortname">Client</string>
     <string name="action_settings">Ustawienia</string>
@@ -56,7 +55,7 @@
     <string name="navigation_drawer_options">Opcje</string>
     <string name="navigation_drawer_settins">Ustawienia</string>
     <string name="navigation_drawer_PRO">Uzyskaj PRO</string>
-    <string name="about_help1">Aby rozpocząć korzystanie z klienta, przejdź do ustawień i umieścić swoje ustawienia qBittorrent wybierając \"Ustawienia\" z menu po lewej szuflady</string>
+    <string name="about_help1">Aby rozpocząć korzystanie z klienta, ustawić ustawienia serwera qBittorrent</string>
     <string name="about_help2">Naciśnij przycisk odświeżania w menu, aby nowe wyniki, lub wybierz opcję z menu szuflady lewej aby otrzymać listę z serwera torrent</string>
     <string name="about_motto">Zarządzanie wszystkie torrenty z Androida za pomocą qBittorrent Client</string>
     <string name="icon">Ikona</string>
@@ -107,8 +106,6 @@
     <string name="settings_qbittorrent_password_title">Hasło</string>
     <string name="settings_qbittorrent_password_summary">Podaj hasło</string>
     <string name="settings_qbittorrent_password_dialog_title">Hasło?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Użyj starą wersję serwera qBittorrent</string>
     <string name="settings_qbittorrent_pro_title">Funkcja nie jest dostępna</string>
     <string name="settings_qbittorrent_pro_message">Ta funkcja jest dostępna tylko w wersji qBittorrent PRO!</string>
     <string name="settings_qbittorrent_autorefresh_category">Automatyczne odświeżanie</string>
@@ -171,7 +168,6 @@
     <string name="action_maximum_priority">Przenieść na początek</string>
     <string name="action_minimum_priority">Przenieść na koniec</string>
     <string name="settings_qbittorrent_darkui_summary">Uruchom ponownie program, aby zastosować motyw</string>
-
     <string name="settings_qbittorrent_darkui_dialog_title">Użyj ciemny motyw</string>
     <string name="action_force_recheck">Sprawdź pobrane dane</string>
     <string name="torrentsRecheck">Weryfikacja zainicjowany</string>
@@ -216,4 +212,6 @@
     <string name="dialog_add_rss">RSS url</string>
     <string name="dialog_label_rss">Nazwa</string>
     <string name="error_rss">Nie udało się uzyskać RSS</string>
+    <string name="settings_qbittorrent_advanced">Opcje zaawansowane...</string>
+    <string name="notifications_rss_available">Nowe torrents dostępne</string>
 </resources>

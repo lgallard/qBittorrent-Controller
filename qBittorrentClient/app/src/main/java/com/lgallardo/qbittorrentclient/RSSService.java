@@ -346,7 +346,7 @@ public class RSSService extends BroadcastReceiver {
         @Override
         protected void onPostExecute(ArrayList<RSSFeed> result) {
 
-            boolean gotItems= false;
+            boolean gotNewItems= false;
 
             if (result != null && result.size() > 0) {
 
@@ -384,11 +384,6 @@ public class RSSService extends BroadcastReceiver {
 
                         ArrayList<RSSFeedItem> items = rssFeed.getItems();
 
-                        if(items.size() > 0){
-                            gotItems = true;
-                        }
-
-
                         for (int j = 0; j < items.size(); j++) {
 
                             // Notify new available torrents
@@ -406,6 +401,7 @@ public class RSSService extends BroadcastReceiver {
                                     // itemPubDate is after channelPubDate
                                     if (itemPubDate.compareTo(channelPubDate) > 0) {
                                         notifyFeed = true;
+                                        gotNewItems = true;
                                     }
 
                                 } catch (Exception e) {
@@ -414,6 +410,7 @@ public class RSSService extends BroadcastReceiver {
 
                                 if (notifyFeed) {
                                     inbox.addLine(items.get(j).getTitle());
+
                                 }
                             }
 
@@ -447,7 +444,7 @@ public class RSSService extends BroadcastReceiver {
                     }
 
 
-                    if(gotItems) {
+                    if(gotNewItems) {
                         inbox.setSummaryText(result.get(0).getChannelTitle());
                         notification = inbox.build();
                     }
@@ -478,7 +475,7 @@ public class RSSService extends BroadcastReceiver {
                     }
                 }
 
-                if(gotItems && notification != null) {
+                if(gotNewItems && notification != null) {
                     notificationManager.notify(0, notification);
                 }
 

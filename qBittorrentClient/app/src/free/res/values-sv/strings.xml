@@ -54,7 +54,7 @@
     <string name="navigation_drawer_inactive">Inaktiva</string>
     <string name="navigation_drawer_options">Alternativ</string>
     <string name="navigation_drawer_settins">Inställningar</string>
-    <string name="about_help1">För att börja använda klienten, ange ditt qBittorrent serverns inställningar och konto genom att välja \"Inställningar\" från den vänstra menyn</string>
+    <string name="about_help1">För att börja använda klienten ställa in din qBittorrent serverinställningar</string>
     <string name="about_help2">Tryck på knappen Uppdatera i menyn för att få nya resultat, eller välj ett alternativ på menyn till vänster för att få torrent listan från servern.</string>
     <string name="about_motto">Hantera alla dina torrents från Android använder qBittorrent Client Pro</string>
     <string name="icon">icon</string>
@@ -99,8 +99,6 @@
     <string name="settings_qbittorrent_password_title">Lösenord</string>
     <string name="settings_qbittorrent_password_summary">Skriv in lösenordet</string>
     <string name="settings_qbittorrent_password_dialog_title">Lösenord?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Använd gamla qBittorrent serverversion</string>
     <string name="settings_qbittorrent_autorefresh_category">Automatisk Uppdatera</string>
     <string name="settings_qbittorrent_autorefresh_title">Uppdatera automatiskt?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Uppdatera torrent lista</string>
@@ -214,4 +212,6 @@
     <string name="dialog_add_rss">RSS url</string>
     <string name="dialog_label_rss">Namn</string>
     <string name="error_rss">Det gick inte att få RSS</string>
+    <string name="settings_qbittorrent_advanced">Alternativ avancerat...</string>
+    <string name="notifications_rss_available">Nya torrents tillgängliga</string>
 </resources>

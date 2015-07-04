@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
     <string name="app_name">qBittorrent Client</string>
     <string name="app_shortname">Client</string>
     <string name="action_settings">Configurações</string>
@@ -56,7 +55,7 @@
     <string name="navigation_drawer_options">Opções</string>
     <string name="navigation_drawer_settins">Configurações</string>
     <string name="navigation_drawer_PRO">Obter PRO</string>
-    <string name="about_help1">Para começar a usar o cliente, defina as configurações e a conta do seu servidor qBittorrent, selecionando \"Configurações\" no menu esquerdo da gaveta</string>
+    <string name="about_help1">Para começar a usar o cliente, defina as configurações do seu servidor qBittorrent</string>
     <string name="about_help2">Pressione o botão de atualização no menu para obter novos resultados, ou escolha uma opção no menu de gaveta para obter a lista de torrents do servidor.</string>
     <string name="about_motto">Gerenciar todos os seus torrents de Android usando qBittorrent Client</string>
     <string name="icon">icones</string>
@@ -107,8 +106,6 @@
     <string name="settings_qbittorrent_password_title">Senha</string>
     <string name="settings_qbittorrent_password_summary">Fornecer senha</string>
     <string name="settings_qbittorrent_password_dialog_title">Senha?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Utilizar versão antiga do servidor qBittorrent</string>
     <string name="settings_qbittorrent_pro_title">Recurso não disponível</string>
     <string name="settings_qbittorrent_pro_message">Esta funcionalidade só está disponível na versão PRO do qBittorrent!</string>
     <string name="settings_qbittorrent_autorefresh_category">Atualização Automática</string>
@@ -215,4 +212,6 @@
     <string name="dialog_add_rss">RSS url</string>
     <string name="dialog_label_rss">Nome</string>
     <string name="error_rss">Não foi possível obter RSS</string>
+    <string name="settings_qbittorrent_advanced">Opções avançadas...</string>
+    <string name="notifications_rss_available">Novos torrents disponíveis</string>
 </resources>

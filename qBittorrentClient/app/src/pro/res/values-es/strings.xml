@@ -9,7 +9,6 @@
       Luis M. Gallardo D.
 -->
 <resources>
-
     <string name="app_name">qBittorrent Client Pro</string>
     <string name="app_shortname">Client Pro</string>
     <string name="action_settings">Ajustes</string>
@@ -65,7 +64,7 @@
     <string name="navigation_drawer_inactive">Inactivos</string>
     <string name="navigation_drawer_options">Opciones</string>
     <string name="navigation_drawer_settins">Configuración</string>
-    <string name="about_help1">Para empezar a utilizar el cliente, proporciona los datos de conexión  seleccionando \'Configuración\' en el menú desplegable de la izquierda</string>
+    <string name="about_help1">Para empezar a utilizar el cliente, proporciona los parámetros de configuración de tu servidor qBittorrent</string>
     <string name="about_help2">Pulsa el botón de actualización en el menú para obtener nuevos resultados, o elige una opción del menú izquierdo de navegación para obtener la lista de torrents desde el servidor.</string>
     <string name="about_motto">Gestiona todos tus torrents desde Android usando qBittorrent Client Pro</string>
     <string name="icon">icono</string>
@@ -115,8 +114,6 @@
     <string name="settings_qbittorrent_password_title">Contraseña</string>
     <string name="settings_qbittorrent_password_summary">Indique contraseña</string>
     <string name="settings_qbittorrent_password_dialog_title">Contraseña?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Usar servidor qBittorrent anterior</string>
     <string name="settings_qbittorrent_autorefresh_category">Refrescado automático</string>
     <string name="settings_qbittorrent_autorefresh_title">¿Refrescar automáticamente?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Actualizar listado de torrents </string>
@@ -218,4 +215,6 @@
     <string name="dialog_add_rss">RSS url</string>
     <string name="dialog_label_rss">Nombre </string>
     <string name="error_rss">No se pudo obtener RSS</string>
+    <string name="settings_qbittorrent_advanced">Opciones avanzadas...</string>
+    <string name="notifications_rss_available">Nuevos torrents disponibles</string>
 </resources>
