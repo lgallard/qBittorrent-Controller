@@ -99,8 +99,6 @@
     <string name="settings_qbittorrent_password_title">Lösenord</string>
     <string name="settings_qbittorrent_password_summary">Skriv in lösenordet</string>
     <string name="settings_qbittorrent_password_dialog_title">Lösenord?</string>
-    <string name="settings_qbittorrent_version_title">qBittorrent 2.x</string>
-    <string name="settings_qbittorrent_version_summary">Använd gamla qBittorrent serverversion</string>
     <string name="settings_qbittorrent_autorefresh_category">Automatisk Uppdatera</string>
     <string name="settings_qbittorrent_autorefresh_title">Uppdatera automatiskt?</string>
     <string name="settings_qbittorrent_autorefresh_summary">Uppdatera torrent lista</string>

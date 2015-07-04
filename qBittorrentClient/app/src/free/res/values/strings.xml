@@ -221,7 +221,7 @@
     <string name="dialog_label_rss">Name</string>
     <string name="checkbox_autodownload_rss">Download new torrents automatically?</string>
     <string name="checkbox_notifynew_rss">Notify new torrents?</string>
-    <string name="notifications_rss_available" translatable="false">New torrents available</string>
+    <string name="notifications_rss_available">New torrents available</string>
     <string name="error_rss">Could not get RSS</string>
     <string name="settings_qbittorrent_advanced">Advanced...</string>
 </resources>
