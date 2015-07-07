@@ -562,7 +562,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
             }
-            if (fm.getBackStackEntryCount() == 0 && (fm.findFragmentByTag("secondFragment") instanceof TorrentDetailsFragment)) {
+            if (fm.getBackStackEntryCount() == 0 && (fm.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
 
                 // Create the about fragment
                 aboutFragment = new AboutFragment();
