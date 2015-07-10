@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="dropShadowBackground" format="reference" />
+    <attr name="backgroundSelector" format="reference" />
+    <attr name="backgroundDrawerSelector" format="reference" />
+    <attr name="windowBackground" format="reference" />
+
+</resources>

@@ -1,0 +1,99 @@
+<!--
+  Copyright (c) 2014 Luis M. Gallardo D..
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Public License v3.0
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/gpl.html
+  
+  Contributors:
+      Luis M. Gallardo D.
+-->
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/about_refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/qBittorrent_logo"
+                android:layout_centerHorizontal="true"
+                android:text="@string/app_name"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <ImageView
+                android:id="@+id/qBittorrent_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="25dp"
+                android:contentDescription="@string/app_name"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView2"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/arrow"
+                android:padding="10dp"
+                android:text="@string/about_help1" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textView3"
+                android:layout_below="@+id/textView3"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:text="@string/about_help2" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView1"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:text="@string/about_motto" />
+
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignTop="@+id/textView3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/icon"
+                android:src="@drawable/ic_arrow" />
+
+            <ImageView
+                android:id="@+id/refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignTop="@+id/textView4"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/icon"
+                android:src="@drawable/ic_refresh" />
+        </RelativeLayout>
+    </ScrollView>
+
+</android.support.v4.widget.SwipeRefreshLayout>

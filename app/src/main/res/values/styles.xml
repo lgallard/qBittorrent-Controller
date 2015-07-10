@@ -1,0 +1,111 @@
+<!--
+  Copyright (c) 2014 Luis M. Gallardo D..
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Public License v3.0
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/gpl.html
+  
+  Contributors:
+      Luis M. Gallardo D. - initial implementation
+-->
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppTheme" parent="AppTheme.Base">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <!-- Background -->
+        <item name="android:windowBackground">@color/Theme_Light_windowBackground</item>
+        <item name="windowBackground">@color/Theme_Light_windowBackground</item>
+
+        <!-- backgroundSelector (for row listView)-->
+        <item name="backgroundSelector">@drawable/background_selector_light</item>
+
+        <!-- backgroundDrawerSelector (for drawer rows)-->
+        <item name="backgroundDrawerSelector">@drawable/background_drawer_selector_light</item>
+
+        <!-- dropShadowBackground (for cardviews)-->
+        <item name="dropShadowBackground">@drawable/gmd_shadow_light</item>
+
+        <!-- Overlay Contextual menu-->
+        <item name="windowActionModeOverlay">true</item>
+
+        <!-- Contextual menu style -->
+        <item name="actionModeBackground">@color/primary</item>
+        <item name="actionModeStyle">@style/ContextualActionBar</item>
+
+    </style>
+
+    <!-- Dark theme. -->
+    <style name="Theme_Light" parent="AppTheme.Base">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Dark theme. -->
+    <style name="Theme_Dark" parent="Theme.AppCompat.NoActionBar">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="colorPrimary">@color/Theme_Dark_primary</item>
+        <item name="colorPrimaryDark">@color/Theme_Dark_primary_dark</item>
+        <item name="colorAccent">@color/Theme_Dark_accent</item>
+        <item name="android:textColorPrimary">@color/Theme_Dark_primary_text</item>
+
+        <!-- Background -->
+        <item name="android:windowBackground">@color/Theme_Dark_windowBackground</item>
+        <item name="windowBackground">@color/Theme_Dark_windowBackground</item>
+
+
+        <!-- backgroundSelector (for row listView)-->
+        <item name="backgroundSelector">@drawable/background_selector_dark</item>
+
+        <!-- backgroundDrawerSelector (for drawer rows)-->
+        <item name="backgroundDrawerSelector">@drawable/background_drawer_selector_dark</item>
+
+        <!-- dropShadowBackground (for cardviews)-->
+        <item name="dropShadowBackground">@drawable/gmd_shadow_dark</item>
+
+        <!-- Overlay Contextual menu-->
+        <item name="windowActionModeOverlay">true</item>
+
+        <!-- Contextual menu style -->
+        <item name="actionModeBackground">?attr/colorAccent</item>
+        <item name="actionModeStyle">@style/ContextualActionBar</item>
+
+    </style>
+
+    <!-- Toolbar theme -->
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">#fff4f4f4</item>
+
+    </style>
+
+    <!-- Contextual menu style -->
+    <style name="ContextualActionBar" parent="Widget.AppCompat.ActionMode">
+        <!--<item name="background">@color/primary_dark_material_light</item>-->
+        <item name="titleTextStyle">@style/my_actionmode_title_style</item>
+
+    </style>
+
+
+    <style name="my_actionmode_title_style" parent="TextAppearance.AppCompat.Widget.ActionMode.Title">
+        <item name="android:textColor">#fff4f4f4</item>
+    </style>
+</resources>

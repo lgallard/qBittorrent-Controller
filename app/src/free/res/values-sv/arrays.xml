@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string-array name="qBittorrentServers">
+        <item>Server 1</item>
+        <item>Server 2</item>
+        <item>Server 3</item>
+    </string-array>
+    <string-array name="qBittorrentServersValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="autorefresh">
+        <item name="1">5 sekunder</item>
+        <item name="2">10 sekunder</item>
+        <item name="3">15 sekunder</item>
+        <item name="4">20 sekunder</item>
+        <item name="5">30 sekunder</item>
+        <item name="6">1 minut</item>
+        <item name="7">2 minuter</item>
+        <item name="8">5 minuter</item>
+        <item name="9">10 minuter</item>
+        <item name="10">15 minuter</item>
+    </string-array>
+    <string-array name="autorefreshValues">
+        <item name="1">5000</item>
+        <item name="2">10000</item>
+        <item name="3">15000</item>
+        <item name="4">20000</item>
+        <item name="5">30000</item>
+        <item name="6">60000</item>
+        <item name="7">120000</item>
+        <item name="8">300000</item>
+        <item name="9">600000</item>
+        <item name="10">900000</item>
+    </string-array>
+    <string-array name="notification">
+        <item name="1">2 minuter</item>
+        <item name="2">5 minuter</item>
+        <item name="3">15 minuter</item>
+        <item name="4">30 minuter</item>
+        <item name="5">1 timme</item>
+        <item name="6">6 timmar</item>
+        <item name="7">12 timmar</item>
+        <item name="8">1 dag</item>
+    </string-array>
+    <string-array name="notificationValues">
+        <item name="1">120000</item>
+        <item name="2">300000</item>
+        <item name="3">900000</item>
+        <item name="4">1800000</item>
+        <item name="5">3600000</item>
+        <item name="6">21600000</item>
+        <item name="7">43200000</item>
+        <item name="8">86400000</item>
+    </string-array>
+    <string-array name="sortBy">
+        <item name="1">Namn</item>
+        <item name="2">Beräknad tid</item>
+        <item name="3">Prioritet</item>
+        <item name="4">Framsteg</item>
+        <item name="5">Förhå</item>
+        <item name="6">Nedladdningshastighet</item>
+        <item name="7">Uppladdningshastighet</item>
+    </string-array>
+    <string-array name="sortByValues">
+        <item name="1">Name</item>
+        <item name="2">ETA</item>
+        <item name="3">Priority</item>
+        <item name="4">Progress</item>
+        <item name="5">Ratio</item>
+        <item name="6">DownloadSpeed</item>
+        <item name="7">UploadSpeed</item>
+    </string-array>
+    <string-array name="qbVersion">
+        <item name="1">2.x</item>
+        <item name="2">3.1.x</item>
+        <item name="3">3.2.x</item>
+    </string-array>
+    <string-array name="qbVersionValues">
+        <item name="1">2.x</item>
+        <item name="2">3.1.x</item>
+        <item name="3">3.2.x</item>
+    </string-array>
+    <string-array name="navigation_drawer_items_array">
+        <item>Alla</item>
+        <item>Hämtar</item>
+        <item>Färdiga</item>
+        <item>Pausad</item>
+        <item>Aktiva</item>
+        <item>Inaktiva</item>
+        <item>Alternativ</item>
+        <item>Inställningar</item>
+        <item>Få PRO</item>
+        <item>Hjälp</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,154 @@
+<!--
+  Copyright (c) 2014 Luis M. Gallardo D..
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Public License v3.0
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/gpl.html
+  
+  Contributors:
+      Luis M. Gallardo D.
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        app:showAsAction="always"
+        android:title="@string/action_refresh" />
+
+    <item
+        android:id="@+id/action_sort_menu"
+        android:icon="@drawable/ic_action_sort"
+        app:showAsAction="collapseActionView|ifRoom"
+        android:title="@string/settings_qbittorrent_sortby_summary">
+
+        <menu>
+            <item
+                android:id="@+id/action_sortby_name"
+                android:title="@string/sortby_menu_name" />
+            <item
+                android:id="@+id/action_sortby_eta"
+                android:title="@string/sortby_menu_eta" />
+            <item
+                android:id="@+id/action_sortby_priority"
+                android:title="@string/sortby_menu_priority" />
+            <item
+                android:id="@+id/action_sortby_progress"
+                android:title="@string/sortby_menu_progress" />
+            <item
+                android:id="@+id/action_sortby_ratio"
+                android:title="@string/sortby_menu_ratio" />
+
+            <item
+                android:id="@+id/action_sortby_downloadSpeed"
+                android:title="@string/sortby_menu_download_speed" />
+            <item
+                android:id="@+id/action_sortby_uploadSpeed"
+                android:title="@string/sortby_menu_upload_speed" />
+
+        </menu>
+
+    </item>
+    <item
+        android:id="@+id/action_resume_all"
+        android:icon="@drawable/ic_action_resume"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_resume_all" />
+    <item
+        android:id="@+id/action_pause_all"
+        android:icon="@drawable/ic_action_pause"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_pause_all" />
+    <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/ic_action_add"
+        app:showAsAction="collapseActionView|ifRoom"
+        android:title="@string/action_add" />
+
+    <item
+        android:id="@+id/action_resume"
+        android:icon="@drawable/ic_action_resume"
+        app:showAsAction="always"
+        android:title="@string/action_resume" />
+    <item
+        android:id="@+id/action_pause"
+        android:icon="@drawable/ic_action_pause"
+        app:showAsAction="always"
+        android:title="@string/action_pause" />
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_action_delete"
+        app:showAsAction="always"
+        android:title="@string/action_delete" />
+    <item
+        android:id="@+id/action_delete_drive"
+        android:icon="@drawable/ic_action_delete_drive"
+        app:showAsAction="always"
+        android:title="@string/action_delete_drive" />
+
+    <item
+        android:id="@+id/action_priority_menu"
+        android:icon="@drawable/ic_action_increase_prio"
+        android:title="@string/torrent_priority_menu">
+
+        <menu>
+            <item
+                android:id="@+id/action_increase_prio"
+                android:icon="@drawable/ic_action_increase_prio"
+                app:showAsAction="ifRoom"
+                android:title="@string/action_increase_priority" />
+            <item
+                android:id="@+id/action_decrease_prio"
+                android:icon="@drawable/ic_action_decrease_prio"
+                app:showAsAction="ifRoom"
+                android:title="@string/action_decrease_priority" />
+
+            <item
+                android:id="@+id/action_max_prio"
+                android:icon="@drawable/ic_action_max_prio"
+                app:showAsAction="ifRoom"
+                android:title="@string/action_maximum_priority" />
+            <item
+                android:id="@+id/action_min_prio"
+                android:icon="@drawable/ic_action_min_prio"
+                app:showAsAction="ifRoom"
+                android:title="@string/action_minimum_priority" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_download_rate_limit"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_download_rate_limit" />
+    <item
+        android:id="@+id/action_upload_rate_limit"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_upload_rate_limit" />
+    <item
+        android:id="@+id/action_recheck"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_force_recheck" />
+    <item
+        android:id="@+id/action_sequential_download"
+        app:showAsAction="ifRoom"
+        android:title="@string/torrent_details_seq_download" />
+    <item
+        android:id="@+id/action_firts_last_piece_prio"
+        app:showAsAction="ifRoom"
+        android:title="@string/torrent_details_first_last" />
+
+    <item
+        android:id="@+id/action_search"
+        android:actionViewClass="android.support.v7.widget.SearchView"
+        android:icon="@drawable/ic_action_search"
+        app:showAsAction="collapseActionView"
+        android:title="@string/search_title" />
+
+    <item
+        android:id="@+id/action_rss"
+        android:icon="@drawable/ic_action_add_rss"
+        app:showAsAction="collapseActionView|ifRoom"
+        android:title="@string/action_rss" />
+
+</menu>

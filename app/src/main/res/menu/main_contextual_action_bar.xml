@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_resume"
+        android:icon="@drawable/ic_action_resume"
+        android:showAsAction="always"
+        android:title="@string/action_resume" />
+    <item
+        android:id="@+id/action_pause"
+        android:icon="@drawable/ic_action_pause"
+        android:showAsAction="always"
+        android:title="@string/action_pause" />
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_action_delete"
+        android:showAsAction="always"
+        android:title="@string/action_delete" />
+    <item
+        android:id="@+id/action_delete_drive"
+        android:icon="@drawable/ic_action_delete_drive"
+        android:showAsAction="always"
+        android:title="@string/action_delete_drive" />
+    <item
+        android:id="@+id/action_priority_menu"
+        android:icon="@drawable/ic_action_increase_prio"
+        android:showAsAction="ifRoom"
+        android:title="@string/torrent_priority_menu">
+
+        <menu>
+            <item
+                android:id="@+id/action_increase_prio"
+                android:icon="@drawable/ic_action_increase_prio"
+                android:showAsAction="ifRoom"
+                android:title="@string/action_increase_priority" />
+            <item
+                android:id="@+id/action_decrease_prio"
+                android:icon="@drawable/ic_action_decrease_prio"
+                android:showAsAction="ifRoom"
+                android:title="@string/action_decrease_priority" />
+
+            <item
+                android:id="@+id/action_max_prio"
+                android:icon="@drawable/ic_action_max_prio"
+                android:showAsAction="ifRoom"
+                android:title="@string/action_maximum_priority" />
+            <item
+                android:id="@+id/action_min_prio"
+                android:icon="@drawable/ic_action_min_prio"
+                android:showAsAction="ifRoom"
+                android:title="@string/action_minimum_priority" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_download_rate_limit"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_download_rate_limit" />
+    <item
+        android:id="@+id/action_upload_rate_limit"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_upload_rate_limit" />
+    <item
+        android:id="@+id/action_recheck"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_force_recheck" />
+    <item
+        android:id="@+id/action_sequential_download"
+        android:showAsAction="ifRoom"
+        android:title="@string/torrent_details_seq_download"/>
+    <item
+        android:id="@+id/action_firts_last_piece_prio"
+        android:showAsAction="ifRoom"
+        android:title="@string/torrent_details_first_last" />
+
+</menu>
