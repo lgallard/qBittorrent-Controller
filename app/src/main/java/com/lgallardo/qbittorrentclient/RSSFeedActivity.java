@@ -160,6 +160,11 @@ public class RSSFeedActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
         // Save rss_feeds
+        if(rss_feeds == null){
+            // Get values from options
+            rss_feeds = sharedPrefs.getString("rss_feeds", "");
+        }
+
         if (rss_feeds.equals("")) {
 
             rss_feeds = title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;

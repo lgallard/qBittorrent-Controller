@@ -24,6 +24,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
@@ -166,6 +167,10 @@ public class RSSFeedParser {
 
                                 if(xmlParser.getAttributeName(i).equals("url")) {
                                     torrent = xmlParser.getAttributeValue(i);
+
+                                    if(torrent != null){
+                                        torrent = Uri.decode(URLEncoder.encode(torrent, "UTF-8"));
+                                    }
                                     break;
                                 }
                             }
@@ -212,6 +217,20 @@ public class RSSFeedParser {
                         } else if(name.equals("item") && !header){
 
                             if(items != null & item != null){
+
+                                // Fix torrent url for no-standar rss feeds
+                                if(torrent == null){
+
+
+                                    String link  = item.getLink();
+
+                                    if(link != null){
+                                        link = Uri.decode(URLEncoder.encode(link, "UTF-8"));
+                                    }
+
+                                    item.setTorrentUrl(link);
+                                }
+
                                 items.add(item);
                             }
 
