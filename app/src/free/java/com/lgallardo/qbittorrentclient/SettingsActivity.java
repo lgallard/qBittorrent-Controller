@@ -185,7 +185,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         refresh_period.setSummary(refresh_period.getEntry());
 
         connection_timeout.setText(sharedPrefs.getString("connection_timeout" + value, "10"));
+        connection_timeout.setSummary(sharedPrefs.getString("connection_timeout" + value, "10"));
+
         data_timeout.setText(sharedPrefs.getString("data_timeout" + value, "20"));
+        data_timeout.setSummary(sharedPrefs.getString("data_timeout" + value, "20"));
 
         if (sortBy.getEntry() == null) {
             sortBy.setValueIndex(1);
@@ -215,6 +218,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         refresh_period.setSummary(refresh_period.getEntry());
         sortBy.setSummary(sortBy.getEntry());
         notification_period.setSummary(notification_period.getEntry());
+        connection_timeout.setSummary(connection_timeout.getText());
+        data_timeout.setSummary(data_timeout.getText());
 
     }
 
