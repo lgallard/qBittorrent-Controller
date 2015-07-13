@@ -2245,10 +2245,20 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             String apiVersion = result[0];
 
+            int api = 0;
+
+            try{
+
+                api = Integer.parseInt(apiVersion);
+
+            }catch (Exception e){
+                api = 0;
+            }
+
 
 //            Log.d("Debug", "API: " + apiVersion);
 
-            if (apiVersion != null && (apiVersion.equals("2") || apiVersion.contains("3.2") || apiVersion.contains("3.3"))) {
+            if (apiVersion != null && (api > 1 || apiVersion.contains("3.2") || apiVersion.contains("3.3"))) {
 
                 qb_version = "3.2.x";
 
