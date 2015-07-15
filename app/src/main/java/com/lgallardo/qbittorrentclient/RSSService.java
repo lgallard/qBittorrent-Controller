@@ -384,7 +384,7 @@ public class RSSService extends BroadcastReceiver {
 
                         ArrayList<RSSFeedItem> items = rssFeed.getItems();
 
-                        for (int j = 0; j < items.size(); j++) {
+                        for (int j = 0; items != null && j < items.size(); j++) {
 
                             // Notify new available torrents
                             if (rssFeed.getNotifyNew() && j < 4) {
