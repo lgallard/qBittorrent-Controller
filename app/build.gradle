@@ -24,6 +24,9 @@ android {
         abortOnError false
     }
 
+    adbOptions {
+        timeOutInMs 600000
+    }
     productFlavors {
         pro {
             applicationId 'com.lgallardo.qbittorrentclientpro'
