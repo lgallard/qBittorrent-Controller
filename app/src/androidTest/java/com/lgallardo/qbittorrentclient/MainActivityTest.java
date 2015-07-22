@@ -2,6 +2,7 @@ package com.lgallardo.qbittorrentclient;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -205,6 +206,22 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
+    // Test Add torrent
+    public void testAddTorrent(){
 
+
+        mSolo.clickOnMenuItem(mSolo.getString(R.string.action_add));
+
+        // wait to dialog to pop up
+        getInstrumentation().waitForIdleSync();
+
+        EditText url = (EditText) mSolo.getView(R.id.url);
+
+        // http://cdimage.debian.org/debian-cd/8.1.0/amd64/bt-cd/debian-8.1.0-amd64-CD-1.iso.torrent
+        mSolo.enterText(url, "http://cdimage.debian.org/debian-cd/8.1.0/amd64/bt-cd/debian-8.1.0-amd64-CD-1.iso.torrent");
+        mSolo.clickOnButton(mSolo.getString(R.string.ok));
+
+        assertTrue(mSolo.waitForText(mSolo.getString(R.string.torrentAdded)));
+    }
 
 }
