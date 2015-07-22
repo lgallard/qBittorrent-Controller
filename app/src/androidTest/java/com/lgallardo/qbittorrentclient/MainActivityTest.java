@@ -5,6 +5,10 @@ import android.test.UiThreadTest;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.robotium.solo.Solo;
+
+import java.util.ArrayList;
+
 /**
  * Created by lgallard on 07/07/15.
  */
@@ -13,6 +17,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     private MainActivity mActivity;
     private ListView mLeftDrawer;
+    private Solo mSolo;
+    private ArrayList<ListView> mListViews;
+    int mLeftDrawerIndex;
 
     public MainActivityTest() {
         super(MainActivity.class);
@@ -27,20 +34,39 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         setActivityInitialTouchMode(false);
 
         mActivity = getActivity();
-
         mLeftDrawer = (ListView) mActivity.findViewById(R.id.left_drawer);
+
+
+        //	Initiate	the	instance	of	Solo
+        mSolo	=	new	Solo(getInstrumentation(), getActivity());
+
+
+        // Get All ListViews
+        mListViews = mSolo.getCurrentViews(ListView.class);
+
+        // Define index for left_drawer list view
+        mLeftDrawerIndex = 1;
+
+        // Get drawer list view index
+        for(int i=0; i < mListViews.size(); i++){
+            if(mListViews.get(i).getId() == R.id.left_drawer){
+                mLeftDrawerIndex = i;
+                break;
+            }
+        }
+
+
+
     }
 
     // Test the All list
-    @UiThreadTest
-    public void testAllListClicked() {
+    public void testAllListClicked() throws Exception {
 
-
-        // Click download
-        mLeftDrawer.performItemClick(mLeftDrawer.getAdapter().getView(0, null, null),
-                0,
-                mLeftDrawer.getAdapter().getItemId(0));
-
+        // Click All
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(1, mLeftDrawerIndex);
+        mSolo.sleep(1000);
+        
         assertEquals("All torrent list not loaded",
                 mActivity.getResources().getStringArray(R.array.navigation_drawer_items_array)[0],
                 mActivity.getSupportActionBar().getTitle());
@@ -48,15 +74,13 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     // Test the Download list
-    @UiThreadTest
     public void testDownloadListClicked() {
 
-
-        // Click download
-        mLeftDrawer.performItemClick(mLeftDrawer.getAdapter().getView(1, null, null),
-                1,
-                mLeftDrawer.getAdapter().getItemId(1));
-
+        // Click Download
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(2, mLeftDrawerIndex);
+        mSolo.sleep(1000);
+        
         assertEquals("Download torrent list not loaded",
                 mActivity.getResources().getStringArray(R.array.navigation_drawer_items_array)[1],
                 mActivity.getSupportActionBar().getTitle());
@@ -64,14 +88,12 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     // Test the Completed list
-    @UiThreadTest
     public void testCompletedListClicked() {
 
-
-        // Click download
-        mLeftDrawer.performItemClick(mLeftDrawer.getAdapter().getView(2, null, null),
-                2,
-                mLeftDrawer.getAdapter().getItemId(2));
+        // Click Completed
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(3, mLeftDrawerIndex);
+        mSolo.sleep(1000);
 
         assertEquals("Completed torrent list not loaded",
                 mActivity.getResources().getStringArray(R.array.navigation_drawer_items_array)[2],
@@ -81,14 +103,12 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
 
     // Test the Paused list
-    @UiThreadTest
     public void testPausedListClicked() {
 
-
-        // Click download
-        mLeftDrawer.performItemClick(mLeftDrawer.getAdapter().getView(3, null, null),
-                3,
-                mLeftDrawer.getAdapter().getItemId(3));
+        // Click Paused
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(4, mLeftDrawerIndex);
+        mSolo.sleep(1000);
 
         assertEquals("Completed torrent list not loaded",
                 mActivity.getResources().getStringArray(R.array.navigation_drawer_items_array)[3],
@@ -98,14 +118,13 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
 
     // Test the Active list
-    @UiThreadTest
     public void testActiveListClicked() {
 
 
-        // Click download
-        mLeftDrawer.performItemClick(mLeftDrawer.getAdapter().getView(4, null, null),
-                4,
-                mLeftDrawer.getAdapter().getItemId(4));
+        // Click Active
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(5, mLeftDrawerIndex);
+        mSolo.sleep(1000);
 
         assertEquals("Completed torrent list not loaded",
                 mActivity.getResources().getStringArray(R.array.navigation_drawer_items_array)[4],
@@ -115,14 +134,13 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
 
     // Test the Inactive list
-    @UiThreadTest
     public void testInactiveListClicked() {
 
 
-        // Click download
-        mLeftDrawer.performItemClick(mLeftDrawer.getAdapter().getView(5, null, null),
-                5,
-                mLeftDrawer.getAdapter().getItemId(5));
+        // Click Inactive
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(6, mLeftDrawerIndex);
+        mSolo.sleep(1000);
 
         assertEquals("Completed torrent list not loaded",
                 mActivity.getResources().getStringArray(R.array.navigation_drawer_items_array)[5],
@@ -132,7 +150,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
 
     // Test if the Get Pro item appears in the listview
-    @UiThreadTest
     public void testGetPRO() {
 
 
@@ -144,5 +161,50 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         }
     }
+
+    // Test if RSS Activity is launched
+    public void testRSSLaunched(){
+
+        mSolo.clickOnMenuItem(mSolo.getString(R.string.action_rss));
+        mSolo.assertCurrentActivity("Can't open RSS Feed activity", RSSFeedActivity.class);
+
+    }
+
+    // Test if Options is launched
+    public void testOptionsLaunched(){
+
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(7, mLeftDrawerIndex);
+        mSolo.assertCurrentActivity("Can't open Options activity", OptionsActivity.class);
+
+    }
+
+
+    // Test if Settings is launched
+    public void testSettingsLaunched(){
+
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(8,mLeftDrawerIndex);
+        mSolo.assertCurrentActivity("Can't open Settings activity", SettingsActivity.class);
+
+    }
+
+
+    // Test if Help is launched
+    public void testHelpLaunched(){
+
+        mSolo.clickOnActionBarHomeButton();
+
+        if (mActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
+            mSolo.clickInList(9, mLeftDrawerIndex);
+        }else {
+            mSolo.clickInList(10, mLeftDrawerIndex);
+        }
+
+        mSolo.assertCurrentActivity("Can't open Help activity", HelpActivity.class);
+
+    }
+
+
 
 }
