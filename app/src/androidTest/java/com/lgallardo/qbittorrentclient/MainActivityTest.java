@@ -235,7 +235,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     // Test Pause torrent
-    public void test2PauseTorrentFromCAB() {
+    public void test1PauseTorrentFromCAB() {
 
         // Long click on pre-added torrent
         mSolo.clickLongOnText("debian");
@@ -256,7 +256,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     // Test Resume torrent
-    public void test2ResumeTorrenttFromCAB() {
+    public void test1ResumeTorrenttFromCAB() {
 
         // Long click on pre-added torrent
         mSolo.clickLongOnText("debian");
