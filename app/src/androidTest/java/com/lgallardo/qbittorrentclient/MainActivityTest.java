@@ -1,7 +1,6 @@
 package com.lgallardo.qbittorrentclient;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.UiThreadTest;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,7 +38,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
 
         //	Initiate	the	instance	of	Solo
-        mSolo	=	new	Solo(getInstrumentation(), getActivity());
+        mSolo = new Solo(getInstrumentation(), getActivity());
 
 
         // Get All ListViews
@@ -49,13 +48,12 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mLeftDrawerIndex = 1;
 
         // Get drawer list view index
-        for(int i=0; i < mListViews.size(); i++){
-            if(mListViews.get(i).getId() == R.id.left_drawer){
+        for (int i = 0; i < mListViews.size(); i++) {
+            if (mListViews.get(i).getId() == R.id.left_drawer) {
                 mLeftDrawerIndex = i;
                 break;
             }
         }
-
 
 
     }
@@ -67,7 +65,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mSolo.clickOnActionBarHomeButton();
         mSolo.clickInList(1, mLeftDrawerIndex);
         mSolo.sleep(1000);
-        
+
         assertEquals("All torrent list not loaded",
                 mActivity.getResources().getStringArray(R.array.navigation_drawer_items_array)[0],
                 mActivity.getSupportActionBar().getTitle());
@@ -81,7 +79,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mSolo.clickOnActionBarHomeButton();
         mSolo.clickInList(2, mLeftDrawerIndex);
         mSolo.sleep(1000);
-        
+
         assertEquals("Download torrent list not loaded",
                 mActivity.getResources().getStringArray(R.array.navigation_drawer_items_array)[1],
                 mActivity.getSupportActionBar().getTitle());
@@ -164,7 +162,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     // Test if RSS Activity is launched
-    public void testRSSLaunched(){
+    public void testRSSLaunched() {
 
         mSolo.clickOnMenuItem(mSolo.getString(R.string.action_rss));
         mSolo.assertCurrentActivity("Can't open RSS Feed activity", RSSFeedActivity.class);
@@ -172,7 +170,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     // Test if Options is launched
-    public void testOptionsLaunched(){
+    public void testOptionsLaunched() {
 
         mSolo.clickOnActionBarHomeButton();
         mSolo.clickInList(7, mLeftDrawerIndex);
@@ -182,23 +180,23 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
 
     // Test if Settings is launched
-    public void testSettingsLaunched(){
+    public void testSettingsLaunched() {
 
         mSolo.clickOnActionBarHomeButton();
-        mSolo.clickInList(8,mLeftDrawerIndex);
+        mSolo.clickInList(8, mLeftDrawerIndex);
         mSolo.assertCurrentActivity("Can't open Settings activity", SettingsActivity.class);
 
     }
 
 
     // Test if Help is launched
-    public void testHelpLaunched(){
+    public void testHelpLaunched() {
 
         mSolo.clickOnActionBarHomeButton();
 
         if (mActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
             mSolo.clickInList(9, mLeftDrawerIndex);
-        }else {
+        } else {
             mSolo.clickInList(10, mLeftDrawerIndex);
         }
 
@@ -207,7 +205,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     // Test Add torrent
-    public void testAddTorrent(){
+    public void test1AddTorrent() {
 
 
         mSolo.clickOnMenuItem(mSolo.getString(R.string.action_add));
@@ -221,7 +219,116 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mSolo.enterText(url, "http://cdimage.debian.org/debian-cd/8.1.0/amd64/bt-cd/debian-8.1.0-amd64-CD-1.iso.torrent");
         mSolo.clickOnButton(mSolo.getString(R.string.ok));
 
-        assertTrue(mSolo.waitForText(mSolo.getString(R.string.torrentAdded)));
+        assertTrue("Torrent not sent", mSolo.waitForText(mSolo.getString(R.string.torrentAdded)));
+
+
+        // Check is on the Downloading list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(2, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+
+        // Get item with text "debian"
+        assertNotNull("Torrent not on Downloading list", mSolo.getText("debian"));
+
+
+    }
+
+    // Test Pause torrent
+    public void test2PauseTorrentFromCAB() {
+
+        // Long click on pre-added torrent
+        mSolo.clickLongOnText("debian");
+
+        // Click pause button on Action menu
+        mSolo.clickOnView(getActivity().findViewById(R.id.action_pause));
+
+        // Check is on the Downloading list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(4, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+
+        // Get item with text "debian"
+        assertNotNull("Torrent not on Paused list", mSolo.getText("debian"));
+
+
+    }
+
+    // Test Resume torrent
+    public void test2ResumeTorrenttFromCAB() {
+
+        // Long click on pre-added torrent
+        mSolo.clickLongOnText("debian");
+
+        // Click pause button on Action menu
+        mSolo.clickOnView(getActivity().findViewById(R.id.action_resume));
+
+        // Check is on the Downloading list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(2, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+        // Get item with text "debian"
+        assertNotNull("Torrent not on Downloading list", mSolo.getText("debian"));
+
+
+    }
+
+    // Test Delete torrent
+    public void test2DeleteTorrenttFromCAB() {
+
+        // Add torrent first
+        test1AddTorrent();
+
+        // Long click on pre-added torrent
+        mSolo.clickLongOnText("debian");
+
+        // Click pause button on Action menu
+        mSolo.clickOnView(getActivity().findViewById(R.id.action_delete));
+
+        // wait to dialog to pop up
+        getInstrumentation().waitForIdleSync();
+
+        // Confirm Delete
+        mSolo.clickOnButton(mSolo.getString(R.string.ok));
+
+        // Check is on the Downloading list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(2, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+        // Get item with text "debian"
+        assertFalse("Torrent not Deleted", mSolo.searchText("debian"));
+
+    }
+
+    // Test Delete with data torrent
+    public void test2DeleteDataTorrenttFromCAB() {
+
+        // Add torrent first
+        test1AddTorrent();
+
+        // Long click on pre-added torrent
+        mSolo.clickLongOnText("debian");
+
+        // Click pause button on Action menu
+        mSolo.clickOnView(getActivity().findViewById(R.id.action_delete_drive));
+
+        // wait to dialog to pop up
+        getInstrumentation().waitForIdleSync();
+
+        // Confirm Delete
+        mSolo.clickOnButton(mSolo.getString(R.string.ok));
+
+        // Check is on the Downloading list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(2, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+        // Get item with text "debian"
+        assertFalse("Torrent not Deleted with data", mSolo.searchText("debian"));
+
     }
 
 }
