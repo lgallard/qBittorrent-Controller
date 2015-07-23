@@ -899,8 +899,36 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     public void popBackStackPhoneView() {
+
+        // Set default toolbar behaviour
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+
+
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+
+        drawerToggle.setToolbarNavigationClickListener(ItemstFragment.originalListener);
+
+        // Show herderInfo in phone's view
+        if (findViewById(R.id.one_frame) != null) {
+
+            if (headerInfo != null) {
+                if (header) {
+                    headerInfo.setVisibility(View.VISIBLE);
+                } else {
+                    headerInfo.setVisibility(View.GONE);
+                }
+            }
+
+        }else{
+                   headerInfo.setVisibility(View.VISIBLE);
+        }
+
+
         getFragmentManager().popBackStack();
-        headerInfo.setVisibility(View.VISIBLE);
+
     }
 
     @Override
