@@ -500,11 +500,35 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
             // Get All Adviews
             ArrayList<AdView> mAdviews = mSolo.getCurrentViews(AdView.class);
 
-            // Check ad unit id
+
+            // Check ad unit id            // Check ad unit id
+            assertTrue("Ads not loaded",mAdviews.size() > 0);
+            assertNotNull("Ads not loaded", mAdviews.get(0).getAdUnitId());
             assertEquals("Ads not loaded", "ca-app-pub-1035265933040074/6449288097",mAdviews.get(0).getAdUnitId());
+
         }
 
     }
 
 
+    // Check Ads were loaded
+    public void test1RSSAdsUnitId() {
+        mSolo.clickOnMenuItem(mSolo.getString(R.string.action_rss));
+//        mSolo.assertCurrentActivity("Can't open RSS Feed activity", RSSFeedActivity.class);
+
+        if (mActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+
+            getInstrumentation().waitForIdleSync();
+
+            // Get All Adviews
+            ArrayList<AdView> mAdviews = mSolo.getCurrentViews(AdView.class);
+
+            // Check ad unit id
+            assertTrue("Ads not loaded",mAdviews.size() > 0);
+            assertNotNull("Ads not loaded", mAdviews.get(0).getAdUnitId());
+            assertEquals("Ads not loaded", "ca-app-pub-1035265933040074/6449288097",mAdviews.get(0).getAdUnitId());
+
+        }
+
+    }
 }
