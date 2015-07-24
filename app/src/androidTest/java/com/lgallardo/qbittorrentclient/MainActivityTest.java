@@ -5,6 +5,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdView;
 import com.robotium.solo.Solo;
 
 import java.util.ArrayList;
@@ -260,41 +261,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
-    // Test Pause torrent
-    public void test1PauseTorrentFromDetails() {
-
-        // Add torrent first
-        mActivity.addTorrent("http://cdimage.debian.org/debian-cd/8.1.0/amd64/bt-cd/debian-8.1.0-amd64-CD-1.iso.torrent");
-        mSolo.sleep(1000);
-        getInstrumentation().waitForIdleSync();
-
-        // Open All list
-        mSolo.clickOnActionBarHomeButton();
-        mSolo.clickInList(1, mLeftDrawerIndex);
-        getInstrumentation().waitForIdleSync();
-
-
-        // Long click on pre-added torrent
-        mSolo.clickOnText("debian");
-        mSolo.waitForText(mSolo.getString(R.string.torrent_details_properties));
-
-        // Click pause button on Action menu
-//        mSolo = new Solo(getInstrumentation(), getActivity());
-        mSolo.clickOnView(getActivity().findViewById(R.id.action_resume));
-
-        // Wait fro Downloading Action bar message
-        mSolo.waitForText(mActivity.getResources().getStringArray(R.array.navigation_drawer_items_array)[1]);
-
-        // Check is on the Paused list
-        mSolo.clickOnActionBarHomeButton();
-        mSolo.clickInList(4, mLeftDrawerIndex);
-        getInstrumentation().waitForIdleSync();
-
-        // Get item with text "debian"
-        assertNotNull("Torrent not on Paused list", mSolo.getText("debian"));
-
-
-    }
 
     // Test Resume torrent
     public void test1ResumeTorrentFromCAB() {
@@ -310,45 +276,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         // Click pause button on Action menu
         mSolo.clickOnView(getActivity().findViewById(R.id.action_resume));
 
-        // Check is on the Downloading list
-        mSolo.clickOnActionBarHomeButton();
-        mSolo.clickInList(2, mLeftDrawerIndex);
-        getInstrumentation().waitForIdleSync();
-
-        // Get item with text "debian"
-        assertNotNull("Torrent not on Downloading list", mSolo.getText("debian"));
-
-
-    }
-
-    // Test Resume torrent
-    public void test1ResumeTorrentFromDetails() {
-
-//        // Add torrent first
-//        mActivity.addTorrent("http://cdimage.debian.org/debian-cd/8.1.0/amd64/bt-cd/debian-8.1.0-amd64-CD-1.iso.torrent");
-//        getInstrumentation().waitForIdleSync();
-        test1AddTorrent();
-
-        // Open All list
+        // Check is on the All list
         mSolo.clickOnActionBarHomeButton();
         mSolo.clickInList(1, mLeftDrawerIndex);
-        getInstrumentation().waitForIdleSync();
-
-
-        // Long click on pre-added torrent
-        mSolo.clickOnText("debian");
-        mSolo.waitForText(mSolo.getString(R.string.torrent_details_properties));
-
-        // Click pause button on Action menu
-//        mSolo = new Solo(getInstrumentation(), getActivity());
-        mSolo.clickOnView(getActivity().findViewById(R.id.action_resume));
-
-        // Wait fro Downloading Action bar message
-        mSolo.waitForText(mActivity.getResources().getStringArray(R.array.navigation_drawer_items_array)[1]);
-
-        // Check is on the Downloading list
-        mSolo.clickOnActionBarHomeButton();
-        mSolo.clickInList(2, mLeftDrawerIndex);
         getInstrumentation().waitForIdleSync();
 
         // Get item with text "debian"
@@ -377,10 +307,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         // Confirm Delete
         mSolo.clickOnButton(mSolo.getString(R.string.ok));
+        getInstrumentation().waitForIdleSync();
 
-        // Check is on the Downloading list
+        // Check is on the All list
         mSolo.clickOnActionBarHomeButton();
-        mSolo.clickInList(2, mLeftDrawerIndex);
+        mSolo.clickInList(1, mLeftDrawerIndex);
         getInstrumentation().waitForIdleSync();
 
         // Get item with text "debian"
@@ -407,6 +338,71 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         // Confirm Delete
         mSolo.clickOnButton(mSolo.getString(R.string.ok));
+        getInstrumentation().waitForIdleSync();
+
+        // Check is on the All list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(1, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+        // Try to get item with text "debian"
+        assertFalse("Torrent not Deleted with data", mSolo.searchText("debian"));
+
+    }
+
+    // Test Pause torrent
+    public void test1PauseTorrentFromDetails() {
+
+        // Add torrent first
+        mActivity.addTorrent("http://cdimage.debian.org/debian-cd/8.1.0/amd64/bt-cd/debian-8.1.0-amd64-CD-1.iso.torrent");
+        getInstrumentation().waitForIdleSync();
+
+        // Open All list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(1, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+
+        // Long click on pre-added torrent
+        mSolo.clickOnText("debian");
+        mSolo.waitForText(mSolo.getString(R.string.torrent_details_properties));
+
+        // Click pause button on Action menu
+//        mSolo = new Solo(getInstrumentation(), getActivity());
+        mSolo.clickOnView(getActivity().findViewById(R.id.action_pause));
+
+        // Check is on the Paused list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(4, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+        // Get item with text "debian"
+        assertNotNull("Torrent not on Paused list", mSolo.getText("debian"));
+
+
+    }
+
+    // Test Resume torrent
+    public void test1ResumeTorrentFromDetails() {
+
+        // Add torrent first
+        mActivity.addTorrent("http://cdimage.debian.org/debian-cd/8.1.0/amd64/bt-cd/debian-8.1.0-amd64-CD-1.iso.torrent");
+        getInstrumentation().waitForIdleSync();
+//        test1AddTorrent();
+
+        // Open All list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(1, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+
+        // Long click on pre-added torrent
+        mSolo.clickOnText("debian");
+        mSolo.waitForText(mSolo.getString(R.string.torrent_details_properties));
+
+        // Click pause button on Action menu
+//        mSolo = new Solo(getInstrumentation(), getActivity());
+        mSolo.clickOnView(getActivity().findViewById(R.id.action_resume));
 
         // Check is on the Downloading list
         mSolo.clickOnActionBarHomeButton();
@@ -414,8 +410,101 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         getInstrumentation().waitForIdleSync();
 
         // Get item with text "debian"
+        assertNotNull("Torrent not on Downloading list", mSolo.getText("debian"));
+
+    }
+
+    // Test Resume torrent
+    public void test2DeleteTorrentFromFromDetails() {
+
+        // Add torrent first
+        mActivity.addTorrent("http://cdimage.debian.org/debian-cd/8.1.0/amd64/bt-cd/debian-8.1.0-amd64-CD-1.iso.torrent");
+        getInstrumentation().waitForIdleSync();
+
+
+        // Open All list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(1, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+
+        // Long click on pre-added torrent
+        mSolo.clickOnText("debian");
+        mSolo.waitForText(mSolo.getString(R.string.torrent_details_properties));
+
+        // Click pause button on Action menu
+        mSolo.clickOnView(getActivity().findViewById(R.id.action_delete));
+
+        // wait to dialog to pop up
+        getInstrumentation().waitForIdleSync();
+
+        // Confirm Delete
+        mSolo.clickOnButton(mSolo.getString(R.string.ok));
+        getInstrumentation().waitForIdleSync();
+
+        // Check is on the All list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(1, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+        // Try to get item with text "debian"
         assertFalse("Torrent not Deleted with data", mSolo.searchText("debian"));
 
     }
+
+    // Test Resume torrent
+    public void test2DeleteTorrentWithDataFromFromDetails() {
+
+        // Add torrent first
+        mActivity.addTorrent("http://cdimage.debian.org/debian-cd/8.1.0/amd64/bt-cd/debian-8.1.0-amd64-CD-1.iso.torrent");
+        getInstrumentation().waitForIdleSync();
+
+
+        // Open All list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(1, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+
+        // Long click on pre-added torrent
+        mSolo.clickOnText("debian");
+        mSolo.waitForText(mSolo.getString(R.string.torrent_details_properties));
+
+        // Click pause button on Action menu
+        mSolo.clickOnView(getActivity().findViewById(R.id.action_delete_drive));
+
+        // wait to dialog to pop up
+        getInstrumentation().waitForIdleSync();
+
+        // Confirm Delete
+        mSolo.clickOnButton(mSolo.getString(R.string.ok));
+        getInstrumentation().waitForIdleSync();
+
+        // Check is on the All list
+        mSolo.clickOnActionBarHomeButton();
+        mSolo.clickInList(1, mLeftDrawerIndex);
+        getInstrumentation().waitForIdleSync();
+
+        // Try to get item with text "debian"
+        assertFalse("Torrent not Deleted with data", mSolo.searchText("debian"));
+
+    }
+
+    // Check Ads were loaded
+    public void test1AdsUnitId(){
+
+        if (mActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+
+            getInstrumentation().waitForIdleSync();
+
+            // Get All Adviews
+            ArrayList<AdView> mAdviews = mSolo.getCurrentViews(AdView.class);
+
+            // Check ad unit id
+            assertEquals("Ads not loaded", "ca-app-pub-1035265933040074/6449288097",mAdviews.get(0).getAdUnitId());
+        }
+
+    }
+
 
 }
