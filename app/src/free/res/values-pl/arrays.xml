@@ -94,5 +94,28 @@
         <item>Uzyskaj Pro</item>
         <item>Pomoc</item>
     </string-array>
-
+    <string-array name="scheduler_days">
+        <item name="1">Codziennie</item>
+        <item name="2">Weekendy</item>
+        <item name="3">W dni powszednie</item>
+        <item name="4">Poniedziałek</item>
+        <item name="5">Wtorek</item>
+        <item name="6">Środa</item>
+        <item name="7">Czwartek</item>
+        <item name="8">Piątek</item>
+        <item name="9">Sobota</item>
+        <item name="10">Niedziela</item>
+    </string-array>
+    <string-array name="scheduler_days_values">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+        <item name="4">3</item>
+        <item name="5">4</item>
+        <item name="6">5</item>
+        <item name="7">6</item>
+        <item name="8">7</item>
+        <item name="9">8</item>
+        <item name="10">9</item>
+    </string-array>
 </resources>

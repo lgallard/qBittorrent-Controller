@@ -94,4 +94,28 @@
         <item>Ottenere PRO</item>
         <item>Aiuto</item>
     </string-array>
+    <string-array name="scheduler_days">
+        <item name="1">Ogni giorno</item>
+        <item name="2">Fine settimana</item>
+        <item name="3">Nei giorni feriali</item>
+        <item name="4">Lunedi</item>
+        <item name="5">Martedì</item>
+        <item name="6">Mercoledì</item>
+        <item name="7">Giovedi</item>
+        <item name="8">Venerdì</item>
+        <item name="9">Sabato</item>
+        <item name="10">Domenica</item>
+    </string-array>
+    <string-array name="scheduler_days_values">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+        <item name="4">3</item>
+        <item name="5">4</item>
+        <item name="6">5</item>
+        <item name="7">6</item>
+        <item name="8">7</item>
+        <item name="9">8</item>
+        <item name="10">9</item>
+    </string-array>
 </resources>
