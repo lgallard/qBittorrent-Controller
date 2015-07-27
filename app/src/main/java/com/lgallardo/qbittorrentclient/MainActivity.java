@@ -595,7 +595,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         activityIsVisible = false;
     }
 
-    // TODO: Unify free & pro
     // Load Banner
     public void loadBanner() {
 

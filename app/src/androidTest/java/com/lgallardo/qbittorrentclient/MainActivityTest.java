@@ -490,7 +490,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
-    // Check Ads were loaded
+    // Check if Ads were loaded in MainActivity
     public void test1AdsUnitId(){
 
         if (mActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
@@ -511,10 +511,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
 
-    // Check Ads were loaded
-    public void test1RSSAdsUnitId() {
+    // Check if Ads were loaded in RSS feed
+    public void test1RSSFeedAdsUnitId() {
         mSolo.clickOnMenuItem(mSolo.getString(R.string.action_rss));
-//        mSolo.assertCurrentActivity("Can't open RSS Feed activity", RSSFeedActivity.class);
 
         if (mActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
 
@@ -524,11 +523,35 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
             ArrayList<AdView> mAdviews = mSolo.getCurrentViews(AdView.class);
 
             // Check ad unit id
-            assertTrue("Ads not loaded",mAdviews.size() > 0);
-            assertNotNull("Ads not loaded", mAdviews.get(0).getAdUnitId());
-            assertEquals("Ads not loaded", "ca-app-pub-1035265933040074/6449288097",mAdviews.get(0).getAdUnitId());
+            assertTrue("Ads not loaded in RSS Feed",mAdviews.size() > 0);
+            assertNotNull("Ads not loaded in RSS Feed", mAdviews.get(0).getAdUnitId());
+            assertEquals("Ads not loaded in RSS Feed", R.id.adViewRssFeed, mAdviews.get(0).getId());
+            assertEquals("Ads not loaded in RSS Feed", "ca-app-pub-1035265933040074/6449288097",mAdviews.get(0).getAdUnitId());
+        }
+    }
+
+    // Check if Ads were loaded in RSS item list
+    public void test1RSSItemAdsUnitId() {
+        mSolo.clickOnMenuItem(mSolo.getString(R.string.action_rss));
+
+        if (mActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+
+            getInstrumentation().waitForIdleSync();
+
+            mSolo.clickInList(1);
+
+            mSolo.sleep(3000);
+
+            // Get All Adviews
+            ArrayList<AdView> mAdviews = mSolo.getCurrentViews(AdView.class);
+
+            // Check ad unit id
+            assertTrue("Ads not loaded in RSS Item list", mAdviews.size() > 0);
+            assertNotNull("Ads not loaded in RSS Item list", mAdviews.get(0).getAdUnitId());
+            assertEquals("Ads not loaded in RSS Item list", R.id.adViewRssItem, mAdviews.get(0).getId());
+            assertEquals("Ads not loaded in RSS Item list", "ca-app-pub-1035265933040074/6449288097",mAdviews.get(0).getAdUnitId());
 
         }
-
     }
+
 }

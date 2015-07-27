@@ -24,6 +24,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
 
 public class RSSFeedActivity extends AppCompatActivity {
@@ -37,6 +40,7 @@ public class RSSFeedActivity extends AppCompatActivity {
     public static RSSFeed rssInfo;
 
     public static ArrayList<RSSFeed> rssFeeds = new ArrayList<RSSFeed>();
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,11 +130,13 @@ public class RSSFeedActivity extends AppCompatActivity {
         registerForContextMenu(listView);
 
 
-
-
         // If it were awaked from an intent-filter,
         // get intent from the intent filter and Add URL torrent
         handleIntent(getIntent());
+
+
+        // Load Ads
+        loadBanner();
     }
 
 
@@ -499,6 +505,20 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    // Load Banner
+    public void loadBanner() {
+
+        if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+
+            // Look up the AdView as a resource and load a request.
+            adView = (AdView) this.findViewById(R.id.adViewRssFeed);
+            AdRequest adRequest = new AdRequest.Builder().build();
+
+            // Start loading the ad in the background.
+            adView.loadAd(adRequest);
+        }
     }
 
     // Here is where the action happens
