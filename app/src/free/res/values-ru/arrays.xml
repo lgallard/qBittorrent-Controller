@@ -94,4 +94,28 @@
     <item>Получить Pro-версию</item>
     <item>Помощь</item>
   </string-array>
+  <string-array name="scheduler_days">
+    <item name="1">Каждый день</item>
+    <item name="2">Выходные</item>
+    <item name="3">будни</item>
+    <item name="4">Понедельник</item>
+    <item name="5">Вторник</item>
+    <item name="6">Среда</item>
+    <item name="7">Четверг</item>
+    <item name="8">Пятница</item>
+    <item name="9">Субботу</item>
+    <item name="10">Воскресенье</item>
+  </string-array>
+  <string-array name="scheduler_days_values">
+    <item name="1">0</item>
+    <item name="2">1</item>
+    <item name="3">2</item>
+    <item name="4">3</item>
+    <item name="5">4</item>
+    <item name="6">5</item>
+    <item name="7">6</item>
+    <item name="8">7</item>
+    <item name="9">8</item>
+    <item name="10">9</item>
+  </string-array>
 </resources>
