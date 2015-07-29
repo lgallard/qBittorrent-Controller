@@ -99,6 +99,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static final String TAG_MAX_ACT_UPLOADS = "max_active_uploads";
     protected static final String TAG_MAX_ACT_TORRENTS = "max_active_torrents";
     protected static final String TAG_URL = "url";
+    protected static final String TAG_SCHEDULER_ENABLED = "scheduler_enabled";
+    protected static final String TAG_SCHEDULE_FROM_HOUR = "schedule_from_hour";
+    protected static final String TAG_SCHEDULE_FROM_MIN = "schedule_from_min";
+    protected static final String TAG_SCHEDULE_TO_HOUR = "schedule_to_hour";
+    protected static final String TAG_SCHEDULE_TO_MIN = "schedule_to_min";
+    protected static final String TAG_SCHEDULER_DAYS = "scheduler_days";
+
 
     protected static final int SETTINGS_CODE = 0;
     protected static final int OPTION_CODE = 1;
@@ -150,6 +157,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static long downloadSpeedCount;
     protected static int uploadCount;
     protected static int downloadCount;
+    protected static boolean schedule_alternative_rate_limits;
+    protected static String alt_from_hour;
+    protected static String alt_from_min;
+    protected static String alt_to_hour;
+    protected static String alt_to_min;
+    protected static String scheduler_days;
 
     static Torrent[] lines;
     static String[] names;
@@ -215,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Packge info
     public static String packageName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1278,8 +1292,25 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Maximum number of active simultaneous downloads and uploads
             json += ",\"max_active_torrents\":" + max_act_torrents;
 
-            // Put everything in an json object
+            // Schedule alternative rate limits
+            json += ",\"scheduler_enabled\":" + schedule_alternative_rate_limits;
 
+            // Scheduler starting hour
+            json += ",\"schedule_from_hour\":" + alt_from_hour;
+
+            // Scheduler starting min
+            json += ",\"schedule_from_min\":" + alt_from_min;
+
+            // Scheduler ending hour
+            json += ",\"schedule_to_hour\":" + alt_to_hour;
+
+            // Scheduler ending min
+            json += ",\"schedule_to_min\":" + alt_to_min;
+
+            // Scheduler scheduler days
+            json += ",\"scheduler_days\":" + scheduler_days;
+
+            // Put everything in an json object
             json = "{" + json + "}";
 
             // Set preferences using this json object
@@ -1939,6 +1970,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         max_act_downloads = sharedPrefs.getString("max_act_downloads", "0");
         max_act_uploads = sharedPrefs.getString("max_act_uploads", "0");
         max_act_torrents = sharedPrefs.getString("max_act_torrents", "0");
+
+        schedule_alternative_rate_limits = sharedPrefs.getBoolean("schedule_alternative_rate_limits", false);
+
+        alt_from_hour = TimePreference.fixStringDecimal(TimePreference.getHour(sharedPrefs.getString("alt_from", "12:00")));
+        alt_from_min = TimePreference.fixStringDecimal(TimePreference.getMinute(sharedPrefs.getString("alt_from", "12:00")));
+
+        alt_to_hour = TimePreference.fixStringDecimal(TimePreference.getHour(sharedPrefs.getString("alt_to", "12:00")));
+        alt_to_min = TimePreference.fixStringDecimal(TimePreference.getMinute(sharedPrefs.getString("alt_to", "12:00")));
+
+       scheduler_days = sharedPrefs.getString("scheduler_days", "NULL");
+
 
     }
 
@@ -2993,6 +3035,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     max_act_uploads = json.getString(TAG_MAX_ACT_UPLOADS);
                     max_act_torrents = json.getString(TAG_MAX_ACT_TORRENTS);
 
+                    schedule_alternative_rate_limits = json.getBoolean(TAG_SCHEDULER_ENABLED);
+                    alt_from_hour = json.getString(TAG_SCHEDULE_FROM_HOUR);
+                    alt_from_min = json.getString(TAG_SCHEDULE_FROM_MIN);
+                    alt_to_hour = json.getString(TAG_SCHEDULE_TO_HOUR);
+                    alt_to_min = json.getString(TAG_SCHEDULE_TO_MIN);
+                    scheduler_days = json.getString(TAG_SCHEDULER_DAYS);
+
                     // Save options locally
                     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                     Editor editor = sharedPrefs.edit();
@@ -3009,6 +3058,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     editor.putString("max_act_downloads", max_act_downloads);
                     editor.putString("max_act_uploads", max_act_uploads);
                     editor.putString("max_act_torrents", max_act_torrents);
+
+                    editor.putBoolean("schedule_alternative_rate_limits",schedule_alternative_rate_limits);
+                    editor.putString("alt_from_hour", alt_from_hour);
+                    editor.putString("alt_from_min", alt_from_min);
+                    editor.putString("alt_to_min", alt_to_hour);
+                    editor.putString("alt_to_min", alt_to_min);
+                    editor.putString("scheduler_days", scheduler_days);
+
 
                     // Commit changes
                     editor.commit();
