@@ -93,4 +93,28 @@
         <item>Settings</item>
         <item>Help</item>
     </string-array>
+    <string-array name="scheduler_days">
+        <item name="1">Every day</item>
+        <item name="2">Weekends</item>
+        <item name="3">Weekdays</item>
+        <item name="4">Monday</item>
+        <item name="5">Tuesday</item>
+        <item name="6">Wednesday</item>
+        <item name="7">Thursday</item>
+        <item name="8">Friday</item>
+        <item name="9">Saturday</item>
+        <item name="10">Sunday</item>
+    </string-array>
+    <string-array name="scheduler_days_values">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+        <item name="4">3</item>
+        <item name="5">4</item>
+        <item name="6">5</item>
+        <item name="7">6</item>
+        <item name="8">7</item>
+        <item name="9">8</item>
+        <item name="10">9</item>
+    </string-array>
 </resources>

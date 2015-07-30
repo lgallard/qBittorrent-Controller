@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.ListFragment;
@@ -17,6 +18,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -146,6 +148,7 @@ public class ItemstFragment extends ListFragment {
                     return true;
                 }
 
+                // This actions are click in the torrent list view (CAB)
                 @Override
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
@@ -193,6 +196,7 @@ public class ItemstFragment extends ListFragment {
 
 
                         case R.id.action_resume:
+
                             m.startSelectedTorrents(hashes);
 
                             // Clear selection
@@ -423,6 +427,8 @@ public class ItemstFragment extends ListFragment {
                             mSwipeRefreshLayout.setEnabled(true);
                             return true;
                     }
+
+
                 }
 
                 @Override
@@ -535,13 +541,12 @@ public class ItemstFragment extends ListFragment {
 
                         }
 
-
                         FragmentManager fm = getFragmentManager();
                         fm.popBackStack();
+
+
                     }
                 });
-
-
             } else {
                 fragmentManager.beginTransaction().replace(this.getSecondFragmentContainer(), detailsFragment, "secondFragment").addToBackStack("secondFragment").commit();
             }

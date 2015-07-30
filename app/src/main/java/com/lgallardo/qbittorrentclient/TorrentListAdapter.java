@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -87,6 +88,18 @@ class TorrentListAdapter extends ArrayAdapter<String> {
                 icon.setImageResource(R.drawable.ic_action_recheck);
             }
 
+            if(MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
+                // Set progress bar
+                ProgressBar progressBar = (ProgressBar) row.findViewById(R.id.progressBar1);
+                TextView percentageTV = (TextView) row.findViewById(R.id.percentage);
+
+                String percentage = torrentsData[position].getPercentage();
+
+                progressBar.setProgress(Integer.parseInt(percentage));
+
+                percentageTV.setText(percentage + "%");
+            }
+
             row.setBackgroundColor(getContext().getResources().getColor(android.R.color.background_light)); //default color
 
             if (mSelection.get(position) != null) {
@@ -94,19 +107,26 @@ class TorrentListAdapter extends ArrayAdapter<String> {
             }
         } else {
 
-            //            Log.d("Debug", "No results");
+//            Log.d("Debug", "No results");
 
             TextView name = (TextView) row.findViewById(R.id.file);
             name.setText(context.getString(R.string.no_results));
 
-            // Hide torrent layout
-//            ProgressBar progressBar = (ProgressBar) row.findViewById(R.id.progressBar1);
-//            TextView percentageTV = (TextView) row.findViewById(R.id.percentage);
+            // Hide progress bar
+            if(MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
+
+                ProgressBar progressBar = (ProgressBar) row.findViewById(R.id.progressBar1);
+                TextView percentageTV = (TextView) row.findViewById(R.id.percentage);
+
+                progressBar.setVisibility(View.GONE);
+                percentageTV.setVisibility(View.GONE);
+
+            }
+
+
             ImageView icon = (ImageView) row.findViewById(R.id.icon);
             TextView info = (TextView) row.findViewById(R.id.info);
 
-//            progressBar.setVisibility(View.GONE);
-//            percentageTV.setVisibility(View.GONE);
             icon.setVisibility(View.GONE);
             info.setVisibility(View.GONE);
 
@@ -115,7 +135,6 @@ class TorrentListAdapter extends ArrayAdapter<String> {
         }
 
         return (row);
-
     }
 
 

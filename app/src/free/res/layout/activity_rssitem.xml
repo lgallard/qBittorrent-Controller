@@ -11,6 +11,7 @@
 
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?windowBackground"
@@ -25,7 +26,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/app_bar"
-        android:background="?backgroundSelector">
-l
+        android:background="?backgroundSelector"
+        android:paddingBottom="50dp" >
+
     </ListView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adViewRssItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-1035265933040074/6449288097" />
 </RelativeLayout>

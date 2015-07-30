@@ -214,4 +214,5 @@
   <string name="error_rss">Ezin da RSS-a lortu</string>
   <string name="settings_qbittorrent_advanced">Aukera aurreratuak...</string>
   <string name="notifications_rss_available">Torrentak berriak eskuragarri</string>
+  <string name="options_qbittorrent_scheduler_days_title">Noiz:</string>
 </resources>

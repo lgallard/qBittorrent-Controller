@@ -19,21 +19,29 @@ android {
         }
     }
 
+
+    lintOptions {
+        abortOnError false
+    }
+
+    adbOptions {
+        timeOutInMs 600000
+    }
     productFlavors {
         pro {
             applicationId 'com.lgallardo.qbittorrentclientpro'
-            versionName '4.1.4'
+            versionName '4.1.5'
             minSdkVersion 14
             targetSdkVersion 21
-            versionCode 414
+            versionCode 415
             archivesBaseName = "qBittorrentClient_v" + versionName
         }
         free {
             applicationId "com.lgallardo.qbittorrentclient"
-            versionName '4.1.4'
+            versionName '4.1.5'
             minSdkVersion 14
             targetSdkVersion 21
-            versionCode 414
+            versionCode 415
             archivesBaseName = "qBittorrentClient_v" + versionName
         }
     }
@@ -63,4 +71,8 @@ dependencies {
         exclude module: 'org.apache.httpcomponents:httpclient'
     }
     compile 'com.google.android.gms:play-services:7.3.0'
+    // Robotium
+    dependencies {
+        compile 'com.jayway.android.robotium:robotium-solo:5.4.1'
+    }
 }

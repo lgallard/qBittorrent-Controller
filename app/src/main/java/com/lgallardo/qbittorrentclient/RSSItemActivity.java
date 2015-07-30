@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
 
 public class RSSItemActivity extends AppCompatActivity {
@@ -22,6 +25,7 @@ public class RSSItemActivity extends AppCompatActivity {
     public static SwipeRefreshLayout mSwipeRefreshLayout;
     public static int rssChannelPosition;
     public static RSSFeedItemListAdapter myItemsAdapter;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +113,9 @@ public class RSSItemActivity extends AppCompatActivity {
 
         listView.setAdapter(myItemsAdapter);
 
+        // Load Ads
+        loadBanner();
+
 
     }
 
@@ -170,6 +177,20 @@ public class RSSItemActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // Load Banner
+    public void loadBanner() {
+
+        if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+
+            // Look up the AdView as a resource and load a request.
+            adView = (AdView) this.findViewById(R.id.adViewRssItem);
+            AdRequest adRequest = new AdRequest.Builder().build();
+
+            // Start loading the ad in the background.
+            adView.loadAd(adRequest);
         }
     }
 

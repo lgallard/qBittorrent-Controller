@@ -11,6 +11,9 @@
 package com.lgallardo.qbittorrentclient;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -22,7 +25,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.view.Menu;
 
-public class SettingsActivity extends PreferenceActivity implements android.content.SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private ListPreference currentServer;
     private EditTextPreference hostname;
@@ -61,19 +64,14 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         currentServer = (ListPreference) findPreference("currentServer");
         hostname = (EditTextPreference) findPreference("hostname");
         subfolder = (EditTextPreference) findPreference("subfolder");
-
         https = (CheckBoxPreference) findPreference("https");
         port = (EditTextPreference) findPreference("port");
         username = (EditTextPreference) findPreference("username");
         password = (EditTextPreference) findPreference("password");
-//        old_version = (CheckBoxPreference) findPreference("old_version");
-
         auto_refresh = (CheckBoxPreference) findPreference("auto_refresh");
         refresh_period = (ListPreference) findPreference("refresh_period");
-
         connection_timeout = (EditTextPreference) findPreference("connection_timeout");
         data_timeout = (EditTextPreference) findPreference("data_timeout");
-
         sortBy = (ListPreference) findPreference("sortby");
         reverse_order = (CheckBoxPreference) findPreference("reverse_order");
 
@@ -91,19 +89,45 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 // do whatever you want with new value
 
-                // Read and load preferences
-                saveQBittorrentServerValues();
-                getQBittorrentServerValues(newValue.toString());
+                if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+
+                    Builder builder = new Builder(SettingsActivity.this);
+
+                    // Message
+                    builder.setMessage(R.string.settings_qbittorrent_pro_message).setTitle(R.string.settings_qbittorrent_pro_title);
+
+                    // Ok
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User accepted the dialog
+
+                            // Set first server
+                            currentServer.setValueIndex(0);
+                        }
+                    });
+
+                    // Create dialog
+                    AlertDialog dialog = builder.create();
+
+                    // Show dialog
+                    dialog.show();
+
+                } else {
+
+                    // Read and load preferences
+                    saveQBittorrentServerValues();
+                    getQBittorrentServerValues(newValue.toString());
+                }
+
                 return true;
             }
         });
 
         // Set last state in intent result
         Intent result = new Intent();
-        result.putExtra("currentState", com.lgallardo.qbittorrentclient.MainActivity.currentState);
+        result.putExtra("currentState", MainActivity.currentState);
         setResult(Activity.RESULT_OK, result);
-
-
 
     }
 
@@ -116,7 +140,6 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
         // Update values on Screen
         refreshScreenValues();
     }
@@ -145,10 +168,9 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         hostname.setSummary(sharedPrefs.getString("hostname" + value, ""));
 
         if (hostname.getText().toString().equals("")) {
-
             hostname.setSummary(getString(R.string.settings_qbittorrent_hostname_hint));
-
         }
+
         subfolder.setText(sharedPrefs.getString("subfolder" + value, ""));
         subfolder.setSummary(sharedPrefs.getString("subfolder" + value, ""));
 
@@ -179,17 +201,15 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         }
 
         sortBy.setSummary(sortBy.getEntry());
-        reverse_order.setChecked(sharedPrefs.getBoolean("reverse_order"+value, false));
+        reverse_order.setChecked(sharedPrefs.getBoolean("reverse_order" + value, false));
 
         dark_ui.setChecked(sharedPrefs.getBoolean("dark_ui", false));
-
 
         if (notification_period.getEntry() == null) {
             notification_period.setValueIndex(1);
         }
 
         notification_period.setSummary(notification_period.getEntry());
-
 
     }
 
@@ -243,11 +263,11 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
         }
 
         if (connection_timeout.getText().toString() != null && connection_timeout.getText().toString() != "") {
-            editor.putString("connection_timeout" + currentServerValue, connection_timeout.getText().toString());
+            editor.putString("connection_timeout", connection_timeout.getText().toString());
         }
 
         if (data_timeout.getText().toString() != null && data_timeout.getText().toString() != "") {
-            editor.putString("data_timeout" + currentServerValue, data_timeout.getText().toString());
+            editor.putString("data_timeout", data_timeout.getText().toString());
         }
 
         editor.putBoolean("revserse_order" + currentServerValue, reverse_order.isChecked());
@@ -256,7 +276,5 @@ public class SettingsActivity extends PreferenceActivity implements android.cont
 
         // Commit changes
         editor.commit();
-
     }
-
 }

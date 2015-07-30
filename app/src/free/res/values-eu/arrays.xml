@@ -94,4 +94,28 @@
     <item>Lortu Pro</item>
     <item>Laguntza</item>
   </string-array>
+  <string-array name="scheduler_days">
+    <item name="1">Egunero</item>
+    <item name="2">Asteburuak</item>
+    <item name="3">Lanegunetan</item>
+    <item name="4">Astelehena</item>
+    <item name="5">Asteartea</item>
+    <item name="6">Asteazkena</item>
+    <item name="7">Osteguna</item>
+    <item name="8">Ostirala</item>
+    <item name="9">Larunbat</item>
+    <item name="10">Igandea</item>
+  </string-array>
+  <string-array name="scheduler_days_values">
+    <item name="1">0</item>
+    <item name="2">1</item>
+    <item name="3">2</item>
+    <item name="4">3</item>
+    <item name="5">4</item>
+    <item name="6">5</item>
+    <item name="7">6</item>
+    <item name="8">7</item>
+    <item name="9">8</item>
+    <item name="10">9</item>
+  </string-array>
 </resources>
