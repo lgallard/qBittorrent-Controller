@@ -224,4 +224,8 @@
     <string name="notifications_rss_available">New torrents available</string>
     <string name="error_rss">Could not get RSS</string>
     <string name="settings_qbittorrent_advanced">Advanced...</string>
+    <string name="options_qbittorrent_schedule_alternative_rate_limits">Schedule alternative rate limits</string>
+    <string name="options_qbittorrent_scheduler_days_title">When:</string>
+    <string name="options_qbittorrent_schedule_alt_from">From</string>
+    <string name="options_qbittorrent_schedule_alt_to">To</string>
 </resources>

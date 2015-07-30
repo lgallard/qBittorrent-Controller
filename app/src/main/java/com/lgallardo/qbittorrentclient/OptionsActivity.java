@@ -20,8 +20,6 @@ import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.Menu;
 
-import java.sql.Time;
-
 public class OptionsActivity extends PreferenceActivity  implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private TimePreference alt_from;
@@ -90,8 +88,8 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 
 		SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
 
-		String time_from = sharedPrefs.getString("alt_from", "12:00");
-		String time_to = sharedPrefs.getString("alt_to", "12:00");
+		String time_from = sharedPrefs.getString("alt_from", "8:00");
+		String time_to = sharedPrefs.getString("alt_to", "20:00");
 
 		alt_from.setSummary(TimePreference.fixStringDecimal(TimePreference.getHour(time_from)) + ":" + TimePreference.fixStringDecimal(TimePreference.getMinute(time_from)));
 		alt_to.setSummary(TimePreference.fixStringDecimal(TimePreference.getHour(time_to)) + ":" + TimePreference.fixStringDecimal(TimePreference.getMinute(time_to)));

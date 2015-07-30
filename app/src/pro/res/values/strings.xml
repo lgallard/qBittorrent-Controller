@@ -49,7 +49,6 @@
     <string name="torrentsRecheck">Recheck started</string>
     <string name="torrentstogglefisrtLastPiecePrio">Toggled first and last piece download!</string>
     <string name="torrentstoggleSequentialDownload">Toggled sequential download!</string>
-
     <string name="torrentPaused">Torrent paused!</string>
     <string name="torrentsSelectedPaused">Torrents paused!</string>
     <string name="AllTorrentsPaused">All torrents were paused!</string>
@@ -221,4 +220,8 @@
     <string name="checkbox_notifynew_rss">Notify new torrents?</string>
     <string name="notifications_rss_available">New torrents available</string>
     <string name="error_rss">Could not get RSS</string>
+    <string name="options_qbittorrent_schedule_alternative_rate_limits">Schedule alternative rate limits</string>
+    <string name="options_qbittorrent_scheduler_days_title">When:</string>
+    <string name="options_qbittorrent_schedule_alt_from">From</string>
+    <string name="options_qbittorrent_schedule_alt_to">To</string>
 </resources>

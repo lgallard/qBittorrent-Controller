@@ -1973,11 +1973,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         schedule_alternative_rate_limits = sharedPrefs.getBoolean("schedule_alternative_rate_limits", false);
 
-        alt_from_hour = TimePreference.fixStringDecimal(TimePreference.getHour(sharedPrefs.getString("alt_from", "12:00")));
-        alt_from_min = TimePreference.fixStringDecimal(TimePreference.getMinute(sharedPrefs.getString("alt_from", "12:00")));
+        alt_from_hour = "" + TimePreference.getHour(sharedPrefs.getString("alt_from", "8:00"));
+        alt_from_min = "" + TimePreference.getMinute(sharedPrefs.getString("alt_from", "8:00"));
 
-        alt_to_hour = TimePreference.fixStringDecimal(TimePreference.getHour(sharedPrefs.getString("alt_to", "12:00")));
-        alt_to_min = TimePreference.fixStringDecimal(TimePreference.getMinute(sharedPrefs.getString("alt_to", "12:00")));
+        alt_to_hour = "" + TimePreference.getHour(sharedPrefs.getString("alt_to", "20:00"));
+        alt_to_min = "" + TimePreference.getMinute(sharedPrefs.getString("alt_to", "20:00"));
 
        scheduler_days = sharedPrefs.getString("scheduler_days", "NULL");
 
@@ -3060,10 +3060,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     editor.putString("max_act_torrents", max_act_torrents);
 
                     editor.putBoolean("schedule_alternative_rate_limits",schedule_alternative_rate_limits);
-                    editor.putString("alt_from_hour", alt_from_hour);
-                    editor.putString("alt_from_min", alt_from_min);
-                    editor.putString("alt_to_min", alt_to_hour);
-                    editor.putString("alt_to_min", alt_to_min);
+                    editor.putString("alt_from", alt_from_hour + ":" + alt_from_min);
+                    editor.putString("alt_to", alt_to_hour + ":" + alt_to_min);
                     editor.putString("scheduler_days", scheduler_days);
 
 

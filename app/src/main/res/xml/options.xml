@@ -61,15 +61,15 @@
             android:key="schedule_alternative_rate_limits"
             android:title="@string/options_qbittorrent_schedule_alternative_rate_limits" />
         <com.lgallardo.qbittorrentclient.TimePreference
-            android:defaultValue="12:00"
+            android:defaultValue="8:00"
             android:dependency="schedule_alternative_rate_limits"
             android:key="alt_from"
-            android:title="From" />
+            android:title="@string/options_qbittorrent_schedule_alt_from" />
         <com.lgallardo.qbittorrentclient.TimePreference
-            android:defaultValue="12:00"
+            android:defaultValue="20:00"
             android:dependency="schedule_alternative_rate_limits"
             android:key="alt_to"
-            android:title="To" />
+            android:title="@string/options_qbittorrent_schedule_alt_to" />
         <ListPreference
             android:defaultValue="1"
             android:dependency="schedule_alternative_rate_limits"

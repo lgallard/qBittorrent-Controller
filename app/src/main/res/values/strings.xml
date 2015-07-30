@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="options_qbittorrent_schedule_alternative_rate_limits">Schedule alternative rate limits</string>
-    <string name="options_qbittorrent_scheduler_days_title">When:</string>
-</resources>

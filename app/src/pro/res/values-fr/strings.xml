@@ -208,4 +208,8 @@
     <string name="error_rss">Impossible d\'obtenir RSS</string>
     <string name="settings_qbittorrent_advanced">Options avancées...</string>
     <string name="notifications_rss_available">Torrentak berriak eskuragarri</string>
+    <string name="options_qbittorrent_schedule_alternative_rate_limits">Plannifier l\'utilisation des vitesses limites alternatives</string>
+    <string name="options_qbittorrent_schedule_alt_from">De</string>
+    <string name="options_qbittorrent_schedule_alt_to">À</string>
+    <string name="options_qbittorrent_scheduler_days_title">Quand:</string>
 </resources>

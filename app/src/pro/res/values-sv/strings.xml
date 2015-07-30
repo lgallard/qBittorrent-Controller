@@ -208,4 +208,8 @@
     <string name="error_rss">Det gick inte att få RSS</string>
     <string name="settings_qbittorrent_advanced">Alternativ avancerat...</string>
     <string name="notifications_rss_available">Nya torrents tillgängliga</string>
+    <string name="options_qbittorrent_schedule_alternative_rate_limits">Schemalägg användning av alternativa hastighetsgränser</string>
+    <string name="options_qbittorrent_schedule_alt_from">Från</string>
+    <string name="options_qbittorrent_schedule_alt_to">Till</string>
+    <string name="options_qbittorrent_scheduler_days_title">När:</string>
 </resources>
