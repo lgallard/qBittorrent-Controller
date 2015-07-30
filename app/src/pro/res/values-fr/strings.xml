@@ -212,4 +212,6 @@
     <string name="options_qbittorrent_schedule_alt_from">De</string>
     <string name="options_qbittorrent_schedule_alt_to">À</string>
     <string name="options_qbittorrent_scheduler_days_title">Quand:</string>
+    <string name="settings_qbittorrent_pro_title">Fonction non disponible</string>
+    <string name="settings_qbittorrent_pro_message">Cette fonctionnalité est disponible uniquement sur la version PRO qBittorrent!</string>
 </resources>
