@@ -215,7 +215,7 @@
   <string name="settings_qbittorrent_advanced">Aukera aurreratuak...</string>
   <string name="notifications_rss_available">Torrentak berriak eskuragarri</string>
   <string name="options_qbittorrent_scheduler_days_title">Noiz:</string>
-  <string name="options_qbittorrent_schedule_alt_from">Geroztik</string>
-  <string name="options_qbittorrent_schedule_alternative_rate_limits">Tasa mugak alternatiba ordutegiak</string>
-  <string name="options_qbittorrent_schedule_alt_to">Arte</string>
+  <string name="options_qbittorrent_schedule_alt_from">Hemendik</string>
+  <string name="options_qbittorrent_schedule_alternative_rate_limits">Egituratu aukerazko neurri mugak</string>
+  <string name="options_qbittorrent_schedule_alt_to">Hona</string>
 </resources>
