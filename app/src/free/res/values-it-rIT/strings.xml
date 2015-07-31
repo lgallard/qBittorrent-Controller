@@ -1,8 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="app_name">qBittorrent Client</string>
-    <string name="app_shortname">Client</string>
+    <string name="app_name">qBittorrent Controller</string>
+    <string name="app_shortname">Controller</string>
     <string name="action_settings">Impostazioni</string>
     <string name="action_refresh">Aggiorna</string>
     <string name="action_add">Aggiungere</string>
@@ -58,7 +57,7 @@
     <string name="navigation_drawer_PRO">Ottenere PRO</string>
     <string name="about_help1">Per iniziare a utilizzare il client, configurare le impostazioni del server qBittorrent</string>
     <string name="about_help2">Premere il pulsante di aggiornamento nel menu per ottenere nuovi risultati, o scegliere un\'opzione dal menu a cassetto per ottenere l\'elenco torrent dal server.</string>
-    <string name="about_motto">Gestisci tutti i tuoi torrent da Android con qBittorrent Client</string>
+    <string name="about_motto">Gestisci tutti i tuoi torrent da Android con qBittorrent Controller</string>
     <string name="icon">icona</string>
     <string name="no_results">Nessun torrent trovato</string>
     <string name="tablet_help">Utilizzare il menu del cassetto per scegliere un\'opzione</string>

@@ -228,6 +228,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         mSolo.clickInList(2, mLeftDrawerIndex);
         getInstrumentation().waitForIdleSync();
 
+        mSolo.sleep(3000);
 
         // Get item with text "debian"
         assertNotNull("Torrent not on Downloading list", mSolo.getText("debian"));

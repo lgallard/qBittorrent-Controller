@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="app_name">qBittorrent Client Pro</string>
-  <string name="app_shortname">Client Pro</string>
+  <string name="app_name">qBittorrent Controller Pro</string>
+  <string name="app_shortname">Controller Pro</string>
   <string name="action_settings">Ezarpenak</string>
   <string name="action_refresh">Berritu</string>
   <string name="action_add">Gehitu</string>
@@ -70,7 +70,7 @@
   <string name="navigation_drawer_settins">Ezarpenak</string>
   <string name="about_help1">Bezeroak erabiltzen hasteko, zure qBittorrent zerbitzari ezarpenak ezarri</string>
   <string name="about_help2">Sakatu berritu botoia menuan emaitza berriak lortzeko, edo hautatu aukera bat hedagarria menutik zerbitzariko torrent zerrenda lortzeko.</string>
-  <string name="about_motto">Kudeatu zure torrent guztiak Android-etik qBittorrent Client erabiliz</string>
+  <string name="about_motto">Kudeatu zure torrent guztiak Android-etik qBittorrent Controller erabiliz</string>
   <string name="icon">ikurra</string>
   <string name="no_results">Ez da torrentik aurkitu</string>
   <string name="tablet_help">Erabili hedagarria menua aukera bat hautatzeko</string>

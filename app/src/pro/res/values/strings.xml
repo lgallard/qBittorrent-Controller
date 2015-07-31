@@ -10,8 +10,8 @@
 -->
 <resources>
 
-    <string name="app_name">qBittorrent Client Pro</string>
-    <string name="app_shortname">Client Pro</string>
+    <string name="app_name">qBittorrent Controller Pro</string>
+    <string name="app_shortname">Controller Pro</string>
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_add">Add</string>
@@ -80,7 +80,7 @@
     <string name="navigation_drawer_settins">Settings</string>
     <string name="about_help1">To start using the client, set your qBittorrent server settings</string>
     <string name="about_help2">Press the refresh button on the menu to get new results, or choose an option from the left menu to get the torrent list from the server.</string>
-    <string name="about_motto">Manage all your torrents from Android using qBittorrent Client</string>
+    <string name="about_motto">Manage all your torrents from Android using qBittorrent Controller</string>
     <string name="icon">icon</string>
     <string name="no_results">No torrents found</string>
     <string name="tablet_help">Use the drawer menu to choose an option</string>

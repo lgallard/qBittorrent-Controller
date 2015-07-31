@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="app_name">qBittorrent Client</string>
-  <string name="app_shortname">Client</string>
+  <string name="app_name">qBittorrent Controller</string>
+  <string name="app_shortname">Controller</string>
   <string name="action_settings">Настройки</string>
   <string name="action_refresh">Обновить</string>
   <string name="action_add">Добавить</string>
@@ -62,7 +62,7 @@
   <string name="navigation_drawer_PRO">Получить PRO-версию</string>
   <string name="about_help1">Для начала с помощью клиента набор настроек сервера qBittorrent</string>
   <string name="about_help2">Нажмите кнопку \"обновление\" в меню, чтобы получить обновленные данные, или воспользуйтесь выезжающим меню слева для получения списка торрентов с сервера</string>
-  <string name="about_motto">Управляйте своими торрентами с Android-устройства, используя qBittorrent Client</string>
+  <string name="about_motto">Управляйте своими торрентами с Android-устройства, используя qBittorrent Controller</string>
   <string name="icon">Значок</string>
   <string name="no_results">Торренты не обнаружены</string>
   <string name="tablet_help">Используйте выезжающее меню слева</string>
