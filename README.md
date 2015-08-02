@@ -1,4 +1,4 @@
-qBittorrent-Client
+qBittorrent-Controller
 ==================
 
 This is the repository for Android's [qBittorrent](http://www.qbittorrent.org/) Client.
