@@ -1,7 +1,7 @@
 qBittorrent-Controller
 ==================
 
-This is the repository for Android's [qBittorrent](http://www.qbittorrent.org/) Client.
+This is the repository for **_qBittorrent Controller_**, an Android app for manage for [qBittorrent](http://www.qbittorrent.org/) remotely.
 
 <h2 id="features">Features</h2>
 * See a two panel view (fragments) for torrent list and details in the same window
