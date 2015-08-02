@@ -34,7 +34,7 @@ android {
             minSdkVersion 14
             targetSdkVersion 21
             versionCode 415
-            archivesBaseName = "qBittorrentClient_v" + versionName
+            archivesBaseName = "qBittorrentController_v" + versionName
         }
         free {
             applicationId "com.lgallardo.qbittorrentclient"
@@ -42,7 +42,7 @@ android {
             minSdkVersion 14
             targetSdkVersion 21
             versionCode 415
-            archivesBaseName = "qBittorrentClient_v" + versionName
+            archivesBaseName = "qBittorrentController_v" + versionName
         }
     }
 
