@@ -28,7 +28,7 @@ public class Common {
         int exp = (int) (Math.log(bytes) / Math.log(unit));
         String pre = "KMGTPE".charAt(exp - 1) + "i";
 
-        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre).replace(",", ".");
 
     }
 
