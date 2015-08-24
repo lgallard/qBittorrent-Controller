@@ -84,7 +84,7 @@
     <string name="torrent_details_cant_general_ino">Informação geral não pôde ser recuperada</string>
     <string name="settings_qbittorrent_account_category">Contas</string>
     <string name="settings_qbittorrent_currentServer_title">Escolha um servidor qBittorrent</string>
-    <string name="settings_qbittorrent_currentServer_summary">Servidor qBitttorent </string>
+    <string name="settings_qbittorrent_currentServer_summary">Servidor qBittorrent </string>
     <string name="settings_qbittorrent_hostname_title">Conexão com o host</string>
     <string name="settings_qbittorrent_hostname_summary">Nome do host ou IP</string>
     <string name="settings_qbittorrent_hostname_dialog_title">Nome do host ou IP?</string>

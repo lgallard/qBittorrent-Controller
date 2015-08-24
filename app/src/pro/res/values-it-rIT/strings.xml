@@ -84,7 +84,7 @@
     <string name="torrent_details_cant_general_ino">Informazioni generali Impossibile recuperare</string>
     <string name="settings_qbittorrent_account_category">Accounts</string>
     <string name="settings_qbittorrent_currentServer_title">Scegli un server qBittorrent</string>
-    <string name="settings_qbittorrent_currentServer_summary">qBitttorent Server</string>
+    <string name="settings_qbittorrent_currentServer_summary">qBittorrent Server</string>
     <string name="settings_qbittorrent_hostname_title">Host di connessione</string>
     <string name="settings_qbittorrent_hostname_summary">Nome host o IP</string>
     <string name="settings_qbittorrent_hostname_dialog_title">Nome host o IP?</string>

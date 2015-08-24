@@ -53,7 +53,7 @@
     <string name="navigation_drawer_inactive">Inactif</string>
     <string name="navigation_drawer_options">Options</string>
     <string name="navigation_drawer_settins">Paramètres</string>
-    <string name="about_help1">Pour commencer à utiliser le client, définissez les paramètres de votre serveur qBittorent</string>
+    <string name="about_help1">Pour commencer à utiliser le client, définissez les paramètres de votre serveur qBittorrent</string>
     <string name="about_help2">Appuyez sur le bouton de rafraîchissement dans le menu pour obtenir de nouveaux résultats, ou choisissez une option dans le menu de gauche pour obtenir la liste de torrent à partir du serveur.</string>
     <string name="about_motto">Gérer vos torrents avec Android en utilisant qBittorrent Controller Pro</string>
     <string name="icon">icône</string>
