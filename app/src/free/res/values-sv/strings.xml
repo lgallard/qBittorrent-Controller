@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">qBittorrent Controller Pro</string>
-    <string name="app_shortname">Controller Pro</string>
+    <string name="app_name">qBittorrent Controller</string>
+    <string name="app_shortname">Controller</string>
     <string name="action_settings">Inställningar</string>
     <string name="action_refresh">Uppdatera</string>
     <string name="action_add">lägg</string>
@@ -56,7 +56,7 @@
     <string name="navigation_drawer_settins">Inställningar</string>
     <string name="about_help1">För att börja använda klienten ställa in din qBittorrent serverinställningar</string>
     <string name="about_help2">Tryck på knappen Uppdatera i menyn för att få nya resultat, eller välj ett alternativ på menyn till vänster för att få torrent listan från servern.</string>
-    <string name="about_motto">Hantera alla dina torrents från Android använder qBittorrent Controller Pro</string>
+    <string name="about_motto">Hantera alla dina torrents från Android använder qBittorrent Controller</string>
     <string name="icon">icon</string>
     <string name="no_results">Ingen torrents hittades</string>
     <string name="tablet_help">Använd lådan meny att välja ett alternativ</string>
