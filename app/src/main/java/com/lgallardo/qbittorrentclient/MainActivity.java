@@ -2628,14 +2628,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         if (packageName.equals("com.lgallardo.qbittorrentclient")) {
                             // Info free
-                            torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
+                            torrents[i].setInfo(torrents[i].getDownloaded() + " / "  + torrents[i].getSize() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
                                     + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
                                     + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + progress + " " + Character.toString('\u2022') + " "
                                     + torrents[i].getEta());
 
                         } else {
                             // Info pro
-                            torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
+                            torrents[i].setInfo(torrents[i].getDownloaded() + " / "  + torrents[i].getSize() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
                                     + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
                                     + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + torrents[i].getEta());
                         }
