@@ -68,7 +68,7 @@
   <string name="navigation_drawer_inactive">Jardungabe</string>
   <string name="navigation_drawer_options">Aukerak</string>
   <string name="navigation_drawer_settins">Ezarpenak</string>
-  <string name="about_help1">Bezeroak erabiltzen hasteko, zure qBittorrent zerbitzari ezarpenak ezarri</string>
+  <string name="about_help1">Bezeroak erabiltzen hasteko, ezarri zure qBittorrent zerbitzariaren ezarpenak</string>
   <string name="about_help2">Sakatu berritu botoia menuan emaitza berriak lortzeko, edo hautatu aukera bat hedagarria menutik zerbitzariko torrent zerrenda lortzeko.</string>
   <string name="about_motto">Kudeatu zure torrent guztiak Android-etik qBittorrent Controller erabiliz</string>
   <string name="icon">ikurra</string>
@@ -104,6 +104,7 @@
   <string name="torrent_priority_menu">Lehentasuna...</string>
   <string name="torrent_details_seq_download">Jeisketa sekuentziala</string>
   <string name="torrent_details_cant_general_ino">Argibide orokorrak ezin dira berreskuratu</string>
+  <string name="settings_qbittorrent_advanced">Aukera aurreratuak...</string>
   <string name="settings_qbittorrent_account_category">Kontuak</string>
   <string name="settings_qbittorrent_currentServer_title">Hautatu qBittorrent zerbitzaria</string>
   <string name="settings_qbittorrent_currentServer_summary">qBittorrent Zerbitzaria</string>
@@ -205,12 +206,11 @@
   <string name="dialog_label_rss">Izena</string>
   <string name="checkbox_autodownload_rss">Jeitsi torrent berriak berezgaitasunez?</string>
   <string name="checkbox_notifynew_rss">Jakinarazi torrent berriak?</string>
-  <string name="error_rss">Ezin da RSS-a lortu</string>
-  <string name="settings_qbittorrent_advanced">Aukera aurreratuak...</string>
   <string name="notifications_rss_available">Torrentak berriak eskuragarri</string>
+  <string name="error_rss">Ezin da RSS-a lortu</string>
+  <string name="options_qbittorrent_schedule_alternative_rate_limits">Egituratu aukerazko neurri mugak</string>
   <string name="options_qbittorrent_scheduler_days_title">Noiz:</string>
   <string name="options_qbittorrent_schedule_alt_from">Hemendik</string>
-  <string name="options_qbittorrent_schedule_alternative_rate_limits">Egituratu aukerazko neurri mugak</string>
   <string name="options_qbittorrent_schedule_alt_to">Hona</string>
   <string name="settings_qbittorrent_pro_title">Ezaugarria ez dago eskuragarri</string>
   <string name="settings_qbittorrent_pro_message">Ezaugarri hau qBittorrent PRO bertsioan bakarrik dago eskuragarri!</string>
