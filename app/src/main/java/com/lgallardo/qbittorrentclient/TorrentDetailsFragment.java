@@ -242,13 +242,13 @@ public class TorrentDetailsFragment extends Fragment {
                 firstLAstPiecePrioCheckBox.setChecked(this.torrent.getisFirstLastPiecePrio());
             }
 
+            // Set Downloaded vs Total size
+            sizeTextView.setText(downloaded + " / " + size);
+
             // Only for Pro version
             if(MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
                 downloadSpeedTextView.setText(Character.toString('\u2193') + " " + downloadSpeed);
                 uploadSpeedTextView.setText(Character.toString('\u2191') + " " + uploadSpeed);
-
-                // Set Downloaded vs Total size
-                sizeTextView.setText(downloaded + " / " + size);
 
                 // Set progress bar
                 ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar1);
@@ -257,7 +257,6 @@ public class TorrentDetailsFragment extends Fragment {
                 progressBar.setProgress(Integer.parseInt(percentage));
                 percentageTV.setText(percentage + "%");
             } else {
-                sizeTextView.setText(size);
                 downloadSpeedTextView.setText(downloadSpeed);
                 uploadSpeedTextView.setText(uploadSpeed);
             }
@@ -367,7 +366,7 @@ public class TorrentDetailsFragment extends Fragment {
             View rootView = detailsFragment.getView();
 
             TextView nameTextView = (TextView) rootView.findViewById(R.id.torrentName);
-            TextView sizeTextView = (TextView) rootView.findViewById(R.id.downloadedVsTotal);
+            TextView sizeTextView = (TextView) rootView.findViewById(R.id.torrentSize);
             TextView ratioTextView = (TextView) rootView.findViewById(R.id.torrentRatio);
             TextView priorityTextView = (TextView) rootView.findViewById(R.id.torrentPriority);
             TextView stateTextView = (TextView) rootView.findViewById(R.id.torrentState);
@@ -401,25 +400,27 @@ public class TorrentDetailsFragment extends Fragment {
                 firstLAstPiecePrioCheckBox.setChecked(torrent.getisFirstLastPiecePrio());
             }
 
+            // Set Downloaded vs Total size
+            sizeTextView.setText(downloaded + " / " + size);
+
             // Only for Pro version
             if(MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
                 downloadSpeedTextView.setText(Character.toString('\u2193') + " " + downloadSpeed);
                 uploadSpeedTextView.setText(Character.toString('\u2191') + " " + uploadSpeed);
 
-                // Set Downloaded vs Total size
-                sizeTextView.setText(downloaded + " / " + size);
+                // Set progress bar
+                ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar1);
+                TextView percentageTV = (TextView) rootView.findViewById(R.id.percentage);
+
+                progressBar.setProgress(Integer.parseInt(percentage));
+                percentageTV.setText(percentage + "%");
+
 
             }else {
                 downloadSpeedTextView.setText(downloadSpeed);
                 uploadSpeedTextView.setText(uploadSpeed);
             }
 
-            // Set progress bar
-            ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar1);
-            TextView percentageTV = (TextView) rootView.findViewById(R.id.percentage);
-
-            progressBar.setProgress(Integer.parseInt(percentage));
-            percentageTV.setText(percentage + "%");
 
             nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.error, 0, 0, 0);
 
