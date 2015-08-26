@@ -42,7 +42,6 @@ android {
             minSdkVersion 14
             targetSdkVersion 21
             versionCode 415
-            archivesBaseName = "qBittorrentController_v" + versionName
         }
     }
 

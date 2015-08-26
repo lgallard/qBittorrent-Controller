@@ -21,6 +21,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -37,6 +39,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -60,6 +63,7 @@ import com.google.android.gms.ads.AdView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -859,11 +863,37 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
+    // Get path from content reference, such as content//downloads/0
+    // Taken from here http://stackoverflow.com/questions/9194361/how-to-use-android-downloadmanager
+    public static String getFilePathFromUri(Context c, Uri uri) {
+        String filePath = null;
+        if ("content".equals(uri.getScheme())) {
+            String[] filePathColumn = {MediaStore.MediaColumns.DATA};
+            ContentResolver contentResolver = c.getContentResolver();
+
+            Cursor cursor = contentResolver.query(uri, filePathColumn, null,
+                    null, null);
+
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            filePath = cursor.getString(columnIndex);
+            cursor.close();
+        } else if ("file".equals(uri.getScheme())) {
+            filePath = new File(uri.getPath()).getAbsolutePath();
+        }
+        return filePath;
+    }
+
     private void addTorrentByIntent(Intent intent) {
 
         String urlTorrent = intent.getDataString();
 
         if (urlTorrent != null && urlTorrent.length() != 0) {
+
+            if(urlTorrent.substring(0, 7).equals("content")){
+                urlTorrent = "file://" + getFilePathFromUri(this, Uri.parse(urlTorrent));
+            }
 
             if (urlTorrent.substring(0, 4).equals("file")) {
 
