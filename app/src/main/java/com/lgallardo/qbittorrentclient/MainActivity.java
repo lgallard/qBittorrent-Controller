@@ -2112,6 +2112,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }else {
                     openHelp();
                 }
+                // Set selection according to last state
                 break;
             case 9:
                 openHelp();
@@ -2122,10 +2123,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
         if (position < 6) {
+            // Set checked item
             drawerList.setItemChecked(position, true);
             drawerList.setSelection(position);
             setTitle(navigationDrawerItemTitles[position]);
+        }else{
+            // Set current selection
+            saveLastState(currentState);
+            setSelectionAndTitle(currentState);
         }
+
 
         drawerLayout.closeDrawer(drawerList);
 
