@@ -113,6 +113,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     // Show dialog
                     dialog.show();
 
+                    // Set first server
+                    currentServer.setValueIndex(0);
+
                 } else {
 
                     // Read and load preferences
