@@ -124,7 +124,9 @@ public class TorrentDetailsFragment extends Fragment {
         // Hide herderInfo and title in phone's view
         if (getActivity().findViewById(R.id.one_frame) != null) {
             MainActivity.headerInfo.setVisibility(View.GONE);
-            ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+//            ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+            ((MainActivity) getActivity()).setTitle("");
         }
 
         savePath = "";

@@ -444,23 +444,23 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // If we're being restored from a previous state,
             // then we don't need to do anything and should return or else
             // we could end up with overlapping fragments.
-            if (savedInstanceState != null) {
-
-                // Handle Item list empty due to Fragment stack
-                try {
-                    FragmentManager fm = getFragmentManager();
-
-                    if (fm.getBackStackEntryCount() == 1 && fm.findFragmentById(R.id.one_frame) instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
-
-                        refreshCurrent();
-
-                    }
-                }
-                catch (Exception e) {
-                }
-
-                return;
-            }
+//            if (savedInstanceState != null) {
+//
+//                // Handle Item list empty due to Fragment stack
+//                try {
+//                    FragmentManager fm = getFragmentManager();
+//
+//                    if (fm.getBackStackEntryCount() == 1 && fm.findFragmentById(R.id.one_frame) instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
+//
+//                        refreshCurrent();
+//
+//                    }
+//                }
+//                catch (Exception e) {
+//                }
+//
+//                return;
+//            }
 
             // Add the fragment to the 'list_frame' FrameLayout
             FragmentManager fragmentManager = getFragmentManager();
@@ -468,10 +468,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             fragmentTransaction.add(R.id.one_frame, secondFragment, "firstFragment");
 
+            // if torrent details was loaded reset back button stack
+            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                fragmentManager.popBackStack();
+            }
+
             fragmentTransaction.commit();
         }
 
-        // Activity is visble
+        // Activity is visible
         activityIsVisible = true;
 
         // First refresh
@@ -554,7 +559,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
-            if (fm.getBackStackEntryCount() == 0 && fm.findFragmentById(R.id.one_frame) instanceof com.lgallardo.qbittorrentclient.ItemstFragment) {
+            if (fm.getBackStackEntryCount() == 0 && firstFragment.getSecondFragmentContainer() == R.id.one_frame && fm.findFragmentById(R.id.one_frame) instanceof com.lgallardo.qbittorrentclient.ItemstFragment) {
 
                 com.lgallardo.qbittorrentclient.ItemstFragment fragment = (com.lgallardo.qbittorrentclient.ItemstFragment) fm.findFragmentById(R.id.one_frame);
 
@@ -580,7 +585,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
             }
-            if (fm.getBackStackEntryCount() == 0 && (fm.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
+            if (fm.getBackStackEntryCount() == 0 && firstFragment.getSecondFragmentContainer() == R.id.content_frame && (fm.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
 
                 // Create the about fragment
                 aboutFragment = new AboutFragment();
@@ -589,7 +594,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 fragmentTransaction.commit();
 
-                // Se titile
+                // Se title
                 setTitle(navigationDrawerItemTitles[drawerList.getCheckedItemPosition()]);
 
                 // Close Contextual Action Bar
@@ -735,6 +740,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             MainActivity.drawerToggle.setDrawerIndicatorEnabled(true);
             MainActivity.drawerToggle.setToolbarNavigationClickListener(ItemstFragment.originalListener);
+
+            // Set title
+            setSelectionAndTitle(MainActivity.currentState);
+
 
             if (headerInfo != null) {
                 if (header) {

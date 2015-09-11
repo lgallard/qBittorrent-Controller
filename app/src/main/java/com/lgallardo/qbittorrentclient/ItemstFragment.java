@@ -527,6 +527,7 @@ public class ItemstFragment extends ListFragment {
                         ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
                         MainActivity.drawerToggle.setDrawerIndicatorEnabled(true);
                         MainActivity.drawerToggle.setToolbarNavigationClickListener(originalListener);
+                        ((MainActivity) getActivity()).setSelectionAndTitle(MainActivity.currentState);
 
                         // Show herderInfo in phone's view
                         if (getActivity().findViewById(R.id.one_frame) != null) {
