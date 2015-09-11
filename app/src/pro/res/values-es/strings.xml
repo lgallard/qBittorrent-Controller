@@ -181,6 +181,7 @@
     <string name="torrent_priority_menu">Prioridad...</string>
     <string name="torrent_details_seq_download">Decarga secuencial</string>
     <string name="sortby_menu_name">Nombre</string>
+    <string name="sortby_menu_size">Tamaño</string>
     <string name="sortby_menu_eta">Tiempo estimado</string>
     <string name="sortby_menu_upload_speed">Velocidad de subida</string>
     <string name="sortby_menu_ratio">Ratio</string>

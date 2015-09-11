@@ -56,21 +56,23 @@
     </string-array>
     <string-array name="sortBy">
         <item name="1">Name</item>
-        <item name="2">ETA</item>
-        <item name="3">Priority</item>
-        <item name="4">Progress</item>
-        <item name="5">Ratio</item>
-        <item name="6">Download speed</item>
-        <item name="7">Upload speed</item>
+        <item name="2">Size</item>
+        <item name="3">ETA</item>
+        <item name="4">Priority</item>
+        <item name="5">Progress</item>
+        <item name="6">Ratio</item>
+        <item name="7">Download speed</item>
+        <item name="8">Upload speed</item>
     </string-array>
     <string-array name="sortByValues">
         <item name="1">Name</item>
-        <item name="2">ETA</item>
-        <item name="3">Priority</item>
-        <item name="4">Progress</item>
-        <item name="5">Ratio</item>
-        <item name="6">DownloadSpeed</item>
-        <item name="7">UploadSpeed</item>
+        <item name="2">Size</item>
+        <item name="3">ETA</item>
+        <item name="4">Priority</item>
+        <item name="5">Progress</item>
+        <item name="6">Ratio</item>
+        <item name="7">DownloadSpeed</item>
+        <item name="8">UploadSpeed</item>
     </string-array>
     <string-array name="qbVersion">
         <item name="1">2.x</item>

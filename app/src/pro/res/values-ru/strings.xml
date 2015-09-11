@@ -181,6 +181,7 @@
   <string name="settings_qbittorrent_sort_category">Сортировка списка торрентов</string>
   <string name="settings_qbittorrent_darkui_summary">Перезапустите приложение для изменения темы оформления</string>
   <string name="sortby_menu_name">Имя</string>
+  <string name="sortby_menu_size">Размер</string>
   <string name="sortby_menu_eta">Осталось</string>
   <string name="sortby_menu_priority">Приоритет</string>
   <string name="sortby_menu_progress">Прогресс</string>

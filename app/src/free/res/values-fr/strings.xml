@@ -177,6 +177,7 @@
     <string name="torrent_details_first_last">Pièces Premières et dernières</string>
     <string name="torrent_details_seq_download">Téléchargement séquentielle</string>
     <string name="sortby_menu_name">Nom</string>
+    <string name="sortby_menu_size">Taille</string>
     <string name="sortby_menu_eta">Durée estimée</string>
     <string name="sortby_menu_priority">Priorité</string>
     <string name="sortby_menu_progress">Progrès</string>

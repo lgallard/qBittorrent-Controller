@@ -182,6 +182,7 @@
   <string name="settings_qbittorrent_sort_category">Antolatu torrent zerrenda</string>
   <string name="settings_qbittorrent_darkui_summary">Berrabiarazi aplikazioa azalgaia ezartzeko</string>
   <string name="sortby_menu_name">Izena</string>
+  <string name="sortby_menu_size">Tamaina</string>
   <string name="sortby_menu_eta">UED</string>
   <string name="sortby_menu_priority">Lehentasuna</string>
   <string name="sortby_menu_progress">Garapena</string>

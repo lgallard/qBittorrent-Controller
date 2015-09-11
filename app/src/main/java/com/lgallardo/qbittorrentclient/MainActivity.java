@@ -2785,6 +2785,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (sortby.equals("Name")) {
                     Collections.sort(torrentsFiltered, new TorrentNameComparator(reverse_order));
                 }
+                // Sort by size
+                if (sortby.equals("Size")) {
+                    Collections.sort(torrentsFiltered, new TorrentSizeComparator(reverse_order));
+                }
                 // Sort by priority
                 if (sortby.equals("Priority")) {
                     Collections.sort(torrentsFiltered, new TorrentPriorityComparator(reverse_order));

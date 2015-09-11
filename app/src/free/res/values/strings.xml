@@ -191,6 +191,7 @@
     <string name="settings_qbittorrent_darkui_dialog_title">Use dark theme </string>
     <string name="settings_qbittorrent_darkui_summary">Restart the app to apply the theme</string>
     <string name="sortby_menu_name">Name</string>
+    <string name="sortby_menu_size">Size</string>
     <string name="sortby_menu_eta">ETA</string>
     <string name="sortby_menu_priority">Priority</string>
     <string name="sortby_menu_progress">Progress</string>

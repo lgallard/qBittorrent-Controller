@@ -56,6 +56,7 @@
     </string-array>
     <string-array name="sortBy">
         <item>Izena</item>
+        <item>Tamaina</item>
         <item>UED</item>
         <item>Lehentasuna</item>
         <item>Garapena</item>
@@ -64,13 +65,14 @@
         <item>Igoera abiadura</item>
     </string-array>
     <string-array name="sortByValues">
-        <item>Izena</item>
-        <item>UED</item>
-        <item>Lehentasuna</item>
-        <item>Garapena</item>
-        <item>Maila</item>
-        <item>Jeisketa Abiadura</item>
-        <item>Igoera Abiadura</item>
+        <item name="1">Name</item>
+        <item name="2">Size</item>
+        <item name="3">ETA</item>
+        <item name="4">Priority</item>
+        <item name="5">Progress</item>
+        <item name="6">Ratio</item>
+        <item name="7">DownloadSpeed</item>
+        <item name="8">UploadSpeed</item>
     </string-array>
     <string-array name="qbVersion">
         <item>2.x</item>

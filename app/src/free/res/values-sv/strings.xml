@@ -177,6 +177,7 @@
     <string name="torrent_details_first_last">Första och sista bitarna</string>
     <string name="torrent_details_seq_download">Sekventiell nedladdning</string>
     <string name="sortby_menu_name">Namn</string>
+    <string name="sortby_menu_size">Storlek</string>
     <string name="sortby_menu_eta">Beräknad tid</string>
     <string name="sortby_menu_priority">Prioritet</string>
     <string name="sortby_menu_progress">Framsteg</string>

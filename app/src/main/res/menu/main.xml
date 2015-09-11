@@ -28,6 +28,9 @@
                 android:id="@+id/action_sortby_name"
                 android:title="@string/sortby_menu_name" />
             <item
+                android:id="@+id/action_sortby_size"
+                android:title="@string/sortby_menu_size" />
+            <item
                 android:id="@+id/action_sortby_eta"
                 android:title="@string/sortby_menu_eta" />
             <item

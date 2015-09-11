@@ -181,6 +181,7 @@
   <string name="settings_qbittorrent_darkui_dialog_title">Erabili azalgai iluna</string>
   <string name="settings_qbittorrent_darkui_summary">Berrabiarazi aplikazioa azalgaia ezartzeko</string>
   <string name="sortby_menu_name">Izena</string>
+  <string name="sortby_menu_size">Tamaina</string>
   <string name="sortby_menu_eta">UED</string>
   <string name="sortby_menu_priority">Lehentasuna</string>
   <string name="sortby_menu_progress">Garapena</string>

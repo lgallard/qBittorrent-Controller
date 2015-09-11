@@ -127,7 +127,7 @@ public class TorrentDetailsFragment extends Fragment {
 //            ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
             ((MainActivity) getActivity()).setTitle("");
-        }
+            }
 
         savePath = "";
         creationDate = "";
