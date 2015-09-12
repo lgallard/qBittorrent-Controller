@@ -1204,33 +1204,43 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 invalidateOptionsMenu();
                 refreshCurrent();
                 return true;
-            case R.id.action_sortby_eta:
+            case R.id.action_sortby_size:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[1]);
                 invalidateOptionsMenu();
                 refreshCurrent();
                 return true;
-            case R.id.action_sortby_priority:
+            case R.id.action_sortby_eta:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[2]);
                 invalidateOptionsMenu();
                 refreshCurrent();
                 return true;
-            case R.id.action_sortby_progress:
+            case R.id.action_sortby_priority:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[3]);
                 invalidateOptionsMenu();
                 refreshCurrent();
                 return true;
-            case R.id.action_sortby_ratio:
+            case R.id.action_sortby_progress:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[4]);
                 invalidateOptionsMenu();
                 refreshCurrent();
                 return true;
-            case R.id.action_sortby_downloadSpeed:
+            case R.id.action_sortby_ratio:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[5]);
                 invalidateOptionsMenu();
                 refreshCurrent();
                 return true;
-            case R.id.action_sortby_uploadSpeed:
+            case R.id.action_sortby_downloadSpeed:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[6]);
+                invalidateOptionsMenu();
+                refreshCurrent();
+                return true;
+            case R.id.action_sortby_uploadSpeed:
+                saveSortBy(getResources().getStringArray(R.array.sortByValues)[7]);
+                invalidateOptionsMenu();
+                refreshCurrent();
+                return true;
+            case R.id.action_sortby_reverse_order:
+                saveReverseOrder(!reverse_order);
                 invalidateOptionsMenu();
                 refreshCurrent();
                 return true;
@@ -2076,6 +2086,19 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Save key-values
         editor.putString("sortby", sortBy);
 
+        // Commit changes
+        editor.apply();
+
+    }
+
+    private void saveReverseOrder( boolean reverse_order) {
+        MainActivity.reverse_order = reverse_order;
+        // Save options locally
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        Editor editor = sharedPrefs.edit();
+
+        // Save key-values
+        editor.putBoolean("reverse_order", reverse_order);
 
         // Commit changes
         editor.apply();

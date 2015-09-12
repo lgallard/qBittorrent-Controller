@@ -273,7 +273,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             editor.putString("data_timeout", data_timeout.getText().toString());
         }
 
-        editor.putBoolean("revserse_order" + currentServerValue, reverse_order.isChecked());
+        editor.putBoolean("reverse_order" + currentServerValue, reverse_order.isChecked());
 
         editor.putBoolean("dark_ui" + currentServerValue, dark_ui.isChecked());
 
