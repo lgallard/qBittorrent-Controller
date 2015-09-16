@@ -43,6 +43,8 @@ import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -67,6 +69,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -127,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static com.lgallardo.qbittorrentclient.JSONParser jParser;
 
     // Preferences properties
+    protected static String currentServer;
     protected static String hostname;
     protected static String subfolder;
     protected static int port;
@@ -189,9 +193,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private CharSequence drawerTitle;
     private CharSequence title;
     private String[] navigationDrawerItemTitles;
-    private ListView drawerList;
+    private String[] navigationDrawerServerItems;
+    //    private ListView drawerList;
+    protected RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
     public static DrawerLayout drawerLayout;
     public static ActionBarDrawerToggle drawerToggle;
+    public static final int DRAWER_ITEM_ACTIONS = 1;
+    public static final int DRAWER_ITEM_SERVERS = 3;
+    public static final int DRAWER_CATEGORY = 5;
+    public static final int DRAWER_ITEM_TAGS = 6;
 
     // Fragments
     private AboutFragment secondFragment;
@@ -232,6 +243,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Packge info
     public static String packageName;
+
+    // Action (states)
+    public static final ArrayList<String> actionStates = new ArrayList<>(Arrays.asList("all", "downloading", "completed", "pause", "active", "inactive"));
+
+    // Connection error counter
+    private int connection400ErrorCounter = 0;
+
 
 
     @Override
@@ -298,50 +316,75 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         setTitle(R.string.app_shortname);
 
         // Drawer menu
+        navigationDrawerServerItems = getResources().getStringArray(R.array.qBittorrentServers);
         navigationDrawerItemTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        drawerList = (ListView) findViewById(R.id.left_drawer);
+//        drawerList = (ListView) findViewById(R.id.left_drawer);
 
-        // TODO: Edit code for Free and Pro versions
 
-        int drawerItemSize;
+        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
+        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are
 
-        // Drawer item list objects
+
+        ArrayList<ObjectDrawerItem> serverItems = new ArrayList<ObjectDrawerItem>();
+        ArrayList<ObjectDrawerItem> actionItems = new ArrayList<ObjectDrawerItem>();
+        ArrayList<ObjectDrawerItem> settingsItems = new ArrayList<ObjectDrawerItem>();
+
+
+        // Add server category
+        serverItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_servers, "Servers", DRAWER_CATEGORY, false, null));
+
+        // Server items
+        int currentServerValue = 1;
+
+        try {
+            currentServerValue = Integer.parseInt(MainActivity.currentServer);
+        } catch (NumberFormatException e) {
+
+        }
+
+        for (int i = 0; i < navigationDrawerServerItems.length; i++) {
+            serverItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, navigationDrawerServerItems[i], DRAWER_ITEM_SERVERS, ((i + 1) == currentServerValue), "changeCurrentServer"));
+
+        }
+
+        // Add actions
+        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_all, navigationDrawerItemTitles[0], DRAWER_ITEM_ACTIONS, lastState.equals("all"), "refreshAll"));
+        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_downloading, navigationDrawerItemTitles[1], DRAWER_ITEM_ACTIONS, lastState.equals("downloading"), "refreshDownloading"));
+        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_completed, navigationDrawerItemTitles[2], DRAWER_ITEM_ACTIONS, lastState.equals("completed"), "refreshCompleted"));
+        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_paused, navigationDrawerItemTitles[3], DRAWER_ITEM_ACTIONS, lastState.equals("pause"), "refreshPaused"));
+        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_active, navigationDrawerItemTitles[4], DRAWER_ITEM_ACTIONS, lastState.equals("active"), "refreshActive"));
+        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[5], DRAWER_ITEM_ACTIONS, lastState.equals("inactive"), "refreshInactive"));
+
+
+        // Add settings actions
+        settingsItems.add(new ObjectDrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[6], DRAWER_ITEM_ACTIONS, false, "openOptions"));
+        settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTIONS, false, "openSettings"));
+
         if (packageName.equals("com.lgallardo.qbittorrentclient")) {
-            drawerItemSize = 10;
+            settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[8], DRAWER_ITEM_ACTIONS, false, "getPro"));
+            settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTIONS, false, "openHelp"));
         } else {
-            drawerItemSize = 9;
-
+            settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[8], DRAWER_ITEM_ACTIONS, false, "openHelp"));
         }
 
-        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[drawerItemSize];
 
-        drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_drawer_all, navigationDrawerItemTitles[0]);
-        drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_drawer_downloading, navigationDrawerItemTitles[1]);
-        drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_drawer_completed, navigationDrawerItemTitles[2]);
-        drawerItem[3] = new ObjectDrawerItem(R.drawable.ic_drawer_paused, navigationDrawerItemTitles[3]);
-        drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_drawer_active, navigationDrawerItemTitles[4]);
-        drawerItem[5] = new ObjectDrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[5]);
-        drawerItem[6] = new ObjectDrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[6]);
-        drawerItem[7] = new ObjectDrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[7]);
-        drawerItem[8] = new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[8]);
+        DrawerItemRecyclerViewAdapter rAdapter = new DrawerItemRecyclerViewAdapter(getApplicationContext(), this, serverItems, actionItems, settingsItems, null);
+        rAdapter.notifyDataSetChanged();
 
-        if (packageName.equals("com.lgallardo.qbittorrentclient")) {
-            drawerItem[8] = new ObjectDrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[8]);
-            drawerItem[9] = new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9]);
-        }
 
-        // Create object for drawer item OnbjectDrawerItem
-        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.drawer_row, drawerItem);
-        drawerList.setAdapter(adapter);
+//        Log.d("Debug", "MainActivity - oldActionPosition: "+ (Arrays.asList(actionStates).indexOf(lastState)));
+
+//        drawerList.setAdapter(adapter);
+        mRecyclerView.setAdapter(rAdapter);
+
+        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
+        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
 
         // Set selection according to last state
         setSelectionAndTitle(lastState);
-
-        // Set the item click listener
-        drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // Get drawer title
         title = drawerTitle = getTitle();
@@ -505,38 +548,38 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             currentState = state;
 
             if (state.equals("all")) {
-                drawerList.setItemChecked(0, true);
+//                drawerList.setItemChecked(0, true);
                 setTitle(navigationDrawerItemTitles[0]);
             }
 
             if (state.equals("downloading")) {
-                drawerList.setItemChecked(1, true);
+//                drawerList.setItemChecked(1, true);
                 setTitle(navigationDrawerItemTitles[1]);
             }
 
             if (state.equals("completed")) {
-                drawerList.setItemChecked(2, true);
+//                drawerList.setItemChecked(2, true);
                 setTitle(navigationDrawerItemTitles[2]);
             }
 
             if (state.equals("pause")) {
-                drawerList.setItemChecked(3, true);
+//                drawerList.setItemChecked(3, true);
                 setTitle(navigationDrawerItemTitles[3]);
             }
 
             if (state.equals("active")) {
-                drawerList.setItemChecked(4, true);
+//                drawerList.setItemChecked(4, true);
                 setTitle(navigationDrawerItemTitles[4]);
             }
 
             if (state.equals("inactive")) {
-                drawerList.setItemChecked(5, true);
+//                drawerList.setItemChecked(5, true);
                 setTitle(navigationDrawerItemTitles[5]);
             }
 
         } else {
             // Set "All" checked
-            drawerList.setItemChecked(0, true);
+//            drawerList.setItemChecked(0, true);
 
             // Set title to All
             setTitle(navigationDrawerItemTitles[0]);
@@ -572,8 +615,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     fragmentTransaction.commit();
 
-                    // Se titile
-                    setTitle(navigationDrawerItemTitles[drawerList.getCheckedItemPosition()]);
+                    // Se title
+//                    setTitle(navigationDrawerItemTitles[drawerList.getCheckedItemPosition()]);
+                    setTitle(navigationDrawerItemTitles[DrawerItemRecyclerViewAdapter.actionPosition]);
 
                     // Close Contextual Action Bar
                     if (firstFragment != null && firstFragment.mActionMode != null) {
@@ -595,7 +639,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 fragmentTransaction.commit();
 
                 // Se title
-                setTitle(navigationDrawerItemTitles[drawerList.getCheckedItemPosition()]);
+//                setTitle(navigationDrawerItemTitles[drawerList.getCheckedItemPosition()]);
+                setTitle(navigationDrawerItemTitles[DrawerItemRecyclerViewAdapter.actionPosition]);
 
                 // Close Contextual Action Bar
                 if (firstFragment != null && firstFragment.mActionMode != null) {
@@ -658,7 +703,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void refreshCurrent() {
         if (!hostname.equals("")) {
 
-            switch (drawerList.getCheckedItemPosition()) {
+//            switch (drawerList.getCheckedItemPosition()) {
+            switch (actionStates.indexOf(currentState)) {
                 case 0:
                     refresh("all");
                     break;
@@ -700,8 +746,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void onBackPressed() {
 
         // If drawer is opened, close it
-        if(drawerLayout.isDrawerOpen(drawerList)){
-            drawerLayout.closeDrawer(drawerList);
+//        if(drawerLayout.isDrawerOpen(drawerList)){
+//            drawerLayout.closeDrawer(drawerList);
+//            return;
+//        }
+        if (drawerLayout.isDrawerOpen(mRecyclerView)) {
+            drawerLayout.closeDrawer(mRecyclerView);
             return;
         }
 
@@ -753,6 +803,23 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
             }
         }
+
+    }
+
+
+    protected void refreshFromDrawerAction(String state, String title) {
+        setTitle(title);
+        refreshSwipeLayout();
+        refresh(state);
+        saveLastState(state);
+
+//        // Mark item as active
+//        ObjectDrawerItem drawerItem = DrawerItemRecyclerViewAdapter.items.get(position);
+//        drawerItem.setActive(true);
+//        DrawerItemRecyclerViewAdapter.items.set(position+1,drawerItem);
+////        mRecyclerView.getAdapter().notifyItemChanged(position-1);
+//        mRecyclerView.getAdapter().notifyItemChanged(DrawerItemRecyclerViewAdapter.oldActionPosition);
+
 
     }
 
@@ -810,8 +877,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         } else {
 
             // Connection Error message
-            Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
-
+            if (connection400ErrorCounter > 1) {
+                Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -848,7 +916,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         try {
             if (intent.getStringExtra("from").equals("NotifierService")) {
 
-                drawerList.setItemChecked(2, true);
+//                drawerList.setItemChecked(2, true);
+//                mRecyclerView.findViewHolderForAdapterPosition(3).itemView.performClick();
+                saveLastState("completed");
+
                 setTitle(navigationDrawerItemTitles[2]);
                 refresh("completed");
 
@@ -923,8 +994,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         try {
             if (intent.getStringExtra("from").equals("NotifierService")) {
-                drawerList.setItemChecked(2, true);
-                setTitle(navigationDrawerItemTitles[2]);
+//                drawerList.setItemChecked(2, true);
+//                setTitle(navigationDrawerItemTitles[2]);
+                saveLastState("completed");
                 refresh("completed");
             }
         } catch (NullPointerException npe) {
@@ -1249,6 +1321,45 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
+    //Change current server
+    protected void changeCurrentServer() {
+
+        connection400ErrorCounter = 0;
+
+        // Get values from preferences
+        getSettings();
+
+        // Get new token and cookie
+        MainActivity.cookie = null;
+        new qBittorrentCookieTask().execute();
+
+        // redraw menu
+        invalidateOptionsMenu();
+
+        // Get options from server and save them as shared preferences
+        // locally
+//            qBittorrentOptions qso = new qBittorrentOptions();
+//            qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
+
+        // Save completedHashes
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor editor = sharedPrefs.edit();
+
+        // Save hashes
+        editor.putString("completed_hashes", "");
+
+        // Commit changes
+        editor.apply();
+
+        canrefresh = true;
+        swipeRefresh();
+
+//        refreshCurrent();
+
+
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -1422,7 +1533,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    private void openSettings() {
+    protected void openSettings() {
         canrefresh = false;
 
         Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.SettingsActivity.class);
@@ -1430,7 +1541,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    private void openHelp() {
+    protected void openHelp() {
         canrefresh = false;
 
         Intent intent = new Intent(getBaseContext(), HelpActivity.class);
@@ -1439,7 +1550,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    private void openOptions() {
+    protected void openOptions() {
         canrefresh = false;
         // Retrieve preferences for options
         Intent intent = new Intent(getBaseContext(), OptionsActivity.class);
@@ -1447,7 +1558,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    private void getPRO() {
+    protected void getPRO() {
         Intent intent = new Intent(
                 new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclientpro")));
         startActivityForResult(intent, GETPRO_CODE);
@@ -1782,7 +1893,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     public void refreshAfterCommand(int delay) {
 
-        switch (drawerList.getCheckedItemPosition()) {
+//        switch (drawerList.getCheckedItemPosition()) {
+        switch (actionStates.indexOf(currentState)) {
             case 0:
                 refreshWithDelay("all", delay);
                 break;
@@ -1902,6 +2014,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
 
         // Get values from preferences
+        currentServer = sharedPrefs.getString("currentServer", "1");
         hostname = sharedPrefs.getString("hostname", "");
         subfolder = sharedPrefs.getString("subfolder", "");
 
@@ -1968,7 +2081,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
 
         // Get last state
-        lastState = sharedPrefs.getString("lastState", null);
+        lastState = sharedPrefs.getString("lastState", "all");
 
         // Notification check
         try {
@@ -1989,6 +2102,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Get package name
         packageName = pInfo.packageName;
+
+//        Log.d("Debug", "MainActivity - getSettings - hostname: " + hostname);
+//        Log.d("Debug", "MainActivity - getSettings - port: " + port);
+//        Log.d("Debug", "MainActivity - getSettings - cookie: " + cookie);
 
     }
 
@@ -2120,86 +2237,86 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         }
 
-        switch (position) {
-            case 0:
-                // Set the refresh layout (refresh icon, etc)
-                refreshSwipeLayout();
-                refresh("all");
-                saveLastState("all");
-                break;
-            case 1:
-                // Set the refresh layout (refresh icon, etc)
-                refreshSwipeLayout();
-                refresh("downloading");
-                saveLastState("downloading");
-                break;
-            case 2:
-                // Set the refresh layout (refresh icon, etc)
-                refreshSwipeLayout();
-                refresh("completed");
-                saveLastState("completed");
-                break;
-            case 3:
-                // Set the refresh layout (refresh icon, etc)
-                refreshSwipeLayout();
-                refresh("pause");
-                saveLastState("pause");
-                break;
-            case 4:
-                // Set the refresh layout (refresh icon, etc)
-                refreshSwipeLayout();
-                refresh("active");
-                saveLastState("active");
-                break;
-            case 5:
-                // Set the refresh layout (refresh icon, etc)
-                refreshSwipeLayout();
-                refresh("inactive");
-                saveLastState("inactive");
-                break;
-            case 6:
-                // Options - Execute the task in background
-                Toast.makeText(getApplicationContext(), R.string.getQBittorrentPrefefrences, Toast.LENGTH_SHORT).show();
-                qBittorrentOptions qso = new qBittorrentOptions();
-                qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
-                break;
-            case 7:
-                // Settings
-                openSettings();
-                break;
-            case 8:
-                if (packageName.equals("com.lgallardo.qbittorrentclient")) {
-                    // Get Pro version
-                    getPRO();
-                }else {
-                    openHelp();
-                }
-                // Set selection according to last state
-                break;
-            case 9:
-                openHelp();
-                break;
-            default:
-                break;
-
-        }
-
-        if (position < 6) {
-            // Set checked item
-            drawerList.setItemChecked(position, true);
-            drawerList.setSelection(position);
-            setTitle(navigationDrawerItemTitles[position]);
-        }else{
-            // Set current selection
-            saveLastState(currentState);
-            setSelectionAndTitle(currentState);
-        }
-
-
-        drawerLayout.closeDrawer(drawerList);
-
-        // Load banner
-        loadBanner();
+//        switch (position) {
+//            case 0:
+//                // Set the refresh layout (refresh icon, etc)
+//                refreshSwipeLayout();
+//                refresh("all");
+//                saveLastState("all");
+//                break;
+//            case 1:
+//                // Set the refresh layout (refresh icon, etc)
+//                refreshSwipeLayout();
+//                refresh("downloading");
+//                saveLastState("downloading");
+//                break;
+//            case 2:
+//                // Set the refresh layout (refresh icon, etc)
+//                refreshSwipeLayout();
+//                refresh("completed");
+//                saveLastState("completed");
+//                break;
+//            case 3:
+//                // Set the refresh layout (refresh icon, etc)
+//                refreshSwipeLayout();
+//                refresh("pause");
+//                saveLastState("pause");
+//                break;
+//            case 4:
+//                // Set the refresh layout (refresh icon, etc)
+//                refreshSwipeLayout();
+//                refresh("active");
+//                saveLastState("active");
+//                break;
+//            case 5:
+//                // Set the refresh layout (refresh icon, etc)
+//                refreshSwipeLayout();
+//                refresh("inactive");
+//                saveLastState("inactive");
+//                break;
+//            case 6:
+//                // Options - Execute the task in background
+//                Toast.makeText(getApplicationContext(), R.string.getQBittorrentPrefefrences, Toast.LENGTH_SHORT).show();
+//                qBittorrentOptions qso = new qBittorrentOptions();
+//                qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
+//                break;
+//            case 7:
+//                // Settings
+//                openSettings();
+//                break;
+//            case 8:
+//                if (packageName.equals("com.lgallardo.qbittorrentclient")) {
+//                    // Get Pro version
+//                    getPRO();
+//                }else {
+//                    openHelp();
+//                }
+//                // Set selection according to last state
+//                break;
+//            case 9:
+//                openHelp();
+//                break;
+//            default:
+//                break;
+//
+//        }
+//
+//        if (position < 6) {
+//            // Set checked item
+//            drawerList.setItemChecked(position, true);
+//            drawerList.setSelection(position);
+//            setTitle(navigationDrawerItemTitles[position]);
+//        }else{
+//            // Set current selection
+//            saveLastState(currentState);
+//            setSelectionAndTitle(currentState);
+//        }
+//
+//
+//        drawerLayout.closeDrawer(drawerList);
+//
+//        // Load banner
+//        loadBanner();
 
 
     }
@@ -2311,6 +2428,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         @Override
         protected void onPostExecute(String[] result) {
+
+
 
             MainActivity.cookie = result[0];
 
@@ -2713,6 +2832,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
             } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
+
+                if (httpStatusCode == 400) {
+                    cookie = null;
+                }
+
                 torrents = null;
                 Log.e("JSONParserStatusCode", e.toString());
 
@@ -2743,6 +2867,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
                     httpStatusCode = 0;
                 }
+                if (httpStatusCode == 400) {
+                    connection400ErrorCounter = connection400ErrorCounter + 1;
+                    httpStatusCode = 0;
+                    return;
+                }
 
                 if (httpStatusCode == 403 || httpStatusCode == 404) {
 
@@ -2758,6 +2887,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
             } else {
+
+                connection400ErrorCounter = 0;
 
                 ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
 

@@ -17,8 +17,8 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="?windowBackground">
+        android:background="?windowBackground"
+        android:orientation="horizontal">
 
         <include
             android:id="@+id/app_bar"
@@ -29,12 +29,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/app_bar"
+            android:background="?dropShadowBackground"
+            android:elevation="1dp"
             android:gravity="end"
             android:orientation="horizontal"
             android:paddingBottom="5dp"
-            android:paddingRight="5dp"
-            android:background="?dropShadowBackground"
-            android:elevation="1dp">
+            android:paddingRight="5dp">
 
             <LinearLayout
 
@@ -102,14 +102,25 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/left_drawer"
+    <!--<ListView-->
+    <!--android:id="@+id/left_drawer"-->
+    <!--android:layout_width="240dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_gravity="start"-->
+    <!--android:background="#111"-->
+    <!--android:choiceMode="singleChoice"-->
+    <!--android:divider="@android:color/transparent"-->
+    <!--android:dividerHeight="0dp" />-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/RecyclerView"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="left"
+
         android:background="#111"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp" />
+        android:scrollbars="vertical">
+
+    </android.support.v7.widget.RecyclerView>
 
 </android.support.v4.widget.DrawerLayout>

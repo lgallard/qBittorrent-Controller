@@ -16,8 +16,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="?backgroundSelector">
+        android:background="?backgroundSelector"
+        android:orientation="vertical">
 
         <include
             android:id="@+id/app_bar"
@@ -27,14 +27,13 @@
             android:id="@+id/header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="horizontal"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:paddingRight="5dp"
             android:background="?dropShadowBackground"
             android:elevation="1dp"
-            >
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:paddingBottom="2dp"
+            android:paddingRight="5dp"
+            android:paddingTop="2dp">
 
             <TextView
                 android:id="@+id/uploadSpeed"
@@ -54,7 +53,7 @@
             android:id="@+id/one_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp"/>
+            android:padding="5dp" />
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
@@ -65,14 +64,25 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/left_drawer"
+    <!--<ListView-->
+    <!--android:id="@+id/left_drawer"-->
+    <!--android:layout_width="240dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_gravity="start"-->
+    <!--android:background="#111"-->
+    <!--android:choiceMode="singleChoice"-->
+    <!--android:divider="@android:color/transparent"-->
+    <!--android:dividerHeight="0dp" />-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/RecyclerView"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="left"
+
         android:background="#111"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp" />
+        android:scrollbars="vertical">
+
+    </android.support.v7.widget.RecyclerView>
 
 </android.support.v4.widget.DrawerLayout>

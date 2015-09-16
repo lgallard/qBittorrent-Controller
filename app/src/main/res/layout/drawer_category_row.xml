@@ -1,0 +1,70 @@
+<!--
+  Copyright (c) 2014 Luis M. Gallardo D..
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Public License v3.0
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/gpl.html
+  
+  Contributors:
+      Luis M. Gallardo D. - initial implementation
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#14501e"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageViewIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/icon"
+            android:paddingRight="10dp"
+            android:src="@drawable/ic_drawer_servers" />
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imageViewIcon"
+            android:layout_weight="2"
+            android:paddingRight="10dp"
+            android:text="Example"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:textColor="#ffffff"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/textViewDrawerArrow"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center|right"
+            android:layout_toRightOf="@+id/imageViewIcon"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingRight="10dp"
+            android:text="▼"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:textColor="#ffffff" />
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/textViewName"
+        android:layout_marginRight="5dp"
+        android:background="@android:color/darker_gray" />
+
+
+</LinearLayout>
