@@ -542,15 +542,15 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
 
         // Debug
-        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - serverValue: " + serverValue);
-        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - changeCurrentServer: " + currentServerValue);
-        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - hostname: " + hostname);
-        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - subfolder: " + subfolder);
-        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - protocol: " + protocol);
-        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - port: " + port);
-        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - https: " + https);
-        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - username: " + username);
-        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - password: " + password);
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - serverValue: " + serverValue);
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - changeCurrentServer: " + currentServerValue);
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - hostname: " + hostname);
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - subfolder: " + subfolder);
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - protocol: " + protocol);
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - port: " + port);
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - https: " + https);
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - username: " + username);
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - password: " + password);
 
 
         // Save values

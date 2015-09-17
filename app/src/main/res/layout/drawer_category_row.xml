@@ -11,7 +11,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#14501e"
+    android:background="#0d1978"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:orientation="vertical"
     android:padding="10dp">

@@ -251,7 +251,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private int connection400ErrorCounter = 0;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -411,6 +410,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 super.onDrawerOpened(drawerView);
                 // getSupportActionBar().setTitle(drawerTitle);
                 // setTitle(R.string.app_shortname);
+
+                Log.d("Debug", "MainActivity - drawer opened");
             }
         };
 
@@ -651,8 +652,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 refreshCurrent();
 
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
         }
     }
@@ -971,7 +971,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (urlTorrent != null && urlTorrent.length() != 0) {
 
-            if(urlTorrent.substring(0, 7).equals("content")){
+            if (urlTorrent.substring(0, 7).equals("content")) {
                 urlTorrent = "file://" + getFilePathFromUri(this, Uri.parse(urlTorrent));
             }
 
@@ -1046,8 +1046,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
             }
 
-        }else{
-                   headerInfo.setVisibility(View.VISIBLE);
+        } else {
+            headerInfo.setVisibility(View.VISIBLE);
         }
 
 
@@ -1329,10 +1329,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get values from preferences
         getSettings();
 
-        // Get new token and cookie
-        MainActivity.cookie = null;
-        new qBittorrentCookieTask().execute();
-
         // redraw menu
         invalidateOptionsMenu();
 
@@ -1352,11 +1348,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         editor.apply();
 
         canrefresh = true;
-        swipeRefresh();
+        refreshSwipeLayout();
 
 //        refreshCurrent();
 
-
+        // Get new token and cookie
+        MainActivity.cookie = null;
+        new qBittorrentApiTask().execute(new Intent());
     }
 
 
@@ -1661,8 +1659,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (qb_version.equals("3.2.x")) {
             qtc.execute(new String[]{"pauseAll", null});
-        }
-        else {
+        } else {
             qtc.execute(new String[]{"pauseall", null});
         }
     }
@@ -1884,8 +1881,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Delay of 1 second
                 refreshAfterCommand(1);
 
-            }
-            else {
+            } else {
                 genericOkDialog(R.string.error, R.string.global_value_error);
             }
         }
@@ -1977,7 +1973,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     openSettings();
                 }
             });
-
 
 
             // Create dialog
@@ -2145,7 +2140,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         alt_to_hour = "" + TimePreference.getHour(sharedPrefs.getString("alt_to", "20:00"));
         alt_to_min = "" + TimePreference.getMinute(sharedPrefs.getString("alt_to", "20:00"));
 
-       scheduler_days = sharedPrefs.getString("scheduler_days", "NULL");
+        scheduler_days = sharedPrefs.getString("scheduler_days", "NULL");
 
 
     }
@@ -2208,7 +2203,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    private void saveReverseOrder( boolean reverse_order) {
+    private void saveReverseOrder(boolean reverse_order) {
         MainActivity.reverse_order = reverse_order;
         // Save options locally
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
@@ -2344,7 +2339,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    public void disableRefreshSwipeLayout(){
+    public void disableRefreshSwipeLayout() {
 
         if (com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout != null) {
             com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setRefreshing(false);
@@ -2361,7 +2356,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(false);
             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.clearAnimation();
-            com.lgallardo.qbittorrentclient.TorrentDetailsFragment  .mSwipeRefreshLayout.setEnabled(true);
+            com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setEnabled(true);
         }
 
         listViewRefreshing = false;
@@ -2428,7 +2423,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         @Override
         protected void onPostExecute(String[] result) {
-
 
 
             MainActivity.cookie = result[0];
@@ -2504,11 +2498,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             int api = 0;
 
-            try{
+            try {
 
                 api = Integer.parseInt(apiVersion);
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 api = 0;
             }
 
@@ -2556,7 +2550,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             } else {
 
-                refresh();
+                refreshCurrent();
             }
 
 
@@ -2816,14 +2810,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         if (packageName.equals("com.lgallardo.qbittorrentclient")) {
                             // Info free
-                            torrents[i].setInfo(torrents[i].getDownloaded() + " / "  + torrents[i].getSize() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
+                            torrents[i].setInfo(torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
                                     + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
                                     + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + progress + " " + Character.toString('\u2022') + " "
                                     + torrents[i].getEta());
 
                         } else {
                             // Info pro
-                            torrents[i].setInfo(torrents[i].getDownloaded() + " / "  + torrents[i].getSize() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
+                            torrents[i].setInfo(torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
                                     + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
                                     + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + torrents[i].getEta());
                         }
@@ -3125,8 +3119,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 }
                             }
                         }
-                    }
-                    else {
+                    } else {
 
                         // No results
 
@@ -3263,7 +3256,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     editor.putString("max_act_uploads", max_act_uploads);
                     editor.putString("max_act_torrents", max_act_torrents);
 
-                    editor.putBoolean("schedule_alternative_rate_limits",schedule_alternative_rate_limits);
+                    editor.putBoolean("schedule_alternative_rate_limits", schedule_alternative_rate_limits);
                     editor.putString("alt_from", alt_from_hour + ":" + alt_from_min);
                     editor.putString("alt_to", alt_to_hour + ":" + alt_to_min);
                     editor.putString("scheduler_days", scheduler_days);
