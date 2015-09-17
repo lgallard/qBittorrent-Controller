@@ -112,14 +112,25 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/left_drawer"
+    <!--<ListView-->
+        <!--android:id="@+id/left_drawer"-->
+        <!--android:layout_width="240dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_gravity="start"-->
+        <!--android:background="#111"-->
+        <!--android:choiceMode="singleChoice"-->
+        <!--android:divider="@android:color/transparent"-->
+        <!--android:dividerHeight="0dp" />-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/RecyclerView"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="left"
+
         android:background="#111"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp" />
+        android:scrollbars="vertical">
+
+    </android.support.v7.widget.RecyclerView>
 
 </android.support.v4.widget.DrawerLayout>
