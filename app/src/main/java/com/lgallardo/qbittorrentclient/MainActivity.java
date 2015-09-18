@@ -701,7 +701,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     };// runnable
 
     public void refreshCurrent() {
-        if (!hostname.equals("")) {
+//        if (!hostname.equals("")) {
 
 //            switch (drawerList.getCheckedItemPosition()) {
             switch (actionStates.indexOf(currentState)) {
@@ -727,7 +727,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     refresh();
                     break;
             }
-        }
+//        }
     }
 
     @Override
@@ -1355,6 +1355,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get new token and cookie
         MainActivity.cookie = null;
         new qBittorrentApiTask().execute(new Intent());
+
+//        Log.d("Debug", "MainActivity - changeCurrentServer called");
     }
 
 

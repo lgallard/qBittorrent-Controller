@@ -221,8 +221,13 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
                 if (drawerItem.getAction().equals("changeCurrentServer")) {
 
+//                Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer ");
+
 
                     if(MainActivity.packageName.equals("com.lgallardo.qbittorrentclient") && items.indexOf(drawerItem) > 1) {
+
+//                        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - items.indexOf(drawerItem): " + items.indexOf(drawerItem));
+
 
                         mainActivity.genericOkDialog(R.string.settings_qbittorrent_pro_title, R.string.settings_qbittorrent_pro_message);
 
@@ -253,6 +258,9 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                         if (currentServerValue < 0) {
                             currentServerValue = 0;
                         }
+
+//                        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - currentServerValue: " + currentServerValue);
+
 
                         changeCurrentServer(currentServerValue);
 
