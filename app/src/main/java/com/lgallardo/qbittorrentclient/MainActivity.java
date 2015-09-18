@@ -1274,47 +1274,47 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_sortby_name:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[0]);
                 invalidateOptionsMenu();
-                refreshCurrent();
+                swipeRefresh();
                 return true;
             case R.id.action_sortby_size:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[1]);
                 invalidateOptionsMenu();
-                refreshCurrent();
+                swipeRefresh();
                 return true;
             case R.id.action_sortby_eta:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[2]);
                 invalidateOptionsMenu();
-                refreshCurrent();
+                swipeRefresh();
                 return true;
             case R.id.action_sortby_priority:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[3]);
                 invalidateOptionsMenu();
-                refreshCurrent();
+                swipeRefresh();
                 return true;
             case R.id.action_sortby_progress:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[4]);
                 invalidateOptionsMenu();
-                refreshCurrent();
+                swipeRefresh();
                 return true;
             case R.id.action_sortby_ratio:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[5]);
                 invalidateOptionsMenu();
-                refreshCurrent();
+                swipeRefresh();
                 return true;
             case R.id.action_sortby_downloadSpeed:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[6]);
                 invalidateOptionsMenu();
-                refreshCurrent();
+                swipeRefresh();
                 return true;
             case R.id.action_sortby_uploadSpeed:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[7]);
                 invalidateOptionsMenu();
-                refreshCurrent();
+                swipeRefresh();
                 return true;
             case R.id.action_sortby_reverse_order:
                 saveReverseOrder(!reverse_order);
                 invalidateOptionsMenu();
-                refreshCurrent();
+                swipeRefresh();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -1488,6 +1488,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
         if (resultCode == RESULT_OK) {
+            // Set the refresh layout (refresh icon, etc)
+            refreshSwipeLayout();
+
             new qBittorrentApiTask().execute(new Intent[]{data});
         }
 
@@ -2448,7 +2451,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Here is where the action happens
-    private class qBittorrentApiTask extends AsyncTask<Intent, Integer, String[]> {
+    private class   qBittorrentApiTask extends AsyncTask<Intent, Integer, String[]> {
 
         @Override
         protected String[] doInBackground(Intent... intents) {
@@ -2550,9 +2553,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Refresh state
                 refresh(stateBefore);
 
+                // load banner
+                loadBanner();
+
             } else {
 
-                refreshCurrent();
+                swipeRefresh();
+
             }
 
 
