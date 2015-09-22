@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private String[] navigationDrawerItemTitles;
     private String[] navigationDrawerServerItems;
     //    private ListView drawerList;
+    public static DrawerItemRecyclerViewAdapter rAdapter;
     protected RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
     public static DrawerLayout drawerLayout;
@@ -370,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
 
-        DrawerItemRecyclerViewAdapter rAdapter = new DrawerItemRecyclerViewAdapter(getApplicationContext(), this, serverItems, actionItems, settingsItems, null);
+        rAdapter = new DrawerItemRecyclerViewAdapter(getApplicationContext(), this, serverItems, actionItems, settingsItems, null);
         rAdapter.notifyDataSetChanged();
 
 
@@ -1365,33 +1366,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (requestCode == SETTINGS_CODE) {
 
-            // Get values from preferences
-            getSettings();
+            // Change current server (from settings or drawer menu)
+            changeCurrentServer();
 
-            // Get new cookie
-            cookie = null;
-
-            // redraw menu
-            invalidateOptionsMenu();
-
-            // Get options from server and save them as shared preferences
-            // locally
-            qBittorrentOptions qso = new qBittorrentOptions();
-            qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
-
-            // Now it can be refreshed
-            canrefresh = true;
-
-            // Save completedHashes
-            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-            Editor editor = sharedPrefs.edit();
-
-            // Save hashes
-            editor.putString("completed_hashes", "");
-
-
-            // Commit changes
-            editor.apply();
 
             alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getApplication(), NotifierService.class);
@@ -1400,11 +1377,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + 5000,
                     notification_period, alarmIntent);
-
-
-            // Refresh
-            canrefresh = true;
-
         }
 
         if (requestCode == OPTION_CODE) {
@@ -2864,11 +2836,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (httpStatusCode == 1) {
                     Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
+                    connection400ErrorCounter = 2;
                 }
 
                 if (httpStatusCode == 401) {
                     Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
                     httpStatusCode = 0;
+                    connection400ErrorCounter = 2;
                 }
                 if (httpStatusCode == 400) {
                     connection400ErrorCounter = connection400ErrorCounter + 1;
@@ -2885,6 +2859,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
+                    connection400ErrorCounter = 2;
 
                 }
 

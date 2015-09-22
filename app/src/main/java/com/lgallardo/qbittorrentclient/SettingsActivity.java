@@ -25,6 +25,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.view.Menu;
 
+import java.util.ArrayList;
+
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private ListPreference currentServer;
@@ -279,5 +281,30 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         // Commit changes
         editor.commit();
+
+
+        // Refresh drawer servers
+
+        String[] navigationDrawerServerItems;
+        navigationDrawerServerItems = getResources().getStringArray(R.array.qBittorrentServers);
+
+        ArrayList<ObjectDrawerItem> serverItems = new ArrayList<ObjectDrawerItem>();
+
+        // Server items
+        int currentServerIntValue = 1;
+
+        try {
+            currentServerIntValue = Integer.parseInt(currentServerValue);
+        } catch (NumberFormatException e) {
+
+        }
+
+        serverItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_servers, "Servers", MainActivity.DRAWER_CATEGORY, false, null));
+
+        for (int i = 0; i < navigationDrawerServerItems.length; i++) {
+            serverItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, navigationDrawerServerItems[i], MainActivity.DRAWER_ITEM_SERVERS, ((i + 1) == currentServerIntValue), "changeCurrentServer"));
+        }
+
+        MainActivity.rAdapter.refreshDrawerServers(serverItems);
     }
 }

@@ -606,6 +606,26 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
     }
 
+    public void refreshDrawerServers(ArrayList<ObjectDrawerItem> serverItems) {
+
+        DrawerItemRecyclerViewAdapter.serverItems = serverItems;
+
+
+        DrawerItemRecyclerViewAdapter.items = new ArrayList<ObjectDrawerItem>();
+
+        // Add items
+        DrawerItemRecyclerViewAdapter.items.addAll(serverItems);
+        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.actionItems);
+        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.settingsItems);
+        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.labelItems);
+
+        // Close server category
+        removeServerItems();
+        // Refresh
+        notifyDataSetChanged();
+
+    }
+
 
     //Below first we override the method onCreateViewHolder which is called when the ViewHolder is
     //Created, In this method we inflate the item_row.xml layout if the viewType is Type_ITEM or else we inflate header.xml
