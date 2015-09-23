@@ -652,6 +652,8 @@ public class JSONParser {
         // httpclient = new DefaultHttpClient();
         httpclient = getNewHttpClient();
 
+        httpclient.setParams(httpParameters);
+
         try {
 
 //            AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
@@ -743,6 +745,10 @@ public class JSONParser {
         // in milliseconds which is the timeout for waiting for data.
         int timeoutSocket = data_timeout * 1000;
 
+        Log.d("Debug", "API - timeoutConnection:" + timeoutConnection);
+        Log.d("Debug", "API - timeoutSocket:" + timeoutSocket);
+
+
         // Set http parameters
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
@@ -756,6 +762,8 @@ public class JSONParser {
         // httpclient = new DefaultHttpClient();
         httpclient = getNewHttpClient();
 
+        httpclient.setParams(httpParameters);
+
         try {
 
             AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
@@ -768,16 +776,26 @@ public class JSONParser {
 
             url = protocol + "://" + hostname + ":" + port + "/" + url;
 
+            Log.d("Debug", "API - url:" + url);
+
+
             HttpGet httpget = new HttpGet(url);
 
+
+            Log.d("Debug", "API - executing");
+
+
             HttpResponse response = httpclient.execute(targetHost, httpget);
+
+            Log.d("Debug", "API - getting entity");
+
             HttpEntity entity = response.getEntity();
 
             StatusLine statusLine = response.getStatusLine();
 
             int mStatusCode = statusLine.getStatusCode();
 
-//            Log.d("Debug", "API - mStatusCode: " + mStatusCode);
+            Log.d("Debug", "API - mStatusCode: " + mStatusCode);
 
             if (mStatusCode == 200) {
 
@@ -785,10 +803,16 @@ public class JSONParser {
 
                 APIVersionString = EntityUtils.toString(response.getEntity());
 
-//                Log.d("Debug", "API - ApiString: " + APIVersionString);
+                Log.d("Debug", "API - ApiString: " + APIVersionString);
 
 
             }
+
+//            if (mStatusCode != 200) {
+//                httpclient.getConnectionManager().shutdown();
+//                throw new JSONParserStatusCodeException(mStatusCode);
+//            }
+
 
 
             if (entity != null) {
@@ -802,7 +826,7 @@ public class JSONParser {
 
         } catch (Exception e) {
 
-//            Log.i("APIVer", "Exception " + e.toString());
+            Log.e("Debug", "API - Exception " + e.toString());
         }
 
 //        if (APIVersionString == null) {
@@ -850,6 +874,8 @@ public class JSONParser {
 
         // httpclient = new DefaultHttpClient();
         httpclient = getNewHttpClient();
+
+        httpclient.setParams(httpParameters);
 
         try {
 
@@ -907,6 +933,11 @@ public class JSONParser {
 
             }
 
+//            if (mStatusCode != 200) {
+//                httpclient.getConnectionManager().shutdown();
+//                throw new JSONParserStatusCodeException(mStatusCode);
+//            }
+//
 
             if (entity != null) {
                 entity.consumeContent();
