@@ -463,9 +463,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            fragmentTransaction.add(R.id.list_frame, helpTabletFragment, "firstFragment");
-            fragmentTransaction.add(R.id.content_frame, secondFragment, "secondFragment");
-            // .addToBackStack("secondFragment");
+            if (fragmentManager.findFragmentByTag("firstFragment") == null) {
+                fragmentTransaction.add(R.id.list_frame, helpTabletFragment, "firstFragment");
+            } else {
+                fragmentTransaction.replace(R.id.list_frame, helpTabletFragment, "firstFragment");
+            }
+
+            if (fragmentManager.findFragmentByTag("secondFragment") == null) {
+                fragmentTransaction.add(R.id.content_frame, secondFragment, "secondFragment");
+            } else {
+                fragmentTransaction.replace(R.id.content_frame, secondFragment, "secondFragment");
+            }
 
             fragmentTransaction.commit();
 
@@ -511,7 +519,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            fragmentTransaction.add(R.id.one_frame, secondFragment, "firstFragment");
+            if (fragmentManager.findFragmentByTag("firstFragment") == null) {
+                fragmentTransaction.add(R.id.one_frame, secondFragment, "firstFragment");
+            } else {
+                fragmentTransaction.add(R.id.one_frame, secondFragment, "firstFragment");
+                fragmentTransaction.replace(R.id.one_frame, secondFragment, "firstFragment");
+            }
 
             // if torrent details was loaded reset back button stack
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
