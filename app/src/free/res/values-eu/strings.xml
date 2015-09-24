@@ -41,6 +41,7 @@
   <string name="priorityUpdated">Lehentasuna eguneratuta!</string>
   <string name="drawer_open">Irekin nabigazio hedagarria</string>
   <string name="drawer_close">Itxi nabigazio hedagarria</string>
+  <string name="drawer_servers_category">Zerbitzarietan</string>
   <string name="getQBittorrentPrefefrences">Aukerak lortzen...</string>
   <string name="setQBittorrentPrefefrences">Aukerak gordeta</string>
   <string name="setUploadRateLimit">Igoera neurri muga ezarrita</string>

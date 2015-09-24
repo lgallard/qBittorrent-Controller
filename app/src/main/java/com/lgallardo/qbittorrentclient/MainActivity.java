@@ -334,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
         // Add server category
-        serverItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_servers, "Servers", DRAWER_CATEGORY, false, null));
+        serverItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_servers, getResources().getString(R.string.drawer_servers_category), DRAWER_CATEGORY, false, null));
 
         // Server items
         int currentServerValue = 1;
@@ -1531,13 +1531,26 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    protected void openOptions() {
+    private void openOptions() {
         canrefresh = false;
         // Retrieve preferences for options
         Intent intent = new Intent(getBaseContext(), OptionsActivity.class);
         startActivityForResult(intent, OPTION_CODE);
 
     }
+
+    // This get qBitorrent options to save them in shared preferences variables and then open the Option activity
+    protected void getAndOpenOptions() {
+
+        // Options - Execute the task in background
+        Toast.makeText(getApplicationContext(), R.string.getQBittorrentPrefefrences, Toast.LENGTH_SHORT).show();
+        qBittorrentOptions qso = new qBittorrentOptions();
+        qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
+
+    }
+
+
+
 
     protected void getPRO() {
         Intent intent = new Intent(

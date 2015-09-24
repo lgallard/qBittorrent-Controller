@@ -36,6 +36,7 @@
     <string name="decreasePrioTorrent">Prioritet minskat!</string>
     <string name="drawer_open">Öppen navigering låda</string>
     <string name="drawer_close">Stäng navigering låda</string>
+    <string name="drawer_servers_category">Servrar</string>
     <string name="getQBittorrentPrefefrences">Att få alternativ...</string>
     <string name="setQBittorrentPrefefrences">Alternativ sparade!</string>
     <string name="setUploadRateLimit">Uppladdningshastighetsgränsen har satts</string>

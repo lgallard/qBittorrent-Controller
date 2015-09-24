@@ -46,6 +46,7 @@
     <string name="priorityUpdated">Prioridad actualizada!</string>
     <string name="drawer_open">Abrir menú de navegación</string>
     <string name="drawer_close">Cierre el menú de navegación</string>
+    <string name="drawer_servers_category">Servidores</string>
     <string name="getQBittorrentPrefefrences">Obteniendo opciones ...</string>
     <string name="setQBittorrentPrefefrences">Guardando opciones</string>
     <string name="setUploadRateLimit">Límite de subida cambiado</string>

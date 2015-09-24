@@ -41,6 +41,7 @@
   <string name="priorityUpdated">Приоритет изменен!</string>
   <string name="drawer_open">Открыть меню навигации</string>
   <string name="drawer_close">Закрыть мею навигации</string>
+  <string name="drawer_servers_category">Серверы</string>
   <string name="getQBittorrentPrefefrences">Получение настроек сервера...</string>
   <string name="setQBittorrentPrefefrences">Настройки сервера сохранены</string>
   <string name="setUploadRateLimit">Установить лимит отдачи</string>

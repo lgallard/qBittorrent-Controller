@@ -367,7 +367,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                     activeLastActionPosition(lastActionPosition);
 
 
-                    mainActivity.openOptions();
+                    mainActivity.getAndOpenOptions();
 
                     // Close drawer
                     mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);

@@ -35,6 +35,7 @@
     <string name="decreasePrioTorrent">Priority réduite!</string>
     <string name="drawer_open">Ouvrez le tiroir de navigation</string>
     <string name="drawer_close">Fermer navigation tiroir</string>
+    <string name="drawer_servers_category">Serveurs</string>
     <string name="getQBittorrentPrefefrences">Obtenir les options...</string>
     <string name="setQBittorrentPrefefrences">Options sauvegardées</string>
     <string name="setUploadRateLimit">Upload limite de vitesse terminé</string>

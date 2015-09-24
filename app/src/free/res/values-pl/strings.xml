@@ -36,6 +36,7 @@
     <string name="decreasePrioTorrent">Priorytet spadła!</string>
     <string name="drawer_open">Otwórz szufladę nawigacji</string>
     <string name="drawer_close">Blisko nawigacji szuflady</string>
+    <string name="drawer_servers_category">Serwery</string>
     <string name="getQBittorrentPrefefrences">Uzyskiwanie opcje...</string>
     <string name="setQBittorrentPrefefrences">Opcje zapisany</string>
     <string name="setUploadRateLimit">Został ustawiony limit wysyłania</string>

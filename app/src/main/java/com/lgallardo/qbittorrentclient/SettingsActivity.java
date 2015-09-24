@@ -299,7 +299,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         }
 
-        serverItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_servers, "Servers", MainActivity.DRAWER_CATEGORY, false, null));
+        serverItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_servers, getResources().getString(R.string.drawer_servers_category), MainActivity.DRAWER_CATEGORY, false, null));
 
         for (int i = 0; i < navigationDrawerServerItems.length; i++) {
             serverItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, navigationDrawerServerItems[i], MainActivity.DRAWER_ITEM_SERVERS, ((i + 1) == currentServerIntValue), "changeCurrentServer"));

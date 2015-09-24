@@ -35,6 +35,7 @@
     <string name="increasePrioTorrent">Priorità aumentato!</string>
     <string name="decreasePrioTorrent">Priorità è diminuito!</string>
     <string name="drawer_open">Aprire il cassetto di navigazione</string>
+    <string name="drawer_servers_category">Server</string>
     <string name="drawer_close">Chiudere il cassetto di navigazione</string>
     <string name="getQBittorrentPrefefrences">Ottenere opzioni...</string>
     <string name="setQBittorrentPrefefrences">Opzioni salvati</string>

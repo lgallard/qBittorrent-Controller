@@ -36,6 +36,7 @@
     <string name="decreasePrioTorrent">Priorità è diminuito!</string>
     <string name="drawer_open">Aprire il cassetto di navigazione</string>
     <string name="drawer_close">Chiudere il cassetto di navigazione</string>
+    <string name="drawer_servers_category">Server</string>
     <string name="getQBittorrentPrefefrences">Ottenere opzioni...</string>
     <string name="setQBittorrentPrefefrences">Opzioni salvati</string>
     <string name="setUploadRateLimit">Limite di velocità di carico è stato fissato</string>

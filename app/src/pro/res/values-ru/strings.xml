@@ -177,6 +177,7 @@
   <string name="dialog_upload_rate_limit">Лимит отдачи (КиБ\С)</string>
   <string name="drawer_close">Закрыть мею навигации</string>
   <string name="drawer_open">Открыть меню навигации</string>
+  <string name="drawer_servers_category">Серверы</string>
   <string name="title_activity_settings">Настройки приложения</string>
   <string name="settings_qbittorrent_sort_category">Сортировка списка торрентов</string>
   <string name="settings_qbittorrent_darkui_summary">Перезапустите приложение для изменения темы оформления</string>
