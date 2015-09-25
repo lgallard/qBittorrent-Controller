@@ -20,7 +20,8 @@
         android:orientation="horizontal"
         android:background="?backgroundSelector"
         android:paddingRight="10dp"
-        android:paddingTop="10dp" >
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
         <ImageView
             android:id="@+id/icon"
