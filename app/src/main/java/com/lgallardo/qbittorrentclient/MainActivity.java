@@ -522,7 +522,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             if (fragmentManager.findFragmentByTag("firstFragment") == null) {
                 fragmentTransaction.add(R.id.one_frame, secondFragment, "firstFragment");
             } else {
-                fragmentTransaction.add(R.id.one_frame, secondFragment, "firstFragment");
                 fragmentTransaction.replace(R.id.one_frame, secondFragment, "firstFragment");
             }
 
