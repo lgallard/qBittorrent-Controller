@@ -44,9 +44,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private EditTextPreference connection_timeout;
     private EditTextPreference data_timeout;
 
-    private ListPreference sortBy;
-    private CheckBoxPreference reverse_order;
-
     private CheckBoxPreference dark_ui;
 
     private CheckBoxPreference enable_notifications;
@@ -74,8 +71,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         refresh_period = (ListPreference) findPreference("refresh_period");
         connection_timeout = (EditTextPreference) findPreference("connection_timeout");
         data_timeout = (EditTextPreference) findPreference("data_timeout");
-        sortBy = (ListPreference) findPreference("sortby");
-        reverse_order = (CheckBoxPreference) findPreference("reverse_order");
 
         dark_ui = (CheckBoxPreference) findPreference("dark_ui");
 
@@ -92,6 +87,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 // do whatever you want with new value
 
                 if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+
 
                     Builder builder = new Builder(SettingsActivity.this);
 
@@ -110,13 +106,22 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     });
 
                     // Create dialog
-                    AlertDialog dialog = builder.create();
+                    final AlertDialog dialog = builder.create();
+
+                    // This detects if the back button was press while showing the dialog
+                    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            //do whatever you want the back key to do
+                            // Set first server
+                            currentServer.setValueIndex(0);
+
+                        }
+                    });
 
                     // Show dialog
                     dialog.show();
 
-                    // Set first server
-                    currentServer.setValueIndex(0);
 
                 } else {
 
@@ -201,12 +206,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         data_timeout.setText(sharedPrefs.getString("data_timeout" + value, "20"));
         data_timeout.setSummary(sharedPrefs.getString("data_timeout" + value, "20"));
 
-        if (sortBy.getEntry() == null) {
-            sortBy.setValueIndex(1);
-        }
-
-        sortBy.setSummary(sortBy.getEntry());
-        reverse_order.setChecked(sharedPrefs.getBoolean("reverse_order" + value, false));
 
         dark_ui.setChecked(sharedPrefs.getBoolean("dark_ui", false));
 
@@ -226,7 +225,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         port.setSummary(port.getText());
         username.setSummary(username.getText());
         refresh_period.setSummary(refresh_period.getEntry());
-        sortBy.setSummary(sortBy.getEntry());
         notification_period.setSummary(notification_period.getEntry());
         connection_timeout.setSummary(connection_timeout.getText());
         data_timeout.setSummary(data_timeout.getText());
@@ -241,6 +239,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
 
         Editor editor = sharedPrefs.edit();
+
 
         if (hostname.getText().toString() != null && hostname.getText().toString() != "") {
             editor.putString("hostname" + currentServerValue, hostname.getText().toString());
@@ -274,8 +273,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         if (data_timeout.getText().toString() != null && data_timeout.getText().toString() != "") {
             editor.putString("data_timeout", data_timeout.getText().toString());
         }
-
-        editor.putBoolean("reverse_order" + currentServerValue, reverse_order.isChecked());
 
         editor.putBoolean("dark_ui" + currentServerValue, dark_ui.isChecked());
 

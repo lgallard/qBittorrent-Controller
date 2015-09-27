@@ -133,23 +133,6 @@
         </PreferenceCategory>
 
         <PreferenceCategory
-            android:key="sort"
-            android:title="@string/settings_qbittorrent_sort_category">
-            <ListPreference
-                android:defaultValue="@string/torrent_details_time_elapsed"
-                android:entries="@array/sortBy"
-                android:entryValues="@array/sortByValues"
-                android:key="sortby"
-                android:summary="@string/settings_qbittorrent_sortby_summary"
-                android:title="@string/settings_qbittorrent_sortby_dialog_title" />
-
-            <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="reverse_order"
-                android:summary="@string/settings_qbittorrent_reverse_order_summary"
-                android:title="@string/settings_qbittorrent_reverse_order_dialog_title" />
-        </PreferenceCategory>
-        <PreferenceCategory
             android:key="appearance"
             android:title="@string/settings_qbittorrent_appearance_category">
 
