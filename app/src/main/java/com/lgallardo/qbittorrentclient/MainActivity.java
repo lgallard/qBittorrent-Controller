@@ -374,9 +374,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         rAdapter = new DrawerItemRecyclerViewAdapter(getApplicationContext(), this, serverItems, actionItems, settingsItems, null);
         rAdapter.notifyDataSetChanged();
 
-
-//        Log.d("Debug", "MainActivity - oldActionPosition: "+ (Arrays.asList(actionStates).indexOf(lastState)));
-
 //        drawerList.setAdapter(adapter);
         mRecyclerView.setAdapter(rAdapter);
 
@@ -412,7 +409,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // getSupportActionBar().setTitle(drawerTitle);
                 // setTitle(R.string.app_shortname);
 
-                Log.d("Debug", "MainActivity - drawer opened");
             }
         };
 
@@ -1386,9 +1382,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (requestCode == SETTINGS_CODE) {
 
-            Log.d("Debug", "MainActivity - onActivityResult - SETTINGS_CODE");
-
-
             alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getApplication(), NotifierService.class);
             alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
@@ -1480,16 +1473,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (requestCode == SETTINGS_CODE && resultCode == RESULT_OK) {
 
-
             // Change current server (from settings or drawer menu)
             changeCurrentServer();
 
-
-//                    Log.d("Debug", "MainActivity - onActivityResult - RESULT_OK");
-//            // Set the refresh layout (refresh icon, etc)
-//            refreshSwipeLayout();
-//
-//            new qBittorrentApiTask().execute(new Intent[]{data});
         }
 
     }
@@ -2114,10 +2100,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get package name
         packageName = pInfo.packageName;
 
-//        Log.d("Debug", "MainActivity - getSettings - hostname: " + hostname);
-//        Log.d("Debug", "MainActivity - getSettings - port: " + port);
-//        Log.d("Debug", "MainActivity - getSettings - cookie: " + cookie);
-
     }
 
     // Get Options
@@ -2455,8 +2437,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Commit changes
             editor.apply();
 
-            Log.d("Debug", "MainActivity - onPOstExecute -  Launching qBittorrentTask");
-
             // Execute the task in background
             new qBittorrentTask().execute(params);
 
@@ -2469,15 +2449,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         @Override
         protected String[] doInBackground(Intent... intents) {
 
-            Log.d("Debug", "MainActivity -  qBittorrentApiTask ");
-
             // Get values from preferences
             getSettings();
 
             // Creating new JSON Parser
             com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
-
-            Log.d("Debug", "MainActivity -  qBittorrentApiTask jPArser done");
 
             String apiVersion = "";
 
@@ -2486,25 +2462,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Try to get the API number
             try {
 
-                Log.d("Debug", "MainActivity -  qBittorrentApiTask  - getting API");
-
                 apiVersion = jParser.getApi();
 
             } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
             }
 
-
-//            Log.d("Debug", "<ApiVersion>: "+ apiVersion);
-
             // If < 3.2.x, get qBittorrent version
             if (httpStatusCode > 200 || apiVersion == null) {
 
-//                Log.d("Debug", "> ApiVersion httpStatusCode: "+ httpStatusCode);
-
                 try {
-
-                    Log.d("Debug", "MainActivity -  qBittorrentApiTask - getting APIVersion");
 
                     apiVersion = jParser.getVersion();
 
@@ -2514,7 +2481,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             }
 
-            Log.d("Debug", "MainActivity -  qBittorrentApiTask - going to postExecute ");
 
             return new String[]{apiVersion, intents[0].getStringExtra("currentState")};
 
@@ -2522,9 +2488,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         @Override
         protected void onPostExecute(String[] result) {
-
-            Log.d("Debug", "MainActivity - qBittorrentApiTask - onPostExecute running ");
-
 
             String apiVersion = result[0];
 
@@ -2537,9 +2500,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             } catch (Exception e) {
                 api = 0;
             }
-
-
-//            Log.d("Debug", "API: " + apiVersion);
 
             if (apiVersion != null && (api > 1 || apiVersion.contains("3.2") || apiVersion.contains("3.3"))) {
 
@@ -2574,9 +2534,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             if (stateBefore != null) {
 
-
-                Log.d("Debug", "MainActivity - qBittorrentApiTask - onPostExecute - stateBefore: " + stateBefore);
-
                 // Set selection according to last state
                 setSelectionAndTitle(stateBefore);
 
@@ -2590,8 +2547,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 loadBanner();
 
             } else {
-
-                Log.d("Debug", "MainActivity - qBittorrentApiTask - onPostExecute - NO stateBefore");
 
                 swipeRefresh();
 
@@ -2890,9 +2845,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         @Override
         protected void onPostExecute(Torrent[] result) {
 
-            Log.d("Debug", "MainActivity - onPostExecute -  httpStatusCode: " + httpStatusCode);
-            Log.d("Debug", "MainActivity - onPostExecute -  result null?: " + (result == null));
-
             if (result == null) {
 
                 Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
@@ -3156,7 +3108,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                                 if (torrentToUpdate != null) {
                                     // Update torrent
-                                    Log.d("Debug", "MainActivity - phone - updateDetails");
                                     detailsFragment.updateDetails(torrentToUpdate);
                                 } else {
 
