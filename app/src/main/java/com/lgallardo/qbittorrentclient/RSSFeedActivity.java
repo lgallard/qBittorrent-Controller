@@ -510,7 +510,7 @@ public class RSSFeedActivity extends AppCompatActivity {
     // Load Banner
     public void loadBanner() {
 
-        if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+        if (MainActivity.packageName == null || MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
 
             // Look up the AdView as a resource and load a request.
             adView = (AdView) this.findViewById(R.id.adViewRssFeed);
