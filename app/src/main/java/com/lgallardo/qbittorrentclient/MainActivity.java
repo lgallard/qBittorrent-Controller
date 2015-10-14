@@ -1099,7 +1099,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 return true;
             case R.id.action_rss:
                 // Open RSS Activity
-                startActivity(new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class));
+                Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
+                intent.putExtra("packageName", packageName);
+                startActivity(intent);
                 return true;
             case R.id.action_pause:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {

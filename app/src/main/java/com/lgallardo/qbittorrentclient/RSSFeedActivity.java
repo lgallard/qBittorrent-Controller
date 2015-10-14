@@ -42,6 +42,8 @@ public class RSSFeedActivity extends AppCompatActivity {
     public static ArrayList<RSSFeed> rssFeeds = new ArrayList<RSSFeed>();
     private AdView adView;
 
+    private String packageName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +140,7 @@ public class RSSFeedActivity extends AppCompatActivity {
         // Load Ads
         loadBanner();
     }
+
 
 
     private void onListItemClick(View v, int pos, long id) {
@@ -481,6 +484,9 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         if (intent != null) {
 
+            // Get package name
+            packageName = intent.getStringExtra("packageName");
+
             // Add Rss from url
             String rssUrl = intent.getDataString();
 
@@ -510,7 +516,7 @@ public class RSSFeedActivity extends AppCompatActivity {
     // Load Banner
     public void loadBanner() {
 
-        if (MainActivity.packageName == null || MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+        if (packageName == null || packageName.equals("com.lgallardo.qbittorrentclient")) {
 
             // Look up the AdView as a resource and load a request.
             adView = (AdView) this.findViewById(R.id.adViewRssFeed);
