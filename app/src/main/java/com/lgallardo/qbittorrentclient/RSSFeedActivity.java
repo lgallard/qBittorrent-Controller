@@ -42,15 +42,22 @@ public class RSSFeedActivity extends AppCompatActivity {
     public static ArrayList<RSSFeed> rssFeeds = new ArrayList<RSSFeed>();
     private AdView adView;
 
+    // Values from MainActivity
     private String packageName;
+    private boolean dark_ui;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // If it were awaken from an intent-filter,
+        // get intent from the intent filter and Add URL torrent
+        handleIntent(getIntent());
+
+        Log.d("Debug", "RSSFeedActivity - onCreate ");
 
         // Set Theme (It must be fore inflating or setContentView)
-        if (MainActivity.dark_ui) {
+        if (dark_ui) {
             this.setTheme(R.style.Theme_Dark);
 
             if (Build.VERSION.SDK_INT >= 21) {
@@ -70,7 +77,7 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
 
-        if (MainActivity.dark_ui) {
+        if (dark_ui) {
             toolbar.setBackgroundColor(getResources().getColor(R.color.Theme_Dark_primary));
         }
 
@@ -132,10 +139,6 @@ public class RSSFeedActivity extends AppCompatActivity {
         registerForContextMenu(listView);
 
 
-        // If it were awaked from an intent-filter,
-        // get intent from the intent filter and Add URL torrent
-        handleIntent(getIntent());
-
 
         // Load Ads
         loadBanner();
@@ -151,7 +154,8 @@ public class RSSFeedActivity extends AppCompatActivity {
 
             Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSItemActivity.class);
             intent.putExtra("position", pos);
-
+            intent.putExtra("packageName", packageName);
+            intent.putExtra("dark_ui", dark_ui);
             startActivity(intent);
         }
 
@@ -481,27 +485,27 @@ public class RSSFeedActivity extends AppCompatActivity {
 
     private void handleIntent(Intent intent) {
 
+//        Log.d("Debug", "RSSFeedActivity - handleIntent ");
 
         if (intent != null) {
+
+//            Log.d("Debug", "RSSFeedActivity - intent is not null ");
 
             // Get package name
             packageName = intent.getStringExtra("packageName");
 
+//            Log.d("Debug", "RSSFeedActivity - packageName: " + packageName);
+
+            // Get theme UI preference
+            dark_ui = intent.getBooleanExtra("dark_ui", false);
+
+//            Log.d("Debug", "RSSFeedActivity - dark_ui: " + dark_ui);
+
             // Add Rss from url
             String rssUrl = intent.getDataString();
 
-//            Log.d("Debug", "RSS url: " + rssUrl);
-
             if (rssUrl != null) {
-
-//                addRssFeed(rssInfo);
-
                 RSSChannelInfoTask rssInfoTask = new RSSChannelInfoTask();
-
-//                new rssFeedsTask().execute();
-//
-//
-//
                 rssInfoTask.execute(rssUrl);
             }
             else {

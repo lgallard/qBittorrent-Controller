@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,13 +26,21 @@ public class RSSItemActivity extends AppCompatActivity {
     public static RSSFeedItemListAdapter myItemsAdapter;
     private AdView adView;
 
+    // Values from RSSFeedActivity (intent)
+    private String packageName;
+    private boolean dark_ui;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // If it were awaken from an intent-filter,
+        // get intent from the intent filter and Add URL torrent
+        handleIntent(getIntent());
+
 
         // Set Theme (It must be fore inflating or setContentView)
-        if (MainActivity.dark_ui) {
+        if (dark_ui) {
             this.setTheme(R.style.Theme_Dark);
 
             if (Build.VERSION.SDK_INT >= 21) {
@@ -54,7 +61,7 @@ public class RSSItemActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
 
-        if (MainActivity.dark_ui) {
+        if (dark_ui) {
             toolbar.setBackgroundColor(getResources().getColor(R.color.Theme_Dark_primary));
 
             // Force backgroud (for some weird reason this activity is not taking the dark background)
@@ -122,14 +129,27 @@ public class RSSItemActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
 
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+
         rssChannelPosition = 0;
 
         if (intent != null) {
             rssChannelPosition = intent.getIntExtra("position", 0);
+
+            // Get package name
+            packageName = intent.getStringExtra("packageName");
+
+            // Get theme UI preference
+            dark_ui = intent.getBooleanExtra("dark_ui", false);
         }
 
 
     }
+
+
 
     private void onListItemClick(View v, int pos, long id) {
 //        Log.i("Debug", "RSS Item - onListItemClick id=" + id);
@@ -183,7 +203,7 @@ public class RSSItemActivity extends AppCompatActivity {
     // Load Banner
     public void loadBanner() {
 
-        if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+        if (packageName.equals("com.lgallardo.qbittorrentclient")) {
 
             // Look up the AdView as a resource and load a request.
             adView = (AdView) this.findViewById(R.id.adViewRssItem);

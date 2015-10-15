@@ -1101,6 +1101,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Open RSS Activity
                 Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
                 intent.putExtra("packageName", packageName);
+                intent.putExtra("dark_ui", dark_ui);
                 startActivity(intent);
                 return true;
             case R.id.action_pause:
