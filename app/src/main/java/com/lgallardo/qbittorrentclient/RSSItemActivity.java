@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -203,14 +204,18 @@ public class RSSItemActivity extends AppCompatActivity {
     // Load Banner
     public void loadBanner() {
 
-        if (packageName.equals("com.lgallardo.qbittorrentclient")) {
+        try {
+            if (packageName.equals("com.lgallardo.qbittorrentclient")) {
 
-            // Look up the AdView as a resource and load a request.
-            adView = (AdView) this.findViewById(R.id.adViewRssItem);
-            AdRequest adRequest = new AdRequest.Builder().build();
+                // Look up the AdView as a resource and load a request.
+                adView = (AdView) this.findViewById(R.id.adViewRssItem);
+                AdRequest adRequest = new AdRequest.Builder().build();
 
-            // Start loading the ad in the background.
-            adView.loadAd(adRequest);
+                // Start loading the ad in the background.
+                adView.loadAd(adRequest);
+            }
+        } catch (Exception e) {
+            Log.e("Debug", e.getMessage());
         }
     }
 

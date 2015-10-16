@@ -54,7 +54,7 @@ public class RSSFeedActivity extends AppCompatActivity {
         // get intent from the intent filter and Add URL torrent
         handleIntent(getIntent());
 
-        Log.d("Debug", "RSSFeedActivity - onCreate ");
+//        Log.d("Debug", "RSSFeedActivity - onCreate ");
 
         // Set Theme (It must be fore inflating or setContentView)
         if (dark_ui) {
@@ -520,14 +520,19 @@ public class RSSFeedActivity extends AppCompatActivity {
     // Load Banner
     public void loadBanner() {
 
-        if (packageName == null || packageName.equals("com.lgallardo.qbittorrentclient")) {
+        try {
+            if (packageName.equals("com.lgallardo.qbittorrentclient")) {
 
-            // Look up the AdView as a resource and load a request.
-            adView = (AdView) this.findViewById(R.id.adViewRssFeed);
-            AdRequest adRequest = new AdRequest.Builder().build();
+                // Look up the AdView as a resource and load a request.
+                adView = (AdView) this.findViewById(R.id.adViewRssFeed);
+                AdRequest adRequest = new AdRequest.Builder().build();
 
-            // Start loading the ad in the background.
-            adView.loadAd(adRequest);
+                // Start loading the ad in the background.
+                adView.loadAd(adRequest);
+            }
+        } catch (Exception e) {
+
+            Log.e("Debug", e.getMessage());
         }
     }
 
