@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Cookie (SID - Session ID)
     public static String cookie = null;
-    public static String qb_version = "3.1.x";
+    public static String qb_version = "3.2.x";
     public static LinearLayout headerInfo;
 
     // Current state
@@ -1385,6 +1385,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (requestCode == SETTINGS_CODE) {
 
+            Log.d("Debug", "Notification alarm set");
+
             alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getApplication(), NotifierService.class);
             alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
@@ -2076,7 +2078,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         dark_ui = sharedPrefs.getBoolean("dark_ui", false);
 
-        qb_version = sharedPrefs.getString("qb_version", "3.1.x");
+        qb_version = sharedPrefs.getString("qb_version", "3.2.x");
 
         MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
 
@@ -2410,7 +2412,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             if (newCookie == null) {
                 newCookie = "";
-
             }
 
             if (api == null) {
@@ -2872,6 +2873,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
                 if (httpStatusCode == 403 || httpStatusCode == 404) {
+
+                    Log.d("Debug","MainActivity - refresh - qb_version:" +qb_version );
 
                     if (qb_version.equals("3.2.x")) {
                         // Get new Cookie

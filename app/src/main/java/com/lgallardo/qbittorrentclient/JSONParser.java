@@ -745,8 +745,8 @@ public class JSONParser {
         // in milliseconds which is the timeout for waiting for data.
         int timeoutSocket = data_timeout * 1000;
 
-        Log.d("Debug", "API - timeoutConnection:" + timeoutConnection);
-        Log.d("Debug", "API - timeoutSocket:" + timeoutSocket);
+//        Log.d("Debug", "API - timeoutConnection:" + timeoutConnection);
+//        Log.d("Debug", "API - timeoutSocket:" + timeoutSocket);
 
 
         // Set http parameters
@@ -776,18 +776,18 @@ public class JSONParser {
 
             url = protocol + "://" + hostname + ":" + port + "/" + url;
 
-            Log.d("Debug", "API - url:" + url);
+//            Log.d("Debug", "API - url:" + url);
 
 
             HttpGet httpget = new HttpGet(url);
 
 
-            Log.d("Debug", "API - executing");
+//            Log.d("Debug", "API - executing");
 
 
             HttpResponse response = httpclient.execute(targetHost, httpget);
 
-            Log.d("Debug", "API - getting entity");
+//            Log.d("Debug", "API - getting entity");
 
             HttpEntity entity = response.getEntity();
 
@@ -795,7 +795,7 @@ public class JSONParser {
 
             int mStatusCode = statusLine.getStatusCode();
 
-            Log.d("Debug", "API - mStatusCode: " + mStatusCode);
+//            Log.d("Debug", "API - mStatusCode: " + mStatusCode);
 
             if (mStatusCode == 200) {
 
@@ -803,7 +803,7 @@ public class JSONParser {
 
                 APIVersionString = EntityUtils.toString(response.getEntity());
 
-                Log.d("Debug", "API - ApiString: " + APIVersionString);
+//                Log.d("Debug", "API - ApiString: " + APIVersionString);
 
 
             }
