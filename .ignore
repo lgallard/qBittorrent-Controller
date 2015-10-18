@@ -8,13 +8,11 @@
 # Java class files
 *.class
 
-/app/app.iml
+
 # Gradle files
 .gradle/
-/.idea/libraries
 build/
 */build/
-.idea/libraries
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -25,9 +23,9 @@ proguard/
 # Log Files
 *.log
 
-.idea/*
+.idea
+.idea/libraries/
 .idea/workspace.xml
-.idea/
 app/app.iml
-
+app/build.gradle
 
