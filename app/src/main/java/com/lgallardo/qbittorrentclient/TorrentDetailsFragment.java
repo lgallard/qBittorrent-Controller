@@ -17,13 +17,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -37,6 +40,8 @@ import com.google.android.gms.ads.AdView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class TorrentDetailsFragment extends Fragment {
 
@@ -563,6 +568,7 @@ public class TorrentDetailsFragment extends Fragment {
     public void setTorrent(Torrent torrent) {
         this.torrent = torrent;
     }
+
 
     // // Here is where the action happens
     private class qBittorrentContentFile extends AsyncTask<View, View, View[]> {

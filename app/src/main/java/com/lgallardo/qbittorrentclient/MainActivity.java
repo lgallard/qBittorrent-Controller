@@ -48,6 +48,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -738,6 +739,54 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 //        }
     }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.isRefreshing()) {
+            return;
+        }
+
+        if (v.getId() == R.id.theList) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+
+            Log.d("Debug", "Chosen: " + menuInfo.toString());
+//            Log.d("Debug", "Chosen: " + info.position);
+
+
+            getMenuInflater().inflate(R.menu.menu_file_contextual, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+//        Log.d("Debug", "Item: " + getResources().getResourceEntryName(item.getItemId()));
+
+
+        switch (item.getItemId()) {
+
+            case R.id.action_file_dont_download:
+                Log.d("Debug", "Don't download");
+                return true;
+            case R.id.action_file_normal_priority:
+                Log.d("Debug", "Normal priority");
+                return true;
+            case R.id.action_file_high_priority:
+                Log.d("Debug", "High priority");
+                return true;
+            case R.id.action_file_maximum_priority:
+                Log.d("Debug", "Maximum priority");
+                return true;
+            default:
+                Log.d("Debug", "onContextItemSelected default option");
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Override
     public void setTitle(CharSequence title) {

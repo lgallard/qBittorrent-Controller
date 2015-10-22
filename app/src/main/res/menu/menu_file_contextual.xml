@@ -13,7 +13,7 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_file_hi_priority"
+        android:id="@+id/action_file_high_priority"
         android:title="@string/action_file_high_priority"
         app:showAsAction="ifRoom" />
 
