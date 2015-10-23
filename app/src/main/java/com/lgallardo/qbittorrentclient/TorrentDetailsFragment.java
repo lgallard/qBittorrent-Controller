@@ -659,6 +659,10 @@ public class TorrentDetailsFragment extends Fragment {
 
                 setListViewHeightBasedOnChildren(lv);
 
+                // This is need for the Contextual menu
+                registerForContextMenu(lv);
+
+
             } catch (Exception e) {
                 Log.e("Content2", e.toString());
 
