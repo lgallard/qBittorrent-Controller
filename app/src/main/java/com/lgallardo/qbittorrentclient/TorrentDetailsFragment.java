@@ -1073,7 +1073,7 @@ public class TorrentDetailsFragment extends Fragment {
                 double viewWidthLong = Double.valueOf(view.getMeasuredWidth());
                 double desiredWidthLong = Double.valueOf(desiredWidth);
 
-                numOfLines = Math.round(viewWidthLong / desiredWidthLong);
+                numOfLines = Math.round(viewWidthLong / desiredWidthLong) + 1;
 
                 totalHeight += (file.getMeasuredHeight() * numOfLines ) +  percentage.getMeasuredHeight() + progressBar1.getMeasuredHeight();
 
