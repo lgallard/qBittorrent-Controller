@@ -8,7 +8,7 @@
 # Java class files
 *.class
 
-/app/app.iml
+        
 # Gradle files
 .gradle/
 /.idea/libraries

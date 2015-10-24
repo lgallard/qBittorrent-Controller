@@ -16,17 +16,15 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -58,7 +56,9 @@ public class TorrentDetailsFragment extends Fragment {
     protected static final String TAG_UPLOAD_LIMIT = "up_limit";
     protected static final String TAG_DOWNLOAD_LIMIT = "dl_limit";
 
+    // TODO: Delete
     static ContentFile[] files;
+    static ArrayList<ContentFile> contentFiles;
     static Tracker[] trackers;
     static String[] names, trackerNames;
 
@@ -598,6 +598,8 @@ public class TorrentDetailsFragment extends Fragment {
             files = null;
             names = null;
 
+            contentFiles = new ArrayList<ContentFile>();
+
             try {
 
                 JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
@@ -625,8 +627,12 @@ public class TorrentDetailsFragment extends Fragment {
                             size = Common.calculateSize(json.getString(MainActivity.TAG_SIZE)).replace(",", ".");
                         }
 
+                        // TODO: Delete nest two lines
                         files[i] = new ContentFile(name, size, progress, priority);
                         names[i] = name;
+
+                        contentFiles.add(new ContentFile(name, size, progress, priority));
+
 
                     }
 
@@ -653,6 +659,7 @@ public class TorrentDetailsFragment extends Fragment {
 
                 ListView lv = (ListView) rootView.findViewById(R.id.theList);
 
+
                 lv.setFocusable(false);
 
                 lv.setAdapter(fileAdpater);
@@ -661,6 +668,21 @@ public class TorrentDetailsFragment extends Fragment {
 
                 // This is need for the Contextual menu
                 registerForContextMenu(lv);
+
+
+                // RecyclerView
+
+                RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.theList);
+                RecyclerView.LayoutManager mLayoutManager;
+
+                // Letting the system know that the list objects are of no fixed sizes
+                mRecyclerView.setHasFixedSize(false);
+
+                // This is need for the Contextual menu
+                registerForContextMenu(mRecyclerView);
+
+
+
 
 
             } catch (Exception e) {
@@ -1001,6 +1023,125 @@ public class TorrentDetailsFragment extends Fragment {
 
             return (row);
         }
+    }
+
+
+
+    class myFileAdapter2 extends RecyclerView.Adapter<myFileAdapter2.ViewHolder> {
+
+
+        private Context context;
+        public  ArrayList<ContentFile> items;
+
+        public myFileAdapter2(Context context, ArrayList<ContentFile> items) {
+
+            this.context = context;
+
+            this.items = new ArrayList<ContentFile>();
+
+            // Add items
+            this.items.addAll(items);
+
+
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+            // These are the values to be set in contentfile_row.xml
+
+            TextView textViewFile;
+            TextView textViewInfo;
+            TextView textViewPriorityInfo;
+            TextView textViewPercentage;
+            ProgressBar progressBarProgressBar;
+
+
+
+
+            public ViewHolder(final View itemView, int ViewType) {                 // Creating ViewHolder Constructor with View and viewType As a parameter
+                super(itemView);
+
+                itemView.setClickable(true);
+                itemView.setOnClickListener(this);
+
+
+                // Here we set the appropriate view in accordance with the the view type as passed when the holder object is created
+
+                textViewFile = (TextView) itemView.findViewById(R.id.file);
+                textViewInfo = (TextView) itemView.findViewById(R.id.info);
+                textViewPriorityInfo = (TextView) itemView.findViewById(R.id.priorityInfo);
+                textViewPercentage = (TextView) itemView.findViewById(R.id.percentage);
+                progressBarProgressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
+
+            }
+
+
+            // In order to track the item position in RecyclerView
+            // Handle item click and set the selection
+            @Override
+            public void onClick(View view) {
+
+            }
+
+        }
+
+        //Below first we override the method onCreateViewHolder which is called when the ViewHolder is
+        //Created, In this method we inflate the item_row.xml layout if the viewType is Type_ITEM or else we inflate header.xml
+        // if the viewType is TYPE_HEADER
+        // and pass it to the view holder
+
+        @Override
+        public myFileAdapter2.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            // Inflate your layout and pass it to view holder
+
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.contentfile_row, parent, false); //Inflating the layout
+            ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
+
+            // Returning the created object
+            return vhItem;
+
+
+        }
+
+        //Next we override a method which is called when the item in a row is needed to be displayed, here the int position
+        // Tells us item at which position is being constructed to be displayed and the holder id of the holder object tell us
+        // which view type is being created 1 for item row
+        @Override
+        public void onBindViewHolder(myFileAdapter2.ViewHolder holder, int position) {
+
+
+            ContentFile item = items.get(position);
+
+
+            holder.textViewFile.setText(item.getName());
+            holder.textViewInfo.setText(item.getSize());
+            holder.textViewPriorityInfo.setText("" + item.getPriority());
+            holder.progressBarProgressBar.setProgress((item.getProgress()).intValue());
+
+        }
+
+
+
+        // This method returns the number of items present in the list
+        @Override
+        public int getItemCount() {
+            // Return the number of items in the list
+            return items.size();
+        }
+
+
+        // Witht the following method we check what type of view is being passed
+        @Override
+        public int getItemViewType(int position) {
+
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - items.size(): " + items.size());
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - position: " + position);
+
+            return 0;
+
+        }
+
     }
 
     class myTrackerAdapter extends ArrayAdapter<String> {
