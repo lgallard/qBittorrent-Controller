@@ -1065,16 +1065,17 @@ public class TorrentDetailsFragment extends Fragment {
             view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
 
             TextView file = (TextView) view.findViewById(R.id.file);
-            TextView info = (TextView) view.findViewById(R.id.info);
+            TextView percentage = (TextView) view.findViewById(R.id.percentage);
+            ProgressBar progressBar1 = (ProgressBar) view.findViewById(R.id.progressBar1);
 
             if (view.getMeasuredWidth() > desiredWidth) {
 
                 double viewWidthLong = Double.valueOf(view.getMeasuredWidth());
                 double desiredWidthLong = Double.valueOf(desiredWidth);
 
-                numOfLines = Math.round(viewWidthLong / desiredWidthLong) + 1;
+                numOfLines = Math.round(viewWidthLong / desiredWidthLong);
 
-                totalHeight += file.getMeasuredHeight() * numOfLines + info.getMeasuredHeight();
+                totalHeight += (file.getMeasuredHeight() * numOfLines ) +  percentage.getMeasuredHeight() + progressBar1.getMeasuredHeight();
 
             } else {
                 totalHeight += view.getMeasuredHeight();
