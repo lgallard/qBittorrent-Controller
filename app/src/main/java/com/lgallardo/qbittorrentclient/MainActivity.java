@@ -748,7 +748,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             return;
         }
 
-        if (v.getId() == R.id.theList) {
+//        if (v.getId() == R.id.theList) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
 
@@ -757,29 +757,36 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
             getMenuInflater().inflate(R.menu.menu_file_contextual, menu);
-        }
+//        }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-//        Log.d("Debug", "Item: " + getResources().getResourceEntryName(item.getItemId()));
+        Log.d("Debug", "Item name: " + getResources().getResourceEntryName(item.getItemId()));
+        Log.d("Debug", "Item position: " + TorrentDetailsFragment.fileContentRowPosition);
 
 
         switch (item.getItemId()) {
 
             case R.id.action_file_dont_download:
                 Log.d("Debug", "Don't download");
+                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition,0);
+
                 return true;
             case R.id.action_file_normal_priority:
                 Log.d("Debug", "Normal priority");
+                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 1);
                 return true;
             case R.id.action_file_high_priority:
                 Log.d("Debug", "High priority");
+                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 2);
                 return true;
             case R.id.action_file_maximum_priority:
                 Log.d("Debug", "Maximum priority");
+                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 7);
+
                 return true;
             default:
                 Log.d("Debug", "onContextItemSelected default option");
@@ -1759,6 +1766,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    public void setFilePrio(String hash, int id, int priority) {
+        // Execute the task in background
+        qBittorrentCommand qtc = new qBittorrentCommand();
+
+        hash = hash + "&" + id + "&" + priority;
+
+        qtc.execute(new String[]{"setFilePrio", hash });
+
+    }
+
     public void recheckTorrents(String hashes) {
         // Execute the task in background
 
@@ -2730,6 +2747,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
 
             if ("minPrio".equals(result)) {
+                messageId = R.string.priorityUpdated;
+            }
+
+            if ("setFilePrio".equals(result)) {
                 messageId = R.string.priorityUpdated;
             }
 

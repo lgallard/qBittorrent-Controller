@@ -16,8 +16,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,13 +56,10 @@ public class TorrentDetailsFragment extends Fragment {
     protected static final String TAG_DOWNLOAD_LIMIT = "dl_limit";
 
     // TODO: Delete files
-    static ContentFile[] files;
     static ArrayList<ContentFile> contentFiles;
     static Tracker[] trackers;
-    static String[] names, trackerNames;
+    static String[] trackerNames;
 
-
-    public static ArrayList<Integer> heights;
 
     // Torrent variables
     String name, info, hash, ratio, size, progress, state, leechs, seeds, priority, savePath, creationDate, comment, totalWasted, totalUploaded,
@@ -78,8 +73,8 @@ public class TorrentDetailsFragment extends Fragment {
     JSONObject json2;
 
     // Adapters
-    myFileAdapter fileAdpater;
-    MyFileAdapter2 fileAdpater2;
+    myFileAdapter fileAdapter;
+
     myTrackerAdapter trackerAdapter;
     myPropertyAdapter propertyAdapter;
 
@@ -90,7 +85,9 @@ public class TorrentDetailsFragment extends Fragment {
 
     // AdView for ads
     private AdView adView;
-    protected RecyclerView mRecyclerView;
+
+    public static int fileContentRowPosition;
+
 
     public TorrentDetailsFragment() {
     }
@@ -111,8 +108,6 @@ public class TorrentDetailsFragment extends Fragment {
         // wants to add/replace/delete using the onCreateOptionsMenu method.
         setHasOptionsMenu(true);
 
-
-        heights = new ArrayList<Integer>();
 
         View rootView;
 
@@ -306,36 +301,6 @@ public class TorrentDetailsFragment extends Fragment {
             if ("checkingDL".equals(state) || "checkingUP".equals(state)) {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_recheck, 0, 0, 0);
             }
-
-
-            // RecyclerView
-
-            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.theList);
-
-            ArrayList<ContentFile> cfs = new ArrayList<ContentFile>();
-
-            cfs.add(new ContentFile("Test 1","10",10.0,10));
-            cfs.add(new ContentFile("Test 2","20",20.0,20));
-
-            fileAdpater2 = new MyFileAdapter2(getActivity(), cfs);
-
-            mRecyclerView.setAdapter(fileAdpater2);
-
-
-            // Letting the system know that the list objects are of no fixed sizes
-            mRecyclerView.setHasFixedSize(true);
-
-            // Create the layout Manager
-
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-
-            // Set the layout Manager
-            mRecyclerView.setLayoutManager(mLayoutManager);
-
-            // This is need for the Contextual menu
-//                registerForContextMenu(mRecyclerView);
-
-
 
 
             // Get Content files in background
@@ -634,9 +599,6 @@ public class TorrentDetailsFragment extends Fragment {
 
             url = qbQueryString + "/propertiesFiles/";
 
-            files = null;
-            names = null;
-
             contentFiles = new ArrayList<ContentFile>();
 
             try {
@@ -650,8 +612,6 @@ public class TorrentDetailsFragment extends Fragment {
 
                 if (jArray != null) {
 
-                    files = new ContentFile[jArray.length()];
-                    TorrentDetailsFragment.names = new String[jArray.length()];
 
                     for (int i = 0; i < jArray.length(); i++) {
 
@@ -665,10 +625,6 @@ public class TorrentDetailsFragment extends Fragment {
                         if (MainActivity.qb_version.equals("3.2.x")) {
                             size = Common.calculateSize(json.getString(MainActivity.TAG_SIZE)).replace(",", ".");
                         }
-
-                        // TODO: Delete next two lines
-                        files[i] = new ContentFile(name, size, progress, priority);
-                        names[i] = name;
 
                         contentFiles.add(new ContentFile(name, size, progress, priority));
 
@@ -694,39 +650,41 @@ public class TorrentDetailsFragment extends Fragment {
 
                 View rootView = rootViews[0];
 
-
-//                ListView lv = (ListView) rootView.findViewById(R.id.theList);
-//
-//
-//                lv.setFocusable(false);
-//
-//                lv.setAdapter(fileAdpater);
-//
-//                setListViewHeightBasedOnChildren(lv);
-//
-//                // This is need for the Contextual menu
-//                registerForContextMenu(lv);
+                fileAdapter = new myFileAdapter(getActivity(), contentFiles);
 
 
-                fileAdpater2.setContentFiles(contentFiles);
-                fileAdpater2.notifyDataSetChanged();
+                LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.files);
+                layout.removeAllViews();
+
+                for (int i = 0; i < fileAdapter.getCount(); i++) {
+                    final View item = fileAdapter.getView(i, null, null);
+
+                    item.setClickable(true);
+
+                    item.setId(i);
+
+                    item.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // ADD your action here
 
 
 
-                Log.d("Debug", "mRecyclerView - height: " + fileAdpater2.getTotalHeight());
+                            Log.d("Debug", "Item clicked: " + v.getId());
 
-                mRecyclerView.getLayoutParams().height = fileAdpater2.getTotalHeight();
+                            fileContentRowPosition = v.getId();
 
-                mRecyclerView.getLayoutParams().height = 1000;
+                            Log.d("Debug", "Item - hash: " + hashToUpdate);
+
+                            registerForContextMenu(v);
+                            getActivity().openContextMenu(v);
+
+                        }
+                    });
 
 
-                mRecyclerView.setClickable(true);
-                mRecyclerView.setHasFixedSize(false);
-
-
-                // This is need for the Contextual menu
-                registerForContextMenu(mRecyclerView);
-
+                    layout.addView(item);
+                }
 
 
             } catch (Exception e) {
@@ -1016,50 +974,86 @@ public class TorrentDetailsFragment extends Fragment {
         }
     }
 
-    class myFileAdapter extends ArrayAdapter<String> {
+    class myFileAdapter extends ArrayAdapter<ContentFile> {
 
-        private String[] filesNames;
-        private ContentFile[] files;
         private Context context;
+        public ArrayList<ContentFile> items;
 
-        public myFileAdapter(Context context, String[] filesNames, ContentFile[] files) {
-            super(context, R.layout.contentfile_row, R.id.file, filesNames);
+        public myFileAdapter(Context context,  ArrayList<ContentFile> items) {
+            super(context, R.layout.contentfile_row, R.id.file, items);
 
-            this.context = context;
-            this.filesNames = filesNames;
-            this.files = files;
+            this.items = new ArrayList<ContentFile>();
+
+            this.items.addAll(items);
 
         }
 
         @Override
         public int getCount() {
-            return (filesNames != null) ? filesNames.length : 0;
+
+            return this.items.size();
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
+
+            ContentFile item = this.items.get(position);
+
+
+            String priorityString = "";
+
+
+            switch (item.getPriority()){
+
+                case 0:
+                    priorityString = getActivity().getResources().getString(R.string.action_file_dont_download);
+                    break;
+                case 1:
+                    priorityString = getActivity().getResources().getString(R.string.action_file_normal_priority);
+                    break;
+                case 2:
+                    priorityString = getActivity().getResources().getString(R.string.action_file_high_priority);
+                    break;
+                case 7:
+                    priorityString = getActivity().getResources().getString(R.string.action_file_maximum_priority);
+                    break;
+                default:
+                    priorityString = "";
+                    break;
+
+
+            }
+
             View row = super.getView(position, convertView, parent);
 
-            TextView info = (TextView) row.findViewById(R.id.info);
 
-            info.setText("" + files[position].getSize());
+
+            TextView textViewFile = (TextView) row.findViewById(R.id.file);
+            TextView textViewInfo = (TextView) row.findViewById(R.id.info);
+            TextView textViewPriorityInfo = (TextView) row.findViewById(R.id.priorityInfo);
+
+
+            textViewFile.setText(item.getName());
+            textViewInfo.setText("" + item.getSize());
+            textViewPriorityInfo.setText(priorityString);
+
 
             // Set progress bar
             ProgressBar progressBar = (ProgressBar) row.findViewById(R.id.progressBar1);
             TextView percentageTV = (TextView) row.findViewById(R.id.percentage);
 
-            int index = files[position].getProgressAsString().indexOf(".");
+            int index = item.getProgressAsString().indexOf(".");
 
             if (index == -1) {
-                index = files[position].getProgressAsString().indexOf(",");
+                index = item.getProgressAsString().indexOf(",");
 
                 if (index == -1) {
-                    index = files[position].getProgressAsString().length();
+                    index = item.getProgressAsString().length();
                 }
             }
 
-            String percentage = files[position].getProgressAsString().substring(0, index);
+            String percentage = item.getProgressAsString().substring(0, index);
 
             progressBar.setProgress(Integer.parseInt(percentage));
 
