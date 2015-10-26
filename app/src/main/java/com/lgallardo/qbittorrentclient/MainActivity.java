@@ -752,7 +752,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
 
-            Log.d("Debug", "Chosen: " + menuInfo.toString());
+//            Log.d("Debug", "Chosen: " + menuInfo.toString());
 //            Log.d("Debug", "Chosen: " + info.position);
 
 

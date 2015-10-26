@@ -6,6 +6,7 @@ public class ContentFile {
 	private String size;
 	private Double progress;
 	private int priority;
+	private int recyclerViewItemHeight;
 
 	public ContentFile(String name, String size, Double progress, int priority) {
 
@@ -52,4 +53,11 @@ public class ContentFile {
 		return String.format("%.2f", this.progress * 100) + "%";
 	}
 
+	public int getRecyclerViewItemHeight() {
+		return recyclerViewItemHeight;
+	}
+
+	public void setRecyclerViewItemHeight(int recyclerViewItemHeight) {
+		this.recyclerViewItemHeight = recyclerViewItemHeight;
+	}
 }
