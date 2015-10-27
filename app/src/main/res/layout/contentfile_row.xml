@@ -12,7 +12,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:background="?android:attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -46,11 +47,12 @@
                 <TextView
                     android:id="@+id/priorityInfo"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:layout_height="wrap_content"
                     android:text="Don't download"
                     android:textSize="13sp"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:gravity="center" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -83,6 +85,12 @@
 
 
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#95e7e7e7"
+             />
+
     </LinearLayout>
 
 
