@@ -216,4 +216,8 @@
     <string name="options_qbittorrent_scheduler_days_title">Quando:</string>
     <string name="settings_qbittorrent_pro_title">Recurso não disponível</string>
     <string name="settings_qbittorrent_pro_message">Esta funcionalidade só está disponível na versão PRO do qBittorrent!</string>
+    <string name="action_file_dont_download">Não faça download</string>
+    <string name="action_file_high_priority">Alta</string>
+    <string name="action_file_normal_priority">Normal</string>
+    <string name="action_file_maximum_priority">Máxima</string>
 </resources>

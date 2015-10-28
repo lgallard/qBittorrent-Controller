@@ -220,4 +220,9 @@
     <string name="options_qbittorrent_schedule_alt_from">Od</string>
     <string name="options_qbittorrent_schedule_alt_to">Do</string>
     <string name="options_qbittorrent_scheduler_days_title">Kiedy:</string>
+    <string name="action_file_dont_download">Nie pobieraj</string>
+    <string name="action_file_high_priority">Wysoki</string>
+    <string name="action_file_maximum_priority">Maksymalna</string>
+    <string name="action_file_normal_priority">Normalny</string>
+
 </resources>

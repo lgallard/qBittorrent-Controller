@@ -221,4 +221,8 @@
     <string name="options_qbittorrent_schedule_alt_from">De</string>
     <string name="options_qbittorrent_schedule_alt_to">A</string>
     <string name="options_qbittorrent_scheduler_days_title">Cuándo:</string>
+    <string name="action_file_dont_download">No descargar</string>
+    <string name="action_file_high_priority">Alta</string>
+    <string name="action_file_maximum_priority">Máxima</string>
+    <string name="action_file_normal_priority">Normal</string>
 </resources>

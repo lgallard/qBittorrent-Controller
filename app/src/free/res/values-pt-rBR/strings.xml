@@ -220,4 +220,8 @@
     <string name="options_qbittorrent_schedule_alt_to">A</string>
     <string name="options_qbittorrent_schedule_alternative_rate_limits">Agendar utilização das taxas limite alternativas</string>
     <string name="options_qbittorrent_scheduler_days_title">Quando:</string>
+    <string name="action_file_dont_download">Não faça download</string>
+    <string name="action_file_high_priority">Alta</string>
+    <string name="action_file_normal_priority">Normal</string>
+    <string name="action_file_maximum_priority">Máxima</string>
 </resources>

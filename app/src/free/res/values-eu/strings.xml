@@ -220,4 +220,8 @@
   <string name="options_qbittorrent_scheduler_days_title">Noiz:</string>
   <string name="options_qbittorrent_schedule_alt_from">Hemendik</string>
   <string name="options_qbittorrent_schedule_alt_to">Hona</string>
+  <string name="action_file_dont_download">Ez deskargatu</string>
+  <string name="action_file_maximum_priority">Gehienezko</string>
+  <string name="action_file_high_priority">Handia</string>
+  <string name="action_file_normal_priority">Normala</string>
 </resources>

@@ -499,7 +499,7 @@ public class JSONParser {
 
             url = protocol + "://" + hostname + ":" + port + "/" + url;
 
-            Log.d("Debug", "url:" + url);
+//            Log.d("Debug", "url:" + url);
 
             HttpPost httpget = new HttpPost(url);
 

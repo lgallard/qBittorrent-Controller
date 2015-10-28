@@ -216,4 +216,8 @@
   <string name="options_qbittorrent_schedule_alt_to">Hona</string>
   <string name="settings_qbittorrent_pro_title">Ezaugarria ez dago eskuragarri</string>
   <string name="settings_qbittorrent_pro_message">Ezaugarri hau qBittorrent PRO bertsioan bakarrik dago eskuragarri!</string>
+  <string name="action_file_dont_download">Ez deskargatu</string>
+  <string name="action_file_maximum_priority">Gehienezko</string>
+  <string name="action_file_high_priority">Handia</string>
+  <string name="action_file_normal_priority">Normala</string>
 </resources>

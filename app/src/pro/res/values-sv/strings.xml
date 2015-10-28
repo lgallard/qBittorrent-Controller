@@ -216,4 +216,8 @@
     <string name="options_qbittorrent_scheduler_days_title">När:</string>
     <string name="settings_qbittorrent_pro_message">Den här funktionen är endast tillgänglig på qBittorrent PRO versionen!</string>
     <string name="settings_qbittorrent_pro_title">Feature inte tillgängligt</string>
+    <string name="action_file_dont_download">Ladda inte ner</string>
+    <string name="action_file_high_priority">Hög</string>
+    <string name="action_file_normal_priority">Normal</string>
+    <string name="action_file_maximum_priority">Högsta</string>
 </resources>

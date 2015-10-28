@@ -220,4 +220,8 @@
     <string name="options_qbittorrent_schedule_alt_from">Från</string>
     <string name="options_qbittorrent_schedule_alt_to">Till</string>
     <string name="options_qbittorrent_scheduler_days_title">När:</string>
+    <string name="action_file_dont_download">Ladda inte ner</string>
+    <string name="action_file_high_priority">Hög</string>
+    <string name="action_file_normal_priority">Normal</string>
+    <string name="action_file_maximum_priority">Högsta</string>
 </resources>

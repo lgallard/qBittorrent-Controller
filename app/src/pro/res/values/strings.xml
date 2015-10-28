@@ -28,6 +28,10 @@
     <string name="action_download_rate_limit">Download rate limit</string>
     <string name="action_upload_rate_limit">Upload rate limit</string>
     <string name="action_force_recheck">Force recheck</string>
+    <string name="action_file_dont_download">Do not download</string>
+    <string name="action_file_normal_priority">Normal</string>
+    <string name="action_file_high_priority">High</string>
+    <string name="action_file_maximum_priority">Maximum</string>
     <string name="connection_error">Network connection failed</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>

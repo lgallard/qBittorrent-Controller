@@ -225,4 +225,8 @@
     <string name="options_qbittorrent_scheduler_days_title">Cuándo:</string>
     <string name="settings_qbittorrent_pro_title">Opción no disponible</string>
     <string name="settings_qbittorrent_pro_message">Esta opción está solo disponible en la versión qBittorrent PRO!</string>
+    <string name="action_file_dont_download">No descargar</string>
+    <string name="action_file_high_priority">Alta</string>
+    <string name="action_file_maximum_priority">Máxima</string>
+    <string name="action_file_normal_priority">Normal</string>
 </resources>

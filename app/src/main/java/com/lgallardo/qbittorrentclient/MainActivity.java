@@ -764,32 +764,31 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        Log.d("Debug", "Item name: " + getResources().getResourceEntryName(item.getItemId()));
-        Log.d("Debug", "Item position: " + TorrentDetailsFragment.fileContentRowPosition);
+//        Log.d("Debug", "Item name: " + getResources().getResourceEntryName(item.getItemId()));
+//        Log.d("Debug", "Item position: " + TorrentDetailsFragment.fileContentRowPosition);
 
 
         switch (item.getItemId()) {
 
             case R.id.action_file_dont_download:
-                Log.d("Debug", "Don't download");
+//                Log.d("Debug", "Don't download");
                 setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition,0);
-
                 return true;
             case R.id.action_file_normal_priority:
-                Log.d("Debug", "Normal priority");
+//                Log.d("Debug", "Normal priority");
                 setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 1);
                 return true;
             case R.id.action_file_high_priority:
-                Log.d("Debug", "High priority");
+//                Log.d("Debug", "High priority");
                 setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 2);
                 return true;
             case R.id.action_file_maximum_priority:
-                Log.d("Debug", "Maximum priority");
+//                Log.d("Debug", "Maximum priority");
                 setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 7);
 
                 return true;
             default:
-                Log.d("Debug", "onContextItemSelected default option");
+//                Log.d("Debug", "default priority?");
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -1441,7 +1440,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (requestCode == SETTINGS_CODE) {
 
-            Log.d("Debug", "Notification alarm set");
+//            Log.d("Debug", "Notification alarm set");
 
             alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getApplication(), NotifierService.class);
@@ -2944,7 +2943,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 if (httpStatusCode == 403 || httpStatusCode == 404) {
 
-                    Log.d("Debug","MainActivity - refresh - qb_version:" +qb_version );
+//                    Log.d("Debug","MainActivity - refresh - qb_version:" +qb_version );
 
                     if (qb_version.equals("3.2.x")) {
                         // Get new Cookie

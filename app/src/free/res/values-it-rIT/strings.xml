@@ -220,4 +220,8 @@
     <string name="options_qbittorrent_scheduler_days_title">Quando:</string>
     <string name="options_qbittorrent_schedule_alt_from">Da</string>
     <string name="options_qbittorrent_schedule_alt_to">A</string>
+    <string name="action_file_dont_download">Non scaricare</string>
+    <string name="action_file_high_priority">Elevata</string>
+    <string name="action_file_normal_priority">Normale</string>
+    <string name="action_file_maximum_priority">Massima</string>
 </resources>
