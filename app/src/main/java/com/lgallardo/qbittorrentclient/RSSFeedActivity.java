@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,10 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class RSSFeedActivity extends AppCompatActivity {
@@ -177,6 +182,18 @@ public class RSSFeedActivity extends AppCompatActivity {
             // Get values from options
             rss_feeds = sharedPrefs.getString("rss_feeds", "");
         }
+
+        // Encode link
+        try {
+
+            link = URLEncoder.encode(link, "UTF-8");
+
+//            Log.d("Debug", "RSSFeedActivity - Uri.decoded: " + URLDecoder.decode(link_encoded,"UTF-8"));
+
+        } catch (UnsupportedEncodingException e) {
+            Log.d("Debug", "RSSFeedActivity - Error encoding link: " + link);
+        }
+
 
         if (rss_feeds.equals("")) {
 
