@@ -24,6 +24,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.util.ArrayList;
@@ -57,15 +59,23 @@ public class RSSFeedParser {
 
     public RSSFeed getRSSFeed(String channelTitle, String channelUrl) {
 
+        // Decode url link
+        try {
+            channelUrl = URLDecoder.decode(channelUrl, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.e("Debug", "RSSFeedParser - decoding error: " + e.toString());
+        }
+
+
+
         // Parse url
-        Uri uri = Uri.parse(channelUrl);
+        Uri uri = uri = Uri.parse(channelUrl);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ;
         int event;
         String text = null;
         String  torrent = null;
         boolean header = true;
 
         this.itemCount = 0;
-
 
         HttpResponse httpResponse;
         DefaultHttpClient httpclient;

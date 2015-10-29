@@ -185,13 +185,9 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         // Encode link
         try {
-
             link = URLEncoder.encode(link, "UTF-8");
-
-//            Log.d("Debug", "RSSFeedActivity - Uri.decoded: " + URLDecoder.decode(link_encoded,"UTF-8"));
-
         } catch (UnsupportedEncodingException e) {
-            Log.d("Debug", "RSSFeedActivity - Error encoding link: " + link);
+            Log.e("Debug", "RSSFeedActivity - Error encoding link: " + link);
         }
 
 
