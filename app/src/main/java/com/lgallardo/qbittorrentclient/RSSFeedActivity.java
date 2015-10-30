@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,9 +28,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class RSSFeedActivity extends AppCompatActivity {
@@ -638,7 +635,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                         try {
 
                             RSSFeedParser rssFeedParser = new RSSFeedParser();
-                            rssFeed = rssFeedParser.getRSSFeed(feedValues[0], feedValues[1]);
+                            rssFeed = rssFeedParser.getRSSFeed(feedValues[0], feedValues[1], feedValues[5]);
 
 //                            saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
                             // Set downlaod and notify flags

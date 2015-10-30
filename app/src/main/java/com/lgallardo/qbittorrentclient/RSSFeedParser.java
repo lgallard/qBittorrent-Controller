@@ -29,6 +29,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -57,7 +58,7 @@ public class RSSFeedParser {
 
     }
 
-    public RSSFeed getRSSFeed(String channelTitle, String channelUrl) {
+    public RSSFeed getRSSFeed(String channelTitle, String channelUrl, String filter) {
 
         // Decode url link
         try {
@@ -228,7 +229,7 @@ public class RSSFeedParser {
 
                             if(items != null & item != null){
 
-                                // Fix torrent url for no-standar rss feeds
+                                // Fix torrent url for no-standard rss feeds
                                 if(torrent == null){
 
 
@@ -256,6 +257,23 @@ public class RSSFeedParser {
 //                }
 
             }
+
+            // Filter items
+            if (filter != null || !filter.equals("")) {
+
+                Iterator iterator = items.iterator();
+
+                while (iterator.hasNext()) {
+
+                    item = (RSSFeedItem) iterator.next();
+
+                    // If link doesn't match filter, remove it
+                    if (!item.getLink().matches(filter)) {
+                        iterator.remove();
+                    }
+                }
+            }
+
 
             rssFeed.setItems(items);
             rssFeed.setItemCount(itemCount);
