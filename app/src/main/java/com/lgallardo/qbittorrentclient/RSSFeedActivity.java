@@ -164,7 +164,7 @@ public class RSSFeedActivity extends AppCompatActivity {
     }
 
 
-    public void saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
+    public void saveRssFeed(String title, String link, String filter, String pubDate, boolean autoDownload, boolean notifyNew) {
 
         String autoDownloadValue = Boolean.toString(autoDownload);
         String notifyNewValue = Boolean.toString(notifyNew);
@@ -190,10 +190,10 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         if (rss_feeds.equals("")) {
 
-            rss_feeds = title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
+            rss_feeds = title + ";" + link + ";" + filter + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
 
         } else {
-            rss_feeds = rss_feeds + "|" + title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
+            rss_feeds = rss_feeds + "|" + title + ";" + link + ";" + filter + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
 
         }
 
@@ -255,7 +255,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                 rss_feeds = "";
                 for (int i = 0; i < rssChannels.size(); i++) {
                     RSSFeed rssFeed = rssChannels.get(i);
-                    saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
+                    saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelFilter(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
                 }
 
                 return true;
@@ -309,6 +309,7 @@ public class RSSFeedActivity extends AppCompatActivity {
         // URL input
         final EditText rssFeedUrlInput = (EditText) addTorrentView.findViewById(R.id.rssFeedUrl);
         final EditText rssFeedNameInput = (EditText) addTorrentView.findViewById(R.id.rssFeedName);
+        final EditText rssFeedFilterInput = (EditText) addTorrentView.findViewById(R.id.rssFeedFilter);
         final CheckBox rssFeedAutoDownloadInput = (CheckBox) addTorrentView.findViewById(R.id.rssFeedAutodownload);
         final CheckBox rssFeedNotifyNewInput = (CheckBox) addTorrentView.findViewById(R.id.rssFeedNotifyNew);
 
@@ -347,6 +348,8 @@ public class RSSFeedActivity extends AppCompatActivity {
                         // Get values from dialog view
                         String title = rssFeedNameInput.getText().toString();
                         String link = rssFeedUrlInput.getText().toString();
+                        String filter = rssFeedFilterInput.getText().toString();
+
                         boolean autoDownload = rssFeedAutoDownloadInput.isChecked() ? true : false;
                         boolean notifyNew = rssFeedNotifyNewInput.isChecked() ? true : false;
 
@@ -359,7 +362,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                                 title = link;
                             }
 
-                            saveRssFeed(title, link, "", autoDownload, notifyNew);
+                            saveRssFeed(title, link, filter, "", autoDownload, notifyNew);
 
 
                             // Refresh channel list

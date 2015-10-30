@@ -47,6 +47,8 @@ public class RSSFeedChannelListAdapter extends ArrayAdapter<RSSFeed> {
 
         String rssChannelTitle = rssChannels.get(position).getChannelTitle();
         String rssChannelLink = rssChannels.get(position).getChannelLink();
+//        String rssChannelFilter = rssChannels.get(position).getChannelFilter();
+
         String rssChannelPubDate = rssChannels.get(position).getChannelPubDate();
         String rssCahnnelNewItems = rssChannels.get(position).getItemCount() + "";
 
