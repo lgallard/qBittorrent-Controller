@@ -167,7 +167,7 @@ public class RSSService extends BroadcastReceiver {
     }
 
 
-    public void saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
+    public void saveRssFeed(String title, String link, String filter, String pubDate, boolean autoDownload, boolean notifyNew) {
 
         String autoDownloadValue = Boolean.toString(autoDownload);
         String notifyNewValue = Boolean.toString(notifyNew);
@@ -180,10 +180,10 @@ public class RSSService extends BroadcastReceiver {
         // Save rss_feeds
         if (rss_feeds.equals("")) {
 
-            rss_feeds = title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
+            rss_feeds = title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue + ";" + filter;
 
         } else {
-            rss_feeds = rss_feeds + "|" + title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
+            rss_feeds = rss_feeds + "|" + title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue + ";" + filter;
 
         }
 
@@ -447,7 +447,7 @@ public class RSSService extends BroadcastReceiver {
                     for (int k = 0; k < result.size(); k++) {
                         RSSFeed rssFeed = result.get(k);
 
-                        saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
+                        saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelFilter(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
                     }
 
 
@@ -478,7 +478,7 @@ public class RSSService extends BroadcastReceiver {
                     for (int k = 0; k < result.size(); k++) {
                         RSSFeed rssFeed = result.get(k);
 
-                        saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
+                        saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelFilter(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
                     }
                 }
 
