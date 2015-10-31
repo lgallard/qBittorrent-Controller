@@ -226,6 +226,11 @@ class Torrent {
      * @return the ratio
      */
     public String getRatio() {
+
+        // if it contains ∞, ratio is > 100
+        if(ratio.equals("∞")){
+            return "1000";
+        }
         return ratio;
     }
 
