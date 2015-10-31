@@ -187,7 +187,7 @@ public class RSSService extends BroadcastReceiver {
 
         }
 
-        Log.d("Debug", "rss_feeds: " + rss_feeds);
+//        Log.d("Debug", "rss_feeds: " + rss_feeds);
 
         editor.putString("rss_feeds", rss_feeds);
         // Commit changes

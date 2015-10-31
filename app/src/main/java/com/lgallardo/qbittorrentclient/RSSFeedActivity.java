@@ -441,7 +441,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User accepted the dialog
-                        Log.d("Debug", "RSS filter: " + rssFeedFilterInput.getText().toString());
+//                        Log.d("Debug", "RSS filter: " + rssFeedFilterInput.getText().toString());
 
                         // Get values from dialog view
                         String title = rssFeedNameInput.getText().toString();
@@ -641,7 +641,7 @@ public class RSSFeedActivity extends AppCompatActivity {
             for (int i = 0; rss_feeds_lines.length > i; i++) {
 
 
-                Log.d("Debug", "feedValues[]: " + rss_feeds_lines[i]);
+//                Log.d("Debug", "feedValues[]: " + rss_feeds_lines[i]);
 
                 String[] feedValues = rss_feeds_lines[i].split(";");
 
@@ -667,12 +667,12 @@ public class RSSFeedActivity extends AppCompatActivity {
 //                            saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
                             // Set downlaod and notify flags
 
-                            Log.d("Debug", "feedValues[0]: " + feedValues[0]);
-                            Log.d("Debug", "feedValues[1]: " + feedValues[1]);
-                            Log.d("Debug", "feedValues[2]: " + feedValues[2]);
-                            Log.d("Debug", "feedValues[3]: " + feedValues[3]);
-                            Log.d("Debug", "feedValues[4]: " + feedValues[4]);
-                            Log.d("Debug", "feedValues[5]: " + filter);
+//                            Log.d("Debug", "feedValues[0]: " + feedValues[0]);
+//                            Log.d("Debug", "feedValues[1]: " + feedValues[1]);
+//                            Log.d("Debug", "feedValues[2]: " + feedValues[2]);
+//                            Log.d("Debug", "feedValues[3]: " + feedValues[3]);
+//                            Log.d("Debug", "feedValues[4]: " + feedValues[4]);
+//                            Log.d("Debug", "feedValues[5]: " + filter);
 
 
                             rssFeed.setChannelFilter(filter);

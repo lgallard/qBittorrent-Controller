@@ -64,12 +64,7 @@ public class RSSFeedParser {
 
         // Decode url link
         try {
-
-            Log.e("Debug", "RSSFeedParser - encoded url: " + channelUrl);
-
             channelUrl = URLDecoder.decode(channelUrl, "UTF-8");
-
-            Log.e("Debug", "RSSFeedParser - decoded url: " + channelUrl);
         } catch (UnsupportedEncodingException e) {
             Log.e("Debug", "RSSFeedParser - decoding error: " + e.toString());
         }
@@ -268,7 +263,7 @@ public class RSSFeedParser {
 
             // Filter items
 
-            Log.e("Debug", "RSSFeedParser - filter: >" + filter + "<");
+//            Log.e("Debug", "RSSFeedParser - filter: >" + filter + "<");
             if (filter != null && !filter.equals("")) {
 
                 Iterator iterator = items.iterator();
@@ -278,27 +273,16 @@ public class RSSFeedParser {
                     item = (RSSFeedItem) iterator.next();
 
                     // If link doesn't match filter, remove it
-                    Log.e("Debug", "RSSFeedParser - item no filter: >" + item.getTitle() + "<");
+//                    Log.e("Debug", "RSSFeedParser - item no filter: >" + item.getTitle() + "<");
 
                     Pattern patter = Pattern.compile(filter);
 
                     Matcher matcher = patter.matcher(item.getTitle()); // get a matcher object
 
-                    if (matcher.find()) {
-                        Log.e("Debug", "RSSFeedParser - item MATCHED");
-                    } else {
-                        Log.e("Debug", "RSSFeedParser - item no matched");
+                    if (!(matcher.find())) {
                         iterator.remove();
                     }
 
-//                    if (!matcher.find()) {
-//                        iterator.remove();
-//                    }
-
-//                    if (!(item.getTitle().matches(filter))) {
-//                        if (!(item.getTitle().contains(filter))) {
-//                        iterator.remove();
-//                    }
                 }
             }
 
