@@ -31,6 +31,8 @@ import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by lgallard on 02/06/15.
@@ -62,20 +64,26 @@ public class RSSFeedParser {
 
         // Decode url link
         try {
+
+            Log.e("Debug", "RSSFeedParser - encoded url: " + channelUrl);
+
             channelUrl = URLDecoder.decode(channelUrl, "UTF-8");
+
+            Log.e("Debug", "RSSFeedParser - decoded url: " + channelUrl);
         } catch (UnsupportedEncodingException e) {
             Log.e("Debug", "RSSFeedParser - decoding error: " + e.toString());
         }
 
 
-
         // Parse url
-        Uri uri = uri = Uri.parse(channelUrl);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ;
+        Uri uri = uri = Uri.parse(channelUrl);
+        ;
         int event;
         String text = null;
-        String  torrent = null;
+        String torrent = null;
         boolean header = true;
 
+        // TODO delete itemCount, as it's not really used
         this.itemCount = 0;
 
         HttpResponse httpResponse;
@@ -174,12 +182,12 @@ public class RSSFeedParser {
 
 
                         try {
-                            for(int i =0; i < xmlParser.getAttributeCount(); i++) {
+                            for (int i = 0; i < xmlParser.getAttributeCount(); i++) {
 
-                                if(xmlParser.getAttributeName(i).equals("url")) {
+                                if (xmlParser.getAttributeName(i).equals("url")) {
                                     torrent = xmlParser.getAttributeValue(i);
 
-                                    if(torrent != null){
+                                    if (torrent != null) {
                                         torrent = Uri.decode(URLEncoder.encode(torrent, "UTF-8"));
                                     }
                                     break;
@@ -225,17 +233,17 @@ public class RSSFeedParser {
                         } else if (name.equals("enclosure")) {
                             item.setTorrentUrl(torrent);
 //                            Log.d("Debug", "Enclosure: " + torrent);
-                        } else if(name.equals("item") && !header){
+                        } else if (name.equals("item") && !header) {
 
-                            if(items != null & item != null){
+                            if (items != null & item != null) {
 
                                 // Fix torrent url for no-standard rss feeds
-                                if(torrent == null){
+                                if (torrent == null) {
 
 
-                                    String link  = item.getLink();
+                                    String link = item.getLink();
 
-                                    if(link != null){
+                                    if (link != null) {
                                         link = Uri.decode(URLEncoder.encode(link, "UTF-8"));
                                     }
 
@@ -245,7 +253,7 @@ public class RSSFeedParser {
                                 items.add(item);
                             }
 
-                    }
+                        }
 
                         break;
                 }
@@ -259,7 +267,9 @@ public class RSSFeedParser {
             }
 
             // Filter items
-            if (filter != null || !filter.equals("")) {
+
+            Log.e("Debug", "RSSFeedParser - filter: >" + filter + "<");
+            if (filter != null && !filter.equals("")) {
 
                 Iterator iterator = items.iterator();
 
@@ -268,9 +278,27 @@ public class RSSFeedParser {
                     item = (RSSFeedItem) iterator.next();
 
                     // If link doesn't match filter, remove it
-                    if (!item.getLink().matches(filter)) {
+                    Log.e("Debug", "RSSFeedParser - item no filter: >" + item.getTitle() + "<");
+
+                    Pattern patter = Pattern.compile(filter);
+
+                    Matcher matcher = patter.matcher(item.getTitle()); // get a matcher object
+
+                    if (matcher.find()) {
+                        Log.e("Debug", "RSSFeedParser - item MATCHED");
+                    } else {
+                        Log.e("Debug", "RSSFeedParser - item no matched");
                         iterator.remove();
                     }
+
+//                    if (!matcher.find()) {
+//                        iterator.remove();
+//                    }
+
+//                    if (!(item.getTitle().matches(filter))) {
+//                        if (!(item.getTitle().contains(filter))) {
+//                        iterator.remove();
+//                    }
                 }
             }
 

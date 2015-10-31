@@ -50,7 +50,8 @@ public class RSSFeed {
     }
 
     public String getChannelFilter() {
-        return channelFilter;
+
+        return (channelFilter == null)?"":channelFilter;
     }
 
     public void setChannelFilter(String channelFilter) {

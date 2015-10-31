@@ -317,10 +317,17 @@ public class RSSService extends BroadcastReceiver {
 
                         RSSFeed rssFeed = new RSSFeed();
 
+                        String filter = "";
+
+                        if(feedValues.length == 6){
+                            filter = feedValues[5];
+                        }
+
                         try {
 
                             RSSFeedParser rssFeedParser = new RSSFeedParser();
-                            rssFeed = rssFeedParser.getRSSFeed(feedValues[0], feedValues[1]);
+                            rssFeed.setChannelFilter(filter);
+                            rssFeed = rssFeedParser.getRSSFeed(feedValues[0], feedValues[1], filter);
                             rssFeed.setAutodDownload(Boolean.parseBoolean(feedValues[3]));
                             rssFeed.setNotifyNew(Boolean.parseBoolean(feedValues[4]));
 

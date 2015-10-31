@@ -47,10 +47,10 @@ public class RSSFeedChannelListAdapter extends ArrayAdapter<RSSFeed> {
 
         String rssChannelTitle = rssChannels.get(position).getChannelTitle();
         String rssChannelLink = rssChannels.get(position).getChannelLink();
-//        String rssChannelFilter = rssChannels.get(position).getChannelFilter();
+        String rssChannelFilter = rssChannels.get(position).getChannelFilter();
 
         String rssChannelPubDate = rssChannels.get(position).getChannelPubDate();
-        String rssCahnnelNewItems = rssChannels.get(position).getItemCount() + "";
+        String rssChannelNewItems = rssChannels.get(position).getItems().size() + "";
 
 
         TextView title = (TextView) row.findViewById(R.id.rss_channel_title);
@@ -86,7 +86,7 @@ public class RSSFeedChannelListAdapter extends ArrayAdapter<RSSFeed> {
 
 
         TextView items = (TextView) row.findViewById(R.id.rss_channel_item_count);
-        items.setText(rssCahnnelNewItems);
+        items.setText(rssChannelNewItems);
 
 
         ImageView icon = (ImageView) row.findViewById(R.id.icon);
