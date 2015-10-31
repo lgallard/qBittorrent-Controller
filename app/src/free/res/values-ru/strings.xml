@@ -210,6 +210,7 @@
   <string name="action_addRss">Добавить RSS</string>
   <string name="action_rss">RSS</string>
   <string name="dialog_add_rss">Ссылка на RSS</string>
+  <string name="dialog_add_rss_filter">Фильтр</string>
   <string name="dialog_label_rss">Название</string>
   <string name="checkbox_autodownload_rss">Загружать новые торренты автоматически?</string>
   <string name="checkbox_notifynew_rss">Уведомлять о новых торрентах?</string>

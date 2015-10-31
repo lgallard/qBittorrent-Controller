@@ -210,6 +210,7 @@
   <string name="action_addRss">Gehitu RSS-a</string>
   <string name="action_rss">RSS</string>
   <string name="dialog_add_rss">RSS url-a</string>
+  <string name="dialog_add_rss_filter">Iragazkia</string>
   <string name="dialog_label_rss">Izena</string>
   <string name="checkbox_autodownload_rss">Jeitsi torrent berriak berezgaitasunez?</string>
   <string name="checkbox_notifynew_rss">Jakinarazi torrent berriak?</string>
