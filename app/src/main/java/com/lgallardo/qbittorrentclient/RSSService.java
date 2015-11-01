@@ -167,7 +167,7 @@ public class RSSService extends BroadcastReceiver {
     }
 
 
-    public void saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
+    public void saveRssFeed(String title, String link, String filter, String pubDate, boolean autoDownload, boolean notifyNew) {
 
         String autoDownloadValue = Boolean.toString(autoDownload);
         String notifyNewValue = Boolean.toString(notifyNew);
@@ -180,14 +180,14 @@ public class RSSService extends BroadcastReceiver {
         // Save rss_feeds
         if (rss_feeds.equals("")) {
 
-            rss_feeds = title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
+            rss_feeds = title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue + ";" + filter;
 
         } else {
-            rss_feeds = rss_feeds + "|" + title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
+            rss_feeds = rss_feeds + "|" + title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue + ";" + filter;
 
         }
 
-        Log.d("Debug", "rss_feeds: " + rss_feeds);
+//        Log.d("Debug", "rss_feeds: " + rss_feeds);
 
         editor.putString("rss_feeds", rss_feeds);
         // Commit changes
@@ -317,10 +317,17 @@ public class RSSService extends BroadcastReceiver {
 
                         RSSFeed rssFeed = new RSSFeed();
 
+                        String filter = "";
+
+                        if(feedValues.length == 6){
+                            filter = feedValues[5];
+                        }
+
                         try {
 
                             RSSFeedParser rssFeedParser = new RSSFeedParser();
-                            rssFeed = rssFeedParser.getRSSFeed(feedValues[0], feedValues[1]);
+                            rssFeed.setChannelFilter(filter);
+                            rssFeed = rssFeedParser.getRSSFeed(feedValues[0], feedValues[1], filter);
                             rssFeed.setAutodDownload(Boolean.parseBoolean(feedValues[3]));
                             rssFeed.setNotifyNew(Boolean.parseBoolean(feedValues[4]));
 
@@ -440,7 +447,7 @@ public class RSSService extends BroadcastReceiver {
                     for (int k = 0; k < result.size(); k++) {
                         RSSFeed rssFeed = result.get(k);
 
-                        saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
+                        saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelFilter(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
                     }
 
 
@@ -471,7 +478,7 @@ public class RSSService extends BroadcastReceiver {
                     for (int k = 0; k < result.size(); k++) {
                         RSSFeed rssFeed = result.get(k);
 
-                        saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
+                        saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelFilter(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
                     }
                 }
 

@@ -321,6 +321,10 @@ public class JSONParser {
         String limit = "";
         String boundary = null;
 
+        String fileId = "";
+
+        String filePriority = "";
+
 
         StringBuilder fileContent = null;
 
@@ -390,6 +394,7 @@ public class JSONParser {
 
         }
 
+
         if ("maxPrio".equals(command)) {
             url = "command/topPrio";
             key = "hashes";
@@ -399,6 +404,20 @@ public class JSONParser {
             url = "command/bottomPrio";
             key = "hashes";
 
+        }
+
+
+        if ("setFilePrio".equals(command)) {
+            url = "command/setFilePrio";
+
+            String[] tmpString = hash.split("&");
+            hash = tmpString[0];
+            fileId = tmpString[1];
+            filePriority = tmpString[2];
+
+//            Log.d("Debug", "hash: " + hash);
+//            Log.d("Debug", "fileId: " + fileId);
+//            Log.d("Debug", "filePriority: " + filePriority);
         }
 
         if ("setQBittorrentPrefefrences".equals(command)) {
@@ -480,6 +499,8 @@ public class JSONParser {
 
             url = protocol + "://" + hostname + ":" + port + "/" + url;
 
+//            Log.d("Debug", "url:" + url);
+
             HttpPost httpget = new HttpPost(url);
 
             if ("addTorrent".equals(command)) {
@@ -499,10 +520,18 @@ public class JSONParser {
 
             }
 
+            // Set values for setting file priority
+            if ("setFilePrio".equals(command)) {
+
+                nvps.add(new BasicNameValuePair("id", fileId));
+                nvps.add(new BasicNameValuePair("priority", filePriority));
+            }
+
+
             httpget.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
             // Set content type and urls
-            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command)) {
+            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command)) {
                 httpget.setHeader("Content-Type", urlContentType);
 
             }
@@ -814,7 +843,6 @@ public class JSONParser {
 //            }
 
 
-
             if (entity != null) {
                 entity.consumeContent();
             }
@@ -910,7 +938,6 @@ public class JSONParser {
                 aboutHtml = EntityUtils.toString(response.getEntity());
 
 
-
                 String aboutStartText = "qBittorrent v";
                 String aboutEndText = " (Web UI)";
 
@@ -918,7 +945,7 @@ public class JSONParser {
 
                 int aboutEnd = aboutHtml.indexOf(aboutEndText);
 
-                if(aboutEnd == -1){
+                if (aboutEnd == -1) {
                     aboutEndText = " Web UI";
                     aboutEnd = aboutHtml.indexOf(aboutEndText);
                 }
@@ -958,7 +985,6 @@ public class JSONParser {
         }
         return version;
     }
-
 
 
 }

@@ -9,6 +9,7 @@ public class RSSFeed {
 
     public String channelTitle;
     public String channelLink;
+    public String channelFilter;
     public String channelPubDate;
     public ArrayList<RSSFeedItem> items;
     public boolean autodDownload;
@@ -46,6 +47,15 @@ public class RSSFeed {
 
     public void setChannelLink(String channelLink) {
         this.channelLink = channelLink;
+    }
+
+    public String getChannelFilter() {
+
+        return (channelFilter == null)?"":channelFilter;
+    }
+
+    public void setChannelFilter(String channelFilter) {
+        this.channelFilter = channelFilter;
     }
 
     public ArrayList<RSSFeedItem> getItems() {

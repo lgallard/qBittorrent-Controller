@@ -206,6 +206,7 @@
     <string name="checkbox_autodownload_rss">Scarica nuovi torrents automaticamente?</string>
     <string name="checkbox_notifynew_rss">Notifica nuove torrents?</string>
     <string name="dialog_add_rss">RSS url</string>
+    <string name="dialog_add_rss_filter">Filtro</string>
     <string name="dialog_label_rss">Nome</string>
     <string name="error_rss">Impossibile ottenere RSS</string>
     <string name="settings_qbittorrent_advanced">Opzioni avanzate...</string>
@@ -216,4 +217,8 @@
     <string name="options_qbittorrent_schedule_alt_to">A</string>
     <string name="settings_qbittorrent_pro_title">Funzione non disponibile</string>
     <string name="settings_qbittorrent_pro_message">Questa funzione è disponibile solo su qBittorrent versione PRO!</string>
+    <string name="action_file_dont_download">Non scaricare</string>
+    <string name="action_file_high_priority">Elevata</string>
+    <string name="action_file_normal_priority">Normale</string>
+    <string name="action_file_maximum_priority">Massima</string>
 </resources>

@@ -55,14 +55,6 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         int Holderid;
         int positionInItems = -1;
 
-//        TextView textView;
-//        ImageView imageView;
-//
-//        ImageView profile;
-//        TextView Name;
-//        TextView email;
-
-
         // New
         ImageView imageViewIcon;
         TextView textViewName;
@@ -709,9 +701,6 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
             // header
 
             return;
-//            holder.profile.setImageResource(profile);           // Similarly we set the resources for header view
-//            holder.Name.setText(name);
-//            holder.email.setText(email);
         }
     }
 

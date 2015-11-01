@@ -212,6 +212,7 @@
     <string name="checkbox_autodownload_rss">Téléchargez de nouveaux torrents automatiquement?</string>
     <string name="checkbox_notifynew_rss">Notifier nouvelles torrents?</string>
     <string name="dialog_add_rss">RSS url</string>
+    <string name="dialog_add_rss_filter">Filtre</string>
     <string name="dialog_label_rss">Nom</string>
     <string name="error_rss">Impossible d\'obtenir RSS</string>
     <string name="settings_qbittorrent_advanced">Options avancées...</string>
@@ -220,4 +221,8 @@
     <string name="options_qbittorrent_schedule_alt_from">De</string>
     <string name="options_qbittorrent_schedule_alt_to">À</string>
     <string name="options_qbittorrent_scheduler_days_title">Quand:</string>
+    <string name="action_file_dont_download">Ne téléchargez pas</string>
+    <string name="action_file_maximum_priority">Maximale</string>
+    <string name="action_file_high_priority">Haute</string>
+    <string name="action_file_normal_priority">Normale</string>
 </resources>

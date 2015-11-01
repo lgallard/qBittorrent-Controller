@@ -4,9 +4,9 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- *
+ * <p/>
  * Contributors:
- *     Luis M. Gallardo D. - initial implementation
+ * Luis M. Gallardo D. - initial implementation
  ******************************************************************************/
 package com.lgallardo.qbittorrentclient;
 
@@ -38,6 +38,8 @@ import com.google.android.gms.ads.AdView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class TorrentDetailsFragment extends Fragment {
 
     // TAGS
@@ -53,9 +55,11 @@ public class TorrentDetailsFragment extends Fragment {
     protected static final String TAG_UPLOAD_LIMIT = "up_limit";
     protected static final String TAG_DOWNLOAD_LIMIT = "dl_limit";
 
-    static ContentFile[] files;
+    // TODO: Delete files
+    static ArrayList<ContentFile> contentFiles;
     static Tracker[] trackers;
-    static String[] names, trackerNames;
+    static String[] trackerNames;
+
 
     // Torrent variables
     String name, info, hash, ratio, size, progress, state, leechs, seeds, priority, savePath, creationDate, comment, totalWasted, totalUploaded,
@@ -69,7 +73,8 @@ public class TorrentDetailsFragment extends Fragment {
     JSONObject json2;
 
     // Adapters
-    myFileAdapter fileAdpater;
+    myFileAdapter fileAdapter;
+
     myTrackerAdapter trackerAdapter;
     myPropertyAdapter propertyAdapter;
 
@@ -80,6 +85,9 @@ public class TorrentDetailsFragment extends Fragment {
 
     // AdView for ads
     private AdView adView;
+
+    public static int fileContentRowPosition;
+
 
     public TorrentDetailsFragment() {
     }
@@ -100,6 +108,7 @@ public class TorrentDetailsFragment extends Fragment {
         // wants to add/replace/delete using the onCreateOptionsMenu method.
         setHasOptionsMenu(true);
 
+
         View rootView;
 
         if (MainActivity.qb_version.equals("3.2.x")) {
@@ -112,7 +121,7 @@ public class TorrentDetailsFragment extends Fragment {
         refreshListener = (RefreshListener) getActivity();
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.details_refresh_layout);
 
-        if(mSwipeRefreshLayout != null) {
+        if (mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -126,7 +135,7 @@ public class TorrentDetailsFragment extends Fragment {
             MainActivity.headerInfo.setVisibility(View.GONE);
 
             ((MainActivity) getActivity()).setTitle("");
-            }
+        }
 
         savePath = "";
         creationDate = "";
@@ -161,7 +170,7 @@ public class TorrentDetailsFragment extends Fragment {
                 hashToUpdate = hash;
 
                 // Only for Pro version
-                if(MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
+                if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
                     int index = progress.indexOf(".");
 
                     if (index == -1) {
@@ -194,7 +203,7 @@ public class TorrentDetailsFragment extends Fragment {
                 hashToUpdate = hash;
 
                 // Only for Pro version
-                if(MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
+                if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
                     int index = this.torrent.getProgress().indexOf(".");
 
                     if (index == -1) {
@@ -247,7 +256,7 @@ public class TorrentDetailsFragment extends Fragment {
             sizeTextView.setText(downloaded + " / " + size);
 
             // Only for Pro version
-            if(MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
+            if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
                 downloadSpeedTextView.setText(Character.toString('\u2193') + " " + downloadSpeed);
                 uploadSpeedTextView.setText(Character.toString('\u2191') + " " + uploadSpeed);
 
@@ -293,6 +302,7 @@ public class TorrentDetailsFragment extends Fragment {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_recheck, 0, 0, 0);
             }
 
+
             // Get Content files in background
             qBittorrentContentFile qcf = new qBittorrentContentFile();
             qcf.execute(new View[]{rootView});
@@ -309,7 +319,7 @@ public class TorrentDetailsFragment extends Fragment {
             Log.e("Debug", "TorrentDetailsFragment - onCreateView: " + e.toString());
         }
 
-        if(MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+        if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
             // Load banner
             loadBanner();
         }
@@ -405,7 +415,7 @@ public class TorrentDetailsFragment extends Fragment {
             sizeTextView.setText(downloaded + " / " + size);
 
             // Only for Pro version
-            if(MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
+            if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
                 downloadSpeedTextView.setText(Character.toString('\u2193') + " " + downloadSpeed);
                 uploadSpeedTextView.setText(Character.toString('\u2191') + " " + uploadSpeed);
 
@@ -417,7 +427,7 @@ public class TorrentDetailsFragment extends Fragment {
                 percentageTV.setText(percentage + "%");
 
 
-            }else {
+            } else {
                 downloadSpeedTextView.setText(downloadSpeed);
                 uploadSpeedTextView.setText(uploadSpeed);
             }
@@ -506,13 +516,13 @@ public class TorrentDetailsFragment extends Fragment {
 
             if (getActivity().findViewById(R.id.one_frame) != null) {
                 menu.findItem(R.id.action_refresh).setVisible(false);
-            }else{
+            } else {
                 menu.findItem(R.id.action_refresh).setVisible(true);
             }
 
             if (getActivity().findViewById(R.id.one_frame) != null) {
                 menu.findItem(R.id.action_sort_menu).setVisible(false);
-            }else{
+            } else {
                 menu.findItem(R.id.action_sort_menu).setVisible(true);
             }
 
@@ -538,8 +548,7 @@ public class TorrentDetailsFragment extends Fragment {
             if (MainActivity.qb_version.equals("3.2.x")) {
                 menu.findItem(R.id.action_firts_last_piece_prio).setVisible(true);
                 menu.findItem(R.id.action_sequential_download).setVisible(true);
-            }
-            else {
+            } else {
                 menu.findItem(R.id.action_firts_last_piece_prio).setVisible(false);
                 menu.findItem(R.id.action_sequential_download).setVisible(false);
             }
@@ -563,6 +572,7 @@ public class TorrentDetailsFragment extends Fragment {
     public void setTorrent(Torrent torrent) {
         this.torrent = torrent;
     }
+
 
     // // Here is where the action happens
     private class qBittorrentContentFile extends AsyncTask<View, View, View[]> {
@@ -589,8 +599,7 @@ public class TorrentDetailsFragment extends Fragment {
 
             url = qbQueryString + "/propertiesFiles/";
 
-            files = null;
-            names = null;
+            contentFiles = new ArrayList<ContentFile>();
 
             try {
 
@@ -603,8 +612,6 @@ public class TorrentDetailsFragment extends Fragment {
 
                 if (jArray != null) {
 
-                    files = new ContentFile[jArray.length()];
-                    TorrentDetailsFragment.names = new String[jArray.length()];
 
                     for (int i = 0; i < jArray.length(); i++) {
 
@@ -619,8 +626,8 @@ public class TorrentDetailsFragment extends Fragment {
                             size = Common.calculateSize(json.getString(MainActivity.TAG_SIZE)).replace(",", ".");
                         }
 
-                        files[i] = new ContentFile(name, size, progress, priority);
-                        names[i] = name;
+                        contentFiles.add(new ContentFile(name, size, progress, priority));
+
 
                     }
 
@@ -643,18 +650,38 @@ public class TorrentDetailsFragment extends Fragment {
 
                 View rootView = rootViews[0];
 
-                fileAdpater = new myFileAdapter(getActivity(), names, files);
+                fileAdapter = new myFileAdapter(getActivity(), contentFiles);
 
-                ListView lv = (ListView) rootView.findViewById(R.id.theList);
 
-                lv.setFocusable(false);
+                LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.files);
+                layout.removeAllViews();
 
-                lv.setAdapter(fileAdpater);
+                for (int i = 0; i < fileAdapter.getCount(); i++) {
+                    final View item = fileAdapter.getView(i, null, null);
 
-                setListViewHeightBasedOnChildren(lv);
+                    item.setClickable(true);
+
+                    item.setId(i);
+
+                    item.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            fileContentRowPosition = v.getId();
+
+                            registerForContextMenu(v);
+                            getActivity().openContextMenu(v);
+
+                        }
+                    });
+
+
+                    layout.addView(item);
+                }
+
 
             } catch (Exception e) {
-                Log.e("Content2", e.toString());
+                Log.e("Debug", e.toString());
 
             }
 
@@ -940,54 +967,96 @@ public class TorrentDetailsFragment extends Fragment {
         }
     }
 
-    class myFileAdapter extends ArrayAdapter<String> {
+    class myFileAdapter extends ArrayAdapter<ContentFile> {
 
-        private String[] filesNames;
-        private ContentFile[] files;
         private Context context;
+        public ArrayList<ContentFile> items;
 
-        public myFileAdapter(Context context, String[] filesNames, ContentFile[] files) {
-            super(context, R.layout.contentfile_row, R.id.file, filesNames);
+        public myFileAdapter(Context context,  ArrayList<ContentFile> items) {
+            super(context, R.layout.contentfile_row, R.id.file, items);
 
-            this.context = context;
-            this.filesNames = filesNames;
-            this.files = files;
+            this.items = new ArrayList<ContentFile>();
+
+            this.items.addAll(items);
 
         }
 
         @Override
         public int getCount() {
-            return (filesNames != null) ? filesNames.length : 0;
+
+            return this.items.size();
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
+
+            ContentFile item = this.items.get(position);
+
+
+            String priorityString = "";
+
+
+            switch (item.getPriority()){
+
+                case 0:
+                    priorityString = getActivity().getResources().getString(R.string.action_file_dont_download);
+                    break;
+                case 1:
+                    priorityString = getActivity().getResources().getString(R.string.action_file_normal_priority);
+                    break;
+                case 2:
+                    priorityString = getActivity().getResources().getString(R.string.action_file_high_priority);
+                    break;
+                case 7:
+                    priorityString = getActivity().getResources().getString(R.string.action_file_maximum_priority);
+                    break;
+                default:
+                    priorityString = "";
+                    break;
+
+
+            }
+
             View row = super.getView(position, convertView, parent);
 
-            TextView info = (TextView) row.findViewById(R.id.info);
 
-            info.setText("" + files[position].getSize());
+
+            TextView textViewFile = (TextView) row.findViewById(R.id.file);
+            TextView textViewInfo = (TextView) row.findViewById(R.id.info);
+            TextView textViewPriorityInfo = (TextView) row.findViewById(R.id.priorityInfo);
+            View viewDivider = row.findViewById(R.id.divider);
+
+
+            textViewFile.setText(item.getName());
+            textViewInfo.setText("" + item.getSize());
+            textViewPriorityInfo.setText(priorityString);
+
 
             // Set progress bar
             ProgressBar progressBar = (ProgressBar) row.findViewById(R.id.progressBar1);
             TextView percentageTV = (TextView) row.findViewById(R.id.percentage);
 
-            int index = files[position].getProgressAsString().indexOf(".");
+            int index = item.getProgressAsString().indexOf(".");
 
             if (index == -1) {
-                index = files[position].getProgressAsString().indexOf(",");
+                index = item.getProgressAsString().indexOf(",");
 
                 if (index == -1) {
-                    index = files[position].getProgressAsString().length();
+                    index = item.getProgressAsString().length();
                 }
             }
 
-            String percentage = files[position].getProgressAsString().substring(0, index);
+            String percentage = item.getProgressAsString().substring(0, index);
 
             progressBar.setProgress(Integer.parseInt(percentage));
 
             percentageTV.setText(percentage + "%");
+
+            // Hide last divider
+            if(position == items.size() -1){
+                viewDivider.setVisibility(View.INVISIBLE);
+            }
 
             return (row);
         }
@@ -1055,7 +1124,8 @@ public class TorrentDetailsFragment extends Fragment {
             view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
 
             TextView file = (TextView) view.findViewById(R.id.file);
-            TextView info = (TextView) view.findViewById(R.id.info);
+            TextView percentage = (TextView) view.findViewById(R.id.percentage);
+            ProgressBar progressBar1 = (ProgressBar) view.findViewById(R.id.progressBar1);
 
             if (view.getMeasuredWidth() > desiredWidth) {
 
@@ -1064,7 +1134,7 @@ public class TorrentDetailsFragment extends Fragment {
 
                 numOfLines = Math.round(viewWidthLong / desiredWidthLong) + 1;
 
-                totalHeight += file.getMeasuredHeight() * numOfLines + info.getMeasuredHeight();
+                totalHeight += (file.getMeasuredHeight() * numOfLines) + percentage.getMeasuredHeight() + progressBar1.getMeasuredHeight();
 
             } else {
                 totalHeight += view.getMeasuredHeight();

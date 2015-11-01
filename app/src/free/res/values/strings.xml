@@ -29,6 +29,10 @@
     <string name="action_download_rate_limit">Download rate limit</string>
     <string name="action_upload_rate_limit">Upload rate limit</string>
     <string name="action_force_recheck">Force recheck</string>
+    <string name="action_file_dont_download">Do not download</string>
+    <string name="action_file_normal_priority">Normal</string>
+    <string name="action_file_high_priority">High</string>
+    <string name="action_file_maximum_priority">Maximum</string>
     <string name="connection_error">Network connection failed</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -47,7 +51,7 @@
     <string name="torrentDeleted">Torrent deleted!</string>
     <string name="torrentDeletedDrive">Torrent and data deleted!</string>
     <string name="increasePrioTorrent">Priority increased!</string>
-    <string name="decreasePrioTorrent">Priority decreased!</string>
+    <string name="decreasePrioTorrent" translatable="false">Priority decreased!</string>
     <string name="priorityUpdated">Priority updated!</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
@@ -220,6 +224,7 @@
     <string name="action_addRss" >Add RSS</string>
     <string name="action_rss">RSS</string>
     <string name="dialog_add_rss">RSS url</string>
+    <string name="dialog_add_rss_filter">Filter</string>
     <string name="dialog_label_rss">Name</string>
     <string name="checkbox_autodownload_rss">Download new torrents automatically?</string>
     <string name="checkbox_notifynew_rss">Notify new torrents?</string>

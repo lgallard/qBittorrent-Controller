@@ -204,6 +204,7 @@
   <string name="action_addRss">Добавить RSS</string>
   <string name="action_rss">RSS</string>
   <string name="dialog_add_rss">Ссылка на RSS</string>
+  <string name="dialog_add_rss_filter">Фильтр</string>
   <string name="dialog_label_rss">Название</string>
   <string name="checkbox_autodownload_rss">Загружать новые торренты автоматически?</string>
   <string name="checkbox_notifynew_rss">Уведомлять о новых торрентах?</string>
@@ -216,4 +217,8 @@
   <string name="options_qbittorrent_scheduler_days_title">Когда:</string>
   <string name="settings_qbittorrent_pro_title">Опция недоступна</string>
   <string name="settings_qbittorrent_pro_message">Данная опция доступна только в PRO-версии</string>
+  <string name="action_file_dont_download">Не загружать</string>
+  <string name="action_file_high_priority">Высокий</string>
+  <string name="action_file_maximum_priority">Максимальный </string>
+  <string name="action_file_normal_priority">Обычный</string>
 </resources>

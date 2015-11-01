@@ -1,3 +1,4 @@
+/app/app.iml
 # Built application files
 *.apk
 *.ap_
@@ -8,7 +9,7 @@
 # Java class files
 *.class
 
-/app/app.iml
+        
 # Gradle files
 .gradle/
 /.idea/libraries

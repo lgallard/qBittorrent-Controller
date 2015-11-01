@@ -17,6 +17,8 @@ import android.widget.ListView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 public class RSSItemActivity extends AppCompatActivity {
@@ -158,11 +160,20 @@ public class RSSItemActivity extends AppCompatActivity {
 
         RSSFeedItem item= myItemsAdapter.getItems().get(pos);
 
+        String url = item.getTorrentUrl();
+
 //        Log.i("Debug", "RSS Item - Title =" + item.getTitle());
-//        Log.i("Debug", "RSS Item - Torrent URL =" + item.getTorrentUrl());
+//        Log.i("Debug", "RSS Item - Torrent URL =" + url);
 //        Log.i("Debug", "RSS Item - PubDate =" + item.getPubDate());
 
-        Uri uri = Uri.parse(item.getTorrentUrl());
+        // Decode url link
+        try {
+            url = URLDecoder.decode(url, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.e("Debug", "RSSFeedParser - decoding error: " + e.toString());
+        }
+
+        Uri uri = Uri.parse(url);
 
 
         // Send torrent to qBittorrent App

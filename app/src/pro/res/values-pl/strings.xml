@@ -206,6 +206,7 @@
     <string name="checkbox_autodownload_rss">Automatyczne pobieranie nowych torrents?</string>
     <string name="checkbox_notifynew_rss">Informuj nowych torrents?</string>
     <string name="dialog_add_rss">RSS url</string>
+    <string name="dialog_add_rss_filter">Filtr</string>
     <string name="dialog_label_rss">Nazwa</string>
     <string name="error_rss">Nie udało się uzyskać RSS</string>
     <string name="settings_qbittorrent_advanced">Opcje zaawansowane...</string>
@@ -216,4 +217,8 @@
     <string name="options_qbittorrent_scheduler_days_title">Kiedy:</string>
     <string name="settings_qbittorrent_pro_title">Funkcja nie jest dostępna</string>
     <string name="settings_qbittorrent_pro_message">Ta funkcja jest dostępna tylko w wersji qBittorrent PRO!</string>
+    <string name="action_file_dont_download">Nie pobieraj</string>
+    <string name="action_file_high_priority">Wysoki</string>
+    <string name="action_file_maximum_priority">Maksymalna</string>
+    <string name="action_file_normal_priority">Normalny</string>
 </resources>

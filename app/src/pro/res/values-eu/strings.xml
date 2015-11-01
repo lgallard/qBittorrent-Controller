@@ -205,6 +205,7 @@
   <string name="action_addRss">Gehitu RSS-a</string>
   <string name="action_rss">RSS</string>
   <string name="dialog_add_rss">RSS url-a</string>
+  <string name="dialog_add_rss_filter">Iragazkia</string>
   <string name="dialog_label_rss">Izena</string>
   <string name="checkbox_autodownload_rss">Jeitsi torrent berriak berezgaitasunez?</string>
   <string name="checkbox_notifynew_rss">Jakinarazi torrent berriak?</string>
@@ -216,4 +217,8 @@
   <string name="options_qbittorrent_schedule_alt_to">Hona</string>
   <string name="settings_qbittorrent_pro_title">Ezaugarria ez dago eskuragarri</string>
   <string name="settings_qbittorrent_pro_message">Ezaugarri hau qBittorrent PRO bertsioan bakarrik dago eskuragarri!</string>
+  <string name="action_file_dont_download">Ez deskargatu</string>
+  <string name="action_file_maximum_priority">Gehienezko</string>
+  <string name="action_file_high_priority">Handia</string>
+  <string name="action_file_normal_priority">Normala</string>
 </resources>

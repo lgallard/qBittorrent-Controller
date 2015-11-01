@@ -48,6 +48,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -739,6 +740,60 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //        }
     }
 
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.isRefreshing()) {
+            return;
+        }
+
+//        if (v.getId() == R.id.theList) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+
+//            Log.d("Debug", "Chosen: " + menuInfo.toString());
+//            Log.d("Debug", "Chosen: " + info.position);
+
+
+            getMenuInflater().inflate(R.menu.menu_file_contextual, menu);
+//        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+//        Log.d("Debug", "Item name: " + getResources().getResourceEntryName(item.getItemId()));
+//        Log.d("Debug", "Item position: " + TorrentDetailsFragment.fileContentRowPosition);
+
+
+        switch (item.getItemId()) {
+
+            case R.id.action_file_dont_download:
+//                Log.d("Debug", "Don't download");
+                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition,0);
+                return true;
+            case R.id.action_file_normal_priority:
+//                Log.d("Debug", "Normal priority");
+                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 1);
+                return true;
+            case R.id.action_file_high_priority:
+//                Log.d("Debug", "High priority");
+                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 2);
+                return true;
+            case R.id.action_file_maximum_priority:
+//                Log.d("Debug", "Maximum priority");
+                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 7);
+
+                return true;
+            default:
+//                Log.d("Debug", "default priority?");
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
     @Override
     public void setTitle(CharSequence title) {
         this.title = title;
@@ -930,11 +985,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         try {
             if (intent.getStringExtra("from").equals("NotifierService")) {
 
-//                drawerList.setItemChecked(2, true);
-//                mRecyclerView.findViewHolderForAdapterPosition(3).itemView.performClick();
                 saveLastState("completed");
-
-                setTitle(navigationDrawerItemTitles[2]);
                 refresh("completed");
 
             }
@@ -1008,8 +1059,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         try {
             if (intent.getStringExtra("from").equals("NotifierService")) {
-//                drawerList.setItemChecked(2, true);
-//                setTitle(navigationDrawerItemTitles[2]);
                 saveLastState("completed");
                 refresh("completed");
             }
@@ -1100,8 +1149,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_rss:
                 // Open RSS Activity
                 Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
-                intent.putExtra("packageName", packageName);
-                intent.putExtra("dark_ui", dark_ui);
+//                intent.putExtra("packageName", packageName);
+//                intent.putExtra("dark_ui", dark_ui);
                 startActivity(intent);
                 return true;
             case R.id.action_pause:
@@ -1385,7 +1434,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (requestCode == SETTINGS_CODE) {
 
-            Log.d("Debug", "Notification alarm set");
+//            Log.d("Debug", "Notification alarm set");
 
             alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getApplication(), NotifierService.class);
@@ -1707,6 +1756,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"minPrio", hash});
+
+    }
+
+    public void setFilePrio(String hash, int id, int priority) {
+        // Execute the task in background
+        qBittorrentCommand qtc = new qBittorrentCommand();
+
+        hash = hash + "&" + id + "&" + priority;
+
+        qtc.execute(new String[]{"setFilePrio", hash });
 
     }
 
@@ -2094,7 +2153,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         header = sharedPrefs.getBoolean("header", true);
 
-        // Get packge info
+        // Get package info
         PackageInfo pInfo = null;
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -2232,91 +2291,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     fragmentManager.popBackStack();
                 }
             }
-
         }
-
-//        switch (position) {
-//            case 0:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("all");
-//                saveLastState("all");
-//                break;
-//            case 1:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("downloading");
-//                saveLastState("downloading");
-//                break;
-//            case 2:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("completed");
-//                saveLastState("completed");
-//                break;
-//            case 3:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("pause");
-//                saveLastState("pause");
-//                break;
-//            case 4:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("active");
-//                saveLastState("active");
-//                break;
-//            case 5:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("inactive");
-//                saveLastState("inactive");
-//                break;
-//            case 6:
-//                // Options - Execute the task in background
-//                Toast.makeText(getApplicationContext(), R.string.getQBittorrentPrefefrences, Toast.LENGTH_SHORT).show();
-//                qBittorrentOptions qso = new qBittorrentOptions();
-//                qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
-//                break;
-//            case 7:
-//                // Settings
-//                openSettings();
-//                break;
-//            case 8:
-//                if (packageName.equals("com.lgallardo.qbittorrentclient")) {
-//                    // Get Pro version
-//                    getPRO();
-//                }else {
-//                    openHelp();
-//                }
-//                // Set selection according to last state
-//                break;
-//            case 9:
-//                openHelp();
-//                break;
-//            default:
-//                break;
-//
-//        }
-//
-//        if (position < 6) {
-//            // Set checked item
-//            drawerList.setItemChecked(position, true);
-//            drawerList.setSelection(position);
-//            setTitle(navigationDrawerItemTitles[position]);
-//        }else{
-//            // Set current selection
-//            saveLastState(currentState);
-//            setSelectionAndTitle(currentState);
-//        }
-//
-//
-//        drawerLayout.closeDrawer(drawerList);
-//
-//        // Load banner
-//        loadBanner();
-
-
     }
 
     @Override
@@ -2684,6 +2659,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 messageId = R.string.priorityUpdated;
             }
 
+            if ("setFilePrio".equals(result)) {
+                messageId = R.string.priorityUpdated;
+            }
+
 
             if ("setQBittorrentPrefefrences".equals(result)) {
                 messageId = R.string.setQBittorrentPrefefrences;
@@ -2874,7 +2853,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 if (httpStatusCode == 403 || httpStatusCode == 404) {
 
-                    Log.d("Debug","MainActivity - refresh - qb_version:" +qb_version );
+//                    Log.d("Debug","MainActivity - refresh - qb_version:" +qb_version );
 
                     if (qb_version.equals("3.2.x")) {
                         // Get new Cookie

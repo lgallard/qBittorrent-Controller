@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +29,8 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class RSSFeedActivity extends AppCompatActivity {
@@ -138,8 +142,6 @@ public class RSSFeedActivity extends AppCompatActivity {
         // This is need for the Contextual menu
         registerForContextMenu(listView);
 
-
-
         // Load Ads
         loadBanner();
     }
@@ -162,7 +164,7 @@ public class RSSFeedActivity extends AppCompatActivity {
     }
 
 
-    public void saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
+    public void saveRssFeed(String title, String link, String filter, String pubDate, boolean autoDownload, boolean notifyNew) {
 
         String autoDownloadValue = Boolean.toString(autoDownload);
         String notifyNewValue = Boolean.toString(notifyNew);
@@ -178,16 +180,24 @@ public class RSSFeedActivity extends AppCompatActivity {
             rss_feeds = sharedPrefs.getString("rss_feeds", "");
         }
 
+        // Encode link
+        try {
+            link = URLEncoder.encode(link, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.e("Debug", "RSSFeedActivity - Error encoding link: " + link);
+        }
+
+
         if (rss_feeds.equals("")) {
 
-            rss_feeds = title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
+            rss_feeds = title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue + ";" + filter;
 
         } else {
-            rss_feeds = rss_feeds + "|" + title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue;
+            rss_feeds = rss_feeds + "|" + title + ";" + link + ";" + pubDate + ";" + autoDownloadValue + ";" + notifyNewValue + ";" + filter;
 
         }
 
-//        Log.d("Debug", "rss_feeds: " + rss_feeds);
+        Log.d("Debug", "rss_feeds: " + rss_feeds);
 
         editor.putString("rss_feeds", rss_feeds);
         // Commit changes
@@ -245,7 +255,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                 rss_feeds = "";
                 for (int i = 0; i < rssChannels.size(); i++) {
                     RSSFeed rssFeed = rssChannels.get(i);
-                    saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
+                    saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelFilter(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
                 }
 
                 return true;
@@ -299,6 +309,7 @@ public class RSSFeedActivity extends AppCompatActivity {
         // URL input
         final EditText rssFeedUrlInput = (EditText) addTorrentView.findViewById(R.id.rssFeedUrl);
         final EditText rssFeedNameInput = (EditText) addTorrentView.findViewById(R.id.rssFeedName);
+        final EditText rssFeedFilterInput = (EditText) addTorrentView.findViewById(R.id.rssFeedFilter);
         final CheckBox rssFeedAutoDownloadInput = (CheckBox) addTorrentView.findViewById(R.id.rssFeedAutodownload);
         final CheckBox rssFeedNotifyNewInput = (CheckBox) addTorrentView.findViewById(R.id.rssFeedNotifyNew);
 
@@ -308,6 +319,11 @@ public class RSSFeedActivity extends AppCompatActivity {
 
             if (rssFeed.getChannelTitle() != null) {
                 rssFeedNameInput.setText(rssFeed.getChannelTitle());
+            }
+
+
+            if (rssFeed.getChannelFilter() != null) {
+                rssFeedNameInput.setText(rssFeed.getChannelFilter());
             }
 
 
@@ -337,6 +353,15 @@ public class RSSFeedActivity extends AppCompatActivity {
                         // Get values from dialog view
                         String title = rssFeedNameInput.getText().toString();
                         String link = rssFeedUrlInput.getText().toString();
+                        String filter = rssFeedFilterInput.getText().toString();
+
+
+                        if(filter == null || filter.isEmpty()){
+                            filter = "";
+                        }
+
+
+
                         boolean autoDownload = rssFeedAutoDownloadInput.isChecked() ? true : false;
                         boolean notifyNew = rssFeedNotifyNewInput.isChecked() ? true : false;
 
@@ -349,7 +374,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                                 title = link;
                             }
 
-                            saveRssFeed(title, link, "", autoDownload, notifyNew);
+                            saveRssFeed(title, link, filter, "", autoDownload, notifyNew);
 
 
                             // Refresh channel list
@@ -382,6 +407,7 @@ public class RSSFeedActivity extends AppCompatActivity {
         // URL input
         final EditText rssFeedUrlInput = (EditText) addTorrentView.findViewById(R.id.rssFeedUrl);
         final EditText rssFeedNameInput = (EditText) addTorrentView.findViewById(R.id.rssFeedName);
+        final EditText rssFeedFilterInput = (EditText) addTorrentView.findViewById(R.id.rssFeedFilter);
         final CheckBox rssFeedAutoDownloadInput = (CheckBox) addTorrentView.findViewById(R.id.rssFeedAutodownload);
         final CheckBox rssFeedNotifyNewInput = (CheckBox) addTorrentView.findViewById(R.id.rssFeedNotifyNew);
 
@@ -389,6 +415,8 @@ public class RSSFeedActivity extends AppCompatActivity {
         // Set dialog's values
         rssFeedUrlInput.setText(rssFeed.getChannelLink());
         rssFeedNameInput.setText(rssFeed.getChannelTitle());
+        rssFeedFilterInput.setText(rssFeed.getChannelFilter());
+
         rssFeedAutoDownloadInput.setChecked(rssFeed.getAutodDownload());
         rssFeedNotifyNewInput.setChecked(rssFeed.getNotifyNew());
 
@@ -413,11 +441,13 @@ public class RSSFeedActivity extends AppCompatActivity {
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User accepted the dialog
-//                        Log.d("Debug", "RSS feed: " + rssFeedUrlInput.getText().toString());
+//                        Log.d("Debug", "RSS filter: " + rssFeedFilterInput.getText().toString());
 
                         // Get values from dialog view
                         String title = rssFeedNameInput.getText().toString();
                         String link = rssFeedUrlInput.getText().toString();
+                        String filter = rssFeedFilterInput.getText().toString();
+
                         boolean autoDownload = rssFeedAutoDownloadInput.isChecked() ? true : false;
                         boolean notifyNew = rssFeedNotifyNewInput.isChecked() ? true : false;
 
@@ -430,10 +460,9 @@ public class RSSFeedActivity extends AppCompatActivity {
                                 title = link;
                             }
 
-//                            saveRssFeed(title, link, "", autoDownload, notifyNew);
-
                             rssFeed.setChannelTitle(title);
                             rssFeed.setChannelLink(link);
+                            rssFeed.setChannelFilter(filter);
                             rssFeed.setAutodDownload(autoDownload);
                             rssFeed.setNotifyNew(notifyNew);
 //
@@ -458,7 +487,7 @@ public class RSSFeedActivity extends AppCompatActivity {
 //                                Log.d("Debug", "Saving: " + rssFeed.getChannelTitle() + ";" +  rssFeed.getChannelLink() + ";" +  rssFeed.getChannelPubDate() + ";" +  rssFeed.getAutodDownload() + ";" + rssFeed.getNotifyNew());
 
 
-                                saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
+                                saveRssFeed(rssFeed.getChannelTitle(), rssFeed.getChannelLink(),rssFeed.getChannelFilter(), rssFeed.getChannelPubDate(), rssFeed.getAutodDownload(), rssFeed.getNotifyNew());
                             }
 
 
@@ -492,14 +521,25 @@ public class RSSFeedActivity extends AppCompatActivity {
 //            Log.d("Debug", "RSSFeedActivity - intent is not null ");
 
             // Get package name
-            packageName = intent.getStringExtra("packageName");
+            packageName = "com.lgallardo.qbittorrentclient";
 
-//            Log.d("Debug", "RSSFeedActivity - packageName: " + packageName);
+            // Get package info
+            PackageInfo pInfo = null;
+            try {
+                pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                packageName = pInfo.packageName;
+            } catch (PackageManager.NameNotFoundException e) {
+            }
 
-            // Get theme UI preference
-            dark_ui = intent.getBooleanExtra("dark_ui", false);
 
-//            Log.d("Debug", "RSSFeedActivity - dark_ui: " + dark_ui);
+            Log.d("Debug", "RSSFeedActivity - packageName: " + packageName);
+
+            // Get theme UI preference from preferences
+            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+            builderPrefs = new StringBuilder();
+            builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
+
+            dark_ui = sharedPrefs.getBoolean("dark_ui", false);
 
             // Add Rss from url
             String rssUrl = intent.getDataString();
@@ -612,6 +652,8 @@ public class RSSFeedActivity extends AppCompatActivity {
             for (int i = 0; rss_feeds_lines.length > i; i++) {
 
 
+//                Log.d("Debug", "feedValues[]: " + rss_feeds_lines[i]);
+
                 String[] feedValues = rss_feeds_lines[i].split(";");
 
 
@@ -622,10 +664,16 @@ public class RSSFeedActivity extends AppCompatActivity {
 
                         RSSFeed rssFeed = new RSSFeed();
 
+                        String filter = "";
+
+                        if(feedValues.length == 6){
+                            filter = feedValues[5];
+                        }
+
                         try {
 
                             RSSFeedParser rssFeedParser = new RSSFeedParser();
-                            rssFeed = rssFeedParser.getRSSFeed(feedValues[0], feedValues[1]);
+                            rssFeed = rssFeedParser.getRSSFeed(feedValues[0], feedValues[1], filter);
 
 //                            saveRssFeed(String title, String link, String pubDate, boolean autoDownload, boolean notifyNew) {
                             // Set downlaod and notify flags
@@ -635,7 +683,10 @@ public class RSSFeedActivity extends AppCompatActivity {
 //                            Log.d("Debug", "feedValues[2]: " + feedValues[2]);
 //                            Log.d("Debug", "feedValues[3]: " + feedValues[3]);
 //                            Log.d("Debug", "feedValues[4]: " + feedValues[4]);
+//                            Log.d("Debug", "feedValues[5]: " + filter);
 
+
+                            rssFeed.setChannelFilter(filter);
 
                             rssFeed.setAutodDownload(Boolean.parseBoolean(feedValues[3]));
                             rssFeed.setNotifyNew(Boolean.parseBoolean(feedValues[4]));
