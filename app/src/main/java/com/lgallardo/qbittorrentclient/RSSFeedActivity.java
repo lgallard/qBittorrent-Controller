@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -139,8 +141,6 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         // This is need for the Contextual menu
         registerForContextMenu(listView);
-
-
 
         // Load Ads
         loadBanner();
@@ -521,14 +521,25 @@ public class RSSFeedActivity extends AppCompatActivity {
 //            Log.d("Debug", "RSSFeedActivity - intent is not null ");
 
             // Get package name
-            packageName = intent.getStringExtra("packageName");
+            packageName = "com.lgallardo.qbittorrentclient";
 
-//            Log.d("Debug", "RSSFeedActivity - packageName: " + packageName);
+            // Get package info
+            PackageInfo pInfo = null;
+            try {
+                pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                packageName = pInfo.packageName;
+            } catch (PackageManager.NameNotFoundException e) {
+            }
 
-            // Get theme UI preference
-            dark_ui = intent.getBooleanExtra("dark_ui", false);
 
-//            Log.d("Debug", "RSSFeedActivity - dark_ui: " + dark_ui);
+            Log.d("Debug", "RSSFeedActivity - packageName: " + packageName);
+
+            // Get theme UI preference from preferences
+            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+            builderPrefs = new StringBuilder();
+            builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
+
+            dark_ui = sharedPrefs.getBoolean("dark_ui", false);
 
             // Add Rss from url
             String rssUrl = intent.getDataString();

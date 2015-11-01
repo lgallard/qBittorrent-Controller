@@ -50,7 +50,7 @@ public class RSSFeedChannelListAdapter extends ArrayAdapter<RSSFeed> {
         String rssChannelFilter = rssChannels.get(position).getChannelFilter();
 
         String rssChannelPubDate = rssChannels.get(position).getChannelPubDate();
-        String rssChannelNewItems = rssChannels.get(position).getItems().size() + "";
+        String rssChannelNewItems = rssChannels.get(position).getItems() == null?"0":rssChannels.get(position).getItems().size() + "";
 
 
         TextView title = (TextView) row.findViewById(R.id.rss_channel_title);

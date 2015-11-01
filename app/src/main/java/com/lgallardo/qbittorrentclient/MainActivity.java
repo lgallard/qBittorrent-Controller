@@ -985,11 +985,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         try {
             if (intent.getStringExtra("from").equals("NotifierService")) {
 
-//                drawerList.setItemChecked(2, true);
-//                mRecyclerView.findViewHolderForAdapterPosition(3).itemView.performClick();
                 saveLastState("completed");
-
-                setTitle(navigationDrawerItemTitles[2]);
                 refresh("completed");
 
             }
@@ -1063,8 +1059,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         try {
             if (intent.getStringExtra("from").equals("NotifierService")) {
-//                drawerList.setItemChecked(2, true);
-//                setTitle(navigationDrawerItemTitles[2]);
                 saveLastState("completed");
                 refresh("completed");
             }
@@ -1155,8 +1149,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_rss:
                 // Open RSS Activity
                 Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
-                intent.putExtra("packageName", packageName);
-                intent.putExtra("dark_ui", dark_ui);
+//                intent.putExtra("packageName", packageName);
+//                intent.putExtra("dark_ui", dark_ui);
                 startActivity(intent);
                 return true;
             case R.id.action_pause:
@@ -2159,7 +2153,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         header = sharedPrefs.getBoolean("header", true);
 
-        // Get packge info
+        // Get package info
         PackageInfo pInfo = null;
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -2297,91 +2291,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     fragmentManager.popBackStack();
                 }
             }
-
         }
-
-//        switch (position) {
-//            case 0:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("all");
-//                saveLastState("all");
-//                break;
-//            case 1:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("downloading");
-//                saveLastState("downloading");
-//                break;
-//            case 2:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("completed");
-//                saveLastState("completed");
-//                break;
-//            case 3:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("pause");
-//                saveLastState("pause");
-//                break;
-//            case 4:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("active");
-//                saveLastState("active");
-//                break;
-//            case 5:
-//                // Set the refresh layout (refresh icon, etc)
-//                refreshSwipeLayout();
-//                refresh("inactive");
-//                saveLastState("inactive");
-//                break;
-//            case 6:
-//                // Options - Execute the task in background
-//                Toast.makeText(getApplicationContext(), R.string.getQBittorrentPrefefrences, Toast.LENGTH_SHORT).show();
-//                qBittorrentOptions qso = new qBittorrentOptions();
-//                qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
-//                break;
-//            case 7:
-//                // Settings
-//                openSettings();
-//                break;
-//            case 8:
-//                if (packageName.equals("com.lgallardo.qbittorrentclient")) {
-//                    // Get Pro version
-//                    getPRO();
-//                }else {
-//                    openHelp();
-//                }
-//                // Set selection according to last state
-//                break;
-//            case 9:
-//                openHelp();
-//                break;
-//            default:
-//                break;
-//
-//        }
-//
-//        if (position < 6) {
-//            // Set checked item
-//            drawerList.setItemChecked(position, true);
-//            drawerList.setSelection(position);
-//            setTitle(navigationDrawerItemTitles[position]);
-//        }else{
-//            // Set current selection
-//            saveLastState(currentState);
-//            setSelectionAndTitle(currentState);
-//        }
-//
-//
-//        drawerLayout.closeDrawer(drawerList);
-//
-//        // Load banner
-//        loadBanner();
-
-
     }
 
     @Override

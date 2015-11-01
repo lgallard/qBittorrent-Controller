@@ -9,7 +9,6 @@
         android:layout_height="wrap_content"
         android:background="?backgroundSelector"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="10dp">
@@ -59,7 +58,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginRight="5dp">
 
             <TextView
                 android:id="@+id/rss_channel_item_count"
