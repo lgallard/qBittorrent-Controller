@@ -51,7 +51,7 @@
     <string name="torrentDeleted">Torrent deleted!</string>
     <string name="torrentDeletedDrive">Torrent and data deleted!</string>
     <string name="increasePrioTorrent">Priority increased!</string>
-    <string name="decreasePrioTorrent" translatable="false">Priority decreased!</string>
+    <string name="decreasePrioTorrent">Priority decreased!</string>
     <string name="priorityUpdated">Priority updated!</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

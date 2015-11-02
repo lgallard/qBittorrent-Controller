@@ -19,6 +19,10 @@
   <string name="action_download_rate_limit">Jeisketa neurri muga</string>
   <string name="action_upload_rate_limit">Igoera neurri muga</string>
   <string name="action_force_recheck">Behartu berregiaztapena</string>
+  <string name="action_file_dont_download">Ez jeitsi</string>
+  <string name="action_file_normal_priority">Arrunta</string>
+  <string name="action_file_high_priority">Handia</string>
+  <string name="action_file_maximum_priority">Gehiena</string>
   <string name="connection_error">Sare elkarketa hutsegitea</string>
   <string name="ok">Ongi</string>
   <string name="cancel">Ezeztatu</string>
@@ -37,11 +41,10 @@
   <string name="torrentDeleted">Torrenta ezabatuta!</string>
   <string name="torrentDeletedDrive">Torrenta eta datuak ezabatuta!</string>
   <string name="increasePrioTorrent">Lehentasuna handituta!</string>
-  <string name="decreasePrioTorrent">Lehentasuna gutxituta!</string>
   <string name="priorityUpdated">Lehentasuna eguneratuta!</string>
   <string name="drawer_open">Irekin nabigazio hedagarria</string>
   <string name="drawer_close">Itxi nabigazio hedagarria</string>
-  <string name="drawer_servers_category">Zerbitzarietan</string>
+  <string name="drawer_servers_category">Zerbitzariak</string>
   <string name="getQBittorrentPrefefrences">Aukerak lortzen...</string>
   <string name="setQBittorrentPrefefrences">Aukerak gordeta</string>
   <string name="setUploadRateLimit">Igoera neurri muga ezarrita</string>
@@ -182,7 +185,7 @@
   <string name="settings_qbittorrent_darkui_dialog_title">Erabili azalgai iluna</string>
   <string name="settings_qbittorrent_darkui_summary">Berrabiarazi aplikazioa azalgaia ezartzeko</string>
   <string name="sortby_menu_name">Izena</string>
-  <string name="sortby_menu_size">Tamaina</string>
+  <string name="sortby_menu_size">Neurria</string>
   <string name="sortby_menu_eta">UED</string>
   <string name="sortby_menu_priority">Lehentasuna</string>
   <string name="sortby_menu_progress">Garapena</string>
@@ -210,7 +213,7 @@
   <string name="action_addRss">Gehitu RSS-a</string>
   <string name="action_rss">RSS</string>
   <string name="dialog_add_rss">RSS url-a</string>
-  <string name="dialog_add_rss_filter">Iragazkia</string>
+  <string name="dialog_add_rss_filter">Iragazi</string>
   <string name="dialog_label_rss">Izena</string>
   <string name="checkbox_autodownload_rss">Jeitsi torrent berriak berezgaitasunez?</string>
   <string name="checkbox_notifynew_rss">Jakinarazi torrent berriak?</string>
@@ -221,8 +224,4 @@
   <string name="options_qbittorrent_scheduler_days_title">Noiz:</string>
   <string name="options_qbittorrent_schedule_alt_from">Hemendik</string>
   <string name="options_qbittorrent_schedule_alt_to">Hona</string>
-  <string name="action_file_dont_download">Ez deskargatu</string>
-  <string name="action_file_maximum_priority">Gehienezko</string>
-  <string name="action_file_high_priority">Handia</string>
-  <string name="action_file_normal_priority">Normala</string>
 </resources>
