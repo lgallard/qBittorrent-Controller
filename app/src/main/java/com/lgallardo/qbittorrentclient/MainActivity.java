@@ -2809,11 +2809,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
 
-                // Request a new cookie if respond was not OK
-                if (httpStatusCode != 200) {
-                    cookie = null;
-                }
-
                 torrents = null;
                 Log.e("JSONParserStatusCode", e.toString());
 
@@ -2843,10 +2838,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 if (httpStatusCode == 401) {
                     Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
+
+                    // Get new Cookie
+                    if (qb_version.equals("3.2.x")) {
+                        cookie = null;
+                    }
+
                     httpStatusCode = 0;
                     connection400ErrorCounter = 2;
                 }
                 if (httpStatusCode == 400) {
+
+                    // Get new Cookie
+                    if (qb_version.equals("3.2.x")) {
+                        cookie = null;
+                    }
+
                     connection400ErrorCounter = connection400ErrorCounter + 1;
                     httpStatusCode = 0;
                     return;
@@ -2856,8 +2863,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 //                    Log.d("Debug","MainActivity - refresh - qb_version:" +qb_version );
 
+                    // Get new Cookie
                     if (qb_version.equals("3.2.x")) {
-                        // Get new Cookie
                         cookie = null;
                     }
 
