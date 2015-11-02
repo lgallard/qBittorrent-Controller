@@ -2809,7 +2809,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
 
-                if (httpStatusCode == 400) {
+                // Request a new cookie if respond was not OK
+                if (httpStatusCode != 200) {
                     cookie = null;
                 }
 
