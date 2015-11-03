@@ -89,6 +89,7 @@ public class NotifierService extends BroadcastReceiver {
             if (qb_version.equals("3.1.x")) {
                 qbQueryString = "json";
                 params[0] = qbQueryString + "/torrents";
+                new qBittorrentCookie().execute();
             }
 
             if (qb_version.equals("3.2.x")) {
@@ -316,7 +317,25 @@ public class NotifierService extends BroadcastReceiver {
 //            Log.d("Debug", "LastCompleted Size: " + last_completed.size());
 //            Log.d("Debug", "LastCompleted Hashes: " + completed_hashes);
 
-            if (torrents != null) {
+//            Log.d("Debug","Notifier >>>" );
+//
+//            Log.d("Debug","Notifier - qb_version:" + qb_version );
+//
+//            Log.d("Debug","Notifier - httpStatusCode: " + httpStatusCode );
+
+            if (torrents == null) {
+
+                if (httpStatusCode == 403 || httpStatusCode == 404) {
+
+//                    Log.d("Debug","Notifier - qb_version:" + qb_version );
+
+                    // Get new Cookie
+                    if (qb_version.equals("3.2.x")) {
+                        cookie = null;
+                    }
+                }
+
+            }else{
 
                 // Check torrents
                 for (int i = 0; i < torrents.length; i++) {
