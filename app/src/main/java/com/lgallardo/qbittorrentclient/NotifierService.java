@@ -402,7 +402,7 @@ public class NotifierService extends BroadcastReceiver {
 
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("from", "NotifierService");
-                    PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
                     it = notify.entrySet().iterator();
 

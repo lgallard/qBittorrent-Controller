@@ -260,6 +260,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get preferences
         getSettings();
 
+        Log.d("Debug", "lastState: " + lastState);
+
         // Set alarm for checking completed torrents, if not set
         if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), NotifierService.class), PendingIntent.FLAG_NO_CREATE) == null) {
 
@@ -423,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         qBittorrentOptions qso = new qBittorrentOptions();
         qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
 
-        // If it were awaked from an intent-filter,
+        // If it were awaken from an intent-filter,
         // get intent from the intent filter and Add URL torrent
         addTorrentByIntent(getIntent());
 
@@ -962,6 +964,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private void handleIntent(Intent intent) {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+
             // Use the query to search your data somehow
             searchField = intent.getStringExtra(SearchManager.QUERY);
 
@@ -983,11 +986,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
         try {
+
             if (intent.getStringExtra("from").equals("NotifierService")) {
 
                 saveLastState("completed");
+                setSelectionAndTitle("completed");
                 refresh("completed");
-
             }
 
             if (intent.getStringExtra("from").equals("RSSItemActivity")) {
@@ -1002,8 +1006,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 refreshCurrent();
             }
 
+//            Log.d("Debug", "lastState (handle intent):End " );
+        } catch (Exception e) {
 
-        } catch (NullPointerException npe) {
+            Log.e("Debug", "Handle intent: " + e.toString() );
 
         }
     }
@@ -1060,6 +1066,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         try {
             if (intent.getStringExtra("from").equals("NotifierService")) {
                 saveLastState("completed");
+                setSelectionAndTitle("completed");
                 refresh("completed");
             }
         } catch (NullPointerException npe) {
