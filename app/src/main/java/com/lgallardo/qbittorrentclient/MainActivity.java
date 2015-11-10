@@ -261,8 +261,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get preferences
         getSettings();
 
-        Log.d("Debug", "lastState: " + lastState);
-
         // Set alarm for checking completed torrents, if not set
         if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), NotifierService.class), PendingIntent.FLAG_NO_CREATE) == null) {
 
@@ -974,7 +972,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Add torrent (file, url or magnet)
             addTorrentByIntent(intent);
 
-            // // Activity is visble
+            // // Activity is visible
             activityIsVisible = true;
 
             // Autorefresh
@@ -1006,7 +1004,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //            Log.d("Debug", "lastState (handle intent):End " );
         } catch (Exception e) {
 
-            Log.e("Debug", "Handle intent: " + e.toString() );
+//            Log.e("Debug", "Handle intent: " + e.toString() );
 
         }
     }
