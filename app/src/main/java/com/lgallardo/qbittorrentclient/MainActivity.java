@@ -964,6 +964,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             searchField = intent.getStringExtra(SearchManager.QUERY);
 
             // Autorefresh
+            refreshSwipeLayout();
             refreshCurrent();
         }
 
@@ -1088,6 +1089,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 // Do something when collapsed
                 searchField = "";
+                refreshSwipeLayout();
                 refreshCurrent();
                 return true;  // Return true to collapse action view
             }
