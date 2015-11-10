@@ -2745,7 +2745,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 messageId = R.string.torrentstoggleSequentialDownload;
             }
 
-            if (!("startSelected".equals(result)) && !("pauseSelected".equals(result)) && !("deleteSelected".equals(result)) && !("deleteDriveSelected".equals(result)) && !("setUploadRateLimit".equals(result)) && !("setDownloadRateLimit".equals(result)) && !("recheckSelected".equals(result) && !("toggleAlternativeSpeedLimits".equals(result)))) {
+            if ("toggleAlternativeSpeedLimits".equals(result)) {
+                messageId = R.string.toggledAlternativeRates;
+            }
+
+
+            if (!("startSelected".equals(result)) && !("pauseSelected".equals(result)) && !("deleteSelected".equals(result)) && !("deleteDriveSelected".equals(result)) && !("setUploadRateLimit".equals(result)) && !("setDownloadRateLimit".equals(result)) && !("recheckSelected".equals(result))) {
                 Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
 
                 // Refresh
