@@ -40,6 +40,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -812,10 +813,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void onBackPressed() {
 
         // If drawer is opened, close it
-//        if(drawerLayout.isDrawerOpen(drawerList)){
-//            drawerLayout.closeDrawer(drawerList);
-//            return;
-//        }
         if (drawerLayout.isDrawerOpen(mRecyclerView)) {
             drawerLayout.closeDrawer(mRecyclerView);
             return;
@@ -1077,17 +1074,47 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        // Retrieve the SearchView and plug it into SearchManager
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Handle open/close SearchView (using an item menu)
+        final MenuItem menuItem = menu.findItem(R.id.action_search);
 
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-        }
+        MenuItemCompat.setOnActionExpandListener(menuItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // Do something when collapsed
+                searchField = "";
+                refreshCurrent();
+                return true;  // Return true to collapse action view
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                // Do something when expanded
+                return true;  // Return true to expand action view
+            }
+        });
+
+        // When back is pressed, delete query field and close the SearchView using the item menu
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused) {
+                if (!queryTextFocused) {
+                    menuItem.collapseActionView();
+                    searchView.setQuery("", false);
+                }
+            }
+        });
+
+        // There is a bug setting the hint from searchable.xml, so force it
+        searchView.setQueryHint(getResources().getString(R.string.search_hint));
+
 
         return true;
     }
@@ -1144,7 +1171,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         switch (item.getItemId()) {
 
             case R.id.action_search:
-                onSearchRequested();
+//                onSearchRequested();
                 return true;
             case R.id.action_refresh:
                 swipeRefresh();
@@ -3184,7 +3211,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
                 // Clear serch field
-                searchField = "";
+//                searchField = "";
 
             }
 

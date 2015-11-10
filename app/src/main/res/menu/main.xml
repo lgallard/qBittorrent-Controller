@@ -15,13 +15,13 @@
         android:id="@+id/action_refresh"
         android:icon="@drawable/ic_action_refresh"
         android:title="@string/action_refresh"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_sort_menu"
         android:icon="@drawable/ic_action_sort"
         android:title="@string/settings_qbittorrent_sortby_summary"
-        app:showAsAction="collapseActionView|always">
+        app:showAsAction="collapseActionView|ifRoom">
 
         <menu>
 
@@ -147,12 +147,11 @@
         android:title="@string/torrent_details_first_last"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_search"
-        android:actionViewClass="android.support.v7.widget.SearchView"
-        android:icon="@drawable/ic_action_search"
+    <item android:id="@+id/action_search"
         android:title="@string/search_title"
-        app:showAsAction="collapseActionView" />
+        android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item
         android:id="@+id/action_rss"
