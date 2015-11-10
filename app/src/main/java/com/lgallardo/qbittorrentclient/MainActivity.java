@@ -1374,6 +1374,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     }
                 }
                 return true;
+            case R.id.action_toggle_alternative_rate:
+                toggleAlternativeSpeedLimits();
+
+                if (findViewById(R.id.one_frame) != null) {
+                    popBackStackPhoneView();
+                }
+
+                return true;
             case R.id.action_sortby_name:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[0]);
                 invalidateOptionsMenu();
@@ -1832,6 +1840,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         qtc.execute(new String[]{"toggleSequentialDownload", hashes});
 
     }
+
+    public void toggleAlternativeSpeedLimits() {
+        // Execute the task in background
+        qBittorrentCommand qtc = new qBittorrentCommand();
+        qtc.execute(new String[]{"toggleAlternativeSpeedLimits", ""});
+
+    }
+
 
     public void setQBittorrentPrefefrences(String hash) {
         // Execute the task in background
@@ -2495,6 +2511,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
 
 
+
             return new String[]{apiVersion, intents[0].getStringExtra("currentState")};
 
         }
@@ -2728,7 +2745,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 messageId = R.string.torrentstoggleSequentialDownload;
             }
 
-            if (!("startSelected".equals(result)) && !("pauseSelected".equals(result)) && !("deleteSelected".equals(result)) && !("deleteDriveSelected".equals(result)) && !("setUploadRateLimit".equals(result)) && !("setDownloadRateLimit".equals(result)) && !("recheckSelected".equals(result))) {
+            if (!("startSelected".equals(result)) && !("pauseSelected".equals(result)) && !("deleteSelected".equals(result)) && !("deleteDriveSelected".equals(result)) && !("setUploadRateLimit".equals(result)) && !("setDownloadRateLimit".equals(result)) && !("recheckSelected".equals(result) && !("toggleAlternativeSpeedLimits".equals(result)))) {
                 Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
 
                 // Refresh

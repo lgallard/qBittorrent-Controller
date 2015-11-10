@@ -457,6 +457,15 @@ public class JSONParser {
 
         }
 
+        if ("toggleAlternativeSpeedLimits".equals(command)) {
+
+            Log.d("Debug", "Toggling alternative rates");
+
+            url = "command/toggleAlternativeSpeedLimits";
+            key = "hashes";
+
+        }
+
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && !subfolder.equals("")) {
@@ -499,7 +508,7 @@ public class JSONParser {
 
             url = protocol + "://" + hostname + ":" + port + "/" + url;
 
-//            Log.d("Debug", "url:" + url);
+            Log.d("Debug", "url:" + url);
 
             HttpPost httpget = new HttpPost(url);
 
@@ -508,7 +517,7 @@ public class JSONParser {
                 hash = hash_uri.toString();
             }
 
-            // In order to pass the has we must set the pair name value
+            // In order to pass the hash we must set the pair name value
             BasicNameValuePair bnvp = new BasicNameValuePair(key, hash);
 
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
@@ -531,7 +540,7 @@ public class JSONParser {
             httpget.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
             // Set content type and urls
-            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command)) {
+            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command) || "toggleAlternativeSpeedLimits".equals(command)) {
                 httpget.setHeader("Content-Type", urlContentType);
 
             }
@@ -985,6 +994,7 @@ public class JSONParser {
         }
         return version;
     }
+
 
 
 }

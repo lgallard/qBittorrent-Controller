@@ -159,4 +159,10 @@
         android:title="@string/action_rss"
         app:showAsAction="collapseActionView|ifRoom" />
 
+    <item
+        android:id="@+id/action_toggle_alternative_rate"
+        android:title="@string/action_toggle_alternative_rates"
+        app:showAsAction="ifRoom" />
+
+
 </menu>
