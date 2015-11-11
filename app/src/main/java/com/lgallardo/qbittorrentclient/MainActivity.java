@@ -936,6 +936,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 } else {
                     // Execute the task in background
                     new qBittorrentTask().execute(params);
+
+                    // Check if  alternative speed limit is set
+                    new qBittorrentCommand().execute(new String[]{"alternativeSpeedLimitsEnabled", ""});
                 }
 
             }
@@ -2588,10 +2591,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
     // Here is where the action happens
-    private class qBittorrentCommand extends AsyncTask<String, Integer, String> {
+    private class qBittorrentCommand extends AsyncTask<String, Integer, String[]> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String[] doInBackground(String... params) {
+
+            String result = "";
 
             // Get values from preferences
             getSettings();
@@ -2605,7 +2610,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 httpStatusCode = 0;
 
-                jParser.postCommand(params[0], params[1]);
+                result = jParser.postCommand(params[0], params[1]);
 
             } catch (JSONParserStatusCodeException e) {
 
@@ -2613,12 +2618,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             }
 
-            return params[0];
+            return (new String[]{params[0],result});
 
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(String[] results) {
+
+
+            String command = results[0];
+            String result = results[1];
 
             // Handle HTTP status code
 
@@ -2652,105 +2661,108 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             int messageId = R.string.connection_error;
 
-            if (result == null) {
+            if (command == null) {
                 messageId = R.string.connection_error;
             }
 
-            if ("start".equals(result)) {
+            if ("start".equals(command)) {
                 messageId = R.string.torrentStarted;
 
                 // Needed to refresh after a resume and see the change
                 delay = 3;
             }
 
-            if ("pause".equals(result)) {
+            if ("pause".equals(command)) {
                 messageId = R.string.torrentPaused;
             }
 
-            if ("delete".equals(result)) {
+            if ("delete".equals(command)) {
                 messageId = R.string.torrentDeleted;
             }
 
-            if ("deleteDrive".equals(result)) {
+            if ("deleteDrive".equals(command)) {
                 messageId = R.string.torrentDeletedDrive;
             }
 
-            if ("addTorrent".equals(result)) {
+            if ("addTorrent".equals(command)) {
                 messageId = R.string.torrentAdded;
             }
 
-            if ("addTorrentFile".equals(result)) {
+            if ("addTorrentFile".equals(command)) {
                 messageId = R.string.torrentFileAdded;
             }
 
-            if ("pauseAll".equals(result)) {
+            if ("pauseAll".equals(command)) {
                 messageId = R.string.AllTorrentsPaused;
             }
 
-            if ("resumeAll".equals(result)) {
+            if ("resumeAll".equals(command)) {
                 messageId = R.string.AllTorrentsResumed;
 
                 // Needed to refresh after a "resume all" and see the changes
                 delay = 3;
             }
 
-            if ("increasePrio".equals(result)) {
+            if ("increasePrio".equals(command)) {
                 messageId = R.string.increasePrioTorrent;
             }
 
-            if ("decreasePrio".equals(result)) {
+            if ("decreasePrio".equals(command)) {
                 messageId = R.string.decreasePrioTorrent;
             }
 
-            if ("maxPrio".equals(result)) {
+            if ("maxPrio".equals(command)) {
                 messageId = R.string.priorityUpdated;
             }
 
-            if ("minPrio".equals(result)) {
+            if ("minPrio".equals(command)) {
                 messageId = R.string.priorityUpdated;
             }
 
-            if ("setFilePrio".equals(result)) {
+            if ("setFilePrio".equals(command)) {
                 messageId = R.string.priorityUpdated;
             }
 
 
-            if ("setQBittorrentPrefefrences".equals(result)) {
+            if ("setQBittorrentPrefefrences".equals(command)) {
                 messageId = R.string.setQBittorrentPrefefrences;
             }
 
-            if ("setUploadRateLimit".equals(result)) {
+            if ("setUploadRateLimit".equals(command)) {
                 messageId = R.string.setUploadRateLimit;
                 if (findViewById(R.id.one_frame) != null) {
                     popBackStackPhoneView();
                 }
             }
 
-            if ("setDownloadRateLimit".equals(result)) {
+            if ("setDownloadRateLimit".equals(command)) {
                 messageId = R.string.setDownloadRateLimit;
                 if (findViewById(R.id.one_frame) != null) {
                     popBackStackPhoneView();
                 }
             }
 
-            if ("recheckSelected".equals(result)) {
+            if ("recheckSelected".equals(command)) {
                 messageId = R.string.torrentsRecheck;
             }
 
-            if ("toggleFirstLastPiecePrio".equals(result)) {
+            if ("toggleFirstLastPiecePrio".equals(command)) {
                 messageId = R.string.torrentstogglefisrtLastPiecePrio;
             }
 
-            if ("toggleSequentialDownload".equals(result)) {
+            if ("toggleSequentialDownload".equals(command)) {
                 messageId = R.string.torrentstoggleSequentialDownload;
             }
 
-            if ("toggleAlternativeSpeedLimits".equals(result)) {
+            if ("toggleAlternativeSpeedLimits".equals(command)) {
                 messageId = R.string.toggledAlternativeRates;
             }
 
+            if ("alternativeSpeedLimitsEnabled".equals(command)) {
+                Log.d("Debug", "alternativeSpeedLimitsEnabled: " + result);
+            }
 
-            if (!("startSelected".equals(result)) && !("pauseSelected".equals(result)) && !("deleteSelected".equals(result)) && !("deleteDriveSelected".equals(result)) && !("setUploadRateLimit".equals(result)) && !("setDownloadRateLimit".equals(result)) && !("recheckSelected".equals(result))) {
+            if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command)) ) {
                 Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
 
                 // Refresh
