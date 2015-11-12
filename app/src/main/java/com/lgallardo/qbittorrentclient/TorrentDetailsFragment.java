@@ -548,9 +548,13 @@ public class TorrentDetailsFragment extends Fragment {
             if (MainActivity.qb_version.equals("3.2.x")) {
                 menu.findItem(R.id.action_firts_last_piece_prio).setVisible(true);
                 menu.findItem(R.id.action_sequential_download).setVisible(true);
+                menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
+
             } else {
                 menu.findItem(R.id.action_firts_last_piece_prio).setVisible(false);
                 menu.findItem(R.id.action_sequential_download).setVisible(false);
+                menu.findItem(R.id.action_toggle_alternative_rate).setVisible(false);
+
             }
 
         }
