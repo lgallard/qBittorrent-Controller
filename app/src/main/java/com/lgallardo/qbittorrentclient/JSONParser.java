@@ -472,7 +472,7 @@ public class JSONParser {
 
         if ("alternativeSpeedLimitsEnabled".equals(command)) {
 
-            Log.d("Debug", "Getting alternativeSpeedLimitsEnabled");
+//            Log.d("Debug", "Getting alternativeSpeedLimitsEnabled");
 
             url = "command/alternativeSpeedLimitsEnabled";
 
@@ -521,7 +521,7 @@ public class JSONParser {
 
             url = protocol + "://" + hostname + ":" + port + "/" + url;
 
-            Log.d("Debug", "url:" + url);
+//            Log.d("Debug", "url:" + url);
 
             HttpPost httpget = new HttpPost(url);
 
