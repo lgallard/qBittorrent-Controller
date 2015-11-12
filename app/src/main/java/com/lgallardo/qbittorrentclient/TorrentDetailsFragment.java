@@ -804,14 +804,28 @@ public class TorrentDetailsFragment extends Fragment {
 
             try {
 
+//                Log.e("Debug", "qBittorrentGeneralInfoTask");
+
                 JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
                         MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
 
+//                if(jParser != null){
+//
+//                    Log.e("Debug", "jParser is not null");
+//
+//                }
+
                 jParser.setCookie(MainActivity.cookie);
+
+
+//                Log.e("Debug", "jParser cookie set");
+
 
                 json2 = jParser.getJSONFromUrl(url + hash);
 
                 if (json2 != null && json2.length() > 0) {
+
+//                    Log.e("Debug", "json2 not null");
 
                     labels = new String[11];
                     values = new String[11];
@@ -820,46 +834,67 @@ public class TorrentDetailsFragment extends Fragment {
                     labels[0] = getString(R.string.torrent_details_save_path);
                     values[0] = json2.getString(TAG_SAVE_PATH);
 
+//                    Log.e("Debug", "save path");
+
                     // Creation date
                     labels[1] = getString(R.string.torrent_details_created_date);
                     values[1] = json2.getString(TAG_CREATION_DATE);
+
+//                    Log.e("Debug", "Creation date");
 
                     // Comment
                     labels[2] = getString(R.string.torrent_details_comment);
                     values[2] = json2.getString(TAG_COMMENT);
 
+//                    Log.e("Debug", "Comment");
+
                     // Total wasted
                     labels[3] = getString(R.string.torrent_details_total_wasted);
                     values[3] = json2.getString(TAG_TOTAL_WASTED);
+
+//                    Log.e("Debug", "Total wasted");
 
                     // Total uploaded
                     labels[4] = getString(R.string.torrent_details_total_uploaded);
                     values[4] = json2.getString(TAG_TOTAL_UPLOADED);
 
+//                    Log.e("Debug", "Total uploaded");
+
                     // Total downloaded
                     labels[5] = getString(R.string.torrent_details_total_downloaded);
                     values[5] = json2.getString(TAG_TOTAL_DOWNLOADED);
+
+//                    Log.e("Debug", "Total downloaded");
 
                     // Time elapsed
                     labels[6] = getString(R.string.torrent_details_time_elapsed);
                     values[6] = json2.getString(TAG_TIME_ELAPSED);
 
+//                    Log.e("Debug", "Time elapsed");
+
                     // Number of connections
                     labels[7] = getString(R.string.torrent_details_num_connections);
                     values[7] = json2.getString(TAG_NB_CONNECTIONS);
+
+//                    Log.e("Debug", "Number of connections");
 
                     // Share ratio
                     labels[8] = getString(R.string.torrent_details_share_ratio);
                     values[8] = json2.getString(TAG_SHARE_RATIO);
 
+//                    Log.e("Debug", "Share ratio");
+
                     // Upload limit
                     labels[9] = getString(R.string.torrent_details_upload_rate_limit);
                     values[9] = json2.getString(TAG_UPLOAD_LIMIT);
+
+//                    Log.e("Debug", "Upload limit");
 
                     // Download limit
                     labels[10] = getString(R.string.torrent_details_download_rate_limit);
                     values[10] = json2.getString(TAG_DOWNLOAD_LIMIT);
 
+//                    Log.e("Debug", "Download limit");
 
                     if (MainActivity.qb_version.equals("3.2.x")) {
 
@@ -896,6 +931,9 @@ public class TorrentDetailsFragment extends Fragment {
                         }
 
                     }
+
+//                    Log.e("Debug", "FIN");
+
 
 
                 }

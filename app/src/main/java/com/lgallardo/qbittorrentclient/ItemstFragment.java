@@ -628,6 +628,12 @@ public class ItemstFragment extends ListFragment {
                 menu.findItem(R.id.action_priority_menu).setVisible(false);
             }
 
+            if (MainActivity.qb_version.equals("3.2.x")) {
+                menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
+
+            } else {
+                menu.findItem(R.id.action_toggle_alternative_rate).setVisible(false);
+            }
 
             menu.findItem(R.id.action_sortby_name).setVisible(true);
             menu.findItem(R.id.action_sortby_size).setVisible(true);

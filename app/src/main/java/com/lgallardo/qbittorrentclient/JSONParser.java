@@ -147,6 +147,8 @@ public class JSONParser {
 
             url = protocol + "://" + hostname + ":" + port + "/" + url;
 
+//            Log.d("Debug", "url:" + url);
+
             HttpGet httpget = new HttpGet(url);
 
             if (this.cookie != null) {
@@ -608,8 +610,6 @@ public class JSONParser {
 //            Log.d("Debug", "JSONPArser - command result: " + result);
 
             return result;
-
-
 
 
         } catch (UnsupportedEncodingException e) {
