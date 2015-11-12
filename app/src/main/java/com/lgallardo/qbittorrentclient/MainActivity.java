@@ -2768,10 +2768,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", "1".equals(result)?true:false);
 
-                if("1".equals(result)){
-                    altSpeedLimitsMenuItem.setChecked(true);
-                }else{
-                    altSpeedLimitsMenuItem.setChecked(false);
+                try {
+                    if("1".equals(result)){
+                        altSpeedLimitsMenuItem.setChecked(true);
+                    }else{
+                        altSpeedLimitsMenuItem.setChecked(false);
+                    }
+                } catch (Exception e) {
+                    ;
                 }
 
 //                Log.d("Debug", "alternativeSpeedLimitsEnabled: " + result);
@@ -3135,8 +3139,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         }
 
 
-                        uploadSpeedTextView.setText(AltSpeedInfo + Character.toString('\u2191') + " " + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
-                        downloadSpeedTextView.setText(Character.toString('\u2193') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
+                        uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
+                        downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
 
 
                         //Set first and second fragments
