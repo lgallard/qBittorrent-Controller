@@ -462,7 +462,7 @@ public class JSONParser {
 
         if ("toggleAlternativeSpeedLimits".equals(command)) {
 
-            Log.d("Debug", "Toggling alternative rates");
+//            Log.d("Debug", "Toggling alternative rates");
 
             url = "command/toggleAlternativeSpeedLimits";
             key = "hashes";
