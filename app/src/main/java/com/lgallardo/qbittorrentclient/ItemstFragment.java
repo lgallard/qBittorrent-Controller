@@ -139,11 +139,9 @@ public class ItemstFragment extends ListFragment {
                     if (MainActivity.qb_version.equals("3.2.x")) {
                         menu.findItem(R.id.action_firts_last_piece_prio).setVisible(true);
                         menu.findItem(R.id.action_sequential_download).setVisible(true);
-                        menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
                     } else {
                         menu.findItem(R.id.action_firts_last_piece_prio).setVisible(false);
                         menu.findItem(R.id.action_sequential_download).setVisible(false);
-                        menu.findItem(R.id.action_toggle_alternative_rate).setVisible(false);
                     }
                     return true;
                 }
@@ -630,6 +628,13 @@ public class ItemstFragment extends ListFragment {
 
             if (MainActivity.qb_version.equals("3.2.x")) {
                 menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
+
+                // Set Alternate Speed limit state
+                if (MainActivity.alternative_speeds) {
+                    menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
+                } else {
+                    menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
+                }
 
             } else {
                 menu.findItem(R.id.action_toggle_alternative_rate).setVisible(false);

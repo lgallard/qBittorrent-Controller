@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static String lastState;
     protected static long notification_period;
     protected static boolean header;
-    protected boolean alternative_speeds;
+    public static boolean alternative_speeds;
 
     // Option
     protected static String global_max_num_connections;
@@ -1178,9 +1178,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         switch (item.getItemId()) {
 
-            case R.id.action_search:
-//                onSearchRequested();
-                return true;
             case R.id.action_refresh:
                 swipeRefresh();
                 return true;
@@ -1384,6 +1381,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 return true;
             case R.id.action_toggle_alternative_rate:
                 toggleAlternativeSpeedLimits();
+
+                refreshAfterCommand(2);
+                swipeRefresh();
 
                 if (findViewById(R.id.one_frame) != null) {
                     popBackStackPhoneView();
@@ -2265,6 +2265,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         scheduler_days = sharedPrefs.getString("scheduler_days", "NULL");
 
+        // Check alternatives speed
+        alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
 
     }
 
@@ -2775,10 +2777,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         altSpeedLimitsMenuItem.setChecked(false);
                     }
                 } catch (Exception e) {
-                    ;
+
                 }
 
 //                Log.d("Debug", "alternativeSpeedLimitsEnabled: " + result);
+
             }
 
             if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command)) ) {

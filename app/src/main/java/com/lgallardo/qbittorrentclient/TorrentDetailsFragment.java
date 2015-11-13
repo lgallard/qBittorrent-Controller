@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
@@ -549,6 +550,14 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_firts_last_piece_prio).setVisible(true);
                 menu.findItem(R.id.action_sequential_download).setVisible(true);
                 menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
+
+                // Set Alternate Speed limit state
+                if (MainActivity.alternative_speeds) {
+                    menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
+                } else {
+                    menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
+                }
+
 
             } else {
                 menu.findItem(R.id.action_firts_last_piece_prio).setVisible(false);
