@@ -235,4 +235,7 @@
     <string name="options_qbittorrent_scheduler_days_title">When:</string>
     <string name="options_qbittorrent_schedule_alt_from">From</string>
     <string name="options_qbittorrent_schedule_alt_to">To</string>
+    <string name="action_toggle_alternative_rates">Alternative speeds</string>
+    <string name="toggledAlternativeRates">Changing speed limits</string>
+
 </resources>

@@ -225,4 +225,6 @@
     <string name="action_file_high_priority">Elevata</string>
     <string name="action_file_normal_priority">Normale</string>
     <string name="action_file_maximum_priority">Massima</string>
+    <string name="action_toggle_alternative_rates">Velocità alternativi</string>
+    <string name="toggledAlternativeRates">Commutazione i limiti di velocità</string>
 </resources>

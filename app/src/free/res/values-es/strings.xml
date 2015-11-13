@@ -226,4 +226,6 @@
     <string name="action_file_high_priority">Alta</string>
     <string name="action_file_maximum_priority">Máxima</string>
     <string name="action_file_normal_priority">Normal</string>
+    <string name="action_toggle_alternative_rates">Velocidades alternas</string>
+    <string name="toggledAlternativeRates">Cambiando límites de velocidad</string>
 </resources>

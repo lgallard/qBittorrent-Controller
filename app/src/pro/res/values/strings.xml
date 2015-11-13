@@ -32,7 +32,6 @@
     <string name="action_file_normal_priority">Normal</string>
     <string name="action_file_high_priority">High</string>
     <string name="action_file_maximum_priority">Maximum</string>
-    <string name="action_toggle_alternative_rates">Alternative speeds</string>
     <string name="connection_error">Network connection failed</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
@@ -64,7 +63,6 @@
     <string name="increasePrioTorrent">Priority increased!</string>
     <string name="decreasePrioTorrent">Priority decreased!</string>
     <string name="priorityUpdated">Priority updated!</string>
-    <string name="toggledAlternativeRates">Changing speed limits</string>
     <string name="getQBittorrentPrefefrences">Getting options...</string>
     <string name="setQBittorrentPrefefrences">Options saved</string>
     <string name="setUploadRateLimit">Upload rate limit set</string>
@@ -234,4 +232,7 @@
     <string name="options_qbittorrent_schedule_alt_to">To</string>
     <string name="settings_qbittorrent_pro_title">Feature not available</string>
     <string name="settings_qbittorrent_pro_message">This feature is only available on qBittorrent PRO version!</string>
+    <string name="action_toggle_alternative_rates">Alternative speeds</string>
+    <string name="toggledAlternativeRates">Changing speed limits</string>
+
 </resources>

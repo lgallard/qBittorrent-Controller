@@ -221,4 +221,7 @@
     <string name="action_file_high_priority">Hög</string>
     <string name="action_file_normal_priority">Normal</string>
     <string name="action_file_maximum_priority">Högsta</string>
+    <string name="action_toggle_alternative_rates">Alternativa hastigheter</string>
+    <string name="toggledAlternativeRates">Ändrade hastighetsgränser</string>
+
 </resources>

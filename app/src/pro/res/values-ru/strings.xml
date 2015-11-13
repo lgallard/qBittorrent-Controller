@@ -221,4 +221,7 @@
   <string name="action_file_high_priority">Высокий</string>
   <string name="action_file_maximum_priority">Максимальный </string>
   <string name="action_file_normal_priority">Обычный</string>
+  <string name="action_toggle_alternative_rates">Альтернативные скорости</string>
+  <string name="toggledAlternativeRates">Переключения ограничения скорости</string>
+
 </resources>
