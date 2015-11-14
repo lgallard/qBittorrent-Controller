@@ -50,6 +50,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -967,6 +968,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Use the query to search your data somehow
             searchField = intent.getStringExtra(SearchManager.QUERY);
 
+            Log.d("Debug", "Search for..." + searchField);
+
             // Autorefresh
             refreshSwipeLayout();
             refreshCurrent();
@@ -1088,31 +1091,51 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Handle open/close SearchView (using an item menu)
         final MenuItem menuItem = menu.findItem(R.id.action_search);
 
-        MenuItemCompat.setOnActionExpandListener(menuItem, new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                // Do something when collapsed
-                searchField = "";
-                refreshSwipeLayout();
-                refreshCurrent();
-                return true;  // Return true to collapse action view
-            }
-
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                // Do something when expanded
-                return true;  // Return true to expand action view
-            }
-        });
-
-        // When back is pressed, delete query field and close the SearchView using the item menu
+        // When back is pressed or the SearchView is close, delete the query field
+        // and close the SearchView using the item menu
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean queryTextFocused) {
                 if (!queryTextFocused) {
                     menuItem.collapseActionView();
                     searchView.setQuery("", false);
+                    searchField = "";
+
+                    refreshSwipeLayout();
+                    refreshCurrent();
                 }
+            }
+        });
+
+        // This must be implemented to override defaul searchview behaviour, in order to
+        // make it work with tablets
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                //Log.d("Debug", "onQueryTextSubmit - searchField: " + query);
+
+                // false: don't actually send the query. We are going to do something different
+                searchView.setQuery(query, false);
+
+                // Set the variable we use in the intent to perform the search
+                searchField = query;
+
+                // Refresh using the search field
+                refreshSwipeLayout();
+                refreshCurrent();
+
+                // Close the soft keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(menuItem.getActionView().getWindowToken(), 0);
+
+                // Here true means, override default searchview query
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
 
@@ -2659,7 +2682,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 return;
             }
 
-            // This delay is needed for resume action. Other actions have a
+            // This delay is needed for postCommaresume action. Other actions have a
             // fewer delay (1 second).
             int delay = 1;
 
@@ -2764,16 +2787,21 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             if ("alternativeSpeedLimitsEnabled".equals(command)) {
 
-                savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", "1".equals(result)?true:false);
-
                 try {
-                    if("1".equals(result)){
+
+                    if ("1".equals(result) == true) {
+                        savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", true);
                         altSpeedLimitsMenuItem.setChecked(true);
-                    }else{
+                    }
+
+
+                    // Here an else cannot be used, because result can be ""
+                    if ("0".equals(result) == true) {
+                        savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", false);
                         altSpeedLimitsMenuItem.setChecked(false);
                     }
-                } catch (Exception e) {
 
+                } catch (Exception e) {
                 }
 
 //                Log.d("Debug", "alternativeSpeedLimitsEnabled: " + result);
@@ -2967,6 +2995,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 connection400ErrorCounter = 0;
 
                 ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
+
+                Log.d("Debug", "Still looking for..."+searchField);
 
                 for (int i = 0; i < result.length; i++) {
 
