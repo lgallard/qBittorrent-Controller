@@ -1,4 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~   Copyright (c) 2014-2015 Luis M. Gallardo D.
+  ~   All rights reserved. This program and the accompanying materials
+  ~   are made available under the terms of the GNU Lesser General Public License v3.0
+  ~   which accompanies this distribution, and is available at
+  ~   http://www.gnu.org/licenses/lgpl.html
+  ~
+  -->
+
 <resources>
   <string name="app_name">qBittorrent Controller Pro</string>
   <string name="app_shortname">Controller Pro</string>
@@ -221,4 +230,7 @@
   <string name="action_file_high_priority">Высокий</string>
   <string name="action_file_maximum_priority">Максимальный </string>
   <string name="action_file_normal_priority">Обычный</string>
+  <string name="action_toggle_alternative_rates">Альтернативные скорости</string>
+  <string name="toggledAlternativeRates">Переключения ограничения скорости</string>
+
 </resources>

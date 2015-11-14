@@ -1,13 +1,11 @@
-/*******************************************************************************
- * Copyright (c) 2014 Luis M. Gallardo D..
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Public License v3.0
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/gpl.html
- * <p/>
- * Contributors:
- * Luis M. Gallardo D.
- ******************************************************************************/
+/*
+ *   Copyright (c) 2014-2015 Luis M. Gallardo D.
+ *   All rights reserved. This program and the accompanying materials
+ *   are made available under the terms of the GNU Lesser General Public License v3.0
+ *   which accompanies this distribution, and is available at
+ *   http://www.gnu.org/licenses/lgpl.html
+ *
+ */
 package com.lgallardo.qbittorrentclient;
 
 import android.util.Log;
@@ -146,6 +144,8 @@ public class JSONParser {
             // set http parameters
 
             url = protocol + "://" + hostname + ":" + port + "/" + url;
+
+//            Log.d("Debug", "url:" + url);
 
             HttpGet httpget = new HttpGet(url);
 
@@ -312,7 +312,7 @@ public class JSONParser {
         return jArray;
     }
 
-    public void postCommand(String command, String hash) throws JSONParserStatusCodeException {
+    public String postCommand(String command, String hash) throws JSONParserStatusCodeException {
 
         String key = "hash";
 
@@ -324,6 +324,9 @@ public class JSONParser {
         String fileId = "";
 
         String filePriority = "";
+
+
+        String result = "";
 
 
         StringBuilder fileContent = null;
@@ -457,6 +460,25 @@ public class JSONParser {
 
         }
 
+        if ("toggleAlternativeSpeedLimits".equals(command)) {
+
+//            Log.d("Debug", "Toggling alternative rates");
+
+            url = "command/toggleAlternativeSpeedLimits";
+            key = "hashes";
+
+        }
+
+
+        if ("alternativeSpeedLimitsEnabled".equals(command)) {
+
+//            Log.d("Debug", "Getting alternativeSpeedLimitsEnabled");
+
+            url = "command/alternativeSpeedLimitsEnabled";
+
+            key = "hashes";
+        }
+
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && !subfolder.equals("")) {
@@ -508,7 +530,7 @@ public class JSONParser {
                 hash = hash_uri.toString();
             }
 
-            // In order to pass the has we must set the pair name value
+            // In order to pass the hash we must set the pair name value
             BasicNameValuePair bnvp = new BasicNameValuePair(key, hash);
 
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
@@ -531,7 +553,7 @@ public class JSONParser {
             httpget.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
             // Set content type and urls
-            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command)) {
+            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command) || "toggleAlternativeSpeedLimits".equals(command) || "alternativeSpeedLimitsEnabled".equals(command)) {
                 httpget.setHeader("Content-Type", urlContentType);
 
             }
@@ -553,19 +575,12 @@ public class JSONParser {
                 // Add boundary
                 builder.setBoundary(boundary);
 
-                // Add text expected by qBittorrent server
-                // builder.addTextBody("text",
-                // "Content-Disposition: form-data; name=\"torrents\"; filename=\""
-                // + hash + "\"\n"
-                // + "Content-Type: application/x-bittorrent\n\n");
-
                 // Add torrent file as binary
                 File file = new File(hash);
                 // FileBody fileBody = new FileBody(file);
                 // builder.addPart("file", fileBody);
 
                 builder.addBinaryBody("upfile", file, ContentType.DEFAULT_BINARY, hash);
-//                builder.addBinaryBody("upfile", file, ContentType.create(urlContentType), hash);
 
                 // Build entity
                 HttpEntity entity = builder.build();
@@ -588,7 +603,11 @@ public class JSONParser {
 
             HttpEntity httpEntity = httpResponse.getEntity();
 
-            is = httpEntity.getContent();
+            result = EntityUtils.toString(httpEntity);
+
+//            Log.d("Debug", "JSONPArser - command result: " + result);
+
+            return result;
 
 
         } catch (UnsupportedEncodingException e) {
@@ -598,7 +617,6 @@ public class JSONParser {
             e.printStackTrace();
         } catch (IOException e) {
             Log.e("Debug", "IO: " + e.toString());
-            // e.printStackTrace();
             httpclient.getConnectionManager().shutdown();
             throw new JSONParserStatusCodeException(TIMEOUT_ERROR);
         } catch (JSONParserStatusCodeException e) {
@@ -612,6 +630,8 @@ public class JSONParser {
             // immediate deallocation of all system resources
             httpclient.getConnectionManager().shutdown();
         }
+
+        return null;
 
     }
 

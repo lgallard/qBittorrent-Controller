@@ -1,14 +1,10 @@
-/**
- * ****************************************************************************
- * Copyright (c) 2014 Luis M. Gallardo D..
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Public License v3.0
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/gpl.html
- * <p>
- * Contributors:
- * Luis M. Gallardo D.
- * ****************************************************************************
+/*
+ *   Copyright (c) 2014-2015 Luis M. Gallardo D.
+ *   All rights reserved. This program and the accompanying materials
+ *   are made available under the terms of the GNU Lesser General Public License v3.0
+ *   which accompanies this distribution, and is available at
+ *   http://www.gnu.org/licenses/lgpl.html
+ *
  */
 package com.lgallardo.qbittorrentclient;
 
@@ -40,6 +36,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -53,6 +50,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -149,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static String lastState;
     protected static long notification_period;
     protected static boolean header;
+    public static boolean alternative_speeds;
 
     // Option
     protected static String global_max_num_connections;
@@ -243,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private boolean isSearchOpened = false;
     private EditText editSearch;
 
-    // Packge info
+    // Package info
     public static String packageName;
 
     // Action (states)
@@ -252,6 +251,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Connection error counter
     private int connection400ErrorCounter = 0;
 
+    // Alternative rate
+    private MenuItem altSpeedLimitsMenuItem;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,8 +262,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Get preferences
         getSettings();
-
-        Log.d("Debug", "lastState: " + lastState);
 
         // Set alarm for checking completed torrents, if not set
         if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), NotifierService.class), PendingIntent.FLAG_NO_CREATE) == null) {
@@ -549,7 +550,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Search bar in Material Design
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        mSearchAction = menu.findItem(R.id.action_search);
+        altSpeedLimitsMenuItem = menu.findItem(R.id.action_toggle_alternative_rate);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -812,10 +813,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void onBackPressed() {
 
         // If drawer is opened, close it
-//        if(drawerLayout.isDrawerOpen(drawerList)){
-//            drawerLayout.closeDrawer(drawerList);
-//            return;
-//        }
         if (drawerLayout.isDrawerOpen(mRecyclerView)) {
             drawerLayout.closeDrawer(mRecyclerView);
             return;
@@ -941,6 +938,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 } else {
                     // Execute the task in background
                     new qBittorrentTask().execute(params);
+
+                    // Check if  alternative speed limit is set
+                    new qBittorrentCommand().execute(new String[]{"alternativeSpeedLimitsEnabled", ""});
                 }
 
             }
@@ -968,7 +968,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Use the query to search your data somehow
             searchField = intent.getStringExtra(SearchManager.QUERY);
 
+//            Log.d("Debug", "Search for..." + searchField);
+
             // Autorefresh
+            refreshSwipeLayout();
             refreshCurrent();
         }
 
@@ -977,7 +980,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Add torrent (file, url or magnet)
             addTorrentByIntent(intent);
 
-            // // Activity is visble
+            // // Activity is visible
             activityIsVisible = true;
 
             // Autorefresh
@@ -1009,7 +1012,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //            Log.d("Debug", "lastState (handle intent):End " );
         } catch (Exception e) {
 
-            Log.e("Debug", "Handle intent: " + e.toString() );
+//            Log.e("Debug", "Handle intent: " + e.toString() );
 
         }
     }
@@ -1077,17 +1080,68 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        // Retrieve the SearchView and plug it into SearchManager
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Handle open/close SearchView (using an item menu)
+        final MenuItem menuItem = menu.findItem(R.id.action_search);
 
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-        }
+        // When back is pressed or the SearchView is close, delete the query field
+        // and close the SearchView using the item menu
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused) {
+                if (!queryTextFocused) {
+                    menuItem.collapseActionView();
+                    searchView.setQuery("", false);
+                    searchField = "";
+
+                    refreshSwipeLayout();
+                    refreshCurrent();
+                }
+            }
+        });
+
+        // This must be implemented to override defaul searchview behaviour, in order to
+        // make it work with tablets
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                //Log.d("Debug", "onQueryTextSubmit - searchField: " + query);
+
+                // false: don't actually send the query. We are going to do something different
+                searchView.setQuery(query, false);
+
+                // Set the variable we use in the intent to perform the search
+                searchField = query;
+
+                // Refresh using the search field
+                refreshSwipeLayout();
+                refreshCurrent();
+
+                // Close the soft keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(menuItem.getActionView().getWindowToken(), 0);
+
+                // Here true means, override default searchview query
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        // There is a bug setting the hint from searchable.xml, so force it
+        searchView.setQueryHint(getResources().getString(R.string.search_hint));
+
 
         return true;
     }
@@ -1143,9 +1197,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         switch (item.getItemId()) {
 
-            case R.id.action_search:
-                onSearchRequested();
-                return true;
             case R.id.action_refresh:
                 swipeRefresh();
                 return true;
@@ -1346,6 +1397,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         popBackStackPhoneView();
                     }
                 }
+                return true;
+            case R.id.action_toggle_alternative_rate:
+                toggleAlternativeSpeedLimits();
+
+                refreshAfterCommand(2);
+                swipeRefresh();
+
+                if (findViewById(R.id.one_frame) != null) {
+                    popBackStackPhoneView();
+                }
+
                 return true;
             case R.id.action_sortby_name:
                 saveSortBy(getResources().getStringArray(R.array.sortByValues)[0]);
@@ -1806,6 +1868,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    public void toggleAlternativeSpeedLimits() {
+        // Execute the task in background
+        qBittorrentCommand qtc = new qBittorrentCommand();
+        qtc.execute(new String[]{"toggleAlternativeSpeedLimits", ""});
+
+    }
+
+
     public void setQBittorrentPrefefrences(String hash) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
@@ -2171,6 +2241,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get package name
         packageName = pInfo.packageName;
 
+        // Get AlternativeSpeedLimitsEnabled value
+        alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
+
     }
 
     // Get Options
@@ -2211,6 +2284,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         scheduler_days = sharedPrefs.getString("scheduler_days", "NULL");
 
+        // Check alternatives speed
+        alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
 
     }
 
@@ -2246,31 +2321,46 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         currentState = state;
 
-        // Save options locally
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        Editor editor = sharedPrefs.edit();
-
-        // Save key-values
-        editor.putString("lastState", state);
-
-        // Commit changes
-        editor.apply();
-
+        savePreferenceAsString("lastState", state);
     }
 
     private void saveSortBy(String sortBy) {
         MainActivity.sortby = sortBy;
-        // Save options locally
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+
+        savePreferenceAsString("sortby", sortBy);
+    }
+
+    // Save key-value preference as String
+    private void savePreferenceAsString(String preference, String value) {
+
+        // Save preference locally
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = sharedPrefs.edit();
 
         // Save key-values
-        editor.putString("sortby", sortBy);
+        editor.putString(preference, value);
 
         // Commit changes
         editor.apply();
 
     }
+
+
+    // Save key-value preference as boolean
+    private void savePreferenceAsBoolean(String preference, boolean value) {
+
+        // Save preference locally
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor editor = sharedPrefs.edit();
+
+        // Save key-values
+        editor.putBoolean(preference, value);
+
+        // Commit changes
+        editor.apply();
+
+    }
+
 
     private void saveReverseOrder(boolean reverse_order) {
         MainActivity.reverse_order = reverse_order;
@@ -2408,20 +2498,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         @Override
         protected void onPostExecute(String[] result) {
 
-
             MainActivity.cookie = result[0];
 
-
-            // Save options locally
-            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-            Editor editor = sharedPrefs.edit();
-
-            // Save key-values
-            editor.putString("qbCookie", result[0]);
-
-
-            // Commit changes
-            editor.apply();
+            // Save cookie
+            savePreferenceAsString("qbCookie", result[0]);
 
             // Execute the task in background
             new qBittorrentTask().execute(params);
@@ -2468,6 +2548,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
 
 
+
             return new String[]{apiVersion, intents[0].getStringExtra("currentState")};
 
         }
@@ -2504,15 +2585,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             }
 
-            // Save options locally
-            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-            Editor editor = sharedPrefs.edit();
-
-            // Save key-values
-            editor.putString("qb_version", qb_version);
-
-            // Commit changes
-            editor.apply();
+            // Save version
+            savePreferenceAsString("qb_version", qb_version);
 
 
             // Refresh
@@ -2544,10 +2618,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
     // Here is where the action happens
-    private class qBittorrentCommand extends AsyncTask<String, Integer, String> {
+    private class qBittorrentCommand extends AsyncTask<String, Integer, String[]> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String[] doInBackground(String... params) {
+
+            String result = "";
 
             // Get values from preferences
             getSettings();
@@ -2561,7 +2637,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 httpStatusCode = 0;
 
-                jParser.postCommand(params[0], params[1]);
+                result = jParser.postCommand(params[0], params[1]);
 
             } catch (JSONParserStatusCodeException e) {
 
@@ -2569,12 +2645,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             }
 
-            return params[0];
+            return (new String[]{params[0],result});
 
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(String[] results) {
+
+
+            String command = results[0];
+            String result = results[1];
 
             // Handle HTTP status code
 
@@ -2602,106 +2682,133 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 return;
             }
 
-            // This delay is needed for resume action. Other actions have a
+            // This delay is needed for postCommaresume action. Other actions have a
             // fewer delay (1 second).
             int delay = 1;
 
             int messageId = R.string.connection_error;
 
-            if (result == null) {
+            if (command == null) {
                 messageId = R.string.connection_error;
             }
 
-            if ("start".equals(result)) {
+            if ("start".equals(command)) {
                 messageId = R.string.torrentStarted;
 
                 // Needed to refresh after a resume and see the change
                 delay = 3;
             }
 
-            if ("pause".equals(result)) {
+            if ("pause".equals(command)) {
                 messageId = R.string.torrentPaused;
             }
 
-            if ("delete".equals(result)) {
+            if ("delete".equals(command)) {
                 messageId = R.string.torrentDeleted;
             }
 
-            if ("deleteDrive".equals(result)) {
+            if ("deleteDrive".equals(command)) {
                 messageId = R.string.torrentDeletedDrive;
             }
 
-            if ("addTorrent".equals(result)) {
+            if ("addTorrent".equals(command)) {
                 messageId = R.string.torrentAdded;
             }
 
-            if ("addTorrentFile".equals(result)) {
+            if ("addTorrentFile".equals(command)) {
                 messageId = R.string.torrentFileAdded;
             }
 
-            if ("pauseAll".equals(result)) {
+            if ("pauseAll".equals(command)) {
                 messageId = R.string.AllTorrentsPaused;
             }
 
-            if ("resumeAll".equals(result)) {
+            if ("resumeAll".equals(command)) {
                 messageId = R.string.AllTorrentsResumed;
 
                 // Needed to refresh after a "resume all" and see the changes
                 delay = 3;
             }
 
-            if ("increasePrio".equals(result)) {
+            if ("increasePrio".equals(command)) {
                 messageId = R.string.increasePrioTorrent;
             }
 
-            if ("decreasePrio".equals(result)) {
+            if ("decreasePrio".equals(command)) {
                 messageId = R.string.decreasePrioTorrent;
             }
 
-            if ("maxPrio".equals(result)) {
+            if ("maxPrio".equals(command)) {
                 messageId = R.string.priorityUpdated;
             }
 
-            if ("minPrio".equals(result)) {
+            if ("minPrio".equals(command)) {
                 messageId = R.string.priorityUpdated;
             }
 
-            if ("setFilePrio".equals(result)) {
+            if ("setFilePrio".equals(command)) {
                 messageId = R.string.priorityUpdated;
             }
 
 
-            if ("setQBittorrentPrefefrences".equals(result)) {
+            if ("setQBittorrentPrefefrences".equals(command)) {
                 messageId = R.string.setQBittorrentPrefefrences;
             }
 
-            if ("setUploadRateLimit".equals(result)) {
+            if ("setUploadRateLimit".equals(command)) {
                 messageId = R.string.setUploadRateLimit;
                 if (findViewById(R.id.one_frame) != null) {
                     popBackStackPhoneView();
                 }
             }
 
-            if ("setDownloadRateLimit".equals(result)) {
+            if ("setDownloadRateLimit".equals(command)) {
                 messageId = R.string.setDownloadRateLimit;
                 if (findViewById(R.id.one_frame) != null) {
                     popBackStackPhoneView();
                 }
             }
 
-            if ("recheckSelected".equals(result)) {
+            if ("recheckSelected".equals(command)) {
                 messageId = R.string.torrentsRecheck;
             }
 
-            if ("toggleFirstLastPiecePrio".equals(result)) {
+            if ("toggleFirstLastPiecePrio".equals(command)) {
                 messageId = R.string.torrentstogglefisrtLastPiecePrio;
             }
 
-            if ("toggleSequentialDownload".equals(result)) {
+            if ("toggleSequentialDownload".equals(command)) {
                 messageId = R.string.torrentstoggleSequentialDownload;
             }
 
-            if (!("startSelected".equals(result)) && !("pauseSelected".equals(result)) && !("deleteSelected".equals(result)) && !("deleteDriveSelected".equals(result)) && !("setUploadRateLimit".equals(result)) && !("setDownloadRateLimit".equals(result)) && !("recheckSelected".equals(result))) {
+            if ("toggleAlternativeSpeedLimits".equals(command)) {
+                messageId = R.string.toggledAlternativeRates;
+            }
+
+            if ("alternativeSpeedLimitsEnabled".equals(command)) {
+
+                try {
+
+                    if ("1".equals(result) == true) {
+                        savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", true);
+                        altSpeedLimitsMenuItem.setChecked(true);
+                    }
+
+
+                    // Here an else cannot be used, because result can be ""
+                    if ("0".equals(result) == true) {
+                        savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", false);
+                        altSpeedLimitsMenuItem.setChecked(false);
+                    }
+
+                } catch (Exception e) {
+                }
+
+//                Log.d("Debug", "alternativeSpeedLimitsEnabled: " + result);
+
+            }
+
+            if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command)) ) {
                 Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
 
                 // Refresh
@@ -2769,7 +2876,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             try {
                                 sequentialDownload = json.getBoolean(TAG_SEQDL);
                             } catch (Exception e) {
-                                firstLastPiecePrio = false;
+                                sequentialDownload = false;
                             }
 
 
@@ -2796,6 +2903,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         } catch (Exception e) {
                             torrents[i].setDownloaded(size);
                         }
+
 
                         if (packageName.equals("com.lgallardo.qbittorrentclient")) {
                             // Info free
@@ -2887,6 +2995,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 connection400ErrorCounter = 0;
 
                 ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
+
+//                Log.d("Debug", "Still looking for..."+searchField);
 
                 for (int i = 0; i < result.length; i++) {
 
@@ -3032,6 +3142,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+                    String AltSpeedInfo;
+
+                    if(alternative_speeds){
+
+                        AltSpeedInfo = Character.toString('\u2713') + "  ";
+                    }else{
+                        AltSpeedInfo = "";
+                    }
+
+
                     // Got some results
                     if (torrentsFiltered.size() > 0) {
 
@@ -3047,8 +3167,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             headerInfo.setVisibility(View.GONE);
                         }
 
-                        uploadSpeedTextView.setText(Character.toString('\u2191') + " " + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
-                        downloadSpeedTextView.setText(Character.toString('\u2193') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
+
+                        uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
+                        downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
 
 
                         //Set first and second fragments
@@ -3134,7 +3255,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         TextView uploadSpeedTextView = (TextView) findViewById(R.id.uploadSpeed);
                         TextView downloadSpeedTextView = (TextView) findViewById(R.id.downloadSpeed);
 
-                        uploadSpeedTextView.setText("");
+                        uploadSpeedTextView.setText(AltSpeedInfo);
                         downloadSpeedTextView.setText("");
 
 
@@ -3182,9 +3303,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 } catch (Exception e) {
                     Log.e("ADAPTER", e.toString());
                 }
-
-                // Clear serch field
-                searchField = "";
 
             }
 

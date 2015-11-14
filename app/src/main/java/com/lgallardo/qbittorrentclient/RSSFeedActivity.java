@@ -1,3 +1,12 @@
+/*
+ *   Copyright (c) 2014-2015 Luis M. Gallardo D.
+ *   All rights reserved. This program and the accompanying materials
+ *   are made available under the terms of the GNU Lesser General Public License v3.0
+ *   which accompanies this distribution, and is available at
+ *   http://www.gnu.org/licenses/lgpl.html
+ *
+ */
+
 package com.lgallardo.qbittorrentclient;
 
 import android.app.AlertDialog;
@@ -197,7 +206,7 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         }
 
-        Log.d("Debug", "rss_feeds: " + rss_feeds);
+//        Log.d("Debug", "rss_feeds: " + rss_feeds);
 
         editor.putString("rss_feeds", rss_feeds);
         // Commit changes
@@ -532,7 +541,7 @@ public class RSSFeedActivity extends AppCompatActivity {
             }
 
 
-            Log.d("Debug", "RSSFeedActivity - packageName: " + packageName);
+//            Log.d("Debug", "RSSFeedActivity - packageName: " + packageName);
 
             // Get theme UI preference from preferences
             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -692,7 +701,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                             rssFeed.setNotifyNew(Boolean.parseBoolean(feedValues[4]));
 
                         } catch (Exception e) {
-                            Log.e("Debug", e.getMessage());
+                                Log.e("Debug", e.getMessage());
                             Log.e("Debug", e.toString());
                             e.printStackTrace();
                         }
