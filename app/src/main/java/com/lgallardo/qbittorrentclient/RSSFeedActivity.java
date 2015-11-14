@@ -701,7 +701,7 @@ public class RSSFeedActivity extends AppCompatActivity {
                             rssFeed.setNotifyNew(Boolean.parseBoolean(feedValues[4]));
 
                         } catch (Exception e) {
-                            Log.e("Debug", e.getMessage());
+                                Log.e("Debug", e.getMessage());
                             Log.e("Debug", e.toString());
                             e.printStackTrace();
                         }
