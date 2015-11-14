@@ -97,6 +97,10 @@ class TorrentListAdapter extends ArrayAdapter<String> {
                 icon.setImageResource(R.drawable.ic_action_recheck);
             }
 
+            if ("error".equals(state)) {
+                icon.setImageResource(R.drawable.error);
+            }
+
             if(MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
                 // Set progress bar
                 ProgressBar progressBar = (ProgressBar) row.findViewById(R.id.progressBar1);
