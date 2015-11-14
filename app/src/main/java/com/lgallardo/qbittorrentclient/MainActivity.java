@@ -968,7 +968,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Use the query to search your data somehow
             searchField = intent.getStringExtra(SearchManager.QUERY);
 
-            Log.d("Debug", "Search for..." + searchField);
+//            Log.d("Debug", "Search for..." + searchField);
 
             // Autorefresh
             refreshSwipeLayout();
@@ -2996,7 +2996,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
 
-                Log.d("Debug", "Still looking for..."+searchField);
+//                Log.d("Debug", "Still looking for..."+searchField);
 
                 for (int i = 0; i < result.length; i++) {
 

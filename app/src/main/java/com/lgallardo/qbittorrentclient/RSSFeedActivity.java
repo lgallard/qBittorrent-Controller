@@ -206,7 +206,7 @@ public class RSSFeedActivity extends AppCompatActivity {
 
         }
 
-        Log.d("Debug", "rss_feeds: " + rss_feeds);
+//        Log.d("Debug", "rss_feeds: " + rss_feeds);
 
         editor.putString("rss_feeds", rss_feeds);
         // Commit changes
@@ -541,7 +541,7 @@ public class RSSFeedActivity extends AppCompatActivity {
             }
 
 
-            Log.d("Debug", "RSSFeedActivity - packageName: " + packageName);
+//            Log.d("Debug", "RSSFeedActivity - packageName: " + packageName);
 
             // Get theme UI preference from preferences
             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
