@@ -2791,6 +2791,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     if ("1".equals(result) == true) {
                         savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", true);
+                        altSpeedLimitsMenuItem.setEnabled(true);
                         altSpeedLimitsMenuItem.setChecked(true);
                     }
 
@@ -2798,6 +2799,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // Here an else cannot be used, because result can be ""
                     if ("0".equals(result) == true) {
                         savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", false);
+                        altSpeedLimitsMenuItem.setEnabled(true);
                         altSpeedLimitsMenuItem.setChecked(false);
                     }
 

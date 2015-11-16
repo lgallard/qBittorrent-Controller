@@ -160,6 +160,7 @@
     <item
         android:id="@+id/action_toggle_alternative_rate"
         android:title="@string/action_toggle_alternative_rates"
+        android:enabled="false"
         android:checkable="true"
         app:showAsAction="ifRoom" />
 
