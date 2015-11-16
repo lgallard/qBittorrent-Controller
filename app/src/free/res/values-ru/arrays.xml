@@ -83,16 +83,6 @@
     <item name="7">DownloadSpeed</item>
     <item name="8">UploadSpeed</item>
   </string-array>
-  <string-array name="qbVersion">
-    <item>2.x</item>
-    <item>3.1.x</item>
-    <item>3.2.x</item>
-  </string-array>
-  <string-array name="qbVersionValues">
-    <item>2.x</item>
-    <item>3.1.x</item>
-    <item>3.2.x</item>
-  </string-array>
   <string-array name="navigation_drawer_items_array">
     <item>Все</item>
     <item>Скачивающиеся</item>
