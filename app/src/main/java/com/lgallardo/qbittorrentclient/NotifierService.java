@@ -86,6 +86,8 @@ public class NotifierService extends BroadcastReceiver {
 
         if (enable_notifications) {
 
+            CustomLogger.saveReportMessage("NotifierService", "Notifications are disabled");
+
             String state = "all";
 
             // Get Settings thr params?
@@ -124,6 +126,8 @@ public class NotifierService extends BroadcastReceiver {
 
 //            Log.d("Debug", "onReceive reached");
 
+        }else{
+            CustomLogger.saveReportMessage("NotifierService", "Notifications are disabled");
         }
 
     }
@@ -192,6 +196,7 @@ public class NotifierService extends BroadcastReceiver {
 
 
     }
+
 
     class FetchTorrentListTask extends AsyncTask<String, Integer, Torrent[]> {
 

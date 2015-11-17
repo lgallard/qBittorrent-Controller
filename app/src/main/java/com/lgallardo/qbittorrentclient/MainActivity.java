@@ -899,6 +899,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void refresh(String state) {
 
+        CustomLogger.saveReportMessage("MainActivity", "Refreshing");
+
         // If Contextual Action Bar is open, don't refresh
         if (firstFragment != null && firstFragment.mActionMode != null) {
             return;
@@ -930,6 +932,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             if (hostname.equals("")) {
                 qBittorrentNoSettingsFoundDialog(R.string.info, R.string.about_help1);
             } else {
+
+                Log.d("Report", "Report: " + CustomLogger.getReport());
 
                 if (qb_version.equals("3.2.x") && (cookie == null || cookie.equals(""))) {
                     // Request new cookie and execute task in background
