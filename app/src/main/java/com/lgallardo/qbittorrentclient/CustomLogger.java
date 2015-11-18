@@ -15,7 +15,11 @@ public class CustomLogger {
 
 
     public static String reportLog = "";
-    public static boolean reporting = false;
+    public static boolean generateReport = false;
+    public static boolean notifierServiceReportReady = false;
+    public static boolean mainActivityReportReady = false;
+    public static boolean rssReportReady = false;
+    public static boolean reportReady = false;
 
 
     public static void saveReportMessage(String tag, String message) {
