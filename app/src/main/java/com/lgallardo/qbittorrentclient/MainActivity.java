@@ -929,6 +929,112 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
+            // TODO: delete
+
+//            hostname = sharedPrefs.getString("hostname", "");
+//            subfolder = sharedPrefs.getString("subfolder", "");
+//
+//            protocol = sharedPrefs.getString("protocol", "NULL");
+//
+//            // If user leave the field empty, set 8080 port
+//            try {
+//                port = Integer.parseInt(sharedPrefs.getString("port", "8080"));
+//            } catch (NumberFormatException e) {
+//                port = 8080;
+//
+//            }
+//            username = sharedPrefs.getString("username", "NULL");
+//            password = sharedPrefs.getString("password", "NULL");
+//            https = sharedPrefs.getBoolean("https", false);
+//
+//            // Check https
+//            if (https) {
+//                protocol = "https";
+//            } else {
+//                protocol = "http";
+//            }
+//
+//            // Get refresh info
+//            auto_refresh = sharedPrefs.getBoolean("auto_refresh", true);
+//
+//            try {
+//                refresh_period = Integer.parseInt(sharedPrefs.getString("refresh_period", "120000"));
+//            } catch (NumberFormatException e) {
+//                refresh_period = 120000;
+//            }
+//
+//            // Get connection and data timeouts
+//            try {
+//                connection_timeout = Integer.parseInt(sharedPrefs.getString("connection_timeout", "10"));
+//
+//                // New default value to make it work with qBittorrent 3.2.x
+//                if (connection_timeout < 10) {
+//                    connection_timeout = 10;
+//                }
+//            } catch (NumberFormatException e) {
+//                connection_timeout = 10;
+//            }
+//
+//            try {
+//                data_timeout = Integer.parseInt(sharedPrefs.getString("data_timeout", "20"));
+//
+//                // New default value to make it work with qBittorrent 3.2.x
+//                if (data_timeout < 20) {
+//                    data_timeout = 20;
+//                }
+//
+//            } catch (NumberFormatException e) {
+//                data_timeout = 20;
+//            }
+//
+//            sortby = sharedPrefs.getString("sortby", "NULL");
+//            reverse_order = sharedPrefs.getBoolean("reverse_order", false);
+//
+//            dark_ui = sharedPrefs.getBoolean("dark_ui", false);
+//
+//            qb_version = sharedPrefs.getString("qb_version", "3.2.x");
+//
+//            MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
+//
+//            // Get last state
+//            lastState = sharedPrefs.getString("lastState", "all");
+//
+//            // Notification check
+//            try {
+//                notification_period = Long.parseLong(sharedPrefs.getString("notification_period", "120000L"));
+//            } catch (NumberFormatException e) {
+//                notification_period = 120000L;
+//            }
+//
+//            header = sharedPrefs.getBoolean("header", true);
+//
+//            // Get package info
+//            PackageInfo pInfo = null;
+//            try {
+//                pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+//            } catch (PackageManager.NameNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//
+//            // Get package name
+//            packageName = pInfo.packageName;
+//
+//            // Get AlternativeSpeedLimitsEnabled value
+//            alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
+
+
+
+
+            // END TODO
+
+            // Logs for reporting
+
+            CustomLogger.saveReportMessage("Main", "currentServer: " + currentServer);
+            CustomLogger.saveReportMessage("Main", "hostname: " + hostname);
+            CustomLogger.saveReportMessage("Main", "username: " + username);
+            CustomLogger.saveReportMessage("Main", "password: [is" + password.isEmpty());
+
+
             if (hostname.equals("")) {
                 qBittorrentNoSettingsFoundDialog(R.string.info, R.string.about_help1);
             } else {
