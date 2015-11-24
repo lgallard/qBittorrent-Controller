@@ -1053,6 +1053,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 //            Log.e("Debug", "Handle intent: " + e.toString() );
 
+            CustomLogger.saveReportMessage("Main","[handleIntent]: " + e.toString());
+
         }
     }
 
@@ -1099,6 +1101,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     addTorrent(Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8")));
                 } catch (UnsupportedEncodingException e) {
                     Log.e("Debug", "Check URL: " + e.toString());
+                    CustomLogger.saveReportMessage("Main", "[addTorrentByIntent] - Check URL: " + e.toString());
+
                 }
 
             }
@@ -2969,10 +2973,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 torrents = null;
                 Log.e("JSONParserStatusCode", e.toString());
+                CustomLogger.saveReportMessage("Main", "[qBittorrentTask - JSONParserStatusCode]: " + e.toString());
+
 
             } catch (Exception e) {
                 torrents = null;
                 Log.e("MAIN:", e.toString());
+                CustomLogger.saveReportMessage("Main", "[qBittorrentTask - Exception]: " + e.toString());
             }
 
             return torrents;
@@ -3176,6 +3183,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     } catch (IllegalStateException le) {
 
                         Log.e("Debug", "IllegalStateException: " + le.toString());
+                        CustomLogger.saveReportMessage("Main", "[qBittorrentTask - IllegalStateException]: " + le.toString());
                     }
 
                     // Create the about fragment
@@ -3345,6 +3353,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 } catch (Exception e) {
                     Log.e("ADAPTER", e.toString());
+                    CustomLogger.saveReportMessage("Main", "[qBittorrentTask - AdapterException]: " + e.toString());
                 }
 
             }
@@ -3377,6 +3386,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 httpStatusCode = e.getCode();
                 Log.e("JSONParserStatusCode", e.toString());
+                CustomLogger.saveReportMessage("Main", "[qBittorrentOptions - JSONParserStatusCode]: " + e.toString());
             }
 
             if (json != null) {
@@ -3430,6 +3440,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 } catch (Exception e) {
                     Log.e("MAIN:", e.toString());
+                    CustomLogger.saveReportMessage("Main", "[qBittorrentOptions - Exception]: " + e.toString());
                     return null;
                 }
 
