@@ -15,7 +15,7 @@ public class CustomLogger {
 
 
     public static String reportLog = "";
-    public static boolean generateReport = false;
+    public static boolean reporting = false;
     public static boolean notifierServiceReportReady = false;
     public static boolean mainActivityReportReady = false;
     public static boolean rssReportReady = false;
@@ -32,4 +32,11 @@ public class CustomLogger {
         return reportLog;
     }
 
+    public static boolean isReporting() {
+        return reporting;
+    }
+
+    public static void setReporting(boolean reporting) {
+        CustomLogger.reporting = reporting;
+    }
 }

@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Alternative rate
     private MenuItem altSpeedLimitsMenuItem;
-
+    private boolean enable_notifications;
 
 
     @Override
@@ -929,68 +929,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
-            // TODO: delete
-
-//
-//            qb_version = sharedPrefs.getString("qb_version", "3.2.x");
-//
-//            MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
-//
-//            // Get last state
-//            lastState = sharedPrefs.getString("lastState", "all");
-//
-//            // Notification check
-//            try {
-//                notification_period = Long.parseLong(sharedPrefs.getString("notification_period", "120000L"));
-//            } catch (NumberFormatException e) {
-//                notification_period = 120000L;
-//            }
-//
-//            header = sharedPrefs.getBoolean("header", true);
-//
-//            // Get package info
-//            PackageInfo pInfo = null;
-//            try {
-//                pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-//            } catch (PackageManager.NameNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//
-//            // Get package name
-//            packageName = pInfo.packageName;
-//
-//            // Get AlternativeSpeedLimitsEnabled value
-//            alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
-
-
-
-
-            // END TODO
-
             // Logs for reporting
-
-            CustomLogger.saveReportMessage("Main", "currentServer: " + currentServer);
-            CustomLogger.saveReportMessage("Main", "hostname: " + hostname);
-            CustomLogger.saveReportMessage("Main", "https: " + https);
-            CustomLogger.saveReportMessage("Main", "port: " + port);
-            CustomLogger.saveReportMessage("Main", "subfolder: " + subfolder);
-            CustomLogger.saveReportMessage("Main", "protocol: " + protocol);
-
-            CustomLogger.saveReportMessage("Main", "username: " + username);
-            CustomLogger.saveReportMessage("Main", "password: [is" + (password.isEmpty()?"":" not") + " empty]");
-
-            CustomLogger.saveReportMessage("Main", "Auto-refresh?: " + auto_refresh);
-            CustomLogger.saveReportMessage("Main", "Refresh period: " + refresh_period);
-
-            CustomLogger.saveReportMessage("Main", "Connection timeout: " + connection_timeout);
-            CustomLogger.saveReportMessage("Main", "Data timeout: " + data_timeout);
-
-            CustomLogger.saveReportMessage("Main", "dark_ui: " + dark_ui);
-            CustomLogger.saveReportMessage("Main", "qb_version: " + qb_version);
-
-            
-
-
+            if(CustomLogger.isReporting()){
+                generateReport();
+            }
 
             if (hostname.equals("")) {
                 qBittorrentNoSettingsFoundDialog(R.string.info, R.string.about_help1);
@@ -1019,6 +961,36 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
             }
         }
+
+    }
+
+    // This method adds information to generate a report for support
+    private void generateReport(){
+        CustomLogger.saveReportMessage("Main", "currentServer: " + currentServer);
+        CustomLogger.saveReportMessage("Main", "hostname: " + hostname);
+        CustomLogger.saveReportMessage("Main", "https: " + https);
+        CustomLogger.saveReportMessage("Main", "port: " + port);
+        CustomLogger.saveReportMessage("Main", "subfolder: " + subfolder);
+        CustomLogger.saveReportMessage("Main", "protocol: " + protocol);
+
+        CustomLogger.saveReportMessage("Main", "username: " + username);
+        CustomLogger.saveReportMessage("Main", "password: [is" + (password.isEmpty()?"":" not") + " empty]");
+
+        CustomLogger.saveReportMessage("Main", "Auto-refresh?: " + auto_refresh);
+        CustomLogger.saveReportMessage("Main", "Refresh period: " + refresh_period);
+
+        CustomLogger.saveReportMessage("Main", "Connection timeout: " + connection_timeout);
+        CustomLogger.saveReportMessage("Main", "Data timeout: " + data_timeout);
+
+        CustomLogger.saveReportMessage("Main", "dark_ui: " + dark_ui);
+        CustomLogger.saveReportMessage("Main", "qb_version: " + qb_version);
+
+        CustomLogger.saveReportMessage("Main", "Cookie: [is" + ((cookie != null && cookie.isEmpty())?"":" not") + " empty]");
+
+        CustomLogger.saveReportMessage("Main", "enable_notifications: " + enable_notifications);
+        CustomLogger.saveReportMessage("Main", "notification_period: " + notification_period);
+
+        CustomLogger.saveReportMessage("Main", "packageName: " + packageName);
 
     }
 
@@ -2289,6 +2261,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         lastState = sharedPrefs.getString("lastState", "all");
 
         // Notification check
+        enable_notifications = sharedPrefs.getBoolean("enable_notifications", false);
+
         try {
             notification_period = Long.parseLong(sharedPrefs.getString("notification_period", "120000L"));
         } catch (NumberFormatException e) {
