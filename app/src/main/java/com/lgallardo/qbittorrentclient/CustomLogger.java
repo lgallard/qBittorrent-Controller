@@ -18,8 +18,6 @@ public class CustomLogger {
     public static boolean reporting = false;
     public static boolean notifierServiceReportReady = false;
     public static boolean mainActivityReportReady = false;
-    public static boolean rssReportReady = false;
-    public static boolean reportReady = false;
 
 
     public static void saveReportMessage(String tag, String message) {
@@ -38,5 +36,22 @@ public class CustomLogger {
 
     public static void setReporting(boolean reporting) {
         CustomLogger.reporting = reporting;
+    }
+
+
+    public static boolean isNotifierServiceReportReady() {
+        return notifierServiceReportReady;
+    }
+
+    public static void setNotifierServiceReportReady(boolean notifierServiceReportReady) {
+        CustomLogger.notifierServiceReportReady = notifierServiceReportReady;
+    }
+
+    public static boolean isMainActivityReportReady() {
+        return mainActivityReportReady;
+    }
+
+    public static void setMainActivityReportReady(boolean mainActivityReportReady) {
+        CustomLogger.mainActivityReportReady = mainActivityReportReady;
     }
 }

@@ -75,18 +75,13 @@ public class NotifierService extends BroadcastReceiver {
 
         getSettings();
 
-//        Log.d("Debug", "Cookie:" + cookie);
-//        Log.d("Debug", "hostname: " + hostname);
-//        Log.d("Debug", "port: " + port);
-//        Log.d("Debug", "usernmae: " + username);
-//        Log.d("Debug", "password: " + password);
-//        Log.d("Debug", "qb_version: " + qb_version);
-//        Log.d("Debug", "currentServer: " + currentServer);
-//        Log.d("Debug", "enable_notifications: " + enable_notifications);
+
+        if(CustomLogger.isReporting()){
+            generateSettingsReport();
+        }
+
 
         if (enable_notifications) {
-
-            CustomLogger.saveReportMessage("NotifierService", "Notifications are disabled");
 
             String state = "all";
 
@@ -126,9 +121,33 @@ public class NotifierService extends BroadcastReceiver {
 
 //            Log.d("Debug", "onReceive reached");
 
-        }else{
-            CustomLogger.saveReportMessage("NotifierService", "Notifications are disabled");
         }
+
+
+
+
+
+    }
+
+    private void generateSettingsReport() {
+
+        CustomLogger.saveReportMessage("Notifier", "enable_notifications: " + enable_notifications);
+
+        CustomLogger.saveReportMessage("Notifier", "currentServer: " + currentServer);
+        CustomLogger.saveReportMessage("Notifier", "hostname: " + hostname);
+        CustomLogger.saveReportMessage("Notifier", "https: " + https);
+        CustomLogger.saveReportMessage("Notifier", "port: " + port);
+        CustomLogger.saveReportMessage("Notifier", "subfolder: " + subfolder);
+        CustomLogger.saveReportMessage("Notifier", "protocol: " + protocol);
+
+        CustomLogger.saveReportMessage("Notifier", "username: " + username);
+        CustomLogger.saveReportMessage("Notifier", "password: [is" + (password.isEmpty()?"":" not") + " empty]");
+
+        CustomLogger.saveReportMessage("Notifier", "qb_version: " + qb_version);
+
+        CustomLogger.saveReportMessage("Notifier", "Cookie: [is" + ((cookie != null && cookie.isEmpty())?"":" not") + " empty]");
+
+        // RSS
 
     }
 
@@ -296,11 +315,25 @@ public class NotifierService extends BroadcastReceiver {
                     cookie = null;
                 }
 
-                Log.e("Debug", e.toString());
+                if(CustomLogger.isReporting()){
+                    CustomLogger.saveReportMessage("Notifier", "httpStatusCode: " + httpStatusCode);
+                    CustomLogger.saveReportMessage("Notifier", "JSONParserStatusCodeException: " + e.toString());
+                }
 
             } catch (Exception e) {
                 torrents = null;
-                Log.e("Notifier:", e.toString());
+
+                if(CustomLogger.isReporting()){
+                    CustomLogger.saveReportMessage("Notifier", "httpStatusCode: " + httpStatusCode);
+                    CustomLogger.saveReportMessage("Notifier", "Exception: " + e.toString());
+                }
+
+
+            }
+            finally {
+
+                CustomLogger.setNotifierServiceReportReady(true);
+
             }
 
             return torrents;
@@ -340,8 +373,6 @@ public class NotifierService extends BroadcastReceiver {
             if (torrents == null) {
 
                 if (httpStatusCode == 403 || httpStatusCode == 404) {
-
-//                    Log.d("Debug","Notifier - qb_version:" + qb_version );
 
                     // Get new Cookie
                     if (qb_version.equals("3.2.x")) {
