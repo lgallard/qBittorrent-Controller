@@ -930,8 +930,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
             // Logs for reporting
-            if(CustomLogger.isReporting()){
-                generateReport();
+            if(CustomLogger.isMainActivityReporting()){
+                generateSettingsReport();
             }
 
             if (hostname.equals("")) {
@@ -965,7 +965,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // This method adds information to generate a report for support
-    private void generateReport(){
+    private void generateSettingsReport(){
         CustomLogger.saveReportMessage("Main", "currentServer: " + currentServer);
         CustomLogger.saveReportMessage("Main", "hostname: " + hostname);
         CustomLogger.saveReportMessage("Main", "https: " + https);
@@ -1053,8 +1053,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 //            Log.e("Debug", "Handle intent: " + e.toString() );
 
-            CustomLogger.saveReportMessage("Main","[handleIntent]: " + e.toString());
-
         }
     }
 
@@ -1101,8 +1099,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     addTorrent(Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8")));
                 } catch (UnsupportedEncodingException e) {
                     Log.e("Debug", "Check URL: " + e.toString());
-                    CustomLogger.saveReportMessage("Main", "[addTorrentByIntent] - Check URL: " + e.toString());
-
                 }
 
             }
@@ -2525,6 +2521,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
+
             }
 
             if (newCookie == null) {
@@ -2577,6 +2574,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
+
             }
 
             // If < 3.2.x, get qBittorrent version
@@ -2973,13 +2971,19 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 torrents = null;
                 Log.e("JSONParserStatusCode", e.toString());
-                CustomLogger.saveReportMessage("Main", "[qBittorrentTask - JSONParserStatusCode]: " + e.toString());
+
+                if(CustomLogger.isMainActivityReporting()) {
+                    CustomLogger.saveReportMessage("Main", "[qBittorrentTask - JSONParserStatusCode]: " + e.toString());
+                }
 
 
             } catch (Exception e) {
                 torrents = null;
                 Log.e("MAIN:", e.toString());
-                CustomLogger.saveReportMessage("Main", "[qBittorrentTask - Exception]: " + e.toString());
+
+                if(CustomLogger.isMainActivityReporting()) {
+                    CustomLogger.saveReportMessage("Main", "[qBittorrentTask - Exception]: " + e.toString());
+                }
             }
 
             return torrents;
@@ -2990,6 +2994,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         protected void onPostExecute(Torrent[] result) {
 
             if (result == null) {
+
+                // Reporting
+                if(CustomLogger.isMainActivityReporting()) {
+                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - result is null");
+                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
+                }
 
                 Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
@@ -3041,6 +3051,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
             } else {
+
+
+                // Reporting
+                if(CustomLogger.isMainActivityReporting()) {
+                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - result length: " + result.length);
+                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
+                }
+
 
                 connection400ErrorCounter = 0;
 
@@ -3141,6 +3159,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     Torrent torrentToUpdate = null;
 
+                    // Reporting
+                    if(CustomLogger.isMainActivityReporting()) {
+                        CustomLogger.saveReportMessage("Main", "[qBittorrentTask - torrentsFiltered.size]: " + torrentsFiltered.size());
+                    }
+
                     for (int i = 0; i < torrentsFiltered.size(); i++) {
 
                         Torrent torrent = torrentsFiltered.get(i);
@@ -3181,9 +3204,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         myadapter.notifyDataSetChanged();
 
                     } catch (IllegalStateException le) {
-
                         Log.e("Debug", "IllegalStateException: " + le.toString());
-                        CustomLogger.saveReportMessage("Main", "[qBittorrentTask - IllegalStateException]: " + le.toString());
                     }
 
                     // Create the about fragment
@@ -3353,10 +3374,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 } catch (Exception e) {
                     Log.e("ADAPTER", e.toString());
-                    CustomLogger.saveReportMessage("Main", "[qBittorrentTask - AdapterException]: " + e.toString());
+
+                    if(CustomLogger.isMainActivityReporting()) {
+                        CustomLogger.saveReportMessage("Main", "[qBittorrentTask - AdapterException]: " + e.toString());
+                    }
                 }
 
             }
+
+            // Reporting - Finish report
+            CustomLogger.setMainActivityReporting(false);
 
             // Disable refreshSwipeLayout
             disableRefreshSwipeLayout();
@@ -3386,7 +3413,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 httpStatusCode = e.getCode();
                 Log.e("JSONParserStatusCode", e.toString());
-                CustomLogger.saveReportMessage("Main", "[qBittorrentOptions - JSONParserStatusCode]: " + e.toString());
+
             }
 
             if (json != null) {
@@ -3440,7 +3467,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 } catch (Exception e) {
                     Log.e("MAIN:", e.toString());
-                    CustomLogger.saveReportMessage("Main", "[qBittorrentOptions - Exception]: " + e.toString());
                     return null;
                 }
 

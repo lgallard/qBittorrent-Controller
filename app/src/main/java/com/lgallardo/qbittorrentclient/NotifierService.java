@@ -19,7 +19,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -76,7 +75,7 @@ public class NotifierService extends BroadcastReceiver {
         getSettings();
 
 
-        if(CustomLogger.isReporting()){
+        if(CustomLogger.isNotifierServiceReportReporting()){
             generateSettingsReport();
         }
 
@@ -315,7 +314,7 @@ public class NotifierService extends BroadcastReceiver {
                     cookie = null;
                 }
 
-                if(CustomLogger.isReporting()){
+                if(CustomLogger.isNotifierServiceReportReporting()){
                     CustomLogger.saveReportMessage("Notifier", "httpStatusCode: " + httpStatusCode);
                     CustomLogger.saveReportMessage("Notifier", "JSONParserStatusCodeException: " + e.toString());
                 }
@@ -323,7 +322,7 @@ public class NotifierService extends BroadcastReceiver {
             } catch (Exception e) {
                 torrents = null;
 
-                if(CustomLogger.isReporting()){
+                if(CustomLogger.isNotifierServiceReportReporting()){
                     CustomLogger.saveReportMessage("Notifier", "httpStatusCode: " + httpStatusCode);
                     CustomLogger.saveReportMessage("Notifier", "Exception: " + e.toString());
                 }
@@ -332,7 +331,7 @@ public class NotifierService extends BroadcastReceiver {
             }
             finally {
 
-                CustomLogger.setNotifierServiceReportReady(true);
+                CustomLogger.setNotifierServiceReportReporting(false);
 
             }
 

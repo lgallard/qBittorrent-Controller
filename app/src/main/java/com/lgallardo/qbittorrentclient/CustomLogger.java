@@ -15,9 +15,8 @@ public class CustomLogger {
 
 
     public static String reportLog = "";
-    public static boolean reporting = false;
-    public static boolean notifierServiceReportReady = false;
-    public static boolean mainActivityReportReady = false;
+    public static boolean notifierServiceReporting = false;
+    public static boolean mainActivityReporting = false;
 
 
     public static void saveReportMessage(String tag, String message) {
@@ -30,28 +29,19 @@ public class CustomLogger {
         return reportLog;
     }
 
-    public static boolean isReporting() {
-        return reporting;
+    public static boolean isNotifierServiceReportReporting() {
+        return notifierServiceReporting;
     }
 
-    public static void setReporting(boolean reporting) {
-        CustomLogger.reporting = reporting;
+    public static void setNotifierServiceReportReporting(boolean notifierServiceReportReporting) {
+        CustomLogger.notifierServiceReporting = notifierServiceReportReporting;
     }
 
-
-    public static boolean isNotifierServiceReportReady() {
-        return notifierServiceReportReady;
+    public static boolean isMainActivityReporting() {
+        return mainActivityReporting;
     }
 
-    public static void setNotifierServiceReportReady(boolean notifierServiceReportReady) {
-        CustomLogger.notifierServiceReportReady = notifierServiceReportReady;
-    }
-
-    public static boolean isMainActivityReportReady() {
-        return mainActivityReportReady;
-    }
-
-    public static void setMainActivityReportReady(boolean mainActivityReportReady) {
-        CustomLogger.mainActivityReportReady = mainActivityReportReady;
+    public static void setMainActivityReporting(boolean mainActivityReporting) {
+        CustomLogger.mainActivityReporting = mainActivityReporting;
     }
 }
