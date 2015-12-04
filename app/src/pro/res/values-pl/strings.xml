@@ -232,5 +232,5 @@
     <string name="action_file_normal_priority">Normalny</string>
     <string name="action_toggle_alternative_rates">Prędkości alternatywne</string>
     <string name="toggledAlternativeRates">Przełączanie ograniczenia prędkości</string>
-
+    <string name="notifications_report_ready">Twój raport jest gotowy!</string>
 </resources>

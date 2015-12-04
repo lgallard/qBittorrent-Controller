@@ -232,5 +232,5 @@
   <string name="action_file_normal_priority">Обычный</string>
   <string name="action_toggle_alternative_rates">Альтернативные скорости</string>
   <string name="toggledAlternativeRates">Переключения ограничения скорости</string>
-
+  <string name="notifications_report_ready">Ваш отчет готов!</string>
 </resources>

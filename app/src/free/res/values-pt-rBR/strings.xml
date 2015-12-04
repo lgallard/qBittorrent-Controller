@@ -236,5 +236,5 @@
     <string name="action_file_maximum_priority">Máxima</string>
     <string name="action_toggle_alternative_rates">Velocidades alternativas</string>
     <string name="toggledAlternativeRates">Alternando os limites de velocidade</string>
-
+    <string name="notifications_report_ready">O seu relatório está pronto!</string>
 </resources>

@@ -1029,6 +1029,30 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         try {
 
+
+            if (intent.getStringExtra("from").equals("NotifierServiceReporter")) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+                emailIntent.setType("jpeg/image");
+
+                emailIntent.putExtra(Intent.EXTRA_EMAIL,"lgallard+qbcontroller@gmail.com");
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, packageName +" report");
+
+                // Include report
+                emailIntent.putExtra(Intent.EXTRA_TEXT, CustomLogger.getReport());
+
+                // Delete report
+                CustomLogger.setReporting(false);
+                CustomLogger.setMainActivityReporting(false);
+                CustomLogger.setNotifierServiceReportReporting(false);
+                CustomLogger.deleteReport();
+
+                // Launch email chooser
+                startActivity(Intent.createChooser(emailIntent, "Send log file..."));
+
+            }
+
+
             if (intent.getStringExtra("from").equals("NotifierService")) {
 
                 saveLastState("completed");

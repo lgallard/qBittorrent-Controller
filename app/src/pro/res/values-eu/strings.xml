@@ -232,4 +232,5 @@
   <string name="settings_qbittorrent_pro_message">Ezaugarri hau qBittorrent PRO bertsioan bakarrik dago eskuragarri!</string>
   <string name="action_toggle_alternative_rates">Alternative abiadura</string>
   <string name="toggledAlternativeRates">Abiadura mugak aldatzea</string>
+  <string name="notifications_report_ready">Zure txostena prest dago!</string>
 </resources>

@@ -75,8 +75,44 @@ public class NotifierService extends BroadcastReceiver {
         getSettings();
 
 
-        if(CustomLogger.isNotifierServiceReportReporting()){
-            generateSettingsReport();
+        // If MainActivity and notifierService reports are ready, notify them
+        if(CustomLogger.isMainActivityReporting() && !CustomLogger.isMainActivityReporting() && !CustomLogger.isNotifierServiceReportReporting()){
+
+
+            Intent intent2 = new Intent(context, MainActivity.class);
+            intent.putExtra("from", "NotifierServiceReporter");
+            PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent2, PendingIntent.FLAG_CANCEL_CURRENT);
+
+
+            // Build notification
+            // the addAction re-use the same intent to keep the example short
+            Notification.Builder builder = new Notification.Builder(context)
+                    .setContentTitle(NotifierService.context.getString(R.string.notifications_report_ready))
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentIntent(pIntent)
+                    .setAutoCancel(true);
+
+
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+
+            Notification notification;
+
+
+            if (android.os.Build.VERSION.SDK_INT >= 16) {
+
+                // Define and Inbox
+                InboxStyle inbox = new Notification.InboxStyle(builder);
+
+                inbox.setBigContentTitle(NotifierService.context.getString(R.string.notifications_report_ready));
+
+                notification = inbox.build();
+            } else {
+                notification = builder.getNotification();
+            }
+
+
+            notificationManager.notify(0, notification);
+
         }
 
 
@@ -241,6 +277,11 @@ public class NotifierService extends BroadcastReceiver {
 
             // Get settings
             getSettings();
+
+            // Generate settings report
+            if(CustomLogger.isNotifierServiceReportReporting()){
+                generateSettingsReport();
+            }
 
             JSONParser jParser;
 

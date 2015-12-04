@@ -232,5 +232,5 @@
     <string name="action_file_maximum_priority">Högsta</string>
     <string name="action_toggle_alternative_rates">Alternativa hastigheter</string>
     <string name="toggledAlternativeRates">Ändrade hastighetsgränser</string>
-
+    <string name="notifications_report_ready">Rapporten är klar!</string>
 </resources>

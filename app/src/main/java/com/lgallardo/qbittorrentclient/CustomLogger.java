@@ -15,6 +15,7 @@ public class CustomLogger {
 
 
     public static String reportLog = "";
+    public static boolean reporting = false;
     public static boolean notifierServiceReporting = false;
     public static boolean mainActivityReporting = false;
 
@@ -27,6 +28,18 @@ public class CustomLogger {
 
     public static String getReport() {
         return reportLog;
+    }
+
+    public static void deleteReport() {
+        reportLog = "";
+    }
+
+    public static boolean isReporting() {
+        return reporting;
+    }
+
+    public static void setReporting(boolean reporting) {
+        CustomLogger.reporting = reporting;
     }
 
     public static boolean isNotifierServiceReportReporting() {
@@ -44,4 +57,5 @@ public class CustomLogger {
     public static void setMainActivityReporting(boolean mainActivityReporting) {
         CustomLogger.mainActivityReporting = mainActivityReporting;
     }
+
 }

@@ -235,4 +235,5 @@
   <string name="options_qbittorrent_schedule_alt_to">Hona</string>
   <string name="action_toggle_alternative_rates">Alternative abiadura</string>
   <string name="toggledAlternativeRates">Abiadura mugak aldatzea</string>
+  <string name="notifications_report_ready">Zure txostena prest dago!</string>
 </resources>

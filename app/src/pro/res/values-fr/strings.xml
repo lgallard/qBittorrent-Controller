@@ -232,4 +232,5 @@
     <string name="action_file_normal_priority">Normale</string>
     <string name="action_toggle_alternative_rates">Vitesses alternatifs</string>
     <string name="toggledAlternativeRates">Commutation des limites de vitesse</string>
+    <string name="notifications_report_ready">Votre rapport est prêt!</string>
 </resources>

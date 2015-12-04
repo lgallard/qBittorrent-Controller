@@ -232,5 +232,6 @@
     <string name="settings_qbittorrent_pro_message">This feature is only available on qBittorrent PRO version!</string>
     <string name="action_toggle_alternative_rates">Alternative speeds</string>
     <string name="toggledAlternativeRates">Changing speed limits</string>
+    <string name="notifications_report_ready">Your report is ready!</string>
 
 </resources>
