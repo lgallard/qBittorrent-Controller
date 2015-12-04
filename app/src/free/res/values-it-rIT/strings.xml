@@ -229,7 +229,6 @@
     <string name="action_file_maximum_priority">Massima</string>
     <string name="action_toggle_alternative_rates">Velocità alternativi</string>
     <string name="toggledAlternativeRates">Commutazione i limiti di velocità</string>
-    <string name="notifications_report_ready">Il vostro rapporto è pronto!</string>
     <string name="dialog_send_report">Fornire una breve descrizione del problema</string>
     <string name="help_report_summary">Invia una segnalazione allo sviluppatore</string>
     <string name="help_report_title">Genera rapporto</string>

@@ -229,7 +229,6 @@
     <string name="action_file_normal_priority">Normale</string>
     <string name="action_toggle_alternative_rates">Vitesses alternatifs</string>
     <string name="toggledAlternativeRates">Commutation des limites de vitesse</string>
-    <string name="notifications_report_ready">Votre rapport est prêt!</string>
     <string name="help_report_title">Générer un rapport</string>
     <string name="help_report_summary">Envoyer un rapport au développeur</string>
     <string name="dialog_send_report">Fournir une brève description de votre problème</string>

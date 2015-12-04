@@ -228,7 +228,6 @@
     <string name="options_qbittorrent_schedule_alt_to">To</string>
     <string name="action_toggle_alternative_rates">Alternative speeds</string>
     <string name="toggledAlternativeRates">Changing speed limits</string>
-    <string name="notifications_report_ready">Your report is ready!</string>
     <string name="help_report_title">Generate report</string>
     <string name="help_report_summary">Send a report to the developer</string>
     <string name="dialog_send_report">Provide a short description of your problem</string>

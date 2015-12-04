@@ -230,7 +230,6 @@
     <string name="action_file_normal_priority">Normal</string>
     <string name="action_toggle_alternative_rates">Velocidades alternas</string>
     <string name="toggledAlternativeRates">Cambiando límites de velocidad</string>
-    <string name="notifications_report_ready">Su informe está listo!</string>
     <string name="dialog_send_report">Proporcione una descripción corta de su problema</string>
     <string name="help_report_summary">Envíe un reporte al desarrollador</string>
     <string name="help_report_title">Generar reporte</string>

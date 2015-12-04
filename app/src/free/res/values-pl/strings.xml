@@ -229,7 +229,6 @@
     <string name="action_file_normal_priority">Normalny</string>
     <string name="action_toggle_alternative_rates">Prędkości alternatywne</string>
     <string name="toggledAlternativeRates">Przełączanie ograniczenia prędkości</string>
-    <string name="notifications_report_ready">Twój raport jest gotowy!</string>
     <string name="help_report_title">Wygenerować raport</string>
     <string name="help_report_summary">Wyślij raport do dewelopera</string>
     <string name="dialog_send_report">Przedstawić krótki opis problemu</string>
