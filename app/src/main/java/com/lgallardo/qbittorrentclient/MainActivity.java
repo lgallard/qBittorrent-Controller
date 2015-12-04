@@ -3198,7 +3198,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     // Reporting
                     if(CustomLogger.isMainActivityReporting()) {
-                        CustomLogger.saveReportMessage("Main", "[qBittorrentTask - torrentsFiltered.size]: " + torrentsFiltered.size());
+                        CustomLogger.saveReportMessage("Main", "qBittorrentTask - torrentsFiltered.size: " + torrentsFiltered.size());
                     }
 
                     for (int i = 0; i < torrentsFiltered.size(); i++) {
