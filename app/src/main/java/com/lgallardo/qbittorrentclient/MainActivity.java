@@ -993,6 +993,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         CustomLogger.saveReportMessage("Main", "packageName: " + packageName);
         CustomLogger.saveReportMessage("Main", "packageVersion: " + packageVersion);
 
+        CustomLogger.saveReportMessage("Main", "Current state: " + currentState);
+        CustomLogger.saveReportMessage("Main", "Last state: " + lastState);
+
     }
 
     public void emailReport() {
