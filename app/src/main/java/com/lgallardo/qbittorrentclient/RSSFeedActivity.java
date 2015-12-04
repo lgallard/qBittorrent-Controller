@@ -297,8 +297,6 @@ public class RSSFeedActivity extends AppCompatActivity {
                 mSwipeRefreshLayout.setRefreshing(true);
                 new rssFeedsTask().execute();
                 return true;
-            case R.id.action_settings:
-                return true;
             case R.id.action_edit:
                 return true;
             case R.id.action_delete:

@@ -14,41 +14,50 @@ package com.lgallardo.qbittorrentclient;
 public class CustomLogger {
 
 
-    public static String reportLog = "";
-    public static boolean reporting = false;
-    public static boolean notifierServiceReporting = false;
+    public static String reportMainLog = "";
+    public static String reportNotifierLog = "";
+    public static String reportDescription = "";
+
     public static boolean mainActivityReporting = false;
 
 
     public static void saveReportMessage(String tag, String message) {
 
-        CustomLogger.reportLog = CustomLogger.reportLog + "\n" + "[" + tag + "]" + " " + message;
+        if(tag.equals("Main")){
+
+            if (CustomLogger.reportMainLog.equals("")){
+
+                CustomLogger.reportMainLog = "\n[" + tag + "]";
+            }
+            CustomLogger.reportMainLog = CustomLogger.reportMainLog + "\n " + message;
+        }
+
+        if(tag.equals("Notifier")){
+            if (CustomLogger.reportNotifierLog.equals("")){
+
+                CustomLogger.reportNotifierLog = "\n[" + tag + "]";
+            }
+            CustomLogger.reportNotifierLog = CustomLogger.reportNotifierLog + "\n " + message;
+
+        }
 
     }
 
     public static String getReport() {
-        return reportLog;
+
+        String report = getReportDescription() + "\n\n" + reportMainLog + "\n" + reportNotifierLog;
+
+        return report;
     }
 
-    public static void deleteReport() {
-        reportLog = "";
+    public static void deleteMainReport() {
+        reportMainLog = "";
     }
 
-    public static boolean isReporting() {
-        return reporting;
+    public static void deleteNotifierReport() {
+        reportNotifierLog = "";
     }
 
-    public static void setReporting(boolean reporting) {
-        CustomLogger.reporting = reporting;
-    }
-
-    public static boolean isNotifierServiceReportReporting() {
-        return notifierServiceReporting;
-    }
-
-    public static void setNotifierServiceReportReporting(boolean notifierServiceReportReporting) {
-        CustomLogger.notifierServiceReporting = notifierServiceReportReporting;
-    }
 
     public static boolean isMainActivityReporting() {
         return mainActivityReporting;
@@ -58,4 +67,12 @@ public class CustomLogger {
         CustomLogger.mainActivityReporting = mainActivityReporting;
     }
 
+
+    public static String getReportDescription() {
+        return reportDescription;
+    }
+
+    public static void setReportDescription(String reportDescription) {
+        CustomLogger.reportDescription = reportDescription;
+    }
 }

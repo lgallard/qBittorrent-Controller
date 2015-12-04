@@ -11,7 +11,6 @@
 <resources>
   <string name="app_name">qBittorrent Controller Pro</string>
   <string name="app_shortname">Controller Pro</string>
-  <string name="action_settings">Ezarpenak</string>
   <string name="action_refresh">Berritu</string>
   <string name="action_add">Gehitu</string>
   <string name="action_pause">Pausatu</string>
@@ -35,8 +34,6 @@
   <string name="connection_error">Sare elkarketa hutsegitea</string>
   <string name="ok">Ongi</string>
   <string name="cancel">Ezeztatu</string>
-  <string name="connecting">Berritzen</string>
-  <string name="title_activity_torrent_actions">Ekintza</string>
   <string name="dm_deleteTorrent">Ongi sakatzeak torrenta ezabatuko du</string>
   <string name="dm_deleteSelectedTorrents">Ongi sakatzeak torrentak ezabatuko ditu</string>
   <string name="dt_deleteTorrent">Ezabatu torrenta</string>
@@ -73,14 +70,7 @@
   <string name="error403">Egiaztapen akatsa</string>
   <string name="info">Kontuz</string>
   <string name="global_value_error">Balio orokorra ezin da berreskuratu. Mesedez egiaztatu zure elkarketa ezarpenak!</string>
-  <string name="navigation_drawer_all">Guztiak</string>
-  <string name="navigation_drawer_downloading">Jeisten</string>
-  <string name="navigation_drawer_completed">Osatuta</string>
-  <string name="navigation_drawer_paused">Pausatuta</string>
-  <string name="navigation_drawer_active">Ekinean</string>
-  <string name="navigation_drawer_inactive">Jardungabe</string>
-  <string name="navigation_drawer_options">Aukerak</string>
-  <string name="navigation_drawer_settins">Ezarpenak</string>
+  <string name="settings">Ezarpenak</string>
   <string name="about_help1">Bezeroak erabiltzen hasteko, ezarri zure qBittorrent zerbitzariaren ezarpenak</string>
   <string name="about_help2">Sakatu berritu botoia menuan emaitza berriak lortzeko, edo hautatu aukera bat hedagarria menutik zerbitzariko torrent zerrenda lortzeko.</string>
   <string name="about_motto">Kudeatu zure torrent guztiak Android-etik qBittorrent Controller erabiliz</string>
@@ -232,5 +222,7 @@
   <string name="settings_qbittorrent_pro_message">Ezaugarri hau qBittorrent PRO bertsioan bakarrik dago eskuragarri!</string>
   <string name="action_toggle_alternative_rates">Alternative abiadura</string>
   <string name="toggledAlternativeRates">Abiadura mugak aldatzea</string>
-  <string name="notifications_report_ready">Zure txostena prest dago!</string>
+  <string name="dialog_send_report">Zure arazoa deskribapen labur bat ematen</string>
+  <string name="help_report_summary">Bidalitako txosten bat developer izateko</string>
+  <string name="help_report_title">Sortu txostena</string>
 </resources>

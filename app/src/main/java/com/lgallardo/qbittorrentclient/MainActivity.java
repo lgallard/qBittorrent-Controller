@@ -244,6 +244,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Package info
     public static String packageName;
+    public static String packageVersion;
+
 
     // Action (states)
     public static final ArrayList<String> actionStates = new ArrayList<>(Arrays.asList("all", "downloading", "completed", "pause", "active", "inactive"));
@@ -899,8 +901,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void refresh(String state) {
 
-        CustomLogger.saveReportMessage("MainActivity", "Refreshing");
-
         // If Contextual Action Bar is open, don't refresh
         if (firstFragment != null && firstFragment.mActionMode != null) {
             return;
@@ -939,6 +939,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             } else {
 
                 Log.d("Report", "Report: " + CustomLogger.getReport());
+
 
                 if (qb_version.equals("3.2.x") && (cookie == null || cookie.equals(""))) {
                     // Request new cookie and execute task in background
@@ -986,11 +987,41 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         CustomLogger.saveReportMessage("Main", "qb_version: " + qb_version);
 
         CustomLogger.saveReportMessage("Main", "Cookie: [is" + ((cookie != null && cookie.isEmpty())?"":" not") + " empty]");
-
         CustomLogger.saveReportMessage("Main", "enable_notifications: " + enable_notifications);
         CustomLogger.saveReportMessage("Main", "notification_period: " + notification_period);
 
         CustomLogger.saveReportMessage("Main", "packageName: " + packageName);
+        CustomLogger.saveReportMessage("Main", "packageVersion: " + packageVersion);
+
+    }
+
+    public void emailReport() {
+
+        if (CustomLogger.isMainActivityReporting()) {
+
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+            emailIntent.setType("text/plain");
+
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"lgallard+qbcontroller@gmail.com"});
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "qBittorrentController report");
+
+            // Include report
+            emailIntent.putExtra(Intent.EXTRA_TEXT, CustomLogger.getReport());
+
+            // Delete report
+            CustomLogger.setMainActivityReporting(false);
+            CustomLogger.deleteMainReport();
+            CustomLogger.deleteNotifierReport();
+
+            // Launch email chooser
+            startActivity(Intent.createChooser(emailIntent, "Send qBittorrent report..."));
+
+            // Reporting - Finish report
+            CustomLogger.setMainActivityReporting(false);
+
+        }
+
 
     }
 
@@ -1028,29 +1059,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
         try {
-
-
-            if (intent.getStringExtra("from").equals("NotifierServiceReporter")) {
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
-
-                emailIntent.setType("jpeg/image");
-
-                emailIntent.putExtra(Intent.EXTRA_EMAIL,"lgallard+qbcontroller@gmail.com");
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, packageName +" report");
-
-                // Include report
-                emailIntent.putExtra(Intent.EXTRA_TEXT, CustomLogger.getReport());
-
-                // Delete report
-                CustomLogger.setReporting(false);
-                CustomLogger.setMainActivityReporting(false);
-                CustomLogger.setNotifierServiceReportReporting(false);
-                CustomLogger.deleteReport();
-
-                // Launch email chooser
-                startActivity(Intent.createChooser(emailIntent, "Send log file..."));
-
-            }
 
 
             if (intent.getStringExtra("from").equals("NotifierService")) {
@@ -1270,8 +1278,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_rss:
                 // Open RSS Activity
                 Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
-//                intent.putExtra("packageName", packageName);
-//                intent.putExtra("dark_ui", dark_ui);
                 startActivity(intent);
                 return true;
             case R.id.action_pause:
@@ -1651,9 +1657,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         }
 
-        if (requestCode == HELP_CODE) {
+        if (requestCode == HELP_CODE && resultCode == RESULT_OK) {
             // Now it can be refreshed
             canrefresh = true;
+
+            refreshSwipeLayout();
+            refreshCurrent();
         }
 
 
@@ -2172,7 +2181,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             });
 
             // Settings
-            builder.setPositiveButton(R.string.navigation_drawer_settins, new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() {
 
                 public void onClick(DialogInterface dialog, int id) {
                     // User accepted the dialog
@@ -2305,6 +2314,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Get package name
         packageName = pInfo.packageName;
+        packageVersion = pInfo.versionName;
 
         // Get AlternativeSpeedLimitsEnabled value
         alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
@@ -3406,8 +3416,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             }
 
-            // Reporting - Finish report
-            CustomLogger.setMainActivityReporting(false);
+            // Send report
+            emailReport();
 
             // Disable refreshSwipeLayout
             disableRefreshSwipeLayout();

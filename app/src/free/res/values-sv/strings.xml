@@ -56,14 +56,7 @@
     <string name="error403">Autentisering misslyckades</string>
     <string name="info">Varning</string>
     <string name="global_value_error">Global värdet kan inte hämtas. Kontrollera anslutningsinställningarna!</string>
-    <string name="navigation_drawer_all">Alla</string>
-    <string name="navigation_drawer_downloading">Hämtar</string>
-    <string name="navigation_drawer_completed">Färdiga</string>
-    <string name="navigation_drawer_paused">Pausad</string>
-    <string name="navigation_drawer_active">Aktiva</string>
-    <string name="navigation_drawer_inactive">Inaktiva</string>
-    <string name="navigation_drawer_options">Alternativ</string>
-    <string name="navigation_drawer_settins">Inställningar</string>
+    <string name="settings">Inställningar</string>
     <string name="about_help1">För att börja använda klienten ställa in din qBittorrent serverinställningar</string>
     <string name="about_help2">Tryck på knappen Uppdatera i menyn för att få nya resultat, eller välj ett alternativ på menyn till vänster för att få torrent listan från servern.</string>
     <string name="about_motto">Hantera alla dina torrents från Android använder qBittorrent Controller</string>
@@ -237,4 +230,7 @@
     <string name="action_toggle_alternative_rates">Alternativa hastigheter</string>
     <string name="toggledAlternativeRates">Ändrade hastighetsgränser</string>
     <string name="notifications_report_ready">Rapporten är klar!</string>
+    <string name="dialog_send_report">Ge en kort beskrivning av ditt problem</string>
+    <string name="help_report_summary">Skicka en rapport till utvecklaren</string>
+    <string name="help_report_title">Generera rapport</string>
 </resources>

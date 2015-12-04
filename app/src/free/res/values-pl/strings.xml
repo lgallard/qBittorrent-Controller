@@ -56,14 +56,7 @@
     <string name="error403">Błąd uwierzytelniania</string>
     <string name="info">Ostrzeżenie</string>
     <string name="global_value_error">Wartość globalnego nie może zostać odzyskane. Proszę sprawdzić ustawienia połączenia!</string>
-    <string name="navigation_drawer_all">Wszystko</string>
-    <string name="navigation_drawer_downloading">Ściąganie</string>
-    <string name="navigation_drawer_completed">Zakończony</string>
-    <string name="navigation_drawer_paused">Wstrzymany</string>
-    <string name="navigation_drawer_active">Aktywny</string>
-    <string name="navigation_drawer_inactive">Nieaktywny</string>
-    <string name="navigation_drawer_options">Opcje</string>
-    <string name="navigation_drawer_settins">Ustawienia</string>
+    <string name="settings">Ustawienia</string>
     <string name="navigation_drawer_PRO">Uzyskaj PRO</string>
     <string name="about_help1">Aby rozpocząć korzystanie z klienta, ustawić ustawienia serwera qBittorrent</string>
     <string name="about_help2">Naciśnij przycisk odświeżania w menu, aby nowe wyniki, lub wybierz opcję z menu szuflady lewej aby otrzymać listę z serwera torrent</string>
@@ -237,4 +230,7 @@
     <string name="action_toggle_alternative_rates">Prędkości alternatywne</string>
     <string name="toggledAlternativeRates">Przełączanie ograniczenia prędkości</string>
     <string name="notifications_report_ready">Twój raport jest gotowy!</string>
+    <string name="help_report_title">Wygenerować raport</string>
+    <string name="help_report_summary">Wyślij raport do dewelopera</string>
+    <string name="dialog_send_report">Przedstawić krótki opis problemu</string>
 </resources>

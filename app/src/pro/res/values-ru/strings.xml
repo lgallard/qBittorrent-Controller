@@ -11,7 +11,6 @@
 <resources>
   <string name="app_name">qBittorrent Controller Pro</string>
   <string name="app_shortname">Controller Pro</string>
-  <string name="action_settings">Настройки</string>
   <string name="action_refresh">Обновить</string>
   <string name="action_add">Добавить</string>
   <string name="action_pause">Приостановить</string>
@@ -31,8 +30,6 @@
   <string name="connection_error">Сетевое подключение не удалось</string>
   <string name="ok">OK</string>
   <string name="cancel">Отмена</string>
-  <string name="connecting">Обновление</string>
-  <string name="title_activity_torrent_actions">Действия</string>
   <string name="dm_deleteTorrent">Нажимая OK, вы подтверждаете удаление торрента, сохраняя загруженные данные</string>
   <string name="dm_deleteSelectedTorrents">Нажимая OK, вы подтверждаете удаление торрентов, сохраняя загруженные данные</string>
   <string name="dt_deleteTorrent">Удалить торрент</string>
@@ -69,14 +66,7 @@
   <string name="error403">Ошибка аутентификации</string>
   <string name="info">Предупреждение</string>
   <string name="global_value_error">Данные не получены. Проверьте настройки соединения!</string>
-  <string name="navigation_drawer_all">Все</string>
-  <string name="navigation_drawer_downloading">Скачивающиеся</string>
-  <string name="navigation_drawer_completed">Завершенные</string>
-  <string name="navigation_drawer_paused">Приостановленные</string>
-  <string name="navigation_drawer_active">Активные</string>
-  <string name="navigation_drawer_inactive">Неактивные</string>
-  <string name="navigation_drawer_options">Настройки сервера</string>
-  <string name="navigation_drawer_settins">Настройки</string>
+  <string name="settings">Настройки</string>
   <string name="about_help1">Для начала с помощью клиента набор настроек сервера qBittorrent</string>
   <string name="about_help2">Нажмите кнопку \"обновление\" в меню, чтобы получить обновленные данные, или воспользуйтесь выезжающим меню слева для получения списка торрентов с сервера</string>
   <string name="about_motto">Управляйте своими торрентами с Android-устройства, используя qBittorrent Controller</string>
@@ -188,7 +178,7 @@
   <string name="drawer_open">Открыть меню навигации</string>
   <string name="drawer_servers_category">Серверы</string>
   <string name="title_activity_settings">Настройки приложения</string>
-  <string name="settings_qbittorrent_sort_category">Сортировка списка торрентов</string>
+  <string ame="settings_qbittorrent_sort_category">Сортировка списка торрентов</string>
   <string name="settings_qbittorrent_darkui_summary">Перезапустите приложение для изменения темы оформления</string>
   <string name="sortby_menu_name">Имя</string>
   <string name="sortby_menu_size">Размер</string>
@@ -232,5 +222,7 @@
   <string name="action_file_normal_priority">Обычный</string>
   <string name="action_toggle_alternative_rates">Альтернативные скорости</string>
   <string name="toggledAlternativeRates">Переключения ограничения скорости</string>
-  <string name="notifications_report_ready">Ваш отчет готов!</string>
+  <string name="help_report_title">Создать отчет</string>
+  <string name="help_report_summary">Отправить отчет разработчику</string>
+  <string name="dialog_send_report">Предоставьте краткое описание вашей проблемы</string>
 </resources>

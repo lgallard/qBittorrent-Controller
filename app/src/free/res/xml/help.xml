@@ -19,6 +19,11 @@
                 android:data="https://github.com/lgallard/qBittorrent-Client/wiki" />
         </Preference>
         <Preference
+            android:summary="@string/help_report_summary"
+            android:title="@string/help_report_title"
+            android:key="report">
+        </Preference>
+        <Preference
             android:key="version"
             android:title="@string/help_version_title"></Preference>
         <Preference

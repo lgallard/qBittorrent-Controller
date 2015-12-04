@@ -11,7 +11,6 @@
 <resources>
     <string name="app_name">qBittorrent Controller Pro</string>
     <string name="app_shortname">Controller Pro</string>
-    <string name="action_settings">Configurações</string>
     <string name="action_refresh">Atualizar</string>
     <string name="action_add">Adicionar</string>
     <string name="action_pause">Pausar</string>
@@ -27,8 +26,6 @@
     <string name="connection_error">Conexão de rede falhou</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
-    <string name="connecting">Atualizando</string>
-    <string name="title_activity_torrent_actions">Ação</string>
     <string name="dm_deleteTorrent">Pressionando OK irá apagar o torrent</string>
     <string name="dt_deleteTorrent">Deletar torrent</string>
     <string name="dm_deleteDriveTorrent">Pressionando OK excluirá torrent e seus dados do disco rígido</string>
@@ -56,14 +53,7 @@
     <string name="error403">Erro de autenticação</string>
     <string name="info">Aviso</string>
     <string name="global_value_error">Valor global não pode ser recuperado. Por favor, verifique as configurações de conexão!</string>
-    <string name="navigation_drawer_all">Tudo</string>
-    <string name="navigation_drawer_downloading">Baixando</string>
-    <string name="navigation_drawer_completed">Completado</string>
-    <string name="navigation_drawer_paused">Pausado</string>
-    <string name="navigation_drawer_active">Ativo</string>
-    <string name="navigation_drawer_inactive">Inativo</string>
-    <string name="navigation_drawer_options">Opções</string>
-    <string name="navigation_drawer_settins">Configurações</string>
+    <string name="settings">Configurações</string>
     <string name="about_help1">Para começar a usar o cliente, defina as configurações do seu servidor qBittorrent</string>
     <string name="about_help2">Pressione o botão de atualização no menu para obter novos resultados, ou escolha uma opção no menu de gaveta para obter a lista de torrents do servidor.</string>
     <string name="about_motto">Gerenciar todos os seus torrents de Android usando qBittorrent Controller Pro</string>
@@ -232,5 +222,7 @@
     <string name="action_file_maximum_priority">Máxima</string>
     <string name="action_toggle_alternative_rates">Velocidades alternativas</string>
     <string name="toggledAlternativeRates">Alternando os limites de velocidade</string>
-    <string name="notifications_report_ready">O seu relatório está pronto!</string>
+    <string name="dialog_send_report">Forneça uma breve descrição do seu problema</string>
+    <string name="help_report_summary">Enviar um informe para o desenvolvedor</string>
+    <string name="help_report_title">Gerar informe</string>
 </resources>

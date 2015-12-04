@@ -56,14 +56,7 @@
     <string name="error403">Errore di autenticazione</string>
     <string name="info">Avvertimento</string>
     <string name="global_value_error">Valore globale non può essere recuperato. Si prega di controllare le impostazioni di connessione!</string>
-    <string name="navigation_drawer_all">Tutto</string>
-    <string name="navigation_drawer_downloading">Download</string>
-    <string name="navigation_drawer_completed">Completato</string>
-    <string name="navigation_drawer_paused">In pausa</string>
-    <string name="navigation_drawer_active">Attivo</string>
-    <string name="navigation_drawer_inactive">Inattivo</string>
-    <string name="navigation_drawer_options">Opzioni</string>
-    <string name="navigation_drawer_settins">Impostazioni</string>
+    <string name="settings">Impostazioni</string>
     <string name="navigation_drawer_PRO">Ottenere PRO</string>
     <string name="about_help1">Per iniziare a utilizzare il client, configurare le impostazioni del server qBittorrent</string>
     <string name="about_help2">Premere il pulsante di aggiornamento nel menu per ottenere nuovi risultati, o scegliere un\'opzione dal menu a cassetto per ottenere l\'elenco torrent dal server.</string>
@@ -237,4 +230,7 @@
     <string name="action_toggle_alternative_rates">Velocità alternativi</string>
     <string name="toggledAlternativeRates">Commutazione i limiti di velocità</string>
     <string name="notifications_report_ready">Il vostro rapporto è pronto!</string>
+    <string name="dialog_send_report">Fornire una breve descrizione del problema</string>
+    <string name="help_report_summary">Invia una segnalazione allo sviluppatore</string>
+    <string name="help_report_title">Genera rapporto</string>
 </resources>

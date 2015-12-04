@@ -50,6 +50,7 @@
   <string name="torrentDeleted">Torrenta ezabatuta!</string>
   <string name="torrentDeletedDrive">Torrenta eta datuak ezabatuta!</string>
   <string name="increasePrioTorrent">Lehentasuna handituta!</string>
+  <string name="decreasePrioTorrent">Lehentasuna gutxituta!</string>
   <string name="priorityUpdated">Lehentasuna eguneratuta!</string>
   <string name="drawer_open">Irekin nabigazio hedagarria</string>
   <string name="drawer_close">Itxi nabigazio hedagarria</string>
@@ -64,14 +65,7 @@
   <string name="error403">Egiaztapen akatsa</string>
   <string name="info">Kontuz</string>
   <string name="global_value_error">Balio orokorra ezin da berreskuratu. Mesedez egiaztatu zure elkarketa ezarpenak!</string>
-  <string name="navigation_drawer_all">Guztiak</string>
-  <string name="navigation_drawer_downloading">Jeisten</string>
-  <string name="navigation_drawer_completed">Osatuta</string>
-  <string name="navigation_drawer_paused">Pausatuta</string>
-  <string name="navigation_drawer_active">Ekinean</string>
-  <string name="navigation_drawer_inactive">Jardungabe</string>
-  <string name="navigation_drawer_options">Aukerak</string>
-  <string name="navigation_drawer_settins">Ezarpenak</string>
+  <string name="settings">Ezarpenak</string>
   <string name="navigation_drawer_PRO">Lortu PRO</string>
   <string name="about_help1">Bezeroa erabiltzen hasteko ezarri zure qBittorrent zerbitzariaren ezarpenak</string>
   <string name="about_help2">Sakatu berritu botoia menuan emaitza berriak lortzeko, edo hautatu aukera bat hedagarria menutik zerbitzariko torrent zerrenda lortzeko.</string>
@@ -236,4 +230,7 @@
   <string name="action_toggle_alternative_rates">Alternative abiadura</string>
   <string name="toggledAlternativeRates">Abiadura mugak aldatzea</string>
   <string name="notifications_report_ready">Zure txostena prest dago!</string>
+  <string name="dialog_send_report">Zure arazoa deskribapen labur bat ematen</string>
+  <string name="help_report_summary">Bidalitako txosten bat developer izateko</string>
+  <string name="help_report_title">Sortu txostena</string>
 </resources>

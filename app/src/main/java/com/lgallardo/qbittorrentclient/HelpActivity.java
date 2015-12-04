@@ -9,17 +9,25 @@
 package com.lgallardo.qbittorrentclient;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class HelpActivity extends PreferenceActivity {
 
     private Preference version;
+    private Preference report;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +44,63 @@ public class HelpActivity extends PreferenceActivity {
         }
         // Get preferences from screen
         version = (Preference) findPreference("version");
+        report = (Preference) findPreference("report");
 
+        //Set version
         version.setSummary(pInfo.versionName);
+
+        // Set click event
+        report.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+
+
+                // get prompts.xml view
+                LayoutInflater li = LayoutInflater.from(HelpActivity.this);
+                View addTorrentView = li.inflate(R.layout.send_report, null);
+
+                // URL input
+                final EditText reportDescription = (EditText) addTorrentView.findViewById(R.id.report_description);
+
+                if (!isFinishing()) {
+                    // Dialog
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HelpActivity.this);
+
+                    // Set add_torrent.xml to AlertDialog builder
+                    builder.setView(addTorrentView);
+
+                    // Cancel
+                    builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                            CustomLogger.setMainActivityReporting(false);
+
+                        }
+                    });
+
+                    // Ok
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User accepted the dialog
+
+                            CustomLogger.setReportDescription(reportDescription.getText().toString());
+                            CustomLogger.setMainActivityReporting(true);
+
+                            finish();
+
+                        }
+                    });
+
+                    // Create dialog
+                    AlertDialog dialog = builder.create();
+
+                    // Show dialog
+                    dialog.show();
+                }
+
+
+                return true;
+            };
+        });
 
 
         // Set last state in intent result
