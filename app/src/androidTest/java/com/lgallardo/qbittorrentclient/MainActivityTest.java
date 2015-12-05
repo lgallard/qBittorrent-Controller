@@ -44,7 +44,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         setActivityInitialTouchMode(false);
 
         mActivity = getActivity();
-        mLeftDrawer = (ListView) mActivity.findViewById(R.id.left_drawer);
+        mLeftDrawer = (ListView) mActivity.findViewById(R.id .left_drawer);
 
 
         //	Initiate	the	instance	of	Solo

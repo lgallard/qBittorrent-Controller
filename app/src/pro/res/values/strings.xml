@@ -68,6 +68,7 @@
     <string name="error403">Authentication error</string>
     <string name="info">Warning</string>
     <string name="global_value_error">Global value cannot be retrieved. Please check your connection settings!</string>
+    <string name="settings">Settings</string>
     <string name="about_help1">To start using the client, set your qBittorrent server settings</string>
     <string name="about_help2">Press the refresh button on the menu to get new results, or choose an option from the left menu to get the torrent list from the server.</string>
     <string name="about_motto">Manage all your torrents from Android using qBittorrent Controller</string>
