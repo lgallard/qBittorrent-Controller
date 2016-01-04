@@ -232,7 +232,9 @@ public class RSSFeedParser {
                         } else if (name.equals("pubDate")) {
 
                             // Set item pubDate
-                            item.setPubDate(text);
+                            if (item != null) {
+                                item.setPubDate(text);
+                            }
 
                         } else if (name.equals("enclosure")) {
                             item.setTorrentUrl(torrent);
