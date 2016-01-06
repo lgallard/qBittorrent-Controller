@@ -29,6 +29,8 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -926,6 +928,19 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        // Get SSID if WiFi
+        WifiManager wifiMgr = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+        String wifiSSID = wifiInfo.getSSID();
+
+        if(wifiMgr.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+
+            Log.d("Debug", "Your current WiFI state is : " + wifiMgr.getWifiState());
+            Log.d("Debug", "Your current SSID is: " + wifiSSID);
+            Log.d("Debug", "Your IP Address SSID is: " + wifiInfo.getIpAddress());
+            Log.d("Debug", "Your NetWorkID SSD is: " + wifiInfo.getNetworkId());
+        }
 
         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
