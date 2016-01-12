@@ -2226,7 +2226,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Get settings
-    protected void getSettings() {
+    protected void  getSettings() {
         // Preferences stuff
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 

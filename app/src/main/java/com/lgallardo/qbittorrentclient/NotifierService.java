@@ -17,6 +17,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -61,6 +63,11 @@ public class NotifierService extends BroadcastReceiver {
     private SharedPreferences sharedPrefs;
     private StringBuilder builderPrefs;
     private String qbQueryString = "query";
+
+    // SSID properties
+    protected static String ssid;
+    protected static String local_hostname;
+    protected static int local_port;
 
 
     public NotifierService() {
@@ -207,6 +214,48 @@ public class NotifierService extends BroadcastReceiver {
         // Notifications
         enable_notifications = sharedPrefs.getBoolean("enable_notifications", false);
         completed_hashes = sharedPrefs.getString("completed_hashes" + currentServer, "");
+
+        // Get local SSID properties
+        ssid = sharedPrefs.getString("ssid", "");
+        local_hostname = sharedPrefs.getString("local_hostname", null);
+
+
+        // If user leave the field empty, set 8080 port
+        try {
+            local_port = Integer.parseInt(sharedPrefs.getString("local_port", "-1"));
+        } catch (NumberFormatException e) {
+            local_port = -1;
+
+        }
+
+        // Set SSI and local hostname and port
+        if(ssid != null && !ssid.equals("")) {
+
+            // Get SSID if WiFi
+            WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+            String wifiSSID = wifiInfo.getSSID();
+
+//            Log.d("Debug", "NotifierService - WiFi SSID: " + wifiSSID);
+//            Log.d("Debug", "NotifierService - SSID: " + ssid);
+
+            if (wifiSSID.equals("\""+ssid+"\"") && wifiMgr.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+
+                if(local_hostname != null && !local_hostname.equals("")){
+                    hostname = local_hostname;
+                }
+
+                if(local_port != -1) {
+                    port = local_port;
+                }
+
+//                Log.d("Debug", "NotifierService - hostname: " + hostname);
+//                Log.d("Debug", "NotifierService - port: " + port);
+//                Log.d("Debug", "NotifierService - local_hostname: " + local_hostname);
+//                Log.d("Debug", "NotifierService -  local_port: " + local_port);
+
+            }
+        }
 
 
     }
