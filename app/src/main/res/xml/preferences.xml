@@ -95,6 +95,7 @@
             <EditTextPreference
                 android:defaultValue=""
                 android:dialogTitle="@string/settings_qbittorrent_localport_dialog_title"
+                android:inputType="number"
                 android:key="local_port"
                 android:summary="@string/settings_qbittorrent_localport_summary"
                 android:title="@string/settings_qbittorrent_localport_dialog_title" />

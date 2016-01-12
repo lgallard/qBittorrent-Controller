@@ -259,6 +259,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private MenuItem altSpeedLimitsMenuItem;
     private boolean enable_notifications;
 
+    // SSID properties
+    protected static String ssid;
+    protected static String local_hostname;
+    protected static int local_port;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -929,18 +934,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        // Get SSID if WiFi
-        WifiManager wifiMgr = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
-        String wifiSSID = wifiInfo.getSSID();
-
-        if(wifiMgr.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
-
-            Log.d("Debug", "Your current WiFI state is : " + wifiMgr.getWifiState());
-            Log.d("Debug", "Your current SSID is: " + wifiSSID);
-            Log.d("Debug", "Your IP Address SSID is: " + wifiInfo.getIpAddress());
-            Log.d("Debug", "Your NetWorkID SSD is: " + wifiInfo.getNetworkId());
-        }
 
         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
@@ -2337,6 +2330,47 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get AlternativeSpeedLimitsEnabled value
         alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
 
+        // Get local SSID properties
+        ssid = sharedPrefs.getString("ssid", "");
+        local_hostname = sharedPrefs.getString("local_hostname", null);
+
+
+        // If user leave the field empty, set 8080 port
+        try {
+            local_port = Integer.parseInt(sharedPrefs.getString("local_port", "-1"));
+        } catch (NumberFormatException e) {
+            local_port = -1;
+
+        }
+
+        // Set SSI and local hostname and port
+        if(ssid != null && !ssid.equals("")) {
+
+            // Get SSID if WiFi
+            WifiManager wifiMgr = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+            String wifiSSID = wifiInfo.getSSID();
+
+//            Log.d("Debug", "WiFi SSID: " + wifiSSID);
+//            Log.d("Debug", "SSID: " + ssid);
+
+            if (wifiSSID.equals("\""+ssid+"\"") && wifiMgr.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+
+                if(local_hostname != null && !local_hostname.equals("")){
+                    hostname = local_hostname;
+                }
+
+                if(local_port != -1) {
+                    port = local_port;
+                }
+
+//                Log.d("Debug", "hostname: " + hostname);
+//                Log.d("Debug", "port: " + port);
+//                Log.d("Debug", "local_hostname: " + local_hostname);
+//                Log.d("Debug", "local_port: " + local_port);
+
+            }
+        }
     }
 
     // Get Options

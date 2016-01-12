@@ -186,11 +186,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     dialog.show();
 
 
-                } else {
-
-                    // Read and load preferences
-                    saveQBittorrentServerValues();
-                    getQBittorrentServerValues(newValue.toString());
                 }
 
                 return true;
@@ -240,11 +235,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     dialog.show();
 
 
-                } else {
-
-                    // Read and load preferences
-                    saveQBittorrentServerValues();
-                    getQBittorrentServerValues(newValue.toString());
                 }
 
                 return true;
@@ -294,11 +284,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     dialog.show();
 
 
-                } else {
-
-                    // Read and load preferences
-                    saveQBittorrentServerValues();
-                    getQBittorrentServerValues(newValue.toString());
                 }
 
                 return true;
