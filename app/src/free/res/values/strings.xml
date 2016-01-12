@@ -232,10 +232,7 @@
     <string name="help_report_summary">Send a report to the developer</string>
     <string name="dialog_send_report">Provide a short description of your problem</string>
     <string name="settings_qbittorrent_SSID_category">Local network</string>
-    <string name="settings_qbittorrent_ssid_dialog_title">Local network</string>
-    <string name="settings_qbittorrent_ssid_summary">Network SSID</string>
+    <string name="settings_qbittorrent_ssid_dialog_title">Network SSID</string>
     <string name="settings_qbittorrent_localhostname_dialog_title">Local Hostname or IP</string>
-    <string name="settings_qbittorrent_localhostname_summary">Hostname or IP for Network SSID</string>
     <string name="settings_qbittorrent_localport_dialog_title">Local Port</string>
-    <string name="settings_qbittorrent_localport_summary">Port for Network SSID</string>
 </resources>
