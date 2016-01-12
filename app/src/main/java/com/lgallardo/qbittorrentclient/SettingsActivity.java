@@ -47,6 +47,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private CheckBoxPreference enable_notifications;
     private ListPreference notification_period;
 
+    private EditTextPreference ssid;
+    private EditTextPreference local_hostname;
+    private EditTextPreference local_port;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -74,6 +78,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         enable_notifications = (CheckBoxPreference) findPreference("enable_notifications");
         notification_period = (ListPreference) findPreference("notification_period");
+
+
+        ssid = (EditTextPreference) findPreference("ssid");
+        local_hostname = (EditTextPreference) findPreference("local_hostname");
+        local_port = (EditTextPreference) findPreference("local_port");
+
 
         // Get values for server
         getQBittorrentServerValues(currentServer.getValue());
@@ -132,6 +142,170 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
         });
 
+
+        Preference pref2 = findPreference("ssid");
+        pref2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                // do whatever you want with new value
+
+                if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+
+
+                    Builder builder = new Builder(SettingsActivity.this);
+
+                    // Message
+                    builder.setMessage(R.string.settings_qbittorrent_pro_message).setTitle(R.string.settings_qbittorrent_pro_title);
+
+                    // Ok
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User accepted the dialog
+
+                            // Set first server
+                            ssid.setText("");
+                        }
+                    });
+
+                    // Create dialog
+                    final AlertDialog dialog = builder.create();
+
+                    // This detects if the back button was press while showing the dialog
+                    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            //do whatever you want the back key to do
+                            // Set first server
+                            ssid.setText("");
+
+                        }
+                    });
+
+                    // Show dialog
+                    dialog.show();
+
+
+                } else {
+
+                    // Read and load preferences
+                    saveQBittorrentServerValues();
+                    getQBittorrentServerValues(newValue.toString());
+                }
+
+                return true;
+            }
+        });
+
+        Preference pref3 = findPreference("local_hostname");
+        pref3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                // do whatever you want with new value
+
+                if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+
+
+                    Builder builder = new Builder(SettingsActivity.this);
+
+                    // Message
+                    builder.setMessage(R.string.settings_qbittorrent_pro_message).setTitle(R.string.settings_qbittorrent_pro_title);
+
+                    // Ok
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User accepted the dialog
+
+                            // Set first server
+                            local_hostname.setText("");
+                        }
+                    });
+
+                    // Create dialog
+                    final AlertDialog dialog = builder.create();
+
+                    // This detects if the back button was press while showing the dialog
+                    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            //do whatever you want the back key to do
+                            // Set first server
+                            local_hostname.setText("");
+
+                        }
+                    });
+
+                    // Show dialog
+                    dialog.show();
+
+
+                } else {
+
+                    // Read and load preferences
+                    saveQBittorrentServerValues();
+                    getQBittorrentServerValues(newValue.toString());
+                }
+
+                return true;
+            }
+        });
+
+        Preference pref4 = findPreference("local_port");
+        pref4.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                // do whatever you want with new value
+
+                if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclient")) {
+
+
+                    Builder builder = new Builder(SettingsActivity.this);
+
+                    // Message
+                    builder.setMessage(R.string.settings_qbittorrent_pro_message).setTitle(R.string.settings_qbittorrent_pro_title);
+
+                    // Ok
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User accepted the dialog
+
+                            // Set first server
+                            local_port.setText("");
+                        }
+                    });
+
+                    // Create dialog
+                    final AlertDialog dialog = builder.create();
+
+                    // This detects if the back button was press while showing the dialog
+                    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            //do whatever you want the back key to do
+                            // Set first server
+                            local_port.setText("");
+
+                        }
+                    });
+
+                    // Show dialog
+                    dialog.show();
+
+
+                } else {
+
+                    // Read and load preferences
+                    saveQBittorrentServerValues();
+                    getQBittorrentServerValues(newValue.toString());
+                }
+
+                return true;
+            }
+        });
+
+
         // Set last state in intent result
         Intent result = new Intent();
         result.putExtra("currentState", MainActivity.currentState);
@@ -187,7 +361,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         port.setText(sharedPrefs.getString("port" + value, "8080"));
         port.setSummary(sharedPrefs.getString("port" + value, "8080"));
 
-        username.setText(sharedPrefs.getString("username" + value, "admin"));
+            username.setText(sharedPrefs.getString("username" + value, "admin"));
         username.setSummary(sharedPrefs.getString("username" + value, "admin"));
 
         password.setText(sharedPrefs.getString("password" + value, "adminadmin"));
@@ -213,6 +387,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         notification_period.setSummary(notification_period.getEntry());
 
+
+        ssid.setText(sharedPrefs.getString("ssid" + value, ""));
+        ssid.setSummary(sharedPrefs.getString("ssid" + value, ""));
+
+        local_hostname.setText(sharedPrefs.getString("local_hostname" + value, ""));
+        local_hostname.setSummary(sharedPrefs.getString("local_hostname" + value, ""));
+
+        local_port.setText(sharedPrefs.getString("local_port" + value, ""));
+        local_port.setSummary(sharedPrefs.getString("local_port" + value, ""));
+
     }
 
     public void refreshScreenValues() {
@@ -226,6 +410,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         notification_period.setSummary(notification_period.getEntry());
         connection_timeout.setSummary(connection_timeout.getText());
         data_timeout.setSummary(data_timeout.getText());
+
+
+        ssid.setSummary(ssid.getText());
+        local_hostname.setSummary(local_hostname.getText());
+        local_port.setSummary(local_port.getText());
+
 
     }
 
@@ -273,6 +463,20 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         }
 
         editor.putBoolean("dark_ui" + currentServerValue, dark_ui.isChecked());
+
+        if (ssid.getText().toString() != null && ssid.getText().toString() != "") {
+            editor.putString("ssid" + currentServerValue, ssid.getText().toString());
+        }
+
+        if (local_hostname.getText().toString() != null && local_hostname.getText().toString() != "") {
+            editor.putString("local_hostname" + currentServerValue, local_hostname.getText().toString());
+        }
+
+        if (local_port.getText().toString() != null && local_port.getText().toString() != "") {
+            editor.putString("local_port" + currentServerValue, local_port.getText().toString());
+        }
+
+
 
         // Commit changes
         editor.commit();
