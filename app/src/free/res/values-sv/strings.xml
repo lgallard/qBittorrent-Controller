@@ -232,4 +232,8 @@
     <string name="dialog_send_report">Ge en kort beskrivning av ditt problem</string>
     <string name="help_report_summary">Skicka en rapport till utvecklaren</string>
     <string name="help_report_title">Generera rapport</string>
+    <string name="settings_qbittorrent_SSID_category">Lokalt nätverk</string>
+    <string name="settings_qbittorrent_localhostname_dialog_title">Lokala värdnamn eller IP</string>
+    <string name="settings_qbittorrent_ssid_dialog_title">Nätverkets SSID.</string>
+    <string name="settings_qbittorrent_localport_dialog_title">Lokal port</string>
 </resources>

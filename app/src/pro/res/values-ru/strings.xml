@@ -225,4 +225,8 @@
   <string name="help_report_title">Создать отчет</string>
   <string name="help_report_summary">Отправить отчет разработчику</string>
   <string name="dialog_send_report">Предоставьте краткое описание вашей проблемы</string>
+  <string name="settings_qbittorrent_SSID_category">Локальная сеть</string>
+  <string name="settings_qbittorrent_localhostname_dialog_title">Местное имя или IP</string>
+  <string name="settings_qbittorrent_localport_dialog_title">Локальный порт</string>
+  <string name="settings_qbittorrent_ssid_dialog_title">SID сети</string>
 </resources>

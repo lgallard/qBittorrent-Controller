@@ -225,4 +225,8 @@
     <string name="dialog_send_report">Fornire una breve descrizione del problema</string>
     <string name="help_report_summary">Invia una segnalazione allo sviluppatore</string>
     <string name="help_report_title">Genera rapporto</string>
+    <string name="settings_qbittorrent_SSID_category">Rete locale</string>
+    <string name="settings_qbittorrent_ssid_dialog_title">SSID della rete</string>
+    <string name="settings_qbittorrent_localport_dialog_title">Porta locale</string>
+    <string name="settings_qbittorrent_localhostname_dialog_title">Host locale o l\'indirizzo IP</string>
 </resources>

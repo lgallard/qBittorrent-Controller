@@ -232,4 +232,8 @@
   <string name="dialog_send_report">Zure arazoa deskribapen labur bat ematen</string>
   <string name="help_report_summary">Bidalitako txosten bat developer izateko</string>
   <string name="help_report_title">Sortu txostena</string>
+  <string name="settings_qbittorrent_SSID_category">Red local</string>
+  <string name="settings_qbittorrent_ssid_dialog_title">Sareko SSID</string>
+  <string name="settings_qbittorrent_localport_dialog_title">Bertako portuan</string>
+  <string name="settings_qbittorrent_localhostname_dialog_title">Bertako ostalari edo IP helbidea</string>
 </resources>
