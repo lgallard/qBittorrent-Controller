@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string-array name="qBittorrentServers">
+    <item>サーバー 1</item>
+    <item>サーバー 2</item>
+    <item>サーバー 3</item>
+  </string-array>
+  <string-array name="qBittorrentServersValues">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+  </string-array>
+  <string-array name="autorefresh">
+    <item>1 秒</item>
+    <item>2 秒</item>
+    <item>5 秒</item>
+    <item>10 秒</item>
+    <item>30 秒</item>
+    <item>1 分</item>
+    <item>2 分</item>
+    <item>5 分</item>
+    <item>10 分</item>
+    <item>15 分</item>
+  </string-array>
+  <string-array name="autorefreshValues">
+    <item>1000</item>
+    <item>2000</item>
+    <item>5000</item>
+    <item>10000</item>
+    <item>30000</item>
+    <item>60000</item>
+    <item>120000</item>
+    <item>300000</item>
+    <item>600000</item>
+    <item>900000</item>
+  </string-array>
+  <string-array name="notification">
+    <item>2 分</item>
+    <item>5 分</item>
+    <item>15 分</item>
+    <item>30 分</item>
+    <item>1 時間</item>
+    <item>6 時間</item>
+    <item>12 時間</item>
+    <item>1 日</item>
+  </string-array>
+  <string-array name="notificationValues">
+    <item>120000</item>
+    <item>300000</item>
+    <item>900000</item>
+    <item>1800000</item>
+    <item>3600000</item>
+    <item>21600000</item>
+    <item>43200000</item>
+    <item>86400000</item>
+  </string-array>
+  <string-array name="sortBy">
+    <item>名前</item>
+    <item>サイズ</item>
+    <item>ETA</item>
+    <item>優先度</item>
+    <item>進捗</item>
+    <item>レシオ</item>
+    <item>ダウンロード速度</item>
+    <item>アップロード速度</item>
+  </string-array>
+  <string-array name="sortByValues">
+    <item>Name</item>
+    <item>Size</item>
+    <item>ETA</item>
+    <item>Priority</item>
+    <item>Progress</item>
+    <item>Ratio</item>
+    <item>DownloadSpeed</item>
+    <item>UploadSpeed</item>
+  </string-array>
+  <string-array name="navigation_drawer_items_array">
+    <item>すべて</item>
+    <item>ダウンロード中</item>
+    <item>完了</item>
+    <item>一時停止</item>
+    <item>アクティブ</item>
+    <item>非アクティブ</item>
+    <item>オプション</item>
+    <item>設定</item>
+    <item>Pro版を入手</item>
+    <item>ヘルプ</item>
+  </string-array>
+  <string-array name="scheduler_days">
+    <item>毎日</item>
+    <item>週末</item>
+    <item>平日</item>
+    <item>月曜</item>
+    <item>火曜</item>
+    <item>水曜</item>
+    <item>木曜</item>
+    <item>金曜</item>
+    <item>土曜</item>
+    <item>日曜</item>
+  </string-array>
+  <string-array name="scheduler_days_values">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+    <item>5</item>
+    <item>6</item>
+    <item>7</item>
+    <item>8</item>
+    <item>9</item>
+  </string-array>
+</resources>
