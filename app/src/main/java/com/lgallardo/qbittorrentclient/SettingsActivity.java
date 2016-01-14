@@ -21,6 +21,7 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 import android.view.Menu;
 
 import java.util.ArrayList;
@@ -468,7 +469,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 
         // Refresh drawer servers
-
         String[] navigationDrawerServerItems;
         navigationDrawerServerItems = getResources().getStringArray(R.array.qBittorrentServers);
 
@@ -489,6 +489,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             serverItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, navigationDrawerServerItems[i], MainActivity.DRAWER_ITEM_SERVERS, ((i + 1) == currentServerIntValue), "changeCurrentServer"));
         }
 
-        MainActivity.rAdapter.refreshDrawerServers(serverItems);
+        try {
+            MainActivity.rAdapter.refreshDrawerServers(serverItems);
+
+        } catch (Exception e) {
+            Log.e("Debug", "SettingActivity - Couldn't refresh servers: " + e.toString());
+        }
     }
 }
