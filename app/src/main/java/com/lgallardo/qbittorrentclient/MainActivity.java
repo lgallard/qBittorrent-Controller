@@ -640,7 +640,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     // Se title
 //                    setTitle(navigationDrawerItemTitles[drawerList.getCheckedItemPosition()]);
-                    setTitle(navigationDrawerItemTitles[DrawerItemRecyclerViewAdapter.actionPosition]);
+//                    setTitle(navigationDrawerItemTitles[DrawerItemRecyclerViewAdapter.actionPosition]);
+                    setSelectionAndTitle(lastState);
 
                     // Close Contextual Action Bar
                     if (firstFragment != null && firstFragment.mActionMode != null) {
@@ -663,7 +664,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 // Se title
 //                setTitle(navigationDrawerItemTitles[drawerList.getCheckedItemPosition()]);
-                setTitle(navigationDrawerItemTitles[DrawerItemRecyclerViewAdapter.actionPosition]);
+//                setTitle(navigationDrawerItemTitles[DrawerItemRecyclerViewAdapter.actionPosition]);
+                setSelectionAndTitle(lastState);
 
                 // Close Contextual Action Bar
                 if (firstFragment != null && firstFragment.mActionMode != null) {
@@ -868,7 +870,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             // Set title
             setSelectionAndTitle(MainActivity.currentState);
-
 
             if (headerInfo != null) {
                 if (header) {
