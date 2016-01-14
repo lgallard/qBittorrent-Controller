@@ -220,8 +220,8 @@
   <string name="options_qbittorrent_schedule_alt_to">Hona</string>
   <string name="settings_qbittorrent_pro_title">Ezaugarria ez dago eskuragarri</string>
   <string name="settings_qbittorrent_pro_message">Ezaugarri hau qBittorrent PRO bertsioan bakarrik dago eskuragarri!</string>
-  <string name="action_toggle_alternative_rates">Alternative abiadura</string>
-  <string name="toggledAlternativeRates">Abiadura mugak aldatzea</string>
+  <string name="action_toggle_alternative_rates">Aukerazko abiadurak</string>
+  <string name="toggledAlternativeRates">Abiadura muga aldaketa</string>
   <string name="dialog_send_report">Zure arazoa deskribapen labur bat ematen</string>
   <string name="help_report_summary">Bidalitako txosten bat developer izateko</string>
   <string name="help_report_title">Sortu txostena</string>
