@@ -88,7 +88,7 @@
                 android:layout_toRightOf="@+id/arrow"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Luis M. Gallardo D. (Spanish translation)\nVitor Sena Melgaço (Portuguese translation)\nWiesław Jurgielewicz (Polish translation)\nAlexey D. Filimonov (Russian translation)\ndartraiden (Russian translation)\nXabier Aramendi (Basque translation)" />
+                android:text="Luis M. Gallardo D. (Spanish translation)\nVitor Sena Melgaço (Portuguese translation)\nWiesław Jurgielewicz (Polish translation)\nAlexey D. Filimonov (Russian translation)\ndartraiden (Russian translation)\nXabier Aramendi (Basque translation)\nNaofumi (Japanese translation)" />
 
 
         </RelativeLayout>
