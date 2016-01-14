@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="app_name">qBittorrent Controller</string>
-  <string name="app_shortname">コントローラー</string>
+  <string name="app_shortname">qBController</string>
   <string name="action_settings">設定</string>
   <string name="action_refresh">リフレッシュ</string>
   <string name="action_add">追加</string>

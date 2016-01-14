@@ -2354,7 +2354,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //            Log.d("Debug", "WiFi SSID: " + wifiSSID);
 //            Log.d("Debug", "SSID: " + ssid);
 
-            if (wifiSSID.equals("\""+ssid+"\"") && wifiMgr.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+            if (wifiSSID.toUpperCase().equals("\""+ssid.toUpperCase()+"\"") && wifiMgr.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
 
                 if(local_hostname != null && !local_hostname.equals("")){
                     hostname = local_hostname;

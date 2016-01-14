@@ -10,7 +10,7 @@
 
 <resources>
     <string name="app_name">qBittorrent Controller</string>
-    <string name="app_shortname">Controller</string>
+    <string name="app_shortname">qBController</string>
     <string name="action_settings">Configurações</string>
     <string name="action_refresh">Atualizar</string>
     <string name="action_add">Adicionar</string>

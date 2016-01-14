@@ -10,7 +10,7 @@
 
 <resources>
   <string name="app_name">qBittorrent Controller Pro</string>
-  <string name="app_shortname">Controller Pro</string>
+  <string name="app_shortname">qBController Pro</string>
   <string name="action_refresh">Berritu</string>
   <string name="action_add">Gehitu</string>
   <string name="action_pause">Pausatu</string>
