@@ -178,7 +178,7 @@
   <string name="drawer_open">Открыть меню навигации</string>
   <string name="drawer_servers_category">Серверы</string>
   <string name="title_activity_settings">Настройки приложения</string>
-  <string ame="settings_qbittorrent_sort_category">Сортировка списка торрентов</string>
+  <string name="settings_qbittorrent_sort_category">Сортировка списка торрентов</string>
   <string name="settings_qbittorrent_darkui_summary">Перезапустите приложение для изменения темы оформления</string>
   <string name="sortby_menu_name">Имя</string>
   <string name="sortby_menu_size">Размер</string>
