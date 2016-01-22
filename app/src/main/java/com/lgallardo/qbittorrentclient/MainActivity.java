@@ -1668,9 +1668,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Scheduler scheduler days
             json += ",\"scheduler_days\":" + scheduler_days;
 
+                Log.d("Debug", "max_ratio_enabled:" + max_ratio_enabled);
+
             // Share Ratio Limiting
             json += ",\"max_ratio_enabled\":" + max_ratio_enabled;
-            json += ",\"max_ratio\":" + max_ratio;
+            json += ",\"max_ratio\":-1";
             json += ",\"max_ratio_act\":" + max_ratio_act;
 
             // Put everything in an json object
