@@ -115,6 +115,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static final String TAG_SCHEDULER_DAYS = "scheduler_days";
 
 
+    protected static final String TAG_MAX_RATIO_ENABLED = "max_ratio_enabled";
+    protected static final String TAG_MAX_RATIO = "max_ratio";
+    protected static final String TAG_MAX_RATIO_ACT = "max_ratio_act";
+
+
+
+
     protected static final int SETTINGS_CODE = 0;
     protected static final int OPTION_CODE = 1;
     protected static final int GETPRO_CODE = 2;
@@ -173,6 +180,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static String alt_to_hour;
     protected static String alt_to_min;
     protected static String scheduler_days;
+    protected static boolean max_ratio_enabled;
+    protected static String max_ratio;
+    protected static String max_ratio_act;
 
     static Torrent[] lines;
     static String[] names;
@@ -1658,6 +1668,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Scheduler scheduler days
             json += ",\"scheduler_days\":" + scheduler_days;
 
+            // Share Ratio Limiting
+            json += ",\"max_ratio_enabled\":" + max_ratio_enabled;
+            json += ",\"max_ratio\":" + max_ratio;
+            json += ",\"max_ratio_act\":" + max_ratio_act;
+
             // Put everything in an json object
             json = "{" + json + "}";
 
@@ -2414,6 +2429,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Check alternatives speed
         alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
+
+        // Share Ratio Limiting
+        max_ratio_enabled = sharedPrefs.getBoolean("max_ratio_enabled", false);
+        max_ratio = sharedPrefs.getString("max_ratio", "0");
+        max_ratio_act =  sharedPrefs.getString("max_ratio_act", "NULL");
 
     }
 
@@ -3526,6 +3546,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     alt_to_min = json.getString(TAG_SCHEDULE_TO_MIN);
                     scheduler_days = json.getString(TAG_SCHEDULER_DAYS);
 
+                    max_ratio_enabled = json.getBoolean(TAG_MAX_RATIO_ENABLED);
+                    max_ratio = json.getString(TAG_MAX_RATIO);
+                    max_ratio_act = json.getString(TAG_MAX_RATIO_ACT);
+
+
                     // Save options locally
                     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                     Editor editor = sharedPrefs.edit();
@@ -3547,6 +3572,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     editor.putString("alt_from", alt_from_hour + ":" + alt_from_min);
                     editor.putString("alt_to", alt_to_hour + ":" + alt_to_min);
                     editor.putString("scheduler_days", scheduler_days);
+
+                    editor.putBoolean("max_ratio_enabled", max_ratio_enabled);
+                    editor.putString("max_ratio", max_ratio);
+                    editor.putString("max_ratio_act", max_ratio_act);
+
 
 
                     // Commit changes

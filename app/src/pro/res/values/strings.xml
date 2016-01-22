@@ -229,4 +229,9 @@
     <string name="settings_qbittorrent_ssid_dialog_title">Network SSID</string>
     <string name="settings_qbittorrent_localhostname_dialog_title">Local Hostname or IP</string>
     <string name="settings_qbittorrent_localport_dialog_title">Local Port</string>
+    <string name="options_qbittorrent_share_ratio_limiting_category">Share Ratio Limiting</string>
+    <string name="options_qbittorrent_share_ratio_limiting_title">Seed torrents until</string>
+    <string name="options_qbittorrent_seed_until_title">their ratio reaches</string>
+    <string name="options_qbittorrent_seed_until_dialog">Seed torrents until their ratio reaches</string>
+    <string name="options_qbittorrent_then_title">Then</string>
 </resources>

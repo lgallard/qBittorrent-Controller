@@ -104,4 +104,26 @@
             android:title="@string/options_qbittorrent_torrent_queueing_max_active_torrents_title" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="Share Ratio Limiting"
+        android:title="@string/options_qbittorrent_share_ratio_limiting_category">
+        <CheckBoxPreference
+            android:key="max_ratio_enabled"
+            android:title="@string/options_qbittorrent_share_ratio_limiting_title" />
+
+        <EditTextPreference
+            android:dependency="max_ratio_enabled"
+            android:dialogTitle="@string/options_qbittorrent_seed_until_dialog"
+            android:inputType="number"
+            android:key="max_ratio"
+            android:title="@string/options_qbittorrent_seed_until_title" />
+        <ListPreference
+            android:defaultValue="0"
+            android:dependency="max_ratio_enabled"
+            android:entries="@array/max_ratio_action"
+            android:entryValues="@array/max_ratio_action_values"
+            android:key="max_ratio_act"
+            android:title="@string/options_qbittorrent_then_title" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

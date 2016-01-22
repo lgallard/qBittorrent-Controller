@@ -23,6 +23,7 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 	private TimePreference alt_from;
 	private TimePreference alt_to;
 	private ListPreference scheduler_days;
+	private ListPreference max_ratio_act;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +39,12 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 		alt_from = (TimePreference) findPreference("alt_from");
 		alt_to = (TimePreference) findPreference("alt_to");
 		scheduler_days = (ListPreference) findPreference("scheduler_days");
+		max_ratio_act = (ListPreference) findPreference("max_ratio_act");
 
 		// Get values for server
 		getQBittorrentOptionValues();
 
-		// Set prefrerence change listeners
+		// Set preference change listeners
 
 		alt_from.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
@@ -98,6 +100,13 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 
 		scheduler_days.setSummary(scheduler_days.getEntry());
 
+
+		if (max_ratio_act.getEntry() == null) {
+			max_ratio_act.setValueIndex(0);
+		}
+
+		max_ratio_act.setSummary(max_ratio_act.getEntry());
+
 	}
 
 	private void saveQBittorrentOptionValues(){
@@ -119,6 +128,7 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 
 	public void refreshScreenValues() {
 		scheduler_days.setSummary(scheduler_days.getEntry());
+		max_ratio_act.setSummary(max_ratio_act.getEntry());
 	}
 		@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
