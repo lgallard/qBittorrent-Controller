@@ -17,7 +17,6 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 import android.view.Menu;
 
 public class OptionsActivity extends PreferenceActivity  implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -140,11 +139,32 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 		SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
 
 
-		global_max_num_connections.setSummary(sharedPrefs.getString("global_max_num_connections", ""));
+		String global_max_num_connections_value = sharedPrefs.getString("global_max_num_connections", "0");
+		String global_upload_value = sharedPrefs.getString("global_upload", "0");
+
+
+		if(global_max_num_connections_value.equals("-1")){
+			global_max_num_connections_value = "0";
+		}
+
+		if(global_upload_value.equals("-1")){
+			global_upload_value = "0";
+		}
+
+
+		global_max_num_connections.setText(global_max_num_connections_value);
+		global_max_num_connections.setSummary(global_max_num_connections_value);
+
+
+
 		max_num_conn_per_torrent.setSummary(sharedPrefs.getString("max_num_conn_per_torrent", ""));
 		max_num_upslots_per_torrent.setSummary(sharedPrefs.getString("max_num_upslots_per_torrent", ""));
 
-		global_upload.setSummary(sharedPrefs.getString("global_upload", ""));
+		global_upload.setText(global_upload_value);
+		global_upload.setSummary(global_upload_value);
+
+
+
 		global_download.setSummary(sharedPrefs.getString("global_download", ""));
 		alt_upload.setSummary(sharedPrefs.getString("alt_upload", ""));
 		alt_download.setSummary(sharedPrefs.getString("alt_download", ""));
@@ -191,19 +211,29 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 
 
         if (max_num_conn_per_torrent.getText().toString() != null && max_num_conn_per_torrent.getText().toString() != "") {
-            editor.putString("global_max_num_connections", max_num_conn_per_torrent.getText().toString());
+            editor.putString("max_num_conn_per_torrent", max_num_conn_per_torrent.getText().toString());
         }
 
         if (max_num_upslots_per_torrent.getText().toString() != null && max_num_upslots_per_torrent.getText().toString() != "") {
-            editor.putString("global_max_num_connections", max_num_upslots_per_torrent.getText().toString());
+            editor.putString("max_num_upslots_per_torrent", max_num_upslots_per_torrent.getText().toString());
         }
 
 
-        if (max_num_conn_per_torrent.getText().toString() != null && max_num_conn_per_torrent.getText().toString() != "") {
-            editor.putString("max_num_upslots_per_torrent", max_num_conn_per_torrent.getText().toString());
-        }
 
 		//TODO: Complete saving values
+
+
+
+
+		if (global_upload.getText().toString() != null && global_upload.getText().toString() != "") {
+
+			if(global_upload.getText().equals("-1")){
+				global_upload.setText("0");
+			}
+
+			editor.putString("global_upload", global_upload.getText().toString());
+		}
+
 
 
 
@@ -256,7 +286,7 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		// Update values on Screen
-		Log.d("Debug", "option changed");
+//		Log.d("Debug", "option changed");
 		refreshScreenValues();
 	}
 }
