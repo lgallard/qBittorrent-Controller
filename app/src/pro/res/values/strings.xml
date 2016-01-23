@@ -234,4 +234,8 @@
     <string name="options_qbittorrent_seed_until_title">their ratio reaches</string>
     <string name="options_qbittorrent_seed_until_dialog">Seed torrents until their ratio reaches</string>
     <string name="options_qbittorrent_then_title">Then</string>
+    <string name="options_qbittorrent_options">Options</string>
+    <string name="options_qbittorrent_connection">Connection</string>
+    <string name="options_qbittorrent_speed">Speed</string>
+    <string name="options_qbittorrent_bittorrent">Bittorrent</string>
 </resources>
