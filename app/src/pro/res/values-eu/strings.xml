@@ -229,4 +229,14 @@
   <string name="settings_qbittorrent_ssid_dialog_title">Sareko SSID</string>
   <string name="settings_qbittorrent_localport_dialog_title">Bertako portuan</string>
   <string name="settings_qbittorrent_localhostname_dialog_title">Bertako ostalari edo IP helbidea</string>
+  <string name="options_qbittorrent_then_title">Orduan</string>
+  <string name="options_qbittorrent_speed">Abiadura</string>
+  <string name="options_qbittorrent_seed_until_dialog">Emaritu torrentak beren maila erdietsi arte</string>
+  <string name="options_qbittorrent_seed_until_title">beren maila erdietsi arte</string>
+  <string name="options_qbittorrent_share_ratio_limiting_title">Emaritu torrentak </string>
+  <string name="options_qbittorrent_share_ratio_limiting_category">Elkarbanatze Maila Mugapena</string>
+  <string name="options_qbittorrent_bittorrent">Bittorrent</string>
+  <string name="options_qbittorrent_connection">Elkarketa</string>
+  <string name="options_qbittorrent_options">Aukerak</string>
+
 </resources>

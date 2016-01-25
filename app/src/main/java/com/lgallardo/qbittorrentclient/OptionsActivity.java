@@ -141,6 +141,7 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 
 		String global_max_num_connections_value = sharedPrefs.getString("global_max_num_connections", "0");
 		String global_upload_value = sharedPrefs.getString("global_upload", "0");
+		String max_ratio_value = sharedPrefs.getString("max_ratio", "0");
 
 
 		if(global_max_num_connections_value.equals("-1")){
@@ -149,6 +150,10 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 
 		if(global_upload_value.equals("-1")){
 			global_upload_value = "0";
+		}
+
+		if(max_ratio_value.equals("-1")){
+			max_ratio_value = "1";
 		}
 
 
@@ -168,6 +173,8 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 		global_download.setSummary(sharedPrefs.getString("global_download", ""));
 		alt_upload.setSummary(sharedPrefs.getString("alt_upload", ""));
 		alt_download.setSummary(sharedPrefs.getString("alt_download", ""));
+
+		max_ratio.setText(max_ratio_value);
 
 		max_act_downloads.setSummary(sharedPrefs.getString("max_act_downloads", ""));
 		max_act_uploads.setSummary(sharedPrefs.getString("max_act_uploads", ""));

@@ -228,5 +228,13 @@
     <string name="settings_qbittorrent_localhostname_dialog_title">Nombre de host o IP local</string>
     <string name="settings_qbittorrent_localport_dialog_title">Puerto local</string>
     <string name="settings_qbittorrent_ssid_dialog_title">Red SSID</string>
-
+    <string name="options_qbittorrent_connection">Conexión</string>
+    <string name="options_qbittorrent_options">Opciones</string>
+    <string name="options_qbittorrent_seed_until_dialog">Sembrar torrents hasta que su ratio sea</string>
+    <string name="options_qbittorrent_seed_until_title">su ratio sea</string>
+    <string name="options_qbittorrent_share_ratio_limiting_category">Límite de ratio de compartición</string>
+    <string name="options_qbittorrent_speed">Velocidad</string>
+    <string name="options_qbittorrent_bittorrent">Bittorrent</string>
+    <string name="options_qbittorrent_then_title">Entonces</string>
+    <string name="options_qbittorrent_share_ratio_limiting_title">Sembrar torrents hasta</string>
 </resources>
