@@ -227,15 +227,15 @@
   <string name="options_qbittorrent_scheduler_days_title">Noiz:</string>
   <string name="options_qbittorrent_schedule_alt_from">Hemendik</string>
   <string name="options_qbittorrent_schedule_alt_to">Hona</string>
-  <string name="action_toggle_alternative_rates">Aukerazko abiadura</string>
+  <string name="action_toggle_alternative_rates">Aukerazko abiadurak</string>
   <string name="toggledAlternativeRates">Abiadura muga aldaketa</string>
-  <string name="dialog_send_report">Eman zure arazoaren azalpen labur bat</string>
-  <string name="help_report_summary">Bidali jakinarazpen bat garatzaileari</string>
   <string name="help_report_title">Sortu jakinarazpena</string>
-  <string name="settings_qbittorrent_SSID_category">Red local</string>
-  <string name="settings_qbittorrent_ssid_dialog_title">Sareko SSID</string>
-  <string name="settings_qbittorrent_localport_dialog_title">Bertako portuan</string>
-  <string name="settings_qbittorrent_localhostname_dialog_title">Bertako ostalari edo IP helbidea</string>
+  <string name="help_report_summary">Bidali jakinarazpen bat garatzaileari</string>
+  <string name="dialog_send_report">Eman zure arazoaren azalpen labur bat</string>
+  <string name="settings_qbittorrent_SSID_category">Tokiko sarea</string>
+  <string name="settings_qbittorrent_ssid_dialog_title">Sare SSID-a</string>
+  <string name="settings_qbittorrent_localhostname_dialog_title">Tokiko Hostalari-izena edo IP-a</string>
+  <string name="settings_qbittorrent_localport_dialog_title">Tokiko Ataka</string>
   <string name="options_qbittorrent_then_title">Orduan</string>
   <string name="options_qbittorrent_speed">Abiadura</string>
   <string name="options_qbittorrent_seed_until_dialog">Emaritu torrentak beren maila erdietsi arte</string>
@@ -246,3 +246,6 @@
   <string name="options_qbittorrent_connection">Elkarketa</string>
   <string name="options_qbittorrent_options">Aukerak</string>
 </resources>
+
+
+
