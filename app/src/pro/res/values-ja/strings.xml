@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="app_name">qBittorrent Controller Pro</string>
-  <string name="app_shortname">qBController Pro</string>
+  <string name="app_shortname">qBC Pro</string>
   <string name="action_refresh">リフレッシュ</string>
   <string name="action_add">追加</string>
   <string name="action_pause">一時停止</string>
@@ -217,9 +217,9 @@
   <string name="help_report_summary">開発者にレポートを送信</string>
   <string name="dialog_send_report">問題の詳細を簡単に入力してください</string>
   <string name="settings_qbittorrent_SSID_category">ローカルネットワーク</string>
-  <string name="settings_qbittorrent_localhostname_dialog_title">ローカルホストまたはIPアドレス</string>
+  <string name="settings_qbittorrent_localhostname_dialog_title">ローカル ホスト名または IP</string>
   <string name="settings_qbittorrent_localport_dialog_title">ローカルポート</string>
-  <string name="settings_qbittorrent_ssid_dialog_title">ネットワークのSSID</string>
+  <string name="settings_qbittorrent_ssid_dialog_title">ネットワーク SSID</string>
   <string name="options_qbittorrent_bittorrent">Bittorrent</string>
   <string name="options_qbittorrent_connection">接続</string>
   <string name="options_qbittorrent_options">オプション</string>
