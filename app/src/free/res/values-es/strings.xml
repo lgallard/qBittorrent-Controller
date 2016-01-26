@@ -245,5 +245,5 @@
     <string name="options_qbittorrent_speed">Velocidad</string>
     <string name="options_qbittorrent_bittorrent">Bittorrent</string>
     <string name="options_qbittorrent_then_title">Entonces</string>
-    <string name="options_qbittorrent_share_ratio_limiting_title">Sembrar torrents hasta</string>
+    <string name="options_qbittorrent_share_ratio_limiting_title">Sembrar torrents hasta que</string>
 </resources>
