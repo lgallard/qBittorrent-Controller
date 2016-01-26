@@ -229,4 +229,13 @@
     <string name="settings_qbittorrent_localhostname_dialog_title">Lokala värdnamn eller IP</string>
     <string name="settings_qbittorrent_ssid_dialog_title">Nätverkets SSID.</string>
     <string name="settings_qbittorrent_localport_dialog_title">Lokal port</string>
+    <string name="options_qbittorrent_bittorrent">Bittorrent</string>
+    <string name="options_qbittorrent_connection">Anslutning</string>
+    <string name="options_qbittorrent_options">Alternativ</string>
+    <string name="options_qbittorrent_seed_until_dialog">Distribuera torrentfiler till deras förhållande når</string>
+    <string name="options_qbittorrent_share_ratio_limiting_title">Distribuera torrentfiler till </string>
+    <string name="options_qbittorrent_share_ratio_limiting_category">Begränsning av utdelningsförhållande</string>
+    <string name="options_qbittorrent_speed">Hastighet</string>
+    <string name="options_qbittorrent_then_title">Sedan</string>
+    <string name="options_qbittorrent_seed_until_title">deras förhållande når</string>
 </resources>

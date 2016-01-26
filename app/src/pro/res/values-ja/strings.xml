@@ -220,4 +220,13 @@
   <string name="settings_qbittorrent_localhostname_dialog_title">ローカルホストまたはIPアドレス</string>
   <string name="settings_qbittorrent_localport_dialog_title">ローカルポート</string>
   <string name="settings_qbittorrent_ssid_dialog_title">ネットワークのSSID</string>
+  <string name="options_qbittorrent_bittorrent">Bittorrent</string>
+  <string name="options_qbittorrent_connection">接続</string>
+  <string name="options_qbittorrent_options">オプション</string>
+  <string name="options_qbittorrent_seed_until_dialog">指定共有比に達するまでシードする</string>
+  <string name="options_qbittorrent_seed_until_title">その比率に達します</string>
+  <string name="options_qbittorrent_share_ratio_limiting_title">シードトレントまで</string>
+  <string name="options_qbittorrent_then_title">に達したとき</string>
+  <string name="options_qbittorrent_speed">速度</string>
+  <string name="options_qbittorrent_share_ratio_limiting_category">共有比上限</string>
 </resources>

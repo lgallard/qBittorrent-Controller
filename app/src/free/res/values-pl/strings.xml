@@ -236,4 +236,13 @@
     <string name="settings_qbittorrent_ssid_dialog_title">SSID sieci</string>
     <string name="settings_qbittorrent_localport_dialog_title">Port lokalny</string>
     <string name="settings_qbittorrent_localhostname_dialog_title">Lokalnego hosta lub adres IP</string>
+    <string name="options_qbittorrent_bittorrent">Bittorrent</string>
+    <string name="options_qbittorrent_connection">Połączenie</string>
+    <string name="options_qbittorrent_options">Opcje</string>
+    <string name="options_qbittorrent_seed_until_dialog">Wysyłaj do czasu, aż współczynnik udziału osiągnie</string>
+    <string name="options_qbittorrent_seed_until_title">współczynnik udziału osiągnie</string>
+    <string name="options_qbittorrent_share_ratio_limiting_title">Wysyłaj do czasu</string>
+    <string name="options_qbittorrent_share_ratio_limiting_category">Ograniczenie współczynnika udziału</string>
+    <string name="options_qbittorrent_speed">Prędkość</string>
+    <string name="options_qbittorrent_then_title">Następnie</string>
 </resources>

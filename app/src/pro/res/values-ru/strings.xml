@@ -229,4 +229,13 @@
   <string name="settings_qbittorrent_localhostname_dialog_title">Местное имя или IP</string>
   <string name="settings_qbittorrent_localport_dialog_title">Локальный порт</string>
   <string name="settings_qbittorrent_ssid_dialog_title">SID сети</string>
+  <string name="options_qbittorrent_then_title">Затем</string>
+  <string name="options_qbittorrent_speed">Скорость</string>
+  <string name="options_qbittorrent_seed_until_dialog">Раздавать торренты, пока их коэффициент не достигнет</string>
+  <string name="options_qbittorrent_bittorrent">Bittorrent</string>
+  <string name="options_qbittorrent_connection">Соединение</string>
+  <string name="options_qbittorrent_options">Настройки</string>
+  <string name="options_qbittorrent_seed_until_title">их коэффициент не достигнет</string>
+  <string name="options_qbittorrent_share_ratio_limiting_title">Раздавать торренты, пока</string>
+  <string name="options_qbittorrent_share_ratio_limiting_category">Ограничение коэффициента раздачи</string>
 </resources>
