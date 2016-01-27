@@ -27,7 +27,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
 
-            android:src="@drawable/downloading" />
+            android:src="@drawable/ic_action_recheck" />
 
         <LinearLayout
             android:layout_width="0dp"

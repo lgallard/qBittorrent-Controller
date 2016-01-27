@@ -97,7 +97,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
                 icon.setImageResource(R.drawable.ic_action_recheck);
             }
 
-            if ("error".equals(state)) {
+            if ("error".equals(state) || "missingFiles".equals(state) || "unknown".equals(state)) {
                 icon.setImageResource(R.drawable.error);
             }
 

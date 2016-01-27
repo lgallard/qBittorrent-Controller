@@ -107,6 +107,13 @@ class Torrent {
      * @return the state
      */
     public String getState() {
+
+        // Despite documentation some unexpected states are returned by qBittorrent servers
+        // Check how is handled by the WebUI: https://github.com/qbittorrent/qBittorrent/blob/de5381856ddf11e7e3a8f29f1ccb7168c108956c/src/webui/www/public/scripts/dynamicTable.js
+
+        if("metaDL".equals(state) || "forcedDL".equals(state)){
+            return "downloading";
+        }
         return state;
     }
 

@@ -269,7 +269,7 @@ public class TorrentDetailsFragment extends Fragment {
                 uploadSpeedTextView.setText(uploadSpeed);
             }
 
-            nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.error, 0, 0, 0);
+            nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_recheck, 0, 0, 0);
 
             // Set status icon
             if ("pausedUP".equals(state) || "pausedDL".equals(state)) {
@@ -300,7 +300,7 @@ public class TorrentDetailsFragment extends Fragment {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_recheck, 0, 0, 0);
             }
 
-            if ("error".equals(state)) {
+            if ("error".equals(state) || "missingFiles".equals(state) || "unknown".equals(state)) {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.error, 0, 0, 0);
             }
 
@@ -436,7 +436,7 @@ public class TorrentDetailsFragment extends Fragment {
             }
 
 
-            nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.error, 0, 0, 0);
+            nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_recheck, 0, 0, 0);
 
             if ("pausedUP".equals(state) || "pausedDL".equals(state)) {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.paused, 0, 0, 0);
@@ -464,6 +464,10 @@ public class TorrentDetailsFragment extends Fragment {
 
             if ("checkingDL".equals(state) || "checkingUP".equals(state)) {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_recheck, 0, 0, 0);
+            }
+
+            if ("error".equals(state) || "missingFiles".equals(state) || "unknown".equals(state)) {
+                nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.error, 0, 0, 0);
             }
 
             // Get Content files in background
