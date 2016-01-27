@@ -2940,12 +2940,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             if ("toggleFirstLastPiecePrio".equals(command)) {
                 messageId = R.string.torrentstogglefisrtLastPiecePrio;
-                delay = 3;
             }
 
             if ("toggleSequentialDownload".equals(command)) {
                 messageId = R.string.torrentstoggleSequentialDownload;
-                delay = 3;
             }
 
             if ("toggleAlternativeSpeedLimits".equals(command)) {
