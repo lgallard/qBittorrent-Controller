@@ -2893,18 +2893,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             if ("increasePrio".equals(command)) {
                 messageId = R.string.increasePrioTorrent;
+                delay = 3;
             }
 
             if ("decreasePrio".equals(command)) {
                 messageId = R.string.decreasePrioTorrent;
+                delay = 3;
             }
 
             if ("maxPrio".equals(command)) {
                 messageId = R.string.priorityUpdated;
+                delay = 3;
             }
 
             if ("minPrio".equals(command)) {
                 messageId = R.string.priorityUpdated;
+                delay = 3;
             }
 
             if ("setFilePrio".equals(command)) {
@@ -2936,10 +2940,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             if ("toggleFirstLastPiecePrio".equals(command)) {
                 messageId = R.string.torrentstogglefisrtLastPiecePrio;
+                delay = 3;
             }
 
             if ("toggleSequentialDownload".equals(command)) {
                 messageId = R.string.torrentstoggleSequentialDownload;
+                delay = 3;
             }
 
             if ("toggleAlternativeSpeedLimits".equals(command)) {
