@@ -1306,18 +1306,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     pauseTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
-                    if (findViewById(R.id.one_frame) != null) {
-                        popBackStackPhoneView();
-                    }
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
                 }
                 return true;
             case R.id.action_resume:
                 if (TorrentDetailsFragment.hashToUpdate != null) {
                     startTorrent(TorrentDetailsFragment.hashToUpdate);
 
-                    if (findViewById(R.id.one_frame) != null) {
-                        popBackStackPhoneView();
-                    }
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
                 }
                 return true;
             case R.id.action_delete:
@@ -1405,36 +1405,36 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     increasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
-                    if (findViewById(R.id.one_frame) != null) {
-                        popBackStackPhoneView();
-                    }
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
                 }
                 return true;
             case R.id.action_decrease_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     decreasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
-                    if (findViewById(R.id.one_frame) != null) {
-                        popBackStackPhoneView();
-                    }
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
                 }
                 return true;
             case R.id.action_max_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     maxPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
-                    if (findViewById(R.id.one_frame) != null) {
-                        popBackStackPhoneView();
-                    }
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
                 }
                 return true;
             case R.id.action_min_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     minPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
-                    if (findViewById(R.id.one_frame) != null) {
-                        popBackStackPhoneView();
-                    }
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
                 }
                 return true;
             case R.id.action_resume_all:
@@ -1447,9 +1447,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     uploadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
-                    if (findViewById(R.id.one_frame) != null) {
-                        popBackStackPhoneView();
-                    }
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
                 }
                 return true;
 
@@ -1457,36 +1457,36 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     downloadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
-                    if (findViewById(R.id.one_frame) != null) {
-                        popBackStackPhoneView();
-                    }
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
                 }
                 return true;
             case R.id.action_recheck:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     recheckTorrents(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
-                    if (findViewById(R.id.one_frame) != null) {
-                        popBackStackPhoneView();
-                    }
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
                 }
                 return true;
             case R.id.action_firts_last_piece_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleFirstLastPiecePrio(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
-                    if (findViewById(R.id.one_frame) != null) {
-                        popBackStackPhoneView();
-                    }
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
                 }
                 return true;
             case R.id.action_sequential_download:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleSequentialDownload(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
-                    if (findViewById(R.id.one_frame) != null) {
-                        popBackStackPhoneView();
-                    }
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
                 }
                 return true;
             case R.id.action_toggle_alternative_rate:
@@ -1495,9 +1495,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 refreshAfterCommand(2);
                 swipeRefresh();
 
-                if (findViewById(R.id.one_frame) != null) {
-                    popBackStackPhoneView();
-                }
+//                if (findViewById(R.id.one_frame) != null) {
+//                    popBackStackPhoneView();
+//                }
 
                 return true;
             case R.id.action_sortby_name:
@@ -2860,6 +2860,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             if ("pause".equals(command)) {
                 messageId = R.string.torrentPaused;
+                delay = 3;
+
             }
 
             if ("delete".equals(command)) {
@@ -2916,16 +2918,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             if ("setUploadRateLimit".equals(command)) {
                 messageId = R.string.setUploadRateLimit;
-                if (findViewById(R.id.one_frame) != null) {
-                    popBackStackPhoneView();
-                }
+//                if (findViewById(R.id.one_frame) != null) {
+//                    popBackStackPhoneView();
+//                }
             }
 
             if ("setDownloadRateLimit".equals(command)) {
                 messageId = R.string.setDownloadRateLimit;
-                if (findViewById(R.id.one_frame) != null) {
-                    popBackStackPhoneView();
-                }
+//                if (findViewById(R.id.one_frame) != null) {
+//                    popBackStackPhoneView();
+//                }
             }
 
             if ("recheckSelected".equals(command)) {
