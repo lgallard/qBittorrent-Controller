@@ -17,6 +17,7 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 import android.view.Menu;
 
 public class OptionsActivity extends PreferenceActivity  implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -230,6 +231,8 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 		//TODO: Complete saving values
 
 
+//		Log.d("Debug", "1) max_ratio: " + max_ratio.getText().toString());
+
 
 
 		if (global_upload.getText().toString() != null && global_upload.getText().toString() != "") {
@@ -242,7 +245,7 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 		}
 
 
-
+		editor.putString("max_ratio", max_ratio.getText().toString());
 
 
         // Commit changes

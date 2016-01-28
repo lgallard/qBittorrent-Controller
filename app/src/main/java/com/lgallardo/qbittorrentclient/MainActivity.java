@@ -1677,8 +1677,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 json += ",\"max_ratio\":-1";
             }
             else{
-                json += ",\"max_ratio\":" + max_ratio;
+                json += ",\"max_ratio\":" + Float.parseFloat(max_ratio);
             }
+
+//            String max_ratio_string = "4) max_ratio: " + Float.parseFloat(max_ratio);
+//            Log.d("Debug", "3) max_ratio: " + Float.parseFloat(max_ratio));
+//            Log.d("Debug", max_ratio_string );
 
             json += ",\"max_ratio_act\":" + max_ratio_act;
 
@@ -3565,6 +3569,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     max_ratio = json.getString(TAG_MAX_RATIO);
                     max_ratio_act = json.getString(TAG_MAX_RATIO_ACT);
 
+
+//                    Log.d("Debug", "2) max_ratio: " + max_ratio);
 
                     // Save options locally
                     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);

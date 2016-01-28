@@ -130,7 +130,7 @@
                 <EditTextPreference
                     android:dependency="max_ratio_enabled"
                     android:dialogTitle="@string/options_qbittorrent_seed_until_dialog"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:key="max_ratio"
                     android:title="@string/options_qbittorrent_seed_until_title" />
                 <ListPreference
