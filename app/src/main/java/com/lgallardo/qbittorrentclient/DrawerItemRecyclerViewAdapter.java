@@ -307,6 +307,18 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                     mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
                 }
 
+
+                // Refresh Seeding
+                if (drawerItem.getAction().equals("refreshSeeding")) {
+
+                    drawerItem.setActive(true);
+                    items.set(layoutPosition - 1, drawerItem);
+                    notifyItemChanged(layoutPosition);
+                    mainActivity.refreshFromDrawerAction("seeding", drawerItem.name);
+
+                    // Close drawer
+                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
+                }
                 // Refresh Pause
                 if (drawerItem.getAction().equals("refreshPaused")) {
 

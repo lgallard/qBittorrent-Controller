@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
     // Action (states)
-    public static final ArrayList<String> actionStates = new ArrayList<>(Arrays.asList("all", "downloading", "completed", "pause", "active", "inactive"));
+    public static final ArrayList<String> actionStates = new ArrayList<>(Arrays.asList("all", "downloading", "completed", "seeding", "pause", "active", "inactive"));
 
     // Connection error counter
     private int connection400ErrorCounter = 0;
@@ -377,20 +377,21 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_all, navigationDrawerItemTitles[0], DRAWER_ITEM_ACTIONS, lastState.equals("all"), "refreshAll"));
         actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_downloading, navigationDrawerItemTitles[1], DRAWER_ITEM_ACTIONS, lastState.equals("downloading"), "refreshDownloading"));
         actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_completed, navigationDrawerItemTitles[2], DRAWER_ITEM_ACTIONS, lastState.equals("completed"), "refreshCompleted"));
-        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_paused, navigationDrawerItemTitles[3], DRAWER_ITEM_ACTIONS, lastState.equals("pause"), "refreshPaused"));
-        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_active, navigationDrawerItemTitles[4], DRAWER_ITEM_ACTIONS, lastState.equals("active"), "refreshActive"));
-        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[5], DRAWER_ITEM_ACTIONS, lastState.equals("inactive"), "refreshInactive"));
+        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_seeding, navigationDrawerItemTitles[3], DRAWER_ITEM_ACTIONS, lastState.equals("seeding"), "refreshSeeding"));
+        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_paused, navigationDrawerItemTitles[4], DRAWER_ITEM_ACTIONS, lastState.equals("pause"), "refreshPaused"));
+        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_active, navigationDrawerItemTitles[5], DRAWER_ITEM_ACTIONS, lastState.equals("active"), "refreshActive"));
+        actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[6], DRAWER_ITEM_ACTIONS, lastState.equals("inactive"), "refreshInactive"));
 
 
         // Add settings actions
-        settingsItems.add(new ObjectDrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[6], DRAWER_ITEM_ACTIONS, false, "openOptions"));
-        settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTIONS, false, "openSettings"));
+        settingsItems.add(new ObjectDrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTIONS, false, "openOptions"));
+        settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[8], DRAWER_ITEM_ACTIONS, false, "openSettings"));
 
         if (packageName.equals("com.lgallardo.qbittorrentclient")) {
-            settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[8], DRAWER_ITEM_ACTIONS, false, "getPro"));
-            settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTIONS, false, "openHelp"));
+            settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTIONS, false, "getPro"));
+            settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[10], DRAWER_ITEM_ACTIONS, false, "openHelp"));
         } else {
-            settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[8], DRAWER_ITEM_ACTIONS, false, "openHelp"));
+            settingsItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTIONS, false, "openHelp"));
         }
 
 
@@ -581,39 +582,34 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             currentState = state;
 
             if (state.equals("all")) {
-//                drawerList.setItemChecked(0, true);
                 setTitle(navigationDrawerItemTitles[0]);
             }
 
             if (state.equals("downloading")) {
-//                drawerList.setItemChecked(1, true);
                 setTitle(navigationDrawerItemTitles[1]);
             }
 
             if (state.equals("completed")) {
-//                drawerList.setItemChecked(2, true);
                 setTitle(navigationDrawerItemTitles[2]);
             }
 
-            if (state.equals("pause")) {
-//                drawerList.setItemChecked(3, true);
+            if (state.equals("seeding")) {
                 setTitle(navigationDrawerItemTitles[3]);
             }
 
-            if (state.equals("active")) {
-//                drawerList.setItemChecked(4, true);
+            if (state.equals("pause")) {
                 setTitle(navigationDrawerItemTitles[4]);
             }
 
-            if (state.equals("inactive")) {
-//                drawerList.setItemChecked(5, true);
+            if (state.equals("active")) {
                 setTitle(navigationDrawerItemTitles[5]);
             }
 
-        } else {
-            // Set "All" checked
-//            drawerList.setItemChecked(0, true);
+            if (state.equals("inactive")) {
+                setTitle(navigationDrawerItemTitles[6]);
+            }
 
+        } else {
             // Set title to All
             setTitle(navigationDrawerItemTitles[0]);
         }
@@ -749,12 +745,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 refresh("completed");
                 break;
             case 3:
-                refresh("pause");
+                refresh("seeding");
                 break;
             case 4:
-                refresh("active");
+                refresh("pause");
                 break;
             case 5:
+                refresh("active");
+                break;
+            case 6:
                 refresh("inactive");
                 break;
             default:
@@ -2156,17 +2155,20 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 refreshWithDelay("completed", delay);
                 break;
             case 3:
-                refreshWithDelay("pause", delay);
+                refreshWithDelay("seeding", delay);
                 break;
             case 4:
-                refreshWithDelay("active", delay);
+                refreshWithDelay("pause", delay);
                 break;
             case 5:
-                refreshWithDelay("inactive", delay);
+                refreshWithDelay("active", delay);
                 break;
             case 6:
+                refreshWithDelay("inactive", delay);
                 break;
             case 7:
+                break;
+            case 8:
                 break;
             default:
                 refreshWithDelay("all", delay);
@@ -3211,6 +3213,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             torrentsFiltered.add(result[i]);
                         }
                     }
+
+                    if (params[1].equals("seeding") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())) {
+                            torrentsFiltered.add(result[i]);
+                        }
+                    }
+
 
                     if (params[1].equals("pause") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
                         if ("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())) {
