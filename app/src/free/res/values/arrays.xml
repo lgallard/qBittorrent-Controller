@@ -87,6 +87,7 @@
         <item>All</item>
         <item>Downloading</item>
         <item>Completed</item>
+        <item>Seeding</item>
         <item>Paused</item>
         <item>Active</item>
         <item>Inactive</item>
