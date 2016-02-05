@@ -131,7 +131,7 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
     public void onPause() {
         getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 
-        saveQBittorrentOptionValues();
+//        saveQBittorrentOptionValues();
         super.onPause();
     }
 
@@ -141,7 +141,15 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 
 
 		String global_max_num_connections_value = sharedPrefs.getString("global_max_num_connections", "0");
+		String max_num_conn_per_torrent_value =  sharedPrefs.getString("max_num_conn_per_torrent", "0");
+		String max_num_upslots_per_torrent_value =  sharedPrefs.getString("max_num_upslots_per_torrent", "0");
+
 		String global_upload_value = sharedPrefs.getString("global_upload", "0");
+		String global_download_value = sharedPrefs.getString("global_download", "0");
+		String alt_upload_value = sharedPrefs.getString("alt_upload", "0");
+		String alt_download_value = sharedPrefs.getString("alt_download", "0");
+
+
 		String max_ratio_value = sharedPrefs.getString("max_ratio", "0");
 
 
@@ -149,9 +157,31 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 			global_max_num_connections_value = "0";
 		}
 
+		if(max_num_conn_per_torrent_value.equals("-1")){
+			max_num_conn_per_torrent_value = "0";
+		}
+
+		if(max_num_upslots_per_torrent_value.equals("-1")){
+			max_num_upslots_per_torrent_value = "0";
+		}
+
+
 		if(global_upload_value.equals("-1")){
 			global_upload_value = "0";
 		}
+
+		if(global_download_value.equals("-1")){
+			global_download_value = "0";
+		}
+
+		if(alt_upload_value.equals("-1")){
+			alt_upload_value = "0";
+		}
+
+		if(alt_download_value.equals("-1")){
+			alt_download_value = "0";
+		}
+
 
 		if(max_ratio_value.equals("-1")){
 			max_ratio_value = "1";
@@ -161,26 +191,29 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 		global_max_num_connections.setText(global_max_num_connections_value);
 		global_max_num_connections.setSummary(global_max_num_connections_value);
 
+		max_num_conn_per_torrent.setText(max_num_conn_per_torrent_value);
+		max_num_conn_per_torrent.setSummary(max_num_conn_per_torrent_value);
 
-
-		max_num_conn_per_torrent.setSummary(sharedPrefs.getString("max_num_conn_per_torrent", ""));
-		max_num_upslots_per_torrent.setSummary(sharedPrefs.getString("max_num_upslots_per_torrent", ""));
+		max_num_upslots_per_torrent.setText(max_num_upslots_per_torrent_value);
+		max_num_upslots_per_torrent.setSummary(max_num_upslots_per_torrent_value);
 
 		global_upload.setText(global_upload_value);
 		global_upload.setSummary(global_upload_value);
 
+		global_download.setText(global_download_value);
+		global_download.setSummary(global_download_value);
 
+		alt_upload.setText(alt_upload_value);
+		alt_upload.setSummary(alt_upload_value);
 
-		global_download.setSummary(sharedPrefs.getString("global_download", ""));
-		alt_upload.setSummary(sharedPrefs.getString("alt_upload", ""));
-		alt_download.setSummary(sharedPrefs.getString("alt_download", ""));
+		alt_download.setText(alt_download_value);
+		alt_download.setSummary(alt_download_value);
 
 		max_ratio.setText(max_ratio_value);
 
 		max_act_downloads.setSummary(sharedPrefs.getString("max_act_downloads", ""));
 		max_act_uploads.setSummary(sharedPrefs.getString("max_act_uploads", ""));
 		max_act_torrents.setSummary(sharedPrefs.getString("max_act_torrents", ""));
-
 
 
 
@@ -207,52 +240,121 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 
 	}
 
-	private void saveQBittorrentOptionValues(){
-		// Save options locally
-		SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
-
-		SharedPreferences.Editor editor = sharedPrefs.edit();
-
-		if (global_max_num_connections.getText().toString() != null && global_max_num_connections.getText().toString() != "") {
-			editor.putString("global_max_num_connections", global_max_num_connections.getText().toString());
-		}
-
-
-        if (max_num_conn_per_torrent.getText().toString() != null && max_num_conn_per_torrent.getText().toString() != "") {
-            editor.putString("max_num_conn_per_torrent", max_num_conn_per_torrent.getText().toString());
-        }
-
-        if (max_num_upslots_per_torrent.getText().toString() != null && max_num_upslots_per_torrent.getText().toString() != "") {
-            editor.putString("max_num_upslots_per_torrent", max_num_upslots_per_torrent.getText().toString());
-        }
-
-
-
-		//TODO: Complete saving values
-
-
-//		Log.d("Debug", "1) max_ratio: " + max_ratio.getText().toString());
-
-
-
-		if (global_upload.getText().toString() != null && global_upload.getText().toString() != "") {
-
-			if(global_upload.getText().equals("-1")){
-				global_upload.setText("0");
-			}
-
-			editor.putString("global_upload", global_upload.getText().toString());
-		}
-
-
-		editor.putString("max_ratio", max_ratio.getText().toString());
-
-
-        // Commit changes
-		editor.commit();
-
-
-	}
+//	private void saveQBittorrentOptionValues(){
+//		// Save options locally
+//		SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
+//		SharedPreferences.Editor editor = sharedPrefs.edit();
+//
+////		try {
+//			String global_max_num_connections_value = global_max_num_connections.getText().toString();
+//
+//			if ((!global_max_num_connections_value.equals(""))) {
+//
+//				if(global_max_num_connections_value.equals("-1")){
+//					global_upload.setText("0");
+//				}
+//
+//				editor.putString("global_max_num_connections", global_max_num_connections_value);
+//			}
+//		} catch (NullPointerException ne) {
+//		}
+//
+//		try {
+//			String max_num_conn_per_torrent_value = max_num_conn_per_torrent.getText().toString();
+//
+//			if ((!max_num_conn_per_torrent_value.equals(""))) {
+//				editor.putString("max_num_conn_per_torrent", max_num_conn_per_torrent_value);
+//			}
+//		} catch (NullPointerException ne) {
+//		}
+//
+//		try {
+//			String max_num_upslots_per_torrent_value  = max_num_upslots_per_torrent.getText().toString();
+//
+//			if ((!max_num_upslots_per_torrent_value.equals(""))) {
+//                editor.putString("max_num_upslots_per_torrent", max_num_upslots_per_torrent_value);
+//            }
+//		} catch (NullPointerException ne) {
+//		}
+//
+//
+//		//TODO: Complete saving values
+//
+//
+//		try {
+//			String global_upload_value = global_upload.getText().toString();
+//
+//			if ((!global_upload_value.equals(""))) {
+//
+//                if(global_upload_value.equals("-1")){
+//                    global_upload.setText("0");
+//                }
+//
+//                editor.putString("global_upload", global_upload_value);
+//            }
+//		} catch (NullPointerException ne) {
+//		}
+//
+//		try {
+//			String global_download_value = global_download.getText().toString();
+//
+//			if ((!global_download_value.equals(""))) {
+//
+//				if(global_download_value.equals("-1")){
+//					global_download.setText("0");
+//				}
+//
+//				editor.putString("global_upload", global_download_value);
+//			}
+//		} catch (NullPointerException ne) {
+//		}
+//
+//
+//		try {
+//			String alt_upload_value = alt_upload.getText().toString();
+//
+//			if ((!alt_upload_value.equals(""))) {
+//
+//				if(alt_upload_value.equals("-1")){
+//					alt_upload.setText("0");
+//				}
+//
+//				editor.putString("global_upload", alt_upload_value);
+//			}
+//		} catch (NullPointerException ne) {
+//		}
+//
+//		try {
+//			String alt_download_value = alt_download.getText().toString();
+//
+//			if ((!alt_download_value.equals(""))) {
+//
+//				if(alt_download_value.equals("-1")){
+//					alt_download.setText("0");
+//				}
+//
+//				editor.putString("global_upload", alt_download_value);
+//			}
+//		} catch (NullPointerException ne) {
+//		}
+//
+//
+//		try {
+//			String max_ratio_value  = max_ratio.getText().toString();
+//
+//			if ((!max_ratio_value.equals(""))) {
+//				editor.putString("max_ratio",max_ratio_value);
+//			}
+//		} catch (NullPointerException ne) {
+//		}
+//
+//
+//
+//        // Commit changes
+//		editor.commit();
+//
+//
+//	}
 
 
 
