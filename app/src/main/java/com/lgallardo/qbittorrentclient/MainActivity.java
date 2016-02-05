@@ -899,15 +899,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         refreshSwipeLayout();
         refresh(state);
         saveLastState(state);
-
-//        // Mark item as active
-//        ObjectDrawerItem drawerItem = DrawerItemRecyclerViewAdapter.items.get(position);
-//        drawerItem.setActive(true);
-//        DrawerItemRecyclerViewAdapter.items.set(position+1,drawerItem);
-////        mRecyclerView.getAdapter().notifyItemChanged(position-1);
-//        mRecyclerView.getAdapter().notifyItemChanged(DrawerItemRecyclerViewAdapter.oldActionPosition);
-
-
     }
 
     private void refresh() {
