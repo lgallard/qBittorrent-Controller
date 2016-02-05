@@ -130,8 +130,6 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
     @Override
     public void onPause() {
         getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-
-//        saveQBittorrentOptionValues();
         super.onPause();
     }
 
@@ -239,123 +237,6 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 		max_ratio_act.setSummary(max_ratio_act.getEntry());
 
 	}
-
-//	private void saveQBittorrentOptionValues(){
-//		// Save options locally
-//		SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
-//		SharedPreferences.Editor editor = sharedPrefs.edit();
-//
-////		try {
-//			String global_max_num_connections_value = global_max_num_connections.getText().toString();
-//
-//			if ((!global_max_num_connections_value.equals(""))) {
-//
-//				if(global_max_num_connections_value.equals("-1")){
-//					global_upload.setText("0");
-//				}
-//
-//				editor.putString("global_max_num_connections", global_max_num_connections_value);
-//			}
-//		} catch (NullPointerException ne) {
-//		}
-//
-//		try {
-//			String max_num_conn_per_torrent_value = max_num_conn_per_torrent.getText().toString();
-//
-//			if ((!max_num_conn_per_torrent_value.equals(""))) {
-//				editor.putString("max_num_conn_per_torrent", max_num_conn_per_torrent_value);
-//			}
-//		} catch (NullPointerException ne) {
-//		}
-//
-//		try {
-//			String max_num_upslots_per_torrent_value  = max_num_upslots_per_torrent.getText().toString();
-//
-//			if ((!max_num_upslots_per_torrent_value.equals(""))) {
-//                editor.putString("max_num_upslots_per_torrent", max_num_upslots_per_torrent_value);
-//            }
-//		} catch (NullPointerException ne) {
-//		}
-//
-//
-//		//TODO: Complete saving values
-//
-//
-//		try {
-//			String global_upload_value = global_upload.getText().toString();
-//
-//			if ((!global_upload_value.equals(""))) {
-//
-//                if(global_upload_value.equals("-1")){
-//                    global_upload.setText("0");
-//                }
-//
-//                editor.putString("global_upload", global_upload_value);
-//            }
-//		} catch (NullPointerException ne) {
-//		}
-//
-//		try {
-//			String global_download_value = global_download.getText().toString();
-//
-//			if ((!global_download_value.equals(""))) {
-//
-//				if(global_download_value.equals("-1")){
-//					global_download.setText("0");
-//				}
-//
-//				editor.putString("global_upload", global_download_value);
-//			}
-//		} catch (NullPointerException ne) {
-//		}
-//
-//
-//		try {
-//			String alt_upload_value = alt_upload.getText().toString();
-//
-//			if ((!alt_upload_value.equals(""))) {
-//
-//				if(alt_upload_value.equals("-1")){
-//					alt_upload.setText("0");
-//				}
-//
-//				editor.putString("global_upload", alt_upload_value);
-//			}
-//		} catch (NullPointerException ne) {
-//		}
-//
-//		try {
-//			String alt_download_value = alt_download.getText().toString();
-//
-//			if ((!alt_download_value.equals(""))) {
-//
-//				if(alt_download_value.equals("-1")){
-//					alt_download.setText("0");
-//				}
-//
-//				editor.putString("global_upload", alt_download_value);
-//			}
-//		} catch (NullPointerException ne) {
-//		}
-//
-//
-//		try {
-//			String max_ratio_value  = max_ratio.getText().toString();
-//
-//			if ((!max_ratio_value.equals(""))) {
-//				editor.putString("max_ratio",max_ratio_value);
-//			}
-//		} catch (NullPointerException ne) {
-//		}
-//
-//
-//
-//        // Commit changes
-//		editor.commit();
-//
-//
-//	}
-
 
 
 	public void refreshScreenValues() {
