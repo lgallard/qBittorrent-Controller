@@ -29,10 +29,10 @@
                     android:key="max_num_conn_per_torrent"
                     android:title="@string/options_qbittorrent_max_num_conn_per_torrent_title" />
                 <EditTextPreference
-                    android:dialogTitle="Maximum number of upload slots per torrent"
+                    android:dialogTitle="@string/options_qbittorrent_max_num_upslots_per_torrent_dialog_title"
                     android:inputType="number"
                     android:key="max_num_upslots_per_torrent"
-                    android:title="Max num upload slots per torrent" />
+                    android:title="@string/options_qbittorrent_max_num_upslots_per_torrent_title" />
             </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen

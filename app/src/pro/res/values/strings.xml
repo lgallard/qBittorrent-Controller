@@ -238,4 +238,6 @@
     <string name="options_qbittorrent_connection">Connection</string>
     <string name="options_qbittorrent_speed">Speed</string>
     <string name="options_qbittorrent_bittorrent">Bittorrent</string>
+    <string name="options_qbittorrent_max_num_upslots_per_torrent_dialog_title">Maximum number of upload slots per torrent</string>
+    <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Max num upload slots per torrent</string>
 </resources>
