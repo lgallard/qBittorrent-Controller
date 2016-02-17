@@ -3200,7 +3200,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     if (params[1].equals("completed") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
                         if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())
-                                || "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState())) {
+                                || "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState()) || "forcedUP".equals(result[i].getState())) {
                             torrentsFiltered.add(result[i]);
                         }
                     }
