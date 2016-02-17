@@ -238,4 +238,7 @@
     <string name="options_qbittorrent_speed">Hastighet</string>
     <string name="options_qbittorrent_then_title">Sedan</string>
     <string name="options_qbittorrent_seed_until_title">deras förhållande når</string>
+    <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Maximalt antal sändningsplatser per torrent</string>
+    <string name="options_qbittorrent_max_uploads_title">Allmänt maximalt antal sändningsplatser per torrent</string>
+
 </resources>

@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static final String TAG_FLPIECEPRIO = "f_l_piece_prio";
     protected static final String TAG_GLOBAL_MAX_NUM_CONNECTIONS = "max_connec";
     protected static final String TAG_MAX_NUM_CONN_PER_TORRENT = "max_connec_per_torrent";
+    protected static final String TAG_MAX_UPLOADS = "max_uploads";
     protected static final String TAG_MAX_NUM_UPSLOTS_PER_TORRENT = "max_uploads_per_torrent";
     protected static final String TAG_GLOBAL_UPLOAD = "up_limit";
     protected static final String TAG_GLOBAL_DOWNLOAD = "dl_limit";
@@ -161,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Option
     protected static String global_max_num_connections;
     protected static String max_num_conn_per_torrent;
+    protected static String max_uploads;
     protected static String max_num_upslots_per_torrent;
     protected static String global_upload;
     protected static String global_download;
@@ -1612,6 +1614,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Maximum number of simultaneous connections per torrent
             json += ",\"max_connec_per_torrent\":" + max_num_conn_per_torrent;
 
+            // Global maximum number of upload slots:
+            json += ",\"max_uploads\":" + max_uploads;
+
             // Maximum number of upload slots per torrent
             json += ",\"max_uploads_per_torrent\":" + max_num_upslots_per_torrent;
 
@@ -2406,8 +2411,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Get values from options
         global_max_num_connections = sharedPrefs.getString("global_max_num_connections", "0");
-
         max_num_conn_per_torrent = sharedPrefs.getString("max_num_conn_per_torrent", "0");
+        max_uploads = sharedPrefs.getString("max_uploads", "0");
         max_num_upslots_per_torrent = sharedPrefs.getString("max_num_upslots_per_torrent", "0");
 
         global_upload = sharedPrefs.getString("global_upload", "0");
@@ -3548,6 +3553,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     global_max_num_connections = json.getString(TAG_GLOBAL_MAX_NUM_CONNECTIONS);
                     max_num_conn_per_torrent = json.getString(TAG_MAX_NUM_CONN_PER_TORRENT);
+                    max_uploads = json.getString(TAG_MAX_UPLOADS);
                     max_num_upslots_per_torrent = json.getString(TAG_MAX_NUM_UPSLOTS_PER_TORRENT);
                     global_upload = json.getString(TAG_GLOBAL_UPLOAD);
                     global_download = json.getString(TAG_GLOBAL_DOWNLOAD);
@@ -3579,6 +3585,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // Save key-values
                     editor.putString("global_max_num_connections", global_max_num_connections);
                     editor.putString("max_num_conn_per_torrent", max_num_conn_per_torrent);
+                    editor.putString("max_uploads", max_uploads);
                     editor.putString("max_num_upslots_per_torrent", max_num_upslots_per_torrent);
                     editor.putString("global_upload", global_upload);
                     editor.putString("global_download", global_download);

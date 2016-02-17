@@ -245,4 +245,7 @@
     <string name="options_qbittorrent_share_ratio_limiting_category">Limite de partilhas</string>
     <string name="options_qbittorrent_speed">Velocidade</string>
     <string name="options_qbittorrent_then_title">E depois</string>
+    <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Número máximo de envios por torrent</string>
+    <string name="options_qbittorrent_max_uploads_title">Número máximo de portas de envio</string>
+
 </resources>

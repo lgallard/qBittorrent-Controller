@@ -238,4 +238,7 @@
     <string name="options_qbittorrent_share_ratio_limiting_category">Ograniczenie współczynnika udziału</string>
     <string name="options_qbittorrent_speed">Prędkość</string>
     <string name="options_qbittorrent_then_title">Następnie</string>
+    <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Maksymalna liczba slotów wysyłania na torrent</string>
+    <string name="options_qbittorrent_max_uploads_title">Maksymalna liczba slotów wysyłania</string>
+
 </resources>

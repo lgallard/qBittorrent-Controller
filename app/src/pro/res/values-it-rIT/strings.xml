@@ -238,4 +238,7 @@
     <string name="options_qbittorrent_share_ratio_limiting_category">Limite rapporto di condivisione</string>
     <string name="options_qbittorrent_options">Opzioni</string>
     <string name="options_qbittorrent_connection">Connessione</string>
+    <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Numero massimo di slot in upload per torrent</string>
+    <string name="options_qbittorrent_max_uploads_title">Numero massimo globale di slot upload</string>
+
 </resources>

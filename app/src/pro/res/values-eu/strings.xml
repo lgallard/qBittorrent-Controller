@@ -238,4 +238,6 @@
   <string name="options_qbittorrent_bittorrent">Bittorrent</string>
   <string name="options_qbittorrent_connection">Elkarketa</string>
   <string name="options_qbittorrent_options">Aukerak</string>
+  <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Gehinezko igoera aho zenbatekoa torrent bakoitzeko</string>
+  <string name="options_qbittorrent_max_uploads_title">Gehinezko elkarketa zenbatekoa orotara</string>
 </resources>

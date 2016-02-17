@@ -245,4 +245,6 @@
     <string name="options_qbittorrent_share_ratio_limiting_category">Limitation du ratio de partage</string>
     <string name="options_qbittorrent_then_title">Puis</string>
     <string name="options_qbittorrent_speed">Vitesse</string>
+    <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Nombre maximum d\' emplacements d\' envoi par torrent</string>
+    <string name="options_qbittorrent_max_uploads_title">Nombre maximum global d\'emplacements d\'envoi</string>
 </resources>

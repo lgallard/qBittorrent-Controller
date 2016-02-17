@@ -229,4 +229,7 @@
   <string name="options_qbittorrent_then_title">に達したとき</string>
   <string name="options_qbittorrent_speed">速度</string>
   <string name="options_qbittorrent_share_ratio_limiting_category">共有比上限</string>
+  <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Torrent あたりの最大アップロードスロット数</string>
+  <string name="options_qbittorrent_max_uploads_title">全体の最大アップロードスロット数</string>
+
 </resources>

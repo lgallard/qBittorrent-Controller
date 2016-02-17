@@ -237,4 +237,7 @@
     <string name="options_qbittorrent_bittorrent">Bittorrent</string>
     <string name="options_qbittorrent_then_title">Entonces</string>
     <string name="options_qbittorrent_share_ratio_limiting_title">Sembrar torrents hasta que</string>
+    <string name="options_qbittorrent_max_uploads_title">Máximo global de puestos de subida</string>
+    <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Número de puestos de subida por torrent</string>
+
 </resources>

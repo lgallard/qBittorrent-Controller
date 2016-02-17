@@ -245,4 +245,7 @@
   <string name="options_qbittorrent_seed_until_title">их коэффициент не достигнет</string>
   <string name="options_qbittorrent_share_ratio_limiting_title">Раздавать торренты, пока</string>
   <string name="options_qbittorrent_share_ratio_limiting_category">Ограничение коэффициента раздачи</string>
+  <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Максимальное число слотов отдачи на торрент</string>
+  <string name="options_qbittorrent_max_uploads_title">Общее ограничение слотов отдачи</string>
+
 </resources>
