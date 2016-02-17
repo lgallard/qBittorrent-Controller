@@ -240,4 +240,7 @@
     <string name="options_qbittorrent_bittorrent">Bittorrent</string>
     <string name="options_qbittorrent_max_num_upslots_per_torrent_dialog_title">Maximum number of upload slots per torrent</string>
     <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Max num upload slots per torrent</string>
+    <string name="options_qbittorrent_max_uploads_dialog_title">Global maximum number of upload slots</string>
+    <string name="options_qbittorrent_max_uploads_title">Global max num of upload slots</string>
+
 </resources>

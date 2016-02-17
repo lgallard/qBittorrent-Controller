@@ -20,39 +20,40 @@ import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.Menu;
 
-public class OptionsActivity extends PreferenceActivity  implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class OptionsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-	private EditTextPreference global_max_num_connections;
-	private EditTextPreference max_num_conn_per_torrent;
-	private EditTextPreference max_num_upslots_per_torrent;
-	private EditTextPreference global_upload;
-	private EditTextPreference global_download;
-	private EditTextPreference alt_upload;
-	private EditTextPreference alt_download;
+    private EditTextPreference global_max_num_connections;
+    private EditTextPreference max_num_conn_per_torrent;
+    private EditTextPreference max_uploads;
+    private EditTextPreference max_num_upslots_per_torrent;
+    private EditTextPreference global_upload;
+    private EditTextPreference global_download;
+    private EditTextPreference alt_upload;
+    private EditTextPreference alt_download;
 
-	private CheckBoxPreference schedule_alternative_rate_limits;
-	private TimePreference alt_from;
-	private TimePreference alt_to;
-	private ListPreference scheduler_days;
+    private CheckBoxPreference schedule_alternative_rate_limits;
+    private TimePreference alt_from;
+    private TimePreference alt_to;
+    private ListPreference scheduler_days;
 
-	private CheckBoxPreference torrent_queueing;
-	private EditTextPreference max_act_downloads;
-	private EditTextPreference max_act_uploads;
-	private EditTextPreference max_act_torrents;
+    private CheckBoxPreference torrent_queueing;
+    private EditTextPreference max_act_downloads;
+    private EditTextPreference max_act_uploads;
+    private EditTextPreference max_act_torrents;
 
-	private CheckBoxPreference max_ration_enabled;
-	private EditTextPreference max_ratio;
-	private ListPreference max_ratio_act;
+    private CheckBoxPreference max_ration_enabled;
+    private EditTextPreference max_ratio;
+    private ListPreference max_ratio_act;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
-		// Set Theme
-		this.setTheme(R.style.Theme_Light);
+        // Set Theme
+        this.setTheme(R.style.Theme_Light);
 
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-		addPreferencesFromResource(R.xml.options);
+        addPreferencesFromResource(R.xml.options);
 
         // Set last state in intent result
         Intent result = new Intent();
@@ -60,57 +61,58 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
         setResult(Activity.RESULT_OK, result);
 
 
-		// Read values
-		global_max_num_connections = (EditTextPreference) findPreference("global_max_num_connections");
-		max_num_conn_per_torrent = (EditTextPreference) findPreference("max_num_conn_per_torrent");
-		max_num_upslots_per_torrent = (EditTextPreference) findPreference("max_num_upslots_per_torrent");
-		global_upload = (EditTextPreference) findPreference("global_upload");
-		global_download = (EditTextPreference) findPreference("global_download");
-		alt_upload = (EditTextPreference) findPreference("alt_upload");
-		alt_download = (EditTextPreference) findPreference("alt_download");
+        // Read values
+        global_max_num_connections = (EditTextPreference) findPreference("global_max_num_connections");
+        max_num_conn_per_torrent = (EditTextPreference) findPreference("max_num_conn_per_torrent");
+        max_uploads = (EditTextPreference) findPreference("max_uploads");
+        max_num_upslots_per_torrent = (EditTextPreference) findPreference("max_num_upslots_per_torrent");
+        global_upload = (EditTextPreference) findPreference("global_upload");
+        global_download = (EditTextPreference) findPreference("global_download");
+        alt_upload = (EditTextPreference) findPreference("alt_upload");
+        alt_download = (EditTextPreference) findPreference("alt_download");
 
-		schedule_alternative_rate_limits = (CheckBoxPreference) findPreference("schedule_alternative_rate_limits");
-		alt_from = (TimePreference) findPreference("alt_from");
-		alt_to = (TimePreference) findPreference("alt_to");
-		scheduler_days = (ListPreference) findPreference("scheduler_days");
+        schedule_alternative_rate_limits = (CheckBoxPreference) findPreference("schedule_alternative_rate_limits");
+        alt_from = (TimePreference) findPreference("alt_from");
+        alt_to = (TimePreference) findPreference("alt_to");
+        scheduler_days = (ListPreference) findPreference("scheduler_days");
 
-		torrent_queueing = (CheckBoxPreference) findPreference("torrent_queueing");
-		max_act_downloads = (EditTextPreference) findPreference("max_act_downloads");
-		max_act_uploads = (EditTextPreference) findPreference("max_act_uploads");
-		max_act_torrents = (EditTextPreference) findPreference("max_act_torrents");
+        torrent_queueing = (CheckBoxPreference) findPreference("torrent_queueing");
+        max_act_downloads = (EditTextPreference) findPreference("max_act_downloads");
+        max_act_uploads = (EditTextPreference) findPreference("max_act_uploads");
+        max_act_torrents = (EditTextPreference) findPreference("max_act_torrents");
 
-		max_ration_enabled = (CheckBoxPreference) findPreference("max_ration_enabled");
-		max_ratio = (EditTextPreference) findPreference("max_ratio");
-		max_ratio_act = (ListPreference) findPreference("max_ratio_act");
+        max_ration_enabled = (CheckBoxPreference) findPreference("max_ration_enabled");
+        max_ratio = (EditTextPreference) findPreference("max_ratio");
+        max_ratio_act = (ListPreference) findPreference("max_ratio_act");
 
-		// Get values for server
-		getQBittorrentOptionValues();
+        // Get values for server
+        getQBittorrentOptionValues();
 
-		// Set preference change listeners
+        // Set preference change listeners
 
-		alt_from.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
+        alt_from.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-				SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
-				alt_from.setSummary(TimePreference.fixStringDecimal(alt_from.getPicker().getCurrentHour()) + ":" + TimePreference.fixStringDecimal(alt_from.getPicker().getCurrentMinute()));
+                SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
+                alt_from.setSummary(TimePreference.fixStringDecimal(alt_from.getPicker().getCurrentHour()) + ":" + TimePreference.fixStringDecimal(alt_from.getPicker().getCurrentMinute()));
 
-				return true;
-			}
+                return true;
+            }
 
-		});
+        });
 
-		alt_to.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
+        alt_to.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-				SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
-				alt_to.setSummary(TimePreference.fixStringDecimal(alt_to.getPicker().getCurrentHour()) + ":" + TimePreference.fixStringDecimal(alt_to.getPicker().getCurrentMinute()));
+                SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
+                alt_to.setSummary(TimePreference.fixStringDecimal(alt_to.getPicker().getCurrentHour()) + ":" + TimePreference.fixStringDecimal(alt_to.getPicker().getCurrentMinute()));
 
-				return true;
-			}
+                return true;
+            }
 
-		});
+        });
 
 //		scheduler_days.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 //			@Override
@@ -124,8 +126,7 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
 //		});
 
 
-
-	}
+    }
 
     @Override
     public void onPause() {
@@ -133,153 +134,159 @@ public class OptionsActivity extends PreferenceActivity  implements SharedPrefer
         super.onPause();
     }
 
-	private void getQBittorrentOptionValues() {
+    private void getQBittorrentOptionValues() {
 
-		SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
-
-
-		String global_max_num_connections_value = sharedPrefs.getString("global_max_num_connections", "0");
-		String max_num_conn_per_torrent_value =  sharedPrefs.getString("max_num_conn_per_torrent", "0");
-		String max_num_upslots_per_torrent_value =  sharedPrefs.getString("max_num_upslots_per_torrent", "0");
-
-		String global_upload_value = sharedPrefs.getString("global_upload", "0");
-		String global_download_value = sharedPrefs.getString("global_download", "0");
-		String alt_upload_value = sharedPrefs.getString("alt_upload", "0");
-		String alt_download_value = sharedPrefs.getString("alt_download", "0");
+        SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
 
 
-		String max_ratio_value = sharedPrefs.getString("max_ratio", "0");
+        String global_max_num_connections_value = sharedPrefs.getString("global_max_num_connections", "0");
+        String max_num_conn_per_torrent_value = sharedPrefs.getString("max_num_conn_per_torrent", "0");
+        String max_uploads_value = sharedPrefs.getString("max_uploads", "0");
+        String max_num_upslots_per_torrent_value = sharedPrefs.getString("max_num_upslots_per_torrent", "0");
+
+        String global_upload_value = sharedPrefs.getString("global_upload", "0");
+        String global_download_value = sharedPrefs.getString("global_download", "0");
+        String alt_upload_value = sharedPrefs.getString("alt_upload", "0");
+        String alt_download_value = sharedPrefs.getString("alt_download", "0");
 
 
-		if(global_max_num_connections_value.equals("-1")){
-			global_max_num_connections_value = "0";
-		}
-
-		if(max_num_conn_per_torrent_value.equals("-1")){
-			max_num_conn_per_torrent_value = "0";
-		}
-
-		if(max_num_upslots_per_torrent_value.equals("-1")){
-			max_num_upslots_per_torrent_value = "0";
-		}
+        String max_ratio_value = sharedPrefs.getString("max_ratio", "0");
 
 
-		if(global_upload_value.equals("-1")){
-			global_upload_value = "0";
-		}
+        if (global_max_num_connections_value.equals("-1")) {
+            global_max_num_connections_value = "0";
+        }
 
-		if(global_download_value.equals("-1")){
-			global_download_value = "0";
-		}
+        if (max_num_conn_per_torrent_value.equals("-1")) {
+            max_num_conn_per_torrent_value = "0";
+        }
 
-		if(alt_upload_value.equals("-1")){
-			alt_upload_value = "0";
-		}
+        if (max_uploads_value.equals("-1")) {
+            max_uploads_value = "0";
+        }
 
-		if(alt_download_value.equals("-1")){
-			alt_download_value = "0";
-		}
+        if (max_num_upslots_per_torrent_value.equals("-1")) {
+            max_num_upslots_per_torrent_value = "0";
+        }
 
+        if (global_upload_value.equals("-1")) {
+            global_upload_value = "0";
+        }
 
-		if(max_ratio_value.equals("-1")){
-			max_ratio_value = "1";
-		}
+        if (global_download_value.equals("-1")) {
+            global_download_value = "0";
+        }
 
+        if (alt_upload_value.equals("-1")) {
+            alt_upload_value = "0";
+        }
 
-		global_max_num_connections.setText(global_max_num_connections_value);
-		global_max_num_connections.setSummary(global_max_num_connections_value);
-
-		max_num_conn_per_torrent.setText(max_num_conn_per_torrent_value);
-		max_num_conn_per_torrent.setSummary(max_num_conn_per_torrent_value);
-
-		max_num_upslots_per_torrent.setText(max_num_upslots_per_torrent_value);
-		max_num_upslots_per_torrent.setSummary(max_num_upslots_per_torrent_value);
-
-		global_upload.setText(global_upload_value);
-		global_upload.setSummary(global_upload_value);
-
-		global_download.setText(global_download_value);
-		global_download.setSummary(global_download_value);
-
-		alt_upload.setText(alt_upload_value);
-		alt_upload.setSummary(alt_upload_value);
-
-		alt_download.setText(alt_download_value);
-		alt_download.setSummary(alt_download_value);
-
-		max_ratio.setText(max_ratio_value);
-
-		max_act_downloads.setSummary(sharedPrefs.getString("max_act_downloads", ""));
-		max_act_uploads.setSummary(sharedPrefs.getString("max_act_uploads", ""));
-		max_act_torrents.setSummary(sharedPrefs.getString("max_act_torrents", ""));
+        if (alt_download_value.equals("-1")) {
+            alt_download_value = "0";
+        }
 
 
-
-		String time_from = sharedPrefs.getString("alt_from", "8:00");
-		String time_to = sharedPrefs.getString("alt_to", "20:00");
-
-		alt_from.setSummary(TimePreference.fixStringDecimal(TimePreference.getHour(time_from)) + ":" + TimePreference.fixStringDecimal(TimePreference.getMinute(time_from)));
-		alt_to.setSummary(TimePreference.fixStringDecimal(TimePreference.getHour(time_to)) + ":" + TimePreference.fixStringDecimal(TimePreference.getMinute(time_to)));
-
-		if (scheduler_days.getEntry() == null) {
-			scheduler_days.setValueIndex(1);
-		}
-
-		scheduler_days.setSummary(scheduler_days.getEntry());
-
-		max_ratio.setSummary(sharedPrefs.getString("max_ratio",""));
+        if (max_ratio_value.equals("-1")) {
+            max_ratio_value = "1";
+        }
 
 
-		if (max_ratio_act.getEntry() == null) {
-			max_ratio_act.setValueIndex(0);
-		}
+        global_max_num_connections.setText(global_max_num_connections_value);
+        global_max_num_connections.setSummary(global_max_num_connections_value);
 
-		max_ratio_act.setSummary(max_ratio_act.getEntry());
+        max_num_conn_per_torrent.setText(max_num_conn_per_torrent_value);
+        max_num_conn_per_torrent.setSummary(max_num_conn_per_torrent_value);
 
-	}
+        max_uploads.setText(max_uploads_value);
+        max_uploads.setSummary(max_uploads_value);
+
+        max_num_upslots_per_torrent.setText(max_num_upslots_per_torrent_value);
+        max_num_upslots_per_torrent.setSummary(max_num_upslots_per_torrent_value);
+
+        global_upload.setText(global_upload_value);
+        global_upload.setSummary(global_upload_value);
+
+        global_download.setText(global_download_value);
+        global_download.setSummary(global_download_value);
+
+        alt_upload.setText(alt_upload_value);
+        alt_upload.setSummary(alt_upload_value);
+
+        alt_download.setText(alt_download_value);
+        alt_download.setSummary(alt_download_value);
+
+        max_ratio.setText(max_ratio_value);
+
+        max_act_downloads.setSummary(sharedPrefs.getString("max_act_downloads", ""));
+        max_act_uploads.setSummary(sharedPrefs.getString("max_act_uploads", ""));
+        max_act_torrents.setSummary(sharedPrefs.getString("max_act_torrents", ""));
 
 
-	public void refreshScreenValues() {
+        String time_from = sharedPrefs.getString("alt_from", "8:00");
+        String time_to = sharedPrefs.getString("alt_to", "20:00");
 
-		global_max_num_connections.setSummary(global_max_num_connections.getText());
-		max_num_conn_per_torrent.setSummary(max_num_conn_per_torrent.getText());
-		max_num_upslots_per_torrent.setSummary(max_num_upslots_per_torrent.getText());
+        alt_from.setSummary(TimePreference.fixStringDecimal(TimePreference.getHour(time_from)) + ":" + TimePreference.fixStringDecimal(TimePreference.getMinute(time_from)));
+        alt_to.setSummary(TimePreference.fixStringDecimal(TimePreference.getHour(time_to)) + ":" + TimePreference.fixStringDecimal(TimePreference.getMinute(time_to)));
 
-		global_upload.setSummary(global_upload.getText());
-		global_download.setSummary(global_download.getText());
-		alt_upload.setSummary(alt_upload.getText());
-		alt_download.setSummary(alt_download.getText());
+        if (scheduler_days.getEntry() == null) {
+            scheduler_days.setValueIndex(1);
+        }
 
-		scheduler_days.setSummary(scheduler_days.getEntry());
+        scheduler_days.setSummary(scheduler_days.getEntry());
 
-		max_act_downloads.setSummary(max_act_downloads.getText());
-		max_act_uploads.setSummary(max_act_uploads.getText());
-		max_act_torrents.setSummary(max_act_torrents.getText());
+        max_ratio.setSummary(sharedPrefs.getString("max_ratio", ""));
 
 
+        if (max_ratio_act.getEntry() == null) {
+            max_ratio_act.setValueIndex(0);
+        }
+
+        max_ratio_act.setSummary(max_ratio_act.getEntry());
+
+    }
 
 
-		max_ratio.setSummary(max_ratio.getText());
-		max_ratio_act.setSummary(max_ratio_act.getEntry());
-	}
-		@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+    public void refreshScreenValues() {
+
+        global_max_num_connections.setSummary(global_max_num_connections.getText());
+        max_num_conn_per_torrent.setSummary(max_num_conn_per_torrent.getText());
+        max_uploads.setSummary(max_uploads.getText());
+        max_num_upslots_per_torrent.setSummary(max_num_upslots_per_torrent.getText());
+
+        global_upload.setSummary(global_upload.getText());
+        global_download.setSummary(global_download.getText());
+        alt_upload.setSummary(alt_upload.getText());
+        alt_download.setSummary(alt_download.getText());
+
+        scheduler_days.setSummary(scheduler_days.getEntry());
+
+        max_act_downloads.setSummary(max_act_downloads.getText());
+        max_act_uploads.setSummary(max_act_uploads.getText());
+        max_act_torrents.setSummary(max_act_torrents.getText());
+
+
+        max_ratio.setSummary(max_ratio.getText());
+        max_ratio_act.setSummary(max_ratio_act.getEntry());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
 //		getMenuInflater().inflate(R.menu.setting, menu);
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 
-	}
+    }
 
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		// Update values on Screen
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // Update values on Screen
 //		Log.d("Debug", "option changed");
-		refreshScreenValues();
-	}
+        refreshScreenValues();
+    }
 }
