@@ -85,7 +85,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
                 icon.setImageResource(R.drawable.downloading);
             }
 
-            if ("uploading".equals(state)) {
+            if ("uploading".equals(state) || "forcedUP".equals(state)) {
                 icon.setImageResource(R.drawable.uploading);
             }
 

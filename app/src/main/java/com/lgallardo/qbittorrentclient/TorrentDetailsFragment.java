@@ -288,7 +288,7 @@ public class TorrentDetailsFragment extends Fragment {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.downloading, 0, 0, 0);
             }
 
-            if ("uploading".equals(state)) {
+            if ("uploading".equals(state) || "forcedUP".equals(state)) {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.uploading, 0, 0, 0);
             }
 
@@ -454,7 +454,7 @@ public class TorrentDetailsFragment extends Fragment {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.downloading, 0, 0, 0);
             }
 
-            if ("uploading".equals(state)) {
+            if ("uploading".equals(state) || "forcedUP".equals(state)) {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.uploading, 0, 0, 0);
             }
 

@@ -3206,7 +3206,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     }
 
                     if (params[1].equals("seeding") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())) {
+                        if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "forcedUP".equals(result[i].getState())) {
                             torrentsFiltered.add(result[i]);
                         }
                     }
