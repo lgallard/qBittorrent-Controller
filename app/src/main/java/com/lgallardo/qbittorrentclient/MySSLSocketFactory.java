@@ -8,7 +8,10 @@
  */
 package com.lgallardo.qbittorrentclient;
 
+import android.util.Log;
+
 import org.apache.http.conn.ssl.SSLSocketFactory;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -17,12 +20,9 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 public class MySSLSocketFactory extends SSLSocketFactory {
          SSLContext sslContext = SSLContext.getInstance("TLS");
@@ -30,17 +30,10 @@ public class MySSLSocketFactory extends SSLSocketFactory {
     public MySSLSocketFactory(KeyStore truststore) throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
         super(truststore);
 
-        TrustManager tm = new X509TrustManager() {
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
 
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
+        Log.d("Debug","Before MyTrustManager");
 
-            public X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-        };
+        TrustManager tm = new MyTrustManager(truststore);
 
         sslContext.init(null, new TrustManager[] { tm }, null);
     }

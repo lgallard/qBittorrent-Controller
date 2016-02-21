@@ -276,6 +276,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static String local_hostname;
     protected static int local_port;
 
+    // keystore file
+    protected static File localTrustStoreFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -283,6 +285,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Get preferences
         getSettings();
+
+
+        Log.d("Debug", "Checking https");
+        // Get custom keystore file
+        if(https){
+            localTrustStoreFile = new File(getFilesDir(), "qbc.bks");
+
+            Log.d("Debug", "File: " + localTrustStoreFile.getAbsolutePath());
+        }else{
+            Log.d("Debug", "https is not enabled");
+        }
 
         // Set alarm for checking completed torrents, if not set
         if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), NotifierService.class), PendingIntent.FLAG_NO_CREATE) == null) {
