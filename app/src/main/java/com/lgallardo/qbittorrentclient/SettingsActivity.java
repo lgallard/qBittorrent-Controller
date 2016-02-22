@@ -54,6 +54,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private EditTextPreference local_hostname;
     private EditTextPreference local_port;
 
+    Preference filePicker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -87,6 +89,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         local_hostname = (EditTextPreference) findPreference("local_hostname");
         local_port = (EditTextPreference) findPreference("local_port");
 
+        filePicker = (Preference) findPreference("filePicker");
 
         // Get values for server
         getQBittorrentServerValues(currentServer.getValue());
@@ -314,6 +317,34 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         });
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        String keystorePath = "";
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            keystorePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+            // Do anything with file
+        }
+
+        if (!keystorePath.equals("")) {
+            SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
+            Editor editor = sharedPrefs.edit();
+
+            editor.putString("keystorePath", keystorePath);
+            editor.commit();
+        }
+
+
+        filePicker.setSummary(keystorePath);
+
+    }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
