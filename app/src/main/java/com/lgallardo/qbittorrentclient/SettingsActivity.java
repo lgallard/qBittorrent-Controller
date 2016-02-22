@@ -24,6 +24,8 @@ import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.Menu;
 
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+
 import java.util.ArrayList;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -296,6 +298,20 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         Intent result = new Intent();
         result.putExtra("currentState", MainActivity.currentState);
         setResult(Activity.RESULT_OK, result);
+
+
+        Preference filePicker = (Preference) findPreference("filePicker");
+        filePicker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+//                Intent intent = new Intent(......); //Intent to start openIntents File Manager
+//                startActivityForResult(intent, requestMode);
+
+                Intent intent = new Intent(getApplicationContext(), FilePickerActivity.class);
+                startActivityForResult(intent, 1);
+                return true;
+            }
+        });
 
     }
 

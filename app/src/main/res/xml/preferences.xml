@@ -66,6 +66,20 @@
                 android:summary="@string/settings_qbittorrent_https_summary"
                 android:title="@string/settings_qbittorrent_https_title" />
 
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="self-signed"
+                android:dependency="https"
+                android:summary="@string/settings_qbittorrent_https_self_signed_title"
+                android:title="@string/settings_qbittorrent_https_self_signed_title" />
+
+
+            <Preference
+                android:title="@string/settings_qbittorrent_https_self_signed_bks_file_title"
+                android:key="filePicker"
+                android:dependency="self-signed"
+                />
+
             <EditTextPreference
                 android:defaultValue=""
                 android:dialogTitle="@string/settings_qbittorrent_subfolder_dialog_title"
