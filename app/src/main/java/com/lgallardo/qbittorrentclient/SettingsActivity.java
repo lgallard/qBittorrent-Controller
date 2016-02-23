@@ -54,7 +54,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private EditTextPreference local_hostname;
     private EditTextPreference local_port;
 
-    Preference filePicker;
+    private Preference keystore_path;
+    private EditTextPreference keystore_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,10 +90,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         local_hostname = (EditTextPreference) findPreference("local_hostname");
         local_port = (EditTextPreference) findPreference("local_port");
 
-        filePicker = (Preference) findPreference("filePicker");
+        keystore_path = (Preference) findPreference("keystore_path");
+        keystore_password = (EditTextPreference) findPreference("keystore_password");
 
         // Get values for server
         getQBittorrentServerValues(currentServer.getValue());
+
 
         Preference pref = findPreference("currentServer");
         pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -303,13 +306,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         setResult(Activity.RESULT_OK, result);
 
 
-        Preference filePicker = (Preference) findPreference("filePicker");
-        filePicker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference keystore_path = (Preference) findPreference("keystore_path");
+        keystore_path.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-//                Intent intent = new Intent(......); //Intent to start openIntents File Manager
-//                startActivityForResult(intent, requestMode);
-
                 Intent intent = new Intent(getApplicationContext(), FilePickerActivity.class);
                 startActivityForResult(intent, 1);
                 return true;
@@ -323,23 +323,23 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        String keystorePath = "";
+        String keystore_path_value = "";
 
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            keystorePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+            keystore_path_value = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             // Do anything with file
         }
 
-        if (!keystorePath.equals("")) {
-            SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
-            Editor editor = sharedPrefs.edit();
+        // Save keystore path
 
-            editor.putString("keystorePath", keystorePath);
-            editor.commit();
-        }
+        SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
+        Editor editor = sharedPrefs.edit();
+
+        editor.putString("keystore_path" + currentServerValue, keystore_path_value);
+        editor.commit();
 
 
-        filePicker.setSummary(keystorePath);
+        keystore_path.setSummary(keystore_path_value);
 
     }
 
@@ -430,6 +430,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         local_port.setText(sharedPrefs.getString("local_port" + value, ""));
         local_port.setSummary(sharedPrefs.getString("local_port" + value, ""));
 
+        keystore_path.setSummary(sharedPrefs.getString("keystore_path" + value, ""));
+        keystore_password.setText(sharedPrefs.getString("keystore_password" + value, ""));
+
     }
 
     public void refreshScreenValues() {
@@ -510,6 +513,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         }
 
 
+        if (keystore_password.getText().toString() != null) {
+
+            editor.putString("keystore_password" + currentServerValue, keystore_password.getText().toString());
+        }
 
         // Commit changes
         editor.commit();

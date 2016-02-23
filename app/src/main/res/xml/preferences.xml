@@ -60,31 +60,36 @@
                 android:summary="@string/settings_qbittorrent_port_summary"
                 android:title="@string/settings_qbittorrent_port_title" />
 
+            <EditTextPreference
+                android:defaultValue=""
+                android:dialogTitle="@string/settings_qbittorrent_subfolder_dialog_title"
+                android:key="subfolder"
+                android:title="@string/settings_qbittorrent_subfolder_title" />
+
+        </PreferenceCategory>
+
+        <PreferenceCategory
+            android:key="https_category"
+            android:title="@string/settings_qbittorrent_https_category">
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="https"
                 android:summary="@string/settings_qbittorrent_https_summary"
                 android:title="@string/settings_qbittorrent_https_title" />
 
-            <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="self-signed"
-                android:dependency="https"
-                android:summary="@string/settings_qbittorrent_https_self_signed_title"
-                android:title="@string/settings_qbittorrent_https_self_signed_title" />
-
-
             <Preference
-                android:title="@string/settings_qbittorrent_https_self_signed_bks_file_title"
-                android:key="filePicker"
-                android:dependency="self-signed"
-                />
+                android:dependency="https"
+                android:key="keystore_path"
+                android:title="@string/settings_qbittorrent_https_self_signed_bks_file_title" />
 
             <EditTextPreference
                 android:defaultValue=""
-                android:dialogTitle="@string/settings_qbittorrent_subfolder_dialog_title"
-                android:key="subfolder"
-                android:title="@string/settings_qbittorrent_subfolder_title" />
+                android:dependency="https"
+                android:dialogTitle="@string/settings_qbittorrent_https_self_signed_keystore_password_title"
+                android:inputType="textPassword"
+                android:key="keystore_password"
+                android:summary="@string/settings_qbittorrent_password_summary"
+                android:title="@string/settings_qbittorrent_https_self_signed_keystore_password_title" />
         </PreferenceCategory>
 
 
@@ -135,60 +140,60 @@
                 android:title="@string/settings_qbittorrent_data_timeout_title" />
         </PreferenceCategory>
     </PreferenceScreen>
-        <PreferenceCategory
-            android:key="Autorefresh"
-            android:title="@string/settings_qbittorrent_autorefresh_category">
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="auto_refresh"
-                android:summary="@string/settings_qbittorrent_autorefresh_summary"
-                android:title="@string/settings_qbittorrent_autorefresh_title" />
+    <PreferenceCategory
+        android:key="Autorefresh"
+        android:title="@string/settings_qbittorrent_autorefresh_category">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="auto_refresh"
+            android:summary="@string/settings_qbittorrent_autorefresh_summary"
+            android:title="@string/settings_qbittorrent_autorefresh_title" />
 
-            <ListPreference
-                android:defaultValue="2"
-                android:dependency="auto_refresh"
-                android:entries="@array/autorefresh"
-                android:entryValues="@array/autorefreshValues"
-                android:key="refresh_period"
-                android:summary="@string/settings_qbittorrent_refresh_period_title"
-                android:title="@string/settings_qbittorrent_refresh_period_title" />
-        </PreferenceCategory>
+        <ListPreference
+            android:defaultValue="2"
+            android:dependency="auto_refresh"
+            android:entries="@array/autorefresh"
+            android:entryValues="@array/autorefreshValues"
+            android:key="refresh_period"
+            android:summary="@string/settings_qbittorrent_refresh_period_title"
+            android:title="@string/settings_qbittorrent_refresh_period_title" />
+    </PreferenceCategory>
 
-        <PreferenceCategory
-            android:key="Notifications"
-            android:title="@string/settings_qbittorrent_notifications_category">
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="enable_notifications"
-                android:summary="@string/settings_qbittorrent_notifications_summary"
-                android:title="@string/settings_qbittorrent_notifications_title" />
+    <PreferenceCategory
+        android:key="Notifications"
+        android:title="@string/settings_qbittorrent_notifications_category">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="enable_notifications"
+            android:summary="@string/settings_qbittorrent_notifications_summary"
+            android:title="@string/settings_qbittorrent_notifications_title" />
 
-            <ListPreference
-                android:defaultValue="2"
-                android:dependency="enable_notifications"
-                android:entries="@array/notification"
-                android:entryValues="@array/notificationValues"
-                android:key="notification_period"
-                android:summary="@string/settings_qbittorrent_notifications_period_summary"
-                android:title="@string/settings_qbittorrent_notifications_period_title" />
-        </PreferenceCategory>
+        <ListPreference
+            android:defaultValue="2"
+            android:dependency="enable_notifications"
+            android:entries="@array/notification"
+            android:entryValues="@array/notificationValues"
+            android:key="notification_period"
+            android:summary="@string/settings_qbittorrent_notifications_period_summary"
+            android:title="@string/settings_qbittorrent_notifications_period_title" />
+    </PreferenceCategory>
 
-        <PreferenceCategory
-            android:key="appearance"
-            android:title="@string/settings_qbittorrent_appearance_category">
+    <PreferenceCategory
+        android:key="appearance"
+        android:title="@string/settings_qbittorrent_appearance_category">
 
-            <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="dark_ui"
-                android:summary="@string/settings_qbittorrent_darkui_summary"
-                android:title="@string/settings_qbittorrent_darkui_dialog_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="dark_ui"
+            android:summary="@string/settings_qbittorrent_darkui_summary"
+            android:title="@string/settings_qbittorrent_darkui_dialog_title" />
 
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="header"
-                android:summary="@string/settings_qbittorrent_header_dialog_sumary"
-                android:title="@string/settings_qbittorrent_header_dialog_title" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="header"
+            android:summary="@string/settings_qbittorrent_header_dialog_sumary"
+            android:title="@string/settings_qbittorrent_header_dialog_title" />
 
-        </PreferenceCategory>
+    </PreferenceCategory>
 
 </PreferenceScreen>
