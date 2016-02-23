@@ -276,8 +276,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static String local_hostname;
     protected static int local_port;
 
-    // keystore file
-    protected static File localTrustStoreFile;
+    // Keystore for self-signed certificate
+    protected static String keystore_path;
+    protected static String keystore_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -285,17 +286,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Get preferences
         getSettings();
-
-
-        Log.d("Debug", "Checking https");
-        // Get custom keystore file
-        if(https){
-            localTrustStoreFile = new File(getFilesDir(), "qbc.bks");
-
-            Log.d("Debug", "File: " + localTrustStoreFile.getAbsolutePath());
-        }else{
-            Log.d("Debug", "https is not enabled");
-        }
 
         // Set alarm for checking completed torrents, if not set
         if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), NotifierService.class), PendingIntent.FLAG_NO_CREATE) == null) {
@@ -2411,6 +2401,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             }
         }
+
+        // Get keystore for self-signed certificate
+        keystore_path = sharedPrefs.getString("keystore_path" + currentServer, "");
+        keystore_password = sharedPrefs.getString("keystore_password" + currentServer, "");
+
     }
 
     // Get Options
@@ -2642,7 +2637,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             getSettings();
 
             // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, keystore_path, keystore_password, port, username, password, connection_timeout, data_timeout);
 
             String newCookie = "";
             String api = "";
@@ -2692,7 +2687,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             getSettings();
 
             // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, keystore_path, keystore_password, port, username, password, connection_timeout, data_timeout);
 
             String apiVersion = "";
 
@@ -2803,7 +2798,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             getSettings();
 
             // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, keystore_path, keystore_password, port, username, password, connection_timeout, data_timeout);
 
             jParser.setCookie(cookie);
 
@@ -3017,7 +3012,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             try {
 
                 // Creating new JSON Parser
-                jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+                jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, keystore_path, keystore_password, port, username, password, connection_timeout, data_timeout);
 
                 jParser.setCookie(MainActivity.cookie);
 
@@ -3544,7 +3539,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             getSettings();
 
             // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, keystore_path, keystore_password, port, username, password, connection_timeout, data_timeout);
 
             jParser.setCookie(cookie);
 

@@ -622,7 +622,7 @@ public class TorrentDetailsFragment extends Fragment {
 
             try {
 
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
+                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.keystore_path, MainActivity.keystore_password, MainActivity.port,
                         MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
 
                 jParser.setCookie(MainActivity.cookie);
@@ -734,7 +734,7 @@ public class TorrentDetailsFragment extends Fragment {
 
             try {
 
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
+                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.keystore_path, MainActivity.keystore_password, MainActivity.port,
                         MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
 
                 jParser.setCookie(MainActivity.cookie);
@@ -821,7 +821,7 @@ public class TorrentDetailsFragment extends Fragment {
 
 //                Log.e("Debug", "qBittorrentGeneralInfoTask");
 
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port,
+                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.keystore_path, MainActivity.keystore_password, MainActivity.port,
                         MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
 
 //                if(jParser != null){

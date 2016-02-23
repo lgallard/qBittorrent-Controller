@@ -63,6 +63,9 @@ public class RSSService extends BroadcastReceiver {
     private String qbQueryString = "query";
     private static String rss_feeds;
 
+    // Keystore for self-signed certificate
+    protected static String keystore_path;
+    protected static String keystore_password;
 
     public RSSService() {
         super();
@@ -172,7 +175,8 @@ public class RSSService extends BroadcastReceiver {
         // Get values from options
         rss_feeds = sharedPrefs.getString("rss_feeds", "");
 
-
+        keystore_path = sharedPrefs.getString("keystore_path" + currentServer, "");
+        keystore_password = sharedPrefs.getString("keystore_password" + currentServer, "");
     }
 
 
@@ -215,7 +219,7 @@ public class RSSService extends BroadcastReceiver {
             getSettings();
 
             // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, keystore_path, keystore_password, port, username, password, connection_timeout, data_timeout);
 
             jParser.setCookie(cookie);
 
@@ -249,7 +253,7 @@ public class RSSService extends BroadcastReceiver {
 
 
             // Creating new JSON Parser
-            JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+            JSONParser jParser = new JSONParser(hostname, subfolder, protocol, keystore_path, keystore_password, port, username, password, connection_timeout, data_timeout);
 
             String cookie = "";
             String api = "";

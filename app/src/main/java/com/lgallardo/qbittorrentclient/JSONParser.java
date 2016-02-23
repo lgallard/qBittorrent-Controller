@@ -27,6 +27,7 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.StrictHostnameVerifierHC4;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -74,21 +75,25 @@ public class JSONParser {
     private String cookie;
 
     private File localTrustStoreFile;
+    private String keystore_path;
+    private String keystore_password;
 
     // constructor
     public JSONParser() {
-        this("", "", "", 0, "", "", 10, 20);
+        this("", "", "", "", "", 0, "", "", 10, 20);
     }
 
     public JSONParser(String hostname, String subfolder, int port, String username, String password) {
-        this(hostname, subfolder, "http", port, username, password, 10, 20);
+        this(hostname, subfolder, "http", "", "", port, username, password, 10, 20);
     }
 
-    public JSONParser(String hostname, String subfolder, String protocol, int port, String username, String password, int connection_timeout, int data_timeout) {
+    public JSONParser(String hostname, String subfolder, String protocol, String keystore_path, String keystore_password, int port, String username, String password, int connection_timeout, int data_timeout) {
 
         this.hostname = hostname;
         this.subfolder = subfolder;
         this.protocol = protocol;
+        this.keystore_path = keystore_path;
+        this.keystore_password = keystore_password;
         this.port = port;
         this.username = username;
         this.password = password;
@@ -644,17 +649,23 @@ public class JSONParser {
     public DefaultHttpClient getNewHttpClient() {
         try {
 
-            String TRUSTSTORE_PASSWORD = "qwerty";
-
             KeyStore localTrustStore = KeyStore.getInstance("BKS");
 
-
-            InputStream in = new FileInputStream(MainActivity.localTrustStoreFile);
+            InputStream in = null;
 
             try {
-                localTrustStore.load(in, TRUSTSTORE_PASSWORD.toCharArray());
+
+                Log.d("Debug", "keystore_path: >" + keystore_path+ "<");
+                Log.d("Debug", "keystore_password: >" + keystore_password + "<");
+
+                localTrustStoreFile = new File(keystore_path);
+                in = new FileInputStream(localTrustStoreFile);
+
+                localTrustStore.load(in, keystore_password.toCharArray());
             } finally {
-                in.close();
+                if (in != null) {
+                    in.close();
+                }
             }
 
             Log.d("Debug","Before MySSLSocketFactory");

@@ -513,6 +513,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         }
 
 
+        if (keystore_path.getSummary().toString() != null) {
+
+            editor.putString("keystore_path" + currentServerValue, keystore_path.getSummary().toString());
+        }
+
         if (keystore_password.getText().toString() != null) {
 
             editor.putString("keystore_password" + currentServerValue, keystore_password.getText().toString());

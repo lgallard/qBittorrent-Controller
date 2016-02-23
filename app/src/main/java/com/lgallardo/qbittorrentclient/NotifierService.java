@@ -69,6 +69,10 @@ public class NotifierService extends BroadcastReceiver {
     protected static String local_hostname;
     protected static int local_port;
 
+    // Keystore for self-signed certificate
+    protected static String keystore_path;
+    protected static String keystore_password;
+
 
     public NotifierService() {
         super();
@@ -257,6 +261,9 @@ public class NotifierService extends BroadcastReceiver {
             }
         }
 
+        keystore_path = sharedPrefs.getString("keystore_path" + currentServer, "");
+        keystore_password = sharedPrefs.getString("keystore_password" + currentServer, "");
+
 
     }
 
@@ -299,7 +306,7 @@ public class NotifierService extends BroadcastReceiver {
             try {
 
                 // Creating new JSON Parser
-                jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+                jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, keystore_path, keystore_password, port, username, password, connection_timeout, data_timeout);
 
                 jParser.setCookie(cookie);
 
@@ -561,7 +568,7 @@ public class NotifierService extends BroadcastReceiver {
             getSettings();
 
             // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new JSONParser(hostname, subfolder, protocol, port, username, password, connection_timeout, data_timeout);
+            com.lgallardo.qbittorrentclient.JSONParser jParser = new JSONParser(hostname, subfolder, protocol, keystore_path, keystore_password, port, username, password, connection_timeout, data_timeout);
 
             String newCookie = "";
             String api = "";
