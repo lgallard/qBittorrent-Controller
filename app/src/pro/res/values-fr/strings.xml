@@ -240,4 +240,8 @@
     <string name="options_qbittorrent_speed">Vitesse</string>
     <string name="options_qbittorrent_max_num_upslots_per_torrent_title">Nombre maximum d\' emplacements d\' envoi par torrent</string>
     <string name="options_qbittorrent_max_uploads_title">Nombre maximum global d\'emplacements d\'envoi</string>
+    <string name="settings_qbittorrent_https_category">HTTPS</string>
+    <string name="settings_qbittorrent_https_self_signed_keystore_password_title">Mot de passe keystore</string>
+    <string name="settings_qbittorrent_https_self_signed_bks_file_title">Keystore de certificat auto-signé</string>
+
 </resources>
