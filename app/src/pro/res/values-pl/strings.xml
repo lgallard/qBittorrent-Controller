@@ -49,6 +49,7 @@
     <string name="setDownloadRateLimit">Limit pobierania był ustawiony.</string>
     <string name="error">Błąd</string>
     <string name="error1">Adres hosta lub  IP nie może być osiągnięty. Proszę sprawdzić ustawienia!!</string>
+    <string name="error2">Błąd certyfikatu HTTPS</string>
     <string name="error401">Nieautoryzowany dostęp. Sprawdź ustawienia konta, aby uniknąć zakazów!</string>
     <string name="error403">Błąd uwierzytelniania</string>
     <string name="info">Ostrzeżenie</string>

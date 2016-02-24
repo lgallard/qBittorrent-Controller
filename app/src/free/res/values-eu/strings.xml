@@ -61,6 +61,7 @@
   <string name="setDownloadRateLimit">Jeisketa neurri muga ezarrita</string>
   <string name="error">Akatsa</string>
   <string name="error1">Hostalaria edo IP helbidea ezin dira lortu. Mesedez egiaztatu zure ezarpenak!</string>
+  <string name="error2">HTTPS ziurtagiria error</string>
   <string name="error401">Sarbide baimengabea. Egiaztatu zure kontuaren ezarpenak debekuak saihesteko!</string>
   <string name="error403">Egiaztapen akatsa</string>
   <string name="info">Kontuz</string>

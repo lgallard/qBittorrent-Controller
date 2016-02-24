@@ -15,15 +15,13 @@ import javax.net.ssl.X509TrustManager;
 
 public class MyTrustManager implements X509TrustManager {
 
-    private static final String TAG = MyTrustManager.class.getSimpleName();
+//    private static final String TAG = MyTrustManager.class.getSimpleName();
 
     static class LocalStoreX509TrustManager implements X509TrustManager {
 
         private X509TrustManager trustManager;
 
         LocalStoreX509TrustManager(KeyStore localTrustStore) {
-
-            Log.d("Debug","MyTrustManager - constructor");
 
             try {
                 TrustManagerFactory tmf = TrustManagerFactory
@@ -109,10 +107,10 @@ public class MyTrustManager implements X509TrustManager {
     public void checkClientTrusted(X509Certificate[] chain, String authType)
             throws CertificateException {
         try {
-            Log.d(TAG, "checkServerTrusted() with default trust manager...");
+//            Log.d(TAG, "checkServerTrusted() with default trust manager...");
             defaultTrustManager.checkClientTrusted(chain, authType);
         } catch (CertificateException ce) {
-            Log.d(TAG, "checkServerTrusted() with local trust manager...");
+//            Log.d(TAG, "checkServerTrusted() with local trust manager...");
             localTrustManager.checkClientTrusted(chain, authType);
         }
     }
@@ -120,10 +118,10 @@ public class MyTrustManager implements X509TrustManager {
     public void checkServerTrusted(X509Certificate[] chain, String authType)
             throws CertificateException {
         try {
-            Log.d(TAG, "checkServerTrusted() with default trust manager...");
+//            Log.d(TAG, "checkServerTrusted() with default trust manager...");
             defaultTrustManager.checkServerTrusted(chain, authType);
         } catch (CertificateException ce) {
-            Log.d(TAG, "checkServerTrusted() with local trust manager...");
+//            Log.d(TAG, "checkServerTrusted() with local trust manager...");
             localTrustManager.checkServerTrusted(chain, authType);
         }
     }

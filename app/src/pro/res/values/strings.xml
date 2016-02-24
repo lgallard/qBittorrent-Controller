@@ -64,6 +64,7 @@
     <string name="setDownloadRateLimit">Download rate limit set</string>
     <string name="error">Error</string>
     <string name="error1">The host or IP address cannot be reached. Please check your settings!</string>
+    <string name="error2">HTTPS certificate error!</string>
     <string name="error401">Unauthorized access. Check your account settings to avoid bans!</string>
     <string name="error403">Authentication error</string>
     <string name="info">Warning</string>

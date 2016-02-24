@@ -142,6 +142,7 @@
     <string name="dialog_download_rate_limit">Limite de taxa de download (KiB/s)</string>
     <string name="dialog_upload_rate_limit">Limite da taxa de carga (KiB/s)</string>
     <string name="error1">O nome do host ou o endereço IP não pode ser alcançado. Por favor, verifique suas configurações!</string>
+    <string name="error2">Erro de certificado HTTPS</string>
     <string name="title_activity_settings">Configurações</string>
     <string name="torrent_details_name">Nome:</string>
     <string name="settings_qbittorrent_sort_category">Ordenar a lista</string>

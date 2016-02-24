@@ -57,6 +57,7 @@
   <string name="setDownloadRateLimit">Установить лимит скачивания</string>
   <string name="error">Ошибка</string>
   <string name="error1">Не удалось подключиться к серверу. Пожалуйста, проверьте настройки!</string>
+  <string name="error2">Oшибка сертификата HTTPS</string>
   <string name="error401">В доступе отказано. Проверьте настройки чтобы избежать блокировки!</string>
   <string name="error403">Ошибка аутентификации</string>
   <string name="info">Предупреждение</string>

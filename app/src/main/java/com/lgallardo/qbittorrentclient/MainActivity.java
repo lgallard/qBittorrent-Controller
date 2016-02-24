@@ -2833,6 +2833,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 return;
             }
 
+            if (httpStatusCode == 2) {
+                Toast.makeText(getApplicationContext(), R.string.error2, Toast.LENGTH_SHORT).show();
+                httpStatusCode = 0;
+                return;
+            }
+
+
             if (httpStatusCode == 401) {
                 Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
                 httpStatusCode = 0;
@@ -3142,6 +3149,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     httpStatusCode = 0;
                     connection400ErrorCounter = 2;
                 }
+
+                if (httpStatusCode == 2) {
+                    Toast.makeText(getApplicationContext(), R.string.error2, Toast.LENGTH_SHORT).show();
+                    httpStatusCode = 0;
+                    connection400ErrorCounter = 2;
+                }
+
 
                 if (httpStatusCode == 401) {
                     Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
@@ -3641,6 +3655,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 if (httpStatusCode == 1) {
                     Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
+                    httpStatusCode = 0;
+                }
+
+                if (httpStatusCode == 2) {
+                    Toast.makeText(getApplicationContext(), R.string.error2, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
                 }
 

@@ -49,6 +49,7 @@
     <string name="setDownloadRateLimit">Den nedladdningshastighet gräns har satts</string>
     <string name="error">Fel!</string>
     <string name="error1">Värd eller IP-adressen inte kan nås. Kontrollera dina inställningar!</string>
+    <string name="error2">HTTPS certifikat fel</string>
     <string name="error401">Obehörig åtkomst. Kontrollera dina kontoinställningar för att undvika förbud!</string>
     <string name="error403">Autentisering misslyckades</string>
     <string name="info">Varning</string>

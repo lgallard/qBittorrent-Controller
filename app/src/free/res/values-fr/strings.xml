@@ -51,6 +51,7 @@
     <string name="setDownloadRateLimit">Limite de vitesse de téléchargement terminées</string>
     <string name="error">Erreur</string>
     <string name="error1">L\'adresse de l\'hôte ou IP ne peut pas être atteint. Se il vous plaît vérifier vos paramètres!</string>
+    <string name="error2">HTTPS erreur de certificat</string>
     <string name="error401">Accès non autorisé. Vérifiez vos paramètres de compte pour éviter les interdictions!</string>
     <string name="error403">Erreur d\'authentification</string>
     <string name="info">Avertissement</string>

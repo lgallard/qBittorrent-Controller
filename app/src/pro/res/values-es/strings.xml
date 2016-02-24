@@ -49,6 +49,7 @@
     <string name="setDownloadRateLimit">Límite de bajada cambiado</string>
     <string name="error">Error</string>
     <string name="error1">El host o dirección IP no son alcanzables. Por favor revise su configuración!</string>
+    <string name="error2">Error de certificado HTTPS</string>
     <string name="error401">Acceso no autorizado. Compruebe la configuración de la cuenta para evitar ser baneado!</string>
     <string name="error403">Error de autenticación</string>
     <string name="info">Atención</string>

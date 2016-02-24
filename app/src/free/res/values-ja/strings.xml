@@ -52,6 +52,7 @@
   <string name="setDownloadRateLimit">ダウンロード レート限度を設定しました</string>
   <string name="error">エラー</string>
   <string name="error1">ホストまたは IP アドレスに到達できません。設定を確認してください!</string>
+  <string name="error2">HTTPS証明書エラー</string>
   <string name="error401">不正アクセス。禁止を回避するために、アカウントの設定を確認してください!</string>
   <string name="error403">認証エラー</string>
   <string name="info">警告</string>

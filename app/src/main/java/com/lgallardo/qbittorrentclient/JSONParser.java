@@ -58,8 +58,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.net.ssl.SSLPeerUnverifiedException;
+
 public class JSONParser {
     private static final int TIMEOUT_ERROR = 1;
+    private static final int NO_PEER_CERTIFICATE = 2;
     static InputStream is = null;
     private JSONObject jObj = null;
     private JSONArray jArray = null;
@@ -197,6 +200,9 @@ public class JSONParser {
         } catch (ClientProtocolException e) {
             Log.e("JSON", "ClientProtocolException: " + e.toString());
             e.printStackTrace();
+        } catch (SSLPeerUnverifiedException e) {
+            Log.e("JSON", "SSLPeerUnverifiedException: " + e.toString());
+            throw new JSONParserStatusCodeException(NO_PEER_CERTIFICATE);
         } catch (IOException e) {
             Log.e("JSON", "IOException: " + e.toString());
             // e.printStackTrace();
@@ -299,13 +305,14 @@ public class JSONParser {
         } catch (ClientProtocolException e) {
             Log.e("JSON", "Client: " + e.toString());
             e.printStackTrace();
+        } catch (SSLPeerUnverifiedException e) {
+            Log.e("JSON", "SSLPeerUnverifiedException: " + e.toString());
+            throw new JSONParserStatusCodeException(NO_PEER_CERTIFICATE);
         } catch (IOException e) {
             Log.e("JSON", "IO: " + e.toString());
             // e.printStackTrace();
-            httpclient.getConnectionManager().shutdown();
             throw new JSONParserStatusCodeException(TIMEOUT_ERROR);
         } catch (JSONParserStatusCodeException e) {
-            httpclient.getConnectionManager().shutdown();
             throw new JSONParserStatusCodeException(e.getCode());
         } catch (Exception e) {
             Log.e("JSON", "Generic: " + e.toString());
@@ -624,6 +631,9 @@ public class JSONParser {
         } catch (ClientProtocolException e) {
             Log.e("Debug", "Client: " + e.toString());
             e.printStackTrace();
+        } catch (SSLPeerUnverifiedException e) {
+            Log.e("JSON", "SSLPeerUnverifiedException: " + e.toString());
+            throw new JSONParserStatusCodeException(NO_PEER_CERTIFICATE);
         } catch (IOException e) {
             Log.e("Debug", "IO: " + e.toString());
             httpclient.getConnectionManager().shutdown();
@@ -655,9 +665,6 @@ public class JSONParser {
 
             try {
 
-                Log.d("Debug", "keystore_path: >" + keystore_path+ "<");
-                Log.d("Debug", "keystore_password: >" + keystore_password + "<");
-
                 localTrustStoreFile = new File(keystore_path);
                 in = new FileInputStream(localTrustStoreFile);
 
@@ -668,7 +675,6 @@ public class JSONParser {
                 }
             }
 
-            Log.d("Debug","Before MySSLSocketFactory");
             MySSLSocketFactory sf = new MySSLSocketFactory(localTrustStore);
             sf.setHostnameVerifier(SSLSocketFactory.STRICT_HOSTNAME_VERIFIER);
 
