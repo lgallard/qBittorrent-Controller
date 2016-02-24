@@ -31,8 +31,6 @@ public class MySSLSocketFactory extends SSLSocketFactory {
         super(truststore);
 
 
-        Log.d("Debug","Before MyTrustManager");
-
         TrustManager tm = new MyTrustManager(truststore);
 
         sslContext.init(null, new TrustManager[] { tm }, null);
