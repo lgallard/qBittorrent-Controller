@@ -103,10 +103,11 @@ public class RSSItemActivity extends AppCompatActivity {
         }
 
 
-        // Get Channel Feed
-        RSSFeed rssFeed = (RSSFeedActivity.myadapter.getRssChannels()).get(rssChannelPosition);
+        try {
+            // Get Channel Feed
+            RSSFeed rssFeed = (RSSFeedActivity.myadapter.getRssChannels()).get(rssChannelPosition);
 
-        ArrayList<RSSFeedItem> items = rssFeed.getItems();
+            ArrayList<RSSFeedItem> items = rssFeed.getItems();
 
 //        Log.d("Debug", "Items size: " + items.size());
 //
@@ -116,21 +117,24 @@ public class RSSItemActivity extends AppCompatActivity {
 //        }
 
 
-        // Get ListView object from xml
-        ListView listView = (ListView) findViewById(R.id.items_list);
+            // Get ListView object from xml
+            ListView listView = (ListView) findViewById(R.id.items_list);
 
-        // Listener for listview
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
-                onListItemClick(v, pos, id);
-            }
-        });
+            // Listener for listview
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
+                    onListItemClick(v, pos, id);
+                }
+            });
 
 
-        myItemsAdapter = new RSSFeedItemListAdapter(this, items);
+            myItemsAdapter = new RSSFeedItemListAdapter(this, items);
 
-        listView.setAdapter(myItemsAdapter);
+            listView.setAdapter(myItemsAdapter);
+        } catch (Exception e) {
+            Log.d("Debug", "Cannot load RSSfeed");
+        }
 
         // Load Ads
         loadBanner();
