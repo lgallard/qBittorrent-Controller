@@ -8,6 +8,7 @@
  */
 package com.lgallardo.qbittorrentclient;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -39,6 +40,10 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -129,13 +134,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static final String TAG_MAX_RATIO = "max_ratio";
     protected static final String TAG_MAX_RATIO_ACT = "max_ratio_act";
 
-
-
-
     protected static final int SETTINGS_CODE = 0;
     protected static final int OPTION_CODE = 1;
     protected static final int GETPRO_CODE = 2;
     protected static final int HELP_CODE = 3;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 200;
+
 
     // Cookie (SID - Session ID)
     public static String cookie = null;
@@ -288,6 +293,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Keystore for self-signed certificate
     protected static String keystore_path;
     protected static String keystore_password;
+
+    // Torrent url
+    private String urlTorrent;
+    private View mLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -459,6 +468,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get options and save them as shared preferences
         qBittorrentOptions qso = new qBittorrentOptions();
         qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
+
+
+        // Get layout for the Snackbar
+        View rootView;
+        LayoutInflater inflater = (LayoutInflater)   getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        rootView = inflater.inflate(R.layout.request_permissions, null);
+        mLayout = rootView.findViewById(R.id.permissions_layout);
+
 
         // If it were awaken from an intent-filter,
         // get intent from the intent filter and Add URL torrent
@@ -1124,7 +1141,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             Cursor cursor = contentResolver.query(uri, filePathColumn, null,
                     null, null);
-            if( cursor != null && cursor.moveToFirst() ) {
+            if (cursor != null && cursor.moveToFirst()) {
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 filePath = cursor.getString(columnIndex);
                 cursor.close();
@@ -1135,43 +1152,67 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         return filePath;
     }
 
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(MainActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    private void handleUrlTorrent(){
+
+        // permission was granted, yay! Do the
+        // contacts-related task you need to do.
+
+
+        if (urlTorrent.substring(0, 7).equals("content")) {
+            urlTorrent = "file://" + getFilePathFromUri(this, Uri.parse(urlTorrent));
+        }
+
+        if (urlTorrent.substring(0, 4).equals("file")) {
+
+            // File
+            addTorrentFile(Uri.parse(urlTorrent).getPath());
+
+        } else {
+            try {
+
+                urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
+
+                // If It is a valid torrent or magnet link
+                if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:")) {
+                    Log.d("Debug", "URL: " + urlTorrent);
+                    addTorrent(urlTorrent);
+                } else {
+                    // Open not valid torrent or magnet link in browser
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTorrent));
+                    startActivity(browserIntent);
+
+                }
+            } catch (UnsupportedEncodingException e) {
+                Log.e("Debug", "Check URL: " + e.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
+
     private void addTorrentByIntent(Intent intent) {
 
-        String urlTorrent = intent.getDataString();
+        Log.d("Debug", "addTorrentByIntent invoked");
+
+        urlTorrent = intent.getDataString();
 
         if (urlTorrent != null && urlTorrent.length() != 0) {
 
-            if (urlTorrent.substring(0, 7).equals("content")) {
-                urlTorrent = "file://" + getFilePathFromUri(this, Uri.parse(urlTorrent));
-            }
-
-            if (urlTorrent.substring(0, 4).equals("file")) {
-
-                // File
-                addTorrentFile(Uri.parse(urlTorrent).getPath());
-
-            } else {
-                try {
-
-                    urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
-
-                    // If It is a valid torrent or magnet link
-                    if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:")) {
-                        Log.d("Debug", "URL: " + urlTorrent);
-                        addTorrent(urlTorrent);
-                    } else {
-                        // Open not valid torrent or magnet link in browser
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTorrent));
-                        startActivity(browserIntent);
-
-                    }
-                } catch (UnsupportedEncodingException e) {
-                    Log.e("Debug", "Check URL: " + e.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
+            // Check dangerous permissions
+            checkDangerousPermissions();
 
         }
 
@@ -1185,6 +1226,117 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         }
 
+    }
+
+
+
+    private void checkDangerousPermissions(){
+
+        // Check Dangerous permissions (Android 6.0+, API 23+)
+        Log.d("Debug", "checkDangerousPermissions invoked");
+
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+
+
+
+//                showMessageOKCancel("Storage access required to download torrent files",
+//                        new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(MainActivity.this,
+                                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+//                            }
+//                        });
+
+//                try {
+////                    Snackbar.make(mLayout, "READ_EXTERNAL_STORAGE access is required to display the camera preview.",
+////                            Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
+////                        @Override
+////                        public void onClick(View view) {
+////                            // Request the permission
+//                            ActivityCompat.requestPermissions(MainActivity.this,
+//                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+//                                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+////                        }
+////                    }).show();
+//                } catch (Exception e) {
+//                   Log.d("Debug", "Snackbar error");
+//                }
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                Log.d("Debug", "checkDangerousPermissions invoked - no explanation needed");
+
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }else{
+
+            Log.d("Debug", "Permissions granted - PERMISSION_GRANTED");
+            handleUrlTorrent();
+
+        }
+
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Log.d("Debug", "Permissions granted - onRequestPermissionsResult");
+                    handleUrlTorrent();
+
+
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                    Log.d("Debug", "Permissions denied");
+                    Log.d("Debug", "grantResults.length: " +grantResults.length);
+                    Log.d("Debug", "grantResults[0] = " +grantResults[0] + "/" + PackageManager.PERMISSION_GRANTED);
+
+                    showMessageOKCancel("Storage access required to download torrent files",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent appIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    appIntent.setData(Uri.parse("package:" + packageName));
+                                    startActivityForResult(appIntent, 0);
+                                }
+                            });
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     @Override
