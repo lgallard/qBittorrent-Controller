@@ -1115,12 +1115,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             Cursor cursor = contentResolver.query(uri, filePathColumn, null,
                     null, null);
-
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            filePath = cursor.getString(columnIndex);
-            cursor.close();
+            if( cursor != null && cursor.moveToFirst() ) {
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                filePath = cursor.getString(columnIndex);
+                cursor.close();
+            }
         } else if ("file".equals(uri.getScheme())) {
             filePath = new File(uri.getPath()).getAbsolutePath();
         }
