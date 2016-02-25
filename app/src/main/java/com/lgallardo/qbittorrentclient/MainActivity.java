@@ -17,6 +17,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -53,6 +54,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -67,7 +69,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1142,11 +1151,24 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 addTorrentFile(Uri.parse(urlTorrent).getPath());
 
             } else {
-
                 try {
-                    addTorrent(Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8")));
+
+                    urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
+
+                    // If It is a valid torrent or magnet link
+                    if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:")) {
+                        Log.d("Debug", "URL: " + urlTorrent);
+                        addTorrent(urlTorrent);
+                    } else {
+                        // Open not valid torrent or magnet link in browser
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTorrent));
+                        startActivity(browserIntent);
+
+                    }
                 } catch (UnsupportedEncodingException e) {
                     Log.e("Debug", "Check URL: " + e.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
             }
