@@ -244,5 +244,7 @@
   <string name="settings_qbittorrent_https_category">HTTPS</string>
   <string name="settings_qbittorrent_https_self_signed_keystore_password_title">Хранилище ключей пароль</string>
   <string name="settings_qbittorrent_https_self_signed_bks_file_title">Keystore для собственного сертификата</string>
+  <string name="error_grant_permission">Доступ хранения требуется для загрузки и отправки торрент-файлы!\n\nВы хотите, чтобы предоставить разрешение в настройках Android?</string>
+  <string name="error_permission">Доступ для хранения требуется, чтобы загрузить и отправить торрент-файлы!</string>
 
 </resources>

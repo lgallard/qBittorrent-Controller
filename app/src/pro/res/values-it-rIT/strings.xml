@@ -244,5 +244,7 @@
     <string name="settings_qbittorrent_https_category">HTTPS</string>
     <string name="settings_qbittorrent_https_self_signed_keystore_password_title">Password di archivio chiavi</string>
     <string name="settings_qbittorrent_https_self_signed_bks_file_title">Chiavi per il certificato auto-firmato</string>
+    <string name="error_grant_permission">L\'accesso storage è necessario per scaricare e inviare file torrent!\n\nVolete concedere l\'autorizzazione nelle impostazioni di Android?</string>
+    <string name="error_permission">L\'accesso storage è necessario per scaricare e inviare file torrent!</string>
 
 </resources>

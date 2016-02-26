@@ -235,5 +235,8 @@
   <string name="settings_qbittorrent_https_category">HTTPS</string>
   <string name="settings_qbittorrent_https_self_signed_keystore_password_title">キーストアパスワード</string>
   <string name="settings_qbittorrent_https_self_signed_bks_file_title">自己署名証明書の鍵ストア</string>
+  <string name="error_grant_permission">ストレージへのアクセスは、ダウンロードして、トレントファイルを送信するために必要な！\n\nあなたは、Androidの設定で権限を付与しますか？</string>
+  <string name="error_permission">ストレージへのアクセスは、ダウンロードして、トレントファイルを送信するために必要とされます！</string>
+
 
 </resources>

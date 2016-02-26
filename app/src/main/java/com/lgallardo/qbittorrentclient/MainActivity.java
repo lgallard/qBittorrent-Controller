@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static final int GETPRO_CODE = 2;
     protected static final int HELP_CODE = 3;
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
-    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 200;
 
 
     // Cookie (SID - Session ID)
@@ -296,7 +295,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Torrent url
     private String urlTorrent;
-    private View mLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -468,14 +466,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get options and save them as shared preferences
         qBittorrentOptions qso = new qBittorrentOptions();
         qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
-
-
-        // Get layout for the Snackbar
-        View rootView;
-        LayoutInflater inflater = (LayoutInflater)   getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        rootView = inflater.inflate(R.layout.request_permissions, null);
-        mLayout = rootView.findViewById(R.id.permissions_layout);
-
 
         // If it were awaken from an intent-filter,
         // get intent from the intent filter and Add URL torrent
@@ -803,14 +793,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
 //        if (v.getId() == R.id.theList) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
 
 //            Log.d("Debug", "Chosen: " + menuInfo.toString());
 //            Log.d("Debug", "Chosen: " + info.position);
 
 
-            getMenuInflater().inflate(R.menu.menu_file_contextual, menu);
+        getMenuInflater().inflate(R.menu.menu_file_contextual, menu);
 //        }
     }
 
@@ -826,7 +816,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             case R.id.action_file_dont_download:
 //                Log.d("Debug", "Don't download");
-                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition,0);
+                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 0);
                 return true;
             case R.id.action_file_normal_priority:
 //                Log.d("Debug", "Normal priority");
@@ -970,7 +960,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
             // Logs for reporting
-            if(CustomLogger.isMainActivityReporting()){
+            if (CustomLogger.isMainActivityReporting()) {
                 generateSettingsReport();
             }
 
@@ -1006,7 +996,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // This method adds information to generate a report for support
-    private void generateSettingsReport(){
+    private void generateSettingsReport() {
         CustomLogger.saveReportMessage("Main", "currentServer: " + currentServer);
         CustomLogger.saveReportMessage("Main", "hostname: " + hostname);
         CustomLogger.saveReportMessage("Main", "https: " + https);
@@ -1015,7 +1005,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         CustomLogger.saveReportMessage("Main", "protocol: " + protocol);
 
         CustomLogger.saveReportMessage("Main", "username: " + username);
-        CustomLogger.saveReportMessage("Main", "password: [is" + (password.isEmpty()?"":" not") + " empty]");
+        CustomLogger.saveReportMessage("Main", "password: [is" + (password.isEmpty() ? "" : " not") + " empty]");
 
         CustomLogger.saveReportMessage("Main", "Auto-refresh?: " + auto_refresh);
         CustomLogger.saveReportMessage("Main", "Refresh period: " + refresh_period);
@@ -1026,7 +1016,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         CustomLogger.saveReportMessage("Main", "dark_ui: " + dark_ui);
         CustomLogger.saveReportMessage("Main", "qb_version: " + qb_version);
 
-        CustomLogger.saveReportMessage("Main", "Cookie: [is" + ((cookie != null && cookie.isEmpty())?"":" not") + " empty]");
+        CustomLogger.saveReportMessage("Main", "Cookie: [is" + ((cookie != null && cookie.isEmpty()) ? "" : " not") + " empty]");
         CustomLogger.saveReportMessage("Main", "enable_notifications: " + enable_notifications);
         CustomLogger.saveReportMessage("Main", "notification_period: " + notification_period);
 
@@ -1153,16 +1143,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
 
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(MainActivity.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
-
-    private void handleUrlTorrent(){
+    private void handleUrlTorrent() {
 
         // permission was granted, yay! Do the
         // contacts-related task you need to do.
@@ -1229,66 +1210,38 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
 
-
-    private void checkDangerousPermissions(){
+    private void checkDangerousPermissions() {
 
         // Check Dangerous permissions (Android 6.0+, API 23+)
         Log.d("Debug", "checkDangerousPermissions invoked");
 
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+
+            // No explanation needed, request the permission.
+            Log.d("Debug", "checkDangerousPermissions invoked - no explanation needed");
+
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) ||
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                genericOkDialog(R.string.error_permission,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                            }
+                        });
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+            }else{
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 
-
-
-
-//                showMessageOKCancel("Storage access required to download torrent files",
-//                        new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-                                ActivityCompat.requestPermissions(MainActivity.this,
-                                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-//                            }
-//                        });
-
-//                try {
-////                    Snackbar.make(mLayout, "READ_EXTERNAL_STORAGE access is required to display the camera preview.",
-////                            Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
-////                        @Override
-////                        public void onClick(View view) {
-////                            // Request the permission
-//                            ActivityCompat.requestPermissions(MainActivity.this,
-//                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-//                                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-////                        }
-////                    }).show();
-//                } catch (Exception e) {
-//                   Log.d("Debug", "Snackbar error");
-//                }
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                Log.d("Debug", "checkDangerousPermissions invoked - no explanation needed");
-
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
-        }else{
+
+
+        } else {
 
             Log.d("Debug", "Permissions granted - PERMISSION_GRANTED");
             handleUrlTorrent();
@@ -1303,13 +1256,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     Log.d("Debug", "Permissions granted - onRequestPermissionsResult");
                     handleUrlTorrent();
-
 
 
                 } else {
@@ -1318,24 +1270,28 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // functionality that depends on this permission.
 
                     Log.d("Debug", "Permissions denied");
-                    Log.d("Debug", "grantResults.length: " +grantResults.length);
-                    Log.d("Debug", "grantResults[0] = " +grantResults[0] + "/" + PackageManager.PERMISSION_GRANTED);
+                    Log.d("Debug", "grantResults.length: " + grantResults.length);
+                    Log.d("Debug", "grantResults[0] = " + grantResults[0] + "/" + PackageManager.PERMISSION_GRANTED);
 
-                    showMessageOKCancel("Storage access required to download torrent files",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent appIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    appIntent.setData(Uri.parse("package:" + packageName));
-                                    startActivityForResult(appIntent, 0);
-                                }
-                            });
+                    // Should we show an explanation?
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                        genericOkCancelDialog(R.string.error_grant_permission,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent appIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        appIntent.setData(Uri.parse("package:" + packageName));
+                                        startActivityForResult(appIntent, 0);
+                                    }
+                                });
+                    }
+                    return;
                 }
-                return;
-            }
 
-            // other 'case' lines to check for other
-            // permissions this app might request
+                // other 'case' lines to check for other
+                // permissions this app might request
+            }
         }
     }
 
@@ -1844,10 +1800,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Share Ratio Limiting
             json += ",\"max_ratio_enabled\":" + max_ratio_enabled;
 
-            if(max_ratio_enabled == false){
+            if (max_ratio_enabled == false) {
                 json += ",\"max_ratio\":-1";
-            }
-            else{
+            } else {
                 json += ",\"max_ratio\":" + Float.parseFloat(max_ratio);
             }
 
@@ -1960,8 +1915,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
 
     }
-
-
 
 
     protected void getPRO() {
@@ -2117,7 +2070,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         hash = hash + "&" + id + "&" + priority;
 
-        qtc.execute(new String[]{"setFilePrio", hash });
+        qtc.execute(new String[]{"setFilePrio", hash});
 
     }
 
@@ -2349,23 +2302,85 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+
     public void genericOkDialog(int title, int message) {
+        genericOkDialog(title, message, null);
+    }
+
+    public void genericOkDialog(int message, DialogInterface.OnClickListener okListener) {
+        genericOkDialog(-1, message, okListener);
+    }
+
+
+    public void genericOkDialog(int message) {
+        genericOkDialog(-1, message, null);
+    }
+
+
+    public void genericOkDialog(int title, int message, DialogInterface.OnClickListener okListener) {
 
         if (!isFinishing()) {
 
             Builder builder = new Builder(this);
 
+            // Title
+            if (title != -1) {
+                builder.setTitle(title);
+            }
+
             // Message
-            builder.setMessage(message).setTitle(title);
+            builder.setMessage(message);
 
             // Ok
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.ok, okListener);
 
-                public void onClick(DialogInterface dialog, int id) {
-                    // User accepted the dialog
+            // Create dialog
+            AlertDialog dialog = builder.create();
 
-                }
-            });
+            // Show dialog
+            dialog.show();
+        }
+
+    }
+
+
+    private void genericOkCancelDialog(int title, int message) {
+
+        genericOkCancelDialog(title, message, null);
+    }
+
+
+    private void genericOkCancelDialog(int message, DialogInterface.OnClickListener okListener) {
+
+        genericOkCancelDialog(-1, message, okListener);
+
+    }
+
+    private void genericOkCancelDialog(int message) {
+
+        genericOkCancelDialog(-1, message, null);
+
+    }
+
+    private void genericOkCancelDialog(int title, int message, DialogInterface.OnClickListener okListener) {
+
+        if (!isFinishing()) {
+
+            Builder builder = new Builder(this);
+
+            // Title
+            if (title != -1) {
+                builder.setTitle(title);
+            }
+
+            // Message
+            builder.setMessage(message);
+
+            // Ok
+            builder.setPositiveButton(R.string.ok, okListener);
+
+            // Cancel
+            builder.setNegativeButton(R.string.cancel, null);
 
             // Create dialog
             AlertDialog dialog = builder.create();
@@ -2429,7 +2444,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Get settings
-    protected void  getSettings() {
+    protected void getSettings() {
         // Preferences stuff
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
@@ -2547,7 +2562,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
         // Set SSI and local hostname and port
-        if(ssid != null && !ssid.equals("")) {
+        if (ssid != null && !ssid.equals("")) {
 
             // Get SSID if WiFi
             WifiManager wifiMgr = (WifiManager) getSystemService(Context.WIFI_SERVICE);
@@ -2557,13 +2572,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //            Log.d("Debug", "WiFi SSID: " + wifiSSID);
 //            Log.d("Debug", "SSID: " + ssid);
 
-            if (wifiSSID.toUpperCase().equals("\""+ssid.toUpperCase()+"\"") && wifiMgr.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+            if (wifiSSID.toUpperCase().equals("\"" + ssid.toUpperCase() + "\"") && wifiMgr.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
 
-                if(local_hostname != null && !local_hostname.equals("")){
+                if (local_hostname != null && !local_hostname.equals("")) {
                     hostname = local_hostname;
                 }
 
-                if(local_port != -1) {
+                if (local_port != -1) {
                     port = local_port;
                 }
 
@@ -2625,7 +2640,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Share Ratio Limiting
         max_ratio_enabled = sharedPrefs.getBoolean("max_ratio_enabled", false);
         max_ratio = sharedPrefs.getString("max_ratio", "0");
-        max_ratio_act =  sharedPrefs.getString("max_ratio_act", "NULL");
+        max_ratio_act = sharedPrefs.getString("max_ratio_act", "NULL");
 
     }
 
@@ -2890,7 +2905,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
 
 
-
             return new String[]{apiVersion, intents[0].getStringExtra("currentState")};
 
         }
@@ -2987,7 +3001,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             }
 
-            return (new String[]{params[0],result});
+            return (new String[]{params[0], result});
 
         }
 
@@ -3165,7 +3179,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             }
 
-            if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command)) ) {
+            if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command))) {
                 Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
 
                 // Refresh
@@ -3284,7 +3298,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 torrents = null;
                 Log.e("JSONParserStatusCode", e.toString());
 
-                if(CustomLogger.isMainActivityReporting()) {
+                if (CustomLogger.isMainActivityReporting()) {
                     CustomLogger.saveReportMessage("Main", "[qBittorrentTask - JSONParserStatusCode]: " + e.toString());
                 }
 
@@ -3293,7 +3307,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 torrents = null;
                 Log.e("MAIN:", e.toString());
 
-                if(CustomLogger.isMainActivityReporting()) {
+                if (CustomLogger.isMainActivityReporting()) {
                     CustomLogger.saveReportMessage("Main", "[qBittorrentTask - Exception]: " + e.toString());
                 }
             }
@@ -3308,7 +3322,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             if (result == null) {
 
                 // Reporting
-                if(CustomLogger.isMainActivityReporting()) {
+                if (CustomLogger.isMainActivityReporting()) {
                     CustomLogger.saveReportMessage("Main", "qBittorrentTask - result is null");
                     CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
                 }
@@ -3373,7 +3387,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
                 // Reporting
-                if(CustomLogger.isMainActivityReporting()) {
+                if (CustomLogger.isMainActivityReporting()) {
                     CustomLogger.saveReportMessage("Main", "qBittorrentTask - result length: " + result.length);
                     CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
                 }
@@ -3486,7 +3500,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     Torrent torrentToUpdate = null;
 
                     // Reporting
-                    if(CustomLogger.isMainActivityReporting()) {
+                    if (CustomLogger.isMainActivityReporting()) {
                         CustomLogger.saveReportMessage("Main", "qBittorrentTask - torrentsFiltered.size: " + torrentsFiltered.size());
                     }
 
@@ -3542,10 +3556,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     String AltSpeedInfo;
 
-                    if(alternative_speeds){
+                    if (alternative_speeds) {
 
                         AltSpeedInfo = Character.toString('\u2713') + "  ";
-                    }else{
+                    } else {
                         AltSpeedInfo = "";
                     }
 
@@ -3701,7 +3715,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 } catch (Exception e) {
                     Log.e("ADAPTER", e.toString());
 
-                    if(CustomLogger.isMainActivityReporting()) {
+                    if (CustomLogger.isMainActivityReporting()) {
                         CustomLogger.saveReportMessage("Main", "[qBittorrentTask - AdapterException]: " + e.toString());
                     }
                 }
@@ -3799,7 +3813,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     editor.putBoolean("max_ratio_enabled", max_ratio_enabled);
                     editor.putString("max_ratio", max_ratio);
                     editor.putString("max_ratio_act", max_ratio_act);
-
 
 
                     // Commit changes

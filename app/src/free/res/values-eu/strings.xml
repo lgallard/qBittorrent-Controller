@@ -251,6 +251,8 @@
   <string name="settings_qbittorrent_https_category">HTTPS</string>
   <string name="settings_qbittorrent_https_self_signed_bks_file_title">Norberak sinatutako ziurtagiria keystore</string>
   <string name="settings_qbittorrent_https_self_signed_keystore_password_title">Keystore pasahitza</string>
+  <string name="error_grant_permission">Biltegiratzea sarbidea eskatzen du eta deskargatzeko torrent fitxategiak bidaltzeko!\n\n Gustatuko Android ezarpenetan baimena ematea nahi duzu?</string>
+  <string name="error_permission">Biltegiratzea sarbidea eskatzen du eta deskargatzeko torrent fitxategiak bidaltzeko!</string>
 
 </resources>
 
