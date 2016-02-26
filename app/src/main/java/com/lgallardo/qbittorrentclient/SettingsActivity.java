@@ -27,6 +27,7 @@ import android.view.Menu;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -311,6 +312,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getApplicationContext(), FilePickerActivity.class);
+                intent.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.bks"));
                 startActivityForResult(intent, 1);
                 return true;
             }

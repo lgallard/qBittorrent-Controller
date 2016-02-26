@@ -1213,14 +1213,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private void checkDangerousPermissions() {
 
         // Check Dangerous permissions (Android 6.0+, API 23+)
-        Log.d("Debug", "checkDangerousPermissions invoked");
-
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-
-            // No explanation needed, request the permission.
-            Log.d("Debug", "checkDangerousPermissions invoked - no explanation needed");
 
 
             // Should we show an explanation?
@@ -1235,6 +1228,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         });
 
             }else{
+
+                // No explanation needed, request the permission.
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 
@@ -1243,7 +1238,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         } else {
 
-            Log.d("Debug", "Permissions granted - PERMISSION_GRANTED");
+            // Permissions granted
             handleUrlTorrent();
 
         }
@@ -1260,18 +1255,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    Log.d("Debug", "Permissions granted - onRequestPermissionsResult");
+                    // Permissions granted
                     handleUrlTorrent();
 
 
                 } else {
 
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    // Permission denied
 
-                    Log.d("Debug", "Permissions denied");
-                    Log.d("Debug", "grantResults.length: " + grantResults.length);
-                    Log.d("Debug", "grantResults[0] = " + grantResults[0] + "/" + PackageManager.PERMISSION_GRANTED);
 
                     // Should we show an explanation?
                     if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -1288,9 +1279,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     }
                     return;
                 }
-
-                // other 'case' lines to check for other
-                // permissions this app might request
             }
         }
     }
