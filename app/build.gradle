@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
 
-    buildToolsVersion "23.0.0   "
+    buildToolsVersion "23.0.1"
     compileSdkVersion 23
 
     defaultConfig {
         applicationId 'com.lgallardo.qbittorrentclient'
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 23
         archivesBaseName = "qBittorrentClient_v" + versionName
     }
 
@@ -30,18 +30,18 @@ android {
     productFlavors {
         pro {
             applicationId 'com.lgallardo.qbittorrentclientpro'
-            versionName '4.2.8'
+            versionName '4.2.9'
             minSdkVersion 14
             targetSdkVersion 23
-            versionCode 428
+            versionCode 429
             archivesBaseName = "qBittorrentController_v" + versionName
         }
         free {
             applicationId "com.lgallardo.qbittorrentclient"
-            versionName '4.2.8'
+            versionName '4.2.9'
             minSdkVersion 14
             targetSdkVersion 23
-            versionCode 428
+            versionCode 429
         }
     }
 
