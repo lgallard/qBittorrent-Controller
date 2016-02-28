@@ -314,6 +314,19 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 Intent intent = new Intent(getApplicationContext(), FilePickerActivity.class);
                 intent.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.bks"));
                 startActivityForResult(intent, 1);
+
+
+//                // Use the GET_CONTENT intent from the utility class
+//                Intent target = FileUtils.createGetContentIntent();
+//                // Create the chooser Intent
+//                Intent intent = Intent.createChooser(
+//                        target, "Prueba");
+//                try {
+//                    startActivityForResult(intent, 1);
+//                } catch (ActivityNotFoundException e) {
+//                    // The reason for the existence of aFileChooser
+//                }
+
                 return true;
             }
         });
@@ -327,10 +340,23 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         String keystore_path_value = "";
 
+        // MaterialDesignPicker
         if (requestCode == 1 && resultCode == RESULT_OK) {
             keystore_path_value = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             // Do anything with file
         }
+
+        // aFileChooser
+//        switch (requestCode) {
+//            case 1:
+//                if (resultCode == RESULT_OK) {
+//
+//                    final Uri uri = data.getData();
+//
+//                    // Get the File path from the Uri
+//                    keystore_path_value = FileUtils.getPath(this, uri);
+//                }
+//        }
 
         // Save keystore path
 
