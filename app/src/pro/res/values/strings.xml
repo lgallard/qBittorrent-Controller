@@ -8,7 +8,7 @@
   -->
 <resources>
     <string name="app_name">qBittorrent Controller Pro</string>
-    <string name="app_shortname">qBC Pro</string>
+    <string name="app_shortname">qBController</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_add">Add</string>
     <string name="action_pause">Pause</string>
