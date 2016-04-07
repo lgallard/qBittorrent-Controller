@@ -83,14 +83,14 @@ public class JSONParser {
 
     // constructor
     public JSONParser() {
-        this("", "", "", "", "", 0, "", "", 10, 20);
+        this("", "", "", 0, "", "", "", "", 10, 20);
     }
 
     public JSONParser(String hostname, String subfolder, int port, String username, String password) {
-        this(hostname, subfolder, "http", "", "", port, username, password, 10, 20);
+        this(hostname, subfolder, "http", port, "", "", username, password, 10, 20);
     }
 
-    public JSONParser(String hostname, String subfolder, String protocol, String keystore_path, String keystore_password, int port, String username, String password, int connection_timeout, int data_timeout) {
+    public JSONParser(String hostname, String subfolder, String protocol, int port, String keystore_path, String keystore_password, String username, String password, int connection_timeout, int data_timeout) {
 
         this.hostname = hostname;
         this.subfolder = subfolder;
