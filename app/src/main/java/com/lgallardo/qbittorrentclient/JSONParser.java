@@ -95,9 +95,9 @@ public class JSONParser {
         this.hostname = hostname;
         this.subfolder = subfolder;
         this.protocol = protocol;
+        this.port = port;
         this.keystore_path = keystore_path;
         this.keystore_password = keystore_password;
-        this.port = port;
         this.username = username;
         this.password = password;
         this.connection_timeout = connection_timeout;
