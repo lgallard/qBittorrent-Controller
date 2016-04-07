@@ -315,18 +315,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 intent.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.bks"));
                 startActivityForResult(intent, 1);
 
-
-//                // Use the GET_CONTENT intent from the utility class
-//                Intent target = FileUtils.createGetContentIntent();
-//                // Create the chooser Intent
-//                Intent intent = Intent.createChooser(
-//                        target, "Prueba");
-//                try {
-//                    startActivityForResult(intent, 1);
-//                } catch (ActivityNotFoundException e) {
-//                    // The reason for the existence of aFileChooser
-//                }
-
                 return true;
             }
         });
@@ -343,36 +331,17 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         // MaterialDesignPicker
         if (requestCode == 1 && resultCode == RESULT_OK) {
             keystore_path_value = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-            // Do anything with file
         }
 
-        // aFileChooser
-//        switch (requestCode) {
-//            case 1:
-//                if (resultCode == RESULT_OK) {
-//
-//                    final Uri uri = data.getData();
-//
-//                    // Get the File path from the Uri
-//                    keystore_path_value = FileUtils.getPath(this, uri);
-//                }
-//        }
-
         // Save keystore path
-
         SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
         Editor editor = sharedPrefs.edit();
 
         editor.putString("keystore_path" + currentServerValue, keystore_path_value);
         editor.commit();
 
-
         keystore_path.setSummary(keystore_path_value);
-
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -542,12 +511,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 
         if (keystore_path.getSummary().toString() != null) {
-
             editor.putString("keystore_path" + currentServerValue, keystore_path.getSummary().toString());
         }
 
         if (keystore_password.getText().toString() != null) {
-
             editor.putString("keystore_password" + currentServerValue, keystore_password.getText().toString());
         }
 
