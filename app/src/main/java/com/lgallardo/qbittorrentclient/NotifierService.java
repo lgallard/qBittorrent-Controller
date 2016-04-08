@@ -261,6 +261,7 @@ public class NotifierService extends BroadcastReceiver {
             }
         }
 
+        // Get keystore for self-signed certificate
         keystore_path = sharedPrefs.getString("keystore_path" + currentServer, "");
         keystore_password = sharedPrefs.getString("keystore_password" + currentServer, "");
 

@@ -458,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         qBittorrentOptions qso = new qBittorrentOptions();
         qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
 
-        // If it were awaken from an intent-filter,
+        // If it was awoken from an intent-filter,
         // get intent from the intent filter and Add URL torrent
         addTorrentByIntent(getIntent());
 

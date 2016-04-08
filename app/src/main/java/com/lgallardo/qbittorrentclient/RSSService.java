@@ -175,6 +175,7 @@ public class RSSService extends BroadcastReceiver {
         // Get values from options
         rss_feeds = sharedPrefs.getString("rss_feeds", "");
 
+        // Get keystore for self-signed certificate
         keystore_path = sharedPrefs.getString("keystore_path" + currentServer, "");
         keystore_password = sharedPrefs.getString("keystore_password" + currentServer, "");
     }
