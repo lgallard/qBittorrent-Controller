@@ -112,8 +112,8 @@
     <item>9</item>
   </string-array>
   <string-array name="max_ratio_action">
-    <item name="1">停止する</item>
-    <item name="2">削除する</item>
+    <item name="1">それを一時停止</item>
+    <item name="2">それを削除</item>
   </string-array>
   <string-array name="max_ratio_action_values">
     <item name="1">0</item>
