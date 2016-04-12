@@ -372,7 +372,7 @@ class Torrent {
      */
     public String getPriority() {
 
-        if(priority.equals("-1")){
+        if(priority.equals("-1") || priority.equals("0")){
             return "*";
         }
         return priority;

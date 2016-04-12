@@ -61,13 +61,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/pro/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/pro/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/pro/rs" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testPro/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testPro/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testPro/assets" type="java-test-resource" />
@@ -75,6 +68,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/testPro/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testPro/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testPro/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestPro/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/assets" type="java-resource" />
@@ -112,6 +112,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/builds" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/bundles" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dependency-cache" />
