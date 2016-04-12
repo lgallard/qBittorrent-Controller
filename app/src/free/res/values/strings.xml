@@ -252,5 +252,7 @@
     <string name="settings_qbittorrent_https_self_signed_keystore_password_title">Keystore password</string>
     <string name="error_grant_permission">Storage access required to download and send torrent files!\n\nWould you like to grant the permission in Android settings?</string>
     <string name="error_permission">Storage access required to download and send torrent files!</string>
+    <string name="error_grant_permission2">Storage access required to list directories and files!\n\nWould you like to grant the permission in Android settings?</string>
+    <string name="error_permission2">Storage access required to list directories and files!</string>
 
 </resources>

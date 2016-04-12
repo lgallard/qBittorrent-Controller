@@ -254,5 +254,7 @@
     <string name="settings_qbittorrent_https_self_signed_keystore_password_title">Contraseña del almacén de claves </string>
     <string name="error_permission">Se requiere acceso de almacenamiento para descargar y enviar los archivos torrents!</string>
     <string name="error_grant_permission">Se requiere acceso de almacenamiento para descargar y enviar los archivos torrents\n\n.¿Le gustaría conceder el permiso en la configuración de Android?</string>
+    <string name="error_grant_permission2">Se requiere acceso de almacenamiento para listar directorios y archivos!\n\n¿Le gustaría conceder el permiso en la configuración de Android?</string>
+    <string name="error_permission2">Se requiere acceso de almacenamiento para listar directorios y archivos!</string>
 
 </resources>

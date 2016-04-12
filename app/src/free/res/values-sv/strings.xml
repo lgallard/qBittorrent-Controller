@@ -251,7 +251,9 @@
     <string name="settings_qbittorrent_https_category">HTTPS</string>
     <string name="settings_qbittorrent_https_self_signed_keystore_password_title">yckelbehållaren lösenord</string>
     <string name="settings_qbittorrent_https_self_signed_bks_file_title">Nyckel för självsignerat certifikat</string>
-    <string name="error_grant_permission">Tillgång lagring krävs för att hämta och skicka torrentfiler !\n\nVill du ge tillstånd i Android-inställningar?</string>
-    <string name="error_permission">Tillgång lagring krävs för att hämta och skicka torrentfiler !</string>
+    <string name="error_grant_permission">Tillgång lagring krävs för att hämta och skicka torrentfiler!\n\nVill du ge tillstånd i Android-inställningar?</string>
+    <string name="error_permission">Tillgång lagring krävs för att hämta och skicka torrentfiler!</string>
+    <string name="error_grant_permission2">Krävs lagring tillgång för att lista kataloger och filer!\n\nVill du ge tillstånd i Android-inställningar?</string>
+    <string name="error_permission2">Krävs lagring tillgång för att lista kataloger och filer!</string>
 
 </resources>

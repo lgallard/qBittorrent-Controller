@@ -8,6 +8,7 @@
  */
 package com.lgallardo.qbittorrentclient;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -15,12 +16,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 
@@ -57,6 +63,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     private Preference keystore_path;
     private EditTextPreference keystore_password;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,13 +318,175 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         keystore_path.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getApplicationContext(), FilePickerActivity.class);
-                intent.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.bks"));
-                startActivityForResult(intent, 1);
+
+                // Check dangerous permissions and open file picker
+                openFilePicker();
 
                 return true;
             }
         });
+
+    }
+
+
+
+
+    private void openFilePicker() {
+
+        // Check Dangerous permissions (Android 6.0+, API 23+)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                genericOkDialog(R.string.error_permission2,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(SettingsActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                            }
+                        });
+
+            }else{
+
+                // No explanation needed, request the permission.
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+            }
+
+
+        } else {
+
+            // Permissions granted, open file picker
+            Intent intent = new Intent(getApplicationContext(), FilePickerActivity.class);
+            intent.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.bks"));
+            startActivityForResult(intent, 1);
+
+        }
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // Permissions granted, open file picker
+                    Intent intent = new Intent(getApplicationContext(), FilePickerActivity.class);
+                    intent.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.bks"));
+                    startActivityForResult(intent, 1);
+
+
+                } else {
+
+                    // Permission denied
+
+
+                    // Should we show an explanation?
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                        genericOkCancelDialog(R.string.error_grant_permission2,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        Intent appIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        appIntent.setData(Uri.parse("package:" + MainActivity.packageName));
+                                        startActivityForResult(appIntent, 0);
+                                    }
+                                });
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+
+    public void genericOkDialog(int title, int message) {
+        genericOkDialog(title, message, null);
+    }
+
+    public void genericOkDialog(int message, DialogInterface.OnClickListener okListener) {
+        genericOkDialog(-1, message, okListener);
+    }
+
+
+    public void genericOkDialog(int message) {
+        genericOkDialog(-1, message, null);
+    }
+
+
+    public void genericOkDialog(int title, int message, DialogInterface.OnClickListener okListener) {
+
+        if (!isFinishing()) {
+
+            Builder builder = new Builder(this);
+
+            // Title
+            if (title != -1) {
+                builder.setTitle(title);
+            }
+
+            // Message
+            builder.setMessage(message);
+
+            // Ok
+            builder.setPositiveButton(R.string.ok, okListener);
+
+            // Create dialog
+            AlertDialog dialog = builder.create();
+
+            // Show dialog
+            dialog.show();
+        }
+
+    }
+
+    private void genericOkCancelDialog(int message, DialogInterface.OnClickListener okListener) {
+
+        genericOkCancelDialog(-1, message, okListener);
+
+    }
+
+    private void genericOkCancelDialog(int message) {
+
+        genericOkCancelDialog(-1, message, null);
+
+    }
+
+    private void genericOkCancelDialog(int title, int message, DialogInterface.OnClickListener okListener) {
+
+        if (!isFinishing()) {
+
+            Builder builder = new Builder(this);
+
+            // Title
+            if (title != -1) {
+                builder.setTitle(title);
+            }
+
+            // Message
+            builder.setMessage(message);
+
+            // Ok
+            builder.setPositiveButton(R.string.ok, okListener);
+
+            // Cancel
+            builder.setNegativeButton(R.string.cancel, null);
+
+            // Create dialog
+            AlertDialog dialog = builder.create();
+
+            // Show dialog
+            dialog.show();
+        }
 
     }
 
@@ -342,6 +511,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         keystore_path.setSummary(keystore_path_value);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

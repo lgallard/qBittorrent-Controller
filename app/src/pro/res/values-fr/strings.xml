@@ -245,6 +245,8 @@
     <string name="settings_qbittorrent_https_self_signed_keystore_password_title">Mot de passe keystore</string>
     <string name="settings_qbittorrent_https_self_signed_bks_file_title">Keystore de certificat auto-signé</string>
     <string name="error_grant_permission">L\'accès de stockage est nécessaire pour télécharger et envoyer des fichiers torrent!\n\nVoulez-vous accorder l\'autorisation dans les paramètres Android?</string>
-    <string name="error_permission">l\'accès de stockage est nécessaire pour télécharger et envoyer des fichiers torrent</string>
+    <string name="error_permission">L\'accès de stockage est nécessaire pour télécharger et envoyer des fichiers torrent</string>
+    <string name="error_grant_permission2">L\'accès au stockage est nécessaire afin de répertorier les répertoires et fichiers!\n\nVoulez-vous accorder l\'autorisation dans les paramètres Android?</string>
+    <string name="error_permission2">L\'accès au stockage est nécessaire afin de répertorier les répertoires et fichiers!</string>
 
 </resources>

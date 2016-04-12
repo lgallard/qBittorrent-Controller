@@ -253,5 +253,7 @@
     <string name="settings_qbittorrent_https_self_signed_bks_file_title">Kluczy dla certyfikatu z podpisem własnym</string>
     <string name="error_grant_permission">Dostęp do pamięci jest zobowiązany do pobierania i wysyłania plików torrent!\n\nChciałbyś udzielenia pozwolenia w ustawieniach Android?</string>
     <string name="error_permission">Dostęp do pamięci jest zobowiązany do pobierania i wysyłania plików torrent!</string>
+    <string name="error_grant_permission2">Dostęp do bagażu wymagane do listy katalogów i plików!\n\nChciałbyś udzielenia pozwolenia w ustawieniach Android?</string>
+    <string name="error_permission2">Dostęp do bagażu wymagane do listy katalogów i plików!</string>
 
 </resources>

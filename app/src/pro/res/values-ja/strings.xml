@@ -237,6 +237,8 @@
   <string name="settings_qbittorrent_https_self_signed_keystore_password_title">キーストアのパスワード</string>
   <string name="error_grant_permission">Torrent ファイルをダウンロードしたり送信するために、ストレージのアクセスが必要です! \nAndroid の設定でアクセス許可を付与しますか?</string>
   <string name="error_permission">Torrent ファイルをダウンロードしたり送信するために、ストレージのアクセスが必要です!</string>
+  <string name="error_grant_permission2">ストレージへのアクセスは、ディレクトリとファイルの一覧を表示するために必要です。! \nAndroid の設定でアクセス許可を付与しますか?</string>
+  <string name="error_permission2">ストレージへのアクセスは、ディレクトリとファイルの一覧を表示するために必要です。!</string>
 
 
 </resources>
