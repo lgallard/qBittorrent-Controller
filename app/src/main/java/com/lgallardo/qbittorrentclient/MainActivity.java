@@ -68,6 +68,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -3228,8 +3229,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         eta = json.getString(TAG_ETA);
                         downloadSpeed = json.getString(TAG_DLSPEED);
                         uploadSpeed = json.getString(TAG_UPSPEED);
-                        addedOn = json.getString(TAG_ADDEDON);
-                        completionOn = json.getString(TAG_COMPLETIONON);
+
+                        try {
+                            addedOn = json.getString(TAG_ADDEDON);
+                        } catch (JSONException je) {
+                            addedOn = null;
+                        }
+
+                        try {
+                            completionOn = json.getString(TAG_COMPLETIONON);
+                        } catch (JSONException je) {
+                            completionOn = null;
+                        }
 
                         if (qb_version.equals("3.2.x")) {
 
