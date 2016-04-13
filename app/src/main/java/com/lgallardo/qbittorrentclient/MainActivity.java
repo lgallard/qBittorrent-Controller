@@ -93,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static final String TAG_HASH = "hash";
     protected static final String TAG_DLSPEED = "dlspeed";
     protected static final String TAG_UPSPEED = "upspeed";
+    protected static final String TAG_ADDEDON = "added_on";
+    protected static final String TAG_COMPLETIONON = "completion_on";
+
     protected static final String TAG_NUMLEECHS = "num_leechs";
     protected static final String TAG_NUMSEEDS = "num_seeds";
     protected static final String TAG_RATIO = "ratio";
@@ -1643,6 +1646,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 invalidateOptionsMenu();
                 swipeRefresh();
                 return true;
+            case R.id.action_sortby_added_on:
+                saveSortBy(getResources().getStringArray(R.array.sortByValues)[8]);
+                invalidateOptionsMenu();
+                swipeRefresh();
+                return true;
+            case R.id.action_sortby_completed_on:
+                saveSortBy(getResources().getStringArray(R.array.sortByValues)[9]);
+                invalidateOptionsMenu();
+                swipeRefresh();
+                return true;
             case R.id.action_sortby_reverse_order:
                 saveReverseOrder(!reverse_order);
                 invalidateOptionsMenu();
@@ -3173,7 +3186,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         @Override
         protected Torrent[] doInBackground(String... params) {
 
-            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed;
+            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed, addedOn, completionOn;
             boolean sequentialDownload = false;
             boolean firstLastPiecePrio = false;
 
@@ -3215,6 +3228,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         eta = json.getString(TAG_ETA);
                         downloadSpeed = json.getString(TAG_DLSPEED);
                         uploadSpeed = json.getString(TAG_UPSPEED);
+                        addedOn = json.getString(TAG_ADDEDON);
+                        completionOn = json.getString(TAG_COMPLETIONON);
 
                         if (qb_version.equals("3.2.x")) {
 
@@ -3237,7 +3252,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             }
                         }
 
-                        torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, sequentialDownload, firstLastPiecePrio);
+                        torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, sequentialDownload, firstLastPiecePrio, addedOn, completionOn);
 
                         MainActivity.names[i] = name;
 
@@ -3463,6 +3478,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (sortby.equals("UploadSpeed")) {
                     Collections.sort(torrentsFiltered, new TorrentUploadSpeedComparator(reverse_order));
                 }
+
+                // Sort by Added on and Completed on
+                if (sortby.equals("AddedOn")) {
+                    Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
+                }
+
+                if (sortby.equals("CompletedOn")) {
+                    Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
+                }
+
 
                 // Get names (delete in background method)
                 MainActivity.names = new String[torrentsFiltered.size()];

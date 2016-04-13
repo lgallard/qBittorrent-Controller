@@ -255,5 +255,9 @@
   <string name="error_permission">Доступ для хранения требуется, чтобы загрузить и отправить торрент-файлы!</string>
   <string name="error_grant_permission2">доступ для хранения требуется для того, чтобы перечислить директории и файлы!\n\nВы хотите, чтобы предоставить разрешение в настройках Android?</string>
   <string name="error_permission2">доступ для хранения требуется для того, чтобы перечислить директории и файлы!</string>
+  <string name="sortby_menu_speed">Скорость...</string>
+  <string name="sortby_menu_date">дата...</string>
+  <string name="sortby_menu_completed_on">Завершена</string>
+  <string name="sortby_menu_added_on">добавлен</string>
 
 </resources>

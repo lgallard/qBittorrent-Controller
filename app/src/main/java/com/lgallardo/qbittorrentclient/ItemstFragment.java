@@ -644,8 +644,12 @@ public class ItemstFragment extends ListFragment {
             menu.findItem(R.id.action_sortby_priority).setVisible(true);
             menu.findItem(R.id.action_sortby_progress).setVisible(true);
             menu.findItem(R.id.action_sortby_ratio).setVisible(true);
+            menu.findItem(R.id.action_sortby_speed).setVisible(true);
             menu.findItem(R.id.action_sortby_downloadSpeed).setVisible(true);
             menu.findItem(R.id.action_sortby_uploadSpeed).setVisible(true);
+            menu.findItem(R.id.action_sortby_date).setVisible(true);
+            menu.findItem(R.id.action_sortby_added_on).setVisible(true);
+            menu.findItem(R.id.action_sortby_completed_on).setVisible(true);
 
             if (MainActivity.sortby.equals("Name")) {
                 menu.findItem(R.id.action_sortby_name).setIcon(R.drawable.ic_stat_completed);
@@ -674,11 +678,25 @@ public class ItemstFragment extends ListFragment {
 
             if (MainActivity.sortby.equals("DownloadSpeed")) {
                 menu.findItem(R.id.action_sortby_downloadSpeed).setIcon(R.drawable.ic_stat_completed);
+                menu.findItem(R.id.action_sortby_speed).setIcon(R.drawable.ic_stat_completed);
             }
 
             if (MainActivity.sortby.equals("UploadSpeed")) {
                 menu.findItem(R.id.action_sortby_uploadSpeed).setIcon(R.drawable.ic_stat_completed);
+                menu.findItem(R.id.action_sortby_speed).setIcon(R.drawable.ic_stat_completed);
+
             }
+
+            if (MainActivity.sortby.equals("AddedOn")) {
+                menu.findItem(R.id.action_sortby_added_on).setIcon(R.drawable.ic_stat_completed);
+                menu.findItem(R.id.action_sortby_date).setIcon(R.drawable.ic_stat_completed);
+
+            }
+            if (MainActivity.sortby.equals("CompletedOn")) {
+                menu.findItem(R.id.action_sortby_completed_on).setIcon(R.drawable.ic_stat_completed);
+                menu.findItem(R.id.action_sortby_date).setIcon(R.drawable.ic_stat_completed);
+            }
+
 
             if (MainActivity.reverse_order) {
                 menu.findItem(R.id.action_sortby_reverse_order).setIcon(R.drawable.ic_stat_completed);

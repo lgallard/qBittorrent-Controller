@@ -279,6 +279,9 @@ public class NotifierService extends BroadcastReceiver {
         protected static final String TAG_HASH = "hash";
         protected static final String TAG_DLSPEED = "dlspeed";
         protected static final String TAG_UPSPEED = "upspeed";
+        protected static final String TAG_ADDEDON = "added_on";
+        protected static final String TAG_COMPLETIONON = "completion_on";
+
         protected static final String TAG_NUMLEECHS = "num_leechs";
         protected static final String TAG_NUMSEEDS = "num_seeds";
         protected static final String TAG_RATIO = "ratio";
@@ -288,7 +291,7 @@ public class NotifierService extends BroadcastReceiver {
         @Override
         protected Torrent[] doInBackground(String... params) {
 
-            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed;
+            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed, addedOn, completionOn;
 
             Torrent[] torrents = null;
 
@@ -337,8 +340,11 @@ public class NotifierService extends BroadcastReceiver {
                         eta = json.getString(TAG_ETA);
                         downloadSpeed = json.getString(TAG_DLSPEED);
                         uploadSpeed = json.getString(TAG_UPSPEED);
+                        addedOn = json.getString(TAG_ADDEDON);
+                        completionOn = json.getString(TAG_COMPLETIONON);
 
-                        torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, false, false);
+
+                        torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, false, false, addedOn, completionOn);
 
 
                         // Get torrent generic properties

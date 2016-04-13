@@ -40,9 +40,13 @@ class Torrent {
     private boolean sequentialDownload;
     private boolean firstLastPiecePrio;
 
+    private String addedOn;
+    private String completionOn;
+
+
     public Torrent(String file, String size, String state, String hash,
                    String info, String ratio, String progress, String leechs,
-                   String seeds, String priority, String eta, String downloadSpeed, String uploadSpeed, boolean sequentialDownload, boolean firstLastPiecePrio) {
+                   String seeds, String priority, String eta, String downloadSpeed, String uploadSpeed, boolean sequentialDownload, boolean firstLastPiecePrio, String addedOn, String completionOn) {
         this.file = file;
         this.size = size;
         this.state = state;
@@ -58,6 +62,8 @@ class Torrent {
         this.uploadSpeed = uploadSpeed;
         this.sequentialDownload = sequentialDownload;
         this.firstLastPiecePrio = firstLastPiecePrio;
+        this.addedOn = addedOn;
+        this.completionOn = completionOn;
 
     }
 
@@ -558,5 +564,21 @@ class Torrent {
 
     public void setFirstLastPiecePrio(boolean firstLastPiecePrio) {
         this.firstLastPiecePrio = firstLastPiecePrio;
+    }
+
+    public String getAddedOn() {
+        return addedOn;
+    }
+
+    public void setAddedOn(String addedOn) {
+        this.addedOn = addedOn;
+    }
+
+    public String getCompletionOn() {
+        return completionOn;
+    }
+
+    public void setCompletionOn(String completionOn) {
+        this.completionOn = completionOn;
     }
 }

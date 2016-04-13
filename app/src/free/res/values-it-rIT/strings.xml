@@ -255,5 +255,9 @@
     <string name="error_permission">L\'accesso storage è necessario per scaricare e inviare file torrent!</string>
     <string name="error_grant_permission2">L\'accesso storage è necessario per elencare directory e file!\n\nVolete concedere l\'autorizzazione nelle impostazioni di Android?</string>
     <string name="error_permission2">L\'accesso storage è necessario per elencare directory e file!</string>
+    <string name="sortby_menu_speed">Velocità...</string>
+    <string name="sortby_menu_added_on">Aggiunto il</string>
+    <string name="sortby_menu_completed_on">Completato nel</string>
+    <string name="sortby_menu_date">Data...</string>
 
 </resources>

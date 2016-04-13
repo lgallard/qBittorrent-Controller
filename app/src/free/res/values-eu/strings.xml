@@ -255,6 +255,10 @@
   <string name="error_permission">Biltegirartze sarbidea beharrezkoa da torrentak jeitsi eta bidaltzeko!</string>
   <string name="error_grant_permission2">Biltegiratze sarbidea ordena guneak eta fitxategiak zerrendatu behar da!\n\nBaimena ematea nahi duzu Android ezarpenetan?</string>
   <string name="error_permission2">Biltegiratze sarbidea ordena guneak eta fitxategiak zerrendatu behar da!</string>
+  <string name="sortby_menu_completed_on">Osatua</string>
+  <string name="sortby_menu_added_on">Gehituta</string>
+  <string name="sortby_menu_date">Data...</string>
+  <string name="sortby_menu_speed">Abiadura...</string>
 
 </resources>
 

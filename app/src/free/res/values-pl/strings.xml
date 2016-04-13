@@ -255,5 +255,9 @@
     <string name="error_permission">Dostęp do pamięci jest zobowiązany do pobierania i wysyłania plików torrent!</string>
     <string name="error_grant_permission2">Dostęp do bagażu wymagane do listy katalogów i plików!\n\nChciałbyś udzielenia pozwolenia w ustawieniach Android?</string>
     <string name="error_permission2">Dostęp do bagażu wymagane do listy katalogów i plików!</string>
+    <string name="sortby_menu_speed">Prędkość...</string>
+    <string name="sortby_menu_date">Data...</string>
+    <string name="sortby_menu_completed_on">Zakończony</string>
+    <string name="sortby_menu_added_on">Dodano w</string>
 
 </resources>

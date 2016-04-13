@@ -255,5 +255,9 @@
     <string name="error_permission">L\'accès de stockage est nécessaire pour télécharger et envoyer des fichiers torrent!</string>
     <string name="error_grant_permission2">L\'accès au stockage est nécessaire afin de répertorier les répertoires et fichiers!\n\nVoulez-vous accorder l\'autorisation dans les paramètres Android?</string>
     <string name="error_permission2">L\'accès au stockage est nécessaire afin de répertorier les répertoires et fichiers!</string>
+    <string name="sortby_menu_speed">Vitesse...</string>
+    <string name="sortby_menu_date">Date...</string>
+    <string name="sortby_menu_completed_on">Complété le</string>
+    <string name="sortby_menu_added_on">Ajouté le</string>
 
 </resources>

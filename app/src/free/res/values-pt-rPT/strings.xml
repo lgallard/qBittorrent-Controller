@@ -255,5 +255,9 @@
     <string name="error_permission">Acesso de armazenamento é necessário para baixar e enviar arquivos torrent!</string>
     <string name="error_grant_permission2">Acesso de armazenamento é necessário, a fim de listar diretórios e arquivos!\n\nVocê gostaria de conceder a permissão em configurações do Android?</string>
     <string name="error_permission2">Acesso de armazenamento é necessário, a fim de listar diretórios e arquivos!</string>
+    <string name="sortby_menu_speed">Velocidade...</string>
+    <string name="sortby_menu_date">Data...</string>
+    <string name="sortby_menu_completed_on">Concluída em</string>
+    <string name="sortby_menu_added_on">Adicionado em</string>
 
 </resources>

@@ -43,12 +43,33 @@
                 android:title="@string/sortby_menu_ratio" />
 
             <item
-                android:id="@+id/action_sortby_downloadSpeed"
-                android:title="@string/sortby_menu_download_speed" />
-            <item
-                android:id="@+id/action_sortby_uploadSpeed"
-                android:title="@string/sortby_menu_upload_speed" />
+                android:id="@+id/action_sortby_speed"
+                android:title="@string/sortby_menu_speed">
 
+                <menu>
+                    <item
+                        android:id="@+id/action_sortby_downloadSpeed"
+                        android:title="@string/sortby_menu_download_speed" />
+                    <item
+                        android:id="@+id/action_sortby_uploadSpeed"
+                        android:title="@string/sortby_menu_upload_speed" />
+                </menu>
+
+            </item>
+            <item
+                android:id="@+id/action_sortby_date"
+                android:title="@string/sortby_menu_date">
+
+                <menu>
+                    <item
+                        android:id="@+id/action_sortby_added_on"
+                        android:title="@string/sortby_menu_added_on" />
+                    <item
+                        android:id="@+id/action_sortby_completed_on"
+                        android:title="@string/sortby_menu_completed_on" />
+
+                </menu>
+            </item>
             <item
                 android:id="@+id/action_sortby_reverse_order"
                 android:title="@string/settings_qbittorrent_reverse_order_summary" />

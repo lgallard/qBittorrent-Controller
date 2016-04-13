@@ -63,6 +63,8 @@
     <item>レシオ</item>
     <item>ダウンロード速度</item>
     <item>アップロード速度</item>
+    <item>上に追加しました</item>
+    <item>上の完了</item>
   </string-array>
   <string-array name="sortByValues">
     <item>Name</item>
@@ -73,6 +75,8 @@
     <item>Ratio</item>
     <item>DownloadSpeed</item>
     <item>UploadSpeed</item>
+    <item>AddedOn</item>
+    <item>CompletedOn</item>
   </string-array>
   <string-array name="navigation_drawer_items_array">
     <item>すべて</item>

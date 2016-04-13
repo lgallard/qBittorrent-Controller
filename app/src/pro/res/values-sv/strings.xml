@@ -248,5 +248,9 @@
     <string name="error_permission">Tillgång lagring krävs för att hämta och skicka torrentfiler!</string>
     <string name="error_grant_permission2">Krävs lagring tillgång för att lista kataloger och filer!\n\nVill du ge tillstånd i Android-inställningar?</string>
     <string name="error_permission2">Krävs lagring tillgång för att lista kataloger och filer!</string>
+    <string name="sortby_menu_speed">Hastighet...</string>
+    <string name="sortby_menu_date">Datum...</string>
+    <string name="sortby_menu_completed_on">Slutförd</string>
+    <string name="sortby_menu_added_on">Lades till</string>
 
 </resources>
