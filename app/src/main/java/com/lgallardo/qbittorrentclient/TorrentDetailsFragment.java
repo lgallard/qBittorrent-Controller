@@ -36,6 +36,7 @@ import com.google.android.gms.ads.AdView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class TorrentDetailsFragment extends Fragment {
@@ -62,7 +63,7 @@ public class TorrentDetailsFragment extends Fragment {
     // Torrent variables
     String name, info, hash, ratio, size, progress, state, leechs, seeds, priority, savePath, creationDate, comment, totalWasted, totalUploaded,
             totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit, downloaded, eta, downloadSpeed, uploadSpeed,
-            percentage = "";
+            percentage = "", addedOn, completionOn;
 
     static String hashToUpdate;
 
@@ -165,6 +166,8 @@ public class TorrentDetailsFragment extends Fragment {
                 uploadSpeed = savedInstanceState.getString("torrentDetailUploadSpeed", "");
                 downloadSpeed = savedInstanceState.getString("torrentDetailDownloadSpeed", "");
                 downloaded = savedInstanceState.getString("torrentDetailDownloaded", "");
+                addedOn = savedInstanceState.getString("torrentDetailsAddedOn", "");
+                completionOn = savedInstanceState.getString("torrentDetailsCompletionOn", "");
                 hashToUpdate = hash;
 
                 // Only for Pro version
@@ -198,6 +201,9 @@ public class TorrentDetailsFragment extends Fragment {
                 uploadSpeed = this.torrent.getUploadSpeed();
                 downloadSpeed = this.torrent.getDownloadSpeed();
                 downloaded = this.torrent.getDownloaded();
+                addedOn = this.torrent.getAddedOn();
+                completionOn = this.torrent.getCompletionOn();
+
                 hashToUpdate = hash;
 
                 // Only for Pro version
@@ -242,12 +248,32 @@ public class TorrentDetailsFragment extends Fragment {
             etaTextView.setText(eta);
             priorityTextView.setText(priority);
 
+
             if (MainActivity.qb_version.equals("3.2.x")) {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
                 firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
                 sequentialDownloadCheckBox.setChecked(this.torrent.getSequentialDownload());
                 firstLAstPiecePrioCheckBox.setChecked(this.torrent.getisFirstLastPiecePrio());
+
+                TextView addedOnTextView = (TextView) rootView.findViewById(R.id.torrentAddedOn);
+                TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+
+                if (addedOn != null && !(addedOn.equals("null"))) {
+                    addedOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(addedOn)));
+                } else {
+                    addedOnTextView.setText("");
+                }
+
+                if (completionOn != null && !(completionOn.equals("null"))) {
+                    completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
+                } else {
+                    completionOnTextView.setText("");
+                }
+
+
             }
 
             // Set Downloaded vs Total size
@@ -353,6 +379,8 @@ public class TorrentDetailsFragment extends Fragment {
             uploadSpeed = torrent.getUploadSpeed();
             downloadSpeed = torrent.getDownloadSpeed();
             downloaded = torrent.getDownloaded();
+            addedOn = torrent.getAddedOn();
+            completionOn = torrent.getCompletionOn();
 
             int index = torrent.getProgress().indexOf(".");
 
@@ -406,12 +434,32 @@ public class TorrentDetailsFragment extends Fragment {
             priorityTextView.setText(priority);
             etaTextView.setText(eta);
 
+
             if (MainActivity.qb_version.equals("3.2.x")) {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
                 firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
                 sequentialDownloadCheckBox.setChecked(torrent.getSequentialDownload());
                 firstLAstPiecePrioCheckBox.setChecked(torrent.getisFirstLastPiecePrio());
+
+                TextView addedOnTextView = (TextView) rootView.findViewById(R.id.torrentAddedOn);
+                TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+
+                if (addedOn != null && !(addedOn.equals("null"))) {
+                    addedOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(addedOn)));
+                } else {
+                    addedOnTextView.setText("");
+                }
+
+                if (completionOn != null && !(completionOn.equals("null"))) {
+                    completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
+                } else {
+                    completionOnTextView.setText("");
+                }
+
+
             }
 
             // Set Downloaded vs Total size
@@ -505,6 +553,8 @@ public class TorrentDetailsFragment extends Fragment {
         outState.putString("torrentDetailUploadSpeed", uploadSpeed);
         outState.putString("torrentDetailDownloadSpeed", downloadSpeed);
         outState.putString("torrentDetailDownloaded", downloaded);
+        outState.putString("torrentDetailsAddedOn", addedOn);
+        outState.putString("torrentDetailsCompletionOn", completionOn);
 
     }
 
