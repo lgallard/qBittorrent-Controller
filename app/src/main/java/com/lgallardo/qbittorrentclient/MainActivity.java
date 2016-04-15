@@ -983,7 +983,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             // Connection Error message
             Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
-
+            disableRefreshSwipeLayout();
         }
 
     }
