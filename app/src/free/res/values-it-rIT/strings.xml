@@ -259,5 +259,7 @@
     <string name="sortby_menu_added_on">Aggiunto il</string>
     <string name="sortby_menu_completed_on">Completato nel</string>
     <string name="sortby_menu_date">Data...</string>
+    <string name="torrent_details_addedon">Aggiunto il:</string>
+    <string name="torrent_details_completedon">Completato nel:</string>
 
 </resources>

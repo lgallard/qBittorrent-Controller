@@ -259,6 +259,8 @@
   <string name="sortby_menu_added_on">Gehituta</string>
   <string name="sortby_menu_date">Data...</string>
   <string name="sortby_menu_speed">Abiadura...</string>
+  <string name="torrent_details_addedon">Gehituta:</string>
+  <string name="torrent_details_completedon">Osatua:</string>
 
 </resources>
 

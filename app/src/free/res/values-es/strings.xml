@@ -260,5 +260,7 @@
     <string name="sortby_menu_completed_on">Completado</string>
     <string name="sortby_menu_date">Fecha...</string>
     <string name="sortby_menu_speed">Velocidad...</string>
+    <string name="torrent_details_addedon">Añadido:</string>
+    <string name="torrent_details_completedon">Completado:</string>
 
 </resources>

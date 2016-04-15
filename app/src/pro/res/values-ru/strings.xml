@@ -252,5 +252,7 @@
   <string name="sortby_menu_date">дата...</string>
   <string name="sortby_menu_completed_on">Завершена</string>
   <string name="sortby_menu_added_on">добавлен</string>
+  <string name="torrent_details_addedon">добавлен:</string>
+  <string name="torrent_details_completedon">Завершена:</string>
 
 </resources>

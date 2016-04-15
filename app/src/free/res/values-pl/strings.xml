@@ -259,5 +259,7 @@
     <string name="sortby_menu_date">Data...</string>
     <string name="sortby_menu_completed_on">Zakończony</string>
     <string name="sortby_menu_added_on">Dodano w</string>
+    <string name="torrent_details_addedon">Dodano w:</string>
+    <string name="torrent_details_completedon">Zakończony:</string>
 
 </resources>

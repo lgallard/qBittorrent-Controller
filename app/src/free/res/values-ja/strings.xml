@@ -250,5 +250,7 @@
   <string name="sortby_menu_completed_on">上の完了</string>
   <string name="sortby_menu_added_on">上に追加しました</string>
   <string name="sortby_menu_date">日付...</string>
+  <string name="torrent_details_addedon">上に追加しました:</string>
+  <string name="torrent_details_completedon">上の完了:</string>
 
 </resources>

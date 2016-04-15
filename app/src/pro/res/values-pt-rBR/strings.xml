@@ -252,5 +252,8 @@
     <string name="sortby_menu_date">Data...</string>
     <string name="sortby_menu_completed_on">Concluída em</string>
     <string name="sortby_menu_added_on">Adicionado em</string>
+    <string name="torrent_details_addedon">Adicionado em:</string>
+    <string name="torrent_details_completedon">Concluída em:</string>
+
 
 </resources>

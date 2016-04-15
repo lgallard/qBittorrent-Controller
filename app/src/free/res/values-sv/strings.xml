@@ -259,5 +259,7 @@
     <string name="sortby_menu_date">Datum...</string>
     <string name="sortby_menu_completed_on">Slutförd</string>
     <string name="sortby_menu_added_on">Lades till</string>
+    <string name="torrent_details_addedon">Lades till:</string>
+    <string name="torrent_details_completedon">Slutförd:</string>
 
 </resources>
