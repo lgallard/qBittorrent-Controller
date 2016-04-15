@@ -272,8 +272,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Action (states)
     public static final ArrayList<String> actionStates = new ArrayList<>(Arrays.asList("all", "downloading", "completed", "seeding", "pause", "active", "inactive"));
 
-    // Connection error counter
-    private int connection400ErrorCounter = 0;
+    // Authentication error counter
+    private int connection403ErrorCounter = 0;
 
     // Alternative rate
     private MenuItem altSpeedLimitsMenuItem;
@@ -513,8 +513,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             fragmentTransaction.commit();
 
-            // Second fragment will be added in ItemsFRagment's onListItemClick
-            // method
+            // Second fragment will be added in ItemsFragment's onListItemClick method
 
         } else {
 
@@ -963,7 +962,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 qBittorrentNoSettingsFoundDialog(R.string.info, R.string.about_help1);
             } else {
 
-                Log.d("Report", "Report: " + CustomLogger.getReport());
+//                Log.d("Report", "Report: " + CustomLogger.getReport());
 
 
                 if (qb_version.equals("3.2.x") && (cookie == null || cookie.equals(""))) {
@@ -983,9 +982,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         } else {
 
             // Connection Error message
-            if (connection400ErrorCounter > 1) {
-                Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
+
         }
 
     }
@@ -1670,7 +1668,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     //Change current server
     protected void changeCurrentServer() {
 
-        connection400ErrorCounter = 0;
+        connection403ErrorCounter = 0;
 
         // Get values from preferences
         getSettings();
@@ -3032,7 +3030,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     cookie = null;
                 }
 
-                Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
 
                 httpStatusCode = 0;
                 return;
@@ -3332,20 +3330,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
                 }
 
-                Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
                 // Handle HTTP status code
 
                 if (httpStatusCode == 1) {
                     Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
-                    connection400ErrorCounter = 2;
                 }
 
                 if (httpStatusCode == 2) {
                     Toast.makeText(getApplicationContext(), R.string.error2, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
-                    connection400ErrorCounter = 2;
                 }
 
 
@@ -3358,16 +3353,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     }
 
                     httpStatusCode = 0;
-                    connection400ErrorCounter = 2;
                 }
                 if (httpStatusCode == 400) {
+
+                    Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 
                     // Get new Cookie
                     if (qb_version.equals("3.2.x")) {
                         cookie = null;
                     }
 
-                    connection400ErrorCounter = connection400ErrorCounter + 1;
                     httpStatusCode = 0;
                     return;
                 }
@@ -3378,12 +3373,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     // Get new Cookie
                     if (qb_version.equals("3.2.x")) {
+
                         cookie = null;
+                        connection403ErrorCounter = connection403ErrorCounter + 1;
+
+
+                        if (connection403ErrorCounter > 1) {
+                            Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                            httpStatusCode = 0;
+                        }
+
+
+                        // Ask a new cookie and re-execute the task in background
+                        new qBittorrentCookieTask().execute(params);
+
                     }
 
-                    Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
-                    httpStatusCode = 0;
-                    connection400ErrorCounter = 2;
 
                 }
 
@@ -3398,7 +3403,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
 
-                connection400ErrorCounter = 0;
+                connection403ErrorCounter = 0;
+
 
                 ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
 
