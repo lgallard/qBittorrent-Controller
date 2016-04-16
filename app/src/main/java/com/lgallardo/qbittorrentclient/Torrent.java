@@ -10,8 +10,6 @@ package com.lgallardo.qbittorrentclient;
 
 import android.util.Log;
 
-import java.text.DecimalFormat;
-
 class Torrent {
 
     private String file;
@@ -240,18 +238,17 @@ class Torrent {
      */
     public String getRatio() {
 
-        String formatedRatio = "0";
-
         // if it contains ∞, ratio is > 100
         if(ratio.equals("∞")){
             return "1000";
         }
 
+
         // Format ratio
+        String formatedRatio = "0";
         try {
-            String.format("%.2f", Float.parseFloat(ratio)).replace(",", ".");
+            formatedRatio = String.format("%.2f", Float.parseFloat(ratio)).replace(",", ".");
         } catch (Exception e) {
-            formatedRatio = "0.00";
         }
 
         return formatedRatio;
