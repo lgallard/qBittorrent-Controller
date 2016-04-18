@@ -24,6 +24,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -281,6 +282,7 @@ public class NotifierService extends BroadcastReceiver {
         protected static final String TAG_UPSPEED = "upspeed";
         protected static final String TAG_ADDEDON = "added_on";
         protected static final String TAG_COMPLETIONON = "completion_on";
+        protected static final String TAG_LABEL = "label";
 
         protected static final String TAG_NUMLEECHS = "num_leechs";
         protected static final String TAG_NUMSEEDS = "num_seeds";
@@ -291,7 +293,7 @@ public class NotifierService extends BroadcastReceiver {
         @Override
         protected Torrent[] doInBackground(String... params) {
 
-            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed, addedOn, completionOn;
+            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed, addedOn, completionOn, label;
 
             Torrent[] torrents = null;
 
@@ -340,11 +342,27 @@ public class NotifierService extends BroadcastReceiver {
                         eta = json.getString(TAG_ETA);
                         downloadSpeed = json.getString(TAG_DLSPEED);
                         uploadSpeed = json.getString(TAG_UPSPEED);
-                        addedOn = json.getString(TAG_ADDEDON);
-                        completionOn = json.getString(TAG_COMPLETIONON);
+
+                        try {
+                            addedOn = json.getString(TAG_ADDEDON);
+                        } catch (JSONException je) {
+                            addedOn = null;
+                        }
+
+                        try {
+                            completionOn = json.getString(TAG_COMPLETIONON);
+                        } catch (JSONException je) {
+                            completionOn = null;
+                        }
 
 
-                        torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, false, false, addedOn, completionOn);
+                        try {
+                            label = json.getString(TAG_LABEL);
+                        } catch (JSONException je) {
+                            label = null;
+                        }
+
+                        torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, false, false, addedOn, completionOn, label);
 
 
                         // Get torrent generic properties

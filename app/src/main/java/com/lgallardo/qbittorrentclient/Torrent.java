@@ -43,10 +43,12 @@ class Torrent {
     private String addedOn;
     private String completionOn;
 
+    private String label;
+
 
     public Torrent(String file, String size, String state, String hash,
                    String info, String ratio, String progress, String leechs,
-                   String seeds, String priority, String eta, String downloadSpeed, String uploadSpeed, boolean sequentialDownload, boolean firstLastPiecePrio, String addedOn, String completionOn) {
+                   String seeds, String priority, String eta, String downloadSpeed, String uploadSpeed, boolean sequentialDownload, boolean firstLastPiecePrio, String addedOn, String completionOn, String label) {
         this.file = file;
         this.size = size;
         this.state = state;
@@ -64,6 +66,7 @@ class Torrent {
         this.firstLastPiecePrio = firstLastPiecePrio;
         this.addedOn = addedOn;
         this.completionOn = completionOn;
+        this.label = label;
 
     }
 
@@ -589,5 +592,14 @@ class Torrent {
 
     public void setCompletionOn(String completionOn) {
         this.completionOn = completionOn;
+    }
+
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

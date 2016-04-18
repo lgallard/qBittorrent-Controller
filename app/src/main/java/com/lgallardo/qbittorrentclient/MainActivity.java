@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static final String TAG_UPSPEED = "upspeed";
     protected static final String TAG_ADDEDON = "added_on";
     protected static final String TAG_COMPLETIONON = "completion_on";
+    protected static final String TAG_LABEL = "label";
 
     protected static final String TAG_NUMLEECHS = "num_leechs";
     protected static final String TAG_NUMSEEDS = "num_seeds";
@@ -144,6 +145,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Current state
     public static String currentState;
+
+    // Current label
+    public static String currentLabel;
 
     protected static com.lgallardo.qbittorrentclient.JSONParser jParser;
 
@@ -370,6 +374,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         ArrayList<ObjectDrawerItem> serverItems = new ArrayList<ObjectDrawerItem>();
         ArrayList<ObjectDrawerItem> actionItems = new ArrayList<ObjectDrawerItem>();
+        ArrayList<ObjectDrawerItem> labelItems = new ArrayList<ObjectDrawerItem>();
         ArrayList<ObjectDrawerItem> settingsItems = new ArrayList<ObjectDrawerItem>();
 
 
@@ -399,6 +404,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_active, navigationDrawerItemTitles[5], DRAWER_ITEM_ACTIONS, lastState.equals("active"), "refreshActive"));
         actionItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[6], DRAWER_ITEM_ACTIONS, lastState.equals("inactive"), "refreshInactive"));
 
+        // Add labels
 
         // Add settings actions
         settingsItems.add(new ObjectDrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTIONS, false, "openOptions"));
@@ -923,6 +929,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+
     private void refresh(String state) {
 
         // If Contextual Action Bar is open, don't refresh
@@ -943,6 +950,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         if (qb_version.equals("3.2.x")) {
             qbQueryString = "query";
             params[0] = qbQueryString + "/torrents?filter=" + state;
+
+
+//            // Label
+//            if(label != null){
+//                params[0] = params[0]  +  "&label=" + label;
+//            }
+
 
         }
 
@@ -3190,7 +3204,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         @Override
         protected Torrent[] doInBackground(String... params) {
 
-            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed, addedOn, completionOn;
+            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed, addedOn, completionOn, label;
             boolean sequentialDownload = false;
             boolean firstLastPiecePrio = false;
 
@@ -3245,6 +3259,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             completionOn = null;
                         }
 
+
+                        try {
+                            label = json.getString(TAG_LABEL);
+                        } catch (JSONException je) {
+                            label = null;
+                        }
+
                         if (qb_version.equals("3.2.x")) {
 
                             size = Common.calculateSize(size);
@@ -3266,7 +3287,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             }
                         }
 
-                        torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, sequentialDownload, firstLastPiecePrio, addedOn, completionOn);
+                        torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, sequentialDownload, firstLastPiecePrio, addedOn, completionOn, label);
 
                         MainActivity.names[i] = name;
 
