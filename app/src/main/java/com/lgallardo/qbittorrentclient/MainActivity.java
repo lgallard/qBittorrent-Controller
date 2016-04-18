@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Cookie (SID - Session ID)
     public static String cookie = null;
     public static String qb_version = "3.2.x";
+    public static String qbittorrentServer = "";
     public static LinearLayout headerInfo;
 
     // Current state
@@ -1008,6 +1009,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         CustomLogger.saveReportMessage("Main", "dark_ui: " + dark_ui);
         CustomLogger.saveReportMessage("Main", "qb_version: " + qb_version);
+        CustomLogger.saveReportMessage("Main", "qBittorrent server: " + qbittorrentServer);
+
 
         CustomLogger.saveReportMessage("Main", "Cookie: [is" + ((cookie != null && cookie.isEmpty()) ? "" : " not") + " empty]");
         CustomLogger.saveReportMessage("Main", "enable_notifications: " + enable_notifications);
@@ -2876,6 +2879,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             try {
 
                 apiVersion = jParser.getApi();
+                qbittorrentServer = apiVersion;
 
             } catch (JSONParserStatusCodeException e) {
                 httpStatusCode = e.getCode();
@@ -2888,6 +2892,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 try {
 
                     apiVersion = jParser.getVersion();
+                    qbittorrentServer = apiVersion;
 
                 } catch (JSONParserStatusCodeException e) {
                     httpStatusCode = e.getCode();
