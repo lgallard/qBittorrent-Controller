@@ -3530,6 +3530,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 // Set unlabeled first
 
+                // Add label category
+                labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_labels, "Labels", DRAWER_CATEGORY, false, "label_category"));
+
+
                 if (labels.contains("Unlabeled")) {
 
                     label = "Unlabeled";
