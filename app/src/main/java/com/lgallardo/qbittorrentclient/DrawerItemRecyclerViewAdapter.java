@@ -36,7 +36,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
     private static final int TYPE_SERVER = 3;
     private static final int TYPE_SERVER_ACTIVE = 4;
     private static final int TYPE_CATEGORY = 5;
-    private static final int TYPE_CATEGORY_ACTIVE = 6;
+    private static final int DRAWER_ITEM_LABELS = 6;
 
 
     // All items
@@ -628,6 +628,26 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.actionItems);
         DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.settingsItems);
         DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.labelItems);
+
+        // Close server category
+        removeServerItems();
+        // Refresh
+        notifyDataSetChanged();
+
+    }
+
+    public void refreshDrawerLabels(ArrayList<ObjectDrawerItem> labelItems) {
+
+        DrawerItemRecyclerViewAdapter.labelItems = labelItems;
+
+
+        DrawerItemRecyclerViewAdapter.items = new ArrayList<ObjectDrawerItem>();
+
+        // Add items
+        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.serverItems);
+        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.actionItems);
+        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.settingsItems);
+        DrawerItemRecyclerViewAdapter.items.addAll(labelItems);
 
         // Close server category
         removeServerItems();

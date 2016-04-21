@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Current label
     public static String currentLabel;
 
+
     protected static com.lgallardo.qbittorrentclient.JSONParser jParser;
 
     // Preferences properties
@@ -168,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static boolean reverse_order;
     protected static boolean dark_ui;
     protected static String lastState;
+    protected static String lastLabel;
     protected static long notification_period;
     protected static boolean header;
     public static boolean alternative_speeds;
@@ -230,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public static final int DRAWER_ITEM_ACTIONS = 1;
     public static final int DRAWER_ITEM_SERVERS = 3;
     public static final int DRAWER_CATEGORY = 5;
-    public static final int DRAWER_ITEM_TAGS = 6;
+    public static final int DRAWER_ITEM_LABELS = 6;
 
     // Fragments
     private AboutFragment secondFragment;
@@ -758,25 +760,25 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //            switch (drawerList.getCheckedItemPosition()) {
         switch (actionStates.indexOf(currentState)) {
             case 0:
-                refresh("all");
+                refresh("all", currentLabel);
                 break;
             case 1:
-                refresh("downloading");
+                refresh("downloading", currentLabel);
                 break;
             case 2:
-                refresh("completed");
+                refresh("completed", currentLabel);
                 break;
             case 3:
-                refresh("seeding");
+                refresh("seeding", currentLabel);
                 break;
             case 4:
-                refresh("pause");
+                refresh("pause", currentLabel);
                 break;
             case 5:
-                refresh("active");
+                refresh("active", currentLabel);
                 break;
             case 6:
-                refresh("inactive");
+                refresh("inactive", currentLabel);
                 break;
             default:
                 refresh();
@@ -919,18 +921,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected void refreshFromDrawerAction(String state, String title) {
         setTitle(title);
         refreshSwipeLayout();
-        refresh(state);
+        refresh(state, currentLabel);
         saveLastState(state);
     }
 
     private void refresh() {
 
-        refresh("all");
+        refresh("all", currentLabel);
 
     }
 
 
-    private void refresh(String state) {
+    private void refresh(String state, String label) {
 
         // If Contextual Action Bar is open, don't refresh
         if (firstFragment != null && firstFragment.mActionMode != null) {
@@ -952,10 +954,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             params[0] = qbQueryString + "/torrents?filter=" + state;
 
 
-//            // Label
-//            if(label != null){
-//                params[0] = params[0]  +  "&label=" + label;
-//            }
+            // Label
+            if (label != null) {
+                params[0] = params[0] + "&label=" + label;
+            }
 
 
         }
@@ -1036,6 +1038,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         CustomLogger.saveReportMessage("Main", "Current state: " + currentState);
         CustomLogger.saveReportMessage("Main", "Last state: " + lastState);
 
+        CustomLogger.saveReportMessage("Main", "Current Label: " + currentLabel);
+
+
+
     }
 
     public void emailReport() {
@@ -1108,7 +1114,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 saveLastState("completed");
                 setSelectionAndTitle("completed");
-                refresh("completed");
+                refresh("completed", currentLabel);
             }
 
             if (intent.getStringExtra("from").equals("RSSItemActivity")) {
@@ -1211,7 +1217,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             if (intent.getStringExtra("from").equals("NotifierService")) {
                 saveLastState("completed");
                 setSelectionAndTitle("completed");
-                refresh("completed");
+                refresh("completed", currentLabel);
             }
         } catch (NullPointerException npe) {
 
@@ -2279,32 +2285,32 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //        switch (drawerList.getCheckedItemPosition()) {
         switch (actionStates.indexOf(currentState)) {
             case 0:
-                refreshWithDelay("all", delay);
+                refreshWithDelay("all", currentLabel, delay);
                 break;
             case 1:
-                refreshWithDelay("downloading", delay);
+                refreshWithDelay("downloading", currentLabel, delay);
                 break;
             case 2:
-                refreshWithDelay("completed", delay);
+                refreshWithDelay("completed", currentLabel, delay);
                 break;
             case 3:
-                refreshWithDelay("seeding", delay);
+                refreshWithDelay("seeding", currentLabel, delay);
                 break;
             case 4:
-                refreshWithDelay("pause", delay);
+                refreshWithDelay("pause", currentLabel, delay);
                 break;
             case 5:
-                refreshWithDelay("active", delay);
+                refreshWithDelay("active", currentLabel, delay);
                 break;
             case 6:
-                refreshWithDelay("inactive", delay);
+                refreshWithDelay("inactive", currentLabel, delay);
                 break;
             case 7:
                 break;
             case 8:
                 break;
             default:
-                refreshWithDelay("all", delay);
+                refreshWithDelay("all", currentLabel, delay);
                 break;
         }
 
@@ -2437,7 +2443,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Delay method
-    public void refreshWithDelay(final String state, int seconds) {
+    public void refreshWithDelay(final String state, final String label, int seconds) {
 
         seconds *= 1000;
 
@@ -2446,7 +2452,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void run() {
                 // Do something after 5s = 5000ms
-                refresh(state);
+                refresh(state, label);
             }
         }, seconds);
     }
@@ -2529,6 +2535,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Get last state
         lastState = sharedPrefs.getString("lastState", "all");
+
+        // Get last label
+        lastLabel = sharedPrefs.getString("lastLabel", "all");
+
 
         // Notification check
         enable_notifications = sharedPrefs.getBoolean("enable_notifications", false);
@@ -2681,15 +2691,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     private void saveLastState(String state) {
-
         currentState = state;
-
         savePreferenceAsString("lastState", state);
+    }
+
+
+    private void saveLastLabel(String label) {
+        currentLabel = label;
+        savePreferenceAsString("lastLabel", label);
     }
 
     private void saveSortBy(String sortBy) {
         MainActivity.sortby = sortBy;
-
         savePreferenceAsString("sortby", sortBy);
     }
 
@@ -2966,8 +2979,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Set the refresh layout (refresh icon, etc)
                 refreshSwipeLayout();
 
+                // TODO: Check if label must be ""
                 // Refresh state
-                refresh(stateBefore);
+                refresh(stateBefore, "");
 
                 // load banner
                 loadBanner();
@@ -3434,9 +3448,34 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
 
+                // Labels
+                ArrayList<String> labels = new ArrayList<String>();
+                String label = null;
+
 //                Log.d("Debug", "Still looking for..."+searchField);
 
                 for (int i = 0; i < result.length; i++) {
+
+                    // Get label
+                    label = result[i].getLabel();
+
+
+                    if (label == null || label.equals("")) {
+                        // TODO: Add "Unlabeled" translations
+                        label = "Unlabeled";
+                    }
+
+
+                    if (!labels.contains(label)) {
+
+
+                        // Add Label
+                        labels.add(label);
+
+                        Log.d("Debug", "Label: " + label);
+
+                    }
+
 
                     if (params[1].equals("all") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
                         torrentsFiltered.add(result[i]);
@@ -3484,6 +3523,33 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     }
 
                 }
+
+
+                // Labels
+                ArrayList<ObjectDrawerItem> labelItems = new ArrayList<ObjectDrawerItem>();
+
+                // Set unlabeled first
+
+                if (labels.contains("Unlabeled")) {
+
+                    label = "Unlabeled";
+                    labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_all, label, DRAWER_ITEM_ACTIONS, lastLabel.equals(label), "label"));
+                    labels.remove(label);
+                }
+
+
+                // Sort labels
+                Collections.sort(labels);
+
+                for (int i = 0; i < labels.size(); i++) {
+
+                    label = labels.get(i);
+                    labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_all, label, DRAWER_ITEM_ACTIONS, lastLabel.equals(label), "label"));
+                }
+
+
+                rAdapter.refreshDrawerLabels(labelItems);
+
 
 
                 // Sort by filename
