@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public static final int DRAWER_ITEM_ACTIONS = 1;
     public static final int DRAWER_ITEM_SERVERS = 3;
     public static final int DRAWER_CATEGORY = 5;
-    public static final int DRAWER_ITEM_LABELS = 6;
+    public static final int DRAWER_LABEL = 6;
 
     // Fragments
     private AboutFragment secondFragment;
@@ -3537,7 +3537,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (labels.contains("Unlabeled")) {
 
                     label = "Unlabeled";
-                    labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_all, label, DRAWER_ITEM_ACTIONS, lastLabel.equals(label), "label"));
+                    labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, lastLabel.equals(label), "label"));
                     labels.remove(label);
                 }
 
@@ -3548,7 +3548,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 for (int i = 0; i < labels.size(); i++) {
 
                     label = labels.get(i);
-                    labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_all, label, DRAWER_ITEM_ACTIONS, lastLabel.equals(label), "label"));
+                    labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, lastLabel.equals(label), "label"));
                 }
 
 

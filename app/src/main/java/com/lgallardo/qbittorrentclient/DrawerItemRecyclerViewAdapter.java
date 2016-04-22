@@ -37,7 +37,8 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
     private static final int TYPE_SERVER = 3;
     private static final int TYPE_SERVER_ACTIVE = 4;
     private static final int TYPE_CATEGORY = 5;
-    private static final int DRAWER_ITEM_LABELS = 6;
+    private static final int TYPE_LABEL = 6;
+    private static final int TYPE_LABEL_ACTIVE = 7;
 
 
     // All items
@@ -680,6 +681,8 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
         } else if (viewType == TYPE_ITEM) {
 
+            Log.d("Debug", "TYPE: ITEM" + viewType);
+
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_row, parent, false); //Inflating the layout
             ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
 
@@ -692,16 +695,18 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
             return vhItem; // Returning the created object
 
-        } else if (viewType == TYPE_SERVER) {
+        } else if (viewType == TYPE_SERVER || viewType == TYPE_LABEL) {
 
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_server_row, parent, false); //Inflating the layout
+            Log.d("Debug", "TYPE: SERVER|LABEL" + viewType);
+
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_subitem_row, parent, false); //Inflating the layout
             ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
 
             return vhItem; // Returning the created object
 
-        } else if (viewType == TYPE_SERVER_ACTIVE) {
+        } else if (viewType == TYPE_SERVER_ACTIVE || viewType == TYPE_LABEL_ACTIVE) {
 
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_server_active_row, parent, false); //Inflating the layout
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_subitem_active_row, parent, false); //Inflating the layout
             ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
 
             return vhItem; // Returning the created object
@@ -790,6 +795,17 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         if (items.get(position - 1).getType() == TYPE_SERVER && items.get(position - 1).isActive()) {
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_SERVER_ACTIVE");
             return TYPE_SERVER_ACTIVE;
+        }
+
+
+        if (items.get(position - 1).getType() == TYPE_LABEL && !(items.get(position - 1).isActive())) {
+//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_LABEL");
+            return TYPE_LABEL;
+        }
+
+        if (items.get(position - 1).getType() == TYPE_LABEL && items.get(position - 1).isActive()) {
+//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_LABEL_ACTIVE");
+            return TYPE_LABEL_ACTIVE;
         }
 
         // Default
