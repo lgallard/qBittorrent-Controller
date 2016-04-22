@@ -235,6 +235,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public static final int DRAWER_LABEL = 6;
     public static final int DRAWER_LABEL_CATEGORY = 8;
 
+    private ArrayList<String> labels = new ArrayList<String>();
+
     // Fragments
     private AboutFragment secondFragment;
     private HelpFragment helpTabletFragment;
@@ -377,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         ArrayList<ObjectDrawerItem> serverItems = new ArrayList<ObjectDrawerItem>();
         ArrayList<ObjectDrawerItem> actionItems = new ArrayList<ObjectDrawerItem>();
-        ArrayList<ObjectDrawerItem> labelItems = new ArrayList<ObjectDrawerItem>();
+//        ArrayList<ObjectDrawerItem> labelItems = new ArrayList<ObjectDrawerItem>();
         ArrayList<ObjectDrawerItem> settingsItems = new ArrayList<ObjectDrawerItem>();
 
 
@@ -956,8 +958,28 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
             // Label
-            if (label != null) {
-                params[0] = params[0] + "&label=" + label;
+            if (label != null && !label.equals("All")) {
+
+
+                if (label.equals("Unlabeled")) {
+                    label = "";
+                }
+
+                try {
+
+                    // I used a dummy URL to encode label
+                    String labelEncoded = Uri.encode("http://www.dummy.org?label=" + label);
+
+                    // then I got the the encoded label
+                    labelEncoded = labelEncoded.substring(labelEncoded.indexOf("%3D") + 3);
+
+                    // to build the url and pass it to params[0]
+                    params[0] = params[0] + "&label=" + labelEncoded;
+
+                } catch (Exception e) {
+
+                    Log.d("Debug", "[Main] Label Exception: " + e.toString());
+                }
             }
 
 
@@ -2538,7 +2560,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         lastState = sharedPrefs.getString("lastState", "all");
 
         // Get last label
+//        lastLabel = sharedPrefs.getString("lastLabel", "all");
         lastLabel = sharedPrefs.getString("lastLabel", "all");
+        currentLabel = "All";
 
 
         // Notification check
@@ -2697,7 +2721,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
 
-    private void saveLastLabel(String label) {
+    public void saveLastLabel(String label) {
         currentLabel = label;
         savePreferenceAsString("lastLabel", label);
     }
@@ -3450,7 +3474,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
 
                 // Labels
-                ArrayList<String> labels = new ArrayList<String>();
+
                 String label = null;
 
 //                Log.d("Debug", "Still looking for..."+searchField);
@@ -3461,18 +3485,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     label = result[i].getLabel();
 
 
-                    if (label == null || label.equals("")) {
-                        // TODO: Add "Unlabeled" translations
-                        label = "Unlabeled";
-                    }
-
-
                     if (!labels.contains(label)) {
-
 
                         // Add Label
                         labels.add(label);
-
                         Log.d("Debug", "Label: " + label);
 
                     }
@@ -3535,12 +3551,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_labels, "Labels", DRAWER_LABEL_CATEGORY, true, "labelCategory"));
 
 
-                if (labels.contains("Unlabeled")) {
+                // Add All
+                label = "All";
 
-                    label = "Unlabeled";
-                    labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, lastLabel.equals(label), "label"));
-                    labels.remove(label);
-                }
+                Log.d("Debug", "labes.size(): " + labels.size());
+
+                labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, (lastLabel.equals(label) || !labels.contains(lastLabel) && !lastLabel.equals("Unlabeled")), "label"));
+
+                // Add unlabeled
+                label = "Unlabeled";
+                labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, lastLabel.equals(label), "label"));
 
 
                 // Sort labels
@@ -3549,7 +3569,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 for (int i = 0; i < labels.size(); i++) {
 
                     label = labels.get(i);
-                    labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, lastLabel.equals(label), "label"));
+
+                    if (!label.equals("")) {
+                        labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, lastLabel.equals(label), "label"));
+                    }
                 }
 
 

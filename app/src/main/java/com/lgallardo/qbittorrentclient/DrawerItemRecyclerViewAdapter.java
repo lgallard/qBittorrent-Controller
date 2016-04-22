@@ -144,7 +144,6 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                 } else {
 
 //                    Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Servers Category inactive");
-                    Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Servers Category inactive????");
 
                     // Insert all server items
                     for (int i = 0; i < serverItems.size(); i++) {
@@ -440,8 +439,6 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
 
                             if (item.getType() == TYPE_LABEL || item.getType() == TYPE_LABEL_ACTIVE) {
-
-                                Log.d("Debug", "Adding  - item.name:  " + item.name);
                                 items.add(items.size(), item);
                                 notifyItemInserted(items.size());
                             }
@@ -451,6 +448,26 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
                     // Scroll drawer
                     mainActivity.mRecyclerView.scrollToPosition(items.size());
+
+                }
+
+                // Clicked on label
+                if (drawerItem.getAction().equals("label")) {
+
+
+                    if (drawerItem.name.equals("All")) {
+                        mainActivity.saveLastLabel("All");
+//                    } else if(drawerItem.name.equals("Unlabeled")){
+//                        mainActivity.saveLastLabel("");
+                    } else {
+                        mainActivity.saveLastLabel(drawerItem.name);
+                    }
+                    Log.d("Debug", "label: " + drawerItem.name);
+
+                    mainActivity.refreshCurrent();
+
+                    // Close drawer
+                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
 
                 }
 
