@@ -233,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public static final int DRAWER_ITEM_SERVERS = 3;
     public static final int DRAWER_CATEGORY = 5;
     public static final int DRAWER_LABEL = 6;
+    public static final int DRAWER_LABEL_CATEGORY = 8;
 
     // Fragments
     private AboutFragment secondFragment;
@@ -3531,7 +3532,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Set unlabeled first
 
                 // Add label category
-                labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_labels, "Labels", DRAWER_CATEGORY, false, "label_category"));
+                labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_labels, "Labels", DRAWER_LABEL_CATEGORY, true, "labelCategory"));
 
 
                 if (labels.contains("Unlabeled")) {
@@ -3553,7 +3554,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
                 rAdapter.refreshDrawerLabels(labelItems);
-
 
 
                 // Sort by filename
