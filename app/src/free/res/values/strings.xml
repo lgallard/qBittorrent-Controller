@@ -260,4 +260,7 @@
     <string name="error_permission2">Storage access required to list directories and files!</string>
     <string name="torrent_details_addedon">Added on:</string>
     <string name="torrent_details_completedon">Completed on:</string>
+    <string name="drawer_label_labels">Labels</string>
+    <string name="drawer_label_all">All</string>
+    <string name="drawer__label_unlabeled">Unlabeled</string>
 </resources>
