@@ -3502,7 +3502,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         // Add Label
                         labels.add(label);
-                        Log.d("Debug", "Label: " + label);
+//                        Log.d("Debug", "Label: " + label);
 
                     }
 

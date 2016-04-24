@@ -264,5 +264,6 @@
     <string name="drawer_label_labels">Etiketter</string>
     <string name="drawer_label_all">Alla</string>
     <string name="drawer_label_unlabeled">Omärkt</string>
+    <string name="torrent_details_label">Etikett:</string>
 
 </resources>

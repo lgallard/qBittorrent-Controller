@@ -179,7 +179,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                 drawerItem = items.get(getLayoutPosition() - 1);
 
                 // Get Action
-                Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Action => " + drawerItem.getAction());
+//                Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Action => " + drawerItem.getAction());
 
 
                 // Disable all items

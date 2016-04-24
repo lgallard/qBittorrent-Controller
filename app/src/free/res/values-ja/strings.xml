@@ -255,4 +255,6 @@
   <string name="drawer_label_labels">ラベル</string>
   <string name="drawer_label_all">すべて</string>
   <string name="drawer_label_unlabeled">標識されていません</string>
+  <string name="torrent_details_label">ラベル:</string>
+
 </resources>

@@ -263,4 +263,5 @@
     <string name="drawer_label_labels">Labels</string>
     <string name="drawer_label_all">All</string>
     <string name="drawer_label_unlabeled">Unlabeled</string>
+    <string name="torrent_details_label">Label:</string>
 </resources>

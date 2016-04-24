@@ -257,4 +257,6 @@
   <string name="drawer_label_labels">Этикетки</string>
   <string name="drawer_label_all">Все</string>
   <string name="drawer_label_unlabeled">Немеченому</string>
+  <string name="torrent_details_label">Этикетка:</string>
+
 </resources>

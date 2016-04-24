@@ -257,5 +257,6 @@
     <string name="drawer_label_labels">Étiquettes</string>
     <string name="drawer_label_all">Tout</string>
     <string name="drawer_label_unlabeled">Sans étiquette</string>
+    <string name="torrent_details_label">Étiquette:</string>
 
 </resources>

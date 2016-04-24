@@ -63,7 +63,7 @@ public class TorrentDetailsFragment extends Fragment {
     // Torrent variables
     String name, info, hash, ratio, size, progress, state, leechs, seeds, priority, savePath, creationDate, comment, totalWasted, totalUploaded,
             totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit, downloaded, eta, downloadSpeed, uploadSpeed,
-            percentage = "", addedOn, completionOn;
+            percentage = "", addedOn, completionOn, label;
 
     static String hashToUpdate;
 
@@ -168,6 +168,7 @@ public class TorrentDetailsFragment extends Fragment {
                 downloaded = savedInstanceState.getString("torrentDetailDownloaded", "");
                 addedOn = savedInstanceState.getString("torrentDetailsAddedOn", "");
                 completionOn = savedInstanceState.getString("torrentDetailsCompletionOn", "");
+                label = savedInstanceState.getString("torrentDetailsLabel", "");
                 hashToUpdate = hash;
 
                 // Only for Pro version
@@ -203,6 +204,7 @@ public class TorrentDetailsFragment extends Fragment {
                 downloaded = this.torrent.getDownloaded();
                 addedOn = this.torrent.getAddedOn();
                 completionOn = this.torrent.getCompletionOn();
+                label = this.torrent.getLabel();
 
                 hashToUpdate = hash;
 
@@ -258,6 +260,7 @@ public class TorrentDetailsFragment extends Fragment {
 
                 TextView addedOnTextView = (TextView) rootView.findViewById(R.id.torrentAddedOn);
                 TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);
+                TextView labelTextView = (TextView) rootView.findViewById(R.id.torrentLabel);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
@@ -271,6 +274,12 @@ public class TorrentDetailsFragment extends Fragment {
                     completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
                 } else {
                     completionOnTextView.setText("");
+                }
+
+                if (label != null && !(label.equals("null"))) {
+                    labelTextView.setText(label);
+                } else {
+                    labelTextView.setText("");
                 }
 
 
@@ -381,6 +390,7 @@ public class TorrentDetailsFragment extends Fragment {
             downloaded = torrent.getDownloaded();
             addedOn = torrent.getAddedOn();
             completionOn = torrent.getCompletionOn();
+            label = torrent.getLabel();
 
             int index = torrent.getProgress().indexOf(".");
 
