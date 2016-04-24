@@ -262,7 +262,7 @@
     <string name="torrent_details_addedon">Lades till:</string>
     <string name="torrent_details_completedon">Slutförd:</string>
     <string name="drawer_label_labels">Etiketter</string>
-    <string name="torrent_details_label_all">Alla</string>
-    <string name="torrent_details_label_unlabeled">Omärkt</string>
+    <string name="drawer_label_all">Alla</string>
+    <string name="drawer_label_unlabeled">Omärkt</string>
 
 </resources>

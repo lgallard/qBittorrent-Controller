@@ -254,5 +254,5 @@
   <string name="torrent_details_completedon">上の完了:</string>
   <string name="drawer_label_labels">ラベル</string>
   <string name="drawer_label_all">すべて</string>
-  <string name="drawer__label_unlabeled">標識されていません</string>
+  <string name="drawer_label_unlabeled">標識されていません</string>
 </resources>

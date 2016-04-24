@@ -254,6 +254,6 @@
     <string name="torrent_details_addedon">Añadido:</string>
     <string name="torrent_details_completedon">Completado:</string>
     <string name="drawer_label_labels">Etiquetas</string>
-    <string name="drawer_label_all">Todos</string>
-    <string name="drawer__label_unlabeled">Sin etiqueta</string>
+    <string name="drawer_label_all">Todas</string>
+    <string name="drawer_label_unlabeled">Sin etiqueta</string>
 </resources>

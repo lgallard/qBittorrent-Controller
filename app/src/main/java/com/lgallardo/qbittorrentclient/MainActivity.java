@@ -958,43 +958,40 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
             // Label
-            if (label != null && !label.equals("All")) {
+            if (label != null && !label.equals(getResources().getString(R.string.drawer_label_all))) {
 
 
-                if (label.equals("Unlabeled")) {
+                if (label.equals(getResources().getString(R.string.drawer_label_unlabeled))) {
                     label = "";
                 }
 
                 if (!labels.contains(label)) {
-                    label = "All";
-//                    return;
+                    label = getResources().getString(R.string.drawer_label_all);
                 }
 
                 saveLastLabel(label);
 
-
-                Log.d("Debug", "Label filter: " + label);
+//                Log.d("Debug", "Label filter: " + label);
 
                 try {
 
-                    if (!label.equals("All")) {
+                    if (!label.equals(getResources().getString(R.string.drawer_label_all))) {
 
                         // I used a dummy URL to encode label
-                    String labelEncoded = Uri.encode("http://www.dummy.org?label=" + label);
+                        String labelEncoded = Uri.encode("http://www.dummy.org?label=" + label);
 
-                    // then I got the the encoded label
-                    labelEncoded = labelEncoded.substring(labelEncoded.indexOf("%3D") + 3);
+                        // then I got the the encoded label
+                        labelEncoded = labelEncoded.substring(labelEncoded.indexOf("%3D") + 3);
 
                         // to build the url and pass it to params[0]
                         params[0] = params[0] + "&label=" + labelEncoded;
                     }
 
                 } catch (Exception e) {
-
                     Log.d("Debug", "[Main] Label Exception: " + e.toString());
                 }
             } else {
-                Log.d("Debug", "Label filter2: " + label);
+//                Log.d("Debug", "Label filter2: " + label);
 
             }
 
@@ -3564,22 +3561,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Set unlabeled first
 
                 // Add label category
-                labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_labels, "Labels", DRAWER_LABEL_CATEGORY, true, "labelCategory"));
+                labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_labels, getResources().getString(R.string.drawer_label_labels), DRAWER_LABEL_CATEGORY, true, "labelCategory"));
 
 
                 // Add All
-                label = "All";
+                label = getResources().getString(R.string.drawer_label_all);
 
-                Log.d("Debug", "labes.size(): " + labels.size());
+//                Log.d("Debug", "labes.size(): " + labels.size());
 
-                labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, (currentLabel.equals(label) || !labels.contains(currentLabel) && !currentLabel.equals("Unlabeled")), "label"));
+                labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, (currentLabel.equals(label) || !labels.contains(currentLabel) && !currentLabel.equals(getResources().getString(R.string.drawer_label_unlabeled))), "label"));
 
                 // Add unlabeled
-                label = "Unlabeled";
+                label = getResources().getString(R.string.drawer_label_unlabeled);
                 labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label) || currentLabel.equals(""), "label"));
 
 
-                Log.d("Debug", "currentLabel: " + currentLabel);
+//                Log.d("Debug", "currentLabel: " + currentLabel);
 
                 // Sort labels
                 Collections.sort(labels);

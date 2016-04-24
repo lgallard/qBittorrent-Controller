@@ -262,5 +262,5 @@
     <string name="torrent_details_completedon">Completed on:</string>
     <string name="drawer_label_labels">Labels</string>
     <string name="drawer_label_all">All</string>
-    <string name="drawer__label_unlabeled">Unlabeled</string>
+    <string name="drawer_label_unlabeled">Unlabeled</string>
 </resources>

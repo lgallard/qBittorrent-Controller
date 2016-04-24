@@ -455,14 +455,12 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                 if (drawerItem.getAction().equals("label")) {
 
 
-                    if (drawerItem.name.equals("All")) {
-                        mainActivity.saveLastLabel("All");
-//                    } else if(drawerItem.name.equals("Unlabeled")){
-//                        mainActivity.saveLastLabel("");
+                    if (drawerItem.name.equals(mainActivity.getResources().getString(R.string.drawer_label_all))) {
+                        mainActivity.saveLastLabel(mainActivity.getResources().getString(R.string.drawer_label_all));
                     } else {
                         mainActivity.saveLastLabel(drawerItem.name);
                     }
-                    Log.d("Debug", "label: " + drawerItem.name);
+//                    Log.d("Debug", "label: " + drawerItem.name);
 
                     mainActivity.refreshCurrent();
 
