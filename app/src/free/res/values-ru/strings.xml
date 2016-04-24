@@ -261,5 +261,8 @@
   <string name="sortby_menu_added_on">добавлен</string>
   <string name="torrent_details_addedon">добавлен:</string>
   <string name="torrent_details_completedon">Завершена:</string>
+  <string name="drawer_label_labels">Этикетки</string>
+  <string name="torrent_details_label_all">Все</string>
+  <string name="torrent_details_label_unlabeled">Немеченому</string>
 
 </resources>

@@ -254,5 +254,8 @@
   <string name="sortby_menu_speed">Abiadura...</string>
   <string name="torrent_details_addedon">Gehituta:</string>
   <string name="torrent_details_completedon">Osatua:</string>
+  <string name="drawer_label_labels">Etiketak</string>
+  <string name="drawer_label_all">Guztiak></string>
+  <string name="drawer__label_unlabeled">Etiketatu gabeko</string>
 
 </resources>
