@@ -955,6 +955,13 @@ public class TorrentDetailsFragment extends Fragment {
                     labels[8] = getString(R.string.torrent_details_share_ratio);
                     values[8] = json2.getString(TAG_SHARE_RATIO);
 
+                    // Format ratio
+                    try {
+                        values[8] = String.format("%.2f", Float.parseFloat(values[8])).replace(",", ".");
+                    } catch (Exception e) {
+                    }
+
+
 //                    Log.e("Debug", "Share ratio");
 
                     // Upload limit
