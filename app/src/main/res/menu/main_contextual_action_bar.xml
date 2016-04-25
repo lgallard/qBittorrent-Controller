@@ -77,8 +77,13 @@
         android:showAsAction="ifRoom"
         android:title="@string/torrent_details_seq_download"/>
     <item
-        android:id="@+id/action_firts_last_piece_prio"
+        android:id="@+id/action_first_last_piece_prio"
         android:showAsAction="ifRoom"
         android:title="@string/torrent_details_first_last" />
+    <item
+        android:id="@+id/action_set_label"
+        android:title="@string/action_set_label"
+        android:showAsAction="ifRoom" />
+
 
 </menu>

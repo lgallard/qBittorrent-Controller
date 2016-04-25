@@ -352,6 +352,8 @@ public class JSONParser {
 
         String url = "";
 
+        String label = "";
+
         if ("start".equals(command) || "startSelected".equals(command)) {
             url = "command/resume";
         }
@@ -485,6 +487,17 @@ public class JSONParser {
 
         }
 
+        if ("setLabel".equals(command)) {
+            url = "command/setLabel";
+            key = "hashes";
+
+            String[] tmpString = hash.split("&");
+            hash = tmpString[0];
+            label = tmpString[1];
+
+            Log.d("Debug", "Hash2: " + hash + "| label2: " + label);
+
+        }
 
         if ("alternativeSpeedLimitsEnabled".equals(command)) {
 
@@ -566,10 +579,17 @@ public class JSONParser {
             }
 
 
+            // Add limit
+            if (!label.equals("")) {
+                nvps.add(new BasicNameValuePair("label", label));
+
+            }
+
+
             httpget.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
             // Set content type and urls
-            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command) || "toggleAlternativeSpeedLimits".equals(command) || "alternativeSpeedLimitsEnabled".equals(command)) {
+            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command) || "toggleAlternativeSpeedLimits".equals(command) || "alternativeSpeedLimitsEnabled".equals(command) || "setLabel".equals(command)) {
                 httpget.setHeader("Content-Type", urlContentType);
 
             }

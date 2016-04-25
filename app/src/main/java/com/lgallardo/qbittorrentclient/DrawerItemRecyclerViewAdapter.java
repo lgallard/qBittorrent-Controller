@@ -596,7 +596,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
             if (item.getType() == TYPE_LABEL || item.getType() == TYPE_LABEL_ACTIVE) {
 
-                Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Removing: " + item.name);
+//                Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Removing: " + item.name);
                 iterator.remove();
                 notifyItemRemoved(iterator.nextIndex() + 1);
 

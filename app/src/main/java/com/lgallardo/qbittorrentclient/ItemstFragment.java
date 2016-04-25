@@ -135,11 +135,13 @@ public class ItemstFragment extends ListFragment {
                 @Override
                 public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
                     if (MainActivity.qb_version.equals("3.2.x")) {
-                        menu.findItem(R.id.action_firts_last_piece_prio).setVisible(true);
+                        menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                         menu.findItem(R.id.action_sequential_download).setVisible(true);
+                        menu.findItem(R.id.action_set_label).setVisible(true);
                     } else {
-                        menu.findItem(R.id.action_firts_last_piece_prio).setVisible(false);
+                        menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
                         menu.findItem(R.id.action_sequential_download).setVisible(false);
+                        menu.findItem(R.id.action_set_label).setVisible(false);
                     }
                     return true;
                 }
@@ -404,9 +406,23 @@ public class ItemstFragment extends ListFragment {
                             mode.finish();
 
                             return true;
-                        case R.id.action_firts_last_piece_prio:
+                        case R.id.action_first_last_piece_prio:
 
                             m.toggleFirstLastPiecePrio(hashes);
+
+                            // Clear selection
+                            nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
+                            mAdapter.clearSelection();
+                            mode.finish();
+
+                            return true;
+                        case R.id.action_set_label:
+
+                            m.setLabelDialog(hashes);
 
                             // Clear selection
                             nr = 0;
@@ -612,8 +628,8 @@ public class ItemstFragment extends ListFragment {
                 menu.findItem(R.id.action_recheck).setVisible(false);
             }
 
-            if (menu.findItem(R.id.action_firts_last_piece_prio) != null) {
-                menu.findItem(R.id.action_firts_last_piece_prio).setVisible(false);
+            if (menu.findItem(R.id.action_first_last_piece_prio) != null) {
+                menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
             }
 
             if (menu.findItem(R.id.action_sequential_download) != null) {
@@ -622,6 +638,10 @@ public class ItemstFragment extends ListFragment {
 
             if (menu.findItem(R.id.action_priority_menu) != null) {
                 menu.findItem(R.id.action_priority_menu).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.action_set_label) != null) {
+                menu.findItem(R.id.action_set_label).setVisible(false);
             }
 
             if (MainActivity.qb_version.equals("3.2.x")) {

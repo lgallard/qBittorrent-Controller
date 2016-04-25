@@ -83,9 +83,9 @@ public class HelpFragment extends Fragment {
                 menu.findItem(R.id.action_recheck).setVisible(false);
             }
 
-            if (menu.findItem(R.id.action_firts_last_piece_prio) != null) {
-                menu.findItem(R.id.action_firts_last_piece_prio).setVisible(false);
-            }
+			if (menu.findItem(R.id.action_first_last_piece_prio) != null) {
+				menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
+			}
 
             if (menu.findItem(R.id.action_sequential_download) != null) {
                 menu.findItem(R.id.action_sequential_download).setVisible(false);
@@ -94,6 +94,10 @@ public class HelpFragment extends Fragment {
             if (menu.findItem(R.id.action_priority_menu) != null) {
                 menu.findItem(R.id.action_priority_menu).setVisible(false);
             }
+
+			if (menu.findItem(R.id.action_set_label) != null) {
+				menu.findItem(R.id.action_set_label).setVisible(false);
+			}
 
 
         }

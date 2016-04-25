@@ -1635,7 +1635,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //                    }
                 }
                 return true;
-            case R.id.action_firts_last_piece_prio:
+            case R.id.action_first_last_piece_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleFirstLastPiecePrio(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
@@ -1647,6 +1647,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_sequential_download:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleSequentialDownload(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
+                }
+                return true;
+            case R.id.action_set_label:
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    setLabelDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
 //                    if (findViewById(R.id.one_frame) != null) {
 //                        popBackStackPhoneView();
@@ -2154,6 +2163,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    public void setLabel(String hashes, String label) {
+        // Execute the task in background
+        qBittorrentCommand qtc = new qBittorrentCommand();
+        qtc.execute(new String[]{"setLabel", hashes + "&" + label});
+
+    }
+
+
     public void toggleAlternativeSpeedLimits() {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
@@ -2208,14 +2225,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
-    public void downloadRateLimitDialog(final String hash) {
+    public void setLabelDialog(final String hash) {
 
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(MainActivity.this);
-        View view = li.inflate(R.layout.download_rate_limit, null);
+        View view = li.inflate(R.layout.set_label, null);
 
         // URL input
-        final EditText downloadRateLimit = (EditText) view.findViewById(R.id.download_rate_limit);
+        final EditText label = (EditText) view.findViewById(R.id.set_label);
 
         if (!isFinishing()) {
             // Dialog
@@ -2235,7 +2252,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User accepted the dialog
-                    setDownloadRateLimit(hash, downloadRateLimit.getText().toString());
+                    Log.d("Debug", "Hash: " + hash + " | label: " + label.getText().toString());
+                    setLabel(hash, label.getText().toString());
                 }
             });
 
@@ -2315,6 +2333,46 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
         }
     }
+
+    public void downloadRateLimitDialog(final String hash) {
+
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(MainActivity.this);
+        View view = li.inflate(R.layout.download_rate_limit, null);
+
+        // URL input
+        final EditText downloadRateLimit = (EditText) view.findViewById(R.id.download_rate_limit);
+
+        if (!isFinishing()) {
+            // Dialog
+            Builder builder = new Builder(MainActivity.this);
+
+            // Set add_torrent.xml to AlertDialog builder
+            builder.setView(view);
+
+            // Cancel
+            builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancelled the dialog
+                }
+            });
+
+            // Ok
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User accepted the dialog
+                    setLabel(hash, downloadRateLimit.getText().toString());
+                }
+            });
+
+            // Create dialog
+            AlertDialog dialog = builder.create();
+
+            // Show dialog
+            dialog.show();
+        }
+    }
+
 
     public void refreshAfterCommand(int delay) {
 
@@ -3215,6 +3273,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             if ("toggleAlternativeSpeedLimits".equals(command)) {
                 messageId = R.string.toggledAlternativeRates;
             }
+
+            if ("setLabel".equals(command)) {
+                messageId = R.string.torrentsSettingLabel;
+                delay = 3;
+            }
+
 
             if ("alternativeSpeedLimitsEnabled".equals(command)) {
 

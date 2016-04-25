@@ -455,6 +455,9 @@ public class TorrentDetailsFragment extends Fragment {
                 TextView addedOnTextView = (TextView) rootView.findViewById(R.id.torrentAddedOn);
                 TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);
 
+                TextView labelTextView = (TextView) rootView.findViewById(R.id.torrentLabel);
+
+
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
                 if (addedOn != null && !(addedOn.equals("null"))) {
@@ -467,6 +470,12 @@ public class TorrentDetailsFragment extends Fragment {
                     completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
                 } else {
                     completionOnTextView.setText("");
+                }
+
+                if (label != null && !(label.equals("null"))) {
+                    labelTextView.setText(label);
+                } else {
+                    labelTextView.setText("");
                 }
 
 
@@ -613,9 +622,10 @@ public class TorrentDetailsFragment extends Fragment {
             }
 
             if (MainActivity.qb_version.equals("3.2.x")) {
-                menu.findItem(R.id.action_firts_last_piece_prio).setVisible(true);
+                menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                 menu.findItem(R.id.action_sequential_download).setVisible(true);
                 menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
+                menu.findItem(R.id.action_set_label).setVisible(true);
 
                 // Set Alternate Speed limit state
                 if (MainActivity.alternative_speeds) {
@@ -626,10 +636,10 @@ public class TorrentDetailsFragment extends Fragment {
 
 
             } else {
-                menu.findItem(R.id.action_firts_last_piece_prio).setVisible(false);
+                menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
                 menu.findItem(R.id.action_sequential_download).setVisible(false);
                 menu.findItem(R.id.action_toggle_alternative_rate).setVisible(false);
-
+                menu.findItem(R.id.action_set_label).setVisible(false);
             }
 
         }

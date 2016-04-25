@@ -162,8 +162,13 @@
         android:title="@string/torrent_details_seq_download"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_firts_last_piece_prio"
+        android:id="@+id/action_first_last_piece_prio"
         android:title="@string/torrent_details_first_last"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_set_label"
+        android:title="@string/action_set_label"
         app:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_search"
