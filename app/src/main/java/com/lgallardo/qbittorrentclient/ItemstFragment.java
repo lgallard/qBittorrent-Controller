@@ -434,6 +434,21 @@ public class ItemstFragment extends ListFragment {
                             mode.finish();
 
                             return true;
+
+                        case R.id.action_delete_label:
+
+                            m.setLabel(hashes, " ");
+
+                            // Clear selection
+                            nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
+                            mAdapter.clearSelection();
+                            mode.finish();
+
+                            return true;
                         default:
                             // Enable SwipeRefresh
                             mSwipeRefreshLayout.setEnabled(true);

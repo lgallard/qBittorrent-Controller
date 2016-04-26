@@ -8,6 +8,7 @@
  */
 package com.lgallardo.qbittorrentclient;
 
+import android.net.Uri;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -22,6 +23,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -29,6 +31,7 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -500,8 +503,6 @@ public class JSONParser {
                 label = "";
             }
 
-            urlContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-
             Log.d("Debug", "Hash2: " + hash + "| label2: " + label);
 
         }
@@ -557,8 +558,6 @@ public class JSONParser {
 
             url = protocol + "://" + hostname + ":" + port + "/" + url;
 
-//            Log.d("Debug", "url:" + url);
-
             HttpPost httpget = new HttpPost(url);
 
             if ("addTorrent".equals(command)) {
@@ -589,22 +588,27 @@ public class JSONParser {
             // Add label
             if (label != null && !label.equals("")) {
 
-//                label = Uri.decode(label);
-                label = URLDecoder.decode(label, "UTF-8");
-
-                Log.d("Debug", "Hash3: " + hash + "| label3: >" + label + "<");
-
+                label = Uri.decode(label);
                 nvps.add(new BasicNameValuePair("label", label));
 
+                Log.d("Debug", "Hash3: " + hash + "| label3: >" + label + "<");
             }
 
 
-            httpget.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+            String entityValue = URLEncodedUtils.format(nvps, HTTP.UTF_8);
+
+            // This replaces encoded char "+" for "%20" so spaces can be passed as parameter
+            entityValue = entityValue.replaceAll("\\+", "%20");
+
+
+            StringEntity stringEntity = new StringEntity(entityValue, HTTP.UTF_8);
+            stringEntity.setContentType(URLEncodedUtils.CONTENT_TYPE);
+
+            httpget.setEntity(stringEntity);
 
             // Set content type and urls
             if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command) || "toggleAlternativeSpeedLimits".equals(command) || "alternativeSpeedLimitsEnabled".equals(command) || "setLabel".equals(command)) {
                 httpget.setHeader("Content-Type", urlContentType);
-
             }
 
 

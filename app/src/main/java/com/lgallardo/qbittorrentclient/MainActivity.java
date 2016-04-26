@@ -1662,6 +1662,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //                    }
                 }
                 return true;
+            case R.id.action_delete_label:
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    setLabel(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate, " ");
+
+//                    if (findViewById(R.id.one_frame) != null) {
+//                        popBackStackPhoneView();
+//                    }
+                }
+                return true;
+
             case R.id.action_toggle_alternative_rate:
                 toggleAlternativeSpeedLimits();
 
@@ -2253,16 +2263,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 public void onClick(DialogInterface dialog, int id) {
                     // User accepted the dialog
 
-                    // I used a dummy URL to encode label
-                    String labelEncoded = "";
+                    String labelEncoded = Uri.encode(label.getText().toString());
 
-                    try {
-                        labelEncoded = URLEncoder.encode(label.getText().toString(), "utf-8");
-                    } catch (UnsupportedEncodingException e) {
-                        labelEncoded = "";
-                    }
-
-                    Log.d("Debug", "Hash: " + hash + " | label: " + labelEncoded);
                     setLabel(hash, labelEncoded);
                 }
             });

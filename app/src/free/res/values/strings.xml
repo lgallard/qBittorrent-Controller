@@ -265,5 +265,7 @@
     <string name="drawer_label_unlabeled">Unlabeled</string>
     <string name="torrent_details_label">Label:</string>
     <string name="action_set_label">Set label</string>
-
+    <string name="action_delete_label">Delete label</string>
+    <string name="torrentsSettingLabel">Setting label!</string>
+    <string name="torrent_label_menu">Label...</string>
 </resources>

@@ -165,11 +165,27 @@
         android:id="@+id/action_first_last_piece_prio"
         android:title="@string/torrent_details_first_last"
         app:showAsAction="ifRoom" />
-
     <item
-        android:id="@+id/action_set_label"
-        android:title="@string/action_set_label"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/action_label_menu"
+        android:icon="@drawable/ic_action_increase_prio"
+        android:title="@string/torrent_label_menu">
+
+        <menu>
+
+            <item
+                android:id="@+id/action_set_label"
+                android:icon="@drawable/ic_drawer_labels"
+                android:title="@string/action_set_label"
+                app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/action_delete_label"
+                android:icon="@drawable/ic_action_delete_drive"
+                android:title="@string/action_delete_label"
+                app:showAsAction="ifRoom" />
+        </menu>
+
+    </item>
 
     <item android:id="@+id/action_search"
         android:title="@string/search_title"
