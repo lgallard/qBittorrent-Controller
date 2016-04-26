@@ -2252,8 +2252,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User accepted the dialog
-                    Log.d("Debug", "Hash: " + hash + " | label: " + label.getText().toString());
-                    setLabel(hash, label.getText().toString());
+
+                    // I used a dummy URL to encode label
+                    String labelEncoded = "";
+
+                    try {
+                        labelEncoded = URLEncoder.encode(label.getText().toString(), "utf-8");
+                    } catch (UnsupportedEncodingException e) {
+                        labelEncoded = "";
+                    }
+
+                    Log.d("Debug", "Hash: " + hash + " | label: " + labelEncoded);
+                    setLabel(hash, labelEncoded);
                 }
             });
 

@@ -27,7 +27,6 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.conn.ssl.StrictHostnameVerifierHC4;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -53,6 +52,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Date;
@@ -493,7 +493,14 @@ public class JSONParser {
 
             String[] tmpString = hash.split("&");
             hash = tmpString[0];
-            label = tmpString[1];
+
+            try {
+                label = tmpString[1];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                label = "";
+            }
+
+            urlContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
             Log.d("Debug", "Hash2: " + hash + "| label2: " + label);
 
@@ -579,8 +586,14 @@ public class JSONParser {
             }
 
 
-            // Add limit
-            if (!label.equals("")) {
+            // Add label
+            if (label != null && !label.equals("")) {
+
+//                label = Uri.decode(label);
+                label = URLDecoder.decode(label, "UTF-8");
+
+                Log.d("Debug", "Hash3: " + hash + "| label3: >" + label + "<");
+
                 nvps.add(new BasicNameValuePair("label", label));
 
             }
@@ -593,6 +606,7 @@ public class JSONParser {
                 httpget.setHeader("Content-Type", urlContentType);
 
             }
+
 
             // Set cookie
             if (this.cookie != null) {
