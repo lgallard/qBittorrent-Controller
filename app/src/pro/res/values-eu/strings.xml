@@ -259,4 +259,6 @@
     <string name="torrent_details_label">Etiketa:</string>
     <string name="torrent_label_menu">Etiketak...</string>
     <string name="torrentsApplyingChange">Aldaketa aplikatuz!</string>
+    <string name="action_delete_label">Etiketa ezabatu</string>
+    <string name="action_set_label">Ezarri etiketa</string>
 </resources>

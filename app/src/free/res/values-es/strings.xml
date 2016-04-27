@@ -267,7 +267,7 @@
     <string name="drawer_label_unlabeled">Sin etiqueta</string>
     <string name="torrent_details_label">Etiqueta:</string>
     <string name="action_delete_label">Borrar etiqueta</string>
-    <string name="action_set_label">Asignar etiqueta</string>
+    <string name="action_set_label">Definir etiqueta</string>
     <string name="torrent_label_menu">Etiqueta...</string>
     <string name="torrentsSettingLabel">Asignando etiqueta!</string>
 

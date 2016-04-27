@@ -259,4 +259,6 @@
     <string name="torrent_details_label">Étiquette:</string>
     <string name="torrent_label_menu">Étiquette...</string>
     <string name="torrentsApplyingChange">Appliquer le changement!</string>
+    <string name="action_delete_label">Supprimer l\'étiquette</string>
+    <string name="action_set_label">Définir l\'étiquette</string>
 </resources>

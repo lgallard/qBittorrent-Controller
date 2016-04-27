@@ -259,5 +259,7 @@
     <string name="torrent_details_label">Этикетка:</string>
     <string name="torrent_label_menu">Этикетка...</string>
     <string name="torrentsApplyingChange">Применение изменений!</string>
+    <string name="action_delete_label">Удалить ярлык</string>
+    <string name="action_set_label">Определить этикетку</string>
 
 </resources>

@@ -259,4 +259,6 @@
     <string name="torrent_details_label">Etikett:</string>
     <string name="torrent_label_menu">Etikett...</string>
     <string name="torrentsApplyingChange">Applicering av förändring!</string>
+    <string name="action_delete_label">Radera etikett!</string>
+    <string name="action_set_label">Definiera etikett</string>
 </resources>

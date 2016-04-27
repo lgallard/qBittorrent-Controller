@@ -251,5 +251,7 @@
     <string name="torrent_details_label">ラベル:</string>
     <string name="torrent_label_menu">ラベル...</string>
     <string name="torrentsApplyingChange">変更を適用します！!</string>
+    <string name="action_delete_label">ラベルを削除</string>
+    <string name="action_set_label">設定ラベル！</string>
 
 </resources>
