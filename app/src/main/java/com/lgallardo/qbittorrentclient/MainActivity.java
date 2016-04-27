@@ -3295,7 +3295,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
 
             if ("setLabel".equals(command)) {
-                messageId = R.string.torrentsSettingLabel;
+                messageId = R.string.torrentsApplyingChange;
                 delay = 3;
             }
 

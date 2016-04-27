@@ -253,5 +253,10 @@
     <string name="sortby_menu_date">Data...</string>
     <string name="torrent_details_addedon">Aggiunto il:</string>
     <string name="torrent_details_completedon">Completato nel:</string>
-
+    <string name="drawer_label_labels">Etichette</string>
+    <string name="drawer_label_all">Tutto</string>
+    <string name="drawer_label_unlabeled">Senza etichetta</string>
+    <string name="torrent_details_label">Etichetta:</string>
+    <string name="torrent_label_menu">Etichetta...</string>
+    <string name="torrentsApplyingChange">Applicando il cambiamento!</string>
 </resources>

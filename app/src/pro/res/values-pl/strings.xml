@@ -253,5 +253,10 @@
     <string name="sortby_menu_added_on">Dodano w</string>
     <string name="torrent_details_addedon">Dodano w:</string>
     <string name="torrent_details_completedon">Zakończony:</string>
-
+    <string name="drawer_label_labels">Etykiety</string>
+    <string name="drawer_label_all">Wszystko</string>
+    <string name="drawer_label_unlabeled">Nieopisane</string>
+    <string name="torrent_details_label">Etykieta:</string>
+    <string name="torrent_label_menu">Etykieta...</string>
+    <string name="torrentsApplyingChange">Zastosowanie zmiany!</string>
 </resources>

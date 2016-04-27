@@ -265,4 +265,5 @@
     <string name="drawer_label_all">Wszystko</string>
     <string name="drawer_label_unlabeled">Nieopisane</string>
     <string name="torrent_details_label">Etykieta:</string>
+
 </resources>

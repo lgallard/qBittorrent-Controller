@@ -253,5 +253,10 @@
     <string name="sortby_menu_added_on">Lades till</string>
     <string name="torrent_details_addedon">Lades till:</string>
     <string name="torrent_details_completedon">Slutförd:</string>
-
+    <string name="drawer_label_labels">Etiketter</string>
+    <string name="drawer_label_all">Alla</string>
+    <string name="drawer_label_unlabeled">Omärkt</string>
+    <string name="torrent_details_label">Etikett:</string>
+    <string name="torrent_label_menu">Etikett...</string>
+    <string name="torrentsApplyingChange">Applicering av förändring!</string>
 </resources>
