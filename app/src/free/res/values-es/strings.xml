@@ -269,6 +269,6 @@
     <string name="action_delete_label">Borrar etiqueta</string>
     <string name="action_set_label">Definir etiqueta</string>
     <string name="torrent_label_menu">Etiqueta...</string>
-    <string name="torrentsSettingLabel">Asignando etiqueta!</string>
+    <string name="torrentsApplyingChange">Aplicando cambio!</string>
 
 </resources>

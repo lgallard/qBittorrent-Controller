@@ -265,5 +265,9 @@
     <string name="drawer_label_all">Wszystko</string>
     <string name="drawer_label_unlabeled">Nieopisane</string>
     <string name="torrent_details_label">Etykieta:</string>
+    <string name="torrent_label_menu">Etykieta...</string>
+    <string name="torrentsApplyingChange">Zastosowanie zmiany!</string>
+    <string name="action_delete_label">Usuń etykietę</string>
+    <string name="action_set_label">Ustaw etykiety</string>
 
 </resources>

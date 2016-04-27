@@ -261,4 +261,5 @@
     <string name="torrentsApplyingChange">Applicering av förändring!</string>
     <string name="action_delete_label">Radera etikett!</string>
     <string name="action_set_label">Definiera etikett</string>
+
 </resources>

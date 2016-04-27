@@ -265,4 +265,9 @@
     <string name="drawer_label_all">Tudo</string>
     <string name="drawer_label_unlabeled">Sem etiquetas</string>
     <string name="torrent_details_label">Etiqueta:</string>
+    <string name="torrent_label_menu">Etiqueta...</string>
+    <string name="torrentsApplyingChange">Aplicando mudança!</string>
+    <string name="action_delete_label">Remover etiqueta</string>
+    <string name="action_set_label">Definir etiqueta</string>
+
 </resources>
