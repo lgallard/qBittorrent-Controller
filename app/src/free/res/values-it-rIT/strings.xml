@@ -269,9 +269,5 @@
     <string name="torrentsApplyingChange">Applicando il cambiamento!</string>
     <string name="action_delete_label">Eliminare l\'etichetta</string>
     <string name="action_set_label">Imposta l\'etichetta</string>
-    <string name="torrent_label_menu">Etichetta...</string>
-    <string name="torrentsApplyingChange">Applicando il cambiamento!</string>
-    <string name="action_delete_label">Eliminare l\'etichetta</string>
-    <string name="action_set_label">Imposta l\'etichetta</string>
 
 </resources>

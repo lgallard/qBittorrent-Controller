@@ -55,7 +55,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Date;
@@ -503,7 +502,7 @@ public class JSONParser {
                 label = "";
             }
 
-            Log.d("Debug", "Hash2: " + hash + "| label2: " + label);
+//            Log.d("Debug", "Hash2: " + hash + "| label2: " + label);
 
         }
 
@@ -591,7 +590,7 @@ public class JSONParser {
                 label = Uri.decode(label);
                 nvps.add(new BasicNameValuePair("label", label));
 
-                Log.d("Debug", "Hash3: " + hash + "| label3: >" + label + "<");
+//                Log.d("Debug", "Hash3: " + hash + "| label3: >" + label + "<");
             }
 
 

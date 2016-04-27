@@ -1239,7 +1239,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void addTorrentByIntent(Intent intent) {
 
-        Log.d("Debug", "addTorrentByIntent invoked");
+//        Log.d("Debug", "addTorrentByIntent invoked");
 
         urlTorrent = intent.getDataString();
 
@@ -3018,7 +3018,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 qb_api = apiVersion;
                 qbittorrentServer = apiVersion;
 
-                Log.d("Debug", "API: " + apiVersion);
+//                Log.d("Debug", "API: " + apiVersion);
 
             } catch (JSONParserStatusCodeException e) {
 
