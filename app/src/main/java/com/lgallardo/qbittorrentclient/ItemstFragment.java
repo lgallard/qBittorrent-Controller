@@ -137,11 +137,20 @@ public class ItemstFragment extends ListFragment {
                     if (MainActivity.qb_version.equals("3.2.x")) {
                         menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                         menu.findItem(R.id.action_sequential_download).setVisible(true);
+                        menu.findItem(R.id.action_label_menu).setVisible(true);
                         menu.findItem(R.id.action_set_label).setVisible(true);
+                        menu.findItem(R.id.action_delete_label).setVisible(true);
+
+                        if (Integer.parseInt(MainActivity.qb_api) < 8) {
+                            menu.findItem(R.id.action_delete_label).setVisible(false);
+                        }
+
                     } else {
                         menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
                         menu.findItem(R.id.action_sequential_download).setVisible(false);
+                        menu.findItem(R.id.action_label_menu).setVisible(false);
                         menu.findItem(R.id.action_set_label).setVisible(false);
+                        menu.findItem(R.id.action_delete_label).setVisible(false);
                     }
                     return true;
                 }
@@ -656,7 +665,10 @@ public class ItemstFragment extends ListFragment {
             }
 
             if (menu.findItem(R.id.action_set_label) != null) {
+                menu.findItem(R.id.action_label_menu).setVisible(false);
                 menu.findItem(R.id.action_set_label).setVisible(false);
+                menu.findItem(R.id.action_delete_label).setVisible(false);
+
             }
 
             if (MainActivity.qb_version.equals("3.2.x")) {

@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Cookie (SID - Session ID)
     public static String cookie = null;
     public static String qb_version = "3.2.x";
+    public static String qb_api = "0";
     public static String qbittorrentServer = "";
     public static LinearLayout headerInfo;
 
@@ -3014,10 +3015,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             try {
 
                 apiVersion = jParser.getApi();
+                qb_api = apiVersion;
                 qbittorrentServer = apiVersion;
 
+                Log.d("Debug", "API: " + apiVersion);
+
             } catch (JSONParserStatusCodeException e) {
+
+                qb_api = "0";
                 httpStatusCode = e.getCode();
+
+                Log.d("Debug", "API Exception: " + httpStatusCode);
 
             }
 
