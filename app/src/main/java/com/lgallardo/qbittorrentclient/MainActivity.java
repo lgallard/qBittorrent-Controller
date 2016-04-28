@@ -3677,21 +3677,23 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 //                Log.d("Debug", "currentLabel: " + currentLabel);
 
-                // Sort labels
-                Collections.sort(labels);
+                if (labels != null) {
+                    // Sort labels
+                    Collections.sort(labels);
 
-                for (int i = 0; i < labels.size(); i++) {
+                    for (int i = 0; i < labels.size(); i++) {
 
-                    label = labels.get(i);
+                        label = labels.get(i);
 
-                    if (!label.equals("")) {
-                        labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label), "label"));
+                        if (label != null && !label.equals("")) {
+                            labelItems.add(new ObjectDrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label), "label"));
+                        }
                     }
+
+
+                    rAdapter.refreshDrawerLabels(labelItems);
+
                 }
-
-
-                rAdapter.refreshDrawerLabels(labelItems);
-
 
                 // Sort by filename
                 if (sortby.equals("Name")) {

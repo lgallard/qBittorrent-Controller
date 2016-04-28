@@ -621,6 +621,8 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_search).setVisible(true);
             }
 
+            Log.d("Debug", "qb_version: " + MainActivity.qb_version);
+
             if (MainActivity.qb_version.equals("3.2.x")) {
                 menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                 menu.findItem(R.id.action_sequential_download).setVisible(true);
@@ -645,7 +647,10 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
                 menu.findItem(R.id.action_sequential_download).setVisible(false);
                 menu.findItem(R.id.action_toggle_alternative_rate).setVisible(false);
+                menu.findItem(R.id.action_label_menu).setVisible(false);
                 menu.findItem(R.id.action_set_label).setVisible(false);
+                menu.findItem(R.id.action_delete_label).setVisible(false);
+
             }
 
         }
