@@ -237,14 +237,16 @@
     <string name="settings_qbittorrent_https_self_signed_keystore_password_title">キーストアのパスワード</string>
     <string name="error_grant_permission">Torrent ファイルをダウンロードしたり送信するために、ストレージのアクセスが必要です! \nAndroid の設定でアクセス許可を付与しますか?</string>
     <string name="error_permission">Torrent ファイルをダウンロードしたり送信するために、ストレージのアクセスが必要です!</string>
-    <string name="error_grant_permission2">ストレージへのアクセスは、ディレクトリとファイルの一覧を表示するために必要です。! \nAndroid の設定でアクセス許可を付与しますか?</string>
-    <string name="error_permission2">ストレージへのアクセスは、ディレクトリとファイルの一覧を表示するために必要です。!</string>
+    <string name="error_grant_permission2">ファイルやディレクトリを一覧表示するために、ストレージのアクセスが必要です!\n\nAndroid
+        の設定でアクセス許可を付与しますか?
+    </string>
+    <string name="error_permission2">ファイルやディレクトリを一覧表示するために、ストレージのアクセスが必要です!</string>
     <string name="sortby_menu_speed">速度...</string>
     <string name="sortby_menu_completed_on">上の完了</string>
     <string name="sortby_menu_added_on">上に追加しました</string>
     <string name="sortby_menu_date">日付...</string>
-    <string name="torrent_details_addedon">上に追加しました:</string>
-    <string name="torrent_details_completedon">上の完了:</string>
+    <string name="torrent_details_addedon">追加:</string>
+    <string name="torrent_details_completedon">完了:</string>
     <string name="drawer_label_labels">ラベル</string>
     <string name="drawer_label_all">すべて</string>
     <string name="drawer_label_unlabeled">標識されていません</string>
