@@ -245,14 +245,18 @@
     <string name="settings_qbittorrent_https_self_signed_keystore_password_title">Giltzategi sarhitza</string>
     <string name="error_grant_permission">Biltegiratze sarbidea beharrezkoa da torrentak jeitsi eta bidaltzeko!\n\nBaimena ematea nahi duzu Android ezarpenetan?</string>
     <string name="error_permission">Biltegirartze sarbidea beharrezkoa da torrentak jeitsi eta bidaltzeko!</string>
-    <string name="error_grant_permission2">Biltegiratze sarbidea ordena guneak eta fitxategiak zerrendatu behar da!\n\nBaimena ematea nahi duzu Android ezarpenetan?</string>
-    <string name="error_permission2">Biltegiratze sarbidea ordena guneak eta fitxategiak zerrendatu behar da!</string>
+    <string name="error_grant_permission2">Biltegiratze sarbidea beharrezkoa da torrentak jeitsi eta
+        bidaltzeko!\n\nBaimena ematea nahi duzu Android ezarpenetan?
+    </string>
+    <string name="error_permission2">Biltegirartze sarbidea beharrezkoa da zuzenbideak eta agiriak
+        zerrendatzeko!
+    </string>
     <string name="sortby_menu_completed_on">Osatua</string>
     <string name="sortby_menu_added_on">Gehituta</string>
     <string name="sortby_menu_date">Data...</string>
     <string name="sortby_menu_speed">Abiadura...</string>
     <string name="torrent_details_addedon">Gehituta:</string>
-    <string name="torrent_details_completedon">Osatua:</string>
+    <string name="torrent_details_completedon">Osatuta:</string>
     <string name="drawer_label_labels">Etiketak</string>
     <string name="drawer_label_all">Guztiak></string>
     <string name="drawer_label_unlabeled">Etiketatu gabeko</string>
@@ -261,4 +265,5 @@
     <string name="torrentsApplyingChange">Aldaketa aplikatuz!</string>
     <string name="action_delete_label">Etiketa ezabatu</string>
     <string name="action_set_label">Ezarri etiketa</string>
+
 </resources>
