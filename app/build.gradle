@@ -46,18 +46,18 @@ android {
     productFlavors {
         pro {
             applicationId 'com.lgallardo.qbittorrentclientpro'
-            versionName '4.3.3'
+            versionName '4.3.4'
             minSdkVersion 14
             targetSdkVersion 23
-            versionCode 433
+            versionCode 434
             archivesBaseName = "qBittorrentController_v" + versionName
         }
         free {
             applicationId "com.lgallardo.qbittorrentclient"
-            versionName '4.3.3'
+            versionName '4.3.4'
             minSdkVersion 14
             targetSdkVersion 23
-            versionCode 433
+            versionCode 434
         }
     }
 
