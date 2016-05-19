@@ -29,10 +29,12 @@ import java.util.ListIterator;
 
 public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<TorrentDetailsRecyclerViewAdapter.ViewHolder> {
 
-    private static final int TYPE_HEADER = 0;  // Declaring Variable to Understand which View is being worked on
+    // Declaring Variable to Understand which View is being worked on
+    private static final int TYPE_HEADER = 0;
     // IF the view under inflation and population is header or Item
-    private static final int TYPE_ITEM = 1;
-    private static final int TYPE_ITEM_ACTIVE = 2;
+    private static final int TYPE_FILE_ITEM = 1;
+//    private static final int TYPE_FILE_ITEM_ACTIVE = 2;
+
     private static final int TYPE_SERVER = 3;
     private static final int TYPE_SERVER_ACTIVE = 4;
     private static final int TYPE_CATEGORY = 5;
@@ -44,7 +46,10 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     // All items
     public static ArrayList<ObjectDrawerItem> items;
 
-    // SUb items
+    // Subitems
+    public static ArrayList<ObjectDrawerItem> fileItems;
+    public static ArrayList<ObjectDrawerItem> trackerItems;
+
     public static ArrayList<ObjectDrawerItem> serverItems;
     public static ArrayList<ObjectDrawerItem> actionItems;
     public static ArrayList<ObjectDrawerItem> settingsItems;
@@ -189,8 +194,7 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
                     ObjectDrawerItem item = items.get(i);
 
 
-                    if ((drawerItem.getType() == TYPE_ITEM || drawerItem.getType() == TYPE_ITEM_ACTIVE) &&
-                            (item.getType() == TYPE_ITEM || item.getType() == TYPE_ITEM_ACTIVE)) {
+                    if ((drawerItem.getType() == TYPE_FILE_ITEM) && (item.getType() == TYPE_FILE_ITEM)) {
 
                         // Get las action position selected
 
@@ -765,16 +769,9 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
             return vhItem; // Returning the created object
 
 
-        } else if (viewType == TYPE_ITEM) {
+        } else if (viewType == TYPE_FILE_ITEM) {
 
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_row, parent, false); //Inflating the layout
-            ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
-
-            return vhItem; // Returning the created object
-
-        } else if (viewType == TYPE_ITEM_ACTIVE) {
-
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_row_active, parent, false); //Inflating the layout
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.contentfile_row, parent, false); //Inflating the layout
             ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
 
             return vhItem; // Returning the created object
@@ -854,11 +851,6 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
             return TYPE_HEADER;
         }
 
-        if (items.get(position - 1).getType() == TYPE_ITEM && items.get(position - 1).isActive()) {
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_ITEM_ACTIVE");
-            return TYPE_ITEM_ACTIVE;
-        }
-
         if (items.get(position - 1).getType() == TYPE_CATEGORY && !(items.get(position - 1).isActive())) {
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_CATEGORY");
             return TYPE_CATEGORY;
@@ -902,8 +894,8 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
         }
 
         // Default
-//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_ITEM");
-        return TYPE_ITEM;
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_FILE_ITEM");
+        return TYPE_FILE_ITEM;
 
     }
 
