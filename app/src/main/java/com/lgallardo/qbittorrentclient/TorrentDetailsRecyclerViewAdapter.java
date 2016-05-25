@@ -27,17 +27,9 @@ import java.util.Iterator;
 public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<TorrentDetailsRecyclerViewAdapter.ViewHolder> {
 
     // Declaring Variable to Understand which View is being worked on
-    private static final int TYPE_HEADER = 0;
     // IF the view under inflation and population is header or Item
-    private static final int TYPE_FILE_ITEM = 1;
-//    private static final int TYPE_FILE_ITEM_ACTIVE = 2;
-
-    private static final int TYPE_SERVER = 3;
-    private static final int TYPE_SERVER_ACTIVE = 4;
-    private static final int TYPE_CATEGORY = 5;
-    private static final int TYPE_LABEL = 6;
-    private static final int TYPE_LABEL_ACTIVE = 7;
-    private static final int TYPE_LABEL_CATEGORY = 8;
+    private static final int TYPE_FILE_ITEM = 0;
+    private static final int TYPE_TRACKER_ITEM = 1;
 
 
     // All items
@@ -52,10 +44,7 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     public static ArrayList<TorrentDetailsItem> settingsItems;
     public static ArrayList<TorrentDetailsItem> labelItems;
 
-    public static int actionPosition = 0;
-
     private static MainActivity mainActivity;
-    private static int drawerOffset = 1;
 
     private Context context;
 
@@ -66,34 +55,12 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         int Holderid;
-        int positionInItems = -1;
-
-        // New
-        ImageView imageViewIcon;
-        TextView textViewName;
 
 
         public ViewHolder(final View itemView, int ViewType) {                 // Creating ViewHolder Constructor with View and viewType As a parameter
             super(itemView);
 
             Holderid = 0;
-            if (ViewType != TYPE_HEADER) {
-
-                itemView.setClickable(true);
-                itemView.setOnClickListener(this);
-
-                Holderid = 1;
-            }
-
-
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - ViewType: " + ViewType);
-//            if (ViewType == TYPE_SERVER || ViewType == TYPE_SERVER_ACTIVE) {
-//                drawerOffset = drawerOffset + 1;
-//            }
-
-            // Here we set the appropriate view in accordance with the the view type as passed when the holder object is created
-            imageViewIcon = (ImageView) itemView.findViewById(R.id.imageViewIcon);
-            textViewName = (TextView) itemView.findViewById(R.id.textViewName);
 
         }
 
@@ -104,29 +71,13 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
         public void onClick(View view) {
 
 
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick - serverItems size: " + DrawerItemRecyclerViewAdapter.serverItems.size());
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick - actionItems size: " + DrawerItemRecyclerViewAdapter.actionItems.size());
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick - settingsItems size: " + DrawerItemRecyclerViewAdapter.settingsItems.size());
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick - labelItems size: " + DrawerItemRecyclerViewAdapter.labelItems.size());
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick - items size: " + DrawerItemRecyclerViewAdapter.items.size());
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - offSetPosition: " + (drawerOffset));
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - getLayoutPosition: " + getLayoutPosition());
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - positionInItems: " + positionInItems);
-
-
             TorrentDetailsItem recyclerItem;
 
 
-            // Get action position
-            actionPosition = getLayoutPosition() - drawerOffset;
-
-
+            // Get position
             int layoutPosition = getLayoutPosition();
 
-            recyclerItem = items.get(getLayoutPosition() - 1);
-
-            // Get Action
-//                Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Action => " + drawerItem.getAction());
+            recyclerItem = items.get(getLayoutPosition());
 
 
             // Disable all items
@@ -140,7 +91,7 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
             }
 
             // Mark new item as active
-//                
+//
 //                items.set(layoutPosition - 1, drawerItem);
 
 
@@ -398,7 +349,7 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
 
             items.set(0, recyclerItem);
 
-            drawerOffset = 1;
+//            drawerOffset = 1;
 
 
             // Load banner
@@ -442,7 +393,7 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
 //        Log.d("Debug", "DrawerItemRecyclerViewAdapter - Constructor - labelItems size: " + TorrentDetailsItemRecyclerViewAdapter.labelItems.size());
 //        Log.d("Debug", "DrawerItemRecyclerViewAdapter - Constructor - items size: " + TorrentDetailsItemRecyclerViewAdapter.items.size());
 
-        drawerOffset = 1;
+//        drawerOffset = 1;
 
         TorrentDetailsItem recyclerItem;
 
@@ -468,12 +419,12 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Analysing: " + item.name);
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Action is: " + item.getAction());
 
-
-            if (item.getType() == TYPE_SERVER || item.getType() == TYPE_SERVER_ACTIVE) {
-
-//                Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Removing: " + item.name);
-                iterator.remove();
-            }
+//
+//            if (item.getType() == TYPE_SERVER || item.getType() == TYPE_SERVER_ACTIVE) {
+//
+////                Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Removing: " + item.name);
+//                iterator.remove();
+//            }
 
 
         }
@@ -496,47 +447,18 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
 //        }
 
         //inflate your layout and pass it to view holder
-        if (viewType == TYPE_CATEGORY) {
-
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_category_row, parent, false); //Inflating the layout
-            ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
-            return vhItem; // Returning the created object
-
-        } else if (viewType == TYPE_LABEL_CATEGORY) {
-
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_category_row, parent, false); //Inflating the layout
-            ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
-            return vhItem; // Returning the created object
-
-
-        } else if (viewType == TYPE_FILE_ITEM) {
+        if (viewType == TYPE_FILE_ITEM) {
 
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.contentfile_row, parent, false); //Inflating the layout
             ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
 
             return vhItem; // Returning the created object
 
-        } else if (viewType == TYPE_SERVER || viewType == TYPE_LABEL) {
+        } else if (viewType == TYPE_TRACKER_ITEM) {
 
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_subitem_row, parent, false); //Inflating the layout
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tracker_row, parent, false); //Inflating the layout
             ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
-
             return vhItem; // Returning the created object
-
-        } else if (viewType == TYPE_SERVER_ACTIVE || viewType == TYPE_LABEL_ACTIVE) {
-
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_subitem_active_row, parent, false); //Inflating the layout
-            ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
-
-            return vhItem; // Returning the created object
-
-        } else if (viewType == TYPE_HEADER) {
-
-
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_header, parent, false); //Inflating the layout
-            ViewHolder vhHeader = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
-
-            return vhHeader; //returning the object created
 
         }
 
