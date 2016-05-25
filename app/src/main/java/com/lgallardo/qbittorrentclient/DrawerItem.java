@@ -8,7 +8,7 @@
  */
 package com.lgallardo.qbittorrentclient;
 
-public class ObjectDrawerItem {
+public class DrawerItem {
 
     public int icon;
     public String name;
@@ -18,7 +18,7 @@ public class ObjectDrawerItem {
 
 
     // Constructor
-    public ObjectDrawerItem(int icon, String name, int type, boolean active, String action) {
+    public DrawerItem(int icon, String name, int type, boolean active, String action) {
 
         this.icon = icon;
         this.name = name;

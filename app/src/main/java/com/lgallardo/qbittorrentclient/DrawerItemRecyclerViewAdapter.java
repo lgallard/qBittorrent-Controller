@@ -17,7 +17,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,13 +42,13 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
 
     // All items
-    public static ArrayList<ObjectDrawerItem> items;
+    public static ArrayList<DrawerItem> items;
 
     // SUb items
-    public static ArrayList<ObjectDrawerItem> serverItems;
-    public static ArrayList<ObjectDrawerItem> actionItems;
-    public static ArrayList<ObjectDrawerItem> settingsItems;
-    public static ArrayList<ObjectDrawerItem> labelItems;
+    public static ArrayList<DrawerItem> serverItems;
+    public static ArrayList<DrawerItem> actionItems;
+    public static ArrayList<DrawerItem> settingsItems;
+    public static ArrayList<DrawerItem> labelItems;
 
     public static int actionPosition = 0;
 
@@ -113,7 +112,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - positionInItems: " + positionInItems);
 
 
-            ObjectDrawerItem drawerItem;
+            DrawerItem drawerItem;
 
 
             // Check and toggle server category
@@ -148,7 +147,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                     // Insert all server items
                     for (int i = 0; i < serverItems.size(); i++) {
 
-                        ObjectDrawerItem item = serverItems.get(i);
+                        DrawerItem item = serverItems.get(i);
 
                         if (item.getType() == TYPE_SERVER || item.getType() == TYPE_SERVER_ACTIVE) {
                             items.add(i, serverItems.get(i));
@@ -187,7 +186,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                 int lastActionPosition = 1;
 
                 for (int i = 0; i < items.size(); i++) {
-                    ObjectDrawerItem item = items.get(i);
+                    DrawerItem item = items.get(i);
 
 
                     if ((drawerItem.getType() == TYPE_ITEM || drawerItem.getType() == TYPE_ITEM_ACTIVE) &&
@@ -239,7 +238,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
 
                         // Force first server
-                        ObjectDrawerItem item = items.get(1);
+                        DrawerItem item = items.get(1);
                         item.setActive(true);
                         items.set(1, item);
                         notifyItemChanged(1);
@@ -400,7 +399,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                 // Open Help
                 if (drawerItem.getAction().equals("openHelp")) {
 
-                    ObjectDrawerItem item = items.get(lastActionPosition);
+                    DrawerItem item = items.get(lastActionPosition);
                     item.setActive(true);
                     items.set(lastActionPosition, item);
 
@@ -435,7 +434,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                         // Insert all label items
                         for (int i = 0; i < labelItems.size(); i++) {
 
-                            ObjectDrawerItem item = labelItems.get(i);
+                            DrawerItem item = labelItems.get(i);
 
 
                             if (item.getType() == TYPE_LABEL || item.getType() == TYPE_LABEL_ACTIVE) {
@@ -491,7 +490,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
     }
 
 
-    DrawerItemRecyclerViewAdapter(Context context, MainActivity mainActivity, ArrayList<ObjectDrawerItem> serverItems, ArrayList<ObjectDrawerItem> actionItems, ArrayList<ObjectDrawerItem> settingsItems, ArrayList<ObjectDrawerItem> labelItems) {
+    DrawerItemRecyclerViewAdapter(Context context, MainActivity mainActivity, ArrayList<DrawerItem> serverItems, ArrayList<DrawerItem> actionItems, ArrayList<DrawerItem> settingsItems, ArrayList<DrawerItem> labelItems) {
 
         this.mainActivity = mainActivity;
         this.context = context;
@@ -504,7 +503,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         DrawerItemRecyclerViewAdapter.settingsItems = settingsItems;
         DrawerItemRecyclerViewAdapter.labelItems = labelItems;
 
-        DrawerItemRecyclerViewAdapter.items = new ArrayList<ObjectDrawerItem>();
+        DrawerItemRecyclerViewAdapter.items = new ArrayList<DrawerItem>();
 
         // Add items
         DrawerItemRecyclerViewAdapter.items.addAll(serverItems);
@@ -514,7 +513,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         if (labelItems != null) {
             DrawerItemRecyclerViewAdapter.items.addAll(labelItems);
         } else {
-            DrawerItemRecyclerViewAdapter.labelItems = new ArrayList<ObjectDrawerItem>();
+            DrawerItemRecyclerViewAdapter.labelItems = new ArrayList<DrawerItem>();
         }
 
 //        Log.d("Debug", "DrawerItemRecyclerViewAdapter - Constructor - serverItems size: " + DrawerItemRecyclerViewAdapter.serverItems.size());
@@ -525,7 +524,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
         drawerOffset = 1;
 
-        ObjectDrawerItem drawerItem;
+        DrawerItem drawerItem;
 
 //        // Add server items to array
 //        for (int i = 0; i < items.size(); i++) {
@@ -544,7 +543,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
         while (iterator.hasNext()) {
 
-            ObjectDrawerItem item = (ObjectDrawerItem) iterator.next();
+            DrawerItem item = (DrawerItem) iterator.next();
 
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Analysing: " + item.name);
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Action is: " + item.getAction());
@@ -569,7 +568,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
         while (iterator.hasNext()) {
 
-            ObjectDrawerItem item = (ObjectDrawerItem) iterator.next();
+            DrawerItem item = (DrawerItem) iterator.next();
 
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Analysing: " + item.name);
 
@@ -590,7 +589,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
         while (iterator.hasNext()) {
 
-            ObjectDrawerItem item = (ObjectDrawerItem) iterator.next();
+            DrawerItem item = (DrawerItem) iterator.next();
 
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - Analysing: " + item.name);
 
@@ -607,7 +606,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
     private void activeLastActionPosition(int lastActionPosition) {
 
-        ObjectDrawerItem item = items.get(lastActionPosition);
+        DrawerItem item = items.get(lastActionPosition);
         item.setActive(true);
         items.set(lastActionPosition, item);
 
@@ -673,14 +672,14 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         mainActivity.changeCurrentServer();
     }
 
-    public void refreshDrawer(ArrayList<ObjectDrawerItem> serverItems, ArrayList<ObjectDrawerItem> actionItems, ArrayList<ObjectDrawerItem> settingsItems, ArrayList<ObjectDrawerItem> labelItems) {
+    public void refreshDrawer(ArrayList<DrawerItem> serverItems, ArrayList<DrawerItem> actionItems, ArrayList<DrawerItem> settingsItems, ArrayList<DrawerItem> labelItems) {
 
         DrawerItemRecyclerViewAdapter.serverItems = serverItems;
         DrawerItemRecyclerViewAdapter.actionItems = actionItems;
         DrawerItemRecyclerViewAdapter.settingsItems = settingsItems;
 
 
-        DrawerItemRecyclerViewAdapter.items = new ArrayList<ObjectDrawerItem>();
+        DrawerItemRecyclerViewAdapter.items = new ArrayList<DrawerItem>();
 
         // Add items
         DrawerItemRecyclerViewAdapter.items.addAll(serverItems);
@@ -697,12 +696,12 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
     }
 
-    public void refreshDrawerServers(ArrayList<ObjectDrawerItem> serverItems) {
+    public void refreshDrawerServers(ArrayList<DrawerItem> serverItems) {
 
         DrawerItemRecyclerViewAdapter.serverItems = serverItems;
 
 
-        DrawerItemRecyclerViewAdapter.items = new ArrayList<ObjectDrawerItem>();
+        DrawerItemRecyclerViewAdapter.items = new ArrayList<DrawerItem>();
 
         // Add items
         DrawerItemRecyclerViewAdapter.items.addAll(serverItems);
@@ -717,12 +716,12 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
     }
 
-    public void refreshDrawerLabels(ArrayList<ObjectDrawerItem> labelItems) {
+    public void refreshDrawerLabels(ArrayList<DrawerItem> labelItems) {
 
         DrawerItemRecyclerViewAdapter.labelItems = labelItems;
 
 
-        DrawerItemRecyclerViewAdapter.items = new ArrayList<ObjectDrawerItem>();
+        DrawerItemRecyclerViewAdapter.items = new ArrayList<DrawerItem>();
 
         // Add items
         DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.serverItems);
@@ -817,7 +816,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
             // position by 1 and pass it to the holder while setting the text and image
 
 
-            ObjectDrawerItem item = items.get(position - 1);
+            DrawerItem item = items.get(position - 1);
 
             holder.imageViewIcon.setImageResource(item.icon);
             holder.textViewName.setText(item.name);
