@@ -40,11 +40,6 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     public static ArrayList<TorrentDetailsItem> fileItems;
     public static ArrayList<TorrentDetailsItem> trackerItems;
 
-    public static ArrayList<TorrentDetailsItem> serverItems;
-    public static ArrayList<TorrentDetailsItem> actionItems;
-    public static ArrayList<TorrentDetailsItem> settingsItems;
-    public static ArrayList<TorrentDetailsItem> labelItems;
-
     private static MainActivity mainActivity;
 
     private Context context;
