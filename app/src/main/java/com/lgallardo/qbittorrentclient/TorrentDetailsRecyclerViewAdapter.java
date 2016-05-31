@@ -15,6 +15,7 @@ package com.lgallardo.qbittorrentclient;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,286 +75,27 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
             TorrentDetailsItem recyclerItem;
 
 
-            // Get position
-            int layoutPosition = getLayoutPosition();
-
+            // Get item
             recyclerItem = items.get(getLayoutPosition());
-
-
-            // Disable all items
-
-            int lastActionPosition = 1;
-
-            for (int i = 0; i < items.size(); i++) {
-                TorrentDetailsItem item = items.get(i);
-
-                items.set(i, item);
-            }
-
-            // Mark new item as active
-//
-//                items.set(layoutPosition - 1, drawerItem);
 
 
             // Perform Action
 
-            // Change current server
+            // Set file priority
 
+            if (recyclerItem.getAction().equals("setFilePriority")) {
 
-            if (recyclerItem.getAction().equals("changeCurrentServer")) {
+                Log.d("Debug", "setFilePriority");
+                //notifyDataSetChanged();
 
-//                Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer ");
-
-
-                if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclient") && items.indexOf(recyclerItem) > 1) {
-
-//                        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - items.indexOf(drawerItem): " + items.indexOf(drawerItem));
-
-
-                    mainActivity.genericOkDialog(R.string.settings_qbittorrent_pro_title, R.string.settings_qbittorrent_pro_message);
-
-                    // Disable server selection
-                    items.set(layoutPosition - 1, recyclerItem);
-                    notifyItemChanged(layoutPosition);
-
-
-                    // Force first server
-                    TorrentDetailsItem item = items.get(1);
-                    items.set(1, item);
-                    notifyItemChanged(1);
-
-
-                } else {
-
-                    items.set(layoutPosition - 1, recyclerItem);
-                    notifyItemChanged(layoutPosition);
-
-
-                    int currentServerValue = serverItems.indexOf(recyclerItem);
-
-                    if (currentServerValue < 0) {
-                        currentServerValue = 0;
-                    }
-
-//                        Log.d("Debug", "DrawerItemRecyclerViewAdapter - changeCurrentServer - currentServerValue: " + currentServerValue);
-
-
-//                    mainActivity.refreshCurrent();
-
-
-                }
-                // Close drawer
-                mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
             }
 
+            // Add tracker
+            if (recyclerItem.getAction().equals("addTracker")) {
 
-//                // Refresh All
-//                if (drawerItem.getAction().equals("refreshAll")) {
-//
-//
-//                    items.set(layoutPosition - 1, drawerItem);
-//                    notifyItemChanged(layoutPosition);
-//                    mainActivity.refreshFromDrawerAction("all", drawerItem.name);
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//                }
-//
-//                // Refresh Downloading
-//                if (drawerItem.getAction().equals("refreshDownloading")) {
-//
-//
-//                    items.set(layoutPosition - 1, drawerItem);
-//                    notifyItemChanged(layoutPosition);
-//                    mainActivity.refreshFromDrawerAction("downloading", drawerItem.name);
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//                }
-//
-//                // Refresh Completed
-//                if (drawerItem.getAction().equals("refreshCompleted")) {
-//
-//
-//                    items.set(layoutPosition - 1, drawerItem);
-//                    notifyItemChanged(layoutPosition);
-//                    mainActivity.refreshFromDrawerAction("completed", drawerItem.name);
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//                }
-//
-//
-//                // Refresh Seeding
-//                if (drawerItem.getAction().equals("refreshSeeding")) {
-//
-//
-//                    items.set(layoutPosition - 1, drawerItem);
-//                    notifyItemChanged(layoutPosition);
-//                    mainActivity.refreshFromDrawerAction("seeding", drawerItem.name);
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//                }
-//                // Refresh Pause
-//                if (drawerItem.getAction().equals("refreshPaused")) {
-//
-//
-//                    items.set(layoutPosition - 1, drawerItem);
-//                    notifyItemChanged(layoutPosition);
-//                    mainActivity.refreshFromDrawerAction("pause", drawerItem.name);
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//                }
-//
-//
-//                // Refresh Active
-//                if (drawerItem.getAction().equals("refreshActive")) {
-//
-//
-//                    items.set(layoutPosition - 1, drawerItem);
-//                    notifyItemChanged(layoutPosition);
-//                    mainActivity.refreshFromDrawerAction("active", drawerItem.name);
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//                }
-//
-//
-//                // Refresh Inactive
-//                if (drawerItem.getAction().equals("refreshInactive")) {
-//
-//
-//                    items.set(layoutPosition - 1, drawerItem);
-//                    notifyItemChanged(layoutPosition);
-//                    mainActivity.refreshFromDrawerAction("inactive", drawerItem.name);
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//                }
-//
-//                // Open Settings
-//                if (drawerItem.getAction().equals("openSettings")) {
-//
-//                    // Seth last actio position
-//                    activeLastActionPosition(lastActionPosition);
-//
-//                    mainActivity.openSettings();
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//                }
-//
-//
-//                // Open Options
-//                if (drawerItem.getAction().equals("openOptions")) {
-//
-//                    // Seth last actio position
-//                    activeLastActionPosition(lastActionPosition);
-//
-//
-//                    mainActivity.getAndOpenOptions();
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//                }
-//
-//                // Get Pro
-//                if (drawerItem.getAction().equals("getPro")) {
-//
-//                    // Set the last action position
-//                    activeLastActionPosition(lastActionPosition);
-//
-//                    mainActivity.getPRO();
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//                }
-//
-//                // Open Help
-//                if (drawerItem.getAction().equals("openHelp")) {
-//
-//                    DrawerItem item = items.get(lastActionPosition);
-//                    item.setActive(true);
-//                    items.set(lastActionPosition, item);
-//
-//
-//                    mainActivity.openHelp();
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//                }
-//
-//                // Clicked on label category
-//                if (drawerItem.getAction().equals("labelCategory")) {
-//
-//                    if (drawerItem.isActive()) {
-//
-//
-//                        // Set as inactive
-//                        drawerItem.setActive(false);
-//                        items.set(getLayoutPosition() - 1, drawerItem);
-//
-//                        // Remove all label items
-//                        removeLabelItems();
-//
-//
-//                    } else {
-//
-//                        // Set as active
-//
-//                        items.set(getLayoutPosition() - 1, drawerItem);
-//
-//
-//                        // Insert all label items
-//                        for (int i = 0; i < labelItems.size(); i++) {
-//
-//                            DrawerItem item = labelItems.get(i);
-//
-//
-//                            if (item.getType() == TYPE_LABEL || item.getType() == TYPE_LABEL_ACTIVE) {
-//                                items.add(items.size(), item);
-//                                notifyItemInserted(items.size());
-//                            }
-//                        }
-//
-//                    }
-//
-//                    // Scroll drawer
-//                    mainActivity.mRecyclerView.scrollToPosition(items.size());
-//
-//                }
-//
-//                // Clicked on label
-//                if (drawerItem.getAction().equals("label")) {
-//
-//
-//                    if (drawerItem.name.equals(mainActivity.getResources().getString(R.string.drawer_label_all))) {
-//                        mainActivity.saveLastLabel(mainActivity.getResources().getString(R.string.drawer_label_all));
-//                    } else {
-//                        mainActivity.saveLastLabel(drawerItem.name);
-//                    }
-////                    Log.d("Debug", "label: " + drawerItem.name);
-//
-//                    mainActivity.refreshCurrent();
-//
-//                    // Close drawer
-//                    mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
-//
-//                }
-
-
-            // Toggle server category
-            recyclerItem = items.get(0);
-
-            items.set(0, recyclerItem);
-
-//            drawerOffset = 1;
-
-
-            // Load banner
-            mainActivity.loadBanner();
+                Log.d("Debug", "addTracker");
+                //notifyDataSetChanged();
+            }
 
 
         }
