@@ -14,6 +14,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,6 +59,14 @@ public class TorrentDetailsFragment extends Fragment {
     static ArrayList<ContentFile> contentFiles;
     static Tracker[] trackers;
     static String[] trackerNames;
+
+
+    // Recycler view for files and trackers
+    public static TorrentDetailsRecyclerViewAdapter rAdapter;
+    protected RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
+
+
 
 
     // Torrent variables
