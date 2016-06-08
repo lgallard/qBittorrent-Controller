@@ -99,10 +99,10 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     }
 
 
-    TorrentDetailsRecyclerViewAdapter(ArrayList<TorrentDetailsItem> fileItems, ArrayList<TorrentDetailsItem> trackerItems) {
+    TorrentDetailsRecyclerViewAdapter(Context context, ArrayList<TorrentDetailsItem> fileItems, ArrayList<TorrentDetailsItem> trackerItems) {
 
 //        this.mainActivity = mainActivity;
-//        this.context = context;
+        this.context = context;
 
 
         // All items

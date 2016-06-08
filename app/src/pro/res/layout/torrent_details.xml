@@ -6,13 +6,12 @@
   ~   http://www.gnu.org/licenses/lgpl.html
   ~
   -->
-<android.support.v4.widget.SwipeRefreshLayout
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/details_refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="wrap_content">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,8 +19,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="?windowBackground">
+            android:background="?windowBackground"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,10 +42,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
                 android:background="?dropShadowBackground"
                 android:elevation="5dp"
                 android:orientation="vertical">
@@ -145,9 +144,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
                 android:background="?dropShadowBackground"
                 android:elevation="5dp"
                 android:orientation="vertical">
@@ -389,8 +388,8 @@
                         android:id="@+id/torrentSequentialDownloadLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/torrent_details_torrent_sequential"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="center"
+                        android:text="@string/torrent_details_torrent_sequential" />
 
                 </LinearLayout>
 
@@ -413,18 +412,24 @@
                         android:id="@+id/torrentFirstLastPiecePrioLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/torrent_details_torrent_first_last_piece_first"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="center"
+                        android:text="@string/torrent_details_torrent_first_last_piece_first" />
                 </LinearLayout>
 
 
             </LinearLayout>
 
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/RecyclerViewFilesTrackers"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#111"></android.support.v7.widget.RecyclerView>
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+
+
+                android:background="?windowBackground"></android.support.v7.widget.RecyclerView>
 
             <LinearLayout
                 android:id="@+id/ContentFiles"
@@ -453,9 +458,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
                     android:background="?dropShadowBackground"
                     android:elevation="5dp"
                     android:orientation="vertical">
@@ -496,9 +501,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
                     android:background="?dropShadowBackground"
                     android:elevation="5dp"
                     android:orientation="vertical">
@@ -539,9 +544,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
                     android:background="?dropShadowBackground"
                     android:elevation="5dp"
                     android:orientation="vertical">
@@ -561,25 +566,25 @@
                 android:id="@+id/downloadedVsTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/eta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/uploadSpeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/DownloadSpeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </android.support.v4.widget.SwipeRefreshLayout>
