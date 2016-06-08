@@ -421,7 +421,7 @@
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/RecyclerView"
+                android:id="@+id/RecyclerViewFilesTrackers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#111"></android.support.v7.widget.RecyclerView>

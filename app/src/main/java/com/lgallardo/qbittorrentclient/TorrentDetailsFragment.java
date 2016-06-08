@@ -127,8 +127,9 @@ public class TorrentDetailsFragment extends Fragment {
         }
 
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.RecyclerViewFilesTrackers); // Assigning the RecyclerView Object to the xml View
         rAdapter = new TorrentDetailsRecyclerViewAdapter(new ArrayList<TorrentDetailsItem>(), new ArrayList<TorrentDetailsItem>());
+        rAdapter.notifyDataSetChanged();
 
 
         if (mRecyclerView == null) {
@@ -145,7 +146,7 @@ public class TorrentDetailsFragment extends Fragment {
 
         mRecyclerView.setAdapter(rAdapter);
 
-        mLayoutManager = new LinearLayoutManager(getActivity());                 // Creating a layout Manager
+        mLayoutManager = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
         mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
 
 

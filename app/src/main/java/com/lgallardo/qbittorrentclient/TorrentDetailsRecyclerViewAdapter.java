@@ -117,6 +117,7 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
         TorrentDetailsRecyclerViewAdapter.items.addAll(trackerItems);
 
 
+        Log.d("Debug", "TorrentDetailsRecyclerViewAdapter instantiated");
     }
 
 
@@ -127,6 +128,8 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
 
     @Override
     public TorrentDetailsRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        Log.d("Debug", "onCreateViewHolder invoked");
 
         //inflate your layout and pass it to view holder
         if (viewType == TYPE_FILE_ITEM) {
@@ -161,7 +164,10 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     @Override
     public int getItemCount() {
         // Return the number of items in the list (header + item actions)
-        return items.size() + 1;
+
+        Log.d("Debug", "getItemCount: " + items.size());
+
+        return items.size();
     }
 
 
