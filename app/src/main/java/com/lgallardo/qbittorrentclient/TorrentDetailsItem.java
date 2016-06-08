@@ -10,15 +10,34 @@ package com.lgallardo.qbittorrentclient;
 
 public class TorrentDetailsItem {
 
+    public static final int FILE = 0;
+    public static final int TRACKER = 1;
+
+    //ContentFile properties
+    private String name;
+    private String size;
+    private Double progress;
+    private int priority;
+
+    // Tracker Properties
+
     public String info;
+
+    // Item properties
     public int type;
     private String action;
 
 
     // Constructor
-    public TorrentDetailsItem(String info, int type, boolean active, String action) {
+    public TorrentDetailsItem(String name, String size, Double progress, int priority, String info, int type, String action) {
+
+        this.name = name;
+        this.size = size;
+        this.progress = progress;
+        this.priority = priority;
 
         this.info = info;
+
         this.type = type;
         this.action = action;
     }

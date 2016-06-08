@@ -14,6 +14,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ public class TorrentDetailsFragment extends Fragment {
     protected static final String TAG_DOWNLOAD_LIMIT = "dl_limit";
 
     // TODO: Delete files
-    static ArrayList<ContentFile> contentFiles;
+    protected static ArrayList<ContentFile> contentFiles;
     static Tracker[] trackers;
     static String[] trackerNames;
 
@@ -124,6 +125,17 @@ public class TorrentDetailsFragment extends Fragment {
         } else {
             rootView = inflater.inflate(R.layout.torrent_details_old, container, false);
         }
+
+
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
+        rAdapter = new TorrentDetailsRecyclerViewAdapter(new ArrayList<TorrentDetailsItem>(), new ArrayList<TorrentDetailsItem>());
+        rAdapter.notifyDataSetChanged();
+
+        mRecyclerView.setAdapter(rAdapter);
+
+        mLayoutManager = new LinearLayoutManager(getActivity());                 // Creating a layout Manager
+        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+
 
         // Get Refresh Listener
         refreshListener = (RefreshListener) getActivity();
@@ -351,8 +363,12 @@ public class TorrentDetailsFragment extends Fragment {
 
 
             // Get Content files in background
-            qBittorrentContentFile qcf = new qBittorrentContentFile();
-            qcf.execute(new View[]{rootView});
+//            qBittorrentContentFile qcf = new qBittorrentContentFile();
+//            qcf.execute(new View[]{rootView});
+
+            ContentFileTask cft = new ContentFileTask();
+            cft.execute(new String[]{hash});
+
 
             // Get trackers in background
             qBittorrentTrackers qt = new qBittorrentTrackers();
@@ -546,9 +562,12 @@ public class TorrentDetailsFragment extends Fragment {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.error, 0, 0, 0);
             }
 
-            // Get Content files in background
-            qBittorrentContentFile qcf = new qBittorrentContentFile();
-            qcf.execute(new View[]{rootView});
+//            // Get Content files in background
+//            qBittorrentContentFile qcf = new qBittorrentContentFile();
+//            qcf.execute(new View[]{rootView});
+
+            ContentFileTask cft = new ContentFileTask();
+            cft.execute(new String[]{hash});
 
             // Get trackers in background
             qBittorrentTrackers qt = new qBittorrentTrackers();

@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<TorrentDetailsRecyclerViewAdapter.ViewHolder> {
 
@@ -98,10 +99,10 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     }
 
 
-    TorrentDetailsRecyclerViewAdapter(Context context, MainActivity mainActivity, ArrayList<TorrentDetailsItem> fileItems, ArrayList<TorrentDetailsItem> trackerItems) {
+    TorrentDetailsRecyclerViewAdapter(ArrayList<TorrentDetailsItem> fileItems, ArrayList<TorrentDetailsItem> trackerItems) {
 
-        this.mainActivity = mainActivity;
-        this.context = context;
+//        this.mainActivity = mainActivity;
+//        this.context = context;
 
 
         // All items
@@ -184,6 +185,51 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
 
     private boolean isPositionHeader(int position) {
         return position == 0;
+    }
+
+    public void refreshContentFiles(ArrayList<TorrentDetailsItem> contentFiles) {
+
+        TorrentDetailsRecyclerViewAdapter.fileItems = contentFiles;
+
+        TorrentDetailsRecyclerViewAdapter.items = new ArrayList<TorrentDetailsItem>();
+
+        // Add items
+        TorrentDetailsRecyclerViewAdapter.items.addAll(TorrentDetailsRecyclerViewAdapter.fileItems);
+        TorrentDetailsRecyclerViewAdapter.items.addAll(TorrentDetailsRecyclerViewAdapter.trackerItems);
+
+        Log.d("Debug", "refreshContentFiles - contentFiles.size: " + contentFiles.size());
+        Log.d("Debug", "refreshContentFiles - items.size: " + items.size());
+
+        ListIterator iterator = items.listIterator();
+
+        while (iterator.hasNext()) {
+
+            TorrentDetailsItem item = (TorrentDetailsItem) iterator.next();
+
+            Log.d("Debug", "refreshContentFiles - TYPE: " + item.getType());
+
+
+        }
+
+
+        // Refresh
+        notifyDataSetChanged();
+
+    }
+
+    public void refreshTrackers(ArrayList<TorrentDetailsItem> trackers) {
+
+        TorrentDetailsRecyclerViewAdapter.trackerItems = trackers;
+
+        TorrentDetailsRecyclerViewAdapter.items = new ArrayList<TorrentDetailsItem>();
+
+        // Add items
+        TorrentDetailsRecyclerViewAdapter.items.addAll(TorrentDetailsRecyclerViewAdapter.fileItems);
+        TorrentDetailsRecyclerViewAdapter.items.addAll(TorrentDetailsRecyclerViewAdapter.trackerItems);
+
+        // Refresh
+        notifyDataSetChanged();
+
     }
 
 }

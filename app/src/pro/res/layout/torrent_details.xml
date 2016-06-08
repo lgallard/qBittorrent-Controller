@@ -420,6 +420,12 @@
 
             </LinearLayout>
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/RecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#111"></android.support.v7.widget.RecyclerView>
+
             <LinearLayout
                 android:id="@+id/ContentFiles"
                 android:layout_width="match_parent"
