@@ -56,8 +56,7 @@ public class TorrentDetailsFragment extends Fragment {
     protected static final String TAG_UPLOAD_LIMIT = "up_limit";
     protected static final String TAG_DOWNLOAD_LIMIT = "dl_limit";
 
-    // TODO: Delete files
-    protected static ArrayList<ContentFile> contentFiles;
+    // TODO: Delete trackers
     static Tracker[] trackers;
     static String[] trackerNames;
 
@@ -82,7 +81,6 @@ public class TorrentDetailsFragment extends Fragment {
     JSONObject json2;
 
     // Adapters
-    myFileAdapter fileAdapter;
 
     myTrackerAdapter trackerAdapter;
     myPropertyAdapter propertyAdapter;
@@ -128,7 +126,7 @@ public class TorrentDetailsFragment extends Fragment {
 
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.RecyclerViewFilesTrackers); // Assigning the RecyclerView Object to the xml View
-        rAdapter = new TorrentDetailsRecyclerViewAdapter(getActivity().getApplicationContext(), new ArrayList<TorrentDetailsItem>(), new ArrayList<TorrentDetailsItem>());
+        rAdapter = new TorrentDetailsRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<TorrentDetailsItem>(), new ArrayList<TorrentDetailsItem>());
         rAdapter.notifyDataSetChanged();
 
 
@@ -148,6 +146,8 @@ public class TorrentDetailsFragment extends Fragment {
 
         mLayoutManager = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
         mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+
+        registerForContextMenu(mRecyclerView);
 
 
         // Get Refresh Listener
@@ -714,121 +714,6 @@ public class TorrentDetailsFragment extends Fragment {
         this.torrent = torrent;
     }
 
-
-    // // Here is where the action happens
-    private class qBittorrentContentFile extends AsyncTask<View, View, View[]> {
-
-        String name, size;
-        Double progress;
-        int priority;
-
-        protected View[] doInBackground(View... rootViews) {
-
-            // Get torrent's files
-            if (MainActivity.qb_version.equals("2.x")) {
-                qbQueryString = "json";
-            }
-
-            if (MainActivity.qb_version.equals("3.1.x")) {
-                qbQueryString = "json";
-            }
-
-            if (MainActivity.qb_version.equals("3.2.x")) {
-                qbQueryString = "query";
-            }
-
-
-            url = qbQueryString + "/propertiesFiles/";
-
-            contentFiles = new ArrayList<ContentFile>();
-
-            try {
-
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port, MainActivity.keystore_path, MainActivity.keystore_password,
-                        MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
-
-                jParser.setCookie(MainActivity.cookie);
-
-                JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
-
-                if (jArray != null) {
-
-
-                    for (int i = 0; i < jArray.length(); i++) {
-
-                        JSONObject json = jArray.getJSONObject(i);
-
-                        name = json.getString(MainActivity.TAG_NAME);
-                        size = json.getString(MainActivity.TAG_SIZE).replace(",", ".");
-                        progress = json.getDouble(MainActivity.TAG_PROGRESS);
-                        priority = json.getInt(MainActivity.TAG_PRIORITY);
-
-                        if (MainActivity.qb_version.equals("3.2.x")) {
-                            size = Common.calculateSize(json.getString(MainActivity.TAG_SIZE)).replace(",", ".");
-                        }
-
-                        contentFiles.add(new ContentFile(name, size, progress, priority));
-
-
-                    }
-
-                }
-
-            } catch (Exception e) {
-
-                Log.e("TorrentFragment:", e.toString());
-
-            }
-
-            return rootViews;
-
-        }
-
-        @Override
-        protected void onPostExecute(View[] rootViews) {
-
-            try {
-
-                View rootView = rootViews[0];
-
-                fileAdapter = new myFileAdapter(getActivity(), contentFiles);
-
-
-                LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.files);
-                layout.removeAllViews();
-
-                for (int i = 0; i < fileAdapter.getCount(); i++) {
-                    final View item = fileAdapter.getView(i, null, null);
-
-                    item.setClickable(true);
-
-                    item.setId(i);
-
-                    item.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            fileContentRowPosition = v.getId();
-
-                            registerForContextMenu(v);
-                            getActivity().openContextMenu(v);
-
-                        }
-                    });
-
-
-                    layout.addView(item);
-                }
-
-
-            } catch (Exception e) {
-                Log.e("Debug", e.toString());
-
-            }
-
-        }
-
-    }
 
     // // Here is where the action happens
     private class qBittorrentTrackers extends AsyncTask<View, View, View[]> {

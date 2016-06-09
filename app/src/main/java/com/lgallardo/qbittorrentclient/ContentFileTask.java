@@ -34,6 +34,8 @@ public class ContentFileTask extends AsyncTask<String, Void, ArrayList<TorrentDe
     private ArrayList<TorrentDetailsItem> contentFiles;
     String hash;
 
+    static int MAX_CONTENT_FILES = 20;
+
     protected ArrayList<TorrentDetailsItem> doInBackground(String... params) {
 
         hash = params[0];
@@ -68,7 +70,7 @@ public class ContentFileTask extends AsyncTask<String, Void, ArrayList<TorrentDe
             if (jArray != null) {
 
 
-                for (int i = 0; i < jArray.length(); i++) {
+                for (int i = 0; i < MAX_CONTENT_FILES && i < jArray.length(); i++) {
 
                     JSONObject json = jArray.getJSONObject(i);
 

@@ -16,10 +16,12 @@ package com.lgallardo.qbittorrentclient;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -42,7 +44,6 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     public static ArrayList<TorrentDetailsItem> trackerItems;
 
     private static MainActivity mainActivity;
-
     private Context context;
 
 
@@ -51,13 +52,27 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        int Holderid;
+
+        TextView textViewFile;
+        TextView textViewInfo;
+        TextView textViewPriorityInfo;
+        TextView textViewPercentage;
+        ProgressBar progressBar;
+
+
 
 
         public ViewHolder(final View itemView, int ViewType) {                 // Creating ViewHolder Constructor with View and viewType As a parameter
             super(itemView);
 
-            Holderid = 0;
+            itemView.setClickable(true);
+            itemView.setOnClickListener(this);
+
+            textViewFile = (TextView) itemView.findViewById(R.id.file);
+            textViewInfo = (TextView) itemView.findViewById(R.id.info);
+            textViewPriorityInfo = (TextView) itemView.findViewById(R.id.priorityInfo);
+            textViewPercentage = (TextView) itemView.findViewById(R.id.percentage);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
 
         }
 
@@ -76,12 +91,19 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
 
 
             // Perform Action
+            Log.d("Debug", "onClicked invoked!");
 
             // Set file priority
 
             if (recyclerItem.getAction().equals("setFilePriority")) {
 
                 Log.d("Debug", "setFilePriority");
+
+                TorrentDetailsFragment.fileContentRowPosition = getAdapterPosition();
+
+
+                mainActivity.openContextMenu(itemView);
+
                 //notifyDataSetChanged();
 
             }
@@ -99,9 +121,9 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     }
 
 
-    TorrentDetailsRecyclerViewAdapter(Context context, ArrayList<TorrentDetailsItem> fileItems, ArrayList<TorrentDetailsItem> trackerItems) {
+    TorrentDetailsRecyclerViewAdapter(MainActivity mainActivity, Context context, ArrayList<TorrentDetailsItem> fileItems, ArrayList<TorrentDetailsItem> trackerItems) {
 
-//        this.mainActivity = mainActivity;
+        this.mainActivity = mainActivity;
         this.context = context;
 
 
@@ -156,6 +178,37 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     // which view type is being created 1 for item row
     @Override
     public void onBindViewHolder(TorrentDetailsRecyclerViewAdapter.ViewHolder holder, int position) {
+
+        TorrentDetailsItem item = items.get(position);
+
+
+        holder.textViewFile.setText(item.getName());
+        holder.textViewInfo.setText(item.getSize());
+        holder.textViewPriorityInfo.setText(getPriorityString(item.getPriority()));
+
+
+        // Set progress bar
+
+        int index = item.getProgressAsString().indexOf(".");
+
+        if (index == -1) {
+            index = item.getProgressAsString().indexOf(",");
+
+            if (index == -1) {
+                index = item.getProgressAsString().length();
+            }
+        }
+
+        String percentage = item.getProgressAsString().substring(0, index);
+
+        holder.progressBar.setProgress(Integer.parseInt(percentage));
+
+        holder.textViewPercentage.setText(percentage + "%");
+
+        // Uncomment for long click menu
+//        holder.itemView.setLongClickable(true);
+
+
 
     }
 
@@ -236,6 +289,34 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
         // Refresh
         notifyDataSetChanged();
 
+    }
+
+    public String getPriorityString(int priority) {
+
+        String priorityString = "";
+
+
+        switch (priority) {
+
+            case 0:
+                priorityString = context.getResources().getString(R.string.action_file_dont_download);
+                break;
+            case 1:
+                priorityString = context.getResources().getString(R.string.action_file_normal_priority);
+                break;
+            case 2:
+                priorityString = context.getResources().getString(R.string.action_file_high_priority);
+                break;
+            case 7:
+                priorityString = context.getResources().getString(R.string.action_file_maximum_priority);
+                break;
+            default:
+                priorityString = "";
+                break;
+
+        }
+
+        return priorityString;
     }
 
 }

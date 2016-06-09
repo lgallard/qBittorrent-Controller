@@ -815,8 +815,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-//        Log.d("Debug", "Item name: " + getResources().getResourceEntryName(item.getItemId()));
-//        Log.d("Debug", "Item position: " + TorrentDetailsFragment.fileContentRowPosition);
+        Log.d("Debug", "Item name: " + getResources().getResourceEntryName(item.getItemId()));
+
+        Log.d("Debug", "Item position: " + TorrentDetailsFragment.fileContentRowPosition);
 
 
         switch (item.getItemId()) {
@@ -1078,7 +1079,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         CustomLogger.saveReportMessage("Main", "Current Label: " + currentLabel);
 
 
-
     }
 
     public void emailReport() {
@@ -1280,7 +1280,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             }
                         });
 
-            }else{
+            } else {
 
                 // No explanation needed, request the permission.
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},

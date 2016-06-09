@@ -8,6 +8,8 @@
  */
 package com.lgallardo.qbittorrentclient;
 
+import android.content.Context;
+
 public class TorrentDetailsItem {
 
     public static final int FILE = 0;
@@ -42,6 +44,46 @@ public class TorrentDetailsItem {
         this.action = action;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public Double getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Double progress) {
+        this.progress = progress;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
     public int getType() {
         return type;
     }
@@ -61,4 +103,9 @@ public class TorrentDetailsItem {
     public void setAction(String action) {
         this.action = action;
     }
+
+    public String getProgressAsString() {
+        return String.format("%.2f", this.progress * 100) + "%";
+    }
+
 }
