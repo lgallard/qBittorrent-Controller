@@ -125,7 +125,7 @@ public class TorrentDetailsFragment extends Fragment {
         }
 
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.RecyclerViewFilesTrackers); // Assigning the RecyclerView Object to the xml View
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.RecyclerViewContentFiles); // Assigning the RecyclerView Object to the xml View
         rAdapter = new TorrentDetailsRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<TorrentDetailsItem>(), new ArrayList<TorrentDetailsItem>());
         rAdapter.notifyDataSetChanged();
 

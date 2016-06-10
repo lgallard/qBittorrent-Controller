@@ -316,7 +316,7 @@
                 android:layout_marginRight="10dp" android:background="?dropShadowBackground"
                 android:elevation="5dp">
 
-                <android.support.v7.widget.RecyclerView android:id="@+id/RecyclerViewFilesTrackers"
+                <android.support.v7.widget.RecyclerView android:id="@+id/RecyclerViewContentFiles"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginLeft="5dp"
@@ -326,48 +326,26 @@
 
             </FrameLayout>
 
-            <LinearLayout
-                android:id="@+id/TrackersInfo"
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp" android:text="@string/torrent_details_trackers"
+                android:textSize="18sp" android:textStyle="bold" />
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
+                android:layout_height="wrap_content" android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" android:background="?dropShadowBackground"
+                android:elevation="5dp">
 
-                <LinearLayout
+                <android.support.v7.widget.RecyclerView android:id="@+id/RecyclerViewTrackers"
+
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content" android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/torrent_details_trackers"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                </android.support.v7.widget.RecyclerView>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="?dropShadowBackground"
-                    android:elevation="5dp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/trackers"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:orientation="vertical"></LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
+            </FrameLayout>
 
             <LinearLayout
                 android:id="@+id/GeneralInfo"
