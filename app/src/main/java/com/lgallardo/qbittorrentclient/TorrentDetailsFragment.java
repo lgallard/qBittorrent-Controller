@@ -35,7 +35,6 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -63,6 +62,7 @@ public class TorrentDetailsFragment extends Fragment {
 
     // Recycler view for files and trackers
     public static TorrentDetailsRecyclerViewAdapter rAdapter;
+    public static TorrentDetailsRecyclerViewAdapter trackerAdapter;
     protected RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
 
@@ -82,7 +82,7 @@ public class TorrentDetailsFragment extends Fragment {
 
     // Adapters
 
-    myTrackerAdapter trackerAdapter;
+    //    myTrackerAdapter trackerAdapter;
     myPropertyAdapter propertyAdapter;
 
     private String qbQueryString = "query";
@@ -384,8 +384,11 @@ public class TorrentDetailsFragment extends Fragment {
 
 
             // Get trackers in background
-            qBittorrentTrackers qt = new qBittorrentTrackers();
-            qt.execute(new View[]{rootView});
+//            qBittorrentTrackers qt = new qBittorrentTrackers();
+//            qt.execute(new View[]{rootView});
+
+            TrackersTask tt = new TrackersTask();
+            cft.execute(new String[]{hash});
 
             // Get general info in background
             qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
@@ -576,15 +579,16 @@ public class TorrentDetailsFragment extends Fragment {
             }
 
 //            // Get Content files in background
-//            qBittorrentContentFile qcf = new qBittorrentContentFile();
-//            qcf.execute(new View[]{rootView});
-
             ContentFileTask cft = new ContentFileTask();
             cft.execute(new String[]{hash});
 
             // Get trackers in background
-            qBittorrentTrackers qt = new qBittorrentTrackers();
-            qt.execute(new View[]{rootView});
+//            qBittorrentTrackers qt = new qBittorrentTrackers();
+//            qt.execute(new View[]{rootView});
+
+            TrackersTask tt = new TrackersTask();
+            cft.execute(new String[]{hash});
+
 
             // Get General info in background
             qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
@@ -716,90 +720,90 @@ public class TorrentDetailsFragment extends Fragment {
 
 
     // // Here is where the action happens
-    private class qBittorrentTrackers extends AsyncTask<View, View, View[]> {
-
-        String url;
-
-        protected View[] doInBackground(View... rootViews) {
-            // Get torrent's trackers
-            if (MainActivity.qb_version.equals("2.x")) {
-                qbQueryString = "json";
-            }
-
-            if (MainActivity.qb_version.equals("3.1.x")) {
-                qbQueryString = "json";
-            }
-
-            if (MainActivity.qb_version.equals("3.2.x")) {
-                qbQueryString = "query";
-            }
-
-            url = qbQueryString + "/propertiesTrackers/";
-
-            trackers = null;
-            trackerNames = null;
-
-            try {
-
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port, MainActivity.keystore_path, MainActivity.keystore_password, MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
-
-                jParser.setCookie(MainActivity.cookie);
-
-                JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
-
-                if (jArray != null) {
-
-                    trackers = new Tracker[jArray.length()];
-                    TorrentDetailsFragment.trackerNames = new String[jArray.length()];
-
-                    for (int i = 0; i < jArray.length(); i++) {
-
-                        JSONObject json = jArray.getJSONObject(i);
-
-                        url = json.getString(MainActivity.TAG_URL);
-
-                        trackers[i] = new Tracker(url);
-                        trackerNames[i] = url;
-
-                    }
-
-                }
-
-            } catch (Exception e) {
-
-                Log.e("TorrentFragment:", e.toString());
-
-            }
-
-            return rootViews;
-
-        }
-
-        @Override
-        protected void onPostExecute(View[] rootViews) {
-
-            try {
-
-                View rootView = rootViews[0];
-
-                trackerAdapter = new myTrackerAdapter(getActivity(), trackerNames, trackers);
-
-                LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.trackers);
-                layout.removeAllViews();
-
-                for (int i = 0; i < trackerAdapter.getCount(); i++) {
-                    View item = trackerAdapter.getView(i, null, null);
-                    layout.addView(item);
-                }
-
-            } catch (Exception e) {
-                Log.e("Trackers", e.toString());
-
-            }
-
-        }
-
-    }
+//    private class qBittorrentTrackers extends AsyncTask<View, View, View[]> {
+//
+//        String url;
+//
+//        protected View[] doInBackground(View... rootViews) {
+//            // Get torrent's trackers
+//            if (MainActivity.qb_version.equals("2.x")) {
+//                qbQueryString = "json";
+//            }
+//
+//            if (MainActivity.qb_version.equals("3.1.x")) {
+//                qbQueryString = "json";
+//            }
+//
+//            if (MainActivity.qb_version.equals("3.2.x")) {
+//                qbQueryString = "query";
+//            }
+//
+//            url = qbQueryString + "/propertiesTrackers/";
+//
+//            trackers = null;
+//            trackerNames = null;
+//
+//            try {
+//
+//                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port, MainActivity.keystore_path, MainActivity.keystore_password, MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
+//
+//                jParser.setCookie(MainActivity.cookie);
+//
+//                JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
+//
+//                if (jArray != null) {
+//
+//                    trackers = new Tracker[jArray.length()];
+//                    TorrentDetailsFragment.trackerNames = new String[jArray.length()];
+//
+//                    for (int i = 0; i < jArray.length(); i++) {
+//
+//                        JSONObject json = jArray.getJSONObject(i);
+//
+//                        url = json.getString(MainActivity.TAG_URL);
+//
+//                        trackers[i] = new Tracker(url);
+//                        trackerNames[i] = url;
+//
+//                    }
+//
+//                }
+//
+//            } catch (Exception e) {
+//
+//                Log.e("TorrentFragment:", e.toString());
+//
+//            }
+//
+//            return rootViews;
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(View[] rootViews) {
+//
+//            try {
+//
+//                View rootView = rootViews[0];
+//
+//                trackerAdapter = new myTrackerAdapter(getActivity(), trackerNames, trackers);
+//
+//                LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.trackers);
+//                layout.removeAllViews();
+//
+//                for (int i = 0; i < trackerAdapter.getCount(); i++) {
+//                    View item = trackerAdapter.getView(i, null, null);
+//                    layout.addView(item);
+//                }
+//
+//            } catch (Exception e) {
+//                Log.e("Trackers", e.toString());
+//
+//            }
+//
+//        }
+//
+//    }
 
     // Here is where the action happens
     private class qBittorrentGeneralInfoTask extends AsyncTask<View, View, View[]> {
