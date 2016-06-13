@@ -64,8 +64,10 @@ public class TorrentDetailsFragment extends Fragment {
     public static TorrentDetailsRecyclerViewAdapter rAdapter;
     public static TorrentDetailsRecyclerViewAdapter trackerAdapter;
     protected RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
+    protected RecyclerView mRecyclerViewTrackers;
 
+    private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
+    private RecyclerView.LayoutManager mLayoutManagerTrackers;            // Declaring Layout Manager as a linear layout manager
 
 
 
@@ -129,25 +131,24 @@ public class TorrentDetailsFragment extends Fragment {
         rAdapter = new TorrentDetailsRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<TorrentDetailsItem>(), new ArrayList<TorrentDetailsItem>());
         rAdapter.notifyDataSetChanged();
 
-
-        if (mRecyclerView == null) {
-
-            Log.d("Debug", "mRecyclerView is null");
-        }
-
-        if (rAdapter == null) {
-            Log.d("Debug", "rAdapter is null");
-        }
+        mRecyclerViewTrackers = (RecyclerView) rootView.findViewById(R.id.RecyclerViewTrackers); // Assigning the RecyclerView Object to the xml View
+        trackerAdapter = new TorrentDetailsRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<TorrentDetailsItem>(), new ArrayList<TorrentDetailsItem>());
+        trackerAdapter.notifyDataSetChanged();
 
 
-        rAdapter.notifyDataSetChanged();
 
         mRecyclerView.setAdapter(rAdapter);
+        mRecyclerViewTrackers.setAdapter(trackerAdapter);
 
         mLayoutManager = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
-        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+        mLayoutManagerTrackers = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
 
+        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+        mRecyclerViewTrackers.setLayoutManager(mLayoutManagerTrackers);                 // Setting the layout Manager
+
+        // TODO: Check if this can be removed
         registerForContextMenu(mRecyclerView);
+        registerForContextMenu(mRecyclerViewTrackers);
 
 
         // Get Refresh Listener
