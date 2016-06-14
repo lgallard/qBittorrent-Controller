@@ -16,32 +16,24 @@ package com.lgallardo.qbittorrentclient;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ListIterator;
 
-public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<TorrentDetailsRecyclerViewAdapter.ViewHolder> {
+public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRecyclerViewAdapter.ViewHolder> {
 
     // Declaring Variable to Understand which View is being worked on
     // IF the view under inflation and population is header or Item
-    private static final int TYPE_FILE_ITEM = 0;
     private static final int TYPE_TRACKER_ITEM = 1;
 
 
     // All items
     public static ArrayList<TorrentDetailsItem> items;
-
-    // Subitems
-    public static ArrayList<TorrentDetailsItem> fileItems;
-    public static ArrayList<TorrentDetailsItem> trackerItems;
 
     private static MainActivity mainActivity;
     private Context context;
@@ -58,8 +50,6 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
         TextView textViewPriorityInfo;
         TextView textViewPercentage;
         ProgressBar progressBar;
-
-
 
 
         public ViewHolder(final View itemView, int ViewType) {                 // Creating ViewHolder Constructor with View and viewType As a parameter
@@ -121,25 +111,20 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     }
 
 
-    TorrentDetailsRecyclerViewAdapter(MainActivity mainActivity, Context context, ArrayList<TorrentDetailsItem> fileItems, ArrayList<TorrentDetailsItem> trackerItems) {
+    TrackersRecyclerViewAdapter(MainActivity mainActivity, Context context, ArrayList<TorrentDetailsItem> trackerItems) {
 
         this.mainActivity = mainActivity;
         this.context = context;
 
 
         // All items
-
-        TorrentDetailsRecyclerViewAdapter.fileItems = fileItems;
-        TorrentDetailsRecyclerViewAdapter.trackerItems = trackerItems;
-
-        TorrentDetailsRecyclerViewAdapter.items = new ArrayList<TorrentDetailsItem>();
+        TrackersRecyclerViewAdapter.items = new ArrayList<TorrentDetailsItem>();
 
         // Add items
-        TorrentDetailsRecyclerViewAdapter.items.addAll(fileItems);
-        TorrentDetailsRecyclerViewAdapter.items.addAll(trackerItems);
+        TrackersRecyclerViewAdapter.items.addAll(trackerItems);
 
 
-        Log.d("Debug", "TorrentDetailsRecyclerViewAdapter instantiated");
+        Log.d("Debug", "ContentFilesRecyclerViewAdapter instantiated");
     }
 
 
@@ -149,19 +134,12 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     // and pass it to the view holder
 
     @Override
-    public TorrentDetailsRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TrackersRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         Log.d("Debug", "onCreateViewHolder invoked");
 
         //inflate your layout and pass it to view holder
-        if (viewType == TYPE_FILE_ITEM) {
-
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.contentfile_row, parent, false); //Inflating the layout
-            ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
-
-            return vhItem; // Returning the created object
-
-        } else if (viewType == TYPE_TRACKER_ITEM) {
+        if (viewType == TYPE_TRACKER_ITEM) {
 
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tracker_row, parent, false); //Inflating the layout
             ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
@@ -177,37 +155,21 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
     // Tells us item at which position is being constructed to be displayed and the holder id of the holder object tell us
     // which view type is being created 1 for item row
     @Override
-    public void onBindViewHolder(TorrentDetailsRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(TrackersRecyclerViewAdapter.ViewHolder holder, int position) {
 
         TorrentDetailsItem item = items.get(position);
 
-
-        holder.textViewFile.setText(item.getName());
-        holder.textViewInfo.setText(item.getSize());
-        holder.textViewPriorityInfo.setText(getPriorityString(item.getPriority()));
+        Log.d("Debug", "onBindViewHolder - item.info: " + item.getInfo());
 
 
-        // Set progress bar
+        if (item.getType() == TorrentDetailsItem.TRACKER) {
 
-        int index = item.getProgressAsString().indexOf(".");
-
-        if (index == -1) {
-            index = item.getProgressAsString().indexOf(",");
-
-            if (index == -1) {
-                index = item.getProgressAsString().length();
-            }
+            holder.textViewInfo.setText(item.getInfo());
         }
 
-        String percentage = item.getProgressAsString().substring(0, index);
-
-        holder.progressBar.setProgress(Integer.parseInt(percentage));
-
-        holder.textViewPercentage.setText(percentage + "%");
 
         // Uncomment for long click menu
 //        holder.itemView.setLongClickable(true);
-
 
 
     }
@@ -231,14 +193,14 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
 //        Log.d("Debug", "DrawerItemRecyclerViewAdapter - items.size(): " + items.size());
 //        Log.d("Debug", "DrawerItemRecyclerViewAdapter - position: " + position);
 
-        if (items.get(position).getType() == TYPE_TRACKER_ITEM) {
-            Log.d("Debug", "TorrentDetailsRecyclerViewAdapter - TYPE_TRACKER_ITEM");
-            return TYPE_TRACKER_ITEM;
-        }
+//        if (items.get(position).getType() == TYPE_TRACKER_ITEM) {
+//            Log.d("Debug", "ContentFilesRecyclerViewAdapter - TYPE_TRACKER_ITEM");
+//            return TYPE_TRACKER_ITEM;
+//        }
 
         // Default
-        Log.d("Debug", "TorrentDetailsRecyclerViewAdapter - TYPE_FILE_ITEM");
-        return TYPE_FILE_ITEM;
+        Log.d("Debug", "ContentFilesRecyclerViewAdapter - TYPE_TRACKER_ITEM");
+        return TYPE_TRACKER_ITEM;
 
     }
 
@@ -246,77 +208,20 @@ public class TorrentDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Torr
         return position == 0;
     }
 
-    public void refreshContentFiles(ArrayList<TorrentDetailsItem> contentFiles) {
 
-        TorrentDetailsRecyclerViewAdapter.fileItems = contentFiles;
+    public void refreshTrackers(ArrayList<TorrentDetailsItem> trackerItems) {
 
-        TorrentDetailsRecyclerViewAdapter.items = new ArrayList<TorrentDetailsItem>();
+
+        TrackersRecyclerViewAdapter.items = new ArrayList<TorrentDetailsItem>();
 
         // Add items
-        TorrentDetailsRecyclerViewAdapter.items.addAll(TorrentDetailsRecyclerViewAdapter.fileItems);
-        TorrentDetailsRecyclerViewAdapter.items.addAll(TorrentDetailsRecyclerViewAdapter.trackerItems);
-
-        Log.d("Debug", "refreshContentFiles - contentFiles.size: " + contentFiles.size());
-        Log.d("Debug", "refreshContentFiles - items.size: " + items.size());
-
-        ListIterator iterator = items.listIterator();
-
-        while (iterator.hasNext()) {
-
-            TorrentDetailsItem item = (TorrentDetailsItem) iterator.next();
-
-            Log.d("Debug", "refreshContentFiles - TYPE: " + item.getType());
-
-
-        }
-
+//        TrackersRecyclerViewAdapter.items.addAll(TrackersRecyclerViewAdapter.fileItems);
+        TrackersRecyclerViewAdapter.items.addAll(trackerItems);
 
         // Refresh
         notifyDataSetChanged();
 
     }
 
-    public void refreshTrackers(ArrayList<TorrentDetailsItem> trackers) {
-
-        TorrentDetailsRecyclerViewAdapter.trackerItems = trackers;
-
-        TorrentDetailsRecyclerViewAdapter.items = new ArrayList<TorrentDetailsItem>();
-
-        // Add items
-        TorrentDetailsRecyclerViewAdapter.items.addAll(TorrentDetailsRecyclerViewAdapter.fileItems);
-        TorrentDetailsRecyclerViewAdapter.items.addAll(TorrentDetailsRecyclerViewAdapter.trackerItems);
-
-        // Refresh
-        notifyDataSetChanged();
-
-    }
-
-    public String getPriorityString(int priority) {
-
-        String priorityString = "";
-
-
-        switch (priority) {
-
-            case 0:
-                priorityString = context.getResources().getString(R.string.action_file_dont_download);
-                break;
-            case 1:
-                priorityString = context.getResources().getString(R.string.action_file_normal_priority);
-                break;
-            case 2:
-                priorityString = context.getResources().getString(R.string.action_file_high_priority);
-                break;
-            case 7:
-                priorityString = context.getResources().getString(R.string.action_file_maximum_priority);
-                break;
-            default:
-                priorityString = "";
-                break;
-
-        }
-
-        return priorityString;
-    }
 
 }

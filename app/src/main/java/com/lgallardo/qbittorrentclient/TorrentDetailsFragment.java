@@ -61,8 +61,8 @@ public class TorrentDetailsFragment extends Fragment {
 
 
     // Recycler view for files and trackers
-    public static TorrentDetailsRecyclerViewAdapter rAdapter;
-    public static TorrentDetailsRecyclerViewAdapter trackerAdapter;
+    public static ContentFilesRecyclerViewAdapter rAdapter;
+    public static TrackersRecyclerViewAdapter trackerAdapter;
     protected RecyclerView mRecyclerView;
     protected RecyclerView mRecyclerViewTrackers;
 
@@ -128,11 +128,11 @@ public class TorrentDetailsFragment extends Fragment {
 
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.RecyclerViewContentFiles); // Assigning the RecyclerView Object to the xml View
-        rAdapter = new TorrentDetailsRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<TorrentDetailsItem>(), new ArrayList<TorrentDetailsItem>());
+        rAdapter = new ContentFilesRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<TorrentDetailsItem>());
         rAdapter.notifyDataSetChanged();
 
         mRecyclerViewTrackers = (RecyclerView) rootView.findViewById(R.id.RecyclerViewTrackers); // Assigning the RecyclerView Object to the xml View
-        trackerAdapter = new TorrentDetailsRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<TorrentDetailsItem>(), new ArrayList<TorrentDetailsItem>());
+        trackerAdapter = new TrackersRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<TorrentDetailsItem>());
         trackerAdapter.notifyDataSetChanged();
 
 
@@ -389,7 +389,7 @@ public class TorrentDetailsFragment extends Fragment {
 //            qt.execute(new View[]{rootView});
 
             TrackersTask tt = new TrackersTask();
-            cft.execute(new String[]{hash});
+            tt.execute(new String[]{hash});
 
             // Get general info in background
             qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
@@ -1136,38 +1136,38 @@ public class TorrentDetailsFragment extends Fragment {
         }
     }
 
-    class myTrackerAdapter extends ArrayAdapter<String> {
-
-        private String[] trackersNames;
-        private Tracker[] trackers;
-        private Context context;
-
-        public myTrackerAdapter(Context context, String[] trackersNames, Tracker[] trackers) {
-            super(context, R.layout.tracker_row, R.id.tracker, trackersNames);
-
-            this.context = context;
-            this.trackersNames = trackersNames;
-            this.trackers = trackers;
-
-        }
-
-        @Override
-        public int getCount() {
-            return (trackersNames != null) ? trackersNames.length : 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            View row = super.getView(position, convertView, parent);
-
-            TextView tracker = (TextView) row.findViewById(R.id.tracker);
-
-            tracker.setText("" + trackers[position].getUrl());
-
-            return (row);
-        }
-    }
+//    class myTrackerAdapter extends ArrayAdapter<String> {
+//
+//        private String[] trackersNames;
+//        private Tracker[] trackers;
+//        private Context context;
+//
+//        public myTrackerAdapter(Context context, String[] trackersNames, Tracker[] trackers) {
+//            super(context, R.layout.tracker_row, R.id.info, trackersNames);
+//
+//            this.context = context;
+//            this.trackersNames = trackersNames;
+//            this.trackers = trackers;
+//
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return (trackersNames != null) ? trackersNames.length : 0;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//
+//            View row = super.getView(position, convertView, parent);
+//
+//            TextView tracker = (TextView) row.findViewById(R.id.info);
+//
+//            tracker.setText("" + trackers[position].getUrl());
+//
+//            return (row);
+//        }
+//    }
 
     /**
      * *

@@ -63,6 +63,7 @@ public class TrackersTask extends AsyncTask<String, Void, ArrayList<TorrentDetai
             jParser.setCookie(MainActivity.cookie);
 
             JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
+            Log.e("Debug", "TrackersTask - jArray ");
 
             if (jArray != null) {
 
@@ -74,6 +75,8 @@ public class TrackersTask extends AsyncTask<String, Void, ArrayList<TorrentDetai
 
                     url = json.getString(MainActivity.TAG_URL);
 
+                    Log.e("Debug", "TrackersTask - url: " + url);
+
                     // Add trackers
                     trackers.add(new TorrentDetailsItem(null, null, null, -1, url, TorrentDetailsItem.TRACKER, "addTracker"));
 
@@ -83,6 +86,7 @@ public class TrackersTask extends AsyncTask<String, Void, ArrayList<TorrentDetai
 
         } catch (Exception e) {
 
+            Log.e("Debug", "TrackersTask - error: ");
             Log.e("TorrentFragment:", e.toString());
 
         }
