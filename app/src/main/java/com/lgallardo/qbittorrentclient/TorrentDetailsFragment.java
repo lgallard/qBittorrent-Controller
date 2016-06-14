@@ -673,6 +673,7 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                 menu.findItem(R.id.action_sequential_download).setVisible(true);
                 menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
+                menu.findItem(R.id.action_add_tracker).setVisible(true);
                 menu.findItem(R.id.action_label_menu).setVisible(true);
                 menu.findItem(R.id.action_set_label).setVisible(true);
                 menu.findItem(R.id.action_delete_label).setVisible(true);
@@ -693,6 +694,7 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
                 menu.findItem(R.id.action_sequential_download).setVisible(false);
                 menu.findItem(R.id.action_toggle_alternative_rate).setVisible(false);
+                menu.findItem(R.id.action_add_tracker).setVisible(false);
                 menu.findItem(R.id.action_label_menu).setVisible(false);
                 menu.findItem(R.id.action_set_label).setVisible(false);
                 menu.findItem(R.id.action_delete_label).setVisible(false);

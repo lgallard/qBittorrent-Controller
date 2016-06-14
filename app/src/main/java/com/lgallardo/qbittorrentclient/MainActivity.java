@@ -803,11 +803,20 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
 
-//            Log.d("Debug", "Chosen: " + menuInfo.toString());
-//            Log.d("Debug", "Chosen: " + info.position);
+//        Log.d("Debug", "Chosen: " + menuInfo.toString());
+//        Log.d("Debug", "Chosen: " + info.position);
+
+//        Log.d("Debug", "View id: " + v.getId());
+//        Log.d("Debug", "View id: " + R.id.RecyclerViewTrackers);
 
 
-        getMenuInflater().inflate(R.menu.menu_file_contextual, menu);
+        if (v.getId() == R.id.RecyclerViewContentFiles) {
+
+            getMenuInflater().inflate(R.menu.menu_file_contextual, menu);
+        }
+
+
+
 //        }
     }
 
@@ -837,8 +846,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_file_maximum_priority:
 //                Log.d("Debug", "Maximum priority");
                 setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 7);
-
                 return true;
+
             default:
 //                Log.d("Debug", "default priority?");
                 return super.onOptionsItemSelected(item);
@@ -1738,6 +1747,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 saveReverseOrder(!reverse_order);
                 invalidateOptionsMenu();
                 swipeRefresh();
+                return true;
+            case R.id.action_add_tracker:
+
+                Log.d("Debug", "Adding tracker");
+
+//                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+//                    uploadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+//                }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

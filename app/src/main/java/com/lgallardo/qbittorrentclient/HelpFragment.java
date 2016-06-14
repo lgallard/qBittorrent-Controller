@@ -95,6 +95,10 @@ public class HelpFragment extends Fragment {
                 menu.findItem(R.id.action_priority_menu).setVisible(false);
             }
 
+			if (menu.findItem(R.id.action_add_tracker) != null) {
+				menu.findItem(R.id.action_add_tracker).setVisible(false);
+			}
+
 			if (menu.findItem(R.id.action_set_label) != null) {
 				menu.findItem(R.id.action_label_menu).setVisible(false);
 				menu.findItem(R.id.action_set_label).setVisible(false);

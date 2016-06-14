@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -137,6 +138,7 @@ public class ItemstFragment extends ListFragment {
                     if (MainActivity.qb_version.equals("3.2.x")) {
                         menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                         menu.findItem(R.id.action_sequential_download).setVisible(true);
+                        menu.findItem(R.id.action_add_tracker).setVisible(true);
                         menu.findItem(R.id.action_label_menu).setVisible(true);
                         menu.findItem(R.id.action_set_label).setVisible(true);
                         menu.findItem(R.id.action_delete_label).setVisible(true);
@@ -148,6 +150,7 @@ public class ItemstFragment extends ListFragment {
                     } else {
                         menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
                         menu.findItem(R.id.action_sequential_download).setVisible(false);
+                        menu.findItem(R.id.action_add_tracker).setVisible(false);
                         menu.findItem(R.id.action_label_menu).setVisible(false);
                         menu.findItem(R.id.action_set_label).setVisible(false);
                         menu.findItem(R.id.action_delete_label).setVisible(false);
@@ -662,6 +665,14 @@ public class ItemstFragment extends ListFragment {
 
             if (menu.findItem(R.id.action_priority_menu) != null) {
                 menu.findItem(R.id.action_priority_menu).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.action_add_tracker) != null) {
+                menu.findItem(R.id.action_add_tracker).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.action_add_tracker) != null) {
+                menu.findItem(R.id.action_add_tracker).setVisible(false);
             }
 
             if (menu.findItem(R.id.action_set_label) != null) {

@@ -101,13 +101,6 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
 
             }
 
-            // Add tracker
-            if (recyclerItem.getAction().equals("addTracker")) {
-
-                Log.d("Debug", "addTracker");
-                //notifyDataSetChanged();
-            }
-
 
         }
 

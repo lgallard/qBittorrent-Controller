@@ -165,6 +165,12 @@
         android:id="@+id/action_first_last_piece_prio"
         android:title="@string/torrent_details_first_last"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_add_tracker"
+        android:title="@string/action_add_tracker"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/action_label_menu"
         android:icon="@drawable/ic_action_increase_prio"

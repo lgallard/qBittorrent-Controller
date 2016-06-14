@@ -83,25 +83,13 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
             // Perform Action
             Log.d("Debug", "onClicked invoked!");
 
-            // Set file priority
-
-            if (recyclerItem.getAction().equals("setFilePriority")) {
-
-                Log.d("Debug", "setFilePriority");
-
-                TorrentDetailsFragment.fileContentRowPosition = getAdapterPosition();
-
-
-                mainActivity.openContextMenu(itemView);
-
-                //notifyDataSetChanged();
-
-            }
 
             // Add tracker
             if (recyclerItem.getAction().equals("addTracker")) {
 
                 Log.d("Debug", "addTracker");
+                mainActivity.openContextMenu(itemView);
+
                 //notifyDataSetChanged();
             }
 

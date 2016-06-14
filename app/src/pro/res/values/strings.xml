@@ -262,5 +262,5 @@
     <string name="action_delete_label">Delete label</string>
     <string name="torrentsApplyingChange">Applying change!</string>
     <string name="torrent_label_menu">Label...</string>
-
+    <string name="action_add_tracker">Add tracker</string>
 </resources>
