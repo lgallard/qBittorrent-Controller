@@ -22,23 +22,25 @@ import java.util.ArrayList;
  */
 
 // // Here is where the action happens
-public class GeneralInfoTask extends AsyncTask<String, Void, ArrayList<TorrentDetailsItem>> {
+public class GeneralInfoTask extends AsyncTask<String, Void, ArrayList<GeneralInfoItem>> {
 
     String name, size;
     Double progress;
     int priority;
     private String qbQueryString = "query";
     String url;
-    private ArrayList<TorrentDetailsItem> trackers;
 
     String hash;
+    JSONObject json2;
 
-    static int MAX_CONTENT_FILES = 20;
+    protected ArrayList<GeneralInfoItem> doInBackground(String... params) {
 
-    protected ArrayList<TorrentDetailsItem> doInBackground(String... params) {
 
         hash = params[0];
-        // Get torrent's trackers
+
+        GeneralInfoItem item;
+
+        // Get torrent's extra info
         if (MainActivity.qb_version.equals("2.x")) {
             qbQueryString = "json";
         }
@@ -51,58 +53,199 @@ public class GeneralInfoTask extends AsyncTask<String, Void, ArrayList<TorrentDe
             qbQueryString = "query";
         }
 
-        url = qbQueryString + "/propertiesTrackers/";
-
-        trackers = new ArrayList<TorrentDetailsItem>();
-
+        url = qbQueryString + "/propertiesGeneral/";
 
         try {
 
+//                Log.e("Debug", "qBittorrentGeneralInfoTask");
+
             JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port, MainActivity.keystore_path, MainActivity.keystore_password, MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
+
+//                if(jParser != null){
+//
+//                    Log.e("Debug", "jParser is not null");
+//
+//                }
 
             jParser.setCookie(MainActivity.cookie);
 
-            JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
-            Log.e("Debug", "TrackersTask - jArray ");
 
-            if (jArray != null) {
+//                Log.e("Debug", "jParser cookie set");
 
-                TorrentDetailsFragment.trackerNames = new String[jArray.length()];
 
-                for (int i = 0; i < jArray.length(); i++) {
+            json2 = jParser.getJSONFromUrl(url + hash);
 
-                    JSONObject json = jArray.getJSONObject(i);
+            if (json2 != null && json2.length() > 0) {
 
-                    url = json.getString(MainActivity.TAG_URL);
+//                    Log.e("Debug", "json2 not null");
 
-                    Log.e("Debug", "TrackersTask - url: " + url);
+                // Save path
+                item = TorrentDetailsFragment.generalInfoItems.get(0);
+                item.setValue(json2.getString(TorrentDetailsFragment.TAG_SAVE_PATH));
+                TorrentDetailsFragment.generalInfoItems.set(0, item);
 
-                    // Add trackers
-                    trackers.add(new TorrentDetailsItem(null, null, null, -1, url, TorrentDetailsItem.TRACKER, "addTracker"));
+//                    Log.e("Debug", "save path");
+
+                // Creation date
+                item = TorrentDetailsFragment.generalInfoItems.get(1);
+                item.setValue(json2.getString(TorrentDetailsFragment.TAG_CREATION_DATE));
+                TorrentDetailsFragment.generalInfoItems.set(1, item);
+
+//                    Log.e("Debug", "Creation date");
+
+                // Comment
+                item = TorrentDetailsFragment.generalInfoItems.get(2);
+                item.setValue(json2.getString(TorrentDetailsFragment.TAG_COMMENT));
+                TorrentDetailsFragment.generalInfoItems.set(2, item);
+
+//                    Log.e("Debug", "Comment");
+
+                // Total wasted
+                item = TorrentDetailsFragment.generalInfoItems.get(3);
+                item.setValue(json2.getString(TorrentDetailsFragment.TAG_TOTAL_WASTED));
+                TorrentDetailsFragment.generalInfoItems.set(3, item);
+
+//                    Log.e("Debug", "Total wasted");
+
+                // Total uploaded
+                item = TorrentDetailsFragment.generalInfoItems.get(4);
+                item.setValue(json2.getString(TorrentDetailsFragment.TAG_TOTAL_UPLOADED));
+                TorrentDetailsFragment.generalInfoItems.set(4, item);
+
+//                    Log.e("Debug", "Total uploaded");
+
+                // Total downloaded
+                item = TorrentDetailsFragment.generalInfoItems.get(5);
+                item.setValue(json2.getString(TorrentDetailsFragment.TAG_TOTAL_DOWNLOADED));
+                TorrentDetailsFragment.generalInfoItems.set(5, item);
+
+//                    Log.e("Debug", "Total downloaded");
+
+                // Time elapsed
+                item = TorrentDetailsFragment.generalInfoItems.get(6);
+                item.setValue(json2.getString(TorrentDetailsFragment.TAG_TIME_ELAPSED));
+                TorrentDetailsFragment.generalInfoItems.set(6, item);
+
+//                    Log.e("Debug", "Time elapsed");
+
+                // Number of connections
+                item = TorrentDetailsFragment.generalInfoItems.get(7);
+                item.setValue(json2.getString(TorrentDetailsFragment.TAG_NB_CONNECTIONS));
+                TorrentDetailsFragment.generalInfoItems.set(7, item);
+
+//                    Log.e("Debug", "Number of connections");
+
+                // Share ratio
+                item = TorrentDetailsFragment.generalInfoItems.get(8);
+                item.setValue(json2.getString(TorrentDetailsFragment.TAG_SHARE_RATIO));
+
+                // Format ratio
+                try {
+
+                    item.setValue(String.format("%.2f", Float.parseFloat(item.getValue())).replace(",", "."));
+
+                } catch (Exception e) {
+                }
+
+                TorrentDetailsFragment.generalInfoItems.set(8, item);
+
+
+//                    Log.e("Debug", "Share ratio");
+
+                // Upload limit
+                item = TorrentDetailsFragment.generalInfoItems.get(9);
+                item.setValue(json2.getString(TorrentDetailsFragment.TAG_UPLOAD_LIMIT));
+                TorrentDetailsFragment.generalInfoItems.set(9, item);
+
+//                    Log.e("Debug", "Upload limit");
+
+                // Download limit
+                item = TorrentDetailsFragment.generalInfoItems.get(10);
+                item.setValue(json2.getString(TorrentDetailsFragment.TAG_DOWNLOAD_LIMIT));
+                TorrentDetailsFragment.generalInfoItems.set(10, item);
+
+//                    Log.e("Debug", "Download limit");
+
+                if (MainActivity.qb_version.equals("3.2.x")) {
+
+                    // Creation date
+                    item = TorrentDetailsFragment.generalInfoItems.get(1);
+                    item.setValue(json2.getString(TorrentDetailsFragment.TAG_CREATION_DATE));
+                    TorrentDetailsFragment.generalInfoItems.set(1, item);
+
+                    // Total wasted
+                    item = TorrentDetailsFragment.generalInfoItems.get(3);
+                    item.setValue(Common.calculateSize(item.getValue()).replace(",", "."));
+                    TorrentDetailsFragment.generalInfoItems.set(3, item);
+
+                    // Total uploaded
+                    item = TorrentDetailsFragment.generalInfoItems.get(4);
+                    item.setValue(Common.calculateSize(item.getValue()).replace(",", "."));
+                    TorrentDetailsFragment.generalInfoItems.set(4, item);
+
+                    // Total downloaded
+                    item = TorrentDetailsFragment.generalInfoItems.get(5);
+                    item.setValue(Common.calculateSize(item.getValue()).replace(",", "."));
+                    TorrentDetailsFragment.generalInfoItems.set(5, item);
+
+                    // Time elapsed
+                    item = TorrentDetailsFragment.generalInfoItems.get(6);
+                    item.setValue(Common.secondsToEta(item.getValue()).replace(",", "."));
+                    TorrentDetailsFragment.generalInfoItems.set(6, item);
+
+                    // Upload limit
+                    item = TorrentDetailsFragment.generalInfoItems.get(9);
+
+                    if (!item.getValue().equals("-1")) {
+
+                        item.setValue(Common.calculateSize(item.getValue()) + "/s");
+
+                    } else {
+                        item.setValue("∞");
+                    }
+
+                    TorrentDetailsFragment.generalInfoItems.set(9, item);
+
+
+                    // Download limit
+                    item = TorrentDetailsFragment.generalInfoItems.get(10);
+
+                    if (!item.getValue().equals("-1")) {
+
+                        item.setValue(Common.calculateSize(item.getValue()) + "/s");
+
+                    } else {
+                        item.setValue("∞");
+                    }
+
+                    TorrentDetailsFragment.generalInfoItems.set(10, item);
 
                 }
+
+//                    Log.e("Debug", "FIN");
+
+
 
             }
 
         } catch (Exception e) {
 
-            Log.e("Debug", "TrackersTask - error: ");
-            Log.e("TorrentFragment:", e.toString());
+            Log.e("Debug", "GeneralInfoTask: " + e.toString());
 
         }
 
 
-        return trackers;
+        return TorrentDetailsFragment.generalInfoItems;
 
     }
 
     @Override
-    protected void onPostExecute(ArrayList<TorrentDetailsItem> trackers) {
+    protected void onPostExecute(ArrayList<GeneralInfoItem> items) {
 
-        Log.d("Debug", "onPostExecute");
-        Log.d("Debug", "onPostExecute - contentFiles.size: " + trackers.size());
+//        Log.d("Debug", "onPostExecute");
+//        Log.d("Debug", "onPostExecute - GeneralInfo.size: " + items.size());
 
-        TorrentDetailsFragment.trackerAdapter.refreshTrackers(trackers);
+        TorrentDetailsFragment.generalInfoAdapter.refreshGeneralInfo(items);
 
 
     }

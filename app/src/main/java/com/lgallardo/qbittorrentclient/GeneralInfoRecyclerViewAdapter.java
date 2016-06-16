@@ -19,21 +19,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 
-public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRecyclerViewAdapter.ViewHolder> {
+public class GeneralInfoRecyclerViewAdapter extends RecyclerView.Adapter<GeneralInfoRecyclerViewAdapter.ViewHolder> {
 
     // Declaring Variable to Understand which View is being worked on
     // IF the view under inflation and population is header or Item
-    private static final int TYPE_TRACKER_ITEM = 1;
+    private static final int TYPE_GENERALINFO_ITEM = 2;
 
 
     // All items
-    public static ArrayList<TorrentDetailsItem> items;
+    public static ArrayList<GeneralInfoItem> items;
 
     private static MainActivity mainActivity;
     private Context context;
@@ -45,11 +43,8 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView textViewFile;
-        TextView textViewInfo;
-        TextView textViewPriorityInfo;
-        TextView textViewPercentage;
-        ProgressBar progressBar;
+        TextView textViewLabel;
+        TextView textViewValue;
 
 
         public ViewHolder(final View itemView, int ViewType) {                 // Creating ViewHolder Constructor with View and viewType As a parameter
@@ -58,11 +53,8 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
 
-            textViewFile = (TextView) itemView.findViewById(R.id.file);
-            textViewInfo = (TextView) itemView.findViewById(R.id.info);
-            textViewPriorityInfo = (TextView) itemView.findViewById(R.id.priorityInfo);
-            textViewPercentage = (TextView) itemView.findViewById(R.id.percentage);
-            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
+            textViewLabel = (TextView) itemView.findViewById(R.id.label);
+            textViewValue = (TextView) itemView.findViewById(R.id.value);
 
         }
 
@@ -73,7 +65,7 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
         public void onClick(View view) {
 
 
-            TorrentDetailsItem recyclerItem;
+            GeneralInfoItem recyclerItem;
 
 
             // Get item
@@ -85,9 +77,9 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
 
 
             // Add tracker
-            if (recyclerItem.getAction().equals("addTracker")) {
+            if (recyclerItem.getAction().equals("generalInfo")) {
 
-//                Log.d("Debug", "addTracker");
+//                Log.d("Debug", "generalInfo");
 //                mainActivity.openContextMenu(itemView);
 
                 //notifyDataSetChanged();
@@ -99,20 +91,20 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
     }
 
 
-    TrackersRecyclerViewAdapter(MainActivity mainActivity, Context context, ArrayList<TorrentDetailsItem> trackerItems) {
+    GeneralInfoRecyclerViewAdapter(MainActivity mainActivity, Context context, ArrayList<GeneralInfoItem> generalInfoItems) {
 
         this.mainActivity = mainActivity;
         this.context = context;
 
 
         // All items
-        TrackersRecyclerViewAdapter.items = new ArrayList<TorrentDetailsItem>();
+        GeneralInfoRecyclerViewAdapter.items = new ArrayList<GeneralInfoItem>();
 
         // Add items
-        TrackersRecyclerViewAdapter.items.addAll(trackerItems);
+        GeneralInfoRecyclerViewAdapter.items.addAll(generalInfoItems);
 
 
-//        Log.d("Debug", "TrackersRecyclerViewAdapter instantiated");
+//        Log.d("Debug", "GeneralInfoRecyclerViewAdapter instantiated");
     }
 
 
@@ -122,14 +114,14 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
     // and pass it to the view holder
 
     @Override
-    public TrackersRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GeneralInfoRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
 //        Log.d("Debug", "onCreateViewHolder invoked");
 
         //inflate your layout and pass it to view holder
-        if (viewType == TYPE_TRACKER_ITEM) {
+        if (viewType == TYPE_GENERALINFO_ITEM) {
 
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tracker_row, parent, false); //Inflating the layout
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.generalinfo_row, parent, false); //Inflating the layout
             ViewHolder vhItem = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view
             return vhItem; // Returning the created object
 
@@ -143,16 +135,18 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
     // Tells us item at which position is being constructed to be displayed and the holder id of the holder object tell us
     // which view type is being created 1 for item row
     @Override
-    public void onBindViewHolder(TrackersRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(GeneralInfoRecyclerViewAdapter.ViewHolder holder, int position) {
 
-        TorrentDetailsItem item = items.get(position);
+        GeneralInfoItem item = items.get(position);
 
-//        Log.d("Debug", "onBindViewHolder - item.info: " + item.getInfo());
+//        Log.d("Debug", "onBindViewHolder - item.label: " + item.getLabel());
+//        Log.d("Debug", "onBindViewHolder - item.value: " + item.getValue());
 
 
-        if (item.getType() == TorrentDetailsItem.TRACKER) {
+        if (item.getType() == GeneralInfoItem.GENERALINFO) {
 
-            holder.textViewInfo.setText(item.getInfo());
+            holder.textViewLabel.setText(item.getLabel());
+            holder.textViewValue.setText(item.getValue());
         }
 
 
@@ -187,8 +181,8 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
 //        }
 
         // Default
-//        Log.d("Debug", "TrackersRecyclerViewAdapter - TYPE_TRACKER_ITEM");
-        return TYPE_TRACKER_ITEM;
+//        Log.d("Debug", "GeneralInfoRecyclerViewAdapter - TYPE_TRACKER_ITEM");
+        return TYPE_GENERALINFO_ITEM;
 
     }
 
@@ -197,14 +191,14 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
     }
 
 
-    public void refreshTrackers(ArrayList<TorrentDetailsItem> trackerItems) {
+    public void refreshGeneralInfo(ArrayList<GeneralInfoItem> generalInfoItems) {
 
 
-        TrackersRecyclerViewAdapter.items = new ArrayList<TorrentDetailsItem>();
+        GeneralInfoRecyclerViewAdapter.items = new ArrayList<GeneralInfoItem>();
 
         // Add items
 //        TrackersRecyclerViewAdapter.items.addAll(TrackersRecyclerViewAdapter.fileItems);
-        TrackersRecyclerViewAdapter.items.addAll(trackerItems);
+        GeneralInfoRecyclerViewAdapter.items.addAll(generalInfoItems);
 
         // Refresh
         notifyDataSetChanged();

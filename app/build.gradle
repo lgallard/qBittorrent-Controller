@@ -90,7 +90,6 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient-android', version: '4.3.5.1'
     compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.2'
     compile 'com.google.android.gms:play-services:7.3.0'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
 
 //     nbsp-team/MaterialFilePicker
     dependencies {

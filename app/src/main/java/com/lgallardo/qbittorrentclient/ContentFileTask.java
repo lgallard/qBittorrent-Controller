@@ -98,7 +98,7 @@ public class ContentFileTask extends AsyncTask<String, Void, ArrayList<TorrentDe
 
         }
 
-        Log.d("Debug", "contentFiles.size: " + contentFiles.size());
+//        Log.d("Debug", "contentFiles.size: " + contentFiles.size());
 
         return contentFiles;
 
@@ -107,8 +107,8 @@ public class ContentFileTask extends AsyncTask<String, Void, ArrayList<TorrentDe
     @Override
     protected void onPostExecute(ArrayList<TorrentDetailsItem> contentFiles) {
 
-        Log.d("Debug", "onPostExecute");
-        Log.d("Debug", "onPostExecute - contentFiles.size: " + contentFiles.size());
+//        Log.d("Debug", "onPostExecute");
+//        Log.d("Debug", "onPostExecute - contentFiles.size: " + contentFiles.size());
 
         TorrentDetailsFragment.rAdapter.refreshContentFiles(contentFiles);
 

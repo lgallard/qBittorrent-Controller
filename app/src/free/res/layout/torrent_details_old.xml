@@ -339,49 +339,24 @@
 
             </FrameLayout>
 
-            <LinearLayout
-                android:id="@+id/GeneralInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp" android:text="@string/torrent_details_general_info"
+                android:textSize="18sp" android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="vertical">
+            <FrameLayout
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+                android:background="?dropShadowBackground" android:elevation="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/torrent_details_general_info"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                <android.support.v7.widget.RecyclerView android:id="@+id/RecyclerViewGeneralInfo"
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:background="?dropShadowBackground"
-                    android:elevation="5dp"
-                    android:orientation="vertical">
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp" android:layout_marginRight="5dp">
 
-                    <LinearLayout
-                        android:id="@+id/lines"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:orientation="vertical"></LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
+                </android.support.v7.widget.RecyclerView>
+
+            </FrameLayout>
 
             <!-- Hidden fields -->
             <TextView

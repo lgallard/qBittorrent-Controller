@@ -58,17 +58,20 @@ public class TorrentDetailsFragment extends Fragment {
     // TODO: Delete trackers
     static Tracker[] trackers;
     static String[] trackerNames;
+    static ArrayList<GeneralInfoItem> generalInfoItems;
 
 
     // Recycler view for files and trackers
     public static ContentFilesRecyclerViewAdapter rAdapter;
     public static TrackersRecyclerViewAdapter trackerAdapter;
+    public static GeneralInfoRecyclerViewAdapter generalInfoAdapter;
     protected RecyclerView mRecyclerView;
     protected RecyclerView mRecyclerViewTrackers;
+    protected RecyclerView mRecyclerViewGeneralInfo;
 
     private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
     private RecyclerView.LayoutManager mLayoutManagerTrackers;            // Declaring Layout Manager as a linear layout manager
-
+    private RecyclerView.LayoutManager mLayoutManagerGeneralInfo;            // Declaring Layout Manager as a linear layout manager
 
 
     // Torrent variables
@@ -81,11 +84,6 @@ public class TorrentDetailsFragment extends Fragment {
     String url;
     int position;
     JSONObject json2;
-
-    // Adapters
-
-    //    myTrackerAdapter trackerAdapter;
-    myPropertyAdapter propertyAdapter;
 
     private String qbQueryString = "query";
     private Torrent torrent;
@@ -135,20 +133,28 @@ public class TorrentDetailsFragment extends Fragment {
         trackerAdapter = new TrackersRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<TorrentDetailsItem>());
         trackerAdapter.notifyDataSetChanged();
 
+        mRecyclerViewGeneralInfo = (RecyclerView) rootView.findViewById(R.id.RecyclerViewGeneralInfo); // Assigning the RecyclerView Object to the xml View
+        generalInfoAdapter = new GeneralInfoRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<GeneralInfoItem>());
+        generalInfoAdapter.notifyDataSetChanged();
 
 
         mRecyclerView.setAdapter(rAdapter);
         mRecyclerViewTrackers.setAdapter(trackerAdapter);
+        mRecyclerViewGeneralInfo.setAdapter(generalInfoAdapter);
 
         mLayoutManager = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
         mLayoutManagerTrackers = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
+        mLayoutManagerGeneralInfo = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
 
         mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
         mRecyclerViewTrackers.setLayoutManager(mLayoutManagerTrackers);                 // Setting the layout Manager
+        mRecyclerViewGeneralInfo.setLayoutManager(mLayoutManagerGeneralInfo);                 // Setting the layout Manager
 
         // TODO: Check if this can be removed
         registerForContextMenu(mRecyclerView);
         registerForContextMenu(mRecyclerViewTrackers);
+        registerForContextMenu(mRecyclerViewGeneralInfo);
+
 
 
         // Get Refresh Listener
@@ -391,9 +397,28 @@ public class TorrentDetailsFragment extends Fragment {
             TrackersTask tt = new TrackersTask();
             tt.execute(new String[]{hash});
 
+            // Get General info labels
+            generalInfoItems = new ArrayList<GeneralInfoItem>();
+
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_save_path), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_created_date), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_comment), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_total_wasted), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_total_uploaded), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_total_downloaded), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_time_elapsed), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_num_connections), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_share_ratio), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_upload_rate_limit), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_download_rate_limit), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+
             // Get general info in background
-            qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
-            qgit.execute(new View[]{rootView});
+//            qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
+//            qgit.execute(new View[]{rootView});
+
+            GeneralInfoTask git = new GeneralInfoTask();
+            git.execute(new String[]{hash});
+
 
         } catch (Exception e) {
             Log.e("Debug", "TorrentDetailsFragment - onCreateView: " + e.toString());
@@ -590,10 +615,28 @@ public class TorrentDetailsFragment extends Fragment {
             TrackersTask tt = new TrackersTask();
             cft.execute(new String[]{hash});
 
+            // Get General info labels
+            generalInfoItems = new ArrayList<GeneralInfoItem>();
+
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_save_path), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_created_date), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_comment), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_total_wasted), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_total_uploaded), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_total_downloaded), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_time_elapsed), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_num_connections), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_share_ratio), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_upload_rate_limit), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+            generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_download_rate_limit), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
+
+
 
             // Get General info in background
-            qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
-            qgit.execute(new View[]{rootView});
+//            qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
+//            qgit.execute(new View[]{rootView});
+            GeneralInfoTask git = new GeneralInfoTask();
+            git.execute(new String[]{hash});
 
         } catch (Exception e) {
 
@@ -667,7 +710,7 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_search).setVisible(true);
             }
 
-            Log.d("Debug", "qb_version: " + MainActivity.qb_version);
+//            Log.d("Debug", "qb_version: " + MainActivity.qb_version);
 
             if (MainActivity.qb_version.equals("3.2.x")) {
                 menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
@@ -721,455 +764,6 @@ public class TorrentDetailsFragment extends Fragment {
         this.torrent = torrent;
     }
 
-
-    // // Here is where the action happens
-//    private class qBittorrentTrackers extends AsyncTask<View, View, View[]> {
-//
-//        String url;
-//
-//        protected View[] doInBackground(View... rootViews) {
-//            // Get torrent's trackers
-//            if (MainActivity.qb_version.equals("2.x")) {
-//                qbQueryString = "json";
-//            }
-//
-//            if (MainActivity.qb_version.equals("3.1.x")) {
-//                qbQueryString = "json";
-//            }
-//
-//            if (MainActivity.qb_version.equals("3.2.x")) {
-//                qbQueryString = "query";
-//            }
-//
-//            url = qbQueryString + "/propertiesTrackers/";
-//
-//            trackers = null;
-//            trackerNames = null;
-//
-//            try {
-//
-//                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port, MainActivity.keystore_path, MainActivity.keystore_password, MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
-//
-//                jParser.setCookie(MainActivity.cookie);
-//
-//                JSONArray jArray = jParser.getJSONArrayFromUrl(url + hash);
-//
-//                if (jArray != null) {
-//
-//                    trackers = new Tracker[jArray.length()];
-//                    TorrentDetailsFragment.trackerNames = new String[jArray.length()];
-//
-//                    for (int i = 0; i < jArray.length(); i++) {
-//
-//                        JSONObject json = jArray.getJSONObject(i);
-//
-//                        url = json.getString(MainActivity.TAG_URL);
-//
-//                        trackers[i] = new Tracker(url);
-//                        trackerNames[i] = url;
-//
-//                    }
-//
-//                }
-//
-//            } catch (Exception e) {
-//
-//                Log.e("TorrentFragment:", e.toString());
-//
-//            }
-//
-//            return rootViews;
-//
-//        }
-//
-//        @Override
-//        protected void onPostExecute(View[] rootViews) {
-//
-//            try {
-//
-//                View rootView = rootViews[0];
-//
-//                trackerAdapter = new myTrackerAdapter(getActivity(), trackerNames, trackers);
-//
-//                LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.trackers);
-//                layout.removeAllViews();
-//
-//                for (int i = 0; i < trackerAdapter.getCount(); i++) {
-//                    View item = trackerAdapter.getView(i, null, null);
-//                    layout.addView(item);
-//                }
-//
-//            } catch (Exception e) {
-//                Log.e("Trackers", e.toString());
-//
-//            }
-//
-//        }
-//
-//    }
-
-    // Here is where the action happens
-    private class qBittorrentGeneralInfoTask extends AsyncTask<View, View, View[]> {
-
-        String[] labels;
-        String[] values;
-
-        protected View[] doInBackground(View... rootViews) {
-            // Get torrent's extra info
-            if (MainActivity.qb_version.equals("2.x")) {
-                qbQueryString = "json";
-            }
-
-            if (MainActivity.qb_version.equals("3.1.x")) {
-                qbQueryString = "json";
-            }
-
-            if (MainActivity.qb_version.equals("3.2.x")) {
-                qbQueryString = "query";
-            }
-
-            url = qbQueryString + "/propertiesGeneral/";
-
-            try {
-
-//                Log.e("Debug", "qBittorrentGeneralInfoTask");
-
-                JSONParser jParser = new JSONParser(MainActivity.hostname, MainActivity.subfolder, MainActivity.protocol, MainActivity.port, MainActivity.keystore_path, MainActivity.keystore_password, MainActivity.username, MainActivity.password, MainActivity.connection_timeout, MainActivity.data_timeout);
-
-//                if(jParser != null){
-//
-//                    Log.e("Debug", "jParser is not null");
-//
-//                }
-
-                jParser.setCookie(MainActivity.cookie);
-
-
-//                Log.e("Debug", "jParser cookie set");
-
-
-                json2 = jParser.getJSONFromUrl(url + hash);
-
-                if (json2 != null && json2.length() > 0) {
-
-//                    Log.e("Debug", "json2 not null");
-
-                    labels = new String[11];
-                    values = new String[11];
-
-                    // Save path
-                    labels[0] = getString(R.string.torrent_details_save_path);
-                    values[0] = json2.getString(TAG_SAVE_PATH);
-
-//                    Log.e("Debug", "save path");
-
-                    // Creation date
-                    labels[1] = getString(R.string.torrent_details_created_date);
-                    values[1] = json2.getString(TAG_CREATION_DATE);
-
-//                    Log.e("Debug", "Creation date");
-
-                    // Comment
-                    labels[2] = getString(R.string.torrent_details_comment);
-                    values[2] = json2.getString(TAG_COMMENT);
-
-//                    Log.e("Debug", "Comment");
-
-                    // Total wasted
-                    labels[3] = getString(R.string.torrent_details_total_wasted);
-                    values[3] = json2.getString(TAG_TOTAL_WASTED);
-
-//                    Log.e("Debug", "Total wasted");
-
-                    // Total uploaded
-                    labels[4] = getString(R.string.torrent_details_total_uploaded);
-                    values[4] = json2.getString(TAG_TOTAL_UPLOADED);
-
-//                    Log.e("Debug", "Total uploaded");
-
-                    // Total downloaded
-                    labels[5] = getString(R.string.torrent_details_total_downloaded);
-                    values[5] = json2.getString(TAG_TOTAL_DOWNLOADED);
-
-//                    Log.e("Debug", "Total downloaded");
-
-                    // Time elapsed
-                    labels[6] = getString(R.string.torrent_details_time_elapsed);
-                    values[6] = json2.getString(TAG_TIME_ELAPSED);
-
-//                    Log.e("Debug", "Time elapsed");
-
-                    // Number of connections
-                    labels[7] = getString(R.string.torrent_details_num_connections);
-                    values[7] = json2.getString(TAG_NB_CONNECTIONS);
-
-//                    Log.e("Debug", "Number of connections");
-
-                    // Share ratio
-                    labels[8] = getString(R.string.torrent_details_share_ratio);
-                    values[8] = json2.getString(TAG_SHARE_RATIO);
-
-                    // Format ratio
-                    try {
-                        values[8] = String.format("%.2f", Float.parseFloat(values[8])).replace(",", ".");
-                    } catch (Exception e) {
-                    }
-
-
-//                    Log.e("Debug", "Share ratio");
-
-                    // Upload limit
-                    labels[9] = getString(R.string.torrent_details_upload_rate_limit);
-                    values[9] = json2.getString(TAG_UPLOAD_LIMIT);
-
-//                    Log.e("Debug", "Upload limit");
-
-                    // Download limit
-                    labels[10] = getString(R.string.torrent_details_download_rate_limit);
-                    values[10] = json2.getString(TAG_DOWNLOAD_LIMIT);
-
-//                    Log.e("Debug", "Download limit");
-
-                    if (MainActivity.qb_version.equals("3.2.x")) {
-
-                        // Creation date
-                        values[1] = Common.unixTimestampToDate(json2.getString(TAG_CREATION_DATE));
-                        // Total wasted
-                        values[3] = Common.calculateSize(json2.getString(TAG_TOTAL_WASTED)).replace(",", ".");
-
-                        // Total uploaded
-                        values[4] = Common.calculateSize(json2.getString(TAG_TOTAL_UPLOADED)).replace(",", ".");
-
-                        // Time elapsed
-                        values[6] = Common.secondsToEta(json2.getString(TAG_TIME_ELAPSED));
-
-                        // Total downloaded
-                        values[5] = Common.calculateSize(json2.getString(TAG_TOTAL_DOWNLOADED)).replace(",", ".");
-
-                        // Upload limit
-                        values[9] = json2.getString(TAG_UPLOAD_LIMIT);
-
-                        if (!values[9].equals("-1")) {
-                            values[9] = Common.calculateSize(values[9]) + "/s";
-                        } else {
-                            values[9] = "∞";
-                        }
-
-                        // Download limit
-                        values[10] = json2.getString(TAG_DOWNLOAD_LIMIT);
-
-                        if (!values[10].equals("-1")) {
-                            values[10] = Common.calculateSize(values[10]) + "/s";
-                        } else {
-                            values[10] = "∞";
-                        }
-
-                    }
-
-//                    Log.e("Debug", "FIN");
-
-
-
-                }
-
-            } catch (Exception e) {
-
-                Log.e("TorrentFragment:", e.toString());
-
-            }
-
-            return rootViews;
-
-        }
-
-        @Override
-        protected void onPostExecute(View[] rootViews) {
-
-            try {
-
-                View rootView = rootViews[0];
-
-                propertyAdapter = new myPropertyAdapter(getActivity(), labels, values);
-
-                LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.lines);
-                layout.removeAllViews();
-
-                for (int i = 0; i < propertyAdapter.getCount(); i++) {
-                    View item = propertyAdapter.getView(i, null, null);
-                    layout.addView(item);
-                }
-
-            } catch (Exception e) {
-                Log.e("TorrentFragment:", e.toString());
-            }
-
-        }
-
-    }
-
-    // My custom adapters
-    class myPropertyAdapter extends ArrayAdapter<String> {
-
-        private String[] labels;
-        private String[] values;
-        private Context context;
-
-        public myPropertyAdapter(Context context, String[] labels, String[] values) {
-            super(context, R.layout.property_row, R.id.label, values);
-
-            this.context = context;
-            this.labels = labels;
-            this.values = values;
-
-        }
-
-        @Override
-        public int getCount() {
-            return (labels != null) ? labels.length : 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            View row = super.getView(position, convertView, parent);
-
-            TextView label = (TextView) row.findViewById(R.id.label);
-            TextView value = (TextView) row.findViewById(R.id.value);
-
-            label.setText("" + labels[position]);
-            value.setText("" + values[position]);
-
-            return (row);
-        }
-    }
-
-    class myFileAdapter extends ArrayAdapter<ContentFile> {
-
-        private Context context;
-        public ArrayList<ContentFile> items;
-
-        public myFileAdapter(Context context,  ArrayList<ContentFile> items) {
-            super(context, R.layout.contentfile_row, R.id.file, items);
-
-            this.items = new ArrayList<ContentFile>();
-
-            this.items.addAll(items);
-
-        }
-
-        @Override
-        public int getCount() {
-
-            return this.items.size();
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-
-            ContentFile item = this.items.get(position);
-
-
-            String priorityString = "";
-
-
-            switch (item.getPriority()){
-
-                case 0:
-                    priorityString = getActivity().getResources().getString(R.string.action_file_dont_download);
-                    break;
-                case 1:
-                    priorityString = getActivity().getResources().getString(R.string.action_file_normal_priority);
-                    break;
-                case 2:
-                    priorityString = getActivity().getResources().getString(R.string.action_file_high_priority);
-                    break;
-                case 7:
-                    priorityString = getActivity().getResources().getString(R.string.action_file_maximum_priority);
-                    break;
-                default:
-                    priorityString = "";
-                    break;
-
-
-            }
-
-            View row = super.getView(position, convertView, parent);
-
-
-
-            TextView textViewFile = (TextView) row.findViewById(R.id.file);
-            TextView textViewInfo = (TextView) row.findViewById(R.id.info);
-            TextView textViewPriorityInfo = (TextView) row.findViewById(R.id.priorityInfo);
-            View viewDivider = row.findViewById(R.id.divider);
-
-
-            textViewFile.setText(item.getName());
-            textViewInfo.setText("" + item.getSize());
-            textViewPriorityInfo.setText(priorityString);
-
-
-            // Set progress bar
-            ProgressBar progressBar = (ProgressBar) row.findViewById(R.id.progressBar1);
-            TextView percentageTV = (TextView) row.findViewById(R.id.percentage);
-
-            int index = item.getProgressAsString().indexOf(".");
-
-            if (index == -1) {
-                index = item.getProgressAsString().indexOf(",");
-
-                if (index == -1) {
-                    index = item.getProgressAsString().length();
-                }
-            }
-
-            String percentage = item.getProgressAsString().substring(0, index);
-
-            progressBar.setProgress(Integer.parseInt(percentage));
-
-            percentageTV.setText(percentage + "%");
-
-            // Hide last divider
-            if(position == items.size() -1){
-                viewDivider.setVisibility(View.INVISIBLE);
-            }
-
-            return (row);
-        }
-    }
-
-//    class myTrackerAdapter extends ArrayAdapter<String> {
-//
-//        private String[] trackersNames;
-//        private Tracker[] trackers;
-//        private Context context;
-//
-//        public myTrackerAdapter(Context context, String[] trackersNames, Tracker[] trackers) {
-//            super(context, R.layout.tracker_row, R.id.info, trackersNames);
-//
-//            this.context = context;
-//            this.trackersNames = trackersNames;
-//            this.trackers = trackers;
-//
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return (trackersNames != null) ? trackersNames.length : 0;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//
-//            View row = super.getView(position, convertView, parent);
-//
-//            TextView tracker = (TextView) row.findViewById(R.id.info);
-//
-//            tracker.setText("" + trackers[position].getUrl());
-//
-//            return (row);
-//        }
-//    }
 
     /**
      * *

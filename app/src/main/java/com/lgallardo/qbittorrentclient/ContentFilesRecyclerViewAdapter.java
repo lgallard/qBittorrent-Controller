@@ -84,13 +84,13 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
 
 
             // Perform Action
-            Log.d("Debug", "onClicked invoked!");
+//            Log.d("Debug", "onClicked invoked!");
 
             // Set file priority
 
             if (recyclerItem.getAction().equals("setFilePriority")) {
 
-                Log.d("Debug", "setFilePriority");
+//                Log.d("Debug", "setFilePriority");
 
                 TorrentDetailsFragment.fileContentRowPosition = getAdapterPosition();
 
@@ -124,7 +124,7 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
         ContentFilesRecyclerViewAdapter.items.addAll(fileItems);
 
 
-        Log.d("Debug", "ContentFilesRecyclerViewAdapter instantiated");
+//        Log.d("Debug", "ContentFilesRecyclerViewAdapter instantiated");
     }
 
 
@@ -136,7 +136,7 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
     @Override
     public ContentFilesRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        Log.d("Debug", "onCreateViewHolder invoked");
+//        Log.d("Debug", "onCreateViewHolder invoked");
 
         //inflate your layout and pass it to view holder
         if (viewType == TYPE_FILE_ITEM) {
@@ -159,7 +159,7 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
 
         TorrentDetailsItem item = items.get(position);
 
-        Log.d("Debug", "onBindViewHolder - item.info: " + item.getInfo());
+//        Log.d("Debug", "onBindViewHolder - item.info: " + item.getInfo());
 
 
         if (item.getType() == TorrentDetailsItem.FILE) {
@@ -206,7 +206,7 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
     public int getItemCount() {
         // Return the number of items in the list (header + item actions)
 
-        Log.d("Debug", "getItemCount: " + items.size());
+//        Log.d("Debug", "getItemCount: " + items.size());
 
         return items.size();
     }
@@ -220,7 +220,7 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
 //        Log.d("Debug", "DrawerItemRecyclerViewAdapter - position: " + position);
 
         // Default
-        Log.d("Debug", "ContentFilesRecyclerViewAdapter - TYPE_FILE_ITEM");
+//        Log.d("Debug", "ContentFilesRecyclerViewAdapter - TYPE_FILE_ITEM");
         return TYPE_FILE_ITEM;
 
     }
@@ -238,8 +238,8 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
         // Add items
         ContentFilesRecyclerViewAdapter.items.addAll(ContentFilesRecyclerViewAdapter.fileItems);
 
-        Log.d("Debug", "refreshContentFiles - contentFiles.size: " + contentFiles.size());
-        Log.d("Debug", "refreshContentFiles - items.size: " + items.size());
+//        Log.d("Debug", "refreshContentFiles - contentFiles.size: " + contentFiles.size());
+//        Log.d("Debug", "refreshContentFiles - items.size: " + items.size());
 
         ListIterator iterator = items.listIterator();
 
@@ -247,7 +247,7 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
 
             TorrentDetailsItem item = (TorrentDetailsItem) iterator.next();
 
-            Log.d("Debug", "refreshContentFiles - TYPE: " + item.getType());
+//            Log.d("Debug", "refreshContentFiles - TYPE: " + item.getType());
 
 
         }
