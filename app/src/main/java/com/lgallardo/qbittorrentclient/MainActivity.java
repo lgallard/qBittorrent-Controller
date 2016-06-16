@@ -3198,10 +3198,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
 //                Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                connection403ErrorCounter = connection403ErrorCounter + 1;
+
+                if (connection403ErrorCounter > 1) {
+                    Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                    httpStatusCode = 0;
+                }
+
 
                 httpStatusCode = 0;
                 return;
             }
+
 
             // This delay is needed for postCommaresume action. Other actions have a
             // fewer delay (1 second).
