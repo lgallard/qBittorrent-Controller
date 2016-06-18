@@ -1031,14 +1031,31 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 if (qb_version.equals("3.2.x") && (cookie == null || cookie.equals(""))) {
                     // Request new cookie and execute task in background
-                    new qBittorrentCookieTask().execute(params);
+
+                    if (connection403ErrorCounter > 1) {
+                        Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                        httpStatusCode = 0;
+                        disableRefreshSwipeLayout();
+                    } else {
+                        new qBittorrentCookieTask().execute(params);
+                    }
+
 
                 } else {
-                    // Execute the task in background
-                    new qBittorrentTask().execute(params);
 
-                    // Check if  alternative speed limit is set
-                    new qBittorrentCommand().execute(new String[]{"alternativeSpeedLimitsEnabled", ""});
+
+                    if (connection403ErrorCounter > 1) {
+                        Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                        httpStatusCode = 0;
+                        disableRefreshSwipeLayout();
+                    } else {
+
+                        // Execute the task in background
+                        new qBittorrentTask().execute(params);
+
+                        // Check if  alternative speed limit is set
+                        new qBittorrentCommand().execute(new String[]{"alternativeSpeedLimitsEnabled", ""});
+                    }
                 }
 
             }
@@ -3203,6 +3220,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (connection403ErrorCounter > 1) {
                     Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
+                    disableRefreshSwipeLayout();
                 }
 
 
@@ -3584,11 +3602,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         if (connection403ErrorCounter > 1) {
                             Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
                             httpStatusCode = 0;
+                            disableRefreshSwipeLayout();
+                        } else {
+
+                            // Ask a new cookie and re-execute the task in background
+                            new qBittorrentCookieTask().execute(params);
+
+
                         }
 
-
-                        // Ask a new cookie and re-execute the task in background
-                        new qBittorrentCookieTask().execute(params);
 
                     }
 
@@ -4139,6 +4161,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (httpStatusCode == 403 || httpStatusCode == 404) {
                     Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
                     httpStatusCode = 0;
+                    disableRefreshSwipeLayout();
 
                     if (qb_version.equals("3.2.x")) {
                         // Get new Cookie
