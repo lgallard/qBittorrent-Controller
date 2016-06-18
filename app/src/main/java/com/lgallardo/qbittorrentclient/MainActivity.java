@@ -1045,7 +1045,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
                     if (connection403ErrorCounter > 1) {
-                        Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+
+                        if (cookie != null && !cookie.equals("")) {
+                            // Only toasts the message if there is not a cookie set before
+                            Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                            cookie = null;
+                        }
+
                         httpStatusCode = 0;
                         disableRefreshSwipeLayout();
                     } else {
@@ -3218,7 +3224,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 connection403ErrorCounter = connection403ErrorCounter + 1;
 
                 if (connection403ErrorCounter > 1) {
-                    Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                    if (cookie != null && !cookie.equals("")) {
+                        // Only toasts the message if there is not a cookie set before
+                        Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                        cookie = null;
+                    }
                     httpStatusCode = 0;
                     disableRefreshSwipeLayout();
                 }
@@ -3595,15 +3605,24 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // Get new Cookie
                     if (qb_version.equals("3.2.x")) {
 
-                        cookie = null;
+
                         connection403ErrorCounter = connection403ErrorCounter + 1;
 
 
                         if (connection403ErrorCounter > 1) {
-                            Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+
+
+                            if (cookie != null && !cookie.equals("")) {
+                                // Only toasts the message if there is not a cookie set before
+                                Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                            }
+
+                            cookie = null;
                             httpStatusCode = 0;
                             disableRefreshSwipeLayout();
+
                         } else {
+
 
                             // Ask a new cookie and re-execute the task in background
                             new qBittorrentCookieTask().execute(params);
