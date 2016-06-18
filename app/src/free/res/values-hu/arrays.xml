@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string-array name="qBittorrentServers">
+        <item>1. kiszolgáló</item>
+        <item>2. kiszolgáló</item>
+        <item>3. kiszolgáló</item>
+    </string-array>
+    <string-array name="qBittorrentServersValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="autorefresh">
+        <item>1 másodperc</item>
+        <item>2 másodperc</item>
+        <item>5 másodperc</item>
+        <item>10 másodperc</item>
+        <item>30 másodperc</item>
+        <item>1 másodperc</item>
+        <item>2 másodperc</item>
+        <item>5 másodperc</item>
+        <item>10 másodperc</item>
+        <item>15 másodperc</item>
+    </string-array>
+    <string-array name="autorefreshValues">
+        <item>1000</item>
+        <item>2000</item>
+        <item>5000</item>
+        <item>10000</item>
+        <item>30000</item>
+        <item>60000</item>
+        <item>120000</item>
+        <item>300000</item>
+        <item>600000</item>
+        <item>900000</item>
+    </string-array>
+    <string-array name="notification">
+        <item>2 perc</item>
+        <item>5 perc</item>
+        <item>15 perc</item>
+        <item>30 perc</item>
+        <item>1 óra</item>
+        <item>6 óra</item>
+        <item>12 óra</item>
+        <item>1 nap</item>
+    </string-array>
+    <string-array name="notificationValues">
+        <item>120000</item>
+        <item>300000</item>
+        <item>900000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+        <item>21600000</item>
+        <item>43200000</item>
+        <item>86400000</item>
+    </string-array>
+    <string-array name="sortBy">
+        <item>Név</item>
+        <item>Méret</item>
+        <item>ETA</item>
+        <item>Prioritás</item>
+        <item>Előrehaladás</item>
+        <item>Arány</item>
+        <item>Letöltési sebesség</item>
+        <item>Hozzáadva</item>
+        <item>Elkészült</item>
+    </string-array>
+    <string-array name="sortByValues">
+        <item>Name</item>
+        <item>Size</item>
+        <item>ETA</item>
+        <item>Priority</item>
+        <item>Progress</item>
+        <item>Ratio</item>
+        <item>DownloadSpeed</item>
+        <item>UploadSpeed</item>
+        <item>AddedOn</item>
+        <item>CompletedOn</item>
+    </string-array>
+    <string-array name="navigation_drawer_items_array">
+        <item>Összes</item>
+        <item>Letöltés</item>
+        <item>Elkészült</item>
+        <item>Seed</item>
+        <item>Szüneteltetett</item>
+        <item>Aktív</item>
+        <item>Inaktív</item>
+        <item>Lehetőségek</item>
+        <item>Beállítások</item>
+        <item>Pro beszerzése</item>
+        <item>Súgó</item>
+    </string-array>
+    <string-array name="scheduler_days">
+        <item>Minden nap</item>
+        <item>Hétvégék</item>
+        <item>Hétköznapok</item>
+        <item>Hétfő</item>
+        <item>Kedd</item>
+        <item>Szerda</item>
+        <item>Csütörtök</item>
+        <item>Péntek</item>
+        <item>Szombat</item>
+        <item>Vasárnap</item>
+    </string-array>
+    <string-array name="scheduler_days_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+    <string-array name="max_ratio_action">
+        <item>Szüneltetés</item>
+        <item>Eltávolítás</item>
+    </string-array>
+    <string-array name="max_ratio_action_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+</resources>
