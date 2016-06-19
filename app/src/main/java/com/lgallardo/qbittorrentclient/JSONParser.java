@@ -337,6 +337,8 @@ public class JSONParser {
         String urlContentType = "application/x-www-form-urlencoded";
 
         String limit = "";
+        String tracker = "";
+
         String boundary = null;
 
         String fileId = "";
@@ -378,6 +380,13 @@ public class JSONParser {
             url = "command/download";
             key = "urls";
         }
+
+        if ("addTracker".equals(command)) {
+            url = "command/addTrackers";
+            key = "urls";
+
+        }
+
 
         if ("addTorrentFile".equals(command)) {
             url = "command/upload";
@@ -560,9 +569,26 @@ public class JSONParser {
             HttpPost httpget = new HttpPost(url);
 
             if ("addTorrent".equals(command)) {
+
                 URI hash_uri = new URI(hash);
                 hash = hash_uri.toString();
             }
+
+            if ("addTracker".equals(command)) {
+
+                URI hash_uri = new URI(hash);
+                hash = hash_uri.toString();
+
+                String[] tmpString = hash.split("&");
+                hash = tmpString[0];
+
+                try {
+                    tracker = tmpString[1];
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    tracker = "";
+                }
+            }
+
 
             // In order to pass the hash we must set the pair name value
             BasicNameValuePair bnvp = new BasicNameValuePair(key, hash);
@@ -575,6 +601,14 @@ public class JSONParser {
                 nvps.add(new BasicNameValuePair("limit", limit));
 
             }
+
+            // Add tracker
+            if (!tracker.equals("")) {
+                Log.d("Debug", "JSONParser - Adding tracker");
+                nvps.add(new BasicNameValuePair("tracker", tracker));
+
+            }
+
 
             // Set values for setting file priority
             if ("setFilePrio".equals(command)) {
@@ -606,7 +640,7 @@ public class JSONParser {
             httpget.setEntity(stringEntity);
 
             // Set content type and urls
-            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command) || "toggleAlternativeSpeedLimits".equals(command) || "alternativeSpeedLimitsEnabled".equals(command) || "setLabel".equals(command)) {
+            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command) || "toggleAlternativeSpeedLimits".equals(command) || "alternativeSpeedLimitsEnabled".equals(command) || "setLabel".equals(command) || "addTracker".equals(command)) {
                 httpget.setHeader("Content-Type", urlContentType);
             }
 

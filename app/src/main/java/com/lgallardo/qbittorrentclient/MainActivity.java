@@ -816,7 +816,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
 
-
 //        }
     }
 
@@ -1772,12 +1771,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 swipeRefresh();
                 return true;
             case R.id.action_add_tracker:
-
                 Log.d("Debug", "Adding tracker");
 
-//                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-//                    uploadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-//                }
+                if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                    addUrlTracker(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+
+                }
 
                 return true;
             default:
@@ -1992,6 +1991,48 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    public void addUrlTracker(final String hash) {
+
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(getApplicationContext());
+        View addTrackerView = li.inflate(R.layout.add_tracker, null);
+
+        // URL input
+        final EditText urlInput = (EditText) addTrackerView.findViewById(R.id.url);
+
+        if (!isFinishing()) {
+            // Dialog
+            Builder builder = new Builder(getApplicationContext());
+
+            // Set add_torrent.xml to AlertDialog builder
+            builder.setView(addTrackerView);
+
+            // Cancel
+            builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancelled the dialog
+                    Log.d("Debug", "addUrlTracker - Cancelled");
+                }
+            });
+
+            // Ok
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User accepted the dialog
+                    Log.d("Debug", "addUrlTracker - Adding tracker");
+//                    addTracker(hash, urlInput.getText().toString());
+                }
+            });
+
+            // Create dialog
+            AlertDialog dialog = builder.create();
+
+            // Show dialog
+            dialog.show();
+        }
+    }
+
+
     protected void openSettings() {
         canrefresh = false;
 
@@ -2118,6 +2159,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"addTorrent", url});
     }
+
+    public void addTracker(String hash, String url) {
+        // Execute the task in background
+        Log.d("Debug", "addTracker - Adding tracker");
+        qBittorrentCommand qtc = new qBittorrentCommand();
+        qtc.execute(new String[]{"addTracker", hash + "&" + url});
+    }
+
 
     public void addTorrentFile(String url) {
         // Execute the task in background
@@ -3278,6 +3327,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 messageId = R.string.torrentFileAdded;
             }
 
+            if ("addTracker".equals(command)) {
+                messageId = R.string.torrentAdded;
+            }
+
+
             if ("pauseAll".equals(command)) {
                 messageId = R.string.AllTorrentsPaused;
             }
@@ -3379,8 +3433,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             }
 
-            if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command))) {
+            if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command)) && !("addTracker".equals(command))) {
                 Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
+
+                Log.d("Debug","addTracker :(");
 
                 // Refresh
                 refreshAfterCommand(delay);

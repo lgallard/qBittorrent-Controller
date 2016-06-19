@@ -10,8 +10,6 @@ package com.lgallardo.qbittorrentclient;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,9 +22,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -383,17 +379,11 @@ public class TorrentDetailsFragment extends Fragment {
 
 
             // Get Content files in background
-//            qBittorrentContentFile qcf = new qBittorrentContentFile();
-//            qcf.execute(new View[]{rootView});
-
             ContentFileTask cft = new ContentFileTask();
             cft.execute(new String[]{hash});
 
 
             // Get trackers in background
-//            qBittorrentTrackers qt = new qBittorrentTrackers();
-//            qt.execute(new View[]{rootView});
-
             TrackersTask tt = new TrackersTask();
             tt.execute(new String[]{hash});
 
@@ -413,9 +403,6 @@ public class TorrentDetailsFragment extends Fragment {
             generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_download_rate_limit), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
 
             // Get general info in background
-//            qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
-//            qgit.execute(new View[]{rootView});
-
             GeneralInfoTask git = new GeneralInfoTask();
             git.execute(new String[]{hash});
 
@@ -716,7 +703,8 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                 menu.findItem(R.id.action_sequential_download).setVisible(true);
                 menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
-                menu.findItem(R.id.action_add_tracker).setVisible(true);
+                // TODO: Change add_tracker to true
+                menu.findItem(R.id.action_add_tracker).setVisible(false);
                 menu.findItem(R.id.action_label_menu).setVisible(true);
                 menu.findItem(R.id.action_set_label).setVisible(true);
                 menu.findItem(R.id.action_delete_label).setVisible(true);
@@ -737,6 +725,7 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
                 menu.findItem(R.id.action_sequential_download).setVisible(false);
                 menu.findItem(R.id.action_toggle_alternative_rate).setVisible(false);
+                // TODO: Change add_tracker to true
                 menu.findItem(R.id.action_add_tracker).setVisible(false);
                 menu.findItem(R.id.action_label_menu).setVisible(false);
                 menu.findItem(R.id.action_set_label).setVisible(false);
