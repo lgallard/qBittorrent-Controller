@@ -134,6 +134,15 @@ public class TorrentDetailsFragment extends Fragment {
         generalInfoAdapter.notifyDataSetChanged();
 
 
+        if (mRecyclerView == null) {
+            Log.d("Debug", "mRecyclerView is null");
+        }
+
+        if (rAdapter == null) {
+            Log.d("Debug", "rAdapter is null");
+        }
+
+
         mRecyclerView.setAdapter(rAdapter);
         mRecyclerViewTrackers.setAdapter(trackerAdapter);
         mRecyclerViewGeneralInfo.setAdapter(generalInfoAdapter);
