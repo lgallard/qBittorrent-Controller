@@ -88,7 +88,30 @@
                 android:layout_toRightOf="@+id/arrow"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Luis M. Gallardo D. (Spanish translation)\nVitor Sena Melgaço (Portuguese translation)\nWiesław Jurgielewicz (Polish translation)\nAlexey D. Filimonov (Russian translation)\ndartraiden (Russian translation)\nXabier Aramendi (Basque translation)\nNaofumi (Japanese translation)" />
+                android:text="Luis M. Gallardo D. (Spanish translation)\nVitor Sena Melgaço (Portuguese translation)\nWiesław Jurgielewicz (Polish translation)\nAlexey D. Filimonov (Russian translation)\ndartraiden (Russian translation)\nXabier Aramendi (Basque translation)\nNaofumi (Japanese translation)\nBalázs Meskó (Hungarian translation)" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView5"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/arrow"
+                android:gravity="center"
+
+                android:text="@string/help_libraries"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView6"
+                android:layout_toRightOf="@+id/arrow"
+                android:gravity="center"
+                android:padding="10dp"
+                android:autoLink="web"
+                android:text="Material File Picker - https://git.io/vorI6" />
 
 
         </RelativeLayout>
