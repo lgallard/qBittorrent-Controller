@@ -265,5 +265,6 @@
     <string name="torrentsApplyingChange">Aldaketa aplikatuz!</string>
     <string name="action_delete_label">Etiketa ezabatu</string>
     <string name="action_set_label">Ezarri etiketa</string>
-
+    <string name="action_add_tracker">Gehitu tracker</string>
+    <string name="help_libraries">Erabilitako softwarea:</string>
 </resources>

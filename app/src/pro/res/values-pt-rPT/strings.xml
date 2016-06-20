@@ -261,5 +261,7 @@
     <string name="torrentsApplyingChange">Aplicando mudança!</string>
     <string name="action_delete_label">Remover etiqueta</string>
     <string name="action_set_label">Definir etiqueta</string>
+    <string name="action_add_tracker">Adicionar tracker</string>
+    <string name="help_libraries">Software usado:</string>
 
 </resources>

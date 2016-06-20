@@ -269,5 +269,7 @@
     <string name="torrentsApplyingChange">Applicando il cambiamento!</string>
     <string name="action_delete_label">Eliminare l\'etichetta</string>
     <string name="action_set_label">Imposta l\'etichetta</string>
+    <string name="action_add_tracker">Aggiungere tracker</string>
+    <string name="help_libraries">Software utilizzato:</string>
 
 </resources>

@@ -263,4 +263,5 @@
     <string name="torrentsApplyingChange">Applying change!</string>
     <string name="torrent_label_menu">Label...</string>
     <string name="action_add_tracker">Add tracker</string>
+    <string name="help_libraries">Software used:</string>
 </resources>

@@ -260,5 +260,6 @@
     <string name="action_set_label">Definir etiqueta</string>
     <string name="torrent_label_menu">Etiqueta...</string>
     <string name="torrentsApplyingChange">Aplicando cambio!</string>
-
+    <string name="action_add_tracker">Añadir tracker</string>
+    <string name="help_libraries">Software usadado:</string>
 </resources>

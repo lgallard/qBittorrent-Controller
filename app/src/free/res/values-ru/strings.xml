@@ -269,5 +269,7 @@
   <string name="torrentsApplyingChange">Применение изменений!</string>
   <string name="action_delete_label">Удалить ярлык</string>
   <string name="action_set_label">Определить этикетку</string>
+  <string name="action_add_tracker">Добавить tracker</string>
+  <string name="help_libraries">используется программное обеспечение:</string>
 
 </resources>
