@@ -823,9 +823,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        Log.d("Debug", "Item name: " + getResources().getResourceEntryName(item.getItemId()));
-
-        Log.d("Debug", "Item position: " + TorrentDetailsFragment.fileContentRowPosition);
+//        Log.d("Debug", "Item name: " + getResources().getResourceEntryName(item.getItemId()));
+//
+//        Log.d("Debug", "Item position: " + TorrentDetailsFragment.fileContentRowPosition);
 
 
         switch (item.getItemId()) {
@@ -3435,8 +3435,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command)) && !("addTracker".equals(command))) {
                 Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
-
-                Log.d("Debug","addTracker :(");
 
                 // Refresh
                 refreshAfterCommand(delay);
