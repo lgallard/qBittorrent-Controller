@@ -22,12 +22,6 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
-    // Flag to tell aapt to keep the attribute ids around
-    // TODO: When moving to grade 1.5. delete it
-//    aaptOptions {
-//        additionalParameters "--no-version-vectors"
-//    }
-
     buildTypes {
         release {
             minifyEnabled false
