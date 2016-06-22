@@ -138,7 +138,7 @@ public class ItemstFragment extends ListFragment {
                         menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                         menu.findItem(R.id.action_sequential_download).setVisible(true);
                         // TODO: Change add_tracker to true
-                        menu.findItem(R.id.action_add_tracker).setVisible(false);
+//                        menu.findItem(R.id.action_add_tracker).setVisible(false);
                         menu.findItem(R.id.action_label_menu).setVisible(true);
                         menu.findItem(R.id.action_set_label).setVisible(true);
                         menu.findItem(R.id.action_delete_label).setVisible(true);
@@ -151,7 +151,7 @@ public class ItemstFragment extends ListFragment {
                         menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
                         menu.findItem(R.id.action_sequential_download).setVisible(false);
                         // TODO: Change add_tracker to true
-                        menu.findItem(R.id.action_add_tracker).setVisible(false);
+//                        menu.findItem(R.id.action_add_tracker).setVisible(false);
                         menu.findItem(R.id.action_label_menu).setVisible(false);
                         menu.findItem(R.id.action_set_label).setVisible(false);
                         menu.findItem(R.id.action_delete_label).setVisible(false);
