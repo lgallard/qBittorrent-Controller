@@ -467,10 +467,18 @@ public class JSONParser {
 
         if ("setDownloadRateLimit".equals(command)) {
             url = "command/setTorrentDlLimit";
+            key = "hashes";
+
+            Log.d("Debug", "Hash before: " + hash);
+
 
             String[] tmpString = hash.split("&");
             hash = tmpString[0];
             limit = tmpString[1];
+
+            Log.d("Debug", "tmpString: " + tmpString.toString() );
+            Log.d("Debug", "Hashes: " + hash + " | limit: " + label);
+
         }
 
         if ("recheckSelected".equals(command)) {
@@ -598,6 +606,7 @@ public class JSONParser {
 
             // Add limit
             if (!limit.equals("")) {
+                Log.d("Debug", "JSONParser - Limit: " + limit);
                 nvps.add(new BasicNameValuePair("limit", limit));
 
             }

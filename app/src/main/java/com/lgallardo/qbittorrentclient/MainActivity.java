@@ -2464,7 +2464,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User accepted the dialog
-                    setLabel(hash, downloadRateLimit.getText().toString());
+                    setDownloadRateLimit(hash, downloadRateLimit.getText().toString());
                 }
             });
 
