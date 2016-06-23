@@ -458,15 +458,22 @@ public class JSONParser {
         }
 
         if ("setUploadRateLimit".equals(command)) {
-            url = "command/setTorrentUpLimit";
+
+            url = "command/setTorrentsUpLimit";
+            key = "hashes";
 
             String[] tmpString = hash.split("&");
             hash = tmpString[0];
-            limit = tmpString[1];
+
+            try {
+                limit = tmpString[1];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                limit = "-1";
+            };
         }
 
         if ("setDownloadRateLimit".equals(command)) {
-            url = "command/setTorrentDlLimit";
+            url = "command/setTorrentsDlLimit";
             key = "hashes";
 
             Log.d("Debug", "Hash before: " + hash);
@@ -474,10 +481,15 @@ public class JSONParser {
 
             String[] tmpString = hash.split("&");
             hash = tmpString[0];
-            limit = tmpString[1];
 
-            Log.d("Debug", "tmpString: " + tmpString.toString() );
-            Log.d("Debug", "Hashes: " + hash + " | limit: " + label);
+            try {
+                limit = tmpString[1];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                limit = "-1";
+            }
+
+//            Log.d("Debug", "url: " + url);
+//            Log.d("Debug", "Hashes: " + hash + " | limit: " + limit);
 
         }
 
@@ -608,7 +620,6 @@ public class JSONParser {
             if (!limit.equals("")) {
                 Log.d("Debug", "JSONParser - Limit: " + limit);
                 nvps.add(new BasicNameValuePair("limit", limit));
-
             }
 
             // Add tracker
@@ -691,6 +702,8 @@ public class JSONParser {
             StatusLine statusLine = httpResponse.getStatusLine();
 
             int mStatusCode = statusLine.getStatusCode();
+
+//            Log.d("Debug", "JSONPArser - mStatusCode: " + mStatusCode);
 
             if (mStatusCode != 200) {
                 httpclient.getConnectionManager().shutdown();
