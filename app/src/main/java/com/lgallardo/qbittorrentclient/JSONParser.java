@@ -602,6 +602,9 @@ public class JSONParser {
                 String[] tmpString = hash.split("&");
                 hash = tmpString[0];
 
+                Log.d("Debug", "addTracker - hash: " + hash);
+                Log.d("Debug", "addTracker - tracker: " + tracker);
+
                 try {
                     tracker = tmpString[1];
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -646,6 +649,16 @@ public class JSONParser {
 
 //                Log.d("Debug", "Hash3: " + hash + "| label3: >" + label + "<");
             }
+
+            // Add label
+            if (tracker != null && !tracker.equals("")) {
+
+                label = Uri.decode(label);
+                nvps.add(new BasicNameValuePair("urls", tracker));
+
+//                Log.d("Debug", "Hash3: " + hash + "| label3: >" + label + "<");
+            }
+
 
 
             String entityValue = URLEncodedUtils.format(nvps, HTTP.UTF_8);
