@@ -1774,9 +1774,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 Log.d("Debug", "Adding tracker");
 
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+
                     addUrlTracker(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
                 }
+
 
                 return true;
             default:
@@ -3327,7 +3329,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
 
             if ("addTracker".equals(command)) {
-                messageId = R.string.torrentAdded;
+                messageId = R.string.tracker_added;
+                delay = 3;
             }
 
 
@@ -3432,7 +3435,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             }
 
-            if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command)) && !("addTracker".equals(command))) {
+            if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command))) {
                 Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
 
                 // Refresh

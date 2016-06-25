@@ -270,4 +270,5 @@
     <string name="torrent_label_menu">Label...</string>
     <string name="action_add_tracker">Add tracker</string>
     <string name="help_libraries">Software used:</string>
+    <string name="tracker_added">Tracker added!</string
 </resources>

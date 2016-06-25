@@ -611,8 +611,8 @@ public class JSONParser {
                     tracker = "";
                 }
 
-                Log.d("Debug", "addTracker - hash: " + hash);
-                Log.d("Debug", "addTracker - tracker: " + tracker);
+//                Log.d("Debug", "addTracker - hash: " + hash);
+//                Log.d("Debug", "addTracker - tracker: " + tracker);
 
             }
 
@@ -651,7 +651,7 @@ public class JSONParser {
 
                 nvps.add(new BasicNameValuePair("urls", tracker));
 
-                Log.d("Debug", ">Tracker: " + key + " | " + hash + " | " + tracker + "<");
+//                Log.d("Debug", ">Tracker: " + key + " | " + hash + " | " + tracker + "<");
 
             }
 

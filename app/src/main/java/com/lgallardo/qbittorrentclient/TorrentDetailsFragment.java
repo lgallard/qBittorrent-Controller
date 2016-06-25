@@ -52,8 +52,6 @@ public class TorrentDetailsFragment extends Fragment {
     protected static final String TAG_DOWNLOAD_LIMIT = "dl_limit";
 
     // TODO: Delete trackers
-    static Tracker[] trackers;
-    static String[] trackerNames;
     static ArrayList<GeneralInfoItem> generalInfoItems;
 
 
@@ -434,6 +432,8 @@ public class TorrentDetailsFragment extends Fragment {
 
     public void updateDetails(Torrent torrent) {
 
+        Log.d("Debug","Updating details");
+
         try {
 
             // Hide herderInfo in phone's view
@@ -609,11 +609,15 @@ public class TorrentDetailsFragment extends Fragment {
             cft.execute(new String[]{hash});
 
             // Get trackers in background
-//            qBittorrentTrackers qt = new qBittorrentTrackers();
-//            qt.execute(new View[]{rootView});
-
             TrackersTask tt = new TrackersTask();
-            cft.execute(new String[]{hash});
+            tt.execute(new String[]{hash});
+
+            Log.d("Debug", "Trying to update trackers info");
+
+//            trackerAdapter.refreshTrackers(TrackersRecyclerViewAdapter.items);
+//            trackerAdapter.notifyDataSetChanged();
+
+            Log.d("Debug", "Trackers updated!");
 
             // Get General info labels
             generalInfoItems = new ArrayList<GeneralInfoItem>();

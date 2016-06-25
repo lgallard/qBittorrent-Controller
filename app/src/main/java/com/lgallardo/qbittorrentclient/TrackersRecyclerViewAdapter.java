@@ -23,7 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRecyclerViewAdapter.ViewHolder> {
 
@@ -203,6 +202,7 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
         TrackersRecyclerViewAdapter.items = new ArrayList<TorrentDetailsItem>();
 
         // Add items
+        Log.d("Debug","Tracker size: " + trackerItems.size());
 //        TrackersRecyclerViewAdapter.items.addAll(TrackersRecyclerViewAdapter.fileItems);
         TrackersRecyclerViewAdapter.items.addAll(trackerItems);
 
