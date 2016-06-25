@@ -2002,7 +2002,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (!isFinishing()) {
             // Dialog
-            Builder builder = new Builder(getApplicationContext());
+            Builder builder = new Builder(MainActivity.this);
 
             // Set add_torrent.xml to AlertDialog builder
             builder.setView(addTrackerView);
@@ -2020,7 +2020,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 public void onClick(DialogInterface dialog, int id) {
                     // User accepted the dialog
                     Log.d("Debug", "addUrlTracker - Adding tracker");
-//                    addTracker(hash, urlInput.getText().toString());
+                    addTracker(hash, urlInput.getText().toString());
                 }
             });
 

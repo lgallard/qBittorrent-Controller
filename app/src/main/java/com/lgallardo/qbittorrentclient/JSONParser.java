@@ -383,7 +383,7 @@ public class JSONParser {
 
         if ("addTracker".equals(command)) {
             url = "command/addTrackers";
-            key = "urls";
+            key = "hash";
 
         }
 
@@ -469,7 +469,7 @@ public class JSONParser {
                 limit = tmpString[1];
             } catch (ArrayIndexOutOfBoundsException e) {
                 limit = "-1";
-            };
+            }
         }
 
         if ("setDownloadRateLimit".equals(command)) {
@@ -596,20 +596,24 @@ public class JSONParser {
 
             if ("addTracker".equals(command)) {
 
-                URI hash_uri = new URI(hash);
-                hash = hash_uri.toString();
+
 
                 String[] tmpString = hash.split("&");
                 hash = tmpString[0];
 
-                Log.d("Debug", "addTracker - hash: " + hash);
-                Log.d("Debug", "addTracker - tracker: " + tracker);
+                URI hash_uri = new URI(hash);
+                hash = hash_uri.toString();
+
 
                 try {
                     tracker = tmpString[1];
                 } catch (ArrayIndexOutOfBoundsException e) {
                     tracker = "";
                 }
+
+                Log.d("Debug", "addTracker - hash: " + hash);
+                Log.d("Debug", "addTracker - tracker: " + tracker);
+
             }
 
 
@@ -624,14 +628,6 @@ public class JSONParser {
                 Log.d("Debug", "JSONParser - Limit: " + limit);
                 nvps.add(new BasicNameValuePair("limit", limit));
             }
-
-            // Add tracker
-            if (!tracker.equals("")) {
-                Log.d("Debug", "JSONParser - Adding tracker");
-                nvps.add(new BasicNameValuePair("tracker", tracker));
-
-            }
-
 
             // Set values for setting file priority
             if ("setFilePrio".equals(command)) {
@@ -650,13 +646,13 @@ public class JSONParser {
 //                Log.d("Debug", "Hash3: " + hash + "| label3: >" + label + "<");
             }
 
-            // Add label
+            // Add tracker
             if (tracker != null && !tracker.equals("")) {
 
-                label = Uri.decode(label);
                 nvps.add(new BasicNameValuePair("urls", tracker));
 
-//                Log.d("Debug", "Hash3: " + hash + "| label3: >" + label + "<");
+                Log.d("Debug", ">Tracker: " + key + " | " + hash + " | " + tracker + "<");
+
             }
 
 
