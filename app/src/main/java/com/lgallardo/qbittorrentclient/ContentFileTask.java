@@ -11,8 +11,6 @@ package com.lgallardo.qbittorrentclient;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -110,7 +108,11 @@ public class ContentFileTask extends AsyncTask<String, Void, ArrayList<TorrentDe
 //        Log.d("Debug", "onPostExecute");
 //        Log.d("Debug", "onPostExecute - contentFiles.size: " + contentFiles.size());
 
-        TorrentDetailsFragment.rAdapter.refreshContentFiles(contentFiles);
+        try {
+            TorrentDetailsFragment.rAdapter.refreshContentFiles(contentFiles);
+        } catch (Exception e) {
+            Log.e("Debug", e.toString());
+        }
 
 
     }

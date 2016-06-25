@@ -12,7 +12,6 @@ package com.lgallardo.qbittorrentclient;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -245,7 +244,11 @@ public class GeneralInfoTask extends AsyncTask<String, Void, ArrayList<GeneralIn
 //        Log.d("Debug", "onPostExecute");
 //        Log.d("Debug", "onPostExecute - GeneralInfo.size: " + items.size());
 
-        TorrentDetailsFragment.generalInfoAdapter.refreshGeneralInfo(items);
+        try {
+            TorrentDetailsFragment.generalInfoAdapter.refreshGeneralInfo(items);
+        } catch (Exception e) {
+            Log.e("Debug", e.toString());
+        }
 
 
     }

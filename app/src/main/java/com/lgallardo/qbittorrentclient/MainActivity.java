@@ -3185,7 +3185,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Set the refresh layout (refresh icon, etc)
                 refreshSwipeLayout();
 
-                // TODO: Check if label must be ""
                 // Refresh state
                 refresh(stateBefore, "");
 

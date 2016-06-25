@@ -97,7 +97,11 @@ public class TrackersTask extends AsyncTask<String, Void, ArrayList<TorrentDetai
     protected void onPostExecute(ArrayList<TorrentDetailsItem> trackers) {
 //        Log.d("Debug", "onPostExecute");
 //        Log.d("Debug", "onPostExecute - contentFiles.size: " + trackers.size());
-        TorrentDetailsFragment.trackerAdapter.refreshTrackers(trackers);
+        try {
+            TorrentDetailsFragment.trackerAdapter.refreshTrackers(trackers);
+        } catch (Exception e) {
+            Log.e("Debug", e.toString());
+        }
 
 
     }

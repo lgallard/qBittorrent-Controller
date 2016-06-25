@@ -143,22 +143,26 @@ public class TorrentDetailsFragment extends Fragment {
         }
 
 
-        mRecyclerView.setAdapter(rAdapter);
-        mRecyclerViewTrackers.setAdapter(trackerAdapter);
-        mRecyclerViewGeneralInfo.setAdapter(generalInfoAdapter);
+        try {
+            mRecyclerView.setAdapter(rAdapter);
+            mRecyclerViewTrackers.setAdapter(trackerAdapter);
+            mRecyclerViewGeneralInfo.setAdapter(generalInfoAdapter);
 
-        mLayoutManager = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
-        mLayoutManagerTrackers = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
-        mLayoutManagerGeneralInfo = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
+            mLayoutManager = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
+            mLayoutManagerTrackers = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
+            mLayoutManagerGeneralInfo = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
 
-        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
-        mRecyclerViewTrackers.setLayoutManager(mLayoutManagerTrackers);                 // Setting the layout Manager
-        mRecyclerViewGeneralInfo.setLayoutManager(mLayoutManagerGeneralInfo);                 // Setting the layout Manager
+            mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+            mRecyclerViewTrackers.setLayoutManager(mLayoutManagerTrackers);                 // Setting the layout Manager
+            mRecyclerViewGeneralInfo.setLayoutManager(mLayoutManagerGeneralInfo);                 // Setting the layout Manager
+        } catch (Exception e) {
+            Log.e("Debug", e.toString());
+        }
 
         // TODO: Check if this can be removed
         registerForContextMenu(mRecyclerView);
-        registerForContextMenu(mRecyclerViewTrackers);
-        registerForContextMenu(mRecyclerViewGeneralInfo);
+//        registerForContextMenu(mRecyclerViewTrackers);
+//        registerForContextMenu(mRecyclerViewGeneralInfo);
 
 
 
