@@ -12,7 +12,7 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -424,5 +424,6 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
+
 </android.support.v4.widget.SwipeRefreshLayout>

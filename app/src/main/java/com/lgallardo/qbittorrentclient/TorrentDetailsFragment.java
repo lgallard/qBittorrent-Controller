@@ -612,13 +612,6 @@ public class TorrentDetailsFragment extends Fragment {
             TrackersTask tt = new TrackersTask();
             tt.execute(new String[]{hash});
 
-            Log.d("Debug", "Trying to update trackers info");
-
-//            trackerAdapter.refreshTrackers(TrackersRecyclerViewAdapter.items);
-//            trackerAdapter.notifyDataSetChanged();
-
-            Log.d("Debug", "Trackers updated!");
-
             // Get General info labels
             generalInfoItems = new ArrayList<GeneralInfoItem>();
 
@@ -636,9 +629,7 @@ public class TorrentDetailsFragment extends Fragment {
 
 
 
-            // Get General info in background
-//            qBittorrentGeneralInfoTask qgit = new qBittorrentGeneralInfoTask();
-//            qgit.execute(new View[]{rootView});
+            // Get General info in background;
             GeneralInfoTask git = new GeneralInfoTask();
             git.execute(new String[]{hash});
 

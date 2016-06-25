@@ -10,12 +10,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/details_refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/linearLayout3"
@@ -451,6 +452,6 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.v4.widget.SwipeRefreshLayout>

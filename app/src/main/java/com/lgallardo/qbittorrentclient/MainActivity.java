@@ -2013,7 +2013,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User cancelled the dialog
-                    Log.d("Debug", "addUrlTracker - Cancelled");
+//                    Log.d("Debug", "addUrlTracker - Cancelled");
                 }
             });
 
@@ -2021,7 +2021,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User accepted the dialog
-                    Log.d("Debug", "addUrlTracker - Adding tracker");
+//                    Log.d("Debug", "addUrlTracker - Adding tracker");
                     addTracker(hash, urlInput.getText().toString());
                 }
             });
@@ -2164,7 +2164,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     public void addTracker(String hash, String url) {
         // Execute the task in background
-        Log.d("Debug", "addTracker - Adding tracker");
+//        Log.d("Debug", "addTracker - Adding tracker");
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"addTracker", hash + "&" + url});
     }
@@ -3329,7 +3329,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
 
             if ("addTracker".equals(command)) {
-                messageId = R.string.tracker_added;
+                messageId = R.string.torrentsApplyingChange;
                 delay = 3;
             }
 
