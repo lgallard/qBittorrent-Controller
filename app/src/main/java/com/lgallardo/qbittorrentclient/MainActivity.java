@@ -1994,7 +1994,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void addUrlTracker(final String hash) {
 
         // get prompts.xml view
-        LayoutInflater li = LayoutInflater.from(getApplicationContext());
+        LayoutInflater li = LayoutInflater.from(MainActivity.this);
         View addTrackerView = li.inflate(R.layout.add_tracker, null);
 
         // URL input
