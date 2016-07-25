@@ -8,6 +8,8 @@
  */
 package com.lgallardo.qbittorrentclient;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -122,6 +124,22 @@ public class Common {
         }
 
         return secs;
+    }
+    // This method converts unix timestamp to date representation
+    public static String timestampToDate(String timestamp){
+
+        Long unixtimestamp = Long.parseLong(timestamp);
+
+        Log.d("Debug", "TimeStamp: " + unixtimestamp);
+
+        if("4294967295".equals(unixtimestamp)){
+            return "";
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
+        Date date = new Date(unixtimestamp*1000);
+        return new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(date);
+
     }
 
 }

@@ -35,6 +35,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TorrentDetailsFragment extends Fragment {
 
@@ -161,7 +162,6 @@ public class TorrentDetailsFragment extends Fragment {
         registerForContextMenu(mRecyclerView);
 //        registerForContextMenu(mRecyclerViewTrackers);
 //        registerForContextMenu(mRecyclerViewGeneralInfo);
-
 
 
         // Get Refresh Listener
@@ -310,16 +310,16 @@ public class TorrentDetailsFragment extends Fragment {
                 TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);
                 TextView labelTextView = (TextView) rootView.findViewById(R.id.torrentLabel);
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-
-                if (addedOn != null && !(addedOn.equals("null"))) {
-                    addedOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(addedOn)));
+                if (addedOn != null && !(addedOn.equals("null")) && !(addedOn.equals("4294967295"))) {
+                    addedOnTextView.setText(Common.timestampToDate(addedOn));
                 } else {
                     addedOnTextView.setText("");
                 }
 
-                if (completionOn != null && !(completionOn.equals("null"))) {
-                    completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
+                Log.d("Debug", "completionOn: " + completionOn);
+
+                if (completionOn != null && !(completionOn.equals("null")) && !(completionOn.equals("4294967295"))) {
+                    completionOnTextView.setText(Common.timestampToDate(completionOn));
                 } else {
                     completionOnTextView.setText("");
                 }
@@ -388,7 +388,6 @@ public class TorrentDetailsFragment extends Fragment {
             }
 
 
-
             // Get Content files in background
             ContentFileTask cft = new ContentFileTask();
             cft.execute(new String[]{hash});
@@ -432,7 +431,7 @@ public class TorrentDetailsFragment extends Fragment {
 
     public void updateDetails(Torrent torrent) {
 
-        Log.d("Debug","Updating details");
+        Log.d("Debug", "Updating details");
 
         try {
 
@@ -527,14 +526,14 @@ public class TorrentDetailsFragment extends Fragment {
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
-                if (addedOn != null && !(addedOn.equals("null"))) {
-                    addedOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(addedOn)));
+                if (addedOn != null && !(addedOn.equals("null")) && !(addedOn.equals("4294967295"))) {
+                    addedOnTextView.setText(Common.timestampToDate(addedOn));
                 } else {
                     addedOnTextView.setText("");
                 }
 
-                if (completionOn != null && !(completionOn.equals("null"))) {
-                    completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
+                if (completionOn != null && !(completionOn.equals("null")) && !(completionOn.equals("4294967295"))) {
+                    completionOnTextView.setText(Common.timestampToDate(completionOn));
                 } else {
                     completionOnTextView.setText("");
                 }
@@ -626,7 +625,6 @@ public class TorrentDetailsFragment extends Fragment {
             generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_share_ratio), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
             generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_upload_rate_limit), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
             generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_download_rate_limit), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
-
 
 
             // Get General info in background;
