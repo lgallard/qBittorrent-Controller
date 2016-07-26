@@ -3860,11 +3860,20 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 // Sort by Added on and Completed on
                 if (sortby.equals("AddedOn")) {
-                    Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
+                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
+                        Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
+                    } else {
+                        Collections.sort(torrentsFiltered, new TorrentAddedOnTimestampComparator(reverse_order));
+                    }
+
                 }
 
                 if (sortby.equals("CompletedOn")) {
-                    Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
+                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
+                        Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
+                    } else {
+                        Collections.sort(torrentsFiltered, new TorrentCompletedOnTimestampComparator(reverse_order));
+                    }
                 }
 
 
