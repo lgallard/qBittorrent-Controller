@@ -310,16 +310,31 @@ public class TorrentDetailsFragment extends Fragment {
                 TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);
                 TextView labelTextView = (TextView) rootView.findViewById(R.id.torrentLabel);
 
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+
                 if (addedOn != null && !(addedOn.equals("null")) && !(addedOn.equals("4294967295"))) {
-                    addedOnTextView.setText(Common.timestampToDate(addedOn));
+                    if(Integer.parseInt(MainActivity.qb_api) < 10) {
+                        // Old time format 2016-07-25T20:52:07
+                        addedOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(addedOn)));
+                    }
+                    else {
+                        // New unix timestamp format 4294967295
+                        addedOnTextView.setText(Common.timestampToDate(addedOn));
+                    }
                 } else {
                     addedOnTextView.setText("");
                 }
 
-                Log.d("Debug", "completionOn: " + completionOn);
 
                 if (completionOn != null && !(completionOn.equals("null")) && !(completionOn.equals("4294967295"))) {
-                    completionOnTextView.setText(Common.timestampToDate(completionOn));
+
+                    if(Integer.parseInt(MainActivity.qb_api) < 10) {
+                        // Old time format 2016-07-25T20:52:07
+                        completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
+                    }else{
+                        // New unix timestamp format 4294967295
+                        completionOnTextView.setText(Common.timestampToDate(completionOn));
+                    }
                 } else {
                     completionOnTextView.setText("");
                 }
@@ -527,16 +542,32 @@ public class TorrentDetailsFragment extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
                 if (addedOn != null && !(addedOn.equals("null")) && !(addedOn.equals("4294967295"))) {
-                    addedOnTextView.setText(Common.timestampToDate(addedOn));
+                    if(Integer.parseInt(MainActivity.qb_api) < 10) {
+                        // Old time format 2016-07-25T20:52:07
+                        addedOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(addedOn)));
+                    }
+                    else {
+                        // New unix timestamp format 4294967295
+                        addedOnTextView.setText(Common.timestampToDate(addedOn));
+                    }
                 } else {
                     addedOnTextView.setText("");
                 }
 
+
                 if (completionOn != null && !(completionOn.equals("null")) && !(completionOn.equals("4294967295"))) {
-                    completionOnTextView.setText(Common.timestampToDate(completionOn));
+
+                    if(Integer.parseInt(MainActivity.qb_api) < 10) {
+                        // Old time format 2016-07-25T20:52:07
+                        completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
+                    }else{
+                        // New unix timestamp format 4294967295
+                        completionOnTextView.setText(Common.timestampToDate(completionOn));
+                    }
                 } else {
                     completionOnTextView.setText("");
                 }
+
 
                 if (label != null && !(label.equals("null"))) {
                     labelTextView.setText(label);

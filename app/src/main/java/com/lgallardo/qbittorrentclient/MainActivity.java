@@ -966,6 +966,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             qbQueryString = "query";
             params[0] = qbQueryString + "/torrents?filter=" + state;
 
+            // Get API version in case it hasn't been gotten before
+            if(qb_api == null|| qb_api.equals("") || qb_api.equals("0")){
+                    new qBittorrentApiTask().execute(new Intent());
+            }
 
             // Label
             if (label != null && !label.equals(getResources().getString(R.string.drawer_label_all))) {
@@ -3110,7 +3114,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 qb_api = apiVersion;
                 qbittorrentServer = apiVersion;
 
-//                Log.d("Debug", "API: " + apiVersion);
+                Log.d("Debug", "API: " + apiVersion);
 
             } catch (JSONParserStatusCodeException e) {
 
