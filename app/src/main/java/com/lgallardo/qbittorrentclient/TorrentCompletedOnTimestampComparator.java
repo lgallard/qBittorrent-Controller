@@ -32,16 +32,16 @@ public class TorrentCompletedOnTimestampComparator implements Comparator<Torrent
         if (reversed) {
             // Ascending order
             if(p1 < p2){
-                returnValue = -1;
-            }else{
                 returnValue = 1;
+            }else{
+                returnValue = -1;
             }
         } else {
             // Descending order
             if(p1 < p2){
-                returnValue = 1;
-            }else{
                 returnValue = -1;
+            }else{
+                returnValue = 1;
             }
 
         }
