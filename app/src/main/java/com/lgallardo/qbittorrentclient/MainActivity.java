@@ -999,10 +999,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         labelEncoded = labelEncoded.substring(labelEncoded.indexOf("%3D") + 3);
 
                         // to build the url and pass it to params[0]
-                        if (Integer.parseInt(MainActivity.qb_api) >= 10) {
-                            params[0] = params[0] + "&category=" + labelEncoded;
-                        } else {
+                        if (Integer.parseInt(MainActivity.qb_api) < 10) {
                             params[0] = params[0] + "&label=" + labelEncoded;
+                        } else {
+                            params[0] = params[0] + "&category=" + labelEncoded;
                         }
                     }
 
@@ -3528,10 +3528,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
                         try {
-                            if (Integer.parseInt(MainActivity.qb_api) >= 10) {
-                                label = json.getString(TAG_CATEGORY);
-                            } else {
+                            if (Integer.parseInt(MainActivity.qb_api) < 10) {
                                 label = json.getString(TAG_LABEL);
+                            } else {
+                                label = json.getString(TAG_CATEGORY);
                             }
 
                         } catch (JSONException je) {
