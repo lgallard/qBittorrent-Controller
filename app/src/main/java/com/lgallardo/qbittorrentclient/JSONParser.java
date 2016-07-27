@@ -535,6 +535,24 @@ public class JSONParser {
 
         }
 
+        if ("setCategory".equals(command)) {
+            url = "command/setCategory";
+            key = "hashes";
+
+            String[] tmpString = hash.split("&");
+            hash = tmpString[0];
+
+            try {
+                label = tmpString[1];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                label = "";
+            }
+
+//            Log.d("Debug", "Hash2: " + hash + "| label2: " + label);
+
+        }
+
+
         if ("alternativeSpeedLimitsEnabled".equals(command)) {
 
 //            Log.d("Debug", "Getting alternativeSpeedLimitsEnabled");
@@ -641,7 +659,14 @@ public class JSONParser {
             if (label != null && !label.equals("")) {
 
                 label = Uri.decode(label);
-                nvps.add(new BasicNameValuePair("label", label));
+
+                if("setLabel".equals(command)) {
+
+                    nvps.add(new BasicNameValuePair("label", label));
+                }else{
+
+                    nvps.add(new BasicNameValuePair("category", label));
+                }
 
 //                Log.d("Debug", "Hash3: " + hash + "| label3: >" + label + "<");
             }
@@ -669,7 +694,7 @@ public class JSONParser {
             httpget.setEntity(stringEntity);
 
             // Set content type and urls
-            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command) || "toggleAlternativeSpeedLimits".equals(command) || "alternativeSpeedLimitsEnabled".equals(command) || "setLabel".equals(command) || "addTracker".equals(command)) {
+            if ("addTorrent".equals(command) || "increasePrio".equals(command) || "decreasePrio".equals(command) || "maxPrio".equals(command) || "setFilePrio".equals(command) || "toggleAlternativeSpeedLimits".equals(command) || "alternativeSpeedLimitsEnabled".equals(command) || "setLabel".equals(command) || "setCategory".equals(command) || "addTracker".equals(command)) {
                 httpget.setHeader("Content-Type", urlContentType);
             }
 

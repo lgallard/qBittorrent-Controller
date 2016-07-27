@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static final String TAG_ADDEDON = "added_on";
     protected static final String TAG_COMPLETIONON = "completion_on";
     protected static final String TAG_LABEL = "label";
+    protected static final String TAG_CATEGORY = "category";
 
     protected static final String TAG_NUMLEECHS = "num_leechs";
     protected static final String TAG_NUMSEEDS = "num_seeds";
@@ -998,7 +999,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         labelEncoded = labelEncoded.substring(labelEncoded.indexOf("%3D") + 3);
 
                         // to build the url and pass it to params[0]
-                        params[0] = params[0] + "&label=" + labelEncoded;
+                        if (Integer.parseInt(MainActivity.qb_api) >= 10) {
+                            params[0] = params[0] + "&category=" + labelEncoded;
+                        } else {
+                            params[0] = params[0] + "&label=" + labelEncoded;
+                        }
                     }
 
                 } catch (Exception e) {
@@ -3228,6 +3233,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 httpStatusCode = 0;
 
+
+
+                // Validate setLabel for API 10+
+                if(Integer.parseInt(MainActivity.qb_api) >= 10 && "setLabel".equals(params[0])) {
+
+                    params[0] = "setCategory";
+
+                    Log.d("Debug", params[0]);
+
+                }
+
+
                 result = jParser.postCommand(params[0], params[1]);
 
             } catch (JSONParserStatusCodeException e) {
@@ -3408,7 +3425,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 messageId = R.string.toggledAlternativeRates;
             }
 
-            if ("setLabel".equals(command)) {
+            if ("setLabel".equals(command) ||  "setCategory".equals(command)) {
                 messageId = R.string.torrentsApplyingChange;
                 delay = 3;
             }
@@ -3511,7 +3528,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
                         try {
-                            label = json.getString(TAG_LABEL);
+                            if (Integer.parseInt(MainActivity.qb_api) >= 10) {
+                                label = json.getString(TAG_CATEGORY);
+                            } else {
+                                label = json.getString(TAG_LABEL);
+                            }
+
                         } catch (JSONException je) {
                             label = null;
                         }
@@ -3728,7 +3750,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         // Add Label
                         labels.add(label);
-//                        Log.d("Debug", "Label: " + label);
+                        Log.d("Debug", "Label: " + label);
 
                     }
 
