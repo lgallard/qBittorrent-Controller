@@ -3236,12 +3236,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
                 // Validate setLabel for API 10+
-                if(Integer.parseInt(MainActivity.qb_api) >= 10 && "setLabel".equals(params[0])) {
-
-                    params[0] = "setCategory";
-
-                    Log.d("Debug", params[0]);
-
+                try {
+                    if(Integer.parseInt(MainActivity.qb_api) >= 10 && "setLabel".equals(params[0])) {
+                        params[0] = "setCategory";
+                        Log.d("Debug", params[0]);
+                    }
+                } catch (NumberFormatException e) {
+                    Log.e("Debug", e.toString());
                 }
 
 
@@ -3882,19 +3883,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 // Sort by Added on and Completed on
                 if (sortby.equals("AddedOn")) {
-                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
-                        Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
-                    } else {
+                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
                         Collections.sort(torrentsFiltered, new TorrentAddedOnTimestampComparator(reverse_order));
+                    } else {
+                        Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
                     }
-
                 }
 
                 if (sortby.equals("CompletedOn")) {
-                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
-                        Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
-                    } else {
+                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
                         Collections.sort(torrentsFiltered, new TorrentCompletedOnTimestampComparator(reverse_order));
+                    } else {
+                        Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
                     }
                 }
 
