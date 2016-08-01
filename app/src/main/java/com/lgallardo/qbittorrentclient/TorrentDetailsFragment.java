@@ -35,7 +35,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class TorrentDetailsFragment extends Fragment {
 
@@ -446,7 +445,7 @@ public class TorrentDetailsFragment extends Fragment {
 
     public void updateDetails(Torrent torrent) {
 
-        Log.d("Debug", "Updating details");
+//        Log.d("Debug", "Updating details");
 
         try {
 

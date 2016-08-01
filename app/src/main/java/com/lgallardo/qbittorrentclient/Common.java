@@ -8,8 +8,6 @@
  */
 package com.lgallardo.qbittorrentclient;
 
-import android.util.Log;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -130,7 +128,7 @@ public class Common {
 
         Long unixtimestamp = Long.parseLong(timestamp);
 
-        Log.d("Debug", "TimeStamp: " + unixtimestamp);
+//        Log.d("Debug", "TimeStamp: " + unixtimestamp);
 
         if("4294967295".equals(unixtimestamp)){
             return "";

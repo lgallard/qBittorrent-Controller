@@ -15,7 +15,6 @@ package com.lgallardo.qbittorrentclient;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -202,7 +201,7 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
         TrackersRecyclerViewAdapter.items = new ArrayList<TorrentDetailsItem>();
 
         // Add items
-        Log.d("Debug","Tracker size: " + trackerItems.size());
+//        Log.d("Debug","Tracker size: " + trackerItems.size());
 //        TrackersRecyclerViewAdapter.items.addAll(TrackersRecyclerViewAdapter.fileItems);
         TrackersRecyclerViewAdapter.items.addAll(trackerItems);
 

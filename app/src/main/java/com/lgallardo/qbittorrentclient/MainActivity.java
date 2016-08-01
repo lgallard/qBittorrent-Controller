@@ -1258,7 +1258,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 // If It is a valid torrent or magnet link
                 if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:")) {
-                    Log.d("Debug", "URL: " + urlTorrent);
+//                    Log.d("Debug", "URL: " + urlTorrent);
                     addTorrent(urlTorrent);
                 } else {
                     // Open not valid torrent or magnet link in browser
@@ -1780,7 +1780,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 swipeRefresh();
                 return true;
             case R.id.action_add_tracker:
-                Log.d("Debug", "Adding tracker");
+//                Log.d("Debug", "Adding tracker");
 
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
 
@@ -3119,7 +3119,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 qb_api = apiVersion;
                 qbittorrentServer = apiVersion;
 
-                Log.d("Debug", "API: " + apiVersion);
+//                Log.d("Debug", "API: " + apiVersion);
 
             } catch (JSONParserStatusCodeException e) {
 
@@ -3239,7 +3239,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 try {
                     if(Integer.parseInt(MainActivity.qb_api) >= 10 && "setLabel".equals(params[0])) {
                         params[0] = "setCategory";
-                        Log.d("Debug", params[0]);
+//                        Log.d("Debug", params[0]);
                     }
                 } catch (NumberFormatException e) {
                     Log.e("Debug", e.toString());
@@ -3751,7 +3751,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         // Add Label
                         labels.add(label);
-                        Log.d("Debug", "Label: " + label);
+//                        Log.d("Debug", "Label: " + label);
 
                     }
 
