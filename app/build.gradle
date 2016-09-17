@@ -85,6 +85,7 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient-android', version: '4.3.5.1'
     compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.5'
     compile 'com.google.android.gms:play-services:7.3.0'
+    compile 'com.android.volley:volley:1.0.0'
 
 //     nbsp-team/MaterialFilePicker
     dependencies {
