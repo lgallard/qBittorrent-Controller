@@ -33,17 +33,24 @@ public class TorrentSizeComparator implements Comparator<Torrent> {
             // Ascending order
             if(p1 < p2){
                 returnValue = -1;
-            }else{
+            }
+            if(p1 > p2){
                 returnValue = 1;
+            }
+            if(p1 == p2){
+                returnValue = 0;
             }
         } else {
             // Descending order
             if(p1 < p2){
                 returnValue = 1;
-            }else{
+            }
+            if(p1 > p2){
                 returnValue = -1;
             }
-
+            if(p1 == p2){
+                returnValue = 0;
+            }
         }
 
         return returnValue;
