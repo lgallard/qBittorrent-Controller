@@ -27,26 +27,14 @@ public class TorrentAddedOnTimestampComparator implements Comparator<Torrent> {
         long p1 = Long.parseLong(d1);
         long p2 = Long.parseLong(d2);
 
-        int returnValue = -1;
-
         if (reversed) {
             // Ascending order
-            if(p1 < p2){
-                returnValue = -1;
-            }else{
-                returnValue = 1;
-            }
+            return (int) (p1 -p2);
         } else {
             // Descending order
-            if(p1 < p2){
-                returnValue = 1;
-            }else{
-                returnValue = -1;
-            }
-
+            return (int) (p2 -p1);
         }
 
-        return returnValue;
     }
 }
 
