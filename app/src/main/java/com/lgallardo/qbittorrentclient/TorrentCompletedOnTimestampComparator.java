@@ -27,26 +27,46 @@ public class TorrentCompletedOnTimestampComparator implements Comparator<Torrent
         long p1 = Long.parseLong(d1);
         long p2 = Long.parseLong(d2);
 
-        int returnValue = -1;
 
-        if (reversed) {
-            // Ascending order
-            if(p1 < p2){
-                returnValue = 1;
-            }else{
-                returnValue = -1;
+        // Not downloaded fix (awful workaround)
+        // Note: take into account the distance between t1 and t2 (math stuff)
+        try {
+            if (Integer.parseInt(t1.getPercentage()) != 100 && Integer.parseInt(t2.getPercentage()) == 100) {
+                p1 = -349714800000l;
             }
-        } else {
-            // Descending order
-            if(p1 < p2){
-                returnValue = -1;
-            }else{
-                returnValue = 1;
-            }
-
+        } catch (Exception e) {
+            p1 = -349714800000l;
         }
 
-        return returnValue;
+        try {
+            if (Integer.parseInt(t2.getPercentage()) != 100 && Integer.parseInt(t1.getPercentage()) == 100) {
+                p2 = 349714800000l;
+            }
+        } catch (Exception e) {
+            p2 = 349714800000l;
+        }
+
+        try {
+            if (Integer.parseInt(t1.getPercentage()) != 100 && Integer.parseInt(t2.getPercentage()) != 100) {
+
+                p1 = 349714800000l;
+                p2 = -349714800000l;
+            }
+        } catch (Exception e) {
+            p1 = 349714800000l;
+            p2 = -349714800000l;
+        }
+
+
+        // Sorting
+        if (reversed) {
+            // Ascending order
+            return (int) (p2 - p1);
+        } else {
+            // Descending order
+            return (int) (p1 - p2);
+        }
+
     }
 }
 
