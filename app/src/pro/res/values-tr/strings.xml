@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="app_name">qBittorrent Controller</string>
+  <string name="app_name">qBittorrent Controller Pro</string>
   <string name="app_shortname">qBController</string>
   <string name="action_refresh">Yenile</string>
   <string name="action_add">Ekle</string>
@@ -57,7 +57,7 @@
   <string name="settings">Ayarlar</string>
   <string name="about_help1">İstemciyi kullanmaya başlamak için qBittorrent sunucu ayarlarınızı ayarlayın</string>
   <string name="about_help2">Yeni sonuçlar almak için öenüdeki yenileme tuşuna basın, veya çekmece menüsünden bir seçenek seçerek sunucudan torrent listesini alın.</string>
-  <string name="about_motto">qBittorrent Controller kullanarak tüm torrentlarınızı Androild ile yönetin</string>
+  <string name="about_motto">qBittorrent Controller Pro kullanarak tüm torrentlarınızı Androild ile yönetin</string>
   <string name="icon">İkon</string>
   <string name="no_results">Hiçbir torrent bulunamadı</string>
   <string name="tablet_help">Bir seçenek seçmek için çekmece menüsünü kullanın</string>
