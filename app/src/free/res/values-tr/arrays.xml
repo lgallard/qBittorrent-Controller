@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string-array name="qBittorrentServers">
+    <item>Sunucu 1</item>
+    <item>Sunucu 2</item>
+    <item>Sunucu 3</item>
+  </string-array>
+  <string-array name="qBittorrentServersValues">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+  </string-array>
+  <string-array name="autorefresh">
+    <item>1 saniye</item>
+    <item>2 saniye</item>
+    <item>5 saniye</item>
+    <item>10 saniye</item>
+    <item>30 saniye</item>
+    <item>1 dakika</item>
+    <item>2 dakika</item>
+    <item>5 dakika</item>
+    <item>10 dakika</item>
+    <item>15 dakika</item>
+  </string-array>
+  <string-array name="autorefreshValues">
+    <item>1000</item>
+    <item>2000</item>
+    <item>5000</item>
+    <item>10000</item>
+    <item>30000</item>
+    <item>60000</item>
+    <item>120000</item>
+    <item>300000</item>
+    <item>600000</item>
+    <item>900000</item>
+  </string-array>
+  <string-array name="notification">
+    <item>2 dakika</item>
+    <item>5 dakika</item>
+    <item>15 dakika</item>
+    <item>30 dakika</item>
+    <item>1 saat</item>
+    <item>6 saat</item>
+    <item>12 saat</item>
+    <item>1 gün</item>
+  </string-array>
+  <string-array name="notificationValues">
+    <item>120000</item>
+    <item>300000</item>
+    <item>900000</item>
+    <item>1800000</item>
+    <item>3600000</item>
+    <item>21600000</item>
+    <item>43200000</item>
+    <item>86400000</item>
+  </string-array>
+  <string-array name="sortBy">
+    <item>İsim</item>
+    <item>Boyut</item>
+    <item>TBS</item>
+    <item>Öncelik</item>
+    <item>İlerleme</item>
+    <item>Oran</item>
+    <item>İndirme Hızı</item>
+    <item>Eklenme Tarihi</item>
+    <item>Tamamlanma Tarihi</item>
+  </string-array>
+  <string-array name="sortByValues">
+    <item name="1">Name</item>
+    <item name="2">Size</item>
+    <item name="3">ETA</item>
+    <item name="4">Priority</item>
+    <item name="5">Progress</item>
+    <item name="6">Ratio</item>
+    <item name="7">DownloadSpeed</item>
+    <item name="8">UploadSpeed</item>
+    <item name="9">AddedOn</item>
+    <item name="10">CompletedOn</item>
+  </string-array>
+  <string-array name="navigation_drawer_items_array">
+    <item>Tümü</item>
+    <item>İndiriliyor</item>
+    <item>Tamamlandı</item>
+    <item>Gönderiliyor</item>
+    <item>Paused</item>
+    <item>Etkin</item>
+    <item>Etkin Değil</item>
+    <item>Seçenekler</item>
+    <item>Ayarlar</item>
+    <item>Pro Sürümü Al</item>
+    <item>Yardım</item>
+  </string-array>
+  <string-array name="scheduler_days">
+    <item>Her Gün</item>
+    <item>Hafta Sonları</item>
+    <item>Hafta İçleri</item>
+    <item>Pazartesi</item>
+    <item>Salı</item>
+    <item>Çarşamba</item>
+    <item>Perşembe</item>
+    <item>Cuma</item>
+    <item>Cumartesi</item>
+    <item>Pazar</item>
+  </string-array>
+  <string-array name="scheduler_days_values">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+    <item>5</item>
+    <item>6</item>
+    <item>7</item>
+    <item>8</item>
+    <item>9</item>
+  </string-array>
+  <string-array name="max_ratio_action">
+    <item>Duraklat</item>
+    <item>Sil</item>
+  </string-array>
+  <string-array name="max_ratio_action_values">
+    <item>0</item>
+    <item>1</item>
+  </string-array>
+</resources>
