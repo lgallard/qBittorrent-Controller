@@ -189,8 +189,8 @@
   <string name="sortby_menu_download_speed">İndirme hızı</string>
   <string name="sortby_menu_upload_speed">Gönderme hızı</string>
   <string name="sortby_menu_date">Tarih...</string>
-  <string name="sortby_menu_added_on">Eklenme:</string>
-  <string name="sortby_menu_completed_on">Tamamlanma:</string>
+  <string name="sortby_menu_added_on">Eklenme</string>
+  <string name="sortby_menu_completed_on">Tamamlanma</string>
   <string name="settings_qbittorrent_notifications_category">Bildirimler</string>
   <string name="settings_qbittorrent_notifications_summary">Arka plan kontrolü</string>
   <string name="settings_qbittorrent_notifications_period_title">Torrent kontrol sıklığı</string>
