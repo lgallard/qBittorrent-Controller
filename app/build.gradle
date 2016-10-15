@@ -107,3 +107,9 @@ dependencies {
 android {
     useLibrary 'org.apache.http.legacy'
 }
+
+tasks.whenTaskAdded { task ->
+    if (task.name.equals("lint")) {
+        task.enabled = false
+    }
+}
