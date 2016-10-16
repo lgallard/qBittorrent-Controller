@@ -67,16 +67,16 @@
     <item>上の完了</item>
   </string-array>
   <string-array name="sortByValues">
-    <item>Name</item>
-    <item>Size</item>
-    <item>ETA</item>
-    <item>Priority</item>
-    <item>Progress</item>
-    <item>Ratio</item>
-    <item>DownloadSpeed</item>
-    <item>UploadSpeed</item>
-    <item>AddedOn</item>
-    <item>CompletedOn</item>
+    <item name="1">1</item>
+    <item name="2">2</item>
+    <item name="3">3</item>
+    <item name="4">4</item>
+    <item name="5">5</item>
+    <item name="6">6</item>
+    <item name="7">7</item>
+    <item name="8">8</item>
+    <item name="9">9</item>
+    <item name="10">10</item>
   </string-array>
   <string-array name="navigation_drawer_items_array">
     <item>すべて</item>
