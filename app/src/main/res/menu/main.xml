@@ -92,7 +92,16 @@
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_add"
         android:title="@string/action_add"
-        app:showAsAction="collapseActionView|ifRoom" />
+        app:showAsAction="collapseActionView|ifRoom">
+        <menu>
+            <item
+                android:id="@+id/action_add_file"
+                android:title="@string/action_add_file" />
+            <item
+                android:id="@+id/action_add_url"
+                android:title="@string/action_add_url" />
+        </menu>
+    </item>
 
     <item
         android:id="@+id/action_resume"
@@ -193,11 +202,12 @@
 
     </item>
 
-    <item android:id="@+id/action_search"
-        android:title="@string/search_title"
+    <item
+        android:id="@+id/action_search"
         android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
-        app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+        android:title="@string/search_title"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
 
     <item
         android:id="@+id/action_rss"
@@ -207,9 +217,9 @@
 
     <item
         android:id="@+id/action_toggle_alternative_rate"
-        android:title="@string/action_toggle_alternative_rates"
-        android:enabled="false"
         android:checkable="true"
+        android:enabled="false"
+        android:title="@string/action_toggle_alternative_rates"
         app:showAsAction="ifRoom" />
 
 

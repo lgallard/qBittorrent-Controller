@@ -257,5 +257,6 @@
     <string name="torrent_label_menu">ラベル...</string>
     <string name="action_add_tracker">加えます tracker</string>
     <string name="help_libraries">ソフトウェアが使用さ：</string>
-
+    <string name="action_add_file">トレントファイルを追加します。</string>
+    <string name="action_add_url">急流のリンクを追加</string>
 </resources>

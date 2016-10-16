@@ -271,6 +271,8 @@
   <string name="action_set_label">Ezarri etiketa</string>
   <string name="action_add_tracker">Gehitu tracker</string>
   <string name="help_libraries">Erabilitako softwarea:</string>
+  <string name="action_add_file">Gehitu torrent fitxategia</string>
+  <string name="action_add_url">Gehitu torrent esteka</string>
 </resources>
 
 

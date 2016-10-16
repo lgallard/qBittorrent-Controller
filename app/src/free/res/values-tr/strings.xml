@@ -266,4 +266,6 @@ Android ayarlarından bu izni vermek ister misiniz?</string>
   <string name="torrent_label_menu">Etiket...</string>
   <string name="action_add_tracker">İzleyici ekle</string>
   <string name="help_libraries">Kullanılan yazılım:</string>
+  <string name="action_add_url">Sel bağlantı ekleyin</string>
+  <string name="action_add_file">Torrent dosyasını ekleyin</string>
 </resources>

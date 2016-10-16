@@ -263,5 +263,6 @@
     <string name="action_set_label">Definir etiqueta</string>
     <string name="action_add_tracker">Adicionar tracker</string>
     <string name="help_libraries">Software usado:</string>
-
+    <string name="action_add_file">Adicionar arquivo torrent</string>
+    <string name="action_add_url">Adicionar link de torrent</string>
 </resources>

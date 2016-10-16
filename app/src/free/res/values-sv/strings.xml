@@ -13,7 +13,7 @@
     <string name="app_shortname">qBController</string>
     <string name="action_settings">Inställningar</string>
     <string name="action_refresh">Uppdatera</string>
-    <string name="action_add">lägg</string>
+    <string name="action_add">Lägg</string>
     <string name="action_pause">Pausa</string>
     <string name="action_resume">Återuppta</string>
     <string name="action_resume_all">Återuppta alla</string>
@@ -209,7 +209,7 @@
     <string name="help_license">© Luis M. Gallardo D. \n\nPublicerad under GPL v3</string>
     <string name="help_rate_summary">Bedöm appen i Google Play</string>
     <string name="help_rate_title">Betygsätt den här appen</string>
-    <string name="action_addRss">lägg RSS</string>
+    <string name="action_addRss">Lägg RSS</string>
     <string name="action_edit">Redigera</string>
     <string name="action_rss">RSS</string>
     <string name="checkbox_autodownload_rss">Ladda ner nya torrents automatiskt?</string>
@@ -271,5 +271,6 @@
     <string name="action_set_label">Definiera etikett</string>
     <string name="action_add_tracker">Lägg tracker</string>
     <string name="help_libraries">Programvara som används:</string>
-
+    <string name="action_add_file">Lägg torrent fil</string>
+    <string name="action_add_url">Lägga torrent länk</string>
 </resources>

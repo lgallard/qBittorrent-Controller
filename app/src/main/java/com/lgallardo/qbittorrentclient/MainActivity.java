@@ -66,6 +66,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,6 +80,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 interface RefreshListener {
     public void swipeRefresh();
@@ -135,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static final int OPTION_CODE = 1;
     protected static final int GETPRO_CODE = 2;
     protected static final int HELP_CODE = 3;
+    protected static final int ADDFILE_CODE = 4;
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
 
     protected static final int SORTBY_NAME = 1;
@@ -1508,8 +1511,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_refresh:
                 swipeRefresh();
                 return true;
-            case R.id.action_add:
-                // Add URL torrent
+            case R.id.action_add_file:
+                // Add torrent file
+                openFilePicker();
+                return true;
+            case R.id.action_add_url:
+                // Add torrent URL
                 addUrlTorrent();
                 return true;
             case R.id.action_rss:
@@ -1970,6 +1977,21 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         }
 
+        if(requestCode == ADDFILE_CODE && resultCode == RESULT_OK){
+
+            String file_path_value = "";
+
+            // MaterialDesignPicker
+            if (requestCode == ADDFILE_CODE && resultCode == RESULT_OK) {
+                file_path_value = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+            }
+
+            Log.d("Debug", "Torrent path: " + file_path_value);
+
+            // Do something with the file path
+            addTorrentFile(file_path_value);
+        }
+
     }
 
     private void addUrlTorrent() {
@@ -2079,7 +2101,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    // This get qBitorrent options to save them in shared preferences variables and then open the Option activity
+    // This get qBittorrent options to save them in shared preferences variables and then open the Option activity
     protected void getAndOpenOptions() {
 
         // Options - Execute the task in background
@@ -2292,14 +2314,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-
     public void toggleAlternativeSpeedLimits() {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"toggleAlternativeSpeedLimits", ""});
 
     }
-
 
     public void setQBittorrentPrefefrences(String hash) {
         // Execute the task in background
@@ -2497,7 +2517,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
-
     public void refreshAfterCommand(int delay) {
 
 //        switch (drawerList.getCheckedItemPosition()) {
@@ -2534,7 +2553,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-
     public void genericOkDialog(int title, int message) {
         genericOkDialog(title, message, null);
     }
@@ -2543,11 +2561,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         genericOkDialog(-1, message, okListener);
     }
 
-
     public void genericOkDialog(int message) {
         genericOkDialog(-1, message, null);
     }
-
 
     public void genericOkDialog(int title, int message, DialogInterface.OnClickListener okListener) {
 
@@ -2575,12 +2591,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-
     private void genericOkCancelDialog(int title, int message) {
 
         genericOkCancelDialog(title, message, null);
     }
-
 
     private void genericOkCancelDialog(int message, DialogInterface.OnClickListener okListener) {
 
@@ -2622,7 +2636,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
     }
-
 
     public void qBittorrentNoSettingsFoundDialog(int title, int message) {
 
@@ -2915,7 +2928,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         savePreferenceAsString("lastState", state);
     }
 
-
     public void saveLastLabel(String label) {
         currentLabel = label;
         savePreferenceAsString("lastLabel", label);
@@ -2957,7 +2969,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
 
-
     // Save key-value preference as boolean
     private void savePreferenceAsBoolean(String preference, boolean value) {
 
@@ -2972,7 +2983,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         editor.apply();
 
     }
-
 
     private void saveReverseOrder(boolean reverse_order) {
         MainActivity.reverse_order = reverse_order;
@@ -3049,7 +3059,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         listViewRefreshing = false;
     }
 
-
     public void refreshSwipeLayout() {
 
         if (!hostname.equals("")) {
@@ -3069,6 +3078,45 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(true);
             }
         }
+
+    }
+
+    private void openFilePicker() {
+
+        // Check Dangerous permissions (Android 6.0+, API 23+)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                genericOkDialog(R.string.error_permission2,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                            }
+                        });
+
+            }else{
+
+                // No explanation needed, request the permission.
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+            }
+
+
+        } else {
+
+            // Permissions granted, open file picker
+            Intent intent = new Intent(getApplicationContext(), FilePickerActivity.class);
+            intent.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.torrent"));
+//            startActivityForResult(INTENT, RESULT_CODE);
+            startActivityForResult(intent, ADDFILE_CODE);
+
+        }
+
 
     }
 
@@ -3237,7 +3285,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         }
     }
-
 
     // Here is where the action happens
     private class qBittorrentCommand extends AsyncTask<String, Integer, String[]> {

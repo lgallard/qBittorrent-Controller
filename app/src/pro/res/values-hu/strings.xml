@@ -255,4 +255,6 @@
     <string name="torrent_label_menu">Címke…</string>
     <string name="action_add_tracker">Hozzáad tracker</string>
     <string name="help_libraries">Könyvtárak használt</string>
+    <string name="action_add_file">Hozzáad torrent fájl</string>
+    <string name="action_add_url">Hozzáad torrent linkre</string>
 </resources>

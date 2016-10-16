@@ -262,4 +262,6 @@
     <string name="torrentsApplyingChange">Aplicando cambio!</string>
     <string name="action_add_tracker">Añadir tracker</string>
     <string name="help_libraries">Software usadado:</string>
+    <string name="action_add_file">Añadir archivo torrent</string>
+    <string name="action_add_url">Añadir enlace torrent</string>
 </resources>
