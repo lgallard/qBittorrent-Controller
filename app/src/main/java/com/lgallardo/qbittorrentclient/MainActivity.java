@@ -137,6 +137,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static final int HELP_CODE = 3;
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
 
+    protected static final int SORTBY_NAME = 1;
+    protected static final int SORTBY_SIZE = 2;
+    protected static final int SORTBY_ETA = 3;
+    protected static final int SORTBY_PRIORITY = 4;
+    protected static final int SORTBY_PROGRESS = 5;
+    protected static final int SORTBY_RATIO = 6;
+    protected static final int SORTBY_DOWNLOAD = 7;
+    protected static final int SORTBY_UPLOAD = 8;
+    protected static final int SORTBY_ADDEDON = 9;
+    protected static final int SORTBY_COMPLETEDON = 10;
 
     // Cookie (SID - Session ID)
     public static String cookie = null;
@@ -167,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static int refresh_period;
     protected static int connection_timeout;
     protected static int data_timeout;
-    protected static String sortby;
+    protected static int sortby_value;
     protected static boolean reverse_order;
     protected static boolean dark_ui;
     protected static String lastState;
@@ -1725,52 +1735,52 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 return true;
             case R.id.action_sortby_name:
-                saveSortBy(getResources().getStringArray(R.array.sortByValues)[0]);
+                saveSortBy(SORTBY_NAME);
                 invalidateOptionsMenu();
                 swipeRefresh();
                 return true;
             case R.id.action_sortby_size:
-                saveSortBy(getResources().getStringArray(R.array.sortByValues)[1]);
+                saveSortBy(SORTBY_SIZE);
                 invalidateOptionsMenu();
                 swipeRefresh();
                 return true;
             case R.id.action_sortby_eta:
-                saveSortBy(getResources().getStringArray(R.array.sortByValues)[2]);
+                saveSortBy(SORTBY_ETA);
                 invalidateOptionsMenu();
                 swipeRefresh();
                 return true;
             case R.id.action_sortby_priority:
-                saveSortBy(getResources().getStringArray(R.array.sortByValues)[3]);
+                saveSortBy(SORTBY_PRIORITY);
                 invalidateOptionsMenu();
                 swipeRefresh();
                 return true;
             case R.id.action_sortby_progress:
-                saveSortBy(getResources().getStringArray(R.array.sortByValues)[4]);
+                saveSortBy(SORTBY_PROGRESS);
                 invalidateOptionsMenu();
                 swipeRefresh();
                 return true;
             case R.id.action_sortby_ratio:
-                saveSortBy(getResources().getStringArray(R.array.sortByValues)[5]);
+                saveSortBy(SORTBY_RATIO);
                 invalidateOptionsMenu();
                 swipeRefresh();
                 return true;
             case R.id.action_sortby_downloadSpeed:
-                saveSortBy(getResources().getStringArray(R.array.sortByValues)[6]);
+                saveSortBy(SORTBY_DOWNLOAD);
                 invalidateOptionsMenu();
                 swipeRefresh();
                 return true;
             case R.id.action_sortby_uploadSpeed:
-                saveSortBy(getResources().getStringArray(R.array.sortByValues)[7]);
+                saveSortBy(SORTBY_UPLOAD);
                 invalidateOptionsMenu();
                 swipeRefresh();
                 return true;
             case R.id.action_sortby_added_on:
-                saveSortBy(getResources().getStringArray(R.array.sortByValues)[8]);
+                saveSortBy(SORTBY_ADDEDON);
                 invalidateOptionsMenu();
                 swipeRefresh();
                 return true;
             case R.id.action_sortby_completed_on:
-                saveSortBy(getResources().getStringArray(R.array.sortByValues)[9]);
+                saveSortBy(SORTBY_COMPLETEDON);
                 invalidateOptionsMenu();
                 swipeRefresh();
                 return true;
@@ -2732,7 +2742,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             data_timeout = 20;
         }
 
-        sortby = sharedPrefs.getString("sortby", "NULL");
+        sortby_value = sharedPrefs.getInt("sortby_value", 1);
         reverse_order = sharedPrefs.getBoolean("reverse_order", false);
 
         dark_ui = sharedPrefs.getBoolean("dark_ui", false);
@@ -2911,9 +2921,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         savePreferenceAsString("lastLabel", label);
     }
 
-    private void saveSortBy(String sortBy) {
-        MainActivity.sortby = sortBy;
-        savePreferenceAsString("sortby", sortBy);
+    private void saveSortBy(int sortby_value) {
+        MainActivity.sortby_value = sortby_value;
+        savePreferenceAsInt("sortby_value", sortby_value);
     }
 
     // Save key-value preference as String
@@ -2930,6 +2940,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         editor.apply();
 
     }
+
+    // Save key-value preference as Int
+    private void savePreferenceAsInt(String preference, int value) {
+
+        // Save preference locally
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor editor = sharedPrefs.edit();
+
+        // Save key-values
+        editor.putInt(preference, value);
+
+        // Commit changes
+        editor.apply();
+
+    }
+
 
 
     // Save key-value preference as boolean
@@ -3846,59 +3872,54 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
                 // Sort by filename
-                if (sortby.equals("Name")) {
+                if (sortby_value == SORTBY_NAME) {
                     Collections.sort(torrentsFiltered, new TorrentNameComparator(reverse_order));
                 }
                 // Sort by size
-                if (sortby.equals("Size")) {
+                if (sortby_value == SORTBY_SIZE) {
                     Collections.sort(torrentsFiltered, new TorrentSizeComparator(reverse_order));
                 }
+                // Sort by Eta
+                if (sortby_value == SORTBY_ETA) {
+                    Collections.sort(torrentsFiltered, new TorrentEtaComparator(reverse_order));
+                }
                 // Sort by priority
-                if (sortby.equals("Priority")) {
+                if (sortby_value == SORTBY_PRIORITY) {
                     Collections.sort(torrentsFiltered, new TorrentPriorityComparator(reverse_order));
                 }
                 // Sort by progress
-                if (sortby.equals("Progress")) {
+                if (sortby_value == SORTBY_PROGRESS) {
                     Collections.sort(torrentsFiltered, new TorrentProgressComparator(reverse_order));
                 }
-                // Sort by Eta
-                if (sortby.equals("ETA")) {
-                    Collections.sort(torrentsFiltered, new TorrentEtaComparator(reverse_order));
-                }
-
-                // Sort by download speed
-                if (sortby.equals("Ratio")) {
+                // Sort by Ratio
+                if (sortby_value == SORTBY_RATIO) {
                     Collections.sort(torrentsFiltered, new TorrentRatioComparator(reverse_order));
                 }
-
-                // Sort by upload speed
-                if (sortby.equals("DownloadSpeed")) {
+                // Sort by download speed
+                if (sortby_value == SORTBY_DOWNLOAD) {
                     Collections.sort(torrentsFiltered, new TorrentDownloadSpeedComparator(reverse_order));
                 }
-
-                // Sort by Ratio
-                if (sortby.equals("UploadSpeed")) {
+                // Sort by upload speed
+                if (sortby_value == SORTBY_UPLOAD) {
                     Collections.sort(torrentsFiltered, new TorrentUploadSpeedComparator(reverse_order));
                 }
-
-                // Sort by Added on and Completed on
-                if (sortby.equals("AddedOn")) {
+                // Sort by Added on
+                if (sortby_value == SORTBY_ADDEDON) {
                     if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
                         Collections.sort(torrentsFiltered, new TorrentAddedOnTimestampComparator(reverse_order));
                     } else {
                         Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
                     }
                 }
-
-                if (sortby.equals("CompletedOn")) {
+                // Sort by Completed on
+                if (sortby_value == SORTBY_COMPLETEDON) {
                     if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
                         Collections.sort(torrentsFiltered, new TorrentCompletedOnTimestampComparator(reverse_order));
                     } else {
                         Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
                     }
                 }
-
-
+                
                 // Get names (delete in background method)
                 MainActivity.names = new String[torrentsFiltered.size()];
                 MainActivity.lines = new Torrent[torrentsFiltered.size()];

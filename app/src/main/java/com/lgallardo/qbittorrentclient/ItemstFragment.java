@@ -706,48 +706,48 @@ public class ItemstFragment extends ListFragment {
             menu.findItem(R.id.action_sortby_added_on).setVisible(true);
             menu.findItem(R.id.action_sortby_completed_on).setVisible(true);
 
-            if (MainActivity.sortby.equals("Name")) {
+            if (MainActivity.sortby_value == MainActivity.SORTBY_NAME) {
                 menu.findItem(R.id.action_sortby_name).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (MainActivity.sortby.equals("Size")) {
+            if (MainActivity.sortby_value == MainActivity.SORTBY_SIZE) {
                 menu.findItem(R.id.action_sortby_size).setIcon(R.drawable.ic_stat_completed);
             }
 
 
-            if (MainActivity.sortby.equals("ETA")) {
+            if (MainActivity.sortby_value == MainActivity.SORTBY_ETA) {
                 menu.findItem(R.id.action_sortby_eta).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (MainActivity.sortby.equals("Priority")) {
+            if (MainActivity.sortby_value == MainActivity.SORTBY_PRIORITY) {
                 menu.findItem(R.id.action_sortby_priority).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (MainActivity.sortby.equals("Progress")) {
+            if (MainActivity.sortby_value == MainActivity.SORTBY_PROGRESS) {
                 menu.findItem(R.id.action_sortby_progress).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (MainActivity.sortby.equals("Ratio")) {
+            if (MainActivity.sortby_value == MainActivity.SORTBY_RATIO) {
                 menu.findItem(R.id.action_sortby_ratio).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (MainActivity.sortby.equals("DownloadSpeed")) {
+            if (MainActivity.sortby_value == MainActivity.SORTBY_DOWNLOAD) {
                 menu.findItem(R.id.action_sortby_downloadSpeed).setIcon(R.drawable.ic_stat_completed);
                 menu.findItem(R.id.action_sortby_speed).setIcon(R.drawable.ic_stat_completed);
             }
 
-            if (MainActivity.sortby.equals("UploadSpeed")) {
+            if (MainActivity.sortby_value == MainActivity.SORTBY_UPLOAD) {
                 menu.findItem(R.id.action_sortby_uploadSpeed).setIcon(R.drawable.ic_stat_completed);
                 menu.findItem(R.id.action_sortby_speed).setIcon(R.drawable.ic_stat_completed);
 
             }
 
-            if (MainActivity.sortby.equals("AddedOn")) {
+            if (MainActivity.sortby_value == MainActivity.SORTBY_ADDEDON) {
                 menu.findItem(R.id.action_sortby_added_on).setIcon(R.drawable.ic_stat_completed);
                 menu.findItem(R.id.action_sortby_date).setIcon(R.drawable.ic_stat_completed);
 
             }
-            if (MainActivity.sortby.equals("CompletedOn")) {
+            if (MainActivity.sortby_value == MainActivity.SORTBY_COMPLETEDON) {
                 menu.findItem(R.id.action_sortby_completed_on).setIcon(R.drawable.ic_stat_completed);
                 menu.findItem(R.id.action_sortby_date).setIcon(R.drawable.ic_stat_completed);
             }
