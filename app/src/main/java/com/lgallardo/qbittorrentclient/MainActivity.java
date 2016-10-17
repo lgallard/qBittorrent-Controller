@@ -1254,47 +1254,56 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // permission was granted, yay! Do the
         // contacts-related task you need to do.
 
-
-        if (urlTorrent.substring(0, 7).equals("content")) {
-            urlTorrent = "file://" + getFilePathFromUri(this, Uri.parse(urlTorrent));
-        }
-
-        if (urlTorrent.substring(0, 4).equals("file")) {
-
-            // File
-            addTorrentFile(Uri.parse(urlTorrent).getPath());
-
+        // if there is not a path to the file, open de file picker
+        if (urlTorrent == null) {
+            openFilePicker();
         } else {
+
             try {
+                if (urlTorrent.substring(0, 7).equals("content")) {
+                    urlTorrent = "file://" + getFilePathFromUri(this, Uri.parse(urlTorrent));
+                }
 
-                urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
+                if (urlTorrent.substring(0, 4).equals("file")) {
 
-                // If It is a valid torrent or magnet link
-                if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:")) {
-//                    Log.d("Debug", "URL: " + urlTorrent);
-                    addTorrent(urlTorrent);
+                    // File
+                    addTorrentFile(Uri.parse(urlTorrent).getPath());
+
                 } else {
-                    // Open not valid torrent or magnet link in browser
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTorrent));
-                    startActivity(browserIntent);
+
+                    urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
+
+                    // If It is a valid torrent or magnet link
+                    if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:")) {
+//                    Log.d("Debug", "URL: " + urlTorrent);
+                        addTorrent(urlTorrent);
+                    } else {
+                        // Open not valid torrent or magnet link in browser
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTorrent));
+                        startActivity(browserIntent);
+                    }
 
                 }
+
             } catch (UnsupportedEncodingException e) {
                 Log.e("Debug", "Check URL: " + e.toString());
+            } catch (NullPointerException e) {
+                Log.e("Debug", "urlTorrent is null: " + e.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 
 
     private void addTorrentByIntent(Intent intent) {
 
-//        Log.d("Debug", "addTorrentByIntent invoked");
+        Log.d("Debug", "addTorrentByIntent invoked");
 
         urlTorrent = intent.getDataString();
+
+//        Log.d("Debug", "urlTorrent: "+ urlTorrent);
+//        Log.d("Debug", "intent: " + intent.toString());
 
         if (urlTorrent != null && urlTorrent.length() != 0) {
 
