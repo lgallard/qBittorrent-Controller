@@ -316,6 +316,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Torrent url
     private String urlTorrent;
 
+
+    private Toast toast;
+    private AsyncTask<String, Integer, Torrent[]> qbTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -733,7 +737,30 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void onPause() {
         super.onPause();
         activityIsVisible = false;
+
+//        // Cancel toast messages
+//        if(toast != null) {
+//            toast.cancel();
+//        }
+
+
     }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//
+//        // Cancel toast messages
+//        if(toast != null) {
+//            toast.cancel();
+//        }
+//
+//        // Cancel qbTask
+//        if(qbTask != null){
+//            qbTask.cancel(true);
+//        }
+//
+//    }
 
     // Load Banner
     public void loadBanner() {
@@ -1054,7 +1081,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // Request new cookie and execute task in background
 
                     if (connection403ErrorCounter > 1) {
-                        Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+
+                        toastText(R.string.error403);
+
                         httpStatusCode = 0;
                         disableRefreshSwipeLayout();
                     } else {
@@ -1069,7 +1098,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         if (cookie != null && !cookie.equals("")) {
                             // Only toasts the message if there is not a cookie set before
-                            Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                            toastText(R.string.error403);
+
                             cookie = null;
                         }
 
@@ -1078,7 +1108,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     } else {
 
                         // Execute the task in background
-                        new qBittorrentTask().execute(params);
+                        qbTask = new qBittorrentTask().execute(params);
 
                         // Check if  alternative speed limit is set
                         new qBittorrentCommand().execute(new String[]{"alternativeSpeedLimitsEnabled", ""});
@@ -1090,8 +1120,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         } else {
 
             // Connection Error message
-            Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
+            toastText(R.string.connection_error);
+
             disableRefreshSwipeLayout();
+        }
+
+    }
+
+    private void toastText(int message) {
+
+        if(activityIsVisible == true) {
+            toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+            toast.show();
         }
 
     }
@@ -1298,10 +1338,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void addTorrentByIntent(Intent intent) {
 
-        Log.d("Debug", "addTorrentByIntent invoked");
+//        Log.d("Debug", "addTorrentByIntent invoked");
 
         urlTorrent = intent.getDataString();
-
+//
 //        Log.d("Debug", "urlTorrent: "+ urlTorrent);
 //        Log.d("Debug", "intent: " + intent.toString());
 
@@ -2114,7 +2154,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected void getAndOpenOptions() {
 
         // Options - Execute the task in background
-        Toast.makeText(getApplicationContext(), R.string.getQBittorrentPrefefrences, Toast.LENGTH_SHORT).show();
+        toastText(R.string.getQBittorrentPrefefrences);
+
         qBittorrentOptions qso = new qBittorrentOptions();
         qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
 
@@ -2143,7 +2184,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             qtc.execute(new String[]{"startSelected", hashesArray[i]});
         }
 
-        Toast.makeText(getApplicationContext(), R.string.torrentsSelectedStarted, Toast.LENGTH_SHORT).show();
+        toastText(R.string.torrentsSelectedStarted);
 
         // Delay of 3 seconds
         refreshAfterCommand(3);
@@ -2165,7 +2206,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             qtc.execute(new String[]{"pauseSelected", hashesArray[i]});
         }
 
-        Toast.makeText(getApplicationContext(), R.string.torrentsSelectedPaused, Toast.LENGTH_SHORT).show();
+        toastText(R.string.torrentsSelectedPaused);
 
         // Delay of 1 second
         refreshAfterCommand(1);
@@ -2183,7 +2224,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"deleteSelected", hashes});
 
-        Toast.makeText(getApplicationContext(), R.string.torrentsSelectedDeleted, Toast.LENGTH_SHORT).show();
+        toastText(R.string.torrentsSelectedDeleted);
 
         // Delay of 1 second
         refreshAfterCommand(1);
@@ -2200,7 +2241,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"deleteDriveSelected", hashes});
 
-        Toast.makeText(getApplicationContext(), R.string.torrentsSelectedDeletedDrive, Toast.LENGTH_SHORT).show();
+        toastText(R.string.torrentsSelectedDeletedDrive);
 
         // Delay of 1 second
         refreshAfterCommand(1);
@@ -2296,7 +2337,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             qtc.execute(new String[]{"recheckSelected", hashesArray[i]});
         }
 
-        Toast.makeText(getApplicationContext(), R.string.torrentsRecheck, Toast.LENGTH_SHORT).show();
+        toastText(R.string.torrentsRecheck);
 
         // Delay of 3 seconds
         refreshAfterCommand(3);
@@ -2441,7 +2482,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     qtc.execute(new String[]{"setUploadRateLimit", hashesArray[i] + "&" + limit * 1024});
                 }
 
-                Toast.makeText(getApplicationContext(), R.string.setUploadRateLimit, Toast.LENGTH_SHORT).show();
+                toastText(R.string.setUploadRateLimit);
 
                 // Delay of 1 second
                 refreshAfterCommand(1);
@@ -2476,7 +2517,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     qtc.execute(new String[]{"setDownloadRateLimit", hashesArray[i] + "&" + limit * 1024});
                 }
 
-                Toast.makeText(getApplicationContext(), R.string.setDownloadRateLimit, Toast.LENGTH_SHORT).show();
+                toastText(R.string.setDownloadRateLimit);
 
                 // Delay of 1 second
                 refreshAfterCommand(1);
@@ -3025,7 +3066,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     @Override
     public void swipeRefresh() {
 
-
         if (hostname.equals("")) {
             qBittorrentNoSettingsFoundDialog(R.string.info, R.string.about_help1);
             disableRefreshSwipeLayout();
@@ -3174,7 +3214,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             savePreferenceAsString("qbCookie", result[0]);
 
             // Execute the task in background
-            new qBittorrentTask().execute(params);
+            qbTask = new qBittorrentTask().execute(params);
 
         }
     }
@@ -3350,20 +3390,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Handle HTTP status code
 
             if (httpStatusCode == 1) {
-                Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
+
+                toastText(R.string.error1);
                 httpStatusCode = 0;
                 return;
             }
 
             if (httpStatusCode == 2) {
-                Toast.makeText(getApplicationContext(), R.string.error2, Toast.LENGTH_SHORT).show();
+                toastText(R.string.error2);
+                toast.show();
                 httpStatusCode = 0;
                 return;
             }
 
 
             if (httpStatusCode == 401) {
-                Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
+                toastText(R.string.error401);
                 httpStatusCode = 0;
                 return;
             }
@@ -3374,13 +3416,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     cookie = null;
                 }
 
-//                Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
                 connection403ErrorCounter = connection403ErrorCounter + 1;
 
                 if (connection403ErrorCounter > 1) {
                     if (cookie != null && !cookie.equals("")) {
                         // Only toasts the message if there is not a cookie set before
-                        Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                        toastText(R.string.error403);
                         cookie = null;
                     }
                     httpStatusCode = 0;
@@ -3540,7 +3581,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
 
             if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command))) {
-                Toast.makeText(getApplicationContext(), messageId, Toast.LENGTH_SHORT).show();
+
+                toastText(messageId);
 
                 // Refresh
                 refreshAfterCommand(delay);
@@ -3730,18 +3772,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Handle HTTP status code
 
                 if (httpStatusCode == 1) {
-                    Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
+                    toastText(R.string.error1);
                     httpStatusCode = 0;
                 }
 
                 if (httpStatusCode == 2) {
-                    Toast.makeText(getApplicationContext(), R.string.error2, Toast.LENGTH_SHORT).show();
+                    toastText(R.string.error2);
                     httpStatusCode = 0;
                 }
 
 
                 if (httpStatusCode == 401) {
-                    Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
+                    toastText(R.string.error401);
 
                     // Get new Cookie
                     if (qb_version.equals("3.2.x")) {
@@ -3752,7 +3794,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
                 if (httpStatusCode == 400) {
 
-                    Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
+                    toastText(R.string.connection_error);
 
                     // Get new Cookie
                     if (qb_version.equals("3.2.x")) {
@@ -3779,7 +3821,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                             if (cookie != null && !cookie.equals("")) {
                                 // Only toasts the message if there is not a cookie set before
-                                Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                                toastText(R.string.error403);
                             }
 
                             cookie = null;
@@ -3788,10 +3830,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         } else {
 
-
                             // Ask a new cookie and re-execute the task in background
                             new qBittorrentCookieTask().execute(params);
-
 
                         }
 
@@ -4326,27 +4366,26 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             if (result == null) {
 
-                Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
+                toastText(R.string.connection_error);
 
                 // Handle HTTP status code
-
                 if (httpStatusCode == 1) {
-                    Toast.makeText(getApplicationContext(), R.string.error1, Toast.LENGTH_SHORT).show();
+                    toastText(R.string.error1);
                     httpStatusCode = 0;
                 }
 
                 if (httpStatusCode == 2) {
-                    Toast.makeText(getApplicationContext(), R.string.error2, Toast.LENGTH_SHORT).show();
+                    toastText(R.string.error2);
                     httpStatusCode = 0;
                 }
 
                 if (httpStatusCode == 401) {
-                    Toast.makeText(getApplicationContext(), R.string.error401, Toast.LENGTH_LONG).show();
+                    toastText(R.string.error401);
                     httpStatusCode = 0;
                 }
 
                 if (httpStatusCode == 403 || httpStatusCode == 404) {
-                    Toast.makeText(getApplicationContext(), R.string.error403, Toast.LENGTH_SHORT).show();
+                    toastText(R.string.error403);
                     httpStatusCode = 0;
                     disableRefreshSwipeLayout();
 
