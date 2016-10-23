@@ -73,7 +73,7 @@ android {
 repositories {
     mavenCentral()
     maven {
-        url  "http://dl.bintray.com/lukaville/maven"
+        url "http://dl.bintray.com/lukaville/maven"
     }
 }
 
@@ -100,7 +100,6 @@ dependencies {
     dependencies {
         compile 'com.jayway.android.robotium:robotium-solo:5.4.1'
     }
-
 
 
 }
