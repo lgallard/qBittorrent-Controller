@@ -314,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static String keystore_password;
 
     // Torrent url
+    private Intent handledIntent;
     private String urlTorrent;
 
 
@@ -1314,11 +1315,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
 
                     // If It is a valid torrent or magnet link
-                    if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:")) {
+                    if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") | handledIntent.getType().equals("application/x-bittorrent"))  {
 //                    Log.d("Debug", "URL: " + urlTorrent);
                         addTorrent(urlTorrent);
                     } else {
                         // Open not valid torrent or magnet link in browser
+
+                        Log.d("Debug", "url to open: " + Uri.parse(urlTorrent) );
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTorrent));
                         startActivity(browserIntent);
                     }
@@ -1340,10 +1343,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 //        Log.d("Debug", "addTorrentByIntent invoked");
 
+        handledIntent = intent;
+
         urlTorrent = intent.getDataString();
 //
-//        Log.d("Debug", "urlTorrent: "+ urlTorrent);
-//        Log.d("Debug", "intent: " + intent.toString());
+        Log.d("Debug", "urlTorrent: "+ urlTorrent);
+        Log.d("Debug", "intent: " + intent.toString());
 
         if (urlTorrent != null && urlTorrent.length() != 0) {
 
