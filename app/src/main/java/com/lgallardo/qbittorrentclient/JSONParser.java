@@ -55,6 +55,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URL;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Date;
@@ -608,12 +609,11 @@ public class JSONParser {
 
             if ("addTorrent".equals(command)) {
 
-                URI hash_uri = new URI(hash);
-                hash = hash_uri.toString();
+                hash = encodeHash(hash);
+
             }
 
             if ("addTracker".equals(command)) {
-
 
 
                 String[] tmpString = hash.split("&");
@@ -621,7 +621,6 @@ public class JSONParser {
 
                 URI hash_uri = new URI(hash);
                 hash = hash_uri.toString();
-
 
                 try {
                     tracker = tmpString[1];
@@ -686,7 +685,8 @@ public class JSONParser {
 
             // This replaces encoded char "+" for "%20" so spaces can be passed as parameter
             entityValue = entityValue.replaceAll("\\+", "%20");
-
+            entityValue = entityValue.replaceAll("\\[", "%5B");
+            entityValue = entityValue.replaceAll("\\]", "%5D");
 
             StringEntity stringEntity = new StringEntity(entityValue, HTTP.UTF_8);
             stringEntity.setContentType(URLEncodedUtils.CONTENT_TYPE);
@@ -782,7 +782,6 @@ public class JSONParser {
     }
 
     // https
-
     public DefaultHttpClient getNewHttpClient() {
         try {
 
@@ -1043,7 +1042,6 @@ public class JSONParser {
         return APIVersionString;
     }
 
-
     public String getVersion() throws JSONParserStatusCodeException {
 
 
@@ -1164,6 +1162,35 @@ public class JSONParser {
             version = "";
         }
         return version;
+    }
+
+    // Encode Url
+    private String encodeHash(String hash){
+
+        URI uri = null;
+        String encodedHash = null;
+
+        try {
+            URL url = new URL(hash);
+
+//            Log.d("Debug", "Protocol: " + url.getProtocol());
+//            Log.d("Debug", "UserInfo: " + url.getUserInfo());
+//            Log.d("Debug", "Host: " + url.getHost());
+//            Log.d("Debug", "Port: " + url.getPort());
+//            Log.d("Debug", "Path: " + url.getPath());
+//            Log.d("Debug", "Query: " + url.getQuery());
+//            Log.d("Debug", "Ref: " + url.getRef());
+
+            uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+
+            encodedHash = uri.toString();
+
+        } catch (Exception e) {
+            Log.e("Debug", "encodeHash: " + e.toString());
+        }
+
+        return (encodedHash);
+
     }
 
 
