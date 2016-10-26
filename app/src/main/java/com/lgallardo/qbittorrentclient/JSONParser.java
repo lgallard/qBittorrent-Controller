@@ -54,6 +54,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.security.KeyStore;
@@ -1171,21 +1172,33 @@ public class JSONParser {
         String encodedHash = null;
 
         try {
-            URL url = new URL(hash);
 
-//            Log.d("Debug", "Protocol: " + url.getProtocol());
-//            Log.d("Debug", "UserInfo: " + url.getUserInfo());
-//            Log.d("Debug", "Host: " + url.getHost());
-//            Log.d("Debug", "Port: " + url.getPort());
-//            Log.d("Debug", "Path: " + url.getPath());
-//            Log.d("Debug", "Query: " + url.getQuery());
-//            Log.d("Debug", "Ref: " + url.getRef());
+            try {
+                URL url = null;
 
-            uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+                url = new URL(hash);
+
+//                Log.d("Debug", "Protocol: " + url.getProtocol());
+//                Log.d("Debug", "UserInfo: " + url.getUserInfo());
+//                Log.d("Debug", "Host: " + url.getHost());
+//                Log.d("Debug", "Port: " + url.getPort());
+//                Log.d("Debug", "Path: " + url.getPath());
+//                Log.d("Debug", "Query: " + url.getQuery());
+//                Log.d("Debug", "Ref: " + url.getRef());
+
+                uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+
+
+            } catch (MalformedURLException e) {
+                uri = new URI(hash);
+
+            }
+
 
             encodedHash = uri.toString();
 
-        } catch (Exception e) {
+
+        }catch (Exception e) {
             Log.e("Debug", "encodeHash: " + e.toString());
         }
 
