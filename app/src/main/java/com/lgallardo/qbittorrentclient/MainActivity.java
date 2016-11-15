@@ -328,6 +328,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get preferences
         getSettings();
 
+        MainActivity.cookie = null;
+
         // Set alarm for checking completed torrents, if not set
         if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), NotifierService.class), PendingIntent.FLAG_NO_CREATE) == null) {
 
@@ -2817,7 +2819,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         qb_version = sharedPrefs.getString("qb_version", "3.2.x");
 
-        MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
+//        MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
 
         // Get last state
         lastState = sharedPrefs.getString("lastState", "all");
@@ -3302,6 +3304,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             } else if (apiVersion.contains("3.1")) {
 
                 qb_version = "3.1.x";
+                cookie = null;
 
             } else {
 
@@ -3369,7 +3372,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //                        Log.d("Debug", params[0]);
                     }
                 } catch (NumberFormatException e) {
-                    Log.e("Debug", e.toString());
+//                    Log.e("Debug", e.toString());
                 }
 
 
@@ -3629,6 +3632,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         JSONObject json = jArray.getJSONObject(i);
 
+                        Log.d("Debug", "name: " + json.getString(TAG_NAME));
+                        Log.d("Debug", "size: " + json.getString(TAG_SIZE));
+                        Log.d("Debug", "progress: " + json.getString(TAG_PROGRESS));
+                        Log.d("Debug", "qb_version: " + qb_version);
+
                         name = json.getString(TAG_NAME);
                         size = json.getString(TAG_SIZE).replace(",", ".");
                         progress = String.format("%.2f", json.getDouble(TAG_PROGRESS) * 100) + "%";
@@ -3664,7 +3672,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 label = json.getString(TAG_CATEGORY);
                             }
 
-                        } catch (JSONException je) {
+                        } catch (Exception e) {
                             label = null;
                         }
 
@@ -3751,7 +3759,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             } catch (Exception e) {
                 torrents = null;
-                Log.e("MAIN:", e.toString());
+                Log.e("MAIN:=", e.toString());
+                e.printStackTrace();
 
                 if (CustomLogger.isMainActivityReporting()) {
                     CustomLogger.saveReportMessage("Main", "[qBittorrentTask - Exception]: " + e.toString());
@@ -3954,7 +3963,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 //                Log.d("Debug", "currentLabel: " + currentLabel);
 
-                if (labels != null) {
+                if (labels != null && !(labels.contains(null))) {
                     // Sort labels
                     Collections.sort(labels);
 
