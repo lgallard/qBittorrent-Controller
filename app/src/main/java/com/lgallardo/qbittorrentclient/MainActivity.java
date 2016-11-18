@@ -612,9 +612,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Load banner
         loadBanner();
 
-        // Request a new cookie
-        new qBittorrentApiTask().execute(new Intent());
-
     }
 
     // Search bar in Material Design
