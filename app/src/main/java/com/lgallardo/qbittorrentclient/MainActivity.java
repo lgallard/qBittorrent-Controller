@@ -328,8 +328,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get preferences
         getSettings();
 
-        MainActivity.cookie = null;
-
         // Set alarm for checking completed torrents, if not set
         if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), NotifierService.class), PendingIntent.FLAG_NO_CREATE) == null) {
 
@@ -2819,7 +2817,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         qb_version = sharedPrefs.getString("qb_version", "3.2.x");
 
-//        MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
+        MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
 
         // Get last state
         lastState = sharedPrefs.getString("lastState", "all");
@@ -3631,11 +3629,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     for (int i = 0; i < jArray.length(); i++) {
 
                         JSONObject json = jArray.getJSONObject(i);
-
-                        Log.d("Debug", "name: " + json.getString(TAG_NAME));
-                        Log.d("Debug", "size: " + json.getString(TAG_SIZE));
-                        Log.d("Debug", "progress: " + json.getString(TAG_PROGRESS));
-                        Log.d("Debug", "qb_version: " + qb_version);
 
                         name = json.getString(TAG_NAME);
                         size = json.getString(TAG_SIZE).replace(",", ".");
