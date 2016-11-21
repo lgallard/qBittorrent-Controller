@@ -58,6 +58,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -80,6 +82,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 interface RefreshListener {
@@ -316,6 +320,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Torrent url
     private Intent handledIntent;
     private String urlTorrent;
+
+
+    // Path and label history
+    private Set<String> path_history;
+    private Set<String> label_history;
+
+    public static String path2Set;
+    public static String label2Set;
 
 
     private Toast toast;
@@ -1009,8 +1021,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             params[0] = qbQueryString + "/torrents?filter=" + state;
 
             // Get API version in case it hasn't been gotten before
-            if(qb_api == null|| qb_api.equals("") || qb_api.equals("0")){
-                    new qBittorrentApiTask().execute(new Intent());
+            if (qb_api == null || qb_api.equals("") || qb_api.equals("0")) {
+                new qBittorrentApiTask().execute(new Intent());
             }
 
             // Label
@@ -1130,7 +1142,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void toastText(int message) {
 
-        if(activityIsVisible == true) {
+        if (activityIsVisible == true) {
             toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -1308,7 +1320,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (urlTorrent.substring(0, 4).equals("file")) {
 
                     // File
-                    addTorrentFile(Uri.parse(urlTorrent).getPath());
+                    sendTorrent("file");
 
                 } else {
 
@@ -1319,7 +1331,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
                     // If It is a valid torrent or magnet link
-                    if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType()))  {
+                    if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType())) {
 //                    Log.d("Debug", "URL: " + urlTorrent);
                         addTorrent(urlTorrent);
                     } else {
@@ -1399,7 +1411,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         } else {
 
             // Permissions granted
-            handleUrlTorrent();
+            sendTorrent("link");
 
         }
 
@@ -1416,8 +1428,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     // Permissions granted
-                    handleUrlTorrent();
-
+                    sendTorrent("link");
 
                 } else {
 
@@ -2031,19 +2042,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         }
 
-        if(requestCode == ADDFILE_CODE && resultCode == RESULT_OK){
+        if (requestCode == ADDFILE_CODE && resultCode == RESULT_OK) {
 
             String file_path_value = "";
 
             // MaterialDesignPicker
             if (requestCode == ADDFILE_CODE && resultCode == RESULT_OK) {
-                file_path_value = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+
+                urlTorrent = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                sendTorrent("file");
+//                file_path_value = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             }
 
             Log.d("Debug", "Torrent path: " + file_path_value);
 
-            // Do something with the file path
-            addTorrentFile(file_path_value);
+//            // Do something with the file path
+//            addTorrentFile(file_path_value);
         }
 
     }
@@ -2255,7 +2269,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void addTorrent(String url) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"addTorrent", url});
+        qtc.execute(new String[]{"addTorrent", url, path2Set, label2Set});
     }
 
     public void addTracker(String hash, String url) {
@@ -2269,7 +2283,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void addTorrentFile(String url) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"addTorrentFile", url});
+        qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
     }
 
     public void pauseAllTorrents() {
@@ -2900,6 +2914,24 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         keystore_path = sharedPrefs.getString("keystore_path" + currentServer, "");
         keystore_password = sharedPrefs.getString("keystore_password" + currentServer, "");
 
+        // Get path and label history
+        path_history = sharedPrefs.getStringSet("path_history", new HashSet<String>());
+        label_history = sharedPrefs.getStringSet("label_history", new HashSet<String>());
+
+//        Iterator iter = path_history.iterator();
+//
+//        while (iter.hasNext()) {
+//            Log.d("Debug", "path_history: " + iter.next());
+//        }
+//
+//
+//        Iterator iter2 = label_history.iterator();
+//
+//        while (iter2.hasNext()) {
+//            Log.d("Debug", "label_history: " + iter2.next());
+//        }
+//
+
     }
 
     // Get Options
@@ -3002,6 +3034,21 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Save key-values
         editor.putString(preference, value);
+
+        // Commit changes
+        editor.apply();
+
+    }
+
+    // Save key-value preference as a String Set
+    private void savePreferenceAsStringSet(String preference, Set<String> value) {
+
+        // Save preference locally
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor editor = sharedPrefs.edit();
+
+        // Save key-values
+        editor.putStringSet(preference, value);
 
         // Commit changes
         editor.apply();
@@ -3152,7 +3199,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             }
                         });
 
-            }else{
+            } else {
 
                 // No explanation needed, request the permission.
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -3173,6 +3220,104 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
     }
+
+    public void sendTorrent(final String type) {
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(this);
+        View sentTorrentView = li.inflate(R.layout.send_torrent, null);
+
+        MainActivity.path2Set = "";
+        MainActivity.label2Set = "";
+
+
+        // Variables
+
+        final AutoCompleteTextView pathTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.path_sent);
+        final AutoCompleteTextView labelTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.label_sent);
+
+
+
+        // Load history for path and label autocomplete text field
+
+        // Path
+        ArrayAdapter<String> pathAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_list_item_1, path_history.toArray(new String[path_history.size()]));
+        pathTextView.setAdapter(pathAdapter);
+
+        // Label
+        ArrayAdapter<String> labelAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_list_item_1, label_history.toArray(new String[label_history.size()]));
+        labelTextView.setAdapter(labelAdapter);
+
+
+        // Dialog
+
+        if (!isFinishing()) {
+            // Dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            // Set send_torrent.xml to AlertDialog builder
+            builder.setView(sentTorrentView);
+
+            // Cancel
+            builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancelled the dialog
+                }
+            });
+
+            // Ok
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                    MainActivity.path2Set = pathTextView.getText().toString();
+                    MainActivity.label2Set = labelTextView.getText().toString();
+
+                    if(!(path2Set.equals(""))) {
+                        addPath2History(path2Set);
+                    }
+
+                    if(!(label2Set.equals(""))) {
+                        addLabel2History(label2Set);
+                    }
+
+                    // User accepted
+
+                    if(type.equals("link")) {
+                        handleUrlTorrent();
+                    }
+                    else{
+                        addTorrentFile(Uri.parse(urlTorrent).getPath());
+                    }
+                }
+            });
+
+            // Create dialog
+            AlertDialog dialog = builder.create();
+
+            // Show dialog
+            dialog.show();
+
+        }
+
+    }
+
+    private void addPath2History(String path) {
+
+        if (!path_history.contains(path)) {
+            path_history.add(path);
+            savePreferenceAsStringSet("path_history", path_history);
+        }
+    }
+
+    private void addLabel2History(String label) {
+
+        if (!label_history.contains(label)) {
+            label_history.add(label);
+            savePreferenceAsStringSet("label_history", label_history);
+        }
+    }
+
 
     // Here is where the action happens
     private class qBittorrentCookieTask extends AsyncTask<String, Integer, String[]> {
@@ -3362,10 +3507,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 httpStatusCode = 0;
 
 
-
                 // Validate setLabel for API 10+
                 try {
-                    if(Integer.parseInt(MainActivity.qb_api) >= 10 && "setLabel".equals(params[0])) {
+                    if (Integer.parseInt(MainActivity.qb_api) >= 10 && "setLabel".equals(params[0])) {
                         params[0] = "setCategory";
 //                        Log.d("Debug", params[0]);
                     }
@@ -3373,8 +3517,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //                    Log.e("Debug", e.toString());
                 }
 
+                // This helps to set the savepathn and the label to set when sending the torrent
+                if (params.length == 4) {
 
-                result = jParser.postCommand(params[0], params[1]);
+                    Log.d("Debug", "params2: " + params[2]);
+
+                    Log.d("Debug", "params3: " + params[3]);
+
+                    result = jParser.postCommand(params[0], params[1], new String[]{params[2], params[3]});
+                } else {
+                    result = jParser.postCommand(params[0], params[1]);
+                }
 
             } catch (JSONParserStatusCodeException e) {
 
@@ -3555,7 +3708,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 messageId = R.string.toggledAlternativeRates;
             }
 
-            if ("setLabel".equals(command) ||  "setCategory".equals(command)) {
+            if ("setLabel".equals(command) || "setCategory".equals(command)) {
                 messageId = R.string.torrentsApplyingChange;
                 delay = 3;
             }
@@ -4022,7 +4175,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
                     }
                 }
-                
+
                 // Get names (delete in background method)
                 MainActivity.names = new String[torrentsFiltered.size()];
                 MainActivity.lines = new Torrent[torrentsFiltered.size()];

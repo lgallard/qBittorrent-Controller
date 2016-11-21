@@ -334,6 +334,12 @@ public class JSONParser {
 
     public String postCommand(String command, String hash) throws JSONParserStatusCodeException {
 
+        return postCommand(command, hash, null);
+
+    }
+
+    public String postCommand(String command, String hash, String[] params) throws JSONParserStatusCodeException {
+
         String key = "hash";
 
         String urlContentType = "application/x-www-form-urlencoded";
@@ -360,6 +366,9 @@ public class JSONParser {
 
         String label = "";
 
+        String path2Set = null;
+        String label2Set = null;
+
         if ("start".equals(command) || "startSelected".equals(command)) {
             url = "command/resume";
         }
@@ -381,6 +390,16 @@ public class JSONParser {
         if ("addTorrent".equals(command)) {
             url = "command/download";
             key = "urls";
+
+            if(params != null){
+
+                path2Set = params[0];
+                label2Set = params[1];
+
+                Log.d("Debug", "JSONParser - path2Set: " + path2Set);
+                Log.d("Debug", "JSONParser - label2Set: " + label2Set);
+
+            }
         }
 
         if ("addTracker".equals(command)) {
@@ -397,6 +416,15 @@ public class JSONParser {
             boundary = "-----------------------" + (new Date()).getTime();
 
             urlContentType = "multipart/form-data; boundary=" + boundary;
+
+            if(params != null){
+
+                path2Set = params[0];
+                label2Set = params[1];
+
+                Log.d("Debug", "JSONParser - path2Set: " + path2Set);
+                Log.d("Debug", "JSONParser - label2Set: " + label2Set);
+            }
 
         }
 
@@ -681,6 +709,23 @@ public class JSONParser {
             }
 
 
+            if (path2Set != null) {
+                nvps.add(new BasicNameValuePair("savepath", path2Set));
+
+                Log.d("Debug", "JSONParser2 - path2Set: " + path2Set);
+
+
+            }
+
+            if (label2Set != null) {
+                nvps.add(new BasicNameValuePair("label", label2Set));
+                nvps.add(new BasicNameValuePair("category", label2Set));
+
+                Log.d("Debug", "JSONParser2 - label2Set: " + label2Set);
+
+            }
+
+
 
             String entityValue = URLEncodedUtils.format(nvps, HTTP.UTF_8);
 
@@ -723,6 +768,8 @@ public class JSONParser {
                 // builder.addPart("file", fileBody);
 
                 builder.addBinaryBody("upfile", file, ContentType.DEFAULT_BINARY, hash);
+                builder.addTextBody("savepath",path2Set, ContentType.TEXT_PLAIN);
+                builder.addTextBody("label",label2Set, ContentType.TEXT_PLAIN);
 
                 // Build entity
                 HttpEntity entity = builder.build();
