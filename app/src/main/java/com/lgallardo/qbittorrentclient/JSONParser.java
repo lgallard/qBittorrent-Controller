@@ -770,6 +770,7 @@ public class JSONParser {
                 builder.addBinaryBody("upfile", file, ContentType.DEFAULT_BINARY, hash);
                 builder.addTextBody("savepath",path2Set, ContentType.TEXT_PLAIN);
                 builder.addTextBody("label",label2Set, ContentType.TEXT_PLAIN);
+                builder.addTextBody("category",label2Set, ContentType.TEXT_PLAIN);
 
                 // Build entity
                 HttpEntity entity = builder.build();
