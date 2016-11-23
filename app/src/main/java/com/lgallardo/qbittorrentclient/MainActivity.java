@@ -1060,7 +1060,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     }
 
                 } catch (Exception e) {
-                    Log.d("Debug", "[Main] Label Exception: " + e.toString());
+                    Log.e("Debug", "[Main] Label Exception: " + e.toString());
                 }
             } else {
 //                Log.d("Debug", "Label filter2: " + label);
@@ -1411,7 +1411,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         } else {
 
             // Permissions granted
-            sendTorrent("link");
+            sendTorrent("file");
 
         }
 
@@ -2050,14 +2050,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             if (requestCode == ADDFILE_CODE && resultCode == RESULT_OK) {
 
                 urlTorrent = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+
                 sendTorrent("file");
-//                file_path_value = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+
             }
 
-            Log.d("Debug", "Torrent path: " + file_path_value);
-
-//            // Do something with the file path
-//            addTorrentFile(file_path_value);
         }
 
     }
@@ -3229,75 +3226,86 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         MainActivity.path2Set = "";
         MainActivity.label2Set = "";
 
+        Log.d("Debug", "qb_version: " + qb_version);
+        Log.d("Debug", "qb_api: " + qb_api);
 
-        // Variables
+        if (qb_version.equals("3.2.x")) {
 
-        final AutoCompleteTextView pathTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.path_sent);
-        final AutoCompleteTextView labelTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.label_sent);
+            // Variables
 
-
-
-        // Load history for path and label autocomplete text field
-
-        // Path
-        ArrayAdapter<String> pathAdapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_list_item_1, path_history.toArray(new String[path_history.size()]));
-        pathTextView.setAdapter(pathAdapter);
-
-        // Label
-        ArrayAdapter<String> labelAdapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_list_item_1, label_history.toArray(new String[label_history.size()]));
-        labelTextView.setAdapter(labelAdapter);
+            final AutoCompleteTextView pathTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.path_sent);
+            final AutoCompleteTextView labelTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.label_sent);
 
 
-        // Dialog
+            // Load history for path and label autocomplete text field
 
-        if (!isFinishing()) {
+            // Path
+            ArrayAdapter<String> pathAdapter = new ArrayAdapter<String>(
+                    this, android.R.layout.simple_list_item_1, path_history.toArray(new String[path_history.size()]));
+            pathTextView.setAdapter(pathAdapter);
+
+            // Label
+            ArrayAdapter<String> labelAdapter = new ArrayAdapter<String>(
+                    this, android.R.layout.simple_list_item_1, label_history.toArray(new String[label_history.size()]));
+            labelTextView.setAdapter(labelAdapter);
+
+
             // Dialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            // Set send_torrent.xml to AlertDialog builder
-            builder.setView(sentTorrentView);
+            if (!isFinishing()) {
+                // Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            // Cancel
-            builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // User cancelled the dialog
-                }
-            });
+                // Set send_torrent.xml to AlertDialog builder
+                builder.setView(sentTorrentView);
 
-            // Ok
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-
-                    MainActivity.path2Set = pathTextView.getText().toString();
-                    MainActivity.label2Set = labelTextView.getText().toString();
-
-                    if(!(path2Set.equals(""))) {
-                        addPath2History(path2Set);
+                // Cancel
+                builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
                     }
+                });
 
-                    if(!(label2Set.equals(""))) {
-                        addLabel2History(label2Set);
+                // Ok
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        MainActivity.path2Set = pathTextView.getText().toString();
+                        MainActivity.label2Set = labelTextView.getText().toString();
+
+                        if (!(path2Set.equals(""))) {
+                            addPath2History(path2Set);
+                        }
+
+                        if (!(label2Set.equals(""))) {
+                            addLabel2History(label2Set);
+                        }
+
+                        // User accepted
+
+                        if (type.equals("link")) {
+                            handleUrlTorrent();
+                        } else {
+                            addTorrentFile(Uri.parse(urlTorrent).getPath());
+                        }
                     }
+                });
 
-                    // User accepted
+                // Create dialog
+                AlertDialog dialog = builder.create();
 
-                    if(type.equals("link")) {
-                        handleUrlTorrent();
-                    }
-                    else{
-                        addTorrentFile(Uri.parse(urlTorrent).getPath());
-                    }
-                }
-            });
+                // Show dialog
+                dialog.show();
+            }
 
-            // Create dialog
-            AlertDialog dialog = builder.create();
+        } else {
 
-            // Show dialog
-            dialog.show();
-
+            // No dialog for qBittorrent version < 3.2.x
+            if (type.equals("link")) {
+                handleUrlTorrent();
+            } else {
+                addTorrentFile(Uri.parse(urlTorrent).getPath());
+            }
         }
 
     }
@@ -3519,10 +3527,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 // This helps to set the savepathn and the label to set when sending the torrent
                 if (params.length == 4) {
-
-                    Log.d("Debug", "params2: " + params[2]);
-
-                    Log.d("Debug", "params3: " + params[3]);
 
                     result = jParser.postCommand(params[0], params[1], new String[]{params[2], params[3]});
                 } else {
@@ -4474,9 +4478,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     max_ratio_enabled = json.getBoolean(TAG_MAX_RATIO_ENABLED);
                     max_ratio = json.getString(TAG_MAX_RATIO);
                     max_ratio_act = json.getString(TAG_MAX_RATIO_ACT);
-
-
-//                    Log.d("Debug", "2) max_ratio: " + max_ratio);
 
                     // Save options locally
                     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);

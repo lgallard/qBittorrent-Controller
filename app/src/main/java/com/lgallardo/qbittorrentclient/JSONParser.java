@@ -395,17 +395,12 @@ public class JSONParser {
 
                 path2Set = params[0];
                 label2Set = params[1];
-
-                Log.d("Debug", "JSONParser - path2Set: " + path2Set);
-                Log.d("Debug", "JSONParser - label2Set: " + label2Set);
-
             }
         }
 
         if ("addTracker".equals(command)) {
             url = "command/addTrackers";
             key = "hash";
-
         }
 
 
@@ -418,14 +413,9 @@ public class JSONParser {
             urlContentType = "multipart/form-data; boundary=" + boundary;
 
             if(params != null){
-
                 path2Set = params[0];
                 label2Set = params[1];
-
-                Log.d("Debug", "JSONParser - path2Set: " + path2Set);
-                Log.d("Debug", "JSONParser - label2Set: " + label2Set);
             }
-
         }
 
         if ("pauseall".equals(command)) {
@@ -453,9 +443,7 @@ public class JSONParser {
         if ("decreasePrio".equals(command)) {
             url = "command/decreasePrio";
             key = "hashes";
-
         }
-
 
         if ("maxPrio".equals(command)) {
             url = "command/topPrio";
@@ -465,7 +453,6 @@ public class JSONParser {
         if ("minPrio".equals(command)) {
             url = "command/bottomPrio";
             key = "hashes";
-
         }
 
 
@@ -477,9 +464,6 @@ public class JSONParser {
             fileId = tmpString[1];
             filePriority = tmpString[2];
 
-//            Log.d("Debug", "hash: " + hash);
-//            Log.d("Debug", "fileId: " + fileId);
-//            Log.d("Debug", "filePriority: " + filePriority);
         }
 
         if ("setQBittorrentPrefefrences".equals(command)) {
@@ -506,9 +490,6 @@ public class JSONParser {
             url = "command/setTorrentsDlLimit";
             key = "hashes";
 
-            Log.d("Debug", "Hash before: " + hash);
-
-
             String[] tmpString = hash.split("&");
             hash = tmpString[0];
 
@@ -517,9 +498,6 @@ public class JSONParser {
             } catch (ArrayIndexOutOfBoundsException e) {
                 limit = "-1";
             }
-
-//            Log.d("Debug", "url: " + url);
-//            Log.d("Debug", "Hashes: " + hash + " | limit: " + limit);
 
         }
 
@@ -530,7 +508,6 @@ public class JSONParser {
         if ("toggleFirstLastPiecePrio".equals(command)) {
             url = "command/toggleFirstLastPiecePrio";
             key = "hashes";
-
         }
 
         if ("toggleSequentialDownload".equals(command)) {
@@ -540,12 +517,8 @@ public class JSONParser {
         }
 
         if ("toggleAlternativeSpeedLimits".equals(command)) {
-
-//            Log.d("Debug", "Toggling alternative rates");
-
             url = "command/toggleAlternativeSpeedLimits";
             key = "hashes";
-
         }
 
         if ("setLabel".equals(command)) {
@@ -561,8 +534,6 @@ public class JSONParser {
                 label = "";
             }
 
-//            Log.d("Debug", "Hash2: " + hash + "| label2: " + label);
-
         }
 
         if ("setCategory".equals(command)) {
@@ -577,18 +548,12 @@ public class JSONParser {
             } catch (ArrayIndexOutOfBoundsException e) {
                 label = "";
             }
-
-//            Log.d("Debug", "Hash2: " + hash + "| label2: " + label);
-
         }
 
 
         if ("alternativeSpeedLimitsEnabled".equals(command)) {
 
-//            Log.d("Debug", "Getting alternativeSpeedLimitsEnabled");
-
             url = "command/alternativeSpeedLimitsEnabled";
-
             key = "hashes";
         }
 
@@ -624,6 +589,9 @@ public class JSONParser {
 
         httpclient.setParams(httpParameters);
 
+        Log.d("Debug", "path2set: " + path2Set);
+        Log.d("Debug", "label2set: " + label2Set);
+
         try {
 
             AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
@@ -657,9 +625,6 @@ public class JSONParser {
                     tracker = "";
                 }
 
-//                Log.d("Debug", "addTracker - hash: " + hash);
-//                Log.d("Debug", "addTracker - tracker: " + tracker);
-
             }
 
 
@@ -671,7 +636,6 @@ public class JSONParser {
 
             // Add limit
             if (!limit.equals("")) {
-                Log.d("Debug", "JSONParser - Limit: " + limit);
                 nvps.add(new BasicNameValuePair("limit", limit));
             }
 
@@ -689,40 +653,26 @@ public class JSONParser {
                 label = Uri.decode(label);
 
                 if("setLabel".equals(command)) {
-
                     nvps.add(new BasicNameValuePair("label", label));
                 }else{
-
                     nvps.add(new BasicNameValuePair("category", label));
                 }
 
-//                Log.d("Debug", "Hash3: " + hash + "| label3: >" + label + "<");
             }
 
             // Add tracker
             if (tracker != null && !tracker.equals("")) {
-
                 nvps.add(new BasicNameValuePair("urls", tracker));
-
-//                Log.d("Debug", ">Tracker: " + key + " | " + hash + " | " + tracker + "<");
-
             }
 
 
             if (path2Set != null) {
                 nvps.add(new BasicNameValuePair("savepath", path2Set));
-
-                Log.d("Debug", "JSONParser2 - path2Set: " + path2Set);
-
-
             }
 
             if (label2Set != null) {
                 nvps.add(new BasicNameValuePair("label", label2Set));
                 nvps.add(new BasicNameValuePair("category", label2Set));
-
-                Log.d("Debug", "JSONParser2 - label2Set: " + label2Set);
-
             }
 
 
@@ -768,9 +718,15 @@ public class JSONParser {
                 // builder.addPart("file", fileBody);
 
                 builder.addBinaryBody("upfile", file, ContentType.DEFAULT_BINARY, hash);
-                builder.addTextBody("savepath",path2Set, ContentType.TEXT_PLAIN);
-                builder.addTextBody("label",label2Set, ContentType.TEXT_PLAIN);
-                builder.addTextBody("category",label2Set, ContentType.TEXT_PLAIN);
+
+                if(path2Set != null) {
+                    builder.addTextBody("savepath", path2Set, ContentType.TEXT_PLAIN);
+                }
+
+                if(label2Set != null) {
+                    builder.addTextBody("label", label2Set, ContentType.TEXT_PLAIN);
+                    builder.addTextBody("category", label2Set, ContentType.TEXT_PLAIN);
+                }
 
                 // Build entity
                 HttpEntity entity = builder.build();
@@ -786,8 +742,6 @@ public class JSONParser {
 
             int mStatusCode = statusLine.getStatusCode();
 
-//            Log.d("Debug", "JSONPArser - mStatusCode: " + mStatusCode);
-
             if (mStatusCode != 200) {
                 httpclient.getConnectionManager().shutdown();
                 throw new JSONParserStatusCodeException(mStatusCode);
@@ -796,8 +750,6 @@ public class JSONParser {
             HttpEntity httpEntity = httpResponse.getEntity();
 
             result = EntityUtils.toString(httpEntity);
-
-//            Log.d("Debug", "JSONPArser - command result: " + result);
 
             return result;
 
@@ -844,7 +796,10 @@ public class JSONParser {
                 in = new FileInputStream(localTrustStoreFile);
 
                 localTrustStore.load(in, keystore_password.toCharArray());
-            } finally {
+            }
+            catch (Exception e){
+            }
+            finally {
                 if (in != null) {
                     in.close();
                 }
@@ -1002,10 +957,6 @@ public class JSONParser {
         // in milliseconds which is the timeout for waiting for data.
         int timeoutSocket = data_timeout * 1000;
 
-//        Log.d("Debug", "API - timeoutConnection:" + timeoutConnection);
-//        Log.d("Debug", "API - timeoutSocket:" + timeoutSocket);
-
-
         // Set http parameters
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
@@ -1033,18 +984,9 @@ public class JSONParser {
 
             url = protocol + "://" + hostname + ":" + port + "/" + url;
 
-//            Log.d("Debug", "API - url:" + url);
-
-
             HttpGet httpget = new HttpGet(url);
 
-
-//            Log.d("Debug", "API - executing");
-
-
             HttpResponse response = httpclient.execute(targetHost, httpget);
-
-//            Log.d("Debug", "API - getting entity");
 
             HttpEntity entity = response.getEntity();
 
@@ -1052,16 +994,10 @@ public class JSONParser {
 
             int mStatusCode = statusLine.getStatusCode();
 
-//            Log.d("Debug", "API - mStatusCode: " + mStatusCode);
-
             if (mStatusCode == 200) {
 
                 // Save API
-
                 APIVersionString = EntityUtils.toString(response.getEntity());
-
-//                Log.d("Debug", "API - ApiString: " + APIVersionString);
-
 
             }
 
@@ -1085,9 +1021,6 @@ public class JSONParser {
             Log.e("Debug", "API - Exception " + e.toString());
         }
 
-//        if (APIVersionString == null) {
-//            APIVersionString = "";
-//        }
         return APIVersionString;
     }
 
@@ -1141,9 +1074,7 @@ public class JSONParser {
 
             // set http parameters
 
-
             url = protocol + "://" + hostname + ":" + port + "/" + url;
-
 
 //            Log.d("Debug", "URL: " + url);
 
@@ -1182,16 +1113,7 @@ public class JSONParser {
                     version = aboutHtml.substring(aboutStart + aboutStartText.length(), aboutEnd);
                 }
 
-//                Log.d("Debug", "Version - VersionString: " + version);
-
-
             }
-
-//            if (mStatusCode != 200) {
-//                httpclient.getConnectionManager().shutdown();
-//                throw new JSONParserStatusCodeException(mStatusCode);
-//            }
-//
 
             if (entity != null) {
                 entity.consumeContent();
