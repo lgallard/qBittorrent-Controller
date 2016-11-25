@@ -1307,6 +1307,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // permission was granted, yay! Do the
         // contacts-related task you need to do.
 
+
+        Log.d("Debug", "=== handleUrlTorrent === ");
+
         // if there is not a path to the file, open de file picker
         if (urlTorrent == null) {
             openFilePicker();
@@ -1325,14 +1328,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 } else {
 
 
-//                    Log.d("Debug", "urlTorrent 1: " + urlTorrent );
+                    Log.d("Debug", "urlTorrent 1: " + urlTorrent );
 
                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
 
 
                     // If It is a valid torrent or magnet link
                     if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType())) {
-//                    Log.d("Debug", "URL: " + urlTorrent);
+                    Log.d("Debug", "URL: " + urlTorrent);
                         addTorrent(urlTorrent);
                     } else {
                         // Open not valid torrent or magnet link in browser
@@ -1411,7 +1414,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         } else {
 
             // Permissions granted
-            sendTorrent("file");
+//            sendTorrent("file");
+            handleUrlTorrent();
 
         }
 
@@ -1428,7 +1432,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     // Permissions granted
-                    sendTorrent("link");
+//                    sendTorrent("file");
+                    handleUrlTorrent();
+
 
                 } else {
 
@@ -3228,6 +3234,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         Log.d("Debug", "qb_version: " + qb_version);
         Log.d("Debug", "qb_api: " + qb_api);
+        Log.d("Debug", "type: " + type);
 
         if (qb_version.equals("3.2.x")) {
 
@@ -3302,8 +3309,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             // No dialog for qBittorrent version < 3.2.x
             if (type.equals("link")) {
+                Log.d("Debug","sendTorrent: link");
                 handleUrlTorrent();
             } else {
+                Log.d("Debug","sendTorrent: file");
                 addTorrentFile(Uri.parse(urlTorrent).getPath());
             }
         }
