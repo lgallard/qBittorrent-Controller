@@ -1323,7 +1323,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (urlTorrent.substring(0, 4).equals("file")) {
 
                     // File
-                    sendTorrent("file");
+                    urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
 
                 } else {
 
@@ -1415,7 +1415,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             // Permissions granted
 //            sendTorrent("file");
-            handleUrlTorrent();
+
+            sendTorrent("link" );
 
         }
 
