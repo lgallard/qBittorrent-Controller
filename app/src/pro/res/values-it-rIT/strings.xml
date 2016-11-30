@@ -265,4 +265,8 @@
     <string name="help_libraries">Software utilizzato:</string>
     <string name="action_add_url">Aggiungere link torrent</string>
     <string name="action_add_file">Aggiungere torrent file</string>
+    <string name="pathAndLabelDialogText">Non mostrare più questo dialogo</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Attiva percorso di salvataggio e di dialogo etichetta</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Salva percorso e il dialogo etichetta</string>
+
 </resources>

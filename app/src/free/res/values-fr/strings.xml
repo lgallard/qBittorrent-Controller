@@ -273,4 +273,8 @@
     <string name="action_add_tracker">Ajouter tracker</string>
     <string name="action_add_url">Ajouter un lien torrent</string>
     <string name="action_add_file">Ajouter fichier torrent</string>
+    <string name="pathAndLabelDialogText">Ne plus afficher cette boîte de dialogue</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Activer la boîte de dialogue de sauvegarde et d\'étiquette</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Enregistrer la boîte de dialogue de chemin et d\'étiquette</string>
+
 </resources>

@@ -269,4 +269,8 @@
     <string name="help_libraries">Erabilitako softwarea:</string>
     <string name="action_add_file">Gehitu torrent fitxategia</string>
     <string name="action_add_url">Gehitu torrent esteka</string>
+    <string name="pathAndLabelDialogText">Ez da elkarrizketa hau berriro erakutsi</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Gaitu bidea eta etiketa elkarrizketa-gorde</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Gorde bidea eta etiketa elkarrizketa-</string>
+
 </resources>

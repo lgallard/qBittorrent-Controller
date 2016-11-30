@@ -265,4 +265,8 @@
     <string name="help_libraries">используется программное обеспечение:</string>
     <string name="action_add_url">Добавить торрент ссылку</string>
     <string name="action_add_file">Добавить торрент-файл</string>
+    <string name="pathAndLabelDialogText">Больше не показывать этот диалог</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Включить путь для сохранения и диалога метки</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Сохранить путь и диалог метки</string>
+
 </resources>

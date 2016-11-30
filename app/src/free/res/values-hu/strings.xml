@@ -355,4 +355,7 @@
     <string name="help_libraries">Könyvtárak használt</string>
     <string name="action_add_file">Hozzáad torrent fájl</string>
     <string name="action_add_url">Hozzáad torrent linkre</string>
+    <string name="pathAndLabelDialogText">Ne jelenjen meg újra ez a párbeszédablak</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Engedélyezze mentési útvonal és a címke párbeszéd</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Mentési útvonal és a címke párbeszéd</string>
 </resources>

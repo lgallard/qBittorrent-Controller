@@ -265,4 +265,7 @@
     <string name="help_libraries">Programvara som används:</string>
     <string name="action_add_file">Lägg torrent fil</string>
     <string name="action_add_url">Lägga torrent länk</string>
+    <string name="pathAndLabelDialogText">Visar inte den här dialogrutan igen</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Aktivera spara väg och dialog etikett</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Spara bana och dialog etikett</string>
 </resources>

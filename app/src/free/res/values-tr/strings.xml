@@ -270,4 +270,7 @@ Android ayarlarından bu izni vermek ister misiniz?</string>
   <string name="action_add_file">Torrent dosyasını ekleyin</string>
   <string name="torrent_details_cant_general_ino">Genel bilgi alınamadı</string>
   <string name="torrent_details_name">Isim:</string>
+  <string name="pathAndLabelDialogText">Bu ileti dizisini tekrar gösterme</string>
+  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Kaydetme yolunu ve etiket iletişim kutusunu etkinleştir</string>
+  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Yol ve etiket iletişim kutusunu kaydet</string>
 </resources>

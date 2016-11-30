@@ -259,4 +259,8 @@
     <string name="help_libraries">ソフトウェアが使用さ：</string>
     <string name="action_add_file">トレントファイルを追加します。</string>
     <string name="action_add_url">急流のリンクを追加</string>
+    <string name="pathAndLabelDialogText">このダイアログを再び表示しない</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">パスとラベルの保存ダイアログを有効にする</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">パスとラベルの保存ダイアログ</string>
+
 </resources>
