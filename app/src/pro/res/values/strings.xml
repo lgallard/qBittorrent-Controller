@@ -152,6 +152,9 @@
     <string name="settings_qbittorrent_header_dialog_title">Show speeds and totals</string>
     <string name="settings_qbittorrent_header_dialog_sumary">Upload/download speeds and totals</string>
 
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Save path and label dialog</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Enable save path and label dialog</string>
+
     <string name="options_qbittorrent_connections_limits_category">Connections Limits</string>
     <string name="options_qbittorrent_global_max_connections_title">Global max connections</string>
     <string name="options_qbittorrent_global_max_connections_dialog_title">Global maximum number of connections?</string>
@@ -266,4 +269,5 @@
     <string name="help_libraries">Software used:</string>
     <string name="action_add_file">Add torrent file</string>
     <string name="action_add_url">Add torrent link</string>
+    <string name="pathAndLabelDialogText">Don\'t show this dialog again</string>
 </resources>

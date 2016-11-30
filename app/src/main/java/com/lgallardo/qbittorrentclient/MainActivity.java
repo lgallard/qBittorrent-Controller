@@ -60,6 +60,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -328,6 +329,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     public static String path2Set;
     public static String label2Set;
+    protected static boolean pathAndLabelDialog = false;
 
 
     private Toast toast;
@@ -2922,19 +2924,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         path_history = sharedPrefs.getStringSet("path_history", new HashSet<String>());
         label_history = sharedPrefs.getStringSet("label_history", new HashSet<String>());
 
-//        Iterator iter = path_history.iterator();
-//
-//        while (iter.hasNext()) {
-//            Log.d("Debug", "path_history: " + iter.next());
-//        }
-//
-//
-//        Iterator iter2 = label_history.iterator();
-//
-//        while (iter2.hasNext()) {
-//            Log.d("Debug", "label_history: " + iter2.next());
-//        }
-//
+        pathAndLabelDialog = sharedPrefs.getBoolean("pathAndLabelDialog", false);
 
     }
 
@@ -3237,12 +3227,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         Log.d("Debug", "qb_api: " + qb_api);
         Log.d("Debug", "type: " + type);
 
-        if (qb_version.equals("3.2.x")) {
+        if (qb_version.equals("3.2.x") && pathAndLabelDialog) {
 
             // Variables
 
             final AutoCompleteTextView pathTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.path_sent);
             final AutoCompleteTextView labelTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.label_sent);
+            final CheckBox checkBoxPathAndLabelDialog = (CheckBox) sentTorrentView.findViewById(R.id.pathAndLabelDialog);
 
 
             // Load history for path and label autocomplete text field
@@ -3257,9 +3248,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     this, android.R.layout.simple_list_item_1, label_history.toArray(new String[label_history.size()]));
             labelTextView.setAdapter(labelAdapter);
 
+            // Checkbox value
+            if (pathAndLabelDialog){
+                checkBoxPathAndLabelDialog.setChecked(false);
+            }
+            else{
+                checkBoxPathAndLabelDialog.setChecked(true);
+            }
 
             // Dialog
-
             if (!isFinishing()) {
                 // Dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -3289,6 +3286,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             addLabel2History(label2Set);
                         }
 
+                        // Save checkbox
+                        savePreferenceAsBoolean("pathAndLabelDialog", !(checkBoxPathAndLabelDialog.isChecked()));
+
                         // User accepted
 
                         if (type.equals("link")) {
@@ -3308,7 +3308,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         } else {
 
-            // No dialog for qBittorrent version < 3.2.x
+            // No dialog for qBittorrent version < 3.2.x or if it's disabled
             if (type.equals("link")) {
                 Log.d("Debug","sendTorrent: link");
                 handleUrlTorrent();
