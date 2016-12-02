@@ -666,11 +666,11 @@ public class JSONParser {
             }
 
 
-            if (path2Set != null) {
+            if (path2Set != null && !(path2Set.equals(""))) {
                 nvps.add(new BasicNameValuePair("savepath", path2Set));
             }
 
-            if (label2Set != null) {
+            if (label2Set != null && !(label2Set.equals(""))) {
                 nvps.add(new BasicNameValuePair("label", label2Set));
                 nvps.add(new BasicNameValuePair("category", label2Set));
             }
@@ -719,11 +719,11 @@ public class JSONParser {
 
                 builder.addBinaryBody("upfile", file, ContentType.DEFAULT_BINARY, hash);
 
-                if(path2Set != null) {
+                if(path2Set != null && !(path2Set.equals(""))) {
                     builder.addTextBody("savepath", path2Set, ContentType.TEXT_PLAIN);
                 }
 
-                if(label2Set != null) {
+                if(label2Set != null && !(label2Set.equals(""))) {
                     builder.addTextBody("label", label2Set, ContentType.TEXT_PLAIN);
                     builder.addTextBody("category", label2Set, ContentType.TEXT_PLAIN);
                 }

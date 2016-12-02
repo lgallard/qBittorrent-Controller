@@ -3535,7 +3535,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //                    Log.e("Debug", e.toString());
                 }
 
-                // This helps to set the savepathn and the label to set when sending the torrent
+                Log.d("Debug", "params.length: " + params.length );
+                Log.d("Debug", "command: " + params[0]);
+
+
+                // This helps to set the savepath and the label to set when sending the torrent
                 if (params.length == 4) {
 
                     result = jParser.postCommand(params[0], params[1], new String[]{params[2], params[3]});
