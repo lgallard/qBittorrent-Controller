@@ -1,134 +1,125 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!--
-  ~   Copyright (c) 2014-2015 Luis M. Gallardo D.
-  ~   All rights reserved. This program and the accompanying materials
-  ~   are made available under the terms of the GNU Lesser General Public License v3.0
-  ~   which accompanies this distribution, and is available at
-  ~   http://www.gnu.org/licenses/lgpl.html
-  ~
-  -->
-
 <resources>
-    <string-array name="qBittorrentServers">
-        <item name="1">Serveur 1</item>
-        <item name="2">Serveur 2</item>
-        <item name="3">Serveur 3</item>
-    </string-array>
-    <string-array name="qBittorrentServersValues">
-        <item name="1">1</item>
-        <item name="2">2</item>
-        <item name="3">3</item>
-    </string-array>
-    <string-array name="autorefresh">
-        <item name="1">1 seconde</item>
-        <item name="2">2 secondes</item>
-        <item name="3">5 secondes</item>
-        <item name="4">10 secondes</item>
-        <item name="5">30 secondes</item>
-        <item name="6">1 minute</item>
-        <item name="7">2 minutes</item>
-        <item name="8">5 minutes</item>
-        <item name="9">10 minutes</item>
-        <item name="10">15 minutes</item>
-    </string-array>
-    <string-array name="autorefreshValues">
-        <item name="1">1000</item>
-        <item name="2">2000</item>
-        <item name="3">5000</item>
-        <item name="4">10000</item>
-        <item name="5">30000</item>
-        <item name="6">60000</item>
-        <item name="7">120000</item>
-        <item name="8">300000</item>
-        <item name="9">600000</item>
-        <item name="10">900000</item>
-    </string-array>
-    <string-array name="notification">
-        <item name="1">2 minutes</item>
-        <item name="2">5 minutes</item>
-        <item name="3">15 minutes</item>
-        <item name="4">30 minutes</item>
-        <item name="5">1 heure</item>
-        <item name="6">6 heures</item>
-        <item name="7">12 heures</item>
-        <item name="8">1 jour</item>
-    </string-array>
-    <string-array name="notificationValues">
-        <item name="1">120000</item>
-        <item name="2">300000</item>
-        <item name="3">900000</item>
-        <item name="4">1800000</item>
-        <item name="5">3600000</item>
-        <item name="6">21600000</item>
-        <item name="7">43200000</item>
-        <item name="8">86400000</item>
-    </string-array>
-    <string-array name="sortBy">
-        <item name="1">Nom</item>
-        <item name="2">Taille</item>
-        <item name="3">Durée estimée</item>
-        <item name="4">Priorité</item>
-        <item name="5">Progrès</item>
-        <item name="6">Ratio</item>
-        <item name="7">Vitesse DL</item>
-        <item name="8">Vitesse UP</item>
-        <item name="9">Ajouté le</item>
-        <item name="10">Complété le</item>
-    </string-array>
-    <string-array name="sortByValues">
-        <item name="1">1</item>
-        <item name="2">2</item>
-        <item name="3">3</item>
-        <item name="4">4</item>
-        <item name="5">5</item>
-        <item name="6">6</item>
-        <item name="7">7</item>
-        <item name="8">8</item>
-        <item name="9">9</item>
-        <item name="10">10</item>
-    </string-array>
-    <string-array name="navigation_drawer_items_array">
-        <item>Tout</item>
-        <item>Téléchargement</item>
-        <item>Fini</item>
-        <item>En partage</item>
-        <item>Suspendu</item>
-        <item>Actif</item>
-        <item>Inactif</item>
-        <item>Options</item>
-        <item>Paramètres</item>
-        <item>Aide</item>
-    </string-array>
-    <string-array name="scheduler_days">
-        <item name="1">Tous les jours</item>
-        <item name="2">Week-ends</item>
-        <item name="3">Jours de la semaine</item>
-        <item name="4">Lundi</item>
-        <item name="5">Mardi</item>
-        <item name="6">Mercredi</item>
-        <item name="7">Jeudi</item>
-        <item name="8">Vendredi</item>
-        <item name="9">Samedi</item>
-        <item name="10">Dimanche</item>
-    </string-array>
-    <string-array name="scheduler_days_values">
-        <item name="1">0</item>
-        <item name="2">1</item>
-        <item name="3">2</item>
-        <item name="4">3</item>
-        <item name="5">4</item>
-        <item name="6">5</item>
-        <item name="7">6</item>
-        <item name="8">7</item>
-        <item name="9">8</item>
-        <item name="10">9</item>
-    </string-array>
-    <string-array name="max_ratio_action">
-        <item name="1">Les mettre en pause</item>
-        <item name="2">Les supprimer</item>
-    </string-array>
-    <string-array name="max_ratio_action_values">
-        <item name="1">0</item>
-        <item name="2">1</item>
-    </string-array>
+  <string-array name="qBittorrentServers">
+    <item>Serveur 1</item>
+    <item>Serveur 2</item>
+    <item>Serveur 3</item>
+  </string-array>
+  <string-array name="qBittorrentServersValues">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+  </string-array>
+  <string-array name="autorefresh">
+    <item>1 seconde</item>
+    <item>2 secondes</item>
+    <item>5 secondes</item>
+    <item>10 secondes</item>
+    <item>30 secondes</item>
+    <item>1 minute</item>
+    <item>2 minutes</item>
+    <item>5 minutes</item>
+    <item>10 minutes</item>
+    <item>15 minutes</item>
+  </string-array>
+  <string-array name="autorefreshValues">
+    <item>1000</item>
+    <item>2000</item>
+    <item>5000</item>
+    <item>10000</item>
+    <item>30000</item>
+    <item>60000</item>
+    <item>120000</item>
+    <item>300000</item>
+    <item>600000</item>
+    <item>900000</item>
+  </string-array>
+  <string-array name="notification">
+    <item>2 minutes</item>
+    <item>5 minutes</item>
+    <item>15 minutes</item>
+    <item>30 minutes</item>
+    <item>1 heure</item>
+    <item>6 heures</item>
+    <item>12 heures</item>
+    <item>1 jour</item>
+  </string-array>
+  <string-array name="notificationValues">
+    <item>120000</item>
+    <item>300000</item>
+    <item>900000</item>
+    <item>1800000</item>
+    <item>3600000</item>
+    <item>21600000</item>
+    <item>43200000</item>
+    <item>86400000</item>
+  </string-array>
+  <string-array name="sortBy">
+    <item>Nom</item>
+    <item>Taille</item>
+    <item>Durée estimée</item>
+    <item>Priorité</item>
+    <item>Progression</item>
+    <item>Ratio</item>
+    <item>Vitesse DL</item>
+    <item>Vitesse UP</item>
+    <item>Ajouté le</item>
+    <item>Complété le</item>
+  </string-array>
+  <string-array name="sortByValues">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+    <item>5</item>
+    <item>6</item>
+    <item>7</item>
+    <item>8</item>
+    <item>9</item>
+    <item>10</item>
+  </string-array>
+  <string-array name="navigation_drawer_items_array">
+    <item>Tout</item>
+    <item>Téléchargement</item>
+    <item>Terminé</item>
+    <item>En partage</item>
+    <item>Suspendu</item>
+    <item>Actif</item>
+    <item>Inactif</item>
+    <item>Options</item>
+    <item>Paramètres</item>
+    <item>Aide</item>
+  </string-array>
+  <string-array name="scheduler_days">
+    <item>Tous les jours</item>
+    <item>Week-ends</item>
+    <item>Jours de la semaine</item>
+    <item>Lundi</item>
+    <item>Mardi</item>
+    <item>Mercredi</item>
+    <item>Jeudi</item>
+    <item>Vendredi</item>
+    <item>Samedi</item>
+    <item>Dimanche</item>
+  </string-array>
+  <string-array name="scheduler_days_values">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+    <item>5</item>
+    <item>6</item>
+    <item>7</item>
+    <item>8</item>
+    <item>9</item>
+  </string-array>
+  <string-array name="max_ratio_action">
+    <item>Les mettre en pause</item>
+    <item>Les supprimer</item>
+  </string-array>
+  <string-array name="max_ratio_action_values">
+    <item>0</item>
+    <item>1</item>
+  </string-array>
 </resources>
