@@ -1310,7 +1310,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // contacts-related task you need to do.
 
 
-        Log.d("Debug", "=== handleUrlTorrent === ");
+//        Log.d("Debug", "=== handleUrlTorrent === ");
+//        Log.d("Debug", "urlTorrent: " + urlTorrent);
 
         // if there is not a path to the file, open de file picker
         if (urlTorrent == null) {
@@ -1320,24 +1321,26 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             try {
                 if (urlTorrent.substring(0, 7).equals("content")) {
                     urlTorrent = "file://" + getFilePathFromUri(this, Uri.parse(urlTorrent));
+
+//                    Log.d("Debug", "urlTorrent: " + urlTorrent);
                 }
 
                 if (urlTorrent.substring(0, 4).equals("file")) {
 
                     // File
                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
-
+                    addTorrentFile(Uri.parse(urlTorrent).getPath());
                 } else {
 
 
-                    Log.d("Debug", "urlTorrent 1: " + urlTorrent );
+//                    Log.d("Debug", "urlTorrent 1: " + urlTorrent );
 
                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
 
 
                     // If It is a valid torrent or magnet link
                     if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType())) {
-                    Log.d("Debug", "URL: " + urlTorrent);
+//                        Log.d("Debug", "URL: " + urlTorrent);
                         addTorrent(urlTorrent);
                     } else {
                         // Open not valid torrent or magnet link in browser
@@ -1417,8 +1420,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             // Permissions granted
 //            sendTorrent("file");
-
-            sendTorrent("link" );
+            handleUrlTorrent();
 
         }
 
@@ -3223,9 +3225,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         MainActivity.path2Set = "";
         MainActivity.label2Set = "";
 
-        Log.d("Debug", "qb_version: " + qb_version);
-        Log.d("Debug", "qb_api: " + qb_api);
-        Log.d("Debug", "type: " + type);
+//        Log.d("Debug", "qb_version: " + qb_version);
+//        Log.d("Debug", "qb_api: " + qb_api);
+//        Log.d("Debug", "type: " + type);
 
         if (qb_version.equals("3.2.x") && pathAndLabelDialog) {
 
@@ -3535,8 +3537,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //                    Log.e("Debug", e.toString());
                 }
 
-                Log.d("Debug", "params.length: " + params.length );
-                Log.d("Debug", "command: " + params[0]);
+//                Log.d("Debug", "params.length: " + params.length );
+//                Log.d("Debug", "command: " + params[0]);
 
 
                 // This helps to set the savepath and the label to set when sending the torrent
