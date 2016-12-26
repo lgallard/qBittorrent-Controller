@@ -153,15 +153,13 @@ public class TorrentDetailsFragment extends Fragment {
             mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
             mRecyclerViewTrackers.setLayoutManager(mLayoutManagerTrackers);                 // Setting the layout Manager
             mRecyclerViewGeneralInfo.setLayoutManager(mLayoutManagerGeneralInfo);                 // Setting the layout Manager
+
+            // This is needed to set the ContextMenu
+            registerForContextMenu(mRecyclerView);
+
         } catch (Exception e) {
             Log.e("Debug", e.toString());
         }
-
-        // TODO: Check if this can be removed
-        registerForContextMenu(mRecyclerView);
-//        registerForContextMenu(mRecyclerViewTrackers);
-//        registerForContextMenu(mRecyclerViewGeneralInfo);
-
 
         // Get Refresh Listener
         refreshListener = (RefreshListener) getActivity();
