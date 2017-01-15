@@ -18,7 +18,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -1283,7 +1282,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
-
     // Based on Trandroid's addTorrentFromStream
     // https://github.com/erickok/transdroid/blob/531051adafdac197295fef3d02e8608e86585c13/app/src/main/java/org/transdroid/core/gui/TorrentsActivity.java#L1157
     public String getFileNameFromStream(InputStream input) {
@@ -1342,10 +1340,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             try {
 
 
-                // Handle format for torrent files on Downloaded list (content://)
-                if(handledIntent.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+                // Handle format for torrent files on Downloaded list
+                if (urlTorrent.substring(0, 7).equals("content")) {
 
-                    urlTorrent = getFileNameFromStream(getContentResolver().openInputStream(handledIntent.getData()));
+                        urlTorrent = getFileNameFromStream(getContentResolver().openInputStream(handledIntent.getData()));
+
+//                    Log.d("Debug", "urlTorrent path (content): " + urlTorrent);
                 }
 
                 // Handle format for downloaded torrent files (Ex: /storage/emulated/0/Download/afile.torrent)
@@ -1359,10 +1359,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // Get raw absolute and add file schema
                         urlTorrent = "file://" + (new File(encodedUri.getRawPath())).getAbsolutePath();
 
-                        Log.d("Debug", "urlTorrent path: " + urlTorrent);
+//                        Log.d("Debug", "urlTorrent path: " + urlTorrent);
                     }
 
                 }
+
 
 
                 // Once formatted, add the torrent
@@ -1374,13 +1375,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 } else {
 
                     // Send magnet or torrent link
-                    Log.d("Debug", "urlTorrent 1: " + urlTorrent );
+//                    Log.d("Debug", "urlTorrent 1: " + urlTorrent );
 
                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
 
+
                     // If It is a valid torrent or magnet link
                     if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType())) {
-                        Log.d("Debug", "URL: " + urlTorrent);
+//                        Log.d("Debug", "URL: " + urlTorrent);
 
                         addTorrent(urlTorrent);
                     } else {
@@ -2136,11 +2138,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
             });
 
-            // Ok
+            // Okv
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User accepted the dialog
-                    addTorrent(urlInput.getText().toString());
+                    urlTorrent = urlInput.getText().toString();
+                    sendTorrent();
+
                 }
             });
 
@@ -2319,8 +2323,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     public void addTorrent(String url) {
         // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"addTorrent", url, path2Set, label2Set});
+
+        try {
+            if (Integer.parseInt(MainActivity.qb_api) >= 7) {
+                qBittorrentCommand qtc = new qBittorrentCommand();
+                qtc.execute(new String[]{"addTorrentAPI7", url, path2Set, label2Set});
+
+            } else {
+                qBittorrentCommand qtc = new qBittorrentCommand();
+                qtc.execute(new String[]{"addTorrent", url, path2Set, label2Set});
+            }
+
+        } catch (Exception e) {
+            qBittorrentCommand qtc = new qBittorrentCommand();
+            qtc.execute(new String[]{"addTorrent", url, path2Set, label2Set});
+        }
+
     }
 
     public void addTracker(String hash, String url) {
@@ -3676,7 +3694,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 messageId = R.string.torrentDeletedDrive;
             }
 
-            if ("addTorrent".equals(command)) {
+            if ("addTorrent".equals(command) || "addTorrentAPI7".equals(command) ) {
                 messageId = R.string.torrentAdded;
             }
 

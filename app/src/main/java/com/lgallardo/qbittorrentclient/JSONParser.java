@@ -398,6 +398,21 @@ public class JSONParser {
             }
         }
 
+        if ("addTorrentAPI7".equals(command)) {
+            url = "command/download";
+            key = "urls";
+
+            boundary = "-----------------------" + (new Date()).getTime();
+
+            urlContentType = "multipart/form-data; boundary=" + boundary;
+
+            if(params != null){
+
+                path2Set = params[0];
+                label2Set = params[1];
+            }
+        }
+
         if ("addTracker".equals(command)) {
             url = "command/addTrackers";
             key = "hash";
@@ -699,6 +714,37 @@ public class JSONParser {
 
 
             // Set content type and urls
+            if ("addTorrentAPI7".equals(command)) {
+
+                httpget.setHeader("Content-Type", urlContentType);
+
+                MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+                // Add boundary
+                builder.setBoundary(boundary);
+
+                // Add torrent urls
+                builder.addTextBody("urls", hash, ContentType.TEXT_PLAIN);
+
+                if(path2Set != null && !(path2Set.equals(""))) {
+                    builder.addTextBody("savepath", path2Set, ContentType.TEXT_PLAIN);
+                }
+
+                if(label2Set != null && !(label2Set.equals(""))) {
+                    builder.addTextBody("label", label2Set, ContentType.TEXT_PLAIN);
+                    builder.addTextBody("category", label2Set, ContentType.TEXT_PLAIN);
+                }
+
+                // Build entity
+                HttpEntity entity = builder.build();
+
+                // Set entity to http post
+                httpget.setEntity(entity);
+
+            }
+
+
             if ("addTorrentFile".equals(command)) {
 
                 httpget.setHeader("Content-Type", urlContentType);
