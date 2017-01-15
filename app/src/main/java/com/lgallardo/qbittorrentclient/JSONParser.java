@@ -589,9 +589,6 @@ public class JSONParser {
 
         httpclient.setParams(httpParameters);
 
-        Log.d("Debug", "path2set: " + path2Set);
-        Log.d("Debug", "label2set: " + label2Set);
-
         try {
 
             AuthScope authScope = new AuthScope(targetHost.getHostName(), targetHost.getPort());
