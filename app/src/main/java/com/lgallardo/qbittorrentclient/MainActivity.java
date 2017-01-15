@@ -18,7 +18,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -38,7 +36,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -76,8 +73,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1282,25 +1282,44 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
-    // Get path from content reference, such as content//downloads/0
-    // Taken from here http://stackoverflow.com/questions/9194361/how-to-use-android-downloadmanager
-    public static String getFilePathFromUri(Context c, Uri uri) {
-        String filePath = null;
-        if ("content".equals(uri.getScheme())) {
-            String[] filePathColumn = {MediaStore.MediaColumns.DATA};
-            ContentResolver contentResolver = c.getContentResolver();
+    // Based on Trandroid's addTorrentFromStream
+    // https://github.com/erickok/transdroid/blob/531051adafdac197295fef3d02e8608e86585c13/app/src/main/java/org/transdroid/core/gui/TorrentsActivity.java#L1157
+    public String getFileNameFromStream(InputStream input) {
 
-            Cursor cursor = contentResolver.query(uri, filePathColumn, null,
-                    null, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                filePath = cursor.getString(columnIndex);
-                cursor.close();
+        String fileName = null;
+
+        File tempFile = new File("/not/yet/set");
+        try {
+            // Write a temporary file with the torrent contents
+            tempFile = File.createTempFile("qbcontroller_", ".torrent", getCacheDir());
+            FileOutputStream output = new FileOutputStream(tempFile);
+            try {
+                final byte[] buffer = new byte[1024];
+                int read;
+                while ((read = input.read(buffer)) != -1) {
+                    output.write(buffer, 0, read);
+                }
+                output.flush();
+
+                // Get filename
+                fileName = Uri.fromFile(tempFile).toString();
+
+            } finally {
+                output.close();
             }
-        } else if ("file".equals(uri.getScheme())) {
-            filePath = new File(uri.getPath()).getAbsolutePath();
+        } catch (IOException e) {
+            Log.e("Debug", "Can't write input stream to " + tempFile.toString() + ": " + e.toString());
+        } finally {
+            try {
+                if (input != null) {
+                    input.close();
+                }
+            } catch (IOException e) {
+                Log.e("Debug",  "Error closing the input stream " + tempFile.toString() + ": " + e.toString());
+            }
         }
-        return filePath;
+
+        return fileName;
     }
 
 
@@ -1309,22 +1328,45 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // permission was granted, yay! Do the
         // contacts-related task you need to do.
 
-
+//
 //        Log.d("Debug", "=== handleUrlTorrent === ");
 //        Log.d("Debug", "urlTorrent: " + urlTorrent);
 
         // if there is not a path to the file, open de file picker
-        if (urlTorrent == null) {
+        if (urlTorrent == null ) {
             openFilePicker();
         } else {
 
             try {
-                if (urlTorrent.substring(0, 7).equals("content")) {
-                    urlTorrent = "file://" + getFilePathFromUri(this, Uri.parse(urlTorrent));
 
-//                    Log.d("Debug", "urlTorrent: " + urlTorrent);
+
+                // Handle format for torrent files on Downloaded list
+                if (urlTorrent.substring(0, 7).equals("content")) {
+
+                        urlTorrent = getFileNameFromStream(getContentResolver().openInputStream(handledIntent.getData()));
+
+//                    Log.d("Debug", "urlTorrent path (content): " + urlTorrent);
                 }
 
+                // Handle format for downloaded torrent files (Ex: /storage/emulated/0/Download/afile.torrent)
+                if (urlTorrent.contains(".torrent") && urlTorrent.substring(0,1).equals("/")) {
+
+                    if (urlTorrent.substring(0,1).equals("/")) {
+
+                    // Encode path
+                        URI encodedUri = new URI(URLEncoder.encode(urlTorrent, "UTF-8"));
+
+                    // Get raw absolute and add file schema
+                        urlTorrent = "file://" + (new File(encodedUri.getRawPath())).getAbsolutePath();
+
+//                        Log.d("Debug", "urlTorrent path: " + urlTorrent);
+                    }
+
+                }
+
+
+
+                // Once formatted, add the torrent
                 if (urlTorrent.substring(0, 4).equals("file")) {
 
                     // File
@@ -1332,7 +1374,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     addTorrentFile(Uri.parse(urlTorrent).getPath());
                 } else {
 
-
+                    // Send magnet or torrent link
 //                    Log.d("Debug", "urlTorrent 1: " + urlTorrent );
 
                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
@@ -1341,6 +1383,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // If It is a valid torrent or magnet link
                     if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType())) {
 //                        Log.d("Debug", "URL: " + urlTorrent);
+
                         addTorrent(urlTorrent);
                     } else {
                         // Open not valid torrent or magnet link in browser
@@ -1357,6 +1400,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 Log.e("Debug", "urlTorrent is null: " + e.toString());
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                Log.e("Debug", "urlTorrent is not ok: " + e.toString());
             }
         }
     }
@@ -1419,8 +1464,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         } else {
 
             // Permissions granted
-//            sendTorrent("file");
-            handleUrlTorrent();
+            sendTorrent();
+//            handleUrlTorrent();
 
         }
 
@@ -1437,8 +1482,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     // Permissions granted
-//                    sendTorrent("file");
-                    handleUrlTorrent();
+                    sendTorrent();
+//                    handleUrlTorrent();
 
 
                 } else {
@@ -2062,7 +2107,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 urlTorrent = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
 
-                sendTorrent("file");
+                sendTorrent();
 
             }
 
@@ -2093,11 +2138,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
             });
 
-            // Ok
+            // Okv
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User accepted the dialog
-                    addTorrent(urlInput.getText().toString());
+                    urlTorrent = urlInput.getText().toString();
+                    sendTorrent();
+
                 }
             });
 
@@ -2276,8 +2323,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     public void addTorrent(String url) {
         // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"addTorrent", url, path2Set, label2Set});
+
+        try {
+            if (Integer.parseInt(MainActivity.qb_api) >= 7) {
+                qBittorrentCommand qtc = new qBittorrentCommand();
+                qtc.execute(new String[]{"addTorrentAPI7", url, path2Set, label2Set});
+
+            } else {
+                qBittorrentCommand qtc = new qBittorrentCommand();
+                qtc.execute(new String[]{"addTorrent", url, path2Set, label2Set});
+            }
+
+        } catch (Exception e) {
+            qBittorrentCommand qtc = new qBittorrentCommand();
+            qtc.execute(new String[]{"addTorrent", url, path2Set, label2Set});
+        }
+
     }
 
     public void addTracker(String hash, String url) {
@@ -3217,7 +3278,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    public void sendTorrent(final String type) {
+    public void sendTorrent() {
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(this);
         View sentTorrentView = li.inflate(R.layout.send_torrent, null);
@@ -3292,12 +3353,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         savePreferenceAsBoolean("pathAndLabelDialog", !(checkBoxPathAndLabelDialog.isChecked()));
 
                         // User accepted
-
-                        if (type.equals("link")) {
-                            handleUrlTorrent();
-                        } else {
-                            addTorrentFile(Uri.parse(urlTorrent).getPath());
-                        }
+                        handleUrlTorrent();
                     }
                 });
 
@@ -3311,13 +3367,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         } else {
 
             // No dialog for qBittorrent version < 3.2.x or if it's disabled
-            if (type.equals("link")) {
-                Log.d("Debug","sendTorrent: link");
-                handleUrlTorrent();
-            } else {
-                Log.d("Debug","sendTorrent: file");
-                addTorrentFile(Uri.parse(urlTorrent).getPath());
-            }
+            handleUrlTorrent();
         }
 
     }
@@ -3644,7 +3694,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 messageId = R.string.torrentDeletedDrive;
             }
 
-            if ("addTorrent".equals(command)) {
+            if ("addTorrent".equals(command) || "addTorrentAPI7".equals(command) ) {
                 messageId = R.string.torrentAdded;
             }
 
