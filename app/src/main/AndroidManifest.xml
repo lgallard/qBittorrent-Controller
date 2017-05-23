@@ -8,12 +8,9 @@
   ~
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:installLocation="preferExternal"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.lgallardo.qbittorrentclient">
-
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
