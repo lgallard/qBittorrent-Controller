@@ -11,6 +11,7 @@ package com.lgallardo.qbittorrentclient;
 import android.net.Uri;
 import android.util.Log;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -169,6 +170,16 @@ public class JSONParser {
                 httpget.setHeader("Cookie", this.cookie);
             }
 
+            // Fix for CSRF in API requests
+            httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
+            httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
+
+//            Header h[] = httpget.getAllHeaders();
+//            for(int i=0; i< h.length; i++){
+//
+//                Log.d("Debug", h[i].getName() + ": " + h[i].getValue());
+//            }
+
             httpResponse = httpclient.execute(targetHost, httpget);
 
             StatusLine statusLine = httpResponse.getStatusLine();
@@ -276,6 +287,16 @@ public class JSONParser {
             if (this.cookie != null) {
                 httpget.setHeader("Cookie", this.cookie);
             }
+
+            // Fix for CSRF in API requests
+            httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
+            httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
+
+//            Header h[] = httpget.getAllHeaders();
+//            for(int i=0; i< h.length; i++){
+//
+//                Log.d("Debug", h[i].getName() + ":" + h[i].getValue());
+//            }
 
             httpResponse = httpclient.execute(targetHost, httpget);
 
@@ -712,6 +733,16 @@ public class JSONParser {
                 httpget.setHeader("Cookie", this.cookie);
             }
 
+            // Fix for CSRF in API requests
+            httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
+            httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
+
+//            Header h[] = httpget.getAllHeaders();
+//            for(int i=0; i< h.length; i++){
+//
+//                Log.d("Debug", h[i].getName() + ":" + h[i].getValue());
+//            }
+
 
             // Set content type and urls
             if ("addTorrentAPI7".equals(command)) {
@@ -930,6 +961,16 @@ public class JSONParser {
             nvps.add(new BasicNameValuePair("username", this.username));
             nvps.add(new BasicNameValuePair("password", this.password));
 
+            // Fix for CSRF in API requests
+            httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
+            httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
+
+//            Header h[] = httpget.getAllHeaders();
+//            for(int i=0; i< h.length; i++){
+//
+//                Log.d("Debug", h[i].getName() + ":" + h[i].getValue());
+//            }
+
             httpget.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
 
@@ -1029,6 +1070,16 @@ public class JSONParser {
 
             HttpGet httpget = new HttpGet(url);
 
+            // Fix for CSRF in API requests
+            httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
+            httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
+
+//            Header h[] = httpget.getAllHeaders();
+//            for(int i=0; i< h.length; i++){
+//
+//                Log.d("Debug", h[i].getName() + ":" + h[i].getValue());
+//            }
+
             HttpResponse response = httpclient.execute(targetHost, httpget);
 
             HttpEntity entity = response.getEntity();
@@ -1122,6 +1173,16 @@ public class JSONParser {
 //            Log.d("Debug", "URL: " + url);
 
             HttpGet httpget = new HttpGet(url);
+
+            // Fix for CSRF in API requests
+            httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
+            httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
+
+//            Header h[] = httpget.getAllHeaders();
+//            for(int i=0; i< h.length; i++){
+//
+//                Log.d("Debug", h[i].getName() + ":" + h[i].getValue());
+//            }
 
             HttpResponse response = httpclient.execute(targetHost, httpget);
             HttpEntity entity = response.getEntity();
