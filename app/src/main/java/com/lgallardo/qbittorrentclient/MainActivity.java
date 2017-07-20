@@ -1411,6 +1411,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 //        Log.d("Debug", "addTorrentByIntent invoked");
 
+        // TODO: Define a setting for this timeout in preferences
+
+        // Delay sending of file
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 3000ms
+                // Nothing
+            }
+        }, 3000);
+
         handledIntent = intent;
 
         urlTorrent = intent.getDataString();
