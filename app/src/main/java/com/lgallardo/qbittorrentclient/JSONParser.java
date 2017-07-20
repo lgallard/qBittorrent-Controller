@@ -177,7 +177,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.hostname);
+                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
@@ -300,7 +300,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.hostname);
+                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
@@ -426,7 +426,7 @@ public class JSONParser {
             url = "command/download";
             key = "urls";
 
-            if(params != null){
+            if (params != null) {
 
                 path2Set = params[0];
                 label2Set = params[1];
@@ -441,7 +441,7 @@ public class JSONParser {
 
             urlContentType = "multipart/form-data; boundary=" + boundary;
 
-            if(params != null){
+            if (params != null) {
 
                 path2Set = params[0];
                 label2Set = params[1];
@@ -462,7 +462,7 @@ public class JSONParser {
 
             urlContentType = "multipart/form-data; boundary=" + boundary;
 
-            if(params != null){
+            if (params != null) {
                 path2Set = params[0];
                 label2Set = params[1];
             }
@@ -699,9 +699,9 @@ public class JSONParser {
 
                 label = Uri.decode(label);
 
-                if("setLabel".equals(command)) {
+                if ("setLabel".equals(command)) {
                     nvps.add(new BasicNameValuePair("label", label));
-                }else{
+                } else {
                     nvps.add(new BasicNameValuePair("category", label));
                 }
 
@@ -721,7 +721,6 @@ public class JSONParser {
                 nvps.add(new BasicNameValuePair("label", label2Set));
                 nvps.add(new BasicNameValuePair("category", label2Set));
             }
-
 
 
             String entityValue = URLEncodedUtils.format(nvps, HTTP.UTF_8);
@@ -750,7 +749,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.hostname);
+                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
@@ -777,11 +776,11 @@ public class JSONParser {
                 // Add torrent urls
                 builder.addTextBody("urls", hash, ContentType.TEXT_PLAIN);
 
-                if(path2Set != null && !(path2Set.equals(""))) {
+                if (path2Set != null && !(path2Set.equals(""))) {
                     builder.addTextBody("savepath", path2Set, ContentType.TEXT_PLAIN);
                 }
 
-                if(label2Set != null && !(label2Set.equals(""))) {
+                if (label2Set != null && !(label2Set.equals(""))) {
                     builder.addTextBody("label", label2Set, ContentType.TEXT_PLAIN);
                     builder.addTextBody("category", label2Set, ContentType.TEXT_PLAIN);
                 }
@@ -812,11 +811,11 @@ public class JSONParser {
 
                 builder.addBinaryBody("upfile", file, ContentType.DEFAULT_BINARY, hash);
 
-                if(path2Set != null && !(path2Set.equals(""))) {
+                if (path2Set != null && !(path2Set.equals(""))) {
                     builder.addTextBody("savepath", path2Set, ContentType.TEXT_PLAIN);
                 }
 
-                if(label2Set != null && !(label2Set.equals(""))) {
+                if (label2Set != null && !(label2Set.equals(""))) {
                     builder.addTextBody("label", label2Set, ContentType.TEXT_PLAIN);
                     builder.addTextBody("category", label2Set, ContentType.TEXT_PLAIN);
                 }
@@ -889,10 +888,8 @@ public class JSONParser {
                 in = new FileInputStream(localTrustStoreFile);
 
                 localTrustStore.load(in, keystore_password.toCharArray());
-            }
-            catch (Exception e){
-            }
-            finally {
+            } catch (Exception e) {
+            } finally {
                 if (in != null) {
                     in.close();
                 }
@@ -983,7 +980,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.hostname);
+                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
@@ -1097,7 +1094,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.hostname);
+                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
@@ -1205,7 +1202,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.hostname);
+                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
@@ -1273,7 +1270,7 @@ public class JSONParser {
     }
 
     // Encode Url
-    private String encodeHash(String hash){
+    private String encodeHash(String hash) {
 
         URI uri = null;
         String encodedHash = null;
@@ -1305,7 +1302,7 @@ public class JSONParser {
             encodedHash = uri.toString();
 
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.e("Debug", "encodeHash: " + e.toString());
         }
 
