@@ -3946,10 +3946,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         if (packageName.equals("com.lgallardo.qbittorrentclient")) {
                             // Info free
-                            infoString = torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
-                                    + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
-                                    + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + progress + " " + Character.toString('\u2022') + " "
-                                    + torrents[i].getEta();
+                            infoString = torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " "
+                                    + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " "
+                                    + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
+                                    + Character.toString('\u2022') + " " + torrents[i].getRatio() + " "
+                                    + Character.toString('\u2022') + " " + progress + " "
+                                    + Character.toString('\u2022') + " " + torrents[i].getEta();
 
                             if (torrents[i].getLabel() != null && !torrents[i].getLabel().equals("")) {
                                 infoString = infoString + " " + Character.toString('\u2022') + " " + torrents[i].getLabel();
@@ -3958,9 +3960,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         } else {
                             // Info pro
-                            infoString = torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
-                                    + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
-                                    + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + torrents[i].getEta();
+                            infoString = torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " "
+                                    + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " "
+                                    + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
+                                    + Character.toString('\u2022') + " " + torrents[i].getRatio() + " "
+                                    + Character.toString('\u2022') + " " + torrents[i].getEta();
 
                             if (torrents[i].getLabel() != null && !torrents[i].getLabel().equals("")) {
                                 infoString = infoString + " " + Character.toString('\u2022') + " " + torrents[i].getLabel();
