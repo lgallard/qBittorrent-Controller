@@ -177,7 +177,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
+                httpget.setHeader("Host", this.hostname);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
@@ -300,7 +300,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
+                httpget.setHeader("Host", this.hostname);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
@@ -749,7 +749,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
+                httpget.setHeader("Host", this.hostname);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
@@ -980,7 +980,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
+                httpget.setHeader("Host", this.hostname);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
@@ -1094,7 +1094,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
+                httpget.setHeader("Host", this.hostname);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
@@ -1202,7 +1202,7 @@ public class JSONParser {
             // Fix for CSRF in API requests
             if (this.subfolder != null && !this.subfolder.equals("")) {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
+                httpget.setHeader("Host", this.hostname);
             } else {
                 httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
                 httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
