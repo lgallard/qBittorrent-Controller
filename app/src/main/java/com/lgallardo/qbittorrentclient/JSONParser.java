@@ -294,13 +294,9 @@ public class JSONParser {
             }
 
             // Fix for CSRF in API requests
-            if (this.subfolder != null && !this.subfolder.equals("")) {
-                httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.hostname);
-            } else {
-                httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
-                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
-            }
+            httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
+            httpget.setHeader("Host", this.hostname + ":" + this.port);
+
 
 //            Header h[] = httpget.getAllHeaders();
 //            for(int i=0; i< h.length; i++){
@@ -743,13 +739,8 @@ public class JSONParser {
             }
 
             // Fix for CSRF in API requests
-            if (this.subfolder != null && !this.subfolder.equals("")) {
-                httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.hostname);
-            } else {
-                httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
-                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
-            }
+            httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
+            httpget.setHeader("Host", this.hostname + ":" + this.port);
 
 //            Header h[] = httpget.getAllHeaders();
 //            for(int i=0; i< h.length; i++){
@@ -974,13 +965,8 @@ public class JSONParser {
             nvps.add(new BasicNameValuePair("password", this.password));
 
             // Fix for CSRF in API requests
-            if (this.subfolder != null && !this.subfolder.equals("")) {
-                httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.hostname);
-            } else {
-                httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
-                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
-            }
+            httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
+            httpget.setHeader("Host", this.hostname + ":" + this.port);
 
 //            Header h[] = httpget.getAllHeaders();
 //            for(int i=0; i< h.length; i++){
@@ -1088,13 +1074,9 @@ public class JSONParser {
             HttpGet httpget = new HttpGet(url);
 
             // Fix for CSRF in API requests
-            if (this.subfolder != null && !this.subfolder.equals("")) {
-                httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.hostname);
-            } else {
-                httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
-                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
-            }
+            httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
+            httpget.setHeader("Host", this.hostname + ":" + this.port);
+
 //            Header h[] = httpget.getAllHeaders();
 //            for(int i=0; i< h.length; i++){
 //
@@ -1196,13 +1178,8 @@ public class JSONParser {
             HttpGet httpget = new HttpGet(url);
 
             // Fix for CSRF in API requests
-            if (this.subfolder != null && !this.subfolder.equals("")) {
-                httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port + "/" + this.subfolder);
-                httpget.setHeader("Host", this.hostname);
-            } else {
-                httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
-                httpget.setHeader("Host", this.protocol + "://" + this.hostname + ":" + this.port);
-            }
+            httpget.setHeader("Referer", this.protocol + "://" + this.hostname + ":" + this.port);
+            httpget.setHeader("Host", this.hostname + ":" + this.port);
 
 //            Header h[] = httpget.getAllHeaders();
 //            for(int i=0; i< h.length; i++){
