@@ -1371,7 +1371,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     // File
                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
-                    addTorrentFile(Uri.parse(urlTorrent).getPath());
+                    addTorrentFile(Uri.parse(urlTorrent).getPath().replaceAll("\\+", "\\ "));
                 } else {
 
                     // Send magnet or torrent link

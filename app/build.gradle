@@ -44,7 +44,7 @@ android {
             versionName '4.5.8'
             minSdkVersion 14
             targetSdkVersion 23
-            versionCode 458
+            versionCode 459
             archivesBaseName = "qBittorrentController_v" + versionName
             dimension "default"
         }
