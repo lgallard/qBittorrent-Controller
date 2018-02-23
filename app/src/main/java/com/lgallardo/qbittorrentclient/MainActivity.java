@@ -1037,8 +1037,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void getApiVersion(final VolleyCallback callback) {
 
-        // Test getAPI - BEGIN
-
         String ApiURL = protocol + "://" + hostname + ":" + port + "/version/api";
 
         // New JSONObject request
@@ -1102,16 +1100,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Add request to te queue
         addVolleyRequest(jsArrayRequest);
 
-
-        // Test getAPI - END
-
-
     }
 
-
     private void getVersion(final VolleyCallback callback) {
-
-        // Test getAPI - BEGIN
 
         String ApiURL = protocol + "://" + hostname + ":" + port + "/about.html";
 
@@ -1197,11 +1188,97 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Add request to te queue
         addVolleyRequest(jsArrayRequest);
 
+    }
 
-        // Test getAPI - END
 
+    private void getCookie(final VolleyCallback callback) {
+
+        String url = protocol + "://" + hostname + ":" + port + "/login";
+
+        // New JSONObject request
+        CustomStringRequest jsArrayRequest = new CustomStringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===cookie===");
+                        Log.d("Debug", "Respnse: " + response);
+                        Log.d("Debug", "headers: " + CustomStringRequest.headers);
+
+                        String cookieString = null;
+
+                        if (CustomStringRequest.headers != null) {
+                            cookieString = CustomStringRequest.headers.get("set-cookie").split(";")[0];
+                        }
+
+                        Log.d("Debug", "set-cookie: " + cookieString);
+
+                        Gson gson = new Gson();
+
+                        Cookie cookie = null;
+                        try {
+                            cookie = gson.fromJson(new JSONObject("{\"cookie\":\"" + cookieString + "\"}").toString(), Cookie.class);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("Error", e.toString());
+                        }
+
+                        Log.d("Debug", "JSONObject: " + response);
+                        Log.d("Debug", "======");
+
+                        if (cookie != null) {
+                            Log.d("Debug: ", "Cookie: " + cookie.getCookie());
+                        }
+
+                        // Return value
+                        callback.onSuccess(cookie.getCookie());
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+                        callback.onSuccess("");
+
+                        Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type:", "application/x-www-form-urlencoded");
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("password", password);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
 
     }
+
+
+    // Wraps
 
     private void getApi() {
         getApiVersion(new VolleyCallback() {
@@ -1297,6 +1374,19 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         });
     }
 
+
+    private void getCookie() {
+        getCookie(new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">Cookie: " + result);
+
+            }
+        });
+    }
+
+
     private void refresh(String state, String label) {
 
         // If Contextual Action Bar is open, don't refresh
@@ -1325,6 +1415,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             {
                 //new qBittorrentApiTask().execute(new Intent());
                 getApi();
+                getCookie();
 
             }
 
@@ -1411,6 +1502,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         httpStatusCode = 0;
                         disableRefreshSwipeLayout();
                     } else {
+
+                        getCookie();
+
                         new qBittorrentCookieTask().execute(params);
                     }
 
@@ -4383,6 +4477,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             disableRefreshSwipeLayout();
 
                         } else {
+
+                            getCookie();
 
                             // Ask a new cookie and re-execute the task in background
                             new qBittorrentCookieTask().execute(params);
