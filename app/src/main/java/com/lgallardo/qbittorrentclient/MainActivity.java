@@ -64,8 +64,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import org.json.JSONArray;
@@ -84,6 +93,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -1000,6 +1010,292 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    // Volley
+
+    protected void addVolleyRequest(JsonObjectRequest jsArrayRequest) {
+
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsArrayRequest);
+
+    }
+
+    protected void addVolleyRequest(JsonArrayRequest jsArrayRequest) {
+
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsArrayRequest);
+
+    }
+
+    protected void addVolleyRequest(StringRequest stringArrayRequest) {
+
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(stringArrayRequest);
+
+    }
+
+    public interface VolleyCallback {
+        void onSuccess(String result);
+    }
+
+
+    private void getApiVersion(final VolleyCallback callback) {
+
+        // Test getAPI - BEGIN
+
+        String ApiURL = protocol + "://" + hostname + ":" + port + "/version/api";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.GET,
+                ApiURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===x===");
+                        Log.d("Debug", "JSONObject: " + response);
+                        Gson gson = new Gson();
+
+                        Api api = null;
+                        try {
+                            api = gson.fromJson(new JSONObject("{\"apiVersion\":" + response + "}").toString(), Api.class);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("Error", e.toString());
+                        }
+
+                        Log.d("Debug", "JSONObject: " + response);
+                        Log.d("Debug", "======");
+                        Log.d("Debug: ", "ApiVersion: " + api.getApiVersion());
+
+                        callback.onSuccess(api.getApiVersion());
+
+                        // There's no need to use a callback method here, toke was already saved
+                        // saveToken(access_token);
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+                        callback.onSuccess("");
+
+                        Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("password", password);
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+
+        // Test getAPI - END
+
+
+    }
+
+
+    private void getVersion(final VolleyCallback callback) {
+
+        // Test getAPI - BEGIN
+
+        String ApiURL = protocol + "://" + hostname + ":" + port + "/about.html";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.GET,
+                ApiURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===x===");
+                        Log.d("Debug", "JSONObject: " + response);
+
+                        String aboutStartText = "qBittorrent v";
+                        String aboutEndText = " (Web UI)";
+
+                        int aboutStart = response.indexOf(aboutStartText);
+
+                        int aboutEnd = response.indexOf(aboutEndText);
+
+                        if (aboutEnd == -1) {
+                            aboutEndText = " Web UI";
+                            aboutEnd = response.indexOf(aboutEndText);
+                        }
+
+                        if (aboutStart >= 0 && aboutEnd > aboutStart) {
+
+                            response = response.substring(aboutStart + aboutStartText.length(), aboutEnd);
+                        }
+
+
+                        if (response == null) {
+                            response = "";
+                        }
+
+                        Gson gson = new Gson();
+
+                        Api api = null;
+                        try {
+                            api = gson.fromJson(new JSONObject("{\"apiVersion\":" + response + "}").toString(), Api.class);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("Error", e.toString());
+                        }
+
+                        Log.d("Debug", "JSONObject: " + response);
+                        Log.d("Debug", "======");
+                        Log.d("Debug: ", "ApiVersion: " + api.getApiVersion());
+
+                        callback.onSuccess(api.getApiVersion());
+
+                        // There's no need to use a callback method here, toke was already saved
+                        // saveToken(access_token);
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+                        Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("password", password);
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+
+        // Test getAPI - END
+
+
+    }
+
+    private void getApi() {
+        getApiVersion(new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">ApiVersion<: " + result);
+
+                if (!result.equals("")) {
+
+                    int api;
+
+                    try {
+
+                        api = Integer.parseInt(result);
+
+                    } catch (Exception e) {
+                        api = 0;
+                    }
+
+                    if (result != null && (api > 1 || result.contains("3.2") || result.contains("3.3"))) {
+
+                        qb_version = "3.2.x";
+
+                        // Get new cookie
+                        cookie = null;
+
+                    } else if (result.contains("3.1")) {
+
+                        qb_version = "3.1.x";
+                        cookie = null;
+
+                    } else {
+
+                        qb_version = "2.x";
+
+                    }
+
+
+                    qb_api = result;
+                    qbittorrentServer = result;
+                } else {
+
+                    getVersion(new VolleyCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+
+                            Log.d("Debug: ", ">version<: " + result);
+
+
+                            if (!result.equals("")) {
+
+                                int api;
+
+                                try {
+
+                                    api = Integer.parseInt(result);
+
+                                } catch (Exception e) {
+                                    api = 0;
+                                }
+
+                                if (result != null && (api > 1 || result.contains("3.2") || result.contains("3.3"))) {
+
+                                    qb_version = "3.2.x";
+
+                                    // Get new cookie
+                                    cookie = null;
+
+                                } else if (result.contains("3.1")) {
+
+                                    qb_version = "3.1.x";
+                                    cookie = null;
+
+                                } else {
+
+                                    qb_version = "2.x";
+
+                                }
+
+
+                                qb_api = result;
+                                qbittorrentServer = result;
+                            }
+
+
+                        }
+                    });
+
+                }
+
+            }
+        });
+    }
 
     private void refresh(String state, String label) {
 
@@ -1022,13 +1318,24 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             qbQueryString = "query";
             params[0] = qbQueryString + "/torrents?filter=" + state;
 
-            // Get API version in case it hasn't been gotten before
-            if (qb_api == null || qb_api.equals("") || qb_api.equals("0")) {
-                new qBittorrentApiTask().execute(new Intent());
+
+            // Get API version in case it hadn't been gotten before
+            if (qb_api == null || qb_api.equals("") || qb_api.equals("0"))
+
+            {
+                //new qBittorrentApiTask().execute(new Intent());
+                getApi();
+
             }
 
             // Label
-            if (label != null && !label.equals(getResources().getString(R.string.drawer_label_all))) {
+            if (label != null && !label.equals(
+
+                    getResources().
+
+                            getString(R.string.drawer_label_all)))
+
+            {
 
 
                 if (label.equals(getResources().getString(R.string.drawer_label_unlabeled))) {
@@ -1064,7 +1371,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 } catch (Exception e) {
                     Log.e("Debug", "[Main] Label Exception: " + e.toString());
                 }
-            } else {
+            } else
+
+            {
 //                Log.d("Debug", "Label filter2: " + label);
 
             }
@@ -1315,7 +1624,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     input.close();
                 }
             } catch (IOException e) {
-                Log.e("Debug",  "Error closing the input stream " + tempFile.toString() + ": " + e.toString());
+                Log.e("Debug", "Error closing the input stream " + tempFile.toString() + ": " + e.toString());
             }
         }
 
@@ -1333,7 +1642,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //        Log.d("Debug", "urlTorrent: " + urlTorrent);
 
         // if there is not a path to the file, open de file picker
-        if (urlTorrent == null ) {
+        if (urlTorrent == null) {
             openFilePicker();
         } else {
 
@@ -1343,27 +1652,26 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Handle format for torrent files on Downloaded list
                 if (urlTorrent.substring(0, 7).equals("content")) {
 
-                        urlTorrent = getFileNameFromStream(getContentResolver().openInputStream(handledIntent.getData()));
+                    urlTorrent = getFileNameFromStream(getContentResolver().openInputStream(handledIntent.getData()));
 
 //                    Log.d("Debug", "urlTorrent path (content): " + urlTorrent);
                 }
 
                 // Handle format for downloaded torrent files (Ex: /storage/emulated/0/Download/afile.torrent)
-                if (urlTorrent.contains(".torrent") && urlTorrent.substring(0,1).equals("/")) {
+                if (urlTorrent.contains(".torrent") && urlTorrent.substring(0, 1).equals("/")) {
 
-                    if (urlTorrent.substring(0,1).equals("/")) {
+                    if (urlTorrent.substring(0, 1).equals("/")) {
 
-                    // Encode path
+                        // Encode path
                         URI encodedUri = new URI(URLEncoder.encode(urlTorrent, "UTF-8"));
 
-                    // Get raw absolute and add file schema
+                        // Get raw absolute and add file schema
                         urlTorrent = "file://" + (new File(encodedUri.getRawPath())).getAbsolutePath();
 
 //                        Log.d("Debug", "urlTorrent path: " + urlTorrent);
                     }
 
                 }
-
 
 
                 // Once formatted, add the torrent
@@ -1978,7 +2286,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Get new token and cookie
         MainActivity.cookie = null;
-        new qBittorrentApiTask().execute(new Intent());
+        //new qBittorrentApiTask().execute(new Intent());
+        getApi();
 
 //        Log.d("Debug", "MainActivity - changeCurrentServer called");
     }
@@ -2966,7 +3275,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         if (ssid != null && !ssid.equals("")) {
 
             // Get SSID if WiFi
-            WifiManager wifiMgr = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifiMgr = (WifiManager) getApplication().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
             String wifiSSID = wifiInfo.getSSID();
 
@@ -3324,10 +3633,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             labelTextView.setAdapter(labelAdapter);
 
             // Checkbox value
-            if (pathAndLabelDialog){
+            if (pathAndLabelDialog) {
                 checkBoxPathAndLabelDialog.setChecked(false);
-            }
-            else{
+            } else {
                 checkBoxPathAndLabelDialog.setChecked(true);
             }
 
@@ -3452,121 +3760,121 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Here is where the action happens
-    private class qBittorrentApiTask extends AsyncTask<Intent, Integer, String[]> {
-
-        @Override
-        protected String[] doInBackground(Intent... intents) {
-
-            // Get values from preferences
-            getSettings();
-
-            // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
-
-            String apiVersion = "";
-
-            httpStatusCode = 0;
-
-            // Try to get the API number
-            try {
-
-                apiVersion = jParser.getApi();
-                qb_api = apiVersion;
-                qbittorrentServer = apiVersion;
-
-//                Log.d("Debug", "API: " + apiVersion);
-
-            } catch (JSONParserStatusCodeException e) {
-
-                qb_api = "0";
-                httpStatusCode = e.getCode();
-
-                Log.d("Debug", "API Exception: " + httpStatusCode);
-
-            }
-
-            // If < 3.2.x, get qBittorrent version
-            if (httpStatusCode > 200 || apiVersion == null) {
-
-                try {
-
-                    apiVersion = jParser.getVersion();
-                    qbittorrentServer = apiVersion;
-
-                } catch (JSONParserStatusCodeException e) {
-                    httpStatusCode = e.getCode();
-                }
-
-            }
-
-
-            return new String[]{apiVersion, intents[0].getStringExtra("currentState")};
-
-        }
-
-        @Override
-        protected void onPostExecute(String[] result) {
-
-            String apiVersion = result[0];
-
-            int api = 0;
-
-            try {
-
-                api = Integer.parseInt(apiVersion);
-
-            } catch (Exception e) {
-                api = 0;
-            }
-
-            if (apiVersion != null && (api > 1 || apiVersion.contains("3.2") || apiVersion.contains("3.3"))) {
-
-                qb_version = "3.2.x";
-
-                // Get new cookie
-                cookie = null;
-
-            } else if (apiVersion.contains("3.1")) {
-
-                qb_version = "3.1.x";
-                cookie = null;
-
-            } else {
-
-                qb_version = "2.x";
-
-            }
-
-            // Save version
-            savePreferenceAsString("qb_version", qb_version);
-
-
-            // Refresh
-            String stateBefore = result[1];
-
-            if (stateBefore != null) {
-
-                // Set selection according to last state
-                setSelectionAndTitle(stateBefore);
-
-                // Set the refresh layout (refresh icon, etc)
-                refreshSwipeLayout();
-
-                // Refresh state
-                refresh(stateBefore, "");
-
-                // load banner
-                loadBanner();
-
-            } else {
-
-                swipeRefresh();
-
-            }
-
-
-        }
-    }
+//    private class qBittorrentApiTask extends AsyncTask<Intent, Integer, String[]> {
+//
+//        @Override
+//        protected String[] doInBackground(Intent... intents) {
+//
+//            // Get values from preferences
+//            getSettings();
+//
+//            // Creating new JSON Parser
+//            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
+//
+//            String apiVersion = "";
+//
+//            httpStatusCode = 0;
+//
+//            // Try to get the API number
+//            try {
+//
+//                apiVersion = jParser.getApi();
+//                qb_api = apiVersion;
+//                qbittorrentServer = apiVersion;
+//
+////                Log.d("Debug", "API: " + apiVersion);
+//
+//            } catch (JSONParserStatusCodeException e) {
+//
+//                qb_api = "0";
+//                httpStatusCode = e.getCode();
+//
+//                Log.d("Debug", "API Exception: " + httpStatusCode);
+//
+//            }
+//
+//            // If < 3.2.x, get qBittorrent version
+//            if (httpStatusCode > 200 || apiVersion == null) {
+//
+//                try {
+//
+//                    apiVersion = jParser.getVersion();
+//                    qbittorrentServer = apiVersion;
+//
+//                } catch (JSONParserStatusCodeException e) {
+//                    httpStatusCode = e.getCode();
+//                }
+//
+//            }
+//
+//
+//            return new String[]{apiVersion, intents[0].getStringExtra("currentState")};
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String[] result) {
+//
+//            String apiVersion = result[0];
+//
+//            int api = 0;
+//
+//            try {
+//
+//                api = Integer.parseInt(apiVersion);
+//
+//            } catch (Exception e) {
+//                api = 0;
+//            }
+//
+//            if (apiVersion != null && (api > 1 || apiVersion.contains("3.2") || apiVersion.contains("3.3"))) {
+//
+//                qb_version = "3.2.x";
+//
+//                // Get new cookie
+//                cookie = null;
+//
+//            } else if (apiVersion.contains("3.1")) {
+//
+//                qb_version = "3.1.x";
+//                cookie = null;
+//
+//            } else {
+//
+//                qb_version = "2.x";
+//
+//            }
+//
+//            // Save version
+//            savePreferenceAsString("qb_version", qb_version);
+//
+//
+//            // Refresh
+//            String stateBefore = result[1];
+//
+//            if (stateBefore != null) {
+//
+//                // Set selection according to last state
+//                setSelectionAndTitle(stateBefore);
+//
+//                // Set the refresh layout (refresh icon, etc)
+//                refreshSwipeLayout();
+//
+//                // Refresh state
+//                refresh(stateBefore, "");
+//
+//                // load banner
+//                loadBanner();
+//
+//            } else {
+//
+//                swipeRefresh();
+//
+//            }
+//
+//
+//        }
+//    }
 
     // Here is where the action happens
     private class qBittorrentCommand extends AsyncTask<String, Integer, String[]> {
@@ -3706,7 +4014,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 messageId = R.string.torrentDeletedDrive;
             }
 
-            if ("addTorrent".equals(command) || "addTorrentAPI7".equals(command) ) {
+            if ("addTorrent".equals(command) || "addTorrentAPI7".equals(command)) {
                 messageId = R.string.torrentAdded;
             }
 
