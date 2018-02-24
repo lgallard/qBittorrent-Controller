@@ -74,7 +74,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import org.json.JSONArray;
@@ -1194,6 +1193,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private void getCookie(final VolleyCallback callback) {
 
         String url = protocol + "://" + hostname + ":" + port + "/login";
+        Map<String, String> myMap;
+
 
         // New JSONObject request
         CustomStringRequest jsArrayRequest = new CustomStringRequest(
@@ -1205,35 +1206,48 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         Log.d("Debug", "===cookie===");
                         Log.d("Debug", "Respnse: " + response);
-                        Log.d("Debug", "headers: " + CustomStringRequest.headers);
+                        //Log.d("Debug", "headers: " + CustomStringRequest.headers);
 
-                        String cookieString = null;
-
-                        if (CustomStringRequest.headers != null) {
-                            cookieString = CustomStringRequest.headers.get("set-cookie").split(";")[0];
+                        JSONObject jsonObject = null;
+                        CustomObjectResult customObjectResult = null;
+                        try {
+                            jsonObject = new JSONObject(response);
+                        } catch (Exception e) {
+                            Log.e("Debug", "THIS => " + e.getMessage());
+                            e.printStackTrace();
                         }
 
-                        Log.d("Debug", "set-cookie: " + cookieString);
+                        // ---
+
 
                         Gson gson = new Gson();
 
-                        Cookie cookie = null;
                         try {
-                            cookie = gson.fromJson(new JSONObject("{\"cookie\":\"" + cookieString + "\"}").toString(), Cookie.class);
-                        } catch (JSONException e) {
+                            Log.d("Debug", "JSONObject: " + jsonObject.toString());
+                            customObjectResult = gson.fromJson(jsonObject.toString(), CustomObjectResult.class);
+                        } catch (Exception e) {
+                            Log.e("Debug", "THIS 2 => " + e.getMessage());
                             e.printStackTrace();
-                            Log.e("Error", e.toString());
                         }
 
-                        Log.d("Debug", "JSONObject: " + response);
-                        Log.d("Debug", "======");
 
-                        if (cookie != null) {
-                            Log.d("Debug: ", "Cookie: " + cookie.getCookie());
-                        }
+                        // Get Headers
+                        String headers = customObjectResult.getHeaders();
+
+
+                        // Get set-cookie from headers
+
+                        String cookieString = headers.split("set-cookie=")[1].split(";")[0];
+
+//                        Log.d("Debug", "JSONObject: " + customObjectResult.toString());
+//                        Log.d("Debug", "======");
+//                        Log.d("Debug", "Headers => "+ headers);
+//                        Log.d("Debug", "======");
+//                        Log.d("Debug", "set-cookie => "+ cookieString);
+//                        Log.d("Debug", "======");
 
                         // Return value
-                        callback.onSuccess(cookie.getCookie());
+                        callback.onSuccess(cookieString);
 
 
                     }
@@ -1380,7 +1394,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">Cookie: " + result);
+                Log.d("Debug: ", ">>> Cookie: " + result);
+
+                MainActivity.cookie = result;
 
             }
         });
@@ -1505,7 +1521,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         getCookie();
 
-                        new qBittorrentCookieTask().execute(params);
+                        //new qBittorrentCookieTask().execute(params);
                     }
 
 
@@ -3804,54 +3820,54 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
     // Here is where the action happens
-    private class qBittorrentCookieTask extends AsyncTask<String, Integer, String[]> {
-
-        @Override
-        protected String[] doInBackground(String... params) {
-
-            // Get values from preferences
-            getSettings();
-
-            // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
-
-            String newCookie = "";
-            String api = "";
-
-            try {
-                newCookie = jParser.getNewCookie();
-
-            } catch (JSONParserStatusCodeException e) {
-                httpStatusCode = e.getCode();
-
-            }
-
-            if (newCookie == null) {
-                newCookie = "";
-            }
-
-            if (api == null) {
-                api = "";
-
-            }
-
-            return new String[]{newCookie, api};
-
-        }
-
-        @Override
-        protected void onPostExecute(String[] result) {
-
-            MainActivity.cookie = result[0];
-
-            // Save cookie
-            savePreferenceAsString("qbCookie", result[0]);
-
-            // Execute the task in background
-            qbTask = new qBittorrentTask().execute(params);
-
-        }
-    }
+//    private class qBittorrentCookieTask extends AsyncTask<String, Integer, String[]> {
+//
+//        @Override
+//        protected String[] doInBackground(String... params) {
+//
+//            // Get values from preferences
+//            getSettings();
+//
+//            // Creating new JSON Parser
+//            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
+//
+//            String newCookie = "";
+//            String api = "";
+//
+//            try {
+//                newCookie = jParser.getNewCookie();
+//
+//            } catch (JSONParserStatusCodeException e) {
+//                httpStatusCode = e.getCode();
+//
+//            }
+//
+//            if (newCookie == null) {
+//                newCookie = "";
+//            }
+//
+//            if (api == null) {
+//                api = "";
+//
+//            }
+//
+//            return new String[]{newCookie, api};
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String[] result) {
+//
+//            MainActivity.cookie = result[0];
+//
+//            // Save cookie
+//            savePreferenceAsString("qbCookie", result[0]);
+//
+//            // Execute the task in background
+//            qbTask = new qBittorrentTask().execute(params);
+//
+//        }
+//    }
 
     // Here is where the action happens
 //    private class qBittorrentApiTask extends AsyncTask<Intent, Integer, String[]> {
@@ -4481,7 +4497,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             getCookie();
 
                             // Ask a new cookie and re-execute the task in background
-                            new qBittorrentCookieTask().execute(params);
+                            //new qBittorrentCookieTask().execute(params);
 
                         }
 
