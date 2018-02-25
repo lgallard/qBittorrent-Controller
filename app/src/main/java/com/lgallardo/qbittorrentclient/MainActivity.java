@@ -344,6 +344,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private Toast toast;
     private AsyncTask<String, Integer, Torrent[]> qbTask;
 
+    // This is the delay before refreshing
+    private int delay = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1189,12 +1192,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-
     private void getCookie(final VolleyCallback callback) {
 
         String url = protocol + "://" + hostname + ":" + port + "/login";
-        Map<String, String> myMap;
-
 
         // New JSONObject request
         CustomStringRequest jsArrayRequest = new CustomStringRequest(
@@ -1216,8 +1216,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             Log.e("Debug", "THIS => " + e.getMessage());
                             e.printStackTrace();
                         }
-
-                        // ---
 
 
                         Gson gson = new Gson();
@@ -1291,6 +1289,72 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void pauseAllTorrents(final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+
+        // Command
+        if (qb_version.equals("3.2.x")) {
+            url = url + "/command/pauseAll";
+        } else {
+            url = "/command/pauseall";
+        }
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
 
     // Wraps
 
@@ -1388,7 +1452,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         });
     }
 
-
     private void getCookie() {
         getCookie(new VolleyCallback() {
             @Override
@@ -1397,6 +1460,29 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 Log.d("Debug: ", ">>> Cookie: " + result);
 
                 MainActivity.cookie = result;
+
+                // Save cookie
+                savePreferenceAsString("qbCookie", result);
+
+                // Execute the task in background
+                qbTask = new qBittorrentTask().execute(params);
+
+            }
+        });
+    }
+
+    private void pauseAllTorrents() {
+
+        pauseAllTorrents(new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> PauseAll: " + result);
+
+                toastText(R.string.AllTorrentsPaused);
+
+                // Refresh
+                refreshAfterCommand(delay);
 
             }
         });
@@ -1431,7 +1517,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             {
                 //new qBittorrentApiTask().execute(new Intent());
                 getApi();
+
                 getCookie();
+                //new qBittorrentCookieTask().execute(params);
+
+                // Execute the task in background
+                //qbTask = new qBittorrentTask().execute(params);
 
             }
 
@@ -2786,7 +2877,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
     }
 
-    public void pauseAllTorrents() {
+    public void pauseAllTorrentsOld() {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
 
@@ -3820,54 +3911,54 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
     // Here is where the action happens
-//    private class qBittorrentCookieTask extends AsyncTask<String, Integer, String[]> {
-//
-//        @Override
-//        protected String[] doInBackground(String... params) {
-//
-//            // Get values from preferences
-//            getSettings();
-//
-//            // Creating new JSON Parser
-//            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
-//
-//            String newCookie = "";
-//            String api = "";
-//
-//            try {
-//                newCookie = jParser.getNewCookie();
-//
-//            } catch (JSONParserStatusCodeException e) {
-//                httpStatusCode = e.getCode();
-//
-//            }
-//
-//            if (newCookie == null) {
-//                newCookie = "";
-//            }
-//
-//            if (api == null) {
-//                api = "";
-//
-//            }
-//
-//            return new String[]{newCookie, api};
-//
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String[] result) {
-//
-//            MainActivity.cookie = result[0];
-//
-//            // Save cookie
-//            savePreferenceAsString("qbCookie", result[0]);
-//
-//            // Execute the task in background
-//            qbTask = new qBittorrentTask().execute(params);
-//
-//        }
-//    }
+    private class qBittorrentCookieTask extends AsyncTask<String, Integer, String[]> {
+
+        @Override
+        protected String[] doInBackground(String... params) {
+
+            // Get values from preferences
+            getSettings();
+
+            // Creating new JSON Parser
+            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
+
+            String newCookie = "";
+            String api = "";
+
+            try {
+                newCookie = jParser.getNewCookie();
+
+            } catch (JSONParserStatusCodeException e) {
+                httpStatusCode = e.getCode();
+
+            }
+
+            if (newCookie == null) {
+                newCookie = "";
+            }
+
+            if (api == null) {
+                api = "";
+
+            }
+
+            return new String[]{newCookie, api};
+
+        }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+
+            MainActivity.cookie = result[0];
+
+            // Save cookie
+            savePreferenceAsString("qbCookie", result[0]);
+
+            // Execute the task in background
+            qbTask = new qBittorrentTask().execute(params);
+
+        }
+    }
 
     // Here is where the action happens
 //    private class qBittorrentApiTask extends AsyncTask<Intent, Integer, String[]> {
@@ -4498,6 +4589,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                             // Ask a new cookie and re-execute the task in background
                             //new qBittorrentCookieTask().execute(params);
+
+                            // Execute the task in background
+                            //qbTask = new qBittorrentTask().execute(params);
 
                         }
 
