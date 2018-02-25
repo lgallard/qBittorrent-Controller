@@ -1356,6 +1356,73 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void pauseTorrent(String hash, final VolleyCallback callback) {
+
+        final String hash_param = hash;
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/command/pause";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hash", hash_param);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
     // Wraps
 
     private void getApi() {
@@ -1488,6 +1555,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         });
     }
 
+    private void pauseTorrent(String hash) {
+
+        pauseTorrent(hash, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Pause Torrent: " + result);
+
+                toastText(R.string.torrentPaused);
+
+                // Refresh
+                refreshAfterCommand(delay);
+
+            }
+        });
+    }
 
     private void refresh(String state, String label) {
 
@@ -2757,7 +2840,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-
     protected void getPRO() {
         Intent intent = new Intent(
                 new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclientpro")));
@@ -2784,12 +2866,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Delay of 3 seconds
         refreshAfterCommand(3);
-    }
-
-    public void pauseTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"pause", hash});
     }
 
     public void pauseSelectedTorrents(String hashes) {
@@ -2870,22 +2946,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         qtc.execute(new String[]{"addTracker", hash + "&" + url});
     }
 
-
     public void addTorrentFile(String url) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
-    }
-
-    public void pauseAllTorrentsOld() {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-
-        if (qb_version.equals("3.2.x")) {
-            qtc.execute(new String[]{"pauseAll", null});
-        } else {
-            qtc.execute(new String[]{"pauseall", null});
-        }
     }
 
     public void resumeAllTorrents() {
