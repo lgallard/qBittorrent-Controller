@@ -1289,6 +1289,73 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void resumeAllTorrents(final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+
+        // Command
+        if (qb_version.equals("3.2.x")) {
+            url = url + "/command/resumeAll";
+        } else {
+            url = "/command/resumeall";
+        }
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
     private void pauseAllTorrents(final VolleyCallback callback) {
 
         String url = "";
@@ -1538,6 +1605,23 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         });
     }
 
+    private void resumeAllTorrents() {
+
+        resumeAllTorrents(new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> ResumeAll: " + result);
+
+                toastText(R.string.AllTorrentsResumed);
+
+                // Refresh
+                refreshAfterCommand(2);
+
+            }
+        });
+    }
+
     private void pauseAllTorrents() {
 
         pauseAllTorrents(new VolleyCallback() {
@@ -1555,7 +1639,26 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         });
     }
 
+    public void pauseSelectedTorrents(String hashes) {
+
+        String[] hashesArray = hashes.split("\\|");
+
+        for (int i = 0; hashesArray.length > i; i++) {
+            pauseTorrent(hashesArray[i], true);
+        }
+
+        toastText(R.string.torrentsSelectedPaused);
+
+        // Delay of 1 second
+        refreshAfterCommand(2);
+
+    }
+
     private void pauseTorrent(String hash) {
+        pauseTorrent(hash, false);
+    }
+
+    private void pauseTorrent(String hash, final boolean isSelection) {
 
         pauseTorrent(hash, new VolleyCallback() {
             @Override
@@ -1563,14 +1666,19 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 Log.d("Debug: ", ">>> Pause Torrent: " + result);
 
-                toastText(R.string.torrentPaused);
+                if (!isSelection) {
+                    toastText(R.string.torrentPaused);
 
-                // Refresh
-                refreshAfterCommand(delay);
+                    // Refresh
+                    refreshAfterCommand(delay);
+
+                }
 
             }
         });
     }
+
+    // End of wraps
 
     private void refresh(String state, String label) {
 
@@ -1595,28 +1703,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
             // Get API version in case it hadn't been gotten before
-            if (qb_api == null || qb_api.equals("") || qb_api.equals("0"))
-
-            {
-                //new qBittorrentApiTask().execute(new Intent());
+            if (qb_api == null || qb_api.equals("") || qb_api.equals("0")) {
                 getApi();
-
                 getCookie();
-                //new qBittorrentCookieTask().execute(params);
-
-                // Execute the task in background
-                //qbTask = new qBittorrentTask().execute(params);
-
             }
 
             // Label
-            if (label != null && !label.equals(
-
-                    getResources().
-
-                            getString(R.string.drawer_label_all)))
-
-            {
+            if (label != null && !label.equals(getResources().getString(R.string.drawer_label_all))) {
 
 
                 if (label.equals(getResources().getString(R.string.drawer_label_unlabeled))) {
@@ -2252,19 +2345,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_pause:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     pauseTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_resume:
                 if (TorrentDetailsFragment.hashToUpdate != null) {
                     startTorrent(TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_delete:
@@ -2815,23 +2900,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         refreshAfterCommand(3);
     }
 
-    public void pauseSelectedTorrents(String hashes) {
-        // Execute the task in background
-
-        String[] hashesArray = hashes.split("\\|");
-
-        for (int i = 0; hashesArray.length > i; i++) {
-            qBittorrentCommand qtc = new qBittorrentCommand();
-            qtc.execute(new String[]{"pauseSelected", hashesArray[i]});
-        }
-
-        toastText(R.string.torrentsSelectedPaused);
-
-        // Delay of 1 second
-        refreshAfterCommand(1);
-
-    }
-
     public void deleteTorrent(String hash) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
@@ -2897,17 +2965,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
-    }
-
-    public void resumeAllTorrents() {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-
-        if (qb_version.equals("3.2.x")) {
-            qtc.execute(new String[]{"resumeAll", null});
-        } else {
-            qtc.execute(new String[]{"resumeall", null});
-        }
     }
 
     public void increasePrioTorrent(String hash) {
