@@ -2351,37 +2351,21 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_increase_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     increasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_decrease_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     decreasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_max_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     maxPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_min_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     minPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_resume_all:
