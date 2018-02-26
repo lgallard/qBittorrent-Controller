@@ -1557,6 +1557,74 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void deleteTorrent(final String hashes, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/command/delete";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        Log.d("Debug", "hashes: " + hashes);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
     // Wraps
 
     private void getApi() {
@@ -1760,10 +1828,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    private void pauseTorrent(String hash) {
-        pauseTorrent(hash, false);
-    }
-
     private void pauseTorrent(String hash, final boolean isSelection) {
 
         pauseTorrent(hash, new VolleyCallback() {
@@ -1774,6 +1838,45 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 if (!isSelection) {
                     toastText(R.string.torrentPaused);
+
+                    // Refresh
+                    refreshAfterCommand(delay);
+
+                }
+
+            }
+        });
+    }
+
+    private void pauseTorrent(String hash) {
+        pauseTorrent(hash, false);
+    }
+
+    public void deleteSelectedTorrents(String hashes) {
+
+        deleteTorrent(hashes, true);
+
+        toastText(R.string.torrentsSelectedDeleted);
+
+        // Delay of 1 second
+        refreshAfterCommand(2);
+
+    }
+
+    private void deleteTorrent(String hashes) {
+        deleteTorrent(hashes, false);
+    }
+
+    private void deleteTorrent(String hash, final boolean isSelection) {
+
+        deleteTorrent(hash, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Delete Torrent: " + result);
+
+                if (!isSelection) {
+                    toastText(R.string.torrentDeleted);
 
                     // Refresh
                     refreshAfterCommand(delay);
@@ -2984,35 +3087,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         startActivityForResult(intent, GETPRO_CODE);
     }
 
-    public void startTorrentOld(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"start", hash});
-    }
 
-    public void startSelectedTorrentsOld(String hashes) {
-        // Execute the task in background
-
-        String[] hashesArray = hashes.split("\\|");
-
-        for (int i = 0; hashesArray.length > i; i++) {
-            qBittorrentCommand qtc = new qBittorrentCommand();
-            qtc.execute(new String[]{"startSelected", hashesArray[i]});
-        }
-
-        toastText(R.string.torrentsSelectedStarted);
-
-        // Delay of 3 seconds
-        refreshAfterCommand(3);
-    }
-
-    public void deleteTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"delete", hash});
-    }
-
-    public void deleteSelectedTorrents(String hashes) {
+    public void deleteSelectedTorrentsOLD(String hashes) {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"deleteSelected", hashes});
