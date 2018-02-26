@@ -2393,65 +2393,37 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_upload_rate_limit:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     uploadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
 
             case R.id.action_download_rate_limit:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     downloadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_recheck:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     recheckTorrents(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_first_last_piece_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleFirstLastPiecePrio(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_sequential_download:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleSequentialDownload(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_set_label:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     setLabelDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_delete_label:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     setLabel(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate, " ");
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
 
@@ -2460,10 +2432,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 refreshAfterCommand(2);
                 swipeRefresh();
-
-//                if (findViewById(R.id.one_frame) != null) {
-//                    popBackStackPhoneView();
-//                }
 
                 return true;
             case R.id.action_sortby_name:
@@ -2522,14 +2490,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 swipeRefresh();
                 return true;
             case R.id.action_add_tracker:
-//                Log.d("Debug", "Adding tracker");
-
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-
                     addUrlTracker(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
                 }
-
 
                 return true;
             default:
