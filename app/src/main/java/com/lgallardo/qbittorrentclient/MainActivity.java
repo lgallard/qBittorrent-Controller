@@ -1887,6 +1887,42 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         });
     }
 
+
+    public void deleteDriveSelectedTorrents(String hashes) {
+
+        deleteDriveTorrent(hashes, true);
+
+        toastText(R.string.torrentsSelectedDeletedDrive);
+
+        // Delay of 1 second
+        refreshAfterCommand(2);
+
+    }
+
+    private void deleteDriveTorrent(String hashes) {
+        deleteDriveTorrent(hashes, false);
+    }
+
+    private void deleteDriveTorrent(String hash, final boolean isSelection) {
+
+        deleteTorrent(hash, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Delete Drive Torrent: " + result);
+
+                if (!isSelection) {
+                    toastText(R.string.torrentDeletedDrive);
+
+                    // Refresh
+                    refreshAfterCommand(delay);
+
+                }
+
+            }
+        });
+    }
+
     // End of wraps
 
     private void refresh(String state, String label) {
@@ -3085,35 +3121,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         Intent intent = new Intent(
                 new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclientpro")));
         startActivityForResult(intent, GETPRO_CODE);
-    }
-
-
-    public void deleteSelectedTorrentsOLD(String hashes) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"deleteSelected", hashes});
-
-        toastText(R.string.torrentsSelectedDeleted);
-
-        // Delay of 1 second
-        refreshAfterCommand(1);
-    }
-
-    public void deleteDriveTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"deleteDrive", hash});
-    }
-
-    public void deleteDriveSelectedTorrents(String hashes) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"deleteDriveSelected", hashes});
-
-        toastText(R.string.torrentsSelectedDeletedDrive);
-
-        // Delay of 1 second
-        refreshAfterCommand(1);
     }
 
     public void addTorrent(String url) {
