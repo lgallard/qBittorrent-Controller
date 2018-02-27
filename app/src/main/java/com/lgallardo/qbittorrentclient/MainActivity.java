@@ -1829,6 +1829,74 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void minPrioTorrent(final String hashes, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/command/bottomPrio";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        Log.d("Debug", "hashes: " + hashes);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
 
     // Wraps
 
@@ -2169,7 +2237,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Increase priority: " + result);
+                Log.d("Debug: ", ">>> Max priority: " + result);
 
                 toastText(R.string.priorityUpdated);
 
@@ -2180,6 +2248,26 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         });
 
     }
+
+
+    public void minPrioTorrent(String hashes) {
+
+        minPrioTorrent(hashes, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Min priority: " + result);
+
+                toastText(R.string.priorityUpdated);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
     // End of wraps
 
     private void refresh(String state, String label) {
@@ -3411,13 +3499,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Execute the task in background
         qBittorrentCommand qtc = new qBittorrentCommand();
         qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
-    }
-
-    public void minPrioTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"minPrio", hash});
-
     }
 
     public void setFilePrio(String hash, int id, int priority) {
