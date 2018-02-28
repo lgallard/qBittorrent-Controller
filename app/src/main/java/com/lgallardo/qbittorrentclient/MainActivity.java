@@ -2039,6 +2039,73 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void recheckTorrent(final String hash, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/command/recheck";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        Log.d("Debug", "hash: " + hash);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hash", hash);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
 
     // Wraps
 
@@ -2435,6 +2502,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    public void recheckTorrent(String hash) {
+
+        recheckTorrent(hash, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> recheckTorrents: " + result);
+
+            }
+        });
+
+    }
 
     // End of wraps
 
@@ -3685,8 +3764,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         String[] hashesArray = hashes.split("\\|");
 
         for (int i = 0; hashesArray.length > i; i++) {
-            qBittorrentCommand qtc = new qBittorrentCommand();
-            qtc.execute(new String[]{"recheckSelected", hashesArray[i]});
+            recheckTorrent(hashesArray[i]);
         }
 
         toastText(R.string.torrentsRecheck);
