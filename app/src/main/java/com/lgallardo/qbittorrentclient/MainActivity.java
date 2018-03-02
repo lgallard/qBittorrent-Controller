@@ -2243,6 +2243,100 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void setLabel(final String hashes, final String label, final VolleyCallback callback) {
+
+        String url = "";
+
+        String labelHeaderTmp = "label";
+
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+        // Validate setLabel for API 10+
+        try {
+
+            if (Integer.parseInt(MainActivity.qb_api) >= 10) {
+                labelHeaderTmp = "category";
+                url = url + "/command/setCategory";
+            } else {
+                labelHeaderTmp = "label";
+                url = url + "/command/setLabel";
+            }
+        } catch (Exception e) {
+            labelHeaderTmp = "label";
+            url = url + "/command/setLabel";
+        }
+
+        final String labelHeader = labelHeaderTmp;
+
+        Log.d("Debug", "url: " + url);
+        Log.d("Debug", "labelHeaderTmp: " + labelHeaderTmp);
+        Log.d("Debug", "hashes: " + hashes);
+
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        Log.d("Debug", "hashes: " + hashes);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                params.put(labelHeader, label);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
 
 
     // Wraps
@@ -2660,7 +2754,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 Log.d("Debug: ", ">>> Toggle first last piece priority: " + result);
 
-                toastText(R.string.priorityUpdated);
+                toastText(R.string.torrentstogglefisrtLastPiecePrio);
 
                 // Refresh
                 refreshAfterCommand(3);
@@ -2678,7 +2772,25 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 Log.d("Debug: ", ">>> toggleSequentialDownload: " + result);
 
-                toastText(R.string.priorityUpdated);
+                toastText(R.string.torrentstoggleSequentialDownload);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void setLabel(String hashes, String label) {
+
+        setLabel(hashes, label, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> setLabel: " + result);
+
+                toastText(R.string.torrentsApplyingChange);
 
                 // Refresh
                 refreshAfterCommand(3);
@@ -3944,13 +4056,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Delay of 3 seconds
         refreshAfterCommand(3);
-    }
-
-    public void setLabel(String hashes, String label) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"setLabel", hashes + "&" + label});
-
     }
 
     public void toggleAlternativeSpeedLimits() {
