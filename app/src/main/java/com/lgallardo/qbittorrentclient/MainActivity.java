@@ -90,6 +90,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -2390,6 +2391,89 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void addTorrent(final String hashes, final String path2Set, final String label2Set, final VolleyCallback callback) {
+
+        String boundary = "";
+
+        if (Integer.parseInt(qb_api) >= 7) {
+
+            boundary = "-----------------------" + (new Date()).getTime();
+            boundary = "multipart/form-data; boundary=" + boundary;
+        } else {
+
+            boundary = "application/x-www-form-urlencoded";
+        }
+
+
+        final String urlContentType = boundary;
+
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/command/download";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        Log.d("Debug", "hashes: " + hashes);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", urlContentType);
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("urls", hashes);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
 
     // Wraps
     private void getApi() {
@@ -2852,7 +2936,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-
     public void toggleAlternativeSpeedLimits() {
 
         toggleAlternativeSpeedLimits(new VolleyCallback() {
@@ -2866,6 +2949,24 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Refresh
                 refreshAfterCommand(2);
                 swipeRefresh();
+
+            }
+        });
+
+    }
+
+    public void addTorrent(String hashes, String path, String label) {
+
+        addTorrent(hashes, path, label, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> addTorrent: " + result);
+
+                toastText(R.string.torrentsApplyingChange);
+
+                // Refresh
+                refreshAfterCommand(3);
 
             }
         });
@@ -3263,7 +3364,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType())) {
 //                        Log.d("Debug", "URL: " + urlTorrent);
 
-                        addTorrent(urlTorrent);
+                        addTorrent(urlTorrent, path2Set, label2Set);
                     } else {
                         // Open not valid torrent or magnet link in browser
 
@@ -4066,26 +4167,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         Intent intent = new Intent(
                 new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclientpro")));
         startActivityForResult(intent, GETPRO_CODE);
-    }
-
-    public void addTorrent(String url) {
-        // Execute the task in background
-
-        try {
-            if (Integer.parseInt(MainActivity.qb_api) >= 7) {
-                qBittorrentCommand qtc = new qBittorrentCommand();
-                qtc.execute(new String[]{"addTorrentAPI7", url, path2Set, label2Set});
-
-            } else {
-                qBittorrentCommand qtc = new qBittorrentCommand();
-                qtc.execute(new String[]{"addTorrent", url, path2Set, label2Set});
-            }
-
-        } catch (Exception e) {
-            qBittorrentCommand qtc = new qBittorrentCommand();
-            qtc.execute(new String[]{"addTorrent", url, path2Set, label2Set});
-        }
-
     }
 
     public void addTracker(String hash, String url) {
