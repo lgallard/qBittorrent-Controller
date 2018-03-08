@@ -1639,6 +1639,74 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void deleteDriveTorrent(final String hashes, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/command/deletePerm";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        Log.d("Debug", "hashes: " + hashes);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
     private void increasePrioTorrent(final String hashes, final VolleyCallback callback) {
 
         String url = "";
@@ -2538,13 +2606,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<NetworkResponse>() {
                     @Override
                     public void onResponse(NetworkResponse response) {
-                        Toast.makeText(context, "Upload successfully!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Upload successfully!", Toast.LENGTH_SHORT).show();
+                        // Return value
+                        callback.onSuccess("");
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Upload failed!\r\n" + error.toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Upload failed!\r\n" + error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override
@@ -2857,7 +2927,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void deleteDriveTorrent(String hash, final boolean isSelection) {
 
-        deleteTorrent(hash, new VolleyCallback() {
+        deleteDriveTorrent(hash, new VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -3083,7 +3153,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> addTorrentFile: " + result);
+                Log.d("Debug", ">>> addTorrentFile: " + result);
 
                 toastText(R.string.torrentFileAdded);
 
