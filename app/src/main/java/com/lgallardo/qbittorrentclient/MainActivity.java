@@ -4398,14 +4398,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     public void addTorrentFile(String url) {
 
-        if (Integer.parseInt(qb_api) >= 7) {
-            addTorrentFileAPI7(url, path2Set, label2Set);
-        } else {
-            // Execute the task in background
+        addTorrentFileAPI7(url, path2Set, label2Set);
+
+//        if (Integer.parseInt(qb_api) >= 7) {
+//            addTorrentFileAPI7(url, path2Set, label2Set);
+//        } else {
+//            addTorrentFile(url, path2Set, label2Set);
+//            // Execute the task in background
 //            qBittorrentCommand qtc = new qBittorrentCommand();
 //            qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
-
-        }
+//
+//        }
     }
 
     public void setFilePrio(String hash, int id, int priority) {
