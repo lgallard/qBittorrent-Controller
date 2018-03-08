@@ -65,6 +65,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -80,6 +81,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -347,6 +351,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // This is the delay before refreshing
     private int delay = 1;
+
+    // Multipart
+    private final Context context = this;
+    private final String twoHyphens = "--";
+    private final String lineEnd = "\r\n";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1031,6 +1040,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(stringArrayRequest);
 
+    }
+
+    protected void addVolleyRequest(CustomMultipartRequest customMultipartRequest) {
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(customMultipartRequest);
     }
 
     public interface VolleyCallback {
@@ -2457,6 +2470,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 params.put("Host", protocol + "://" + hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", urlContentType);
+                params.put("savepath", path2Set);
+                params.put("category", label2Set);
                 params.put("Cookie", cookie);
                 return params;
             }
@@ -2472,6 +2487,95 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Add request to te queue
         addVolleyRequest(jsArrayRequest);
 
+    }
+
+    private void addTorrentFileAPI7(final String hash, final String path2Set, final String label2Set, final VolleyCallback callback) {
+
+        final String boundary = "-----------------------" + (new Date()).getTime();
+        final String urlContentType = "multipart/form-data; boundary=" + boundary;
+        byte[] multipartBody = null;
+
+        String url = "";
+
+        byte[] fileBytesTemp = null;
+
+        final File file = new File(hash);
+
+        try {
+            fileBytesTemp = Common.fullyReadFileToBytes(file);
+        } catch (IOException e) {
+            fileBytesTemp = null;
+            e.printStackTrace();
+        }
+
+        final byte[] fileBytes = fileBytesTemp;
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
+
+        try {
+            // the file
+            buildPart(boundary, dos, fileBytes, file.getName());
+            // send multipart form data necessary after file data
+            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+            // pass to multipart body
+            multipartBody = bos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/command/upload";
+
+        CustomMultipartRequest customMultipartRequest = new CustomMultipartRequest(
+                url,
+                urlContentType,
+                multipartBody,
+                new Response.Listener<NetworkResponse>() {
+                    @Override
+                    public void onResponse(NetworkResponse response) {
+                        Toast.makeText(context, "Upload successfully!", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Upload failed!\r\n" + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", urlContentType);
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+
+                if (path2Set != null && path2Set.length() != 0) {
+                    params.put("savepath", path2Set);
+                }
+
+                if (label2Set != null && label2Set.length() != 0) {
+                    params.put("category", label2Set);
+                }
+
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(customMultipartRequest);
     }
 
 
@@ -2963,7 +3067,25 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 Log.d("Debug: ", ">>> addTorrent: " + result);
 
-                toastText(R.string.torrentsApplyingChange);
+                toastText(R.string.torrentFileAdded);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void addTorrentFileAPI7(String hash, String path, String label) {
+
+        addTorrentFileAPI7(hash, path, label, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> addTorrentFile: " + result);
+
+                toastText(R.string.torrentFileAdded);
 
                 // Refresh
                 refreshAfterCommand(3);
@@ -2974,6 +3096,34 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // End of wraps
+
+    // MultiPart
+    private void buildPart(String boundary, DataOutputStream dataOutputStream, byte[] fileData, String fileName) throws IOException {
+        dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
+        dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\"; filename=\""
+                + fileName + "\"" + lineEnd);
+        dataOutputStream.writeBytes(lineEnd);
+
+        ByteArrayInputStream fileInputStream = new ByteArrayInputStream(fileData);
+        int bytesAvailable = fileInputStream.available();
+
+        int maxBufferSize = 1024 * 1024;
+        int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+        byte[] buffer = new byte[bufferSize];
+
+        // read file and write it into form...
+        int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+        while (bytesRead > 0) {
+            dataOutputStream.write(buffer, 0, bufferSize);
+            bytesAvailable = fileInputStream.available();
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+        }
+
+        dataOutputStream.writeBytes(lineEnd);
+    }
+
 
     private void refresh(String state, String label) {
 
@@ -4177,9 +4327,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     public void addTorrentFile(String url) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
+
+        if (Integer.parseInt(qb_api) >= 7) {
+            addTorrentFileAPI7(url, path2Set, label2Set);
+        } else {
+            // Execute the task in background
+//            qBittorrentCommand qtc = new qBittorrentCommand();
+//            qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
+
+        }
     }
 
     public void setFilePrio(String hash, int id, int priority) {
