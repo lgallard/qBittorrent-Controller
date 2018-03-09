@@ -2648,6 +2648,68 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         addVolleyRequest(customMultipartRequest);
     }
 
+    private void addTracker(final String hash, final String urlParam, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/command/addTrackers";
+
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hash", hash);
+                params.put("urls", urlParam);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
 
     // Wraps
     private void getApi() {
@@ -3156,6 +3218,23 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 Log.d("Debug", ">>> addTorrentFile: " + result);
 
                 toastText(R.string.torrentFileAdded);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void addTracker(String hashes, String url) {
+
+        addTracker(hashes, url, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> addTracker: " + result);
+                toastText(R.string.torrentsApplyingChange);
 
                 // Refresh
                 refreshAfterCommand(3);
@@ -4387,13 +4466,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         Intent intent = new Intent(
                 new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclientpro")));
         startActivityForResult(intent, GETPRO_CODE);
-    }
-
-    public void addTracker(String hash, String url) {
-        // Execute the task in background
-//        Log.d("Debug", "addTracker - Adding tracker");
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"addTracker", hash + "&" + url});
     }
 
     public void addTorrentFile(String url) {
