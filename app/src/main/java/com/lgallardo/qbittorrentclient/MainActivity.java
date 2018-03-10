@@ -654,6 +654,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         altSpeedLimitsMenuItem = menu.findItem(R.id.action_toggle_alternative_rate);
+        altSpeedLimitsMenuItem.setEnabled(true);
+        altSpeedLimitsMenuItem.setChecked(alternative_speeds);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -2710,6 +2712,74 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void getAlternativeSpeedLimitsEnabled(final VolleyCallback callback) {
+
+        String ApiURL = protocol + "://" + hostname + ":" + port + "/command/alternativeSpeedLimitsEnabled";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.GET,
+                ApiURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===x===");
+                        Log.d("Debug", "JSONObject: " + response);
+                        Gson gson = new Gson();
+
+                        CustomStringResult result = null;
+                        try {
+                            result = gson.fromJson(new JSONObject("{\"result\":" + response + "}").toString(), CustomStringResult.class);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("Error", e.toString());
+                        }
+
+                        Log.d("Debug", "JSONObject: " + response);
+                        Log.d("Debug", "======");
+                        Log.d("Debug: ", "result: " + result.getResult());
+
+                        callback.onSuccess(result.getResult());
+
+                        // There's no need to use a callback method here, toke was already saved
+                        // saveToken(access_token);
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+                        callback.onSuccess("");
+
+                        Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
 
     // Wraps
     private void getApi() {
@@ -3244,6 +3314,34 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void getAlternativeSpeedLimitsEnabled() {
+        getAlternativeSpeedLimitsEnabled(new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Boolean isAlternativeSpeedLimitsEnabled;
+
+                Log.d("Debug: ", ">getAlternativeSpeedLimitsEnabled<: " + result);
+
+                if (result != null && !result.equals("")) {
+
+                    if ("1".equals(result) == true) {
+                        isAlternativeSpeedLimitsEnabled = true;
+                    } else {
+                        isAlternativeSpeedLimitsEnabled = false;
+                    }
+
+                    savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", isAlternativeSpeedLimitsEnabled);
+                    if (altSpeedLimitsMenuItem != null) {
+                        altSpeedLimitsMenuItem.setEnabled(true);
+                        altSpeedLimitsMenuItem.setChecked(isAlternativeSpeedLimitsEnabled);
+                    }
+                }
+            }
+        });
+    }
+
+
     // End of wraps
 
     // MultiPart
@@ -3406,7 +3504,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         qbTask = new qBittorrentTask().execute(params);
 
                         // Check if  alternative speed limit is set
-                        new qBittorrentCommand().execute(new String[]{"alternativeSpeedLimitsEnabled", ""});
+                        getAlternativeSpeedLimitsEnabled();
                     }
                 }
 
