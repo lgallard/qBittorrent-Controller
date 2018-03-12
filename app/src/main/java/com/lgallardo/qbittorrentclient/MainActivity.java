@@ -2780,6 +2780,81 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void setFilePrio(final String hashes, final int idTemp, final int priorityTemp, final VolleyCallback callback) {
+
+        final String id = Integer.toString(idTemp);
+        final String priority = Integer.toString(priorityTemp);
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/command/setFilePrio";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        Log.d("Debug", "hashes: " + hashes);
+                        Log.d("Debug", "id: " + id);
+                        Log.d("Debug", "priority: " + priority);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hash", hashes);
+                params.put("id", id);
+                params.put("priority", priority);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
 
     // Wraps
     private void getApi() {
@@ -3342,6 +3417,19 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
 
+    public void setFilePrio(String hashes, int id, int priority) {
+
+        setFilePrio(hashes, id, priority, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> setFilePrio: " + result);
+
+            }
+        });
+
+    }
+
     // End of wraps
 
     // MultiPart
@@ -3480,7 +3568,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         getCookie();
 
-                        //new qBittorrentCookieTask().execute(params);
                     }
 
 
@@ -4290,7 +4377,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Get new token and cookie
         MainActivity.cookie = null;
-        //new qBittorrentApiTask().execute(new Intent());
+
+        // Get API;
         getApi();
 
 //        Log.d("Debug", "MainActivity - changeCurrentServer called");
@@ -4579,16 +4667,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //            qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
 //
 //        }
-    }
-
-    public void setFilePrio(String hash, int id, int priority) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-
-        hash = hash + "&" + id + "&" + priority;
-
-        qtc.execute(new String[]{"setFilePrio", hash});
-
     }
 
     public void recheckTorrents(String hashes) {
