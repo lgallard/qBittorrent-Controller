@@ -2855,6 +2855,73 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    private void setQBittorrentPrefefrences(final String json, final VolleyCallback callback) {
+
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/command/setPreferences";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("json", json);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
 
     // Wraps
     private void getApi() {
@@ -3416,6 +3483,20 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         });
     }
 
+    public void setQBittorrentPrefefrences(String json) {
+
+        setQBittorrentPrefefrences(json, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> setQBittorrentPrefefrences: " + result);
+
+                toastText(R.string.setQBittorrentPrefefrences);
+
+            }
+        });
+
+    }
 
     public void setFilePrio(String hashes, int id, int priority) {
 
@@ -4412,80 +4493,26 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
              * Save qBittorrent's options remotely *
              ****************************************/
 
-            // Maximum global number of simultaneous connections
-            json += "\"max_connec\":" + global_max_num_connections;
+            Gson gson = new Gson();
 
-            // Maximum number of simultaneous connections per torrent
-            json += ",\"max_connec_per_torrent\":" + max_num_conn_per_torrent;
+            String up_limit = Integer.toString(Integer.parseInt(global_upload) * 1024);
+            String down_limit = Integer.toString(Integer.parseInt(global_download) * 1024);
 
-            // Global maximum number of upload slots:
-            json += ",\"max_uploads\":" + max_uploads;
-
-            // Maximum number of upload slots per torrent
-            json += ",\"max_uploads_per_torrent\":" + max_num_upslots_per_torrent;
-
-            // Global upload speed limit in KiB/s; -1 means no limit is applied
-            json += ",\"up_limit\":" + global_upload;
-
-            // Global download speed limit in KiB/s; -1 means no limit is
-            // applied
-            json += ",\"dl_limit\":" + global_download;
-
-            // alternative global upload speed limit in KiB/s
-            json += ",\"alt_up_limit\":" + alt_upload;
-
-            // alternative global upload speed limit in KiB/s
-            json += ",\"alt_dl_limit\":" + alt_download;
-
-            // Is torrent queuing enabled ?
-            json += ",\"queueing_enabled\":" + torrent_queueing;
-
-            // Maximum number of active simultaneous downloads
-            json += ",\"max_active_downloads\":" + max_act_downloads;
-
-            // Maximum number of active simultaneous uploads
-            json += ",\"max_active_uploads\":" + max_act_uploads;
-
-            // Maximum number of active simultaneous downloads and uploads
-            json += ",\"max_active_torrents\":" + max_act_torrents;
-
-            // Schedule alternative rate limits
-            json += ",\"scheduler_enabled\":" + schedule_alternative_rate_limits;
-
-            // Scheduler starting hour
-            json += ",\"schedule_from_hour\":" + alt_from_hour;
-
-            // Scheduler starting min
-            json += ",\"schedule_from_min\":" + alt_from_min;
-
-            // Scheduler ending hour
-            json += ",\"schedule_to_hour\":" + alt_to_hour;
-
-            // Scheduler ending min
-            json += ",\"schedule_to_min\":" + alt_to_min;
-
-            // Scheduler scheduler days
-            json += ",\"scheduler_days\":" + scheduler_days;
-
-//            Log.d("Debug", "max_ratio_enabled:" + max_ratio_enabled);
-
-            // Share Ratio Limiting
-            json += ",\"max_ratio_enabled\":" + max_ratio_enabled;
-
-            if (max_ratio_enabled == false) {
-                json += ",\"max_ratio\":-1";
-            } else {
-                json += ",\"max_ratio\":" + Float.parseFloat(max_ratio);
+            if (Integer.parseInt(qb_api) > 0) {
+                alt_upload = Integer.toString(Integer.parseInt(alt_upload) * 1024);
+                alt_download = Integer.toString(Integer.parseInt(alt_download) * 1024);
             }
 
-//            String max_ratio_string = "4) max_ratio: " + Float.parseFloat(max_ratio);
-//            Log.d("Debug", "3) max_ratio: " + Float.parseFloat(max_ratio));
-//            Log.d("Debug", max_ratio_string );
 
-            json += ",\"max_ratio_act\":" + max_ratio_act;
+            Options options = new Options(global_max_num_connections, global_max_num_connections,
+                    max_num_conn_per_torrent, max_num_conn_per_torrent, max_uploads,
+                    max_num_upslots_per_torrent, max_num_upslots_per_torrent,
+                    global_upload, up_limit, global_download, down_limit,
+                    alt_upload, alt_download, torrent_queueing, max_act_downloads,
+                    max_act_uploads, max_act_torrents, schedule_alternative_rate_limits,
+                    alt_from_hour, alt_from_min, alt_to_hour, alt_to_min, scheduler_days);
 
-            // Put everything in an json object
-            json = "{" + json + "}";
+            json = gson.toJson(options).toString();
 
             // Set preferences using this json object
             setQBittorrentPrefefrences(json);
@@ -4684,12 +4711,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         refreshAfterCommand(3);
     }
 
-    public void setQBittorrentPrefefrences(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"setQBittorrentPrefefrences", hash});
-
-    }
+//    public void setQBittorrentPrefefrences(String hash) {
+//        // Execute the task in background
+//        qBittorrentCommand qtc = new qBittorrentCommand();
+//        qtc.execute(new String[]{"setQBittorrentPrefefrences", hash});
+//
+//    }
 
     public void uploadRateLimitDialog(final String hash) {
 
@@ -5848,7 +5875,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 messageId = R.string.priorityUpdated;
             }
 
-
             if ("setQBittorrentPrefefrences".equals(command)) {
                 messageId = R.string.setQBittorrentPrefefrences;
             }
@@ -6639,10 +6665,27 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     max_num_conn_per_torrent = json.getString(TAG_MAX_NUM_CONN_PER_TORRENT);
                     max_uploads = json.getString(TAG_MAX_UPLOADS);
                     max_num_upslots_per_torrent = json.getString(TAG_MAX_NUM_UPSLOTS_PER_TORRENT);
-                    global_upload = json.getString(TAG_GLOBAL_UPLOAD);
-                    global_download = json.getString(TAG_GLOBAL_DOWNLOAD);
-                    alt_upload = json.getString(TAG_ALT_UPLOAD);
-                    alt_download = json.getString(TAG_ALT_DOWNLOAD);
+
+
+                    if (Integer.parseInt(qb_api) > 0) {
+                        global_upload = Integer.toString(json.getInt(TAG_GLOBAL_UPLOAD) / 1024);
+                        global_download = Integer.toString(json.getInt(TAG_GLOBAL_DOWNLOAD) / 1024);
+                        alt_upload = Integer.toString(json.getInt(TAG_ALT_UPLOAD) / 1024);
+                        alt_download = Integer.toString(json.getInt(TAG_ALT_DOWNLOAD) / 1024);
+                    } else {
+                        global_upload = json.getString(TAG_GLOBAL_UPLOAD);
+                        global_download = json.getString(TAG_GLOBAL_DOWNLOAD);
+                        alt_upload = json.getString(TAG_ALT_UPLOAD);
+                        alt_download = json.getString(TAG_ALT_DOWNLOAD);
+                    }
+
+
+                    global_upload = Integer.toString(json.getInt(TAG_GLOBAL_UPLOAD) / 1024);
+                    global_download = Integer.toString(json.getInt(TAG_GLOBAL_DOWNLOAD) / 1024);
+                    alt_upload = Integer.toString(json.getInt(TAG_ALT_UPLOAD) / 1024);
+                    alt_download = Integer.toString(json.getInt(TAG_ALT_DOWNLOAD) / 1024);
+
+
                     torrent_queueing = json.getBoolean(TAG_TORRENT_QUEUEING);
                     max_act_downloads = json.getString(TAG_MAX_ACT_DOWNLOADS);
                     max_act_uploads = json.getString(TAG_MAX_ACT_UPLOADS);
