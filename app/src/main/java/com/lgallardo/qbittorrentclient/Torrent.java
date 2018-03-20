@@ -12,7 +12,7 @@ import android.util.Log;
 
 class Torrent {
 
-    private String file;
+    private String name;
     private String size;
     private String info;
     private String state;
@@ -46,10 +46,10 @@ class Torrent {
     private String label;
 
 
-    public Torrent(String file, String size, String state, String hash,
+    public Torrent(String name, String size, String state, String hash,
                    String info, String ratio, String progress, String leechs,
                    String seeds, String priority, String eta, String downloadSpeed, String uploadSpeed, boolean sequentialDownload, boolean firstLastPiecePrio, String addedOn, String completionOn, String label) {
-        this.file = file;
+        this.name = name;
         this.size = size;
         this.state = state;
         this.hash = hash;
@@ -71,17 +71,17 @@ class Torrent {
     }
 
     /**
-     * @return the file
+     * @return the name
      */
-    public String getFile() {
-        return file;
+    public String getName() {
+        return name;
     }
 
     /**
-     * @param file the file to set
+     * @param name the name to set
      */
-    public void setFile(String file) {
-        this.file = file;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**

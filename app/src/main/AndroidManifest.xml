@@ -96,7 +96,7 @@
                 <data
                     android:host="*"
                     android:mimeType="application/x-bittorrent"
-                    android:scheme="file" />
+                    android:scheme="name" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -107,7 +107,7 @@
                 <data
                     android:host="*"
                     android:pathPattern=".*\\.torrent"
-                    android:scheme="file" />
+                    android:scheme="name" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

@@ -75,6 +75,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import org.json.JSONArray;
@@ -89,6 +90,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -97,12 +99,17 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 interface RefreshListener {
-    public void swipeRefresh();
+    void swipeRefresh();
+}
+
+interface ListCallback {
+    void onSuccess(List<Torrent> list);
 }
 
 public class MainActivity extends AppCompatActivity implements RefreshListener {
@@ -356,6 +363,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private final Context context = this;
     private final String twoHyphens = "--";
     private final String lineEnd = "\r\n";
+
+    // Replacement for params[0]
+    String urlPrefix = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -2923,6 +2933,115 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    // WL copy
+    // Get all torrents
+    private List getTorrentList(final String state, final ListCallback callback) {
+
+
+        //Torrent[] torrents = null;
+
+
+        final List<Torrent> torrents = new ArrayList<>();
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+        // Command
+        if (qb_version.equals("2.x")) {
+            url = url + "/json/events";
+        }
+
+        if (qb_version.equals("3.1.x")) {
+            url = url + "/json/torrents";
+        }
+
+        if (qb_version.equals("3.2.x")) {
+            url = url + "/query/torrents?filter=" + state;
+        }
+
+
+        JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        Gson gson = new Gson();
+
+//                        Log.d("Debug", "JSONObject: " + response);
+
+                        // Get list type to parse it
+                        Type listType = new TypeToken<List<Torrent>>() {
+                        }.getType();
+
+                        // Parse Lists using Gson
+//                        java.util.List<List> parsedLists =  new Gson().fromJson(response.toString(), listType);
+                        torrents.addAll((List<Torrent>) new Gson().fromJson(response.toString(), listType));
+
+//                        vLists = new Gson().fromJson(response.toString(), listType);
+
+
+                        //Log.d("Debug", "=== Get All Lists ===");
+
+                        for (int i = 0; i < torrents.size(); i++) {
+
+                            Log.d("Debug", "- - -");
+                            Log.d("Debug", "File: " + torrents.get(i).getName());
+                            Log.d("Debug", "Hash: " + torrents.get(i).getHash());
+
+                        }
+
+                        // Return value
+                        callback.onSuccess(torrents);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        // Log status code
+                        NetworkResponse networkResponse = error.networkResponse;
+                        if (networkResponse != null) {
+                            Log.d("Debug", "getAllTorrents - statusCode: " + networkResponse.statusCode);
+                        }
+
+                        // Log error
+                        Log.d("Debug", "getAllTorrents - Error in JSON response: " + error.getMessage());
+
+                    }
+                }
+
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+        // Return the lists
+        return torrents;
+    }
+
+    // End WL Copy
+
     // Wraps
     private void getApi() {
         getApiVersion(new VolleyCallback() {
@@ -3511,6 +3630,27 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    public void getTorrentList(String state) {
+
+        getTorrentList(state, new ListCallback() {
+            @Override
+            public void onSuccess(List<Torrent> torrents) {
+
+                for (int i = 0; i < torrents.size(); i++) {
+
+                    Log.d("Debug", "- - -");
+                    Log.d("Debug", "> File: " + torrents.get(i).getName());
+                    Log.d("Debug", "> Hash: " + torrents.get(i).getHash());
+
+                }
+
+            }
+
+
+        });
+
+    }
+
     // End of wraps
 
     // MultiPart
@@ -3550,18 +3690,23 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (qb_version.equals("2.x")) {
             qbQueryString = "json";
+            urlPrefix = qbQueryString + "/events";
+            // TODO: Delete
             params[0] = qbQueryString + "/events";
         }
 
         if (qb_version.equals("3.1.x")) {
             qbQueryString = "json";
+            urlPrefix = qbQueryString + "/torrents";
+            // TODO: Delete
             params[0] = qbQueryString + "/torrents";
         }
 
         if (qb_version.equals("3.2.x")) {
             qbQueryString = "query";
+            // TODO: Delete
+            urlPrefix = qbQueryString + "/torrents?filter=" + state;
             params[0] = qbQueryString + "/torrents?filter=" + state;
-
 
             // Get API version in case it hadn't been gotten before
             if (qb_api == null || qb_api.equals("") || qb_api.equals("0")) {
@@ -3670,6 +3815,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         // Execute the task in background
                         qbTask = new qBittorrentTask().execute(params);
+
+                        // Test
+                        getTorrentList(state);
 
                         // Check if  alternative speed limit is set
                         getAlternativeSpeedLimitsEnabled();
@@ -5929,44 +6077,44 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     }
 
 
-                    if (params[1].equals("all") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                    if (params[1].equals("all") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
                         torrentsFiltered.add(result[i]);
                     }
 
-                    if (params[1].equals("downloading") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                    if (params[1].equals("downloading") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
                         if ("downloading".equals(result[i].getState()) || "stalledDL".equals(result[i].getState()) || "pausedDL".equals(result[i].getState())
                                 || "queuedDL".equals(result[i].getState()) || "checkingDL".equals(result[i].getState())) {
                             torrentsFiltered.add(result[i]);
                         }
                     }
 
-                    if (params[1].equals("completed") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                    if (params[1].equals("completed") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
                         if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())
                                 || "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState()) || "forcedUP".equals(result[i].getState())) {
                             torrentsFiltered.add(result[i]);
                         }
                     }
 
-                    if (params[1].equals("seeding") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                    if (params[1].equals("seeding") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
                         if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "forcedUP".equals(result[i].getState())) {
                             torrentsFiltered.add(result[i]);
                         }
                     }
 
 
-                    if (params[1].equals("pause") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                    if (params[1].equals("pause") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
                         if ("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())) {
                             torrentsFiltered.add(result[i]);
                         }
                     }
 
-                    if (params[1].equals("active") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                    if (params[1].equals("active") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
                         if ("uploading".equals(result[i].getState()) || "downloading".equals(result[i].getState())) {
                             torrentsFiltered.add(result[i]);
                         }
                     }
 
-                    if (params[1].equals("inactive") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
+                    if (params[1].equals("inactive") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
                         if ("pausedUP".equals(result[i].getState()) || "pausedDL".equals(result[i].getState()) || "queueUP".equals(result[i].getState())
                                 || "queueDL".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())
                                 || "stalledDL".equals(result[i].getState())) {
@@ -6090,7 +6238,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         Torrent torrent = torrentsFiltered.get(i);
 
-                        MainActivity.names[i] = torrent.getFile();
+                        MainActivity.names[i] = torrent.getName();
                         MainActivity.lines[i] = torrent;
 
                         if (torrent.getHash().equals(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate)) {

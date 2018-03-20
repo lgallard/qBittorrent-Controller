@@ -41,7 +41,7 @@
     <string name="dt_deleteDriveTorrent">Delete torrent and its data</string>
     <string name="dt_deleteDriveSelectedTorrents">Delete torrents and data</string>
     <string name="torrentAdded">Torrent sent!</string>
-    <string name="torrentFileAdded">Torrent file sent!</string>
+    <string name="torrentFileAdded">Torrent name sent!</string>
     <string name="torrentStarted">Torrent started!</string>
     <string name="torrentsSelectedStarted">Torrents started!</string>
     <string name="torrentsRecheck">Recheck started</string>
@@ -267,7 +267,7 @@
     <string name="torrent_label_menu">Label...</string>
     <string name="action_add_tracker">Add tracker</string>
     <string name="help_libraries">Software used:</string>
-    <string name="action_add_file">Add torrent file</string>
+    <string name="action_add_file">Add torrent name</string>
     <string name="action_add_url">Add torrent link</string>
     <string name="pathAndLabelDialogText">Don\'t show this dialog again</string>
 </resources>

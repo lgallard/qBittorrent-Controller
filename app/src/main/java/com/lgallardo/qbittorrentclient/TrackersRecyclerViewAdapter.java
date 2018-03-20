@@ -56,7 +56,7 @@ public class TrackersRecyclerViewAdapter extends RecyclerView.Adapter<TrackersRe
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
 
-            textViewFile = (TextView) itemView.findViewById(R.id.file);
+            textViewFile = (TextView) itemView.findViewById(R.id.name);
             textViewInfo = (TextView) itemView.findViewById(R.id.info);
             textViewPriorityInfo = (TextView) itemView.findViewById(R.id.priorityInfo);
             textViewPercentage = (TextView) itemView.findViewById(R.id.percentage);

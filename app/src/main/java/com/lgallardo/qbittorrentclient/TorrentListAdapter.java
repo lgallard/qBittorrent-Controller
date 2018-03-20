@@ -30,7 +30,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
     private Context context;
 
     public TorrentListAdapter(Context context, String[] torrentsNames, Torrent[] torrentsData) {
-        super(context, R.layout.row, R.id.file, torrentsNames);
+        super(context, R.layout.row, R.id.name, torrentsNames);
 
         this.context = context;
         this.torrentsNames = torrentsNames;
@@ -56,11 +56,11 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
         if (torrentsData != null) {
 
-            String file = torrentsData[position].getFile();
+            String file = torrentsData[position].getName();
 
             String state = torrentsData[position].getState();
 
-            TextView name = (TextView) row.findViewById(R.id.file);
+            TextView name = (TextView) row.findViewById(R.id.name);
             name.setText(file);
 
             TextView info = (TextView) row.findViewById(R.id.info);
@@ -122,7 +122,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
 //            Log.d("Debug", "No results");
 
-            TextView name = (TextView) row.findViewById(R.id.file);
+            TextView name = (TextView) row.findViewById(R.id.name);
             name.setText(context.getString(R.string.no_results));
 
             // Hide progress bar

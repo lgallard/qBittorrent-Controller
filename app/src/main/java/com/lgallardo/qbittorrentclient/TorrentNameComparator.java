@@ -20,8 +20,8 @@ public class TorrentNameComparator implements Comparator<Torrent> {
 
     @Override
     public int compare(Torrent t1, Torrent t2) {
-        String name1 = t1.getFile();
-        String name2 = t2.getFile();
+        String name1 = t1.getName();
+        String name2 = t2.getName();
 
         if (reversed) {
             // Descending order

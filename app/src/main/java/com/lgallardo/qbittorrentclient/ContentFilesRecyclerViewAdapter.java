@@ -15,7 +15,6 @@ package com.lgallardo.qbittorrentclient;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +60,7 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
 
-            textViewFile = (TextView) itemView.findViewById(R.id.file);
+            textViewFile = (TextView) itemView.findViewById(R.id.name);
             textViewInfo = (TextView) itemView.findViewById(R.id.info);
             textViewPriorityInfo = (TextView) itemView.findViewById(R.id.priorityInfo);
             textViewPercentage = (TextView) itemView.findViewById(R.id.percentage);

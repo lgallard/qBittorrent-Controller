@@ -21,7 +21,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -527,9 +526,9 @@ public class NotifierService extends BroadcastReceiver {
                         Torrent t = (Torrent) pairs.getValue();
 
                         if (info.equals("")) {
-                            info += t.getFile();
+                            info += t.getName();
                         } else {
-                            info += ", " + t.getFile();
+                            info += ", " + t.getName();
                         }
 
 //                        it.remove(); // avoids a ConcurrentModificationException

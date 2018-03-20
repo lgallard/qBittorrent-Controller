@@ -234,7 +234,7 @@ public class TorrentDetailsFragment extends Fragment {
             } else {
 
                 // Get values from current activity
-                name = this.torrent.getFile();
+                name = this.torrent.getName();
                 size = this.torrent.getSize();
                 hash = this.torrent.getHash();
                 ratio = this.torrent.getRatio();
@@ -453,7 +453,7 @@ public class TorrentDetailsFragment extends Fragment {
             }
 
             // Get values from current activity
-            name = torrent.getFile();
+            name = torrent.getName();
             size = torrent.getSize();
             hash = torrent.getHash();
             ratio = torrent.getRatio();
@@ -816,7 +816,7 @@ public class TorrentDetailsFragment extends Fragment {
 
             view.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
 
-            TextView file = (TextView) view.findViewById(R.id.file);
+            TextView file = (TextView) view.findViewById(R.id.name);
             TextView percentage = (TextView) view.findViewById(R.id.percentage);
             ProgressBar progressBar1 = (ProgressBar) view.findViewById(R.id.progressBar1);
 
