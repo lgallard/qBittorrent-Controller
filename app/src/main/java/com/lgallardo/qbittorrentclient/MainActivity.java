@@ -2991,13 +2991,38 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         //Log.d("Debug", "=== Get All Lists ===");
 
-                        for (int i = 0; i < torrents.size(); i++) {
-
-                            Log.d("Debug", "- - -");
-                            Log.d("Debug", "File: " + torrents.get(i).getName());
-                            Log.d("Debug", "Hash: " + torrents.get(i).getHash());
-
-                        }
+//                        for (int i = 0; i < torrents.size(); i++) {
+//
+//                            Log.d("Debug", "- - -");
+//                            Log.d("Debug", "Name: " + torrents.get(i).getName());
+//                            Log.d("Debug", "Size: " + torrents.get(i).getSize());
+//                            Log.d("Debug", "Info: " + torrents.get(i).getInfo());
+//                            Log.d("Debug", "State: " + torrents.get(i).getState());
+//                            Log.d("Debug", "Hash: " + torrents.get(i).getHash());
+//                            Log.d("Debug", "downloadSpeed: " + torrents.get(i).getDlspeed());
+//                            Log.d("Debug", "uploadSpeed: " + torrents.get(i).getUpspeed());
+//                            Log.d("Debug", "ratio: " + torrents.get(i).getRatio());
+//                            Log.d("Debug", "progress: " + torrents.get(i).getProgress());
+//                            Log.d("Debug", "downloaded: " + torrents.get(i).getDownloaded());
+//                            Log.d("Debug", "leechs: " + torrents.get(i).getLeechs());
+//                            Log.d("Debug", "seeds: " + torrents.get(i).getSeeds());
+//                            Log.d("Debug", "priority: " + torrents.get(i).getPriority());
+//                            Log.d("Debug", "eta: " + torrents.get(i).getEta());
+//                            Log.d("Debug", "savePath: " + torrents.get(i).getSavePath());
+//                            Log.d("Debug", "creationDate: " + torrents.get(i).getCreationDate());
+//                            Log.d("Debug", "comment: " + torrents.get(i).getComment());
+//                            Log.d("Debug", "totalWasted: " + torrents.get(i).getTotalWasted());
+//                            Log.d("Debug", "totalUploaded: " + torrents.get(i).getTotalUploaded());
+//                            Log.d("Debug", "totalDownloaded: " + torrents.get(i).getTotalDownloaded());
+//                            Log.d("Debug", "timeElapsed: " + torrents.get(i).getTimeElapsed());
+//                            Log.d("Debug", "nbConnections: " + torrents.get(i).getNbConnections());
+//                            //Log.d("Debug", "uploadLimit: " + torrents.get(i).getUploadLimit());
+//                            //Log.d("Debug", "downloadLimit: " + torrents.get(i).getDownloadLimit());
+//                            Log.d("Debug", "sequentialDownload: " + torrents.get(i).getSequentialDownload());
+//                            Log.d("Debug", "firstLastPiecePrio: " + torrents.get(i).getisFirstLastPiecePrio());
+//                            Log.d("Debug", "*****************");
+//
+//                        }
 
                         // Return value
                         callback.onSuccess(torrents);
@@ -3150,7 +3175,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 savePreferenceAsString("qbCookie", result);
 
                 // Execute the task in background
-                qbTask = new qBittorrentTask().execute(params);
+                //qbTask = new qBittorrentTask().execute(params);
+
+                // Test
+                getTorrentList(lastState);
+
 
             }
         });
@@ -3642,10 +3671,468 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     Log.d("Debug", "> File: " + torrents.get(i).getName());
                     Log.d("Debug", "> Hash: " + torrents.get(i).getHash());
 
+                    String size = torrents.get(i).getSize();
+                    Double progress = Double.parseDouble(torrents.get(i).getProgress());
+
+                    // Get torrent generic properties
+                    try {
+                        // Calculate total downloaded
+                        Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
+                        String sizeUnit = size.substring(size.indexOf(" "), size.length());
+
+                        torrents.get(i).setDownloaded(String.format("%.1f", sizeScalar * progress).replace(",", ".") + sizeUnit);
+
+                    } catch (Exception e) {
+                        torrents.get(i).setDownloaded(size);
+                    }
+
+                    String infoString = "";
+
+                    if (packageName.equals("com.lgallardo.qbittorrentclient")) {
+                        // Info free
+                        infoString = torrents.get(i).getDownloaded() + " / " + torrents.get(i).getSize() + " "
+                                + Character.toString('\u2191') + " " + torrents.get(i).getUpspeed() + " "
+                                + Character.toString('\u2193') + " " + torrents.get(i).getDlspeed() + " "
+                                + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
+                                + Character.toString('\u2022') + " " + progress + " "
+                                + Character.toString('\u2022') + " " + torrents.get(i).getEta();
+
+                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
+                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
+                        }
+
+
+                    } else {
+                        // Info pro
+                        infoString = torrents.get(i).getDownloaded() + " / " + torrents.get(i).getSize() + " "
+                                + Character.toString('\u2191') + " " + torrents.get(i).getUpspeed() + " "
+                                + Character.toString('\u2193') + " " + torrents.get(i).getDlspeed() + " "
+                                + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
+                                + Character.toString('\u2022') + " " + torrents.get(i).getEta();
+
+                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
+                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
+                        }
+
+
+                    }
+
+                    // Set info
+                    torrents.get(i).setInfo(infoString);
                 }
 
-            }
 
+                // On Post execure
+                // Reporting
+                if (CustomLogger.isMainActivityReporting()) {
+                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - result length: " + torrents.size());
+                    //CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
+                }
+
+
+                ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
+
+                // Labels
+
+                String label = null;
+
+//                Log.d("Debug", "Still looking for..."+searchField);
+
+                for (int i = 0; i < torrents.size(); i++) {
+
+                    // Get label
+                    label = torrents.get(i).getLabel();
+
+
+                    if (!labels.contains(label)) {
+
+                        // Add Label
+                        labels.add(label);
+//                        Log.d("Debug", "Label: " + label);
+
+                    }
+
+
+                    if (currentState.equals("all") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        torrentsFiltered.add(torrents.get(i));
+                    }
+
+                    if (currentState.equals("downloading") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("downloading".equals(torrents.get(i).getState()) || "stalledDL".equals(torrents.get(i).getState()) || "pausedDL".equals(torrents.get(i).getState())
+                                || "queuedDL".equals(torrents.get(i).getState()) || "checkingDL".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+                    if (currentState.equals("completed") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("uploading".equals(torrents.get(i).getState()) || "stalledUP".equals(torrents.get(i).getState()) || "pausedUP".equals(torrents.get(i).getState())
+                                || "queuedUP".equals(torrents.get(i).getState()) || "checkingUP".equals(torrents.get(i).getState()) || "forcedUP".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+                    if (currentState.equals("seeding") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("uploading".equals(torrents.get(i).getState()) || "stalledUP".equals(torrents.get(i).getState()) || "forcedUP".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+
+                    if (currentState.equals("pause") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("pausedDL".equals(torrents.get(i).getState()) || "pausedUP".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+                    if (currentState.equals("active") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("uploading".equals(torrents.get(i).getState()) || "downloading".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+                    if (currentState.equals("inactive") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("pausedUP".equals(torrents.get(i).getState()) || "pausedDL".equals(torrents.get(i).getState()) || "queueUP".equals(torrents.get(i).getState())
+                                || "queueDL".equals(torrents.get(i).getState()) || "stalledUP".equals(torrents.get(i).getState())
+                                || "stalledDL".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+                }
+
+
+                // Labels
+                ArrayList<DrawerItem> labelItems = new ArrayList<DrawerItem>();
+
+                // Set unlabeled first
+
+                // Add label category
+                labelItems.add(new DrawerItem(R.drawable.ic_drawer_labels, getResources().getString(R.string.drawer_label_labels), DRAWER_LABEL_CATEGORY, true, "labelCategory"));
+
+
+                // Add All
+                label = getResources().getString(R.string.drawer_label_all);
+
+//                Log.d("Debug", "labes.size(): " + labels.size());
+
+                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, (currentLabel.equals(label) || !labels.contains(currentLabel) && !currentLabel.equals(getResources().getString(R.string.drawer_label_unlabeled))), "label"));
+
+                // Add unlabeled
+                label = getResources().getString(R.string.drawer_label_unlabeled);
+                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label) || currentLabel.equals(""), "label"));
+
+
+//                Log.d("Debug", "currentLabel: " + currentLabel);
+
+                if (labels != null && !(labels.contains(null))) {
+                    // Sort labels
+                    Collections.sort(labels);
+
+                    for (int i = 0; i < labels.size(); i++) {
+
+                        label = labels.get(i);
+
+                        if (label != null && !label.equals("")) {
+                            labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label), "label"));
+                        }
+                    }
+
+
+                    rAdapter.refreshDrawerLabels(labelItems);
+
+                }
+
+                // Sort by filename
+                if (sortby_value == SORTBY_NAME) {
+                    Collections.sort(torrentsFiltered, new TorrentNameComparator(reverse_order));
+                }
+                // Sort by size
+                if (sortby_value == SORTBY_SIZE) {
+                    Collections.sort(torrentsFiltered, new TorrentSizeComparator(reverse_order));
+                }
+                // Sort by Eta
+                if (sortby_value == SORTBY_ETA) {
+                    Collections.sort(torrentsFiltered, new TorrentEtaComparator(reverse_order));
+                }
+                // Sort by priority
+                if (sortby_value == SORTBY_PRIORITY) {
+                    Collections.sort(torrentsFiltered, new TorrentPriorityComparator(reverse_order));
+                }
+                // Sort by progress
+                if (sortby_value == SORTBY_PROGRESS) {
+                    Collections.sort(torrentsFiltered, new TorrentProgressComparator(reverse_order));
+                }
+                // Sort by Ratio
+                if (sortby_value == SORTBY_RATIO) {
+                    Collections.sort(torrentsFiltered, new TorrentRatioComparator(reverse_order));
+                }
+                // Sort by download speed
+                if (sortby_value == SORTBY_DOWNLOAD) {
+                    Collections.sort(torrentsFiltered, new TorrentDownloadSpeedComparator(reverse_order));
+                }
+                // Sort by upload speed
+                if (sortby_value == SORTBY_UPLOAD) {
+                    Collections.sort(torrentsFiltered, new TorrentUploadSpeedComparator(reverse_order));
+                }
+                // Sort by Added on
+                if (sortby_value == SORTBY_ADDEDON) {
+                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
+                        Collections.sort(torrentsFiltered, new TorrentAddedOnTimestampComparator(reverse_order));
+                    } else {
+                        Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
+                    }
+                }
+                // Sort by Completed on
+                if (sortby_value == SORTBY_COMPLETEDON) {
+                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
+                        Collections.sort(torrentsFiltered, new TorrentCompletedOnTimestampComparator(reverse_order));
+                    } else {
+                        Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
+                    }
+                }
+
+                // Get names (delete in background method)
+                MainActivity.names = new String[torrentsFiltered.size()];
+                MainActivity.lines = new Torrent[torrentsFiltered.size()];
+
+                uploadSpeedCount = 0;
+                downloadSpeedCount = 0;
+
+                uploadCount = 0;
+                downloadCount = 0;
+
+                try {
+
+                    Torrent torrentToUpdate = null;
+
+                    // Reporting
+                    if (CustomLogger.isMainActivityReporting()) {
+                        CustomLogger.saveReportMessage("Main", "qBittorrentTask - torrentsFiltered.size: " + torrentsFiltered.size());
+                    }
+
+                    for (int i = 0; i < torrentsFiltered.size(); i++) {
+
+                        Torrent torrent = torrentsFiltered.get(i);
+
+                        MainActivity.names[i] = torrent.getName();
+                        MainActivity.lines[i] = torrent;
+
+                        if (torrent.getHash().equals(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate)) {
+                            torrentToUpdate = torrent;
+                        }
+
+                        uploadSpeedCount += (int) Common.humanSizeToBytes(torrent.getUpspeed());
+                        downloadSpeedCount += (int) Common.humanSizeToBytes(torrent.getDlspeed());
+
+                        if ("uploading".equals(torrent.getState())) {
+                            uploadCount = uploadCount + 1;
+                        }
+
+                        if ("downloading".equals(torrent.getState())) {
+                            downloadCount = downloadCount + 1;
+                        }
+
+                    }
+
+                    // Update torrent list
+                    try {
+                        myadapter.setNames(names);
+                        myadapter.setData(lines);
+                        myadapter.notifyDataSetChanged();
+                    } catch (NullPointerException ne)
+
+                    {
+                        myadapter = new TorrentListAdapter(MainActivity.this, names, lines);
+                        firstFragment.setListAdapter(myadapter);
+
+                        myadapter.setNames(names);
+                        myadapter.setData(lines);
+                        myadapter.notifyDataSetChanged();
+
+                    } catch (IllegalStateException le) {
+                        Log.e("Debug", "IllegalStateException: " + le.toString());
+                    }
+
+                    // Create the about fragment
+                    aboutFragment = new AboutFragment();
+
+                    // Add the fragment to the 'list_frame' FrameLayout
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                    String AltSpeedInfo;
+
+                    if (alternative_speeds) {
+
+                        AltSpeedInfo = Character.toString('\u2713') + "  ";
+                    } else {
+                        AltSpeedInfo = "";
+                    }
+
+
+                    // Got some results
+                    if (torrentsFiltered.size() > 0) {
+
+                        // Set headerInfo
+                        TextView uploadSpeedTextView = (TextView) findViewById(R.id.upspeed);
+                        TextView downloadSpeedTextView = (TextView) findViewById(R.id.dlspeed);
+
+                        headerInfo = (LinearLayout) findViewById(R.id.header);
+
+                        if (header) {
+                            headerInfo.setVisibility(View.VISIBLE);
+                        } else {
+                            headerInfo.setVisibility(View.GONE);
+                        }
+
+
+                        uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
+                        downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
+
+
+                        //Set first and second fragments
+                        if (findViewById(R.id.fragment_container) != null) {
+
+                            // Set where is the second container
+                            firstFragment.setSecondFragmentContainer(R.id.content_frame);
+
+                            // Set first fragment
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof HelpFragment) {
+                                fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
+                            }
+
+                            // Set second fragment
+                            if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
+
+                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
+
+                                if (torrentToUpdate != null) {
+                                    // Update torrent details
+                                    detailsFragment.updateDetails(torrentToUpdate);
+                                } else {
+
+                                    // Torrent no longer found
+
+                                    // Set second fragment with About fragment
+                                    fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
+
+                                    // Reset back button stack
+                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                        fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                    }
+                                }
+
+
+                            } else {
+                                // Reset back button stack
+                                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                    fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                }
+
+                            }
+
+                        } else {
+
+                            // Set where is the second container
+                            firstFragment.setSecondFragmentContainer(R.id.one_frame);
+
+                            // Set first fragment
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
+                                fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+                            }
+
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
+
+                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("firstFragment");
+
+                                if (torrentToUpdate != null) {
+                                    // Update torrent
+                                    detailsFragment.updateDetails(torrentToUpdate);
+                                } else {
+
+                                    // Torrent no longer found
+
+                                    // Reset back button stack
+                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                        fragmentManager.popBackStack();
+                                    }
+
+                                }
+                            }
+                        }
+                    } else {
+
+                        // No results
+
+                        myadapter.setNames(null);
+                        myadapter.setData(null);
+
+                        myadapter.notifyDataSetChanged();
+
+                        // Hide headerInfo
+                        TextView uploadSpeedTextView = (TextView) findViewById(R.id.upspeed);
+                        TextView downloadSpeedTextView = (TextView) findViewById(R.id.dlspeed);
+
+                        uploadSpeedTextView.setText(AltSpeedInfo);
+                        downloadSpeedTextView.setText("");
+
+
+                        //Set first and second fragments
+                        if (findViewById(R.id.fragment_container) != null) {
+
+                            // Set where is the second container
+                            firstFragment.setSecondFragmentContainer(R.id.content_frame);
+
+                            // Set first fragment
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof HelpFragment) {
+                                fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
+                            }
+
+                            // Set second fragment
+                            if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
+                                fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
+
+                                // Reset back button stack
+                                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                    fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                }
+
+                            }
+                        } else {
+
+                            // Set where is the second container
+                            firstFragment.setSecondFragmentContainer(R.id.one_frame);
+
+                            // Set first fragment
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
+                                fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+                            }
+
+                            // Reset back button stack
+                            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                fragmentManager.popBackStack();
+                            }
+                        }
+                    }
+
+                    // Commit
+                    fragmentTransaction.commit();
+
+                } catch (Exception e) {
+                    Log.e("ADAPTER", e.toString());
+
+                    if (CustomLogger.isMainActivityReporting()) {
+                        CustomLogger.saveReportMessage("Main", "[qBittorrentTask - AdapterException]: " + e.toString());
+                    }
+                }
+
+                // Send report
+                emailReport();
+
+                // Disable refreshSwipeLayout
+                disableRefreshSwipeLayout();
+
+            }
 
         });
 
@@ -3814,7 +4301,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     } else {
 
                         // Execute the task in background
-                        qbTask = new qBittorrentTask().execute(params);
+                        //qbTask = new qBittorrentTask().execute(params);
 
                         // Test
                         getTorrentList(state);
@@ -5779,686 +6266,686 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
 
-    // Here is where the action happens
-    private class qBittorrentTask extends AsyncTask<String, Integer, Torrent[]> {
-
-        @Override
-        protected Torrent[] doInBackground(String... params) {
-
-            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed, addedOn, completionOn, label;
-            boolean sequentialDownload = false;
-            boolean firstLastPiecePrio = false;
-
-            Torrent[] torrents = null;
-
-            // Get settings
-            getSettings();
-
-            try {
-
-                // Creating new JSON Parser
-                jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
-
-                jParser.setCookie(MainActivity.cookie);
-
-                JSONArray jArray = jParser.getJSONArrayFromUrl(params[0]);
-
-                if (jArray != null) {
-
-                    torrents = new Torrent[jArray.length()];
-
-                    MainActivity.names = new String[jArray.length()];
-
-                    for (int i = 0; i < jArray.length(); i++) {
-
-                        JSONObject json = jArray.getJSONObject(i);
-
-                        name = json.getString(TAG_NAME);
-                        size = json.getString(TAG_SIZE).replace(",", ".");
-                        progress = String.format("%.2f", json.getDouble(TAG_PROGRESS) * 100) + "%";
-                        progress = progress.replace(",", ".");
-                        info = "";
-                        state = json.getString(TAG_STATE);
-                        hash = json.getString(TAG_HASH);
-                        ratio = json.getString(TAG_RATIO).replace(",", ".");
-                        leechs = json.getString(TAG_NUMLEECHS);
-                        seeds = json.getString(TAG_NUMSEEDS);
-                        priority = json.getString(TAG_PRIORITY);
-                        eta = json.getString(TAG_ETA);
-                        downloadSpeed = json.getString(TAG_DLSPEED);
-                        uploadSpeed = json.getString(TAG_UPSPEED);
-
-                        try {
-                            addedOn = json.getString(TAG_ADDEDON);
-                        } catch (JSONException je) {
-                            addedOn = null;
-                        }
-
-                        try {
-                            completionOn = json.getString(TAG_COMPLETIONON);
-                        } catch (JSONException je) {
-                            completionOn = null;
-                        }
-
-
-                        try {
-                            if (Integer.parseInt(MainActivity.qb_api) < 10) {
-                                label = json.getString(TAG_LABEL);
-                            } else {
-                                label = json.getString(TAG_CATEGORY);
-                            }
-
-                        } catch (Exception e) {
-                            label = null;
-                        }
-
-                        if (qb_version.equals("3.2.x")) {
-
-                            size = Common.calculateSize(size);
-                            eta = Common.secondsToEta(eta);
-                            downloadSpeed = Common.calculateSize(downloadSpeed) + "/s";
-                            uploadSpeed = Common.calculateSize(uploadSpeed) + "/s";
-
-                            try {
-                                sequentialDownload = json.getBoolean(TAG_SEQDL);
-                            } catch (Exception e) {
-                                sequentialDownload = false;
-                            }
-
-
-                            try {
-                                firstLastPiecePrio = json.getBoolean(TAG_FLPIECEPRIO);
-                            } catch (Exception e) {
-                                firstLastPiecePrio = false;
-                            }
-                        }
-
-                        torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, sequentialDownload, firstLastPiecePrio, addedOn, completionOn, label);
-
-                        MainActivity.names[i] = name;
-
-                        // Get torrent generic properties
-
-                        try {
-                            // Calculate total downloaded
-                            Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
-                            String sizeUnit = size.substring(size.indexOf(" "), size.length());
-
-                            torrents[i].setDownloaded(String.format("%.1f", sizeScalar * json.getDouble(TAG_PROGRESS)).replace(",", ".") + sizeUnit);
-
-                        } catch (Exception e) {
-                            torrents[i].setDownloaded(size);
-                        }
-
-                        String infoString = "";
-
-                        if (packageName.equals("com.lgallardo.qbittorrentclient")) {
-                            // Info free
-                            infoString = torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " "
-                                    + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " "
-                                    + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
-                                    + Character.toString('\u2022') + " " + torrents[i].getRatio() + " "
-                                    + Character.toString('\u2022') + " " + progress + " "
-                                    + Character.toString('\u2022') + " " + torrents[i].getEta();
-
-                            if (torrents[i].getLabel() != null && !torrents[i].getLabel().equals("")) {
-                                infoString = infoString + " " + Character.toString('\u2022') + " " + torrents[i].getLabel();
-                            }
-
-
-                        } else {
-                            // Info pro
-                            infoString = torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " "
-                                    + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " "
-                                    + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
-                                    + Character.toString('\u2022') + " " + torrents[i].getRatio() + " "
-                                    + Character.toString('\u2022') + " " + torrents[i].getEta();
-
-                            if (torrents[i].getLabel() != null && !torrents[i].getLabel().equals("")) {
-                                infoString = infoString + " " + Character.toString('\u2022') + " " + torrents[i].getLabel();
-                            }
-
-
-                        }
-
-                        // Set info
-                        torrents[i].setInfo(infoString);
-                    }
-
-                }
-            } catch (JSONParserStatusCodeException e) {
-                httpStatusCode = e.getCode();
-
-                torrents = null;
-                Log.e("JSONParserStatusCode", e.toString());
-
-                if (CustomLogger.isMainActivityReporting()) {
-                    CustomLogger.saveReportMessage("Main", "[qBittorrentTask - JSONParserStatusCode]: " + e.toString());
-                }
-
-
-            } catch (Exception e) {
-                torrents = null;
-                Log.e("MAIN:=", e.toString());
-                e.printStackTrace();
-
-                if (CustomLogger.isMainActivityReporting()) {
-                    CustomLogger.saveReportMessage("Main", "[qBittorrentTask - Exception]: " + e.toString());
-                }
-            }
-
-            return torrents;
-
-        }
-
-        @Override
-        protected void onPostExecute(Torrent[] result) {
-
-            if (result == null) {
-
-                // Reporting
-                if (CustomLogger.isMainActivityReporting()) {
-                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - result is null");
-                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
-                }
-
-
-                // Handle HTTP status code
-
-                if (httpStatusCode == 1) {
-                    toastText(R.string.error1);
-                    httpStatusCode = 0;
-                }
-
-                if (httpStatusCode == 2) {
-                    toastText(R.string.error2);
-                    httpStatusCode = 0;
-                }
-
-
-                if (httpStatusCode == 401) {
-                    toastText(R.string.error401);
-
-                    // Get new Cookie
-                    if (qb_version.equals("3.2.x")) {
-                        cookie = null;
-                    }
-
-                    httpStatusCode = 0;
-                }
-                if (httpStatusCode == 400) {
-
-                    toastText(R.string.connection_error);
-
-                    // Get new Cookie
-                    if (qb_version.equals("3.2.x")) {
-                        cookie = null;
-                    }
-
-                    httpStatusCode = 0;
-                    return;
-                }
-
-                if (httpStatusCode == 403 || httpStatusCode == 404) {
-
-//                    Log.d("Debug","MainActivity - refresh - qb_version:" +qb_version );
-
-                    // Get new Cookie
-                    if (qb_version.equals("3.2.x")) {
-
-
-                        connection403ErrorCounter = connection403ErrorCounter + 1;
-
-
-                        if (connection403ErrorCounter > 1) {
-
-
-                            if (cookie != null && !cookie.equals("")) {
-                                // Only toasts the message if there is not a cookie set before
-                                toastText(R.string.error403);
-                            }
-
-                            cookie = null;
-                            httpStatusCode = 0;
-                            disableRefreshSwipeLayout();
-
-                        } else {
-
-                            getCookie();
-
-                            // Ask a new cookie and re-execute the task in background
-                            //new qBittorrentCookieTask().execute(params);
-
-                            // Execute the task in background
-                            //qbTask = new qBittorrentTask().execute(params);
-
-                        }
-
-
-                    }
-
-
-                }
-
-
-            } else {
-
-
-                // Reporting
-                if (CustomLogger.isMainActivityReporting()) {
-                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - result length: " + result.length);
-                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
-                }
-
-
-                connection403ErrorCounter = 0;
-
-
-                ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
-
-                // Labels
-
-                String label = null;
-
-//                Log.d("Debug", "Still looking for..."+searchField);
-
-                for (int i = 0; i < result.length; i++) {
-
-                    // Get label
-                    label = result[i].getLabel();
-
-
-                    if (!labels.contains(label)) {
-
-                        // Add Label
-                        labels.add(label);
-//                        Log.d("Debug", "Label: " + label);
-
-                    }
-
-
-                    if (params[1].equals("all") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
-                        torrentsFiltered.add(result[i]);
-                    }
-
-                    if (params[1].equals("downloading") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("downloading".equals(result[i].getState()) || "stalledDL".equals(result[i].getState()) || "pausedDL".equals(result[i].getState())
-                                || "queuedDL".equals(result[i].getState()) || "checkingDL".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-                    if (params[1].equals("completed") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())
-                                || "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState()) || "forcedUP".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-                    if (params[1].equals("seeding") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "forcedUP".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-
-                    if (params[1].equals("pause") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-                    if (params[1].equals("active") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("uploading".equals(result[i].getState()) || "downloading".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-                    if (params[1].equals("inactive") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("pausedUP".equals(result[i].getState()) || "pausedDL".equals(result[i].getState()) || "queueUP".equals(result[i].getState())
-                                || "queueDL".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())
-                                || "stalledDL".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-                }
-
-
-                // Labels
-                ArrayList<DrawerItem> labelItems = new ArrayList<DrawerItem>();
-
-                // Set unlabeled first
-
-                // Add label category
-                labelItems.add(new DrawerItem(R.drawable.ic_drawer_labels, getResources().getString(R.string.drawer_label_labels), DRAWER_LABEL_CATEGORY, true, "labelCategory"));
-
-
-                // Add All
-                label = getResources().getString(R.string.drawer_label_all);
-
-//                Log.d("Debug", "labes.size(): " + labels.size());
-
-                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, (currentLabel.equals(label) || !labels.contains(currentLabel) && !currentLabel.equals(getResources().getString(R.string.drawer_label_unlabeled))), "label"));
-
-                // Add unlabeled
-                label = getResources().getString(R.string.drawer_label_unlabeled);
-                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label) || currentLabel.equals(""), "label"));
-
-
-//                Log.d("Debug", "currentLabel: " + currentLabel);
-
-                if (labels != null && !(labels.contains(null))) {
-                    // Sort labels
-                    Collections.sort(labels);
-
-                    for (int i = 0; i < labels.size(); i++) {
-
-                        label = labels.get(i);
-
-                        if (label != null && !label.equals("")) {
-                            labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label), "label"));
-                        }
-                    }
-
-
-                    rAdapter.refreshDrawerLabels(labelItems);
-
-                }
-
-                // Sort by filename
-                if (sortby_value == SORTBY_NAME) {
-                    Collections.sort(torrentsFiltered, new TorrentNameComparator(reverse_order));
-                }
-                // Sort by size
-                if (sortby_value == SORTBY_SIZE) {
-                    Collections.sort(torrentsFiltered, new TorrentSizeComparator(reverse_order));
-                }
-                // Sort by Eta
-                if (sortby_value == SORTBY_ETA) {
-                    Collections.sort(torrentsFiltered, new TorrentEtaComparator(reverse_order));
-                }
-                // Sort by priority
-                if (sortby_value == SORTBY_PRIORITY) {
-                    Collections.sort(torrentsFiltered, new TorrentPriorityComparator(reverse_order));
-                }
-                // Sort by progress
-                if (sortby_value == SORTBY_PROGRESS) {
-                    Collections.sort(torrentsFiltered, new TorrentProgressComparator(reverse_order));
-                }
-                // Sort by Ratio
-                if (sortby_value == SORTBY_RATIO) {
-                    Collections.sort(torrentsFiltered, new TorrentRatioComparator(reverse_order));
-                }
-                // Sort by download speed
-                if (sortby_value == SORTBY_DOWNLOAD) {
-                    Collections.sort(torrentsFiltered, new TorrentDownloadSpeedComparator(reverse_order));
-                }
-                // Sort by upload speed
-                if (sortby_value == SORTBY_UPLOAD) {
-                    Collections.sort(torrentsFiltered, new TorrentUploadSpeedComparator(reverse_order));
-                }
-                // Sort by Added on
-                if (sortby_value == SORTBY_ADDEDON) {
-                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
-                        Collections.sort(torrentsFiltered, new TorrentAddedOnTimestampComparator(reverse_order));
-                    } else {
-                        Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
-                    }
-                }
-                // Sort by Completed on
-                if (sortby_value == SORTBY_COMPLETEDON) {
-                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
-                        Collections.sort(torrentsFiltered, new TorrentCompletedOnTimestampComparator(reverse_order));
-                    } else {
-                        Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
-                    }
-                }
-
-                // Get names (delete in background method)
-                MainActivity.names = new String[torrentsFiltered.size()];
-                MainActivity.lines = new Torrent[torrentsFiltered.size()];
-
-                uploadSpeedCount = 0;
-                downloadSpeedCount = 0;
-
-                uploadCount = 0;
-                downloadCount = 0;
-
-                try {
-
-                    Torrent torrentToUpdate = null;
-
-                    // Reporting
-                    if (CustomLogger.isMainActivityReporting()) {
-                        CustomLogger.saveReportMessage("Main", "qBittorrentTask - torrentsFiltered.size: " + torrentsFiltered.size());
-                    }
-
-                    for (int i = 0; i < torrentsFiltered.size(); i++) {
-
-                        Torrent torrent = torrentsFiltered.get(i);
-
-                        MainActivity.names[i] = torrent.getName();
-                        MainActivity.lines[i] = torrent;
-
-                        if (torrent.getHash().equals(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate)) {
-                            torrentToUpdate = torrent;
-                        }
-
-                        uploadSpeedCount += (int) Common.humanSizeToBytes(torrent.getUploadSpeed());
-                        downloadSpeedCount += (int) Common.humanSizeToBytes(torrent.getDownloadSpeed());
-
-                        if ("uploading".equals(torrent.getState())) {
-                            uploadCount = uploadCount + 1;
-                        }
-
-                        if ("downloading".equals(torrent.getState())) {
-                            downloadCount = downloadCount + 1;
-                        }
-
-                    }
-
-                    // Update torrent list
-                    try {
-                        myadapter.setNames(names);
-                        myadapter.setData(lines);
-                        myadapter.notifyDataSetChanged();
-                    } catch (NullPointerException ne)
-
-                    {
-                        myadapter = new TorrentListAdapter(MainActivity.this, names, lines);
-                        firstFragment.setListAdapter(myadapter);
-
-                        myadapter.setNames(names);
-                        myadapter.setData(lines);
-                        myadapter.notifyDataSetChanged();
-
-                    } catch (IllegalStateException le) {
-                        Log.e("Debug", "IllegalStateException: " + le.toString());
-                    }
-
-                    // Create the about fragment
-                    aboutFragment = new AboutFragment();
-
-                    // Add the fragment to the 'list_frame' FrameLayout
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                    String AltSpeedInfo;
-
-                    if (alternative_speeds) {
-
-                        AltSpeedInfo = Character.toString('\u2713') + "  ";
-                    } else {
-                        AltSpeedInfo = "";
-                    }
-
-
-                    // Got some results
-                    if (torrentsFiltered.size() > 0) {
-
-                        // Set headerInfo
-                        TextView uploadSpeedTextView = (TextView) findViewById(R.id.uploadSpeed);
-                        TextView downloadSpeedTextView = (TextView) findViewById(R.id.downloadSpeed);
-
-                        headerInfo = (LinearLayout) findViewById(R.id.header);
-
-                        if (header) {
-                            headerInfo.setVisibility(View.VISIBLE);
-                        } else {
-                            headerInfo.setVisibility(View.GONE);
-                        }
-
-
-                        uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
-                        downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
-
-
-                        //Set first and second fragments
-                        if (findViewById(R.id.fragment_container) != null) {
-
-                            // Set where is the second container
-                            firstFragment.setSecondFragmentContainer(R.id.content_frame);
-
-                            // Set first fragment
-                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof HelpFragment) {
-                                fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
-                            }
-
-                            // Set second fragment
-                            if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
-
-                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
-
-                                if (torrentToUpdate != null) {
-                                    // Update torrent details
-                                    detailsFragment.updateDetails(torrentToUpdate);
-                                } else {
-
-                                    // Torrent no longer found
-
-                                    // Set second fragment with About fragment
-                                    fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
-
-                                    // Reset back button stack
-                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                        fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                    }
-                                }
-
-
-                            } else {
-                                // Reset back button stack
-                                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                    fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                }
-
-                            }
-
-                        } else {
-
-                            // Set where is the second container
-                            firstFragment.setSecondFragmentContainer(R.id.one_frame);
-
-                            // Set first fragment
-                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
-                                fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
-                            }
-
-                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
-
-                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("firstFragment");
-
-                                if (torrentToUpdate != null) {
-                                    // Update torrent
-                                    detailsFragment.updateDetails(torrentToUpdate);
-                                } else {
-
-                                    // Torrent no longer found
-
-                                    // Reset back button stack
-                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                        fragmentManager.popBackStack();
-                                    }
-
-                                }
-                            }
-                        }
-                    } else {
-
-                        // No results
-
-                        myadapter.setNames(null);
-                        myadapter.setData(null);
-
-                        myadapter.notifyDataSetChanged();
-
-                        // Hide headerInfo
-                        TextView uploadSpeedTextView = (TextView) findViewById(R.id.uploadSpeed);
-                        TextView downloadSpeedTextView = (TextView) findViewById(R.id.downloadSpeed);
-
-                        uploadSpeedTextView.setText(AltSpeedInfo);
-                        downloadSpeedTextView.setText("");
-
-
-                        //Set first and second fragments
-                        if (findViewById(R.id.fragment_container) != null) {
-
-                            // Set where is the second container
-                            firstFragment.setSecondFragmentContainer(R.id.content_frame);
-
-                            // Set first fragment
-                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof HelpFragment) {
-                                fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
-                            }
-
-                            // Set second fragment
-                            if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
-                                fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
-
-                                // Reset back button stack
-                                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                    fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                }
-
-                            }
-                        } else {
-
-                            // Set where is the second container
-                            firstFragment.setSecondFragmentContainer(R.id.one_frame);
-
-                            // Set first fragment
-                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
-                                fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
-                            }
-
-                            // Reset back button stack
-                            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                fragmentManager.popBackStack();
-                            }
-                        }
-                    }
-
-                    // Commit
-                    fragmentTransaction.commit();
-
-                } catch (Exception e) {
-                    Log.e("ADAPTER", e.toString());
-
-                    if (CustomLogger.isMainActivityReporting()) {
-                        CustomLogger.saveReportMessage("Main", "[qBittorrentTask - AdapterException]: " + e.toString());
-                    }
-                }
-
-            }
-
-            // Send report
-            emailReport();
-
-            // Disable refreshSwipeLayout
-            disableRefreshSwipeLayout();
-        }
-    }
+//    // Here is where the action happens
+//    private class qBittorrentTask extends AsyncTask<String, Integer, Torrent[]> {
+//
+//        @Override
+//        protected Torrent[] doInBackground(String... params) {
+//
+//            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed, addedOn, completionOn, label;
+//            boolean sequentialDownload = false;
+//            boolean firstLastPiecePrio = false;
+//
+//            Torrent[] torrents = null;
+//
+//            // Get settings
+//            getSettings();
+//
+//            try {
+//
+//                // Creating new JSON Parser
+//                jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
+//
+//                jParser.setCookie(MainActivity.cookie);
+//
+//                JSONArray jArray = jParser.getJSONArrayFromUrl(params[0]);
+//
+//                if (jArray != null) {
+//
+//                    torrents = new Torrent[jArray.length()];
+//
+//                    MainActivity.names = new String[jArray.length()];
+//
+//                    for (int i = 0; i < jArray.length(); i++) {
+//
+//                        JSONObject json = jArray.getJSONObject(i);
+//
+//                        name = json.getString(TAG_NAME);
+//                        size = json.getString(TAG_SIZE).replace(",", ".");
+//                        progress = String.format("%.2f", json.getDouble(TAG_PROGRESS) * 100) + "%";
+//                        progress = progress.replace(",", ".");
+//                        info = "";
+//                        state = json.getString(TAG_STATE);
+//                        hash = json.getString(TAG_HASH);
+//                        ratio = json.getString(TAG_RATIO).replace(",", ".");
+//                        leechs = json.getString(TAG_NUMLEECHS);
+//                        seeds = json.getString(TAG_NUMSEEDS);
+//                        priority = json.getString(TAG_PRIORITY);
+//                        eta = json.getString(TAG_ETA);
+//                        downloadSpeed = json.getString(TAG_DLSPEED);
+//                        uploadSpeed = json.getString(TAG_UPSPEED);
+//
+//                        try {
+//                            addedOn = json.getString(TAG_ADDEDON);
+//                        } catch (JSONException je) {
+//                            addedOn = null;
+//                        }
+//
+//                        try {
+//                            completionOn = json.getString(TAG_COMPLETIONON);
+//                        } catch (JSONException je) {
+//                            completionOn = null;
+//                        }
+//
+//
+//                        try {
+//                            if (Integer.parseInt(MainActivity.qb_api) < 10) {
+//                                label = json.getString(TAG_LABEL);
+//                            } else {
+//                                label = json.getString(TAG_CATEGORY);
+//                            }
+//
+//                        } catch (Exception e) {
+//                            label = null;
+//                        }
+//
+//                        if (qb_version.equals("3.2.x")) {
+//
+//                            size = Common.calculateSize(size);
+//                            eta = Common.secondsToEta(eta);
+//                            downloadSpeed = Common.calculateSize(downloadSpeed) + "/s";
+//                            uploadSpeed = Common.calculateSize(uploadSpeed) + "/s";
+//
+//                            try {
+//                                sequentialDownload = json.getBoolean(TAG_SEQDL);
+//                            } catch (Exception e) {
+//                                sequentialDownload = false;
+//                            }
+//
+//
+//                            try {
+//                                firstLastPiecePrio = json.getBoolean(TAG_FLPIECEPRIO);
+//                            } catch (Exception e) {
+//                                firstLastPiecePrio = false;
+//                            }
+//                        }
+//
+//                        torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, sequentialDownload, firstLastPiecePrio, addedOn, completionOn, label);
+//
+//                        MainActivity.names[i] = name;
+//
+//                        // Get torrent generic properties
+//
+//                        try {
+//                            // Calculate total downloaded
+//                            Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
+//                            String sizeUnit = size.substring(size.indexOf(" "), size.length());
+//
+//                            torrents[i].setDownloaded(String.format("%.1f", sizeScalar * json.getDouble(TAG_PROGRESS)).replace(",", ".") + sizeUnit);
+//
+//                        } catch (Exception e) {
+//                            torrents[i].setDownloaded(size);
+//                        }
+//
+//                        String infoString = "";
+//
+//                        if (packageName.equals("com.lgallardo.qbittorrentclient")) {
+//                            // Info free
+//                            infoString = torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " "
+//                                    + Character.toString('\u2191') + " " + torrents[i].getUpspeed() + " "
+//                                    + Character.toString('\u2193') + " " + torrents[i].getDlspeed() + " "
+//                                    + Character.toString('\u2022') + " " + torrents[i].getRatio() + " "
+//                                    + Character.toString('\u2022') + " " + progress + " "
+//                                    + Character.toString('\u2022') + " " + torrents[i].getEta();
+//
+//                            if (torrents[i].getLabel() != null && !torrents[i].getLabel().equals("")) {
+//                                infoString = infoString + " " + Character.toString('\u2022') + " " + torrents[i].getLabel();
+//                            }
+//
+//
+//                        } else {
+//                            // Info pro
+//                            infoString = torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " "
+//                                    + Character.toString('\u2191') + " " + torrents[i].getUpspeed() + " "
+//                                    + Character.toString('\u2193') + " " + torrents[i].getDlspeed() + " "
+//                                    + Character.toString('\u2022') + " " + torrents[i].getRatio() + " "
+//                                    + Character.toString('\u2022') + " " + torrents[i].getEta();
+//
+//                            if (torrents[i].getLabel() != null && !torrents[i].getLabel().equals("")) {
+//                                infoString = infoString + " " + Character.toString('\u2022') + " " + torrents[i].getLabel();
+//                            }
+//
+//
+//                        }
+//
+//                        // Set info
+//                        torrents[i].setInfo(infoString);
+//                    }
+//
+//                }
+//            } catch (JSONParserStatusCodeException e) {
+//                httpStatusCode = e.getCode();
+//
+//                torrents = null;
+//                Log.e("JSONParserStatusCode", e.toString());
+//
+//                if (CustomLogger.isMainActivityReporting()) {
+//                    CustomLogger.saveReportMessage("Main", "[qBittorrentTask - JSONParserStatusCode]: " + e.toString());
+//                }
+//
+//
+//            } catch (Exception e) {
+//                torrents = null;
+//                Log.e("MAIN:=", e.toString());
+//                e.printStackTrace();
+//
+//                if (CustomLogger.isMainActivityReporting()) {
+//                    CustomLogger.saveReportMessage("Main", "[qBittorrentTask - Exception]: " + e.toString());
+//                }
+//            }
+//
+//            return torrents;
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Torrent[] result) {
+//
+//            if (result == null) {
+//
+//                // Reporting
+//                if (CustomLogger.isMainActivityReporting()) {
+//                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - result is null");
+//                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
+//                }
+//
+//
+//                // Handle HTTP status code
+//
+//                if (httpStatusCode == 1) {
+//                    toastText(R.string.error1);
+//                    httpStatusCode = 0;
+//                }
+//
+//                if (httpStatusCode == 2) {
+//                    toastText(R.string.error2);
+//                    httpStatusCode = 0;
+//                }
+//
+//
+//                if (httpStatusCode == 401) {
+//                    toastText(R.string.error401);
+//
+//                    // Get new Cookie
+//                    if (qb_version.equals("3.2.x")) {
+//                        cookie = null;
+//                    }
+//
+//                    httpStatusCode = 0;
+//                }
+//                if (httpStatusCode == 400) {
+//
+//                    toastText(R.string.connection_error);
+//
+//                    // Get new Cookie
+//                    if (qb_version.equals("3.2.x")) {
+//                        cookie = null;
+//                    }
+//
+//                    httpStatusCode = 0;
+//                    return;
+//                }
+//
+//                if (httpStatusCode == 403 || httpStatusCode == 404) {
+//
+////                    Log.d("Debug","MainActivity - refresh - qb_version:" +qb_version );
+//
+//                    // Get new Cookie
+//                    if (qb_version.equals("3.2.x")) {
+//
+//
+//                        connection403ErrorCounter = connection403ErrorCounter + 1;
+//
+//
+//                        if (connection403ErrorCounter > 1) {
+//
+//
+//                            if (cookie != null && !cookie.equals("")) {
+//                                // Only toasts the message if there is not a cookie set before
+//                                toastText(R.string.error403);
+//                            }
+//
+//                            cookie = null;
+//                            httpStatusCode = 0;
+//                            disableRefreshSwipeLayout();
+//
+//                        } else {
+//
+//                            getCookie();
+//
+//                            // Ask a new cookie and re-execute the task in background
+//                            //new qBittorrentCookieTask().execute(params);
+//
+//                            // Execute the task in background
+//                            //qbTask = new qBittorrentTask().execute(params);
+//
+//                        }
+//
+//
+//                    }
+//
+//
+//                }
+//
+//
+//            } else {
+//
+//
+//                // Reporting
+//                if (CustomLogger.isMainActivityReporting()) {
+//                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - result length: " + result.length);
+//                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
+//                }
+//
+//
+//                connection403ErrorCounter = 0;
+//
+//
+//                ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
+//
+//                // Labels
+//
+//                String label = null;
+//
+////                Log.d("Debug", "Still looking for..."+searchField);
+//
+//                for (int i = 0; i < result.length; i++) {
+//
+//                    // Get label
+//                    label = result[i].getLabel();
+//
+//
+//                    if (!labels.contains(label)) {
+//
+//                        // Add Label
+//                        labels.add(label);
+////                        Log.d("Debug", "Label: " + label);
+//
+//                    }
+//
+//
+//                    if (params[1].equals("all") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
+//                        torrentsFiltered.add(result[i]);
+//                    }
+//
+//                    if (params[1].equals("downloading") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
+//                        if ("downloading".equals(result[i].getState()) || "stalledDL".equals(result[i].getState()) || "pausedDL".equals(result[i].getState())
+//                                || "queuedDL".equals(result[i].getState()) || "checkingDL".equals(result[i].getState())) {
+//                            torrentsFiltered.add(result[i]);
+//                        }
+//                    }
+//
+//                    if (params[1].equals("completed") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
+//                        if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())
+//                                || "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState()) || "forcedUP".equals(result[i].getState())) {
+//                            torrentsFiltered.add(result[i]);
+//                        }
+//                    }
+//
+//                    if (params[1].equals("seeding") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
+//                        if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "forcedUP".equals(result[i].getState())) {
+//                            torrentsFiltered.add(result[i]);
+//                        }
+//                    }
+//
+//
+//                    if (params[1].equals("pause") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
+//                        if ("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())) {
+//                            torrentsFiltered.add(result[i]);
+//                        }
+//                    }
+//
+//                    if (params[1].equals("active") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
+//                        if ("uploading".equals(result[i].getState()) || "downloading".equals(result[i].getState())) {
+//                            torrentsFiltered.add(result[i]);
+//                        }
+//                    }
+//
+//                    if (params[1].equals("inactive") && (searchField == "" || result[i].getName().toUpperCase().contains(searchField.toUpperCase()))) {
+//                        if ("pausedUP".equals(result[i].getState()) || "pausedDL".equals(result[i].getState()) || "queueUP".equals(result[i].getState())
+//                                || "queueDL".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())
+//                                || "stalledDL".equals(result[i].getState())) {
+//                            torrentsFiltered.add(result[i]);
+//                        }
+//                    }
+//
+//                }
+//
+//
+//                // Labels
+//                ArrayList<DrawerItem> labelItems = new ArrayList<DrawerItem>();
+//
+//                // Set unlabeled first
+//
+//                // Add label category
+//                labelItems.add(new DrawerItem(R.drawable.ic_drawer_labels, getResources().getString(R.string.drawer_label_labels), DRAWER_LABEL_CATEGORY, true, "labelCategory"));
+//
+//
+//                // Add All
+//                label = getResources().getString(R.string.drawer_label_all);
+//
+////                Log.d("Debug", "labes.size(): " + labels.size());
+//
+//                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, (currentLabel.equals(label) || !labels.contains(currentLabel) && !currentLabel.equals(getResources().getString(R.string.drawer_label_unlabeled))), "label"));
+//
+//                // Add unlabeled
+//                label = getResources().getString(R.string.drawer_label_unlabeled);
+//                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label) || currentLabel.equals(""), "label"));
+//
+//
+////                Log.d("Debug", "currentLabel: " + currentLabel);
+//
+//                if (labels != null && !(labels.contains(null))) {
+//                    // Sort labels
+//                    Collections.sort(labels);
+//
+//                    for (int i = 0; i < labels.size(); i++) {
+//
+//                        label = labels.get(i);
+//
+//                        if (label != null && !label.equals("")) {
+//                            labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label), "label"));
+//                        }
+//                    }
+//
+//
+//                    rAdapter.refreshDrawerLabels(labelItems);
+//
+//                }
+//
+//                // Sort by filename
+//                if (sortby_value == SORTBY_NAME) {
+//                    Collections.sort(torrentsFiltered, new TorrentNameComparator(reverse_order));
+//                }
+//                // Sort by size
+//                if (sortby_value == SORTBY_SIZE) {
+//                    Collections.sort(torrentsFiltered, new TorrentSizeComparator(reverse_order));
+//                }
+//                // Sort by Eta
+//                if (sortby_value == SORTBY_ETA) {
+//                    Collections.sort(torrentsFiltered, new TorrentEtaComparator(reverse_order));
+//                }
+//                // Sort by priority
+//                if (sortby_value == SORTBY_PRIORITY) {
+//                    Collections.sort(torrentsFiltered, new TorrentPriorityComparator(reverse_order));
+//                }
+//                // Sort by progress
+//                if (sortby_value == SORTBY_PROGRESS) {
+//                    Collections.sort(torrentsFiltered, new TorrentProgressComparator(reverse_order));
+//                }
+//                // Sort by Ratio
+//                if (sortby_value == SORTBY_RATIO) {
+//                    Collections.sort(torrentsFiltered, new TorrentRatioComparator(reverse_order));
+//                }
+//                // Sort by download speed
+//                if (sortby_value == SORTBY_DOWNLOAD) {
+//                    Collections.sort(torrentsFiltered, new TorrentDownloadSpeedComparator(reverse_order));
+//                }
+//                // Sort by upload speed
+//                if (sortby_value == SORTBY_UPLOAD) {
+//                    Collections.sort(torrentsFiltered, new TorrentUploadSpeedComparator(reverse_order));
+//                }
+//                // Sort by Added on
+//                if (sortby_value == SORTBY_ADDEDON) {
+//                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
+//                        Collections.sort(torrentsFiltered, new TorrentAddedOnTimestampComparator(reverse_order));
+//                    } else {
+//                        Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
+//                    }
+//                }
+//                // Sort by Completed on
+//                if (sortby_value == SORTBY_COMPLETEDON) {
+//                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
+//                        Collections.sort(torrentsFiltered, new TorrentCompletedOnTimestampComparator(reverse_order));
+//                    } else {
+//                        Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
+//                    }
+//                }
+//
+//                // Get names (delete in background method)
+//                MainActivity.names = new String[torrentsFiltered.size()];
+//                MainActivity.lines = new Torrent[torrentsFiltered.size()];
+//
+//                uploadSpeedCount = 0;
+//                downloadSpeedCount = 0;
+//
+//                uploadCount = 0;
+//                downloadCount = 0;
+//
+//                try {
+//
+//                    Torrent torrentToUpdate = null;
+//
+//                    // Reporting
+//                    if (CustomLogger.isMainActivityReporting()) {
+//                        CustomLogger.saveReportMessage("Main", "qBittorrentTask - torrentsFiltered.size: " + torrentsFiltered.size());
+//                    }
+//
+//                    for (int i = 0; i < torrentsFiltered.size(); i++) {
+//
+//                        Torrent torrent = torrentsFiltered.get(i);
+//
+//                        MainActivity.names[i] = torrent.getName();
+//                        MainActivity.lines[i] = torrent;
+//
+//                        if (torrent.getHash().equals(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate)) {
+//                            torrentToUpdate = torrent;
+//                        }
+//
+//                        uploadSpeedCount += (int) Common.humanSizeToBytes(torrent.getUpspeed());
+//                        downloadSpeedCount += (int) Common.humanSizeToBytes(torrent.getDlspeed());
+//
+//                        if ("uploading".equals(torrent.getState())) {
+//                            uploadCount = uploadCount + 1;
+//                        }
+//
+//                        if ("downloading".equals(torrent.getState())) {
+//                            downloadCount = downloadCount + 1;
+//                        }
+//
+//                    }
+//
+//                    // Update torrent list
+//                    try {
+//                        myadapter.setNames(names);
+//                        myadapter.setData(lines);
+//                        myadapter.notifyDataSetChanged();
+//                    } catch (NullPointerException ne)
+//
+//                    {
+//                        myadapter = new TorrentListAdapter(MainActivity.this, names, lines);
+//                        firstFragment.setListAdapter(myadapter);
+//
+//                        myadapter.setNames(names);
+//                        myadapter.setData(lines);
+//                        myadapter.notifyDataSetChanged();
+//
+//                    } catch (IllegalStateException le) {
+//                        Log.e("Debug", "IllegalStateException: " + le.toString());
+//                    }
+//
+//                    // Create the about fragment
+//                    aboutFragment = new AboutFragment();
+//
+//                    // Add the fragment to the 'list_frame' FrameLayout
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//                    String AltSpeedInfo;
+//
+//                    if (alternative_speeds) {
+//
+//                        AltSpeedInfo = Character.toString('\u2713') + "  ";
+//                    } else {
+//                        AltSpeedInfo = "";
+//                    }
+//
+//
+//                    // Got some results
+//                    if (torrentsFiltered.size() > 0) {
+//
+//                        // Set headerInfo
+//                        TextView uploadSpeedTextView = (TextView) findViewById(R.id.upspeed);
+//                        TextView downloadSpeedTextView = (TextView) findViewById(R.id.dlspeed);
+//
+//                        headerInfo = (LinearLayout) findViewById(R.id.header);
+//
+//                        if (header) {
+//                            headerInfo.setVisibility(View.VISIBLE);
+//                        } else {
+//                            headerInfo.setVisibility(View.GONE);
+//                        }
+//
+//
+//                        uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
+//                        downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
+//
+//
+//                        //Set first and second fragments
+//                        if (findViewById(R.id.fragment_container) != null) {
+//
+//                            // Set where is the second container
+//                            firstFragment.setSecondFragmentContainer(R.id.content_frame);
+//
+//                            // Set first fragment
+//                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof HelpFragment) {
+//                                fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
+//                            }
+//
+//                            // Set second fragment
+//                            if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
+//
+//                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
+//
+//                                if (torrentToUpdate != null) {
+//                                    // Update torrent details
+//                                    detailsFragment.updateDetails(torrentToUpdate);
+//                                } else {
+//
+//                                    // Torrent no longer found
+//
+//                                    // Set second fragment with About fragment
+//                                    fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
+//
+//                                    // Reset back button stack
+//                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+//                                        fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                                    }
+//                                }
+//
+//
+//                            } else {
+//                                // Reset back button stack
+//                                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+//                                    fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                                }
+//
+//                            }
+//
+//                        } else {
+//
+//                            // Set where is the second container
+//                            firstFragment.setSecondFragmentContainer(R.id.one_frame);
+//
+//                            // Set first fragment
+//                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
+//                                fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+//                            }
+//
+//                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
+//
+//                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("firstFragment");
+//
+//                                if (torrentToUpdate != null) {
+//                                    // Update torrent
+//                                    detailsFragment.updateDetails(torrentToUpdate);
+//                                } else {
+//
+//                                    // Torrent no longer found
+//
+//                                    // Reset back button stack
+//                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+//                                        fragmentManager.popBackStack();
+//                                    }
+//
+//                                }
+//                            }
+//                        }
+//                    } else {
+//
+//                        // No results
+//
+//                        myadapter.setNames(null);
+//                        myadapter.setData(null);
+//
+//                        myadapter.notifyDataSetChanged();
+//
+//                        // Hide headerInfo
+//                        TextView uploadSpeedTextView = (TextView) findViewById(R.id.upspeed);
+//                        TextView downloadSpeedTextView = (TextView) findViewById(R.id.dlspeed);
+//
+//                        uploadSpeedTextView.setText(AltSpeedInfo);
+//                        downloadSpeedTextView.setText("");
+//
+//
+//                        //Set first and second fragments
+//                        if (findViewById(R.id.fragment_container) != null) {
+//
+//                            // Set where is the second container
+//                            firstFragment.setSecondFragmentContainer(R.id.content_frame);
+//
+//                            // Set first fragment
+//                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof HelpFragment) {
+//                                fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
+//                            }
+//
+//                            // Set second fragment
+//                            if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
+//                                fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
+//
+//                                // Reset back button stack
+//                                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+//                                    fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                                }
+//
+//                            }
+//                        } else {
+//
+//                            // Set where is the second container
+//                            firstFragment.setSecondFragmentContainer(R.id.one_frame);
+//
+//                            // Set first fragment
+//                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
+//                                fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+//                            }
+//
+//                            // Reset back button stack
+//                            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+//                                fragmentManager.popBackStack();
+//                            }
+//                        }
+//                    }
+//
+//                    // Commit
+//                    fragmentTransaction.commit();
+//
+//                } catch (Exception e) {
+//                    Log.e("ADAPTER", e.toString());
+//
+//                    if (CustomLogger.isMainActivityReporting()) {
+//                        CustomLogger.saveReportMessage("Main", "[qBittorrentTask - AdapterException]: " + e.toString());
+//                    }
+//                }
+//
+//            }
+//
+//            // Send report
+//            emailReport();
+//
+//            // Disable refreshSwipeLayout
+//            disableRefreshSwipeLayout();
+//        }
+//    }
 
     // Here is where the action happens
     private class qBittorrentOptions extends AsyncTask<String, Integer, String> {

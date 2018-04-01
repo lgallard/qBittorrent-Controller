@@ -378,8 +378,8 @@ public class NotifierService extends BroadcastReceiver {
                         }
 
                         // Info
-                        torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
-                                + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " " + Character.toString('\u2022') + " "
+                        torrents[i].setInfo(torrents[i].getDownloaded() + " " + Character.toString('\u2193') + " " + torrents[i].getDlspeed() + " "
+                                + Character.toString('\u2191') + " " + torrents[i].getUpspeed() + " " + Character.toString('\u2022') + " "
                                 + torrents[i].getRatio() + " " + Character.toString('\u2022') + " " + torrents[i].getEta());
 
                     }

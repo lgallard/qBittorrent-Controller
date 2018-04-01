@@ -244,8 +244,8 @@ public class TorrentDetailsFragment extends Fragment {
                 progress = this.torrent.getProgress();
                 priority = this.torrent.getPriority();
                 eta = this.torrent.getEta();
-                uploadSpeed = this.torrent.getUploadSpeed();
-                downloadSpeed = this.torrent.getDownloadSpeed();
+                uploadSpeed = this.torrent.getUpspeed();
+                downloadSpeed = this.torrent.getDlspeed();
                 downloaded = this.torrent.getDownloaded();
                 addedOn = this.torrent.getAddedOn();
                 completionOn = this.torrent.getCompletionOn();
@@ -463,8 +463,8 @@ public class TorrentDetailsFragment extends Fragment {
             progress = torrent.getProgress();
             priority = torrent.getPriority();
             eta = torrent.getEta();
-            uploadSpeed = torrent.getUploadSpeed();
-            downloadSpeed = torrent.getDownloadSpeed();
+            uploadSpeed = torrent.getUpspeed();
+            downloadSpeed = torrent.getDlspeed();
             downloaded = torrent.getDownloaded();
             addedOn = torrent.getAddedOn();
             completionOn = torrent.getCompletionOn();

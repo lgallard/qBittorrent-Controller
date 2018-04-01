@@ -17,8 +17,8 @@ class Torrent {
     private String info;
     private String state;
     private String hash;
-    private String downloadSpeed;
-    private String uploadSpeed;
+    private String dlspeed;
+    private String upspeed;
     private String ratio;
     private String progress;
     private String downloaded;
@@ -48,7 +48,7 @@ class Torrent {
 
     public Torrent(String name, String size, String state, String hash,
                    String info, String ratio, String progress, String leechs,
-                   String seeds, String priority, String eta, String downloadSpeed, String uploadSpeed, boolean sequentialDownload, boolean firstLastPiecePrio, String addedOn, String completionOn, String label) {
+                   String seeds, String priority, String eta, String dlspeed, String upspeed, boolean sequentialDownload, boolean firstLastPiecePrio, String addedOn, String completionOn, String label) {
         this.name = name;
         this.size = size;
         this.state = state;
@@ -60,8 +60,8 @@ class Torrent {
         this.seeds = seeds;
         this.priority = priority;
         this.eta = eta;
-        this.downloadSpeed = downloadSpeed;
-        this.uploadSpeed = uploadSpeed;
+        this.dlspeed = dlspeed;
+        this.upspeed = upspeed;
         this.sequentialDownload = sequentialDownload;
         this.firstLastPiecePrio = firstLastPiecePrio;
         this.addedOn = addedOn;
@@ -148,17 +148,17 @@ class Torrent {
     }
 
     /**
-     * @return the downloadSpeed
+     * @return the dlspeed
      */
-    public String getDownloadSpeed() {
-        return downloadSpeed;
+    public String getDlspeed() {
+        return dlspeed;
     }
 
     /**
-     * @param downloadSpeed the downloadSpeed to set
+     * @param dlspeed the dlspeed to set
      */
-    public void setDownloadSpeed(String downloadSpeed) {
-        this.downloadSpeed = downloadSpeed;
+    public void setDlspeed(String dlspeed) {
+        this.dlspeed = dlspeed;
     }
 
     public int getSpeedWeight(String type) {
@@ -167,10 +167,10 @@ class Torrent {
         String unit = "";
         int weight = 0;
 
-        String speed = this.downloadSpeed;
+        String speed = this.dlspeed;
 
         if (type.equals("upload")) {
-            speed = this.uploadSpeed;
+            speed = this.upspeed;
         }
 
 
@@ -219,10 +219,10 @@ class Torrent {
     }
 
     /**
-     * @return the uploadSpeed
+     * @return the upspeed
      */
-    public String getUploadSpeed() {
-        return uploadSpeed;
+    public String getUpspeed() {
+        return upspeed;
     }
 
     public int getUploadSpeedWeight() {
@@ -230,10 +230,10 @@ class Torrent {
     }
 
     /**
-     * @param uploadSpeed the uploadSpeed to set
+     * @param upspeed the upspeed to set
      */
-    public void setUploadSpeed(String uploadSpeed) {
-        this.uploadSpeed = uploadSpeed;
+    public void setUpspeed(String upspeed) {
+        this.upspeed = upspeed;
     }
 
     /**
