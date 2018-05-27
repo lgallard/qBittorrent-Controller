@@ -1593,7 +1593,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/delete";
+        if (qb_version.equals("4.1.0")) {
+            url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
+        } else {
+            url = protocol + "://" + hostname + ":" + port + url + "/command/delete";
+        }
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1602,12 +1606,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
-                        Log.d("Debug", "hashes: " + hashes);
-
+//                        Log.d("Debug", "===Command===");
+//                        Log.d("Debug", "Response: " + response);
+//                        Log.d("Debug", "hashes: " + hashes);
                         // Return value
                         callback.onSuccess("");
 
@@ -1617,14 +1618,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
+//                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -1643,6 +1638,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("hashes", hashes);
+                params.put("deleteFiles", "false");
                 return params;
             }
         };
@@ -1661,7 +1657,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/deletePerm";
+        if (qb_version.equals("4.1.0")) {
+            url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
+        } else {
+            url = protocol + "://" + hostname + ":" + port + url + "/command/deletePerm";
+        }
+
+        Log.d("Debug", "URL: " + url);
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1670,29 +1672,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
-                        Log.d("Debug", "hashes: " + hashes);
-
+//                        Log.d("Debug", "===Command===");
+//                        Log.d("Debug", "Response: " + response);
+//                        Log.d("Debug", "hashes: " + hashes);
                         // Return value
                         callback.onSuccess("");
-
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
                         Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -1711,6 +1702,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("hashes", hashes);
+                params.put("deleteFiles", "true");
                 return params;
             }
         };
