@@ -1392,7 +1392,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/resume";
+        if (qb_version.equals("4.1.0")) {
+            url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/resume";
+        } else {
+            url = protocol + "://" + hostname + ":" + port + url + "/command/resume";
+        }
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1439,6 +1443,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
+                params.put("hashes", hash_param);
                 params.put("hash", hash_param);
                 return params;
             }
@@ -1526,7 +1531,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/pause";
+        if (qb_version.equals("4.1.0")) {
+            url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/pause";
+        } else {
+            url = protocol + "://" + hostname + ":" + port + url + "/command/pause";
+        }
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1573,6 +1582,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
+                params.put("hashes", hash_param);
                 params.put("hash", hash_param);
                 return params;
             }
@@ -2933,13 +2943,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    // WL copy
     // Get all torrents
     private List getTorrentList(final String state, final ListCallback callback) {
-
-
-        //Torrent[] torrents = null;
-
 
         final List<Torrent> torrents = new ArrayList<>();
 
@@ -2965,6 +2970,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = url + "/query/torrents?filter=" + state;
         }
 
+        if (qb_version.equals("4.1.0")) {
+            url = url + "/api/v2/torrents/info?filter=" + state;
+        }
 
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -2976,53 +2984,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         Gson gson = new Gson();
 
-//                        Log.d("Debug", "JSONObject: " + response);
-
                         // Get list type to parse it
                         Type listType = new TypeToken<List<Torrent>>() {
                         }.getType();
 
                         // Parse Lists using Gson
-//                        java.util.List<List> parsedLists =  new Gson().fromJson(response.toString(), listType);
                         torrents.addAll((List<Torrent>) new Gson().fromJson(response.toString(), listType));
-
-//                        vLists = new Gson().fromJson(response.toString(), listType);
-
-
-                        //Log.d("Debug", "=== Get All Lists ===");
-
-//                        for (int i = 0; i < torrents.size(); i++) {
-//
-//                            Log.d("Debug", "- - -");
-//                            Log.d("Debug", "Name: " + torrents.get(i).getName());
-//                            Log.d("Debug", "Size: " + torrents.get(i).getSize());
-//                            Log.d("Debug", "Info: " + torrents.get(i).getInfo());
-//                            Log.d("Debug", "State: " + torrents.get(i).getState());
-//                            Log.d("Debug", "Hash: " + torrents.get(i).getHash());
-//                            Log.d("Debug", "downloadSpeed: " + torrents.get(i).getDlspeed());
-//                            Log.d("Debug", "uploadSpeed: " + torrents.get(i).getUpspeed());
-//                            Log.d("Debug", "ratio: " + torrents.get(i).getRatio());
-//                            Log.d("Debug", "progress: " + torrents.get(i).getProgress());
-//                            Log.d("Debug", "downloaded: " + torrents.get(i).getDownloaded());
-//                            Log.d("Debug", "leechs: " + torrents.get(i).getLeechs());
-//                            Log.d("Debug", "seeds: " + torrents.get(i).getSeeds());
-//                            Log.d("Debug", "priority: " + torrents.get(i).getPriority());
-//                            Log.d("Debug", "eta: " + torrents.get(i).getEta());
-//                            Log.d("Debug", "savePath: " + torrents.get(i).getSavePath());
-//                            Log.d("Debug", "creationDate: " + torrents.get(i).getCreationDate());
-//                            Log.d("Debug", "comment: " + torrents.get(i).getComment());
-//                            Log.d("Debug", "totalWasted: " + torrents.get(i).getTotalWasted());
-//                            Log.d("Debug", "totalUploaded: " + torrents.get(i).getTotalUploaded());
-//                            Log.d("Debug", "totalDownloaded: " + torrents.get(i).getTotalDownloaded());
-//                            Log.d("Debug", "timeElapsed: " + torrents.get(i).getTimeElapsed());
-//                            Log.d("Debug", "nbConnections: " + torrents.get(i).getNbConnections());
-//                            //Log.d("Debug", "uploadLimit: " + torrents.get(i).getUploadLimit());
-//                            //Log.d("Debug", "downloadLimit: " + torrents.get(i).getDownloadLimit());
-//                            Log.d("Debug", "sequentialDownload: " + torrents.get(i).getSequentialDownload());
-//                            Log.d("Debug", "firstLastPiecePrio: " + torrents.get(i).getisFirstLastPiecePrio());
-//                            Log.d("Debug", "*****************");
-//
-//                        }
 
                         // Return value
                         callback.onSuccess(torrents);
@@ -3065,7 +3032,99 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         return torrents;
     }
 
-    // End WL Copy
+
+//    // TODO: Change StringRequest for JsonObjectRequest as in
+//    // https://bitbucket.org/lgallard/wlconnector/src/497f3555cfd418ab8b1aa351abea9a610cd684f3/app/src/main/java/com/lgallardo/wlconnector/MainActivity.java?at=master&fileviewer=file-view-default#MainActivity.java-3203
+//    private void getQBittorrentOptions(final VolleyCallback callback) {
+//
+//
+//        String url = "";
+//
+//        // if server is publish in a subfolder, fix url
+//        if (subfolder != null && !subfolder.equals("")) {
+//            url = subfolder + "/" + url;
+//        }
+//
+//        url = protocol + "://" + hostname + ":" + port + url;
+//
+//
+//        // Command
+//        if (qb_version.equals("2.x")) {
+//            url = url + "/json/preferences";
+//        }
+//
+//        if (qb_version.equals("3.1.x")) {
+//            url = url + "/json/preferences";
+//        }
+//
+//        if (qb_version.equals("3.2.x")) {
+//            url = url + "/query/preferences";
+//        }
+//
+//
+//        // New JSONObject request
+//        JsonObjectRequest jsArrayRequest = new JsonObjectRequest(
+//                Request.Method.GET,
+//                url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                        Log.d("Debug", "===x===");
+//                        Log.d("Debug", "JSONObject: " + response);
+//                        Gson gson = new Gson();
+//
+//                        CustomStringResult result = null;
+//                        try {
+//                            result = gson.fromJson(new JSONObject("{\"result\":" + response + "}").toString(), CustomStringResult.class);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                            Log.e("Error", e.toString());
+//                        }
+//
+//                        Log.d("Debug", "JSONObject: " + response);
+//                        Log.d("Debug", "======");
+//                        Log.d("Debug: ", "result: " + result.getResult());
+//
+//                        callback.onSuccess(result.getResult());
+//
+//                        // There's no need to use a callback method here, toke was already saved
+//                        // saveToken(access_token);
+//
+//
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//
+//                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+//
+//                        callback.onSuccess("");
+//
+//                        Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//
+//                    }
+//                }
+//        ) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("User-Agent", "qBittorrent for Android");
+//                params.put("Host", protocol + "://" + hostname + ":" + port);
+//                params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                params.put("Content-Type", "application/x-www-form-urlencoded");
+//                params.put("Cookie", cookie);
+//                return params;
+//            }
+//        };
+//
+//        // Add request to te queue
+//        addVolleyRequest(jsArrayRequest);
+//
+//    }
 
     // Wraps
     private void getApi() {
@@ -3087,22 +3146,21 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         api = 0;
                     }
 
-                    if (result != null && (api > 1 || result.contains("3.2") || result.contains("3.3"))) {
-
-                        qb_version = "3.2.x";
-
-                        // Get new cookie
+                    if (api >= 18) {
+                        qb_version = "4.1.0";
                         cookie = null;
-
-                    } else if (result.contains("3.1")) {
-
-                        qb_version = "3.1.x";
-                        cookie = null;
-
                     } else {
-
-                        qb_version = "2.x";
-
+                        if (result != null && (api > 1 || result.contains("3.2") || result.contains("3.3"))) {
+                            qb_version = "3.2.x";
+                            cookie = null;
+                        } else {
+                            if (result.contains("3.1")) {
+                                qb_version = "3.1.x";
+                                cookie = null;
+                            } else {
+                                qb_version = "2.x";
+                            }
+                        }
                     }
 
 
@@ -4189,11 +4247,24 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             params[0] = qbQueryString + "/torrents";
         }
 
-        if (qb_version.equals("3.2.x")) {
-            qbQueryString = "query";
-            // TODO: Delete
-            urlPrefix = qbQueryString + "/torrents?filter=" + state;
-            params[0] = qbQueryString + "/torrents?filter=" + state;
+        if (qb_version.equals("3.2.x") || qb_version.equals("4.1.0")) {
+
+            if (qb_version.equals("3.2.x")) {
+                qbQueryString = "query";
+                // TODO: Delete
+                urlPrefix = qbQueryString + "/torrents?filter=" + state;
+                params[0] = qbQueryString + "/torrents?filter=" + state;
+            }
+
+
+            if (qb_version.equals("4.1.0")) {
+                qbQueryString = "query";
+                urlPrefix = "api/v2/torrents/info?filter=" + state;
+                params[0] = "api/v2/torrents/info?filter=" + state;
+            }
+
+
+
 
             // Get API version in case it hadn't been gotten before
             if (qb_api == null || qb_api.equals("") || qb_api.equals("0")) {
