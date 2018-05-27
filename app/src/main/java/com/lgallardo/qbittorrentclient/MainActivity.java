@@ -1065,7 +1065,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void getApiVersion(final VolleyCallback callback) {
 
-        String ApiURL = protocol + "://" + hostname + ":" + port + "/version/api";
+        String ApiURL;
+
+        if (qb_version.equals("4.1.0")) {
+            ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/app/webapiVersion";
+
+        } else {
+            ApiURL = protocol + "://" + hostname + ":" + port + "/version/api";
+        }
+
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1104,7 +1112,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     public void onErrorResponse(VolleyError error) {
 
 
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", " getApiVersion - Error in JSON response: " + error.getMessage());
 
                         callback.onSuccess("");
 
@@ -1194,7 +1202,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     public void onErrorResponse(VolleyError error) {
 
 
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", "getVersion - Error in JSON response: " + error.getMessage());
 
                         Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -1220,7 +1228,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void getCookie(final VolleyCallback callback) {
 
-        String url = protocol + "://" + hostname + ":" + port + "/login";
+        String url;
+
+        if (qb_version.equals("4.1.0")) {
+            url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
+
+        } else {
+            url = protocol + "://" + hostname + ":" + port + "/login";
+        }
+
 
         // New JSONObject request
         CustomStringRequest jsArrayRequest = new CustomStringRequest(
@@ -1231,7 +1247,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     public void onResponse(String response) {
 
                         Log.d("Debug", "===cookie===");
-                        Log.d("Debug", "Respnse: " + response);
+                        Log.d("Debug", "Response: " + response);
                         //Log.d("Debug", "headers: " + CustomStringRequest.headers);
 
                         JSONObject jsonObject = null;
@@ -1281,7 +1297,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     public void onErrorResponse(VolleyError error) {
 
 
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", "getCookie - Error in JSON response: " + error.getMessage());
 
                         callback.onSuccess("");
 
@@ -2717,7 +2733,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void getAlternativeSpeedLimitsEnabled(final VolleyCallback callback) {
 
-        String ApiURL = protocol + "://" + hostname + ":" + port + "/command/alternativeSpeedLimitsEnabled";
+        String ApiURL;
+
+        if (qb_version.equals("4.1.0")) {
+            ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/transfer/speedLimitsMode";
+        } else {
+            ApiURL = protocol + "://" + hostname + ":" + port + "/command/alternativeSpeedLimitsEnabled";
+        }
+
+        Log.d("Debug", "ApiURL: " + ApiURL);
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2729,11 +2753,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         Log.d("Debug", "===x===");
                         Log.d("Debug", "JSONObject: " + response);
+
+                        Log.d("Debug", "getAlternativeSpeedLimitsEnabled - Cookie: " + cookie);
+
                         Gson gson = new Gson();
 
                         CustomStringResult result = null;
                         try {
                             result = gson.fromJson(new JSONObject("{\"result\":" + response + "}").toString(), CustomStringResult.class);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.e("Error", e.toString());
@@ -2756,7 +2784,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     public void onErrorResponse(VolleyError error) {
 
 
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", "getAlternativeSpeedLimitsEnabled - - Error in JSON response: " + error.getMessage());
 
                         callback.onSuccess("");
 
@@ -2957,6 +2985,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = url + "/api/v2/torrents/info?filter=" + state;
         }
 
+        Log.d("Debug: ", "GetAllTorrents - URL: " + url);
+        Log.d("Debug: ", "GetAllTorrents - cookies: " + cookie);
+
+
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 url,
@@ -3015,100 +3047,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         return torrents;
     }
 
-
-//    // TODO: Change StringRequest for JsonObjectRequest as in
-//    // https://bitbucket.org/lgallard/wlconnector/src/497f3555cfd418ab8b1aa351abea9a610cd684f3/app/src/main/java/com/lgallardo/wlconnector/MainActivity.java?at=master&fileviewer=file-view-default#MainActivity.java-3203
-//    private void getQBittorrentOptions(final VolleyCallback callback) {
-//
-//
-//        String url = "";
-//
-//        // if server is publish in a subfolder, fix url
-//        if (subfolder != null && !subfolder.equals("")) {
-//            url = subfolder + "/" + url;
-//        }
-//
-//        url = protocol + "://" + hostname + ":" + port + url;
-//
-//
-//        // Command
-//        if (qb_version.equals("2.x")) {
-//            url = url + "/json/preferences";
-//        }
-//
-//        if (qb_version.equals("3.1.x")) {
-//            url = url + "/json/preferences";
-//        }
-//
-//        if (qb_version.equals("3.2.x")) {
-//            url = url + "/query/preferences";
-//        }
-//
-//
-//        // New JSONObject request
-//        JsonObjectRequest jsArrayRequest = new JsonObjectRequest(
-//                Request.Method.GET,
-//                url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//
-//                        Log.d("Debug", "===x===");
-//                        Log.d("Debug", "JSONObject: " + response);
-//                        Gson gson = new Gson();
-//
-//                        CustomStringResult result = null;
-//                        try {
-//                            result = gson.fromJson(new JSONObject("{\"result\":" + response + "}").toString(), CustomStringResult.class);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                            Log.e("Error", e.toString());
-//                        }
-//
-//                        Log.d("Debug", "JSONObject: " + response);
-//                        Log.d("Debug", "======");
-//                        Log.d("Debug: ", "result: " + result.getResult());
-//
-//                        callback.onSuccess(result.getResult());
-//
-//                        // There's no need to use a callback method here, toke was already saved
-//                        // saveToken(access_token);
-//
-//
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//
-//
-//                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-//
-//                        callback.onSuccess("");
-//
-//                        Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-//
-//
-//                    }
-//                }
-//        ) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<>();
-//                params.put("User-Agent", "qBittorrent for Android");
-//                params.put("Host", protocol + "://" + hostname + ":" + port);
-//                params.put("Referer", protocol + "://" + hostname + ":" + port);
-//                params.put("Content-Type", "application/x-www-form-urlencoded");
-//                params.put("Cookie", cookie);
-//                return params;
-//            }
-//        };
-//
-//        // Add request to te queue
-//        addVolleyRequest(jsArrayRequest);
-//
-//    }
-
     // Wraps
     private void getApi() {
         getApiVersion(new VolleyCallback() {
@@ -3122,9 +3060,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     int api;
 
                     try {
-
                         api = Integer.parseInt(result);
-
                     } catch (Exception e) {
                         api = 0;
                     }
@@ -3132,14 +3068,21 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     if (api >= 18) {
                         qb_version = "4.1.0";
                         cookie = null;
+                        getCookie();
+
+//                        Log.d("Debug: ", "getApi was executed");
+//                        Log.d("Debug: ", "getApi - cookie: " + cookie);
+
                     } else {
                         if (result != null && (api > 1 || result.contains("3.2") || result.contains("3.3"))) {
                             qb_version = "3.2.x";
                             cookie = null;
+                            getCookie();
                         } else {
                             if (result.contains("3.1")) {
                                 qb_version = "3.1.x";
                                 cookie = null;
+                                getCookie();
                             } else {
                                 qb_version = "2.x";
                             }
@@ -3665,6 +3608,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         altSpeedLimitsMenuItem.setEnabled(true);
                         altSpeedLimitsMenuItem.setChecked(isAlternativeSpeedLimitsEnabled);
                     }
+                } else {
+                    Log.d("Debug: ", "getAlternativeSpeedLimitsEnabled got null");
                 }
             }
         });
