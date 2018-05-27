@@ -3658,6 +3658,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     String size = torrents.get(i).getSize();
                     Double progress = Double.parseDouble(torrents.get(i).getProgress());
 
+                    // Set torrent progress
+                    torrents.get(i).setProgress(String.format("%.1f", (progress * 100)));
+
+                    Log.d("Debug", "> Size: " + size);
+                    Log.d("Debug", "> progress: " + (progress * 100));
+                    Log.d("Debug", "> progress reported: " + torrents.get(i).getProgress());
+
                     // Get torrent generic properties
                     try {
                         // Calculate total downloaded
