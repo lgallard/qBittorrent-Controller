@@ -1326,12 +1326,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         url = protocol + "://" + hostname + ":" + port + url;
 
-
         // Command
-        if (qb_version.equals("3.2.x")) {
-            url = url + "/command/resumeAll";
+        if (qb_version.equals("4.1.0")) {
+            url = url + "/api/v2/torrents/resume";
         } else {
-            url = "/command/resumeall";
+            if (qb_version.equals("3.2.x")) {
+                url = url + "/command/resumeAll";
+            } else {
+                url = url + "/command/resumeall";
+            }
         }
 
         // New JSONObject request
@@ -1341,27 +1344,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
+//                        Log.d("Debug", "===Command===");
+//                        Log.d("Debug", "Response: " + response);
                         // Return value
                         callback.onSuccess("");
-
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
+//                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -1373,6 +1366,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", "all");
                 return params;
             }
         };
@@ -1465,13 +1465,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         url = protocol + "://" + hostname + ":" + port + url;
 
-
         // Command
-        if (qb_version.equals("3.2.x")) {
-            url = url + "/command/pauseAll";
+        if (qb_version.equals("4.1.0")) {
+            url = url + "/api/v2/torrents/pause";
         } else {
-            url = "/command/pauseall";
+            if (qb_version.equals("3.2.x")) {
+                url = url + "/command/pauseAll";
+            } else {
+                url = url + "/command/pauseall";
+            }
         }
+
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1480,27 +1484,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
+//                        Log.d("Debug", "===Command===");
+//                        Log.d("Debug", "Response: " + response);
                         // Return value
                         callback.onSuccess("");
-
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
+//                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -1512,6 +1506,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", "all");
                 return params;
             }
         };
@@ -1544,27 +1545,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
+                        // Log.d("Debug", "===Command===");
+                        // Log.d("Debug", "Response: " + response);
                         // Return value
                         callback.onSuccess("");
-
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
+                        //Log.d("Debug", "Error in JSON response: " + error.getMessage());
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -3249,8 +3240,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> ResumeAll: " + result);
-
+//                Log.d("Debug: ", ">>> ResumeAll: " + result);
                 toastText(R.string.AllTorrentsResumed);
 
                 // Refresh
@@ -3305,8 +3295,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> PauseAll: " + result);
-
+//                Log.d("Debug: ", ">>> PauseAll: " + result);
                 toastText(R.string.AllTorrentsPaused);
 
                 // Refresh
