@@ -1402,6 +1402,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         final String hash_param = hash;
         String url = "";
+        final String key;
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && !subfolder.equals("")) {
@@ -1410,8 +1411,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (qb_version.equals("4.1.x")) {
             url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/resume";
+            key = "hashes";
         } else {
             url = protocol + "://" + hostname + ":" + port + url + "/command/resume";
+            key = "hash";
         }
 
         // New JSONObject request
@@ -1459,8 +1462,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("hashes", hash_param);
-                params.put("hash", hash_param);
+                params.put(key, hash_param);
                 return params;
             }
         };
@@ -1542,6 +1544,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         final String hash_param = hash;
         String url = "";
+        final String key;
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && !subfolder.equals("")) {
@@ -1550,8 +1553,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (qb_version.equals("4.1.x")) {
             url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/pause";
+            key = "hashes";
         } else {
             url = protocol + "://" + hostname + ":" + port + url + "/command/pause";
+            key = "hash";
         }
 
         // New JSONObject request
@@ -1589,8 +1594,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("hashes", hash_param);
-                params.put("hash", hash_param);
+                params.put(key, hash_param);
                 return params;
             }
         };
