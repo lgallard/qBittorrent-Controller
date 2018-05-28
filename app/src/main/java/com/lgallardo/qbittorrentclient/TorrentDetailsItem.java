@@ -8,8 +8,6 @@
  */
 package com.lgallardo.qbittorrentclient;
 
-import android.content.Context;
-
 public class TorrentDetailsItem {
 
     public static final int FILE = 0;
@@ -53,6 +51,11 @@ public class TorrentDetailsItem {
     }
 
     public String getSize() {
+
+        if (MainActivity.qb_version.equals("4.1.x")) {
+            size = Common.calculateSize(size);
+        }
+
         return size;
     }
 
