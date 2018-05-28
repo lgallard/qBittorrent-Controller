@@ -1067,7 +1067,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         String ApiURL;
 
-        if (qb_version.equals("4.1.0")) {
+        if (qb_version.equals("4.1.x")) {
             ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/app/webapiVersion";
 
         } else {
@@ -1230,7 +1230,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         String url;
 
-        if (qb_version.equals("4.1.0")) {
+        if (qb_version.equals("4.1.x")) {
             url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
 
         } else {
@@ -1343,7 +1343,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         url = protocol + "://" + hostname + ":" + port + url;
 
         // Command
-        if (qb_version.equals("4.1.0")) {
+        if (qb_version.equals("4.1.x")) {
             url = url + "/api/v2/torrents/resume";
         } else {
             if (qb_version.equals("3.2.x")) {
@@ -1408,7 +1408,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        if (qb_version.equals("4.1.0")) {
+        if (qb_version.equals("4.1.x")) {
             url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/resume";
         } else {
             url = protocol + "://" + hostname + ":" + port + url + "/command/resume";
@@ -1482,7 +1482,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         url = protocol + "://" + hostname + ":" + port + url;
 
         // Command
-        if (qb_version.equals("4.1.0")) {
+        if (qb_version.equals("4.1.x")) {
             url = url + "/api/v2/torrents/pause";
         } else {
             if (qb_version.equals("3.2.x")) {
@@ -1548,7 +1548,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        if (qb_version.equals("4.1.0")) {
+        if (qb_version.equals("4.1.x")) {
             url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/pause";
         } else {
             url = protocol + "://" + hostname + ":" + port + url + "/command/pause";
@@ -1609,7 +1609,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        if (qb_version.equals("4.1.0")) {
+        if (qb_version.equals("4.1.x")) {
             url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
         } else {
             url = protocol + "://" + hostname + ":" + port + url + "/command/delete";
@@ -1673,7 +1673,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        if (qb_version.equals("4.1.0")) {
+        if (qb_version.equals("4.1.x")) {
             url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
         } else {
             url = protocol + "://" + hostname + ":" + port + url + "/command/deletePerm";
@@ -2735,7 +2735,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         String ApiURL;
 
-        if (qb_version.equals("4.1.0")) {
+        if (qb_version.equals("4.1.x")) {
             ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/transfer/speedLimitsMode";
         } else {
             ApiURL = protocol + "://" + hostname + ":" + port + "/command/alternativeSpeedLimitsEnabled";
@@ -2981,7 +2981,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = url + "/query/torrents?filter=" + state;
         }
 
-        if (qb_version.equals("4.1.0")) {
+        if (qb_version.equals("4.1.x")) {
             url = url + "/api/v2/torrents/info?filter=" + state;
         }
 
@@ -3066,7 +3066,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     }
 
                     if (api >= 18) {
-                        qb_version = "4.1.0";
+                        qb_version = "4.1.x";
                         cookie = null;
                         getCookie();
 
@@ -3649,13 +3649,20 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(List<Torrent> torrents) {
 
+                String size;
+
                 for (int i = 0; i < torrents.size(); i++) {
 
                     Log.d("Debug", "- - -");
                     Log.d("Debug", "> File: " + torrents.get(i).getName());
                     Log.d("Debug", "> Hash: " + torrents.get(i).getHash());
 
-                    String size = torrents.get(i).getSize();
+                    if (qb_version.equals("3.2.x") || qb_version.equals("4.1.x")) {
+                        size = Common.calculateSize(torrents.get(i).getSize());
+                    } else {
+                        size = torrents.get(i).getSize();
+                    }
+
                     Double progress = Double.parseDouble(torrents.get(i).getProgress());
 
                     // Set torrent progress
@@ -3695,7 +3702,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     } else {
                         // Info pro
-                        infoString = torrents.get(i).getDownloaded() + " / " + torrents.get(i).getSize() + " "
+                        infoString = torrents.get(i).getDownloaded() + " / " + size + " "
                                 + Character.toString('\u2191') + " " + torrents.get(i).getUpspeed() + " "
                                 + Character.toString('\u2193') + " " + torrents.get(i).getDlspeed() + " "
                                 + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
@@ -4180,7 +4187,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             params[0] = qbQueryString + "/torrents";
         }
 
-        if (qb_version.equals("3.2.x") || qb_version.equals("4.1.0")) {
+        if (qb_version.equals("3.2.x") || qb_version.equals("4.1.x")) {
 
             if (qb_version.equals("3.2.x")) {
                 qbQueryString = "query";
@@ -4190,7 +4197,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
 
 
-            if (qb_version.equals("4.1.0")) {
+            if (qb_version.equals("4.1.x")) {
                 qbQueryString = "query";
                 urlPrefix = "api/v2/torrents/info?filter=" + state;
                 params[0] = "api/v2/torrents/info?filter=" + state;
