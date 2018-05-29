@@ -1232,7 +1232,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (qb_version.equals("4.1.x")) {
             url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
-
         } else {
             url = protocol + "://" + hostname + ":" + port + "/login";
         }
@@ -1607,6 +1606,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private void deleteTorrent(final String hashes, final VolleyCallback callback) {
 
         String url = "";
+        final Map<String, String> postParams = new HashMap<>();
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && !subfolder.equals("")) {
@@ -1615,8 +1615,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (qb_version.equals("4.1.x")) {
             url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
+            postParams.put("hashes", hashes);
+            postParams.put("deleteFiles", "false");
         } else {
             url = protocol + "://" + hostname + ":" + port + url + "/command/delete";
+            postParams.put("hashes", hashes);
         }
 
         // New JSONObject request
@@ -1656,10 +1659,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             @Override
             public Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("hashes", hashes);
-                params.put("deleteFiles", "false");
-                return params;
+                return postParams;
             }
         };
 
@@ -1671,6 +1671,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private void deleteDriveTorrent(final String hashes, final VolleyCallback callback) {
 
         String url = "";
+        final Map<String, String> postParams = new HashMap<>();
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && !subfolder.equals("")) {
@@ -1679,8 +1680,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         if (qb_version.equals("4.1.x")) {
             url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
+            postParams.put("hashes", hashes);
+            postParams.put("deleteFiles", "true");
+
         } else {
             url = protocol + "://" + hostname + ":" + port + url + "/command/deletePerm";
+            postParams.put("hashes", hashes);
         }
 
         Log.d("Debug", "URL: " + url);
@@ -1720,10 +1725,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             @Override
             public Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("hashes", hashes);
-                params.put("deleteFiles", "true");
-                return params;
+                return postParams;
             }
         };
 
