@@ -2523,7 +2523,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/download";
+        if (qb_version.equals("4.1.x")) {
+            url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/add";
+        } else {
+            url = protocol + "://" + hostname + ":" + port + url + "/command/download";
+        }
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
