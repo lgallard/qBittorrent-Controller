@@ -296,7 +296,7 @@ public class TorrentDetailsFragment extends Fragment {
             priorityTextView.setText(priority);
 
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.1.x")) {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
                 firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
@@ -696,6 +696,9 @@ public class TorrentDetailsFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (menu != null) {
 
+            // Disable RSS support
+            menu.findItem(R.id.action_rss).setVisible(false);
+
             menu.findItem(R.id.action_resume_all).setVisible(false);
             menu.findItem(R.id.action_pause_all).setVisible(false);
             menu.findItem(R.id.action_add).setVisible(false);
@@ -733,7 +736,7 @@ public class TorrentDetailsFragment extends Fragment {
 
 //            Log.d("Debug", "qb_version: " + MainActivity.qb_version);
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.1.x")) {
                 menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                 menu.findItem(R.id.action_sequential_download).setVisible(true);
                 menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
@@ -764,7 +767,6 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_label_menu).setVisible(false);
                 menu.findItem(R.id.action_set_label).setVisible(false);
                 menu.findItem(R.id.action_delete_label).setVisible(false);
-
             }
 
         }

@@ -387,18 +387,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     notification_period, alarmIntent);
         }
 
-        // Set alarm for RSS checking, if not set
-        if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), RSSService.class), PendingIntent.FLAG_NO_CREATE) == null) {
-
-            // Set Alarm for checking completed torrents
-            alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
-            Intent intent = new Intent(getApplication(), RSSService.class);
-            alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
-
-            alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + 5000,
-                    AlarmManager.INTERVAL_DAY, alarmIntent);
-        }
+//        // Set alarm for RSS checking, if not set
+//        if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), RSSService.class), PendingIntent.FLAG_NO_CREATE) == null) {
+//
+//            // Set Alarm for checking completed torrents
+//            alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
+//            Intent intent = new Intent(getApplication(), RSSService.class);
+//            alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
+//
+//            alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//                    SystemClock.elapsedRealtime() + 5000,
+//                    AlarmManager.INTERVAL_DAY, alarmIntent);
+//        }
 
         // Set Theme (It must be fore inflating or setContentView)
         if (dark_ui) {
@@ -4726,6 +4726,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+
+        // Disable RSS support
+        menu.findItem(R.id.action_rss).setVisible(false);
+
         // Retrieve the SearchView and plug it into SearchManager
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
@@ -4853,11 +4857,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Add torrent URL
                 addUrlTorrent();
                 return true;
-            case R.id.action_rss:
-                // Open RSS Activity
-                Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
-                startActivity(intent);
-                return true;
+//            case R.id.action_rss:
+//                // Open RSS Activity
+//                Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
+//                startActivity(intent);
+//                return true;
             case R.id.action_pause:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     pauseTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
