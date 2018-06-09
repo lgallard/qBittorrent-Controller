@@ -463,7 +463,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         for (int i = 0; i < navigationDrawerServerItems.length; i++) {
             serverItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, navigationDrawerServerItems[i], DRAWER_ITEM_SERVERS, ((i + 1) == currentServerValue), "changeCurrentServer"));
-
         }
 
         // Add actions
@@ -478,7 +477,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Add labels
 
         // Add settings actions
-        settingsItems.add(new DrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTIONS, false, "openOptions"));
+        //settingsItems.add(new DrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTIONS, false, "openOptions"));
         settingsItems.add(new DrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[8], DRAWER_ITEM_ACTIONS, false, "openSettings"));
 
         if (packageName.equals("com.lgallardo.qbittorrentclient")) {
@@ -536,9 +535,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         getSupportActionBar().setHomeButtonEnabled(false);
 
 
-        // Get options and save them as shared preferences
-        qBittorrentOptions qso = new qBittorrentOptions();
-        qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
+//        // Get options and save them as shared preferences
+//        qBittorrentOptions qso = new qBittorrentOptions();
+//        qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
 
         // If it was awoken from an intent-filter,
         // get intent from the intent filter and Add URL torrent
@@ -5330,8 +5329,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Options - Execute the task in background
         toastText(R.string.getQBittorrentPrefefrences);
 
-        qBittorrentOptions qso = new qBittorrentOptions();
-        qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
+//        qBittorrentOptions qso = new qBittorrentOptions();
+//        qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
 
     }
 
@@ -6290,173 +6289,173 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
-    // Here is where the action happens
-    private class qBittorrentOptions extends AsyncTask<String, Integer, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            // Get settings
-            getSettings();
-
-            // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
-
-            jParser.setCookie(cookie);
-
-            // Get the Json object
-            JSONObject json = null;
-            try {
-                json = jParser.getJSONFromUrl(params[0]);
-
-            } catch (JSONParserStatusCodeException e) {
-
-                httpStatusCode = e.getCode();
-                Log.e("JSONParserStatusCode", e.toString());
-
-            }
-
-            if (json != null) {
-
-                try {
-
-                    global_max_num_connections = json.getString(TAG_GLOBAL_MAX_NUM_CONNECTIONS);
-                    max_num_conn_per_torrent = json.getString(TAG_MAX_NUM_CONN_PER_TORRENT);
-                    max_uploads = json.getString(TAG_MAX_UPLOADS);
-                    max_num_upslots_per_torrent = json.getString(TAG_MAX_NUM_UPSLOTS_PER_TORRENT);
-
-
-                    if (Integer.parseInt(qb_api) > 0) {
-                        global_upload = Integer.toString(json.getInt(TAG_GLOBAL_UPLOAD) / 1024);
-                        global_download = Integer.toString(json.getInt(TAG_GLOBAL_DOWNLOAD) / 1024);
-                        alt_upload = Integer.toString(json.getInt(TAG_ALT_UPLOAD) / 1024);
-                        alt_download = Integer.toString(json.getInt(TAG_ALT_DOWNLOAD) / 1024);
-                    } else {
-                        global_upload = json.getString(TAG_GLOBAL_UPLOAD);
-                        global_download = json.getString(TAG_GLOBAL_DOWNLOAD);
-                        alt_upload = json.getString(TAG_ALT_UPLOAD);
-                        alt_download = json.getString(TAG_ALT_DOWNLOAD);
-                    }
-
-
-                    global_upload = Integer.toString(json.getInt(TAG_GLOBAL_UPLOAD) / 1024);
-                    global_download = Integer.toString(json.getInt(TAG_GLOBAL_DOWNLOAD) / 1024);
-                    alt_upload = Integer.toString(json.getInt(TAG_ALT_UPLOAD) / 1024);
-                    alt_download = Integer.toString(json.getInt(TAG_ALT_DOWNLOAD) / 1024);
-
-
-                    torrent_queueing = json.getBoolean(TAG_TORRENT_QUEUEING);
-                    max_act_downloads = json.getString(TAG_MAX_ACT_DOWNLOADS);
-                    max_act_uploads = json.getString(TAG_MAX_ACT_UPLOADS);
-                    max_act_torrents = json.getString(TAG_MAX_ACT_TORRENTS);
-
-                    schedule_alternative_rate_limits = json.getBoolean(TAG_SCHEDULER_ENABLED);
-                    alt_from_hour = json.getString(TAG_SCHEDULE_FROM_HOUR);
-                    alt_from_min = json.getString(TAG_SCHEDULE_FROM_MIN);
-                    alt_to_hour = json.getString(TAG_SCHEDULE_TO_HOUR);
-                    alt_to_min = json.getString(TAG_SCHEDULE_TO_MIN);
-                    scheduler_days = json.getString(TAG_SCHEDULER_DAYS);
-
-                    max_ratio_enabled = json.getBoolean(TAG_MAX_RATIO_ENABLED);
-                    max_ratio = json.getString(TAG_MAX_RATIO);
-                    max_ratio_act = json.getString(TAG_MAX_RATIO_ACT);
-
-                    // Save options locally
-                    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                    Editor editor = sharedPrefs.edit();
-
-                    // Save key-values
-                    editor.putString("global_max_num_connections", global_max_num_connections);
-                    editor.putString("max_num_conn_per_torrent", max_num_conn_per_torrent);
-                    editor.putString("max_uploads", max_uploads);
-                    editor.putString("max_num_upslots_per_torrent", max_num_upslots_per_torrent);
-                    editor.putString("global_upload", global_upload);
-                    editor.putString("global_download", global_download);
-                    editor.putString("alt_upload", alt_upload);
-                    editor.putString("alt_download", alt_download);
-                    editor.putBoolean("torrent_queueing", torrent_queueing);
-                    editor.putString("max_act_downloads", max_act_downloads);
-                    editor.putString("max_act_uploads", max_act_uploads);
-                    editor.putString("max_act_torrents", max_act_torrents);
-
-                    editor.putBoolean("schedule_alternative_rate_limits", schedule_alternative_rate_limits);
-                    editor.putString("alt_from", alt_from_hour + ":" + alt_from_min);
-                    editor.putString("alt_to", alt_to_hour + ":" + alt_to_min);
-                    editor.putString("scheduler_days", scheduler_days);
-
-                    editor.putBoolean("max_ratio_enabled", max_ratio_enabled);
-                    editor.putString("max_ratio", max_ratio);
-                    editor.putString("max_ratio_act", max_ratio_act);
-
-
-                    // Commit changes
-                    editor.commit();
-
-                } catch (Exception e) {
-                    Log.e("MAIN:", e.toString());
-                    return null;
-                }
-
-            }
-
-            // Return getSettings or setSettings
-            return params[1];
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            if (result == null) {
-
-                toastText(R.string.connection_error);
-
-                // Handle HTTP status code
-                if (httpStatusCode == 1) {
-                    toastText(R.string.error1);
-                    httpStatusCode = 0;
-                }
-
-                if (httpStatusCode == 2) {
-                    toastText(R.string.error2);
-                    httpStatusCode = 0;
-                }
-
-                if (httpStatusCode == 401) {
-                    toastText(R.string.error401);
-                    httpStatusCode = 0;
-                }
-
-                if (httpStatusCode == 403 || httpStatusCode == 404) {
-                    toastText(R.string.error403);
-                    httpStatusCode = 0;
-                    disableRefreshSwipeLayout();
-
-                    if (qb_version.equals("3.2.x")) {
-                        // Get new Cookie
-                        cookie = null;
-                    }
-                }
-
-            } else {
-
-                // Set options with the preference UI
-
-                if (result.equals("setOptions")) {
-
-                    // Open options activity
-                    openOptions();
-                }
-
-                // Get options only
-                if (result.equals("getOptions")) {
-
-                    // Do nothing
-
-                }
-            }
-        }
-    }
+//    // Here is where the action happens
+//    private class qBittorrentOptions extends AsyncTask<String, Integer, String> {
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//
+//            // Get settings
+//            getSettings();
+//
+//            // Creating new JSON Parser
+//            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
+//
+//            jParser.setCookie(cookie);
+//
+//            // Get the Json object
+//            JSONObject json = null;
+//            try {
+//                json = jParser.getJSONFromUrl(params[0]);
+//
+//            } catch (JSONParserStatusCodeException e) {
+//
+//                httpStatusCode = e.getCode();
+//                Log.e("JSONParserStatusCode", e.toString());
+//
+//            }
+//
+//            if (json != null) {
+//
+//                try {
+//
+//                    global_max_num_connections = json.getString(TAG_GLOBAL_MAX_NUM_CONNECTIONS);
+//                    max_num_conn_per_torrent = json.getString(TAG_MAX_NUM_CONN_PER_TORRENT);
+//                    max_uploads = json.getString(TAG_MAX_UPLOADS);
+//                    max_num_upslots_per_torrent = json.getString(TAG_MAX_NUM_UPSLOTS_PER_TORRENT);
+//
+//
+//                    if (Integer.parseInt(qb_api) > 0) {
+//                        global_upload = Integer.toString(json.getInt(TAG_GLOBAL_UPLOAD) / 1024);
+//                        global_download = Integer.toString(json.getInt(TAG_GLOBAL_DOWNLOAD) / 1024);
+//                        alt_upload = Integer.toString(json.getInt(TAG_ALT_UPLOAD) / 1024);
+//                        alt_download = Integer.toString(json.getInt(TAG_ALT_DOWNLOAD) / 1024);
+//                    } else {
+//                        global_upload = json.getString(TAG_GLOBAL_UPLOAD);
+//                        global_download = json.getString(TAG_GLOBAL_DOWNLOAD);
+//                        alt_upload = json.getString(TAG_ALT_UPLOAD);
+//                        alt_download = json.getString(TAG_ALT_DOWNLOAD);
+//                    }
+//
+//
+//                    global_upload = Integer.toString(json.getInt(TAG_GLOBAL_UPLOAD) / 1024);
+//                    global_download = Integer.toString(json.getInt(TAG_GLOBAL_DOWNLOAD) / 1024);
+//                    alt_upload = Integer.toString(json.getInt(TAG_ALT_UPLOAD) / 1024);
+//                    alt_download = Integer.toString(json.getInt(TAG_ALT_DOWNLOAD) / 1024);
+//
+//
+//                    torrent_queueing = json.getBoolean(TAG_TORRENT_QUEUEING);
+//                    max_act_downloads = json.getString(TAG_MAX_ACT_DOWNLOADS);
+//                    max_act_uploads = json.getString(TAG_MAX_ACT_UPLOADS);
+//                    max_act_torrents = json.getString(TAG_MAX_ACT_TORRENTS);
+//
+//                    schedule_alternative_rate_limits = json.getBoolean(TAG_SCHEDULER_ENABLED);
+//                    alt_from_hour = json.getString(TAG_SCHEDULE_FROM_HOUR);
+//                    alt_from_min = json.getString(TAG_SCHEDULE_FROM_MIN);
+//                    alt_to_hour = json.getString(TAG_SCHEDULE_TO_HOUR);
+//                    alt_to_min = json.getString(TAG_SCHEDULE_TO_MIN);
+//                    scheduler_days = json.getString(TAG_SCHEDULER_DAYS);
+//
+//                    max_ratio_enabled = json.getBoolean(TAG_MAX_RATIO_ENABLED);
+//                    max_ratio = json.getString(TAG_MAX_RATIO);
+//                    max_ratio_act = json.getString(TAG_MAX_RATIO_ACT);
+//
+//                    // Save options locally
+//                    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+//                    Editor editor = sharedPrefs.edit();
+//
+//                    // Save key-values
+//                    editor.putString("global_max_num_connections", global_max_num_connections);
+//                    editor.putString("max_num_conn_per_torrent", max_num_conn_per_torrent);
+//                    editor.putString("max_uploads", max_uploads);
+//                    editor.putString("max_num_upslots_per_torrent", max_num_upslots_per_torrent);
+//                    editor.putString("global_upload", global_upload);
+//                    editor.putString("global_download", global_download);
+//                    editor.putString("alt_upload", alt_upload);
+//                    editor.putString("alt_download", alt_download);
+//                    editor.putBoolean("torrent_queueing", torrent_queueing);
+//                    editor.putString("max_act_downloads", max_act_downloads);
+//                    editor.putString("max_act_uploads", max_act_uploads);
+//                    editor.putString("max_act_torrents", max_act_torrents);
+//
+//                    editor.putBoolean("schedule_alternative_rate_limits", schedule_alternative_rate_limits);
+//                    editor.putString("alt_from", alt_from_hour + ":" + alt_from_min);
+//                    editor.putString("alt_to", alt_to_hour + ":" + alt_to_min);
+//                    editor.putString("scheduler_days", scheduler_days);
+//
+//                    editor.putBoolean("max_ratio_enabled", max_ratio_enabled);
+//                    editor.putString("max_ratio", max_ratio);
+//                    editor.putString("max_ratio_act", max_ratio_act);
+//
+//
+//                    // Commit changes
+//                    editor.commit();
+//
+//                } catch (Exception e) {
+//                    Log.e("MAIN:", e.toString());
+//                    return null;
+//                }
+//
+//            }
+//
+//            // Return getSettings or setSettings
+//            return params[1];
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String result) {
+//
+//            if (result == null) {
+//
+//                toastText(R.string.connection_error);
+//
+//                // Handle HTTP status code
+//                if (httpStatusCode == 1) {
+//                    toastText(R.string.error1);
+//                    httpStatusCode = 0;
+//                }
+//
+//                if (httpStatusCode == 2) {
+//                    toastText(R.string.error2);
+//                    httpStatusCode = 0;
+//                }
+//
+//                if (httpStatusCode == 401) {
+//                    toastText(R.string.error401);
+//                    httpStatusCode = 0;
+//                }
+//
+//                if (httpStatusCode == 403 || httpStatusCode == 404) {
+//                    toastText(R.string.error403);
+//                    httpStatusCode = 0;
+//                    disableRefreshSwipeLayout();
+//
+//                    if (qb_version.equals("3.2.x")) {
+//                        // Get new Cookie
+//                        cookie = null;
+//                    }
+//                }
+//
+//            } else {
+//
+//                // Set options with the preference UI
+//
+//                if (result.equals("setOptions")) {
+//
+//                    // Open options activity
+//                    openOptions();
+//                }
+//
+//                // Get options only
+//                if (result.equals("getOptions")) {
+//
+//                    // Do nothing
+//
+//                }
+//            }
+//        }
+//    }
 
     // Drawer classes
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

@@ -361,7 +361,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                 // Open Settings
                 if (drawerItem.getAction().equals("openSettings")) {
 
-                    // Seth last actio position
+                    // Set last action position
                     activeLastActionPosition(lastActionPosition);
 
                     mainActivity.openSettings();
@@ -374,11 +374,11 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                 // Open Options
                 if (drawerItem.getAction().equals("openOptions")) {
 
-                    // Seth last actio position
-                    activeLastActionPosition(lastActionPosition);
+                    // Set last action position
+                    //activeLastActionPosition(lastActionPosition);
 
 
-                    mainActivity.getAndOpenOptions();
+                    //mainActivity.getAndOpenOptions();
 
                     // Close drawer
                     mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
