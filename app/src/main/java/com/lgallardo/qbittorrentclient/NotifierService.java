@@ -295,7 +295,7 @@ public class NotifierService extends BroadcastReceiver {
     }
 
     // Get all torrents
-    private List getTorrentList(final String state, final ListCallback callback) {
+    private List getTorrentList(final String state, final TorrentsListCallBack callback) {
 
         final List<Torrent> torrents = new ArrayList<>();
 
@@ -409,7 +409,7 @@ public class NotifierService extends BroadcastReceiver {
 
     public void getTorrentList(String state) {
 
-        getTorrentList(state, new ListCallback() {
+        getTorrentList(state, new TorrentsListCallBack() {
             @Override
             public void onSuccess(List<Torrent> torrents) {
 

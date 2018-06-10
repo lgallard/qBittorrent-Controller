@@ -28,13 +28,34 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.lgallardo.qbittorrentclient.MainActivity.cookie;
+import static com.lgallardo.qbittorrentclient.MainActivity.hostname;
+import static com.lgallardo.qbittorrentclient.MainActivity.port;
+import static com.lgallardo.qbittorrentclient.MainActivity.protocol;
+import static com.lgallardo.qbittorrentclient.MainActivity.qb_version;
+import static com.lgallardo.qbittorrentclient.MainActivity.subfolder;
+
 
 public class TorrentDetailsFragment extends Fragment {
 
@@ -77,9 +98,7 @@ public class TorrentDetailsFragment extends Fragment {
 
     String url;
     int position;
-    JSONObject json2;
 
-    private String qbQueryString = "query";
     private Torrent torrent;
     public static SwipeRefreshLayout mSwipeRefreshLayout;
     private RefreshListener refreshListener;
@@ -88,7 +107,6 @@ public class TorrentDetailsFragment extends Fragment {
     private AdView adView;
 
     public static int fileContentRowPosition;
-
 
     public TorrentDetailsFragment() {
     }
@@ -109,15 +127,13 @@ public class TorrentDetailsFragment extends Fragment {
         // wants to add/replace/delete using the onCreateOptionsMenu method.
         setHasOptionsMenu(true);
 
-
         View rootView;
 
-        if (MainActivity.qb_version.equals("3.2.x")) {
+        if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.1.x")) {
             rootView = inflater.inflate(R.layout.torrent_details, container, false);
         } else {
             rootView = inflater.inflate(R.layout.torrent_details_old, container, false);
         }
-
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.RecyclerViewContentFiles); // Assigning the RecyclerView Object to the xml View
         rAdapter = new ContentFilesRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<TorrentDetailsItem>());
@@ -131,7 +147,6 @@ public class TorrentDetailsFragment extends Fragment {
         generalInfoAdapter = new GeneralInfoRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<GeneralInfoItem>());
         generalInfoAdapter.notifyDataSetChanged();
 
-
         if (mRecyclerView == null) {
             Log.d("Debug", "mRecyclerView is null");
         }
@@ -140,19 +155,20 @@ public class TorrentDetailsFragment extends Fragment {
             Log.d("Debug", "rAdapter is null");
         }
 
-
         try {
             mRecyclerView.setAdapter(rAdapter);
             mRecyclerViewTrackers.setAdapter(trackerAdapter);
             mRecyclerViewGeneralInfo.setAdapter(generalInfoAdapter);
 
-            mLayoutManager = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
-            mLayoutManagerTrackers = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
-            mLayoutManagerGeneralInfo = new LinearLayoutManager(rootView.getContext());                 // Creating a layout Manager
+            // Creating a layout Managers
+            mLayoutManager = new LinearLayoutManager(rootView.getContext());
+            mLayoutManagerTrackers = new LinearLayoutManager(rootView.getContext());
+            mLayoutManagerGeneralInfo = new LinearLayoutManager(rootView.getContext());
 
-            mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
-            mRecyclerViewTrackers.setLayoutManager(mLayoutManagerTrackers);                 // Setting the layout Manager
-            mRecyclerViewGeneralInfo.setLayoutManager(mLayoutManagerGeneralInfo);                 // Setting the layout Manager
+            // Setting Layout Managers
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerViewTrackers.setLayoutManager(mLayoutManagerTrackers);
+            mRecyclerViewGeneralInfo.setLayoutManager(mLayoutManagerGeneralInfo);
 
             // This is needed to set the ContextMenu
             registerForContextMenu(mRecyclerView);
@@ -341,8 +357,6 @@ public class TorrentDetailsFragment extends Fragment {
                 } else {
                     labelTextView.setText("");
                 }
-
-
             }
 
             // Set Downloaded vs Total size
@@ -400,10 +414,8 @@ public class TorrentDetailsFragment extends Fragment {
             }
 
 
-            // Get Content files in background
-            ContentFileTask cft = new ContentFileTask();
-            cft.execute(new String[]{hash});
-
+            // Get Content files
+            getTorrentContents();
 
             // Get trackers in background
             TrackersTask tt = new TrackersTask();
@@ -440,6 +452,144 @@ public class TorrentDetailsFragment extends Fragment {
 
         return rootView;
     }
+
+    // Volley singletons
+    protected void addVolleyRequest(StringRequest stringArrayRequest) {
+        VolleySingleton.getInstance(getActivity().getApplication()).addToRequestQueue(stringArrayRequest);
+    }
+
+    protected void addVolleyRequest(JsonArrayRequest jsArrayRequest) {
+        VolleySingleton.getInstance(getActivity().getApplication()).addToRequestQueue(jsArrayRequest);
+    }
+
+    // Volley methods
+    private List getTorrentContents(final ContentsListCallback callback) {
+
+        final List<ContentFile> contentFiles = new ArrayList<>();
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+        // Command
+        if (qb_version.equals("2.x")) {
+            url = url + "/query/propertiesFiles/" + hash;
+        }
+
+        if (qb_version.equals("3.1.x")) {
+            url = url + "/query/propertiesFiles/" + hash;
+        }
+
+        if (qb_version.equals("3.2.x")) {
+            url = url + "/query/propertiesFiles/" + hash;
+        }
+
+        if (qb_version.equals("4.1.x")) {
+            url = url + "/api/v2/torrents/files?hash=" + hash;
+        }
+
+        Log.d("Debug: ", "getTorrentContents - URL: " + url);
+        Log.d("Debug: ", "getTorrentContents - cookies: " + cookie);
+
+
+        JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        // Get list type to parse it
+                        Type listType = new TypeToken<List<ContentFile>>() {
+                        }.getType();
+
+                        // Parse Lists using Gson
+                        contentFiles.addAll((List<ContentFile>) new Gson().fromJson(response.toString(), listType));
+
+
+                        Log.d("Debug: ", "getTorrentContents - Contentsize: " + contentFiles.size());
+
+
+                        // Return value
+                        callback.onSuccess(contentFiles);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        // Log status code
+                        NetworkResponse networkResponse = error.networkResponse;
+                        if (networkResponse != null) {
+                            Log.d("Debug", "getTorrentContents - statusCode: " + networkResponse.statusCode);
+                        }
+
+                        // Log error
+                        Log.d("Debug", "getTorrentContents - Error in JSON response: " + error.getMessage());
+
+                    }
+                }
+
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                //params.put("hash", hash);
+                return params;
+            }
+//            @Override
+//            public Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("hash", hash);
+//                return params;
+//            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+        // Return the lists
+        return contentFiles;
+    }
+
+    // Volley wrappers
+    public void getTorrentContents() {
+
+        getTorrentContents(new ContentsListCallback() {
+            @Override
+            public void onSuccess(List<ContentFile> contents) {
+
+                ArrayList<TorrentDetailsItem> contentFiles = new ArrayList<TorrentDetailsItem>();
+
+                for (int i = 0; i < contents.size(); i++) {
+
+                    Log.d("Debug", "Content: " + contents.get(i).getName());
+
+                    ContentFile item = contents.get(i);
+
+                    // Add ContentFiles
+                    contentFiles.add(new TorrentDetailsItem(item.getName(), item.getSize(), item.getProgress(), item.getPriority(), null, TorrentDetailsItem.FILE, "setFilePriority"));
+                }
+
+                TorrentDetailsFragment.rAdapter.refreshContentFiles(contentFiles);
+            }
+
+        });
+
+    }
+    // end of wraps
 
     public void updateDetails(Torrent torrent) {
 
@@ -482,7 +632,6 @@ public class TorrentDetailsFragment extends Fragment {
 
             percentage = torrent.getProgress().substring(0, index);
 
-
             FragmentManager fragmentManager = getFragmentManager();
 
             TorrentDetailsFragment detailsFragment = null;
@@ -523,7 +672,7 @@ public class TorrentDetailsFragment extends Fragment {
             etaTextView.setText(eta);
 
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
+            if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.1.x")) {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
                 firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
@@ -631,9 +780,9 @@ public class TorrentDetailsFragment extends Fragment {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.error, 0, 0, 0);
             }
 
-//            // Get Content files in background
-            ContentFileTask cft = new ContentFileTask();
-            cft.execute(new String[]{hash});
+
+            // Get Content files
+            getTorrentContents();
 
             // Get trackers in background
             TrackersTask tt = new TrackersTask();
@@ -734,8 +883,6 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_search).setVisible(true);
             }
 
-//            Log.d("Debug", "qb_version: " + MainActivity.qb_version);
-
             if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.1.x")) {
                 menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                 menu.findItem(R.id.action_sequential_download).setVisible(true);
@@ -756,7 +903,6 @@ public class TorrentDetailsFragment extends Fragment {
                 } else {
                     menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
                 }
-
 
             } else {
                 menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);

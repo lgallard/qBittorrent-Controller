@@ -108,8 +108,13 @@ interface RefreshListener {
     void swipeRefresh();
 }
 
-interface ListCallback {
+interface TorrentsListCallBack {
     void onSuccess(List<Torrent> list);
+}
+
+
+interface ContentsListCallback {
+    void onSuccess(List<ContentFile> list);
 }
 
 public class MainActivity extends AppCompatActivity implements RefreshListener {
@@ -2964,7 +2969,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Get all torrents
-    private List getTorrentList(final String state, final ListCallback callback) {
+    private List getTorrentList(final String state, final TorrentsListCallBack callback) {
 
         final List<Torrent> torrents = new ArrayList<>();
 
@@ -3005,8 +3010,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-
-                        Gson gson = new Gson();
 
                         // Get list type to parse it
                         Type listType = new TypeToken<List<Torrent>>() {
@@ -3654,7 +3657,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     public void getTorrentList(String state) {
 
-        getTorrentList(state, new ListCallback() {
+        getTorrentList(state, new TorrentsListCallBack() {
             @Override
             public void onSuccess(List<Torrent> torrents) {
 
