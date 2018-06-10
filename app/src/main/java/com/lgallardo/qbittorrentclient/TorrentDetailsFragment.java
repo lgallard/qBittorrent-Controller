@@ -493,10 +493,6 @@ public class TorrentDetailsFragment extends Fragment {
             url = url + "/api/v2/torrents/files?hash=" + hash;
         }
 
-        Log.d("Debug: ", "getTorrentContents - URL: " + url);
-        Log.d("Debug: ", "getTorrentContents - cookies: " + cookie);
-
-
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 url,
@@ -511,10 +507,6 @@ public class TorrentDetailsFragment extends Fragment {
 
                         // Parse Lists using Gson
                         contentFiles.addAll((List<ContentFile>) new Gson().fromJson(response.toString(), listType));
-
-
-                        Log.d("Debug: ", "getTorrentContents - Contentsize: " + contentFiles.size());
-
 
                         // Return value
                         callback.onSuccess(contentFiles);
@@ -546,15 +538,8 @@ public class TorrentDetailsFragment extends Fragment {
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
-                //params.put("hash", hash);
                 return params;
             }
-//            @Override
-//            public Map<String, String> getParams() {
-//                Map<String, String> params = new HashMap<>();
-//                params.put("hash", hash);
-//                return params;
-//            }
         };
 
         // Add request to te queue
@@ -575,8 +560,6 @@ public class TorrentDetailsFragment extends Fragment {
 
                 for (int i = 0; i < contents.size(); i++) {
 
-                    Log.d("Debug", "Content: " + contents.get(i).getName());
-
                     ContentFile item = contents.get(i);
 
                     // Add ContentFiles
@@ -592,8 +575,6 @@ public class TorrentDetailsFragment extends Fragment {
     // end of wraps
 
     public void updateDetails(Torrent torrent) {
-
-//        Log.d("Debug", "Updating details");
 
         try {
 
