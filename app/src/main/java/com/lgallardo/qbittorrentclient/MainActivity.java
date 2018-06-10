@@ -117,6 +117,10 @@ interface ContentsListCallback {
     void onSuccess(List<ContentFile> list);
 }
 
+
+interface TrackersListCallback {
+    void onSuccess(List<Tracker> list);
+}
 public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Torrent Info TAGs

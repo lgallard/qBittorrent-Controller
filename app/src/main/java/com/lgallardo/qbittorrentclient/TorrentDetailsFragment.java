@@ -417,9 +417,8 @@ public class TorrentDetailsFragment extends Fragment {
             // Get Content files
             getTorrentContents();
 
-            // Get trackers in background
-            TrackersTask tt = new TrackersTask();
-            tt.execute(new String[]{hash});
+            // Get trackers
+            getTorrentTrackers();
 
             // Get General info labels
             generalInfoItems = new ArrayList<GeneralInfoItem>();
@@ -549,6 +548,92 @@ public class TorrentDetailsFragment extends Fragment {
         return contentFiles;
     }
 
+    private List getTorrentTrackers(final TrackersListCallback callback) {
+
+        final List<Tracker> trackers = new ArrayList<>();
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+        // Command
+        if (qb_version.equals("2.x")) {
+            url = url + "/query/propertiesTrackers/" + hash;
+        }
+
+        if (qb_version.equals("3.1.x")) {
+            url = url + "/query/propertiesTrackers/" + hash;
+        }
+
+        if (qb_version.equals("3.2.x")) {
+            url = url + "/query/propertiesTrackers/" + hash;
+        }
+
+        if (qb_version.equals("4.1.x")) {
+            url = url + "/api/v2/torrents/trackers?hash=" + hash;
+        }
+
+        JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        // Get list type to parse it
+                        Type listType = new TypeToken<List<Tracker>>() {
+                        }.getType();
+
+                        // Parse Lists using Gson
+                        trackers.addAll((List<Tracker>) new Gson().fromJson(response.toString(), listType));
+
+                        // Return value
+                        callback.onSuccess(trackers);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        // Log status code
+                        NetworkResponse networkResponse = error.networkResponse;
+                        if (networkResponse != null) {
+                            Log.d("Debug", "getTorrentTrackers - statusCode: " + networkResponse.statusCode);
+                        }
+
+                        // Log error
+                        Log.d("Debug", "getTorrentTrackers - Error in JSON response: " + error.getMessage());
+
+                    }
+                }
+
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+        // Return the lists
+        return trackers;
+    }
+
     // Volley wrappers
     public void getTorrentContents() {
 
@@ -572,6 +657,32 @@ public class TorrentDetailsFragment extends Fragment {
         });
 
     }
+
+    public void getTorrentTrackers() {
+
+        getTorrentTrackers(new TrackersListCallback() {
+            @Override
+            public void onSuccess(List<Tracker> trackers) {
+
+                ArrayList<TorrentDetailsItem> trackersInfo = new ArrayList<TorrentDetailsItem>();
+
+                for (int i = 0; i < trackers.size(); i++) {
+
+                    Tracker item = trackers.get(i);
+
+                    // Add trackers
+                    trackersInfo.add(new TorrentDetailsItem(null, null, null, -1, item.getUrl(), TorrentDetailsItem.TRACKER, "addTracker"));
+
+                }
+
+                TorrentDetailsFragment.trackerAdapter.refreshTrackers(trackersInfo);
+
+            }
+
+        });
+
+    }
+
     // end of wraps
 
     public void updateDetails(Torrent torrent) {
@@ -765,9 +876,8 @@ public class TorrentDetailsFragment extends Fragment {
             // Get Content files
             getTorrentContents();
 
-            // Get trackers in background
-            TrackersTask tt = new TrackersTask();
-            tt.execute(new String[]{hash});
+            // Get trackers
+            getTorrentTrackers();
 
             // Get General info labels
             generalInfoItems = new ArrayList<GeneralInfoItem>();
