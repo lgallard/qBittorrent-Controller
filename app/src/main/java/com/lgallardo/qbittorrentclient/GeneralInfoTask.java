@@ -24,8 +24,6 @@ import java.util.ArrayList;
 public class GeneralInfoTask extends AsyncTask<String, Void, ArrayList<GeneralInfoItem>> {
 
     String name, size;
-    Double progress;
-    int priority;
     private String qbQueryString = "query";
     String url;
 

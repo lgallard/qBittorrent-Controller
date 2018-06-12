@@ -120,6 +120,10 @@ interface TrackersListCallback {
     void onSuccess(List<Tracker> list);
 }
 
+interface GeneralInfoCallback {
+    void onSuccess(GeneralInfo generalInfo);
+}
+
 public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Torrent Info TAGs
@@ -3668,9 +3672,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 for (int i = 0; i < torrents.size(); i++) {
 
-                    Log.d("Debug", "- - -");
-                    Log.d("Debug", "> File: " + torrents.get(i).getName());
-                    Log.d("Debug", "> Hash: " + torrents.get(i).getHash());
+//                    Log.d("Debug", "- - -");
+//                    Log.d("Debug", "> File: " + torrents.get(i).getName());
+//                    Log.d("Debug", "> Hash: " + torrents.get(i).getHash());
 
                     if (qb_version.equals("3.2.x") || qb_version.equals("4.1.x")) {
                         size = Common.calculateSize(torrents.get(i).getSize());
@@ -3683,9 +3687,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // Set torrent progress
                     torrents.get(i).setProgress(String.format("%.1f", (progress * 100)));
 
-                    Log.d("Debug", "> Size: " + size);
-                    Log.d("Debug", "> progress: " + (progress * 100));
-                    Log.d("Debug", "> progress reported: " + torrents.get(i).getProgress());
+//                    Log.d("Debug", "> Size: " + size);
+//                    Log.d("Debug", "> progress: " + (progress * 100));
+//                    Log.d("Debug", "> progress reported: " + torrents.get(i).getProgress());
 
                     // Get torrent generic properties
                     try {

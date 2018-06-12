@@ -34,13 +34,14 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -326,11 +327,10 @@ public class TorrentDetailsFragment extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
                 if (addedOn != null && !(addedOn.equals("null")) && !(addedOn.equals("4294967295"))) {
-                    if(Integer.parseInt(MainActivity.qb_api) < 10) {
+                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
                         // Old time format 2016-07-25T20:52:07
                         addedOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(addedOn)));
-                    }
-                    else {
+                    } else {
                         // New unix timestamp format 4294967295
                         addedOnTextView.setText(Common.timestampToDate(addedOn));
                     }
@@ -341,10 +341,10 @@ public class TorrentDetailsFragment extends Fragment {
 
                 if (completionOn != null && !(completionOn.equals("null")) && !(completionOn.equals("4294967295"))) {
 
-                    if(Integer.parseInt(MainActivity.qb_api) < 10) {
+                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
                         // Old time format 2016-07-25T20:52:07
                         completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
-                    }else{
+                    } else {
                         // New unix timestamp format 4294967295
                         completionOnTextView.setText(Common.timestampToDate(completionOn));
                     }
@@ -436,8 +436,9 @@ public class TorrentDetailsFragment extends Fragment {
             generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_download_rate_limit), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
 
             // Get general info in background
-            GeneralInfoTask git = new GeneralInfoTask();
-            git.execute(new String[]{hash});
+            getTorrentGeneralInfo();
+//            GeneralInfoTask git = new GeneralInfoTask();
+//            TorrentsListCallBack.execute(new String[]{hash});
 
 
         } catch (Exception e) {
@@ -453,8 +454,8 @@ public class TorrentDetailsFragment extends Fragment {
     }
 
     // Volley singletons
-    protected void addVolleyRequest(StringRequest stringArrayRequest) {
-        VolleySingleton.getInstance(getActivity().getApplication()).addToRequestQueue(stringArrayRequest);
+    protected void addVolleyRequest(JsonObjectRequest jsArrayRequest) {
+        VolleySingleton.getInstance(getActivity().getApplication()).addToRequestQueue(jsArrayRequest);
     }
 
     protected void addVolleyRequest(JsonArrayRequest jsArrayRequest) {
@@ -634,6 +635,93 @@ public class TorrentDetailsFragment extends Fragment {
         return trackers;
     }
 
+    private void getTorrentGeneralInfo(final GeneralInfoCallback callback) {
+
+        final List<GeneralInfoItem> generalInfo = new ArrayList<>();
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+        // Command
+//        if (qb_version.equals("2.x")) {
+//            url = url + "/json/propertiesGeneral/" + hash;
+//        }
+
+        if (qb_version.equals("3.1.x")) {
+            url = url + "/query/propertiesGeneral/" + hash;
+        }
+
+        if (qb_version.equals("3.2.x")) {
+            url = url + "/query/propertiesGeneral/" + hash;
+        }
+
+        if (qb_version.equals("4.1.x")) {
+            url = url + "/api/v2/torrents/properties??hash=" + hash;
+        }
+
+        JsonObjectRequest jsArrayRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Return value
+
+                        Log.d("Debug", "getTorrentGeneralInfo - response: " + response);
+                        GeneralInfo generalInfoResponse = new Gson().fromJson(response.toString(), GeneralInfo.class);
+
+                        Log.d("Debug", "getTorrentGeneralInfo - addition_date: " + generalInfoResponse.getAddition_date());
+                        Log.d("Debug", "getTorrentGeneralInfo - comment: " + generalInfoResponse.getComment());
+                        Log.d("Debug", "getTorrentGeneralInfo - completion_date: " + generalInfoResponse.getCompletion_date());
+                        Log.d("Debug", "getTorrentGeneralInfo - created_by: " + generalInfoResponse.getCreated_by());
+                        Log.d("Debug", "getTorrentGeneralInfo - creation_date: " + generalInfoResponse.getCreation_date());
+
+
+                        callback.onSuccess((GeneralInfo) new Gson().fromJson(response.toString(), GeneralInfo.class));
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        // Log status code
+                        NetworkResponse networkResponse = error.networkResponse;
+                        if (networkResponse != null) {
+                            Log.d("Debug", "getTorrentGeneralInfo - statusCode: " + networkResponse.statusCode);
+                        }
+
+                        // Log error
+                        Log.d("Debug", "getTorrentGeneralInfo - Error in JSON response: " + error.getMessage());
+
+                    }
+                }
+
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
     // Volley wrappers
     public void getTorrentContents() {
 
@@ -683,6 +771,108 @@ public class TorrentDetailsFragment extends Fragment {
 
     }
 
+    public void getTorrentGeneralInfo() {
+
+        getTorrentGeneralInfo(new GeneralInfoCallback() {
+            @Override
+            public void onSuccess(GeneralInfo generalInfo) {
+
+                GeneralInfoItem item;
+
+                if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.1.x")) {
+
+                    // Save path
+                    item = generalInfoItems.get(0);
+                    item.setValue(generalInfo.getSave_path());
+                    generalInfoItems.set(0, item);
+
+                    // Creation date
+                    item = generalInfoItems.get(1);
+                    item.setValue(Common.unixTimestampToDate(Long.toString(generalInfo.getCreation_date())));
+                    generalInfoItems.set(1, item);
+
+                    // Comment
+                    item = generalInfoItems.get(2);
+                    item.setValue(generalInfo.getComment());
+                    generalInfoItems.set(2, item);
+
+                    // Total wasted
+                    item = generalInfoItems.get(3);
+                    item.setValue(Common.calculateSize(Long.toString(generalInfo.getTotal_wasted())).replace(",", "."));
+                    generalInfoItems.set(3, item);
+
+                    // Total uploaded
+                    item = generalInfoItems.get(4);
+                    item.setValue(Common.calculateSize(Long.toString(generalInfo.getTotal_uploaded())).replace(",", "."));
+                    generalInfoItems.set(4, item);
+
+                    // Total downloaded
+                    item = generalInfoItems.get(5);
+                    item.setValue(Common.calculateSize(Long.toString(generalInfo.getTotal_downloaded())).replace(",", "."));
+                    generalInfoItems.set(5, item);
+
+                    // Time elapsed
+                    item = generalInfoItems.get(6);
+                    item.setValue(Common.secondsToEta(Long.toString(generalInfo.getTime_elapsed())).replace(",", "."));
+                    generalInfoItems.set(6, item);
+
+                    // Number of connections
+                    item = generalInfoItems.get(7);
+                    item.setValue(Long.toString(generalInfo.getNb_connections()));
+                    generalInfoItems.set(7, item);
+
+                    // Share ratio
+                    item = generalInfoItems.get(8);
+                    // Format ratio
+                    try {
+                        item.setValue(String.format("%.2f", generalInfo.getShare_ratio()).replace(",", "."));
+                    } catch (Exception e) {
+                    }
+                    generalInfoItems.set(8, item);
+
+                    // Upload limit
+                    item = generalInfoItems.get(9);
+                    item.setValue(Long.toString(generalInfo.getUp_limit()));
+                    generalInfoItems.set(9, item);
+
+                    // Download limit
+                    item = generalInfoItems.get(10);
+                    item.setValue(Long.toString(generalInfo.getDl_limit()));
+                    generalInfoItems.set(10, item);
+
+                    // Format Upload and Download limit
+
+                    // Upload limit
+                    item = generalInfoItems.get(9);
+
+                    if (!item.getValue().equals("-1")) {
+                        item.setValue(Common.calculateSize(item.getValue()).replace(",", ".") + "/s");
+                    } else {
+                        item.setValue("∞");
+                    }
+
+                    generalInfoItems.set(9, item);
+
+                    // Download limit
+                    item = generalInfoItems.get(10);
+
+                    if (!item.getValue().equals("-1")) {
+                        item.setValue(Common.calculateSize(item.getValue()).replace(",", ".") + "/s");
+                    } else {
+                        item.setValue("∞");
+                    }
+
+                    generalInfoItems.set(10, item);
+
+                }
+
+                // Refresh adapater
+                generalInfoAdapter.refreshGeneralInfo(generalInfoItems);
+
+            }
+
+        });
+    }
     // end of wraps
 
     public void updateDetails(Torrent torrent) {
@@ -780,11 +970,10 @@ public class TorrentDetailsFragment extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
                 if (addedOn != null && !(addedOn.equals("null")) && !(addedOn.equals("4294967295"))) {
-                    if(Integer.parseInt(MainActivity.qb_api) < 10) {
+                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
                         // Old time format 2016-07-25T20:52:07
                         addedOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(addedOn)));
-                    }
-                    else {
+                    } else {
                         // New unix timestamp format 4294967295
                         addedOnTextView.setText(Common.timestampToDate(addedOn));
                     }
@@ -795,10 +984,10 @@ public class TorrentDetailsFragment extends Fragment {
 
                 if (completionOn != null && !(completionOn.equals("null")) && !(completionOn.equals("4294967295"))) {
 
-                    if(Integer.parseInt(MainActivity.qb_api) < 10) {
+                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
                         // Old time format 2016-07-25T20:52:07
                         completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
-                    }else{
+                    } else {
                         // New unix timestamp format 4294967295
                         completionOnTextView.setText(Common.timestampToDate(completionOn));
                     }
@@ -896,8 +1085,9 @@ public class TorrentDetailsFragment extends Fragment {
 
 
             // Get General info in background;
-            GeneralInfoTask git = new GeneralInfoTask();
-            git.execute(new String[]{hash});
+            getTorrentGeneralInfo();
+            // GeneralInfoTask git = new GeneralInfoTask();
+            // git.execute(new String[]{hash});
 
         } catch (Exception e) {
 
