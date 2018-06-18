@@ -437,8 +437,6 @@ public class TorrentDetailsFragment extends Fragment {
 
             // Get general info in background
             getTorrentGeneralInfo();
-//            GeneralInfoTask git = new GeneralInfoTask();
-//            TorrentsListCallBack.execute(new String[]{hash});
 
 
         } catch (Exception e) {
@@ -673,34 +671,20 @@ public class TorrentDetailsFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         // Return value
-
-                        Log.d("Debug", "getTorrentGeneralInfo - response: " + response);
                         GeneralInfo generalInfoResponse = new Gson().fromJson(response.toString(), GeneralInfo.class);
-
-                        Log.d("Debug", "getTorrentGeneralInfo - addition_date: " + generalInfoResponse.getAddition_date());
-                        Log.d("Debug", "getTorrentGeneralInfo - comment: " + generalInfoResponse.getComment());
-                        Log.d("Debug", "getTorrentGeneralInfo - completion_date: " + generalInfoResponse.getCompletion_date());
-                        Log.d("Debug", "getTorrentGeneralInfo - created_by: " + generalInfoResponse.getCreated_by());
-                        Log.d("Debug", "getTorrentGeneralInfo - creation_date: " + generalInfoResponse.getCreation_date());
-
-
                         callback.onSuccess((GeneralInfo) new Gson().fromJson(response.toString(), GeneralInfo.class));
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
                         // Log status code
                         NetworkResponse networkResponse = error.networkResponse;
                         if (networkResponse != null) {
                             Log.d("Debug", "getTorrentGeneralInfo - statusCode: " + networkResponse.statusCode);
                         }
-
                         // Log error
                         Log.d("Debug", "getTorrentGeneralInfo - Error in JSON response: " + error.getMessage());
-
                     }
                 }
 
@@ -1083,11 +1067,8 @@ public class TorrentDetailsFragment extends Fragment {
             generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_upload_rate_limit), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
             generalInfoItems.add(new GeneralInfoItem(getString(R.string.torrent_details_download_rate_limit), null, GeneralInfoItem.GENERALINFO, "generalInfo"));
 
-
             // Get General info in background;
             getTorrentGeneralInfo();
-            // GeneralInfoTask git = new GeneralInfoTask();
-            // git.execute(new String[]{hash});
 
         } catch (Exception e) {
 
