@@ -88,34 +88,19 @@ repositories {
 
 dependencies {
 
-//    implementation('com.google.api-client:google-api-client-android:1.23.0') {
-//        exclude module: 'org.apache.httpcomponents:httpmime'
-//        exclude module: 'httpclient'
-//    }
-
-//    implementation('com.google.http-client:google-http-client:1.23.0') {
-//        exclude module: 'org.apache.httpcomponents:httpmime'
-//        exclude module: 'httpclient'
-//    }
-
-    implementation 'com.android.support:support-v4:23.2.1'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:support-v4:25.3.1'
     implementation 'com.android.support:appcompat-v7:25.3.1'
     implementation 'com.android.support:recyclerview-v7:25.3.1'
     implementation 'com.android.support:cardview-v7:25.3.1'
-    implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.6'
-    implementation group: 'cz.msebera.android' , name: 'httpclient', version: '4.4.1.1'
     implementation 'com.google.android.gms:play-services:7.3.0'
     implementation 'com.android.volley:volley:1.0.0'
     implementation 'com.google.code.gson:gson:2.7'
 
-//     nbsp-team/MaterialFilePicker
     dependencies {
         implementation 'com.nbsp:library:1.08'
     }
 
-//    dependencies {
-//        implementation 'andhradroid.dev:aFilechooser:1.0.1'
-//    }
 
     // Robotium
     dependencies {

@@ -241,7 +241,7 @@ public class NotifierService extends BroadcastReceiver {
                         Gson gson = new Gson();
 
                         try {
-                            Log.d("Debug", "JSONObject: " + jsonObject.toString());
+//                            Log.d("Debug", "JSONObject: " + jsonObject.toString());
                             customObjectResult = gson.fromJson(jsonObject.toString(), CustomObjectResult.class);
                         } catch (Exception e) {
                             Log.e("Debug", "THIS 2 => " + e.getMessage());

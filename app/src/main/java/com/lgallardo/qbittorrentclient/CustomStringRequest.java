@@ -1,7 +1,5 @@
 package com.lgallardo.qbittorrentclient;
 
-import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
@@ -46,7 +44,7 @@ public class CustomStringRequest extends com.android.volley.toolbox.StringReques
 
         token = response.headers.get("set-cookie").split(";")[0];
 
-        Log.d("Debug", "Response headers: " + response.headers);
+//        Log.d("Debug", "Response headers: " + response.headers);
 
 
         //return super.parseNetworkResponse(response);

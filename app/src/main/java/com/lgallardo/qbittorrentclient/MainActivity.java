@@ -202,9 +202,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Current label
     public static String currentLabel;
 
-
-    protected static com.lgallardo.qbittorrentclient.JSONParser jParser;
-
     // Preferences properties
     protected static String currentServer;
     protected static String hostname;
@@ -1094,8 +1091,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "===x===");
-                        Log.d("Debug", "JSONObject: " + response);
+//                        Log.d("Debug", "===x===");
+//                        Log.d("Debug", "JSONObject: " + response);
                         Gson gson = new Gson();
 
                         Api api = null;
@@ -1106,22 +1103,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             Log.e("Error", e.toString());
                         }
 
-                        Log.d("Debug", "JSONObject: " + response);
-                        Log.d("Debug", "======");
-                        Log.d("Debug: ", "ApiVersion: " + api.getApiVersion());
+//                        Log.d("Debug", "JSONObject: " + response);
+//                        Log.d("Debug", "======");
+//                        Log.d("Debug: ", "ApiVersion: " + api.getApiVersion());
 
                         callback.onSuccess(api.getApiVersion());
-
-                        // There's no need to use a callback method here, toke was already saved
-                        // saveToken(access_token);
-
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
 
                         Log.d("Debug", " getApiVersion - Error in JSON response: " + error.getMessage());
 
@@ -1160,10 +1152,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===x===");
-                        Log.d("Debug", "JSONObject: " + response);
-
+//                        Log.d("Debug", "===x===");
+//                        Log.d("Debug", "JSONObject: " + response);
                         String aboutStartText = "qBittorrent v";
                         String aboutEndText = " (Web UI)";
 
@@ -1177,10 +1167,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         }
 
                         if (aboutStart >= 0 && aboutEnd > aboutStart) {
-
                             response = response.substring(aboutStart + aboutStartText.length(), aboutEnd);
                         }
-
 
                         if (response == null) {
                             response = "";
@@ -1196,15 +1184,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             Log.e("Error", e.toString());
                         }
 
-                        Log.d("Debug", "JSONObject: " + response);
-                        Log.d("Debug", "======");
-                        Log.d("Debug: ", "ApiVersion: " + api.getApiVersion());
+//                        Log.d("Debug", "JSONObject: " + response);
+//                        Log.d("Debug", "======");
+//                        Log.d("Debug: ", "ApiVersion: " + api.getApiVersion());
 
                         callback.onSuccess(api.getApiVersion());
-
-                        // There's no need to use a callback method here, toke was already saved
-                        // saveToken(access_token);
-
 
                     }
                 },
@@ -1212,8 +1196,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-
-                        Log.d("Debug", "getVersion - Error in JSON response: " + error.getMessage());
+//                        Log.d("Debug", "getVersion - Error in JSON response: " + error.getMessage());
 
                         Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -1247,7 +1230,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = protocol + "://" + hostname + ":" + port + "/login";
         }
 
-
         // New JSONObject request
         CustomStringRequest jsArrayRequest = new CustomStringRequest(
                 Request.Method.POST,
@@ -1256,8 +1238,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "===cookie===");
-                        Log.d("Debug", "Response: " + response);
+//                        Log.d("Debug", "===cookie===");
+//                        Log.d("Debug", "Response: " + response);
                         //Log.d("Debug", "headers: " + CustomStringRequest.headers);
 
                         JSONObject jsonObject = null;
@@ -1269,21 +1251,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             e.printStackTrace();
                         }
 
-
                         Gson gson = new Gson();
 
                         try {
-                            Log.d("Debug", "JSONObject: " + jsonObject.toString());
+//                            Log.d("Debug", "JSONObject: " + jsonObject.toString());
                             customObjectResult = gson.fromJson(jsonObject.toString(), CustomObjectResult.class);
                         } catch (Exception e) {
                             Log.e("Debug", "THIS 2 => " + e.getMessage());
                             e.printStackTrace();
                         }
 
-
                         // Get Headers
                         String headers = customObjectResult.getHeaders();
-
 
                         // Get set-cookie from headers
 
@@ -1299,13 +1278,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         // Return value
                         callback.onSuccess(cookieString);
 
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
 
                         Log.d("Debug", "getCookie - Error in JSON response: " + error.getMessage());
 
@@ -1435,12 +1412,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
+//                        Log.d("Debug", "===Command===");
+//                        Log.d("Debug", "Response: " + response);
 
                         // Return value
                         callback.onSuccess("");
-
 
                     }
                 },
@@ -1448,12 +1424,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-
                         Log.d("Debug", "Error in JSON response: " + error.getMessage());
 
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
 
                     }
                 }
@@ -1503,7 +1476,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 url = url + "/command/pauseall";
             }
         }
-
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1766,12 +1738,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         Log.d("Debug", "===Command===");
                         Log.d("Debug", "Response: " + response);
-
                         Log.d("Debug", "hashes: " + hashes);
 
                         // Return value
                         callback.onSuccess("");
-
 
                     }
                 },
@@ -1779,12 +1749,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-
                         Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
 
                     }
                 }
@@ -2548,14 +2514,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
-                        Log.d("Debug", "hashes: " + hashes);
+//                        Log.d("Debug", "===Command===");
+//                        Log.d("Debug", "Response: " + response);
+//                        Log.d("Debug", "hashes: " + hashes);
 
                         // Return value
                         callback.onSuccess("");
-
 
                     }
                 },
@@ -2563,12 +2527,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-
                         Log.d("Debug", "Error in JSON response: " + error.getMessage());
 
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
 
                     }
                 }
@@ -2762,7 +2723,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             ApiURL = protocol + "://" + hostname + ":" + port + "/command/alternativeSpeedLimitsEnabled";
         }
 
-        Log.d("Debug", "ApiURL: " + ApiURL);
+//        Log.d("Debug", "ApiURL: " + ApiURL);
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2772,10 +2733,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "===x===");
-                        Log.d("Debug", "JSONObject: " + response);
-
-                        Log.d("Debug", "getAlternativeSpeedLimitsEnabled - Cookie: " + cookie);
+//                        Log.d("Debug", "===x===");
+//                        Log.d("Debug", "JSONObject: " + response);
+//                        Log.d("Debug", "getAlternativeSpeedLimitsEnabled - Cookie: " + cookie);
 
                         Gson gson = new Gson();
 
@@ -2788,16 +2748,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             Log.e("Error", e.toString());
                         }
 
-                        Log.d("Debug", "JSONObject: " + response);
-                        Log.d("Debug", "======");
-                        Log.d("Debug: ", "result: " + result.getResult());
+//                        Log.d("Debug", "JSONObject: " + response);
+//                        Log.d("Debug", "======");
+//                        Log.d("Debug: ", "result: " + result.getResult());
 
                         callback.onSuccess(result.getResult());
-
-                        // There's no need to use a callback method here, toke was already saved
-                        // saveToken(access_token);
-
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -3006,8 +2961,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = url + "/api/v2/torrents/info?filter=" + state;
         }
 
-        Log.d("Debug: ", "GetAllTorrents - URL: " + url);
-        Log.d("Debug: ", "GetAllTorrents - cookies: " + cookie);
+//        Log.d("Debug: ", "GetAllTorrents - URL: " + url);
+//        Log.d("Debug: ", "GetAllTorrents - cookies: " + cookie);
 
 
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
@@ -3072,7 +3027,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">ApiVersion<: " + result);
+//                Log.d("Debug: ", ">ApiVersion<: " + result);
 
                 if (!result.equals("")) {
 
@@ -3117,8 +3072,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         @Override
                         public void onSuccess(String result) {
 
-                            Log.d("Debug: ", ">version<: " + result);
-
+//                            Log.d("Debug: ", ">version<: " + result);
 
                             if (!result.equals("")) {
 
@@ -3170,7 +3124,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Cookie: " + result);
+//                Log.d("Debug: ", ">>> Cookie: " + result);
 
                 MainActivity.cookie = result;
 
@@ -3612,7 +3566,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 Boolean isAlternativeSpeedLimitsEnabled;
 
-                Log.d("Debug: ", ">getAlternativeSpeedLimitsEnabled<: " + result);
+//                Log.d("Debug: ", ">getAlternativeSpeedLimitsEnabled<: " + result);
 
                 if (result != null && !result.equals("")) {
 
@@ -3769,7 +3723,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     }
 
-
                     if (currentState.equals("all") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
                         torrentsFiltered.add(torrents.get(i));
                     }
@@ -3817,7 +3770,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 }
 
-
                 // Labels
                 ArrayList<DrawerItem> labelItems = new ArrayList<DrawerItem>();
 
@@ -3825,7 +3777,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 // Add label category
                 labelItems.add(new DrawerItem(R.drawable.ic_drawer_labels, getResources().getString(R.string.drawer_label_labels), DRAWER_LABEL_CATEGORY, true, "labelCategory"));
-
 
                 // Add All
                 label = getResources().getString(R.string.drawer_label_all);

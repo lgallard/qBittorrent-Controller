@@ -50,7 +50,7 @@ public class CustomObjectRequest extends com.android.volley.toolbox.JsonObjectRe
         this.headers = response.headers;
 
 
-        Log.d("Debug", "Response headers: " + response.headers);
+//        Log.d("Debug", "Response headers: " + response.headers);
 
         //return super.parseNetworkResponse(response);
 
