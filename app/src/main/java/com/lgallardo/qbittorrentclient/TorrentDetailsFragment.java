@@ -662,7 +662,7 @@ public class TorrentDetailsFragment extends Fragment {
         }
 
         if (qb_version.equals("4.1.x")) {
-            url = url + "/api/v2/torrents/properties??hash=" + hash;
+            url = url + "/api/v2/torrents/properties?hash=" + hash;
         }
 
         JsonObjectRequest jsArrayRequest = new JsonObjectRequest(
