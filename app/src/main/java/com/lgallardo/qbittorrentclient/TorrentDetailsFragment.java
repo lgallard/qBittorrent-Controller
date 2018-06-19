@@ -671,7 +671,6 @@ public class TorrentDetailsFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         // Return value
-                        GeneralInfo generalInfoResponse = new Gson().fromJson(response.toString(), GeneralInfo.class);
                         callback.onSuccess((GeneralInfo) new Gson().fromJson(response.toString(), GeneralInfo.class));
                     }
                 },
