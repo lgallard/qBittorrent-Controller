@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId 'com.lgallardo.qbittorrentclient'
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 23
         archivesBaseName = "qBittorrentClient_v" + versionName
 
         // Stops the Gradle plugin’s automatic rasterization of vectors
@@ -48,19 +48,19 @@ android {
     productFlavors {
         pro {
             applicationId 'com.lgallardo.qbittorrentclientpro'
-            versionName '4.6.2'
+            versionName '4.6.4'
             minSdkVersion 14
-            targetSdkVersion 25
-            versionCode 462
+            targetSdkVersion 23
+            versionCode 464
             archivesBaseName = "qBittorrentController_v" + versionName
             dimension "default"
         }
         free {
             applicationId "com.lgallardo.qbittorrentclient"
-            versionName '4.6.2'
+            versionName '4.6.4'
             minSdkVersion 14
-            targetSdkVersion 25
-            versionCode 462
+            targetSdkVersion 23
+            versionCode 464
             dimension "default"
         }
     }
