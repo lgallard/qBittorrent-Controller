@@ -3,7 +3,7 @@ qBittorrent-Controller
 
 This is the repository for **_qBittorrent Controller_**, an Android app for manage for [qBittorrent](http://www.qbittorrent.org/) remotely.
 
-## Feeatures
+## Features
 
 * See a two panel view (fragments) for torrent list and details in the same window
 * Drawer menu for switching between All, Downloading, Completed, Paused, Active and Inactive torrent list
