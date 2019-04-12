@@ -24,6 +24,9 @@ public class Common {
 
     public static String calculateSize(String value) {
 
+        if(value == null || value == "")
+            return "0";
+
         long bytes = Long.parseLong(value);
 
         int unit = 1024;

@@ -65,7 +65,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
             TextView info = (TextView) row.findViewById(R.id.info);
 
-            info.setText("" + torrentsData[position].getInfo());
+//            info.setText("" + torrentsData[position].getInfo());
 
             ImageView icon = (ImageView) row.findViewById(R.id.icon);
 
@@ -106,7 +106,9 @@ class TorrentListAdapter extends ArrayAdapter<String> {
                 ProgressBar progressBar = (ProgressBar) row.findViewById(R.id.progressBar1);
                 TextView percentageTV = (TextView) row.findViewById(R.id.percentage);
 
-                String percentage = torrentsData[position].getPercentage();
+//                String percentage = torrentsData[position].getPercentage();
+
+                String percentage = "" + torrentsData[position].getProgress();
 
                 progressBar.setProgress(Integer.parseInt(percentage));
 

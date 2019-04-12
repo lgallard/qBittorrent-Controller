@@ -21,8 +21,11 @@ public class TorrentProgressComparator implements Comparator<Torrent> {
     @Override
     public int compare(Torrent t1, Torrent t2) {
 
-        String percentage1 = t1.getPercentage();
-        String percentage2 = t2.getPercentage();
+//        String percentage1 = t1.getPercentage();
+//        String percentage2 = t2.getPercentage();
+
+        String percentage1 = "" + t1.getProgress();
+        String percentage2 = "" + t2.getProgress();
 
         int p1 = Integer.parseInt(percentage1);
         int p2 = Integer.parseInt(percentage2);

@@ -21,8 +21,12 @@ public class TorrentPriorityComparator implements Comparator<Torrent> {
     @Override
     public int compare(Torrent t1, Torrent t2) {
 
-        String priority1 = t1.getPriority();
-        String priority2 = t2.getPriority();
+//        String priority1 = t1.getPriority();
+//        String priority2 = t2.getPriority();
+
+        String priority1 = "" + t1.getPriority();
+        String priority2 = "" + t2.getPriority();
+
 
         // If torrent has no priority, give it a really low priority for sorting purposes
         if (priority1 == null || priority1.equals("*")) {

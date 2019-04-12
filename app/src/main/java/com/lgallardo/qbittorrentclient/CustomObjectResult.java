@@ -1,20 +1,19 @@
 package com.lgallardo.qbittorrentclient;
 
-import org.json.JSONObject;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by lgallard on 2/24/18.
  */
 
 public class CustomObjectResult {
-
-    String data;
-    String headers;
-
-    public CustomObjectResult(String data, String headers) {
-        this.data = data;
-        this.headers = headers;
-    }
+    @SerializedName("data")
+    @Expose
+    private String data;
+    @SerializedName("headers")
+    @Expose
+    private String headers;
 
     public String getData() {
         return data;

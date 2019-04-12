@@ -21,8 +21,12 @@ public class TorrentRatioComparator implements Comparator<Torrent> {
     @Override
     public int compare(Torrent t1, Torrent t2) {
 
-        String ratio1 = t1.getRatio();
-        String ratio2 = t2.getRatio();
+//        String ratio1 = t1.getRatio();
+//        String ratio2 = t2.getRatio();
+
+        String ratio1 = "" + t1.getRatio();
+        String ratio2 = "" + t2.getRatio();
+
 
         float r1 = Float.parseFloat(ratio1) * 100;
         float r2 = Float.parseFloat(ratio2) * 100;

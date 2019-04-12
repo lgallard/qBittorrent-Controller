@@ -252,37 +252,42 @@ public class TorrentDetailsFragment extends Fragment {
 
                 // Get values from current activity
                 name = this.torrent.getName();
-                size = this.torrent.getSize();
+                size = "" + this.torrent.getSize();
                 hash = this.torrent.getHash();
-                ratio = this.torrent.getRatio();
+                ratio = "" + this.torrent.getRatio();
                 state = this.torrent.getState();
-                leechs = this.torrent.getLeechs();
-                seeds = this.torrent.getSeeds();
-                progress = this.torrent.getProgress();
-                priority = this.torrent.getPriority();
-                eta = this.torrent.getEta();
-                uploadSpeed = this.torrent.getUpspeed();
-                downloadSpeed = this.torrent.getDlspeed();
-                downloaded = this.torrent.getDownloaded();
-                addedOn = this.torrent.getAddedOn();
-                completionOn = this.torrent.getCompletionOn();
-                label = this.torrent.getLabel();
+//                leechs = this.torrent.getLeechs();
+//                seeds = this.torrent.getSeeds();
+                progress = "" + this.torrent.getProgress();
+                priority = "" + this.torrent.getPriority();
+                eta = "" + this.torrent.getEta();
+                uploadSpeed = "" + this.torrent.getUpspeed();
+                downloadSpeed = "" + this.torrent.getDlspeed();
+                downloaded = "" + this.torrent.getDownloaded();
+//                addedOn = this.torrent.getAddedOn();
+//                completionOn = this.torrent.getCompletionOn();
+//                label = this.torrent.getLabel();
 
                 hashToUpdate = hash;
 
                 // Only for Pro version
                 if (MainActivity.packageName.equals("com.lgallardo.qbittorrentclientpro")) {
-                    int index = this.torrent.getProgress().indexOf(".");
+//                    int index = this.torrent.getProgress().indexOf(".");
+//
+//                    if (index == -1) {
+//                        index = this.torrent.getProgress().indexOf(",");
+//
+//                        if (index == -1) {
+//                            index = this.torrent.getProgress().length();
+//                        }
+//                    }
+//
+//                    percentage = this.torrent.getProgress().substring(0, index);
 
-                    if (index == -1) {
-                        index = this.torrent.getProgress().indexOf(",");
+                    percentage = "" + this.torrent.getProgress();
 
-                        if (index == -1) {
-                            index = this.torrent.getProgress().length();
-                        }
-                    }
 
-                    percentage = this.torrent.getProgress().substring(0, index);
+
                 }
             }
 
@@ -317,8 +322,8 @@ public class TorrentDetailsFragment extends Fragment {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
                 firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
-                sequentialDownloadCheckBox.setChecked(this.torrent.getSequentialDownload());
-                firstLAstPiecePrioCheckBox.setChecked(this.torrent.getisFirstLastPiecePrio());
+//                sequentialDownloadCheckBox.setChecked(this.torrent.getSequentialDownload());
+//                firstLAstPiecePrioCheckBox.setChecked(this.torrent.getisFirstLastPiecePrio());
 
                 TextView addedOnTextView = (TextView) rootView.findViewById(R.id.torrentAddedOn);
                 TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);
@@ -869,35 +874,37 @@ public class TorrentDetailsFragment extends Fragment {
 
             // Get values from current activity
             name = torrent.getName();
-            size = torrent.getSize();
+            size = "" + torrent.getSize();
             hash = torrent.getHash();
-            ratio = torrent.getRatio();
+            ratio = "" + torrent.getRatio();
             state = torrent.getState();
-            leechs = torrent.getLeechs();
-            seeds = torrent.getSeeds();
-            progress = torrent.getProgress();
-            priority = torrent.getPriority();
-            eta = torrent.getEta();
-            uploadSpeed = torrent.getUpspeed();
-            downloadSpeed = torrent.getDlspeed();
-            downloaded = torrent.getDownloaded();
-            addedOn = torrent.getAddedOn();
-            completionOn = torrent.getCompletionOn();
-            label = torrent.getLabel();
+//            leechs = torrent.getLeechs();
+//            seeds = torrent.getSeeds();
+            progress = "" + torrent.getProgress();
+            priority = "" + torrent.getPriority();
+            eta = "" + torrent.getEta();
+            uploadSpeed = "" + torrent.getUpspeed();
+            downloadSpeed = "" + torrent.getDlspeed();
+            downloaded = "" + torrent.getDownloaded();
+//            addedOn = torrent.getAddedOn();
+//            completionOn = torrent.getCompletionOn();
+//            label = torrent.getLabel();
 
-            int index = torrent.getProgress().indexOf(".");
+//            int index = torrent.getProgress().indexOf(".");
+//
+//            if (index == -1) {
+//                index = torrent.getProgress().indexOf(",");
+//
+//                if (index == -1) {
+//                    index = torrent.getProgress().length();
+//                }
+//            }
+//
+//            percentage = torrent.getProgress().substring(0, index);
 
-            if (index == -1) {
-                index = torrent.getProgress().indexOf(",");
+            percentage = "" + torrent.getProgress();
 
-                if (index == -1) {
-                    index = torrent.getProgress().length();
-                }
-            }
-
-            percentage = torrent.getProgress().substring(0, index);
-
-            FragmentManager fragmentManager = getFragmentManager();
+                    FragmentManager fragmentManager = getFragmentManager();
 
             TorrentDetailsFragment detailsFragment = null;
 
@@ -941,8 +948,8 @@ public class TorrentDetailsFragment extends Fragment {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
                 firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
-                sequentialDownloadCheckBox.setChecked(torrent.getSequentialDownload());
-                firstLAstPiecePrioCheckBox.setChecked(torrent.getisFirstLastPiecePrio());
+//                sequentialDownloadCheckBox.setChecked(torrent.getSequentialDownload());
+//                firstLAstPiecePrioCheckBox.setChecked(torrent.getisFirstLastPiecePrio());
 
                 TextView addedOnTextView = (TextView) rootView.findViewById(R.id.torrentAddedOn);
                 TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);

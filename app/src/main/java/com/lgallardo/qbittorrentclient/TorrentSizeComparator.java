@@ -21,8 +21,12 @@ public class TorrentSizeComparator implements Comparator<Torrent> {
     @Override
     public int compare(Torrent t1, Torrent t2) {
 
-        String size1 = t1.getSize();
-        String size2 = t2.getSize();
+//        String size1 = t1.getSize();
+//        String size2 = t2.getSize();
+
+        String size1 = "" + t1.getSize();
+        String size2 = "" + t2.getSize();
+
 
         double p1 = Common.humanSizeToBytes(size1);
         double p2 = Common.humanSizeToBytes(size2);

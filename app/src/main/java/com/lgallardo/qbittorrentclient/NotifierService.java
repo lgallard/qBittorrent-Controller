@@ -47,7 +47,7 @@ import java.util.Map;
  */
 public class NotifierService extends BroadcastReceiver {
 
-    public static String qb_version = "3.2.x";
+    public static String qb_version = "4.1.x";
     public static String completed_hashes;
     // Cookie (SID - Session ID)
     public static String cookie = null;
@@ -214,7 +214,7 @@ public class NotifierService extends BroadcastReceiver {
         if (qb_version.equals("4.1.x")) {
             url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
         } else {
-            url = protocol + "://" + hostname + ":" + port + "/login";
+               url = protocol + "://" + hostname + ":" + port + "/login";
         }
 
         // New JSONObject request
@@ -239,20 +239,22 @@ public class NotifierService extends BroadcastReceiver {
                         }
 
                         Gson gson = new Gson();
+                        String cookieString = null;
 
                         try {
 //                            Log.d("Debug", "JSONObject: " + jsonObject.toString());
                             customObjectResult = gson.fromJson(jsonObject.toString(), CustomObjectResult.class);
+                            // Get Headers
+                            String headers = customObjectResult.getHeaders();
+
+                            // Get set-cookie from headers
+                            cookieString = headers.split("set-cookie=")[1].split(";")[0];
+
                         } catch (Exception e) {
                             Log.e("Debug", "THIS 2 => " + e.getMessage());
                             e.printStackTrace();
                         }
 
-                        // Get Headers
-                        String headers = customObjectResult.getHeaders();
-
-                        // Get set-cookie from headers
-                        String cookieString = headers.split("set-cookie=")[1].split(";")[0];
 
                         // Return value
                         callback.onSuccess(cookieString);
@@ -274,7 +276,7 @@ public class NotifierService extends BroadcastReceiver {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type:", "application/x-www-form-urlencoded");
 
@@ -366,7 +368,7 @@ public class NotifierService extends BroadcastReceiver {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -417,20 +419,24 @@ public class NotifierService extends BroadcastReceiver {
 
                 for (int i = 0; i < torrents.size(); i++) {
 
-                    //Log.d("Debug", "NS - - -");
-                    //Log.d("Debug", ">NS File: " + torrents.get(i).getName());
-                    //Log.d("Debug", ">NS Hash: " + torrents.get(i).getHash());
+                    Log.d("Debug", "NS - - -");
+                    Log.d("Debug", ">NS File: " + torrents.get(i).getName());
+                    Log.d("Debug", ">NS Hash: " + torrents.get(i).getHash());
 
                     if (qb_version.equals("3.2.x") || qb_version.equals("4.1.x")) {
-                        size = Common.calculateSize(torrents.get(i).getSize());
+                        Log.d("Debug", ">>>>>>> NS Calculating sizes!!!!");
+//                        size = Common.calculateSize(torrents.get(i).getSize());
+                        size = Common.calculateSize("" + torrents.get(i).getSize());
                     } else {
-                        size = torrents.get(i).getSize();
+//                        size = torrents.get(i).getSize();
+                        size = "" + torrents.get(i).getSize();
                     }
+                    Log.d("Debug", "NS >>>>>>> !!!!");
 
-                    Double progress = Double.parseDouble(torrents.get(i).getProgress());
+                    Double progress = Double.parseDouble("" + torrents.get(i).getProgress());
 
                     // Set torrent progress
-                    torrents.get(i).setProgress(String.format("%.1f", (progress * 100)));
+//                    torrents.get(i).setProgress(String.format("%.1f", (progress * 100)));
 
                     //Log.d("Debug", "NS> Size: " + size);
                     //Log.d("Debug", "NS> progress: " + (progress * 100));
@@ -442,10 +448,10 @@ public class NotifierService extends BroadcastReceiver {
                         Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
                         String sizeUnit = size.substring(size.indexOf(" "), size.length());
 
-                        torrents.get(i).setDownloaded(String.format("%.1f", sizeScalar * progress).replace(",", ".") + sizeUnit);
+//                        torrents.get(i).setDownloaded(String.format("%.1f", sizeScalar * progress).replace(",", ".") + sizeUnit);
 
                     } catch (Exception e) {
-                        torrents.get(i).setDownloaded(size);
+//                        torrents.get(i).setDownloaded(size);
                     }
 
                     String infoString = "";
@@ -457,7 +463,7 @@ public class NotifierService extends BroadcastReceiver {
                             + torrents.get(i).getRatio() + " " + Character.toString('\u2022') + " " + torrents.get(i).getEta();
 
                     // Set info
-                    torrents.get(i).setInfo(infoString);
+//                    torrents.get(i).setInfo(infoString);
                 }
 
                 Iterator it;
@@ -483,8 +489,8 @@ public class NotifierService extends BroadcastReceiver {
                     for (int i = 0; i < torrents.size(); i++) {
 
                         // Completed torrents
-                        if (torrents.get(i).getPercentage().equals("100")) {
-
+//                        if (torrents.get(i).getPercentage().equals("100")) {
+                        if (("" + torrents.get(i).getProgress()).equals("100")) {
                             completed.put(torrents.get(i).getHash(), torrents.get(i));
 
                             // Build  completed hashes string here
@@ -578,6 +584,8 @@ public class NotifierService extends BroadcastReceiver {
                             completedNames = info.split(",");
 
                             for (int j = 0; j < completedNames.length && j < 4; j++) {
+
+                                if (completedNames[j] != null)
                                 inbox.addLine(completedNames[j].trim());
                             }
 

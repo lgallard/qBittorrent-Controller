@@ -76,6 +76,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import org.json.JSONArray;
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Cookie (SID - Session ID)
     public static String cookie = null;
-    public static String qb_version = "3.2.x";
+    public static String qb_version = "4.1.x";
     public static String qb_api = "0";
     public static String qbittorrentServer = "";
     public static LinearLayout headerInfo;
@@ -1075,12 +1076,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         String ApiURL;
 
-        if (qb_version.equals("4.1.x")) {
-            ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/app/webapiVersion";
-
-        } else {
+//        if (qb_version.equals("4.1.x")) {
+//            ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/app/webapiVersion";
+//
+//        } else {
             ApiURL = protocol + "://" + hostname + ":" + port + "/version/api";
-        }
+//        }
 
 
         // New JSONObject request
@@ -1091,23 +1092,45 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-//                        Log.d("Debug", "===x===");
-//                        Log.d("Debug", "JSONObject: " + response);
+                        Log.d("Debug", "===x===");
+                        Log.d("Debug", "JSONObject: " + response);
                         Gson gson = new Gson();
 
-                        Api api = null;
+                        Integer responseInt = new Integer(-1);
+
                         try {
-                            api = gson.fromJson(new JSONObject("{\"apiVersion\":" + response + "}").toString(), Api.class);
+
+
+                            String jsonString = "{\"apiversion\":"  + response + "}";
+
+                            Log.d("Debug", "jsonString => : " + jsonString);
+
+                            JSONObject jobj = new JSONObject(jsonString);
+
+                            Log.d("Debug", "jobj => : " + jobj);
+                            Log.d("Debug", "jobj (string) => : " + jobj.toString());
+
+                            //api = gson.fromJson(jsonString, Api.class);
+
+
+                             responseInt  = gson.fromJson(response, Integer.class);
+
+
+                            Log.d("Debug", "responseInt => " + responseInt);
+
+                            //Log.d("Debug", "api 2 => " + api.getApiversion());
+
+
                         } catch (JSONException e) {
+                            Log.d("Debug", "THIS 0 => error: " + e);
                             e.printStackTrace();
                             Log.e("Error", e.toString());
                         }
 
-//                        Log.d("Debug", "JSONObject: " + response);
-//                        Log.d("Debug", "======");
-//                        Log.d("Debug: ", "ApiVersion: " + api.getApiVersion());
+                        Log.d("Debug", "JSONObject: " + response);
+                        Log.d("Debug", "======");
 
-                        callback.onSuccess(api.getApiVersion());
+                        callback.onSuccess(responseInt.toString());
 
                     }
                 },
@@ -1130,7 +1153,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 Map<String, String> params = new HashMap<>();
                 params.put("username", username);
                 params.put("password", password);
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
 
                 return params;
             }
@@ -1178,7 +1201,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         Api api = null;
                         try {
-                            api = gson.fromJson(new JSONObject("{\"apiVersion\":" + response + "}").toString(), Api.class);
+                            api = gson.fromJson(new JSONObject("{\"apiversion\":" + response + "}").toString(), Api.class);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.e("Error", e.toString());
@@ -1186,9 +1209,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 //                        Log.d("Debug", "JSONObject: " + response);
 //                        Log.d("Debug", "======");
-//                        Log.d("Debug: ", "ApiVersion: " + api.getApiVersion());
+//                        Log.d("Debug: ", "ApiVersion: " + api.getApiversion());
 
-                        callback.onSuccess(api.getApiVersion());
+                        callback.onSuccess(api.getApiversion());
 
                     }
                 },
@@ -1209,7 +1232,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 Map<String, String> params = new HashMap<>();
                 params.put("username", username);
                 params.put("password", password);
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
 
                 return params;
             }
@@ -1220,7 +1243,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    private void getCookie(final VolleyCallback callback) {
+    private void getCookieV(final VolleyCallback callback) {
 
         String url;
 
@@ -1238,8 +1261,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-//                        Log.d("Debug", "===cookie===");
-//                        Log.d("Debug", "Response: " + response);
+                        Log.d("Debug", "===cookie===");
+                        Log.d("Debug", "Response: " + response);
                         //Log.d("Debug", "headers: " + CustomStringRequest.headers);
 
                         JSONObject jsonObject = null;
@@ -1253,20 +1276,35 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         Gson gson = new Gson();
 
+                        String cookieString = null;
+
                         try {
-//                            Log.d("Debug", "JSONObject: " + jsonObject.toString());
+                            Log.d("Debug", "JSONObject: " + jsonObject.toString());
                             customObjectResult = gson.fromJson(jsonObject.toString(), CustomObjectResult.class);
+
+                            Log.d("Debug", "DATA?: " + customObjectResult.getData());
+                            Log.d("Debug", "HEADERS?: " + customObjectResult.getHeaders());
+                            Log.d("Debug", "======");
+                            // Get Headers
+                            String headers = customObjectResult.getHeaders();
+
+
+                            Log.d("Debug", "Headers => " + headers);
+                            Log.d("Debug", "======");
+
+                            // Get set-cookie from headers
+                            cookieString = headers.split("set-cookie=")[1].split(";")[0];
+
+
+                            Log.d("Debug", "set-cookie => " + cookieString);
+                            Log.d("Debug", "======");
+
                         } catch (Exception e) {
+
                             Log.e("Debug", "THIS 2 => " + e.getMessage());
                             e.printStackTrace();
                         }
 
-                        // Get Headers
-                        String headers = customObjectResult.getHeaders();
-
-                        // Get set-cookie from headers
-
-                        String cookieString = headers.split("set-cookie=")[1].split(";")[0];
 
 //                        Log.d("Debug", "JSONObject: " + customObjectResult.toString());
 //                        Log.d("Debug", "======");
@@ -1290,14 +1328,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
 
-
                     }
                 }
         ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type:", "application/x-www-form-urlencoded");
 
@@ -1365,7 +1402,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -1435,7 +1472,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -1502,7 +1539,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -1566,7 +1603,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -1633,7 +1670,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -1699,7 +1736,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -1759,7 +1796,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -1827,7 +1864,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -1895,7 +1932,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -1963,7 +2000,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2033,7 +2070,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2104,7 +2141,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2173,7 +2210,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2241,7 +2278,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2309,7 +2346,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2396,7 +2433,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2463,7 +2500,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2538,7 +2575,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", urlContentType);
                 params.put("savepath", path2Set);
@@ -2624,7 +2661,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", urlContentType);
                 params.put("Cookie", cookie);
@@ -2692,7 +2729,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2733,16 +2770,25 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-//                        Log.d("Debug", "===x===");
-//                        Log.d("Debug", "JSONObject: " + response);
-//                        Log.d("Debug", "getAlternativeSpeedLimitsEnabled - Cookie: " + cookie);
+                        Log.d("Debug", "===x===");
+                        Log.d("Debug", "JSONObject: " + response);
+                        Log.d("Debug", "getAlternativeSpeedLimitsEnabled - Cookie: " + cookie);
 
                         Gson gson = new Gson();
 
                         CustomStringResult result = null;
                         try {
+
+                            JSONObject jobj = new Gson().fromJson("{\"result\":" + response + "}", JSONObject.class);
+
+                            Log.d("Debug", ">===xxx===<");
+                            //Log.d("Debug", "DATA: " + jobj.getJSONObject("data").toString());
+                            //Log.d("Debug", "HEADERS: " + jobj.getJSONObject("headers").toSkipping duplicate class check due to unsupported classloaderString());
+                            Log.d("Debug", "Response: " + response);
+
                             result = gson.fromJson(new JSONObject("{\"result\":" + response + "}").toString(), CustomStringResult.class);
 
+                            Log.d("Debug", "result: " + result.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.e("Error", e.toString());
@@ -2774,7 +2820,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2840,7 +2886,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2910,7 +2956,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -2931,7 +2977,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Get all torrents
-    private List getTorrentList(final String state, final TorrentsListCallBack callback) {
+    private List getTorrentListV(final String state, final TorrentsListCallBack callback) {
 
         final List<Torrent> torrents = new ArrayList<>();
 
@@ -2961,8 +3007,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = url + "/api/v2/torrents/info?filter=" + state;
         }
 
-//        Log.d("Debug: ", "GetAllTorrents - URL: " + url);
-//        Log.d("Debug: ", "GetAllTorrents - cookies: " + cookie);
+        Log.d("Debug: ", "GetAllTorrents - URL: " + url);
+        Log.d("Debug: ", "GetAllTorrents - cookies: " + cookie);
 
 
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
@@ -2973,12 +3019,24 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(JSONArray response) {
 
+                        Log.d("Debug: ", "GetAllTorrents - onResponse");
+
                         // Get list type to parse it
                         Type listType = new TypeToken<List<Torrent>>() {
                         }.getType();
 
                         // Parse Lists using Gson
                         torrents.addAll((List<Torrent>) new Gson().fromJson(response.toString(), listType));
+
+                        List<Torrent> listTorrent = (List<Torrent>) new Gson().fromJson(response.toString(), listType);
+
+                        Log.d("Debug: ", "GetAllTorrents - torrent list - Name: " + listTorrent.get(0).getName());
+                        Log.d("Debug: ", "GetAllTorrents - torrent list - List Torrent: " + listTorrent.toString());
+
+                        Log.d("Debug: ", "GetAllTorrents - response: " + response.toString());
+                        Log.d("Debug: ", "GetAllTorrents - onResponse before callback.onSuccess");
+                        Log.d("Debug: ", "GetAllTorrents - onResponse - torrents size: " + torrents.size());
+
 
                         // Return value
                         callback.onSuccess(torrents);
@@ -3006,7 +3064,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", protocol + "://" + hostname + ":" + port);
+                params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
@@ -3027,9 +3085,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-//                Log.d("Debug: ", ">ApiVersion<: " + result);
+                Log.d("Debug: ", ">ApiVersion<: " + result);
 
-                if (!result.equals("")) {
+                if (result != null && !result.equals("")) {
 
                     int api;
 
@@ -3044,8 +3102,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         cookie = null;
                         getCookie();
 
-//                        Log.d("Debug: ", "getApi was executed");
-//                        Log.d("Debug: ", "getApi - cookie: " + cookie);
+                        Log.d("Debug: ", "getApi was executed");
+                        Log.d("Debug: ", "getApi - cookie: " + cookie);
 
                     } else {
                         if (result != null && (api > 1 || result.contains("3.2") || result.contains("3.3"))) {
@@ -3072,9 +3130,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         @Override
                         public void onSuccess(String result) {
 
-//                            Log.d("Debug: ", ">version<: " + result);
+                            Log.d("Debug: ", ">version<: " + result);
 
-                            if (!result.equals("")) {
+                            if (result != null && !result.equals("")) {
 
                                 int api;
 
@@ -3120,7 +3178,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     private void getCookie() {
-        getCookie(new VolleyCallback() {
+        getCookieV(new VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -3618,28 +3676,36 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     public void getTorrentList(String state) {
 
-        getTorrentList(state, new TorrentsListCallBack() {
+        getTorrentListV(state, new TorrentsListCallBack() {
             @Override
             public void onSuccess(List<Torrent> torrents) {
 
-                String size;
+//                String size;
+                long size;
+                Log.d("Debug", "*** torrents.size(): " + torrents.size());
 
                 for (int i = 0; i < torrents.size(); i++) {
 
-//                    Log.d("Debug", "- - -");
-//                    Log.d("Debug", "> File: " + torrents.get(i).getName());
-//                    Log.d("Debug", "> Hash: " + torrents.get(i).getHash());
+                    Log.d("Debug", "- - -");
+                    Log.d("Debug", "> File: " + torrents.get(i).getName());
+                    Log.d("Debug", "> Hash: " + torrents.get(i).getHash());
 
                     if (qb_version.equals("3.2.x") || qb_version.equals("4.1.x")) {
-                        size = Common.calculateSize(torrents.get(i).getSize());
+
+                        Log.d("Debug", ">>>>>>> Calculating sizes!!!!");
+
+//                        size = Common.calculateSize(torrents.get(i).getSize());
+                        size = torrents.get(i).getSize();
                     } else {
                         size = torrents.get(i).getSize();
                     }
 
-                    Double progress = Double.parseDouble(torrents.get(i).getProgress());
+                    Log.d("Debug", ">>>>>>> !!!!");
+
+                    Double progress = Double.parseDouble("" + torrents.get(i).getProgress());
 
                     // Set torrent progress
-                    torrents.get(i).setProgress(String.format("%.1f", (progress * 100)));
+//                    torrents.get(i).setProgress(String.format("%.1f", (progress * 100)));
 
 //                    Log.d("Debug", "> Size: " + size);
 //                    Log.d("Debug", "> progress: " + (progress * 100));
@@ -3648,10 +3714,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // Get torrent generic properties
                     try {
                         // Calculate total downloaded
-                        Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
-                        String sizeUnit = size.substring(size.indexOf(" "), size.length());
-
-                        torrents.get(i).setDownloaded(String.format("%.1f", sizeScalar * progress).replace(",", ".") + sizeUnit);
+//                        Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
+//                        String sizeUnit = size.substring(size.indexOf(" "), size.length());
+//
+//                        torrents.get(i).setDownloaded(String.format("%.1f", sizeScalar * progress).replace(",", ".") + sizeUnit);
 
                     } catch (Exception e) {
                         torrents.get(i).setDownloaded(size);
@@ -3668,9 +3734,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 + Character.toString('\u2022') + " " + progress + " "
                                 + Character.toString('\u2022') + " " + torrents.get(i).getEta();
 
-                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
-                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
-                        }
+//                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
+//                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
+//                        }
 
 
                     } else {
@@ -3681,19 +3747,19 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
                                 + Character.toString('\u2022') + " " + torrents.get(i).getEta();
 
-                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
-                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
-                        }
+//                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
+//                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
+//                        }
 
 
                     }
 
                     // Set info
-                    torrents.get(i).setInfo(infoString);
+//                    torrents.get(i).setInfo(infoString);
                 }
 
 
-                // On Post execure
+                // On Post execute
                 // Reporting
                 if (CustomLogger.isMainActivityReporting()) {
                     CustomLogger.saveReportMessage("Main", "qBittorrentTask - result length: " + torrents.size());
@@ -3712,7 +3778,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 for (int i = 0; i < torrents.size(); i++) {
 
                     // Get label
-                    label = torrents.get(i).getLabel();
+//                    label = torrents.get(i).getLabel();
 
 
                     if (!labels.contains(label)) {
@@ -3889,8 +3955,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             torrentToUpdate = torrent;
                         }
 
-                        uploadSpeedCount += (int) Common.humanSizeToBytes(torrent.getUpspeed());
-                        downloadSpeedCount += (int) Common.humanSizeToBytes(torrent.getDlspeed());
+//                        uploadSpeedCount += (int) Common.humanSizeToBytes(torrent.getUpspeed());
+//                        downloadSpeedCount += (int) Common.humanSizeToBytes(torrent.getDlspeed());
+
+                        uploadSpeedCount += torrent.getUpspeed();
+                        downloadSpeedCount += torrent.getDlspeed();
 
                         if ("uploading".equals(torrent.getState())) {
                             uploadCount = uploadCount + 1;

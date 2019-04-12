@@ -29,8 +29,11 @@ public class TorrentAddedOnComparator implements Comparator<Torrent> {
         Date date1 = null;
         Date date2 = null;
 
-        String d1 = t1.getAddedOn();
-        String d2 = t2.getAddedOn();
+//        String d1 = t1.getAddedOn();
+//        String d2 = t2.getAddedOn();
+
+        String d1 = "" + t1.getAdded_on();
+        String d2 = "" + t2.getAdded_on();
 
 //        Log.d("Debug", "d1: " + d1);
 //        Log.d("Debug", "d2: " + d2);

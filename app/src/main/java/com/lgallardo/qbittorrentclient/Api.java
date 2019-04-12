@@ -6,17 +6,17 @@ package com.lgallardo.qbittorrentclient;
 
 public class Api {
 
-    String apiVersion;
+    String apiversion;
 
-    public Api(String apiVersion) {
-        this.apiVersion = apiVersion;
+    public Api(String apiversion) {
+        this.apiversion = apiversion;
     }
 
-    public String getApiVersion() {
-        return apiVersion;
+    public String getApiversion() {
+        return apiversion;
     }
 
-    public void setApiVersion(String apiVersion) {
-        this.apiVersion = apiVersion;
+    public void setApiversion(String apiversion) {
+        this.apiversion = apiversion;
     }
 }

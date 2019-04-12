@@ -21,8 +21,11 @@ public class TorrentAddedOnTimestampComparator implements Comparator<Torrent> {
     @Override
     public int compare(Torrent t1, Torrent t2) {
 
-        String d1 = t1.getAddedOn();
-        String d2 = t2.getAddedOn();
+//        String d1 = t1.getAddedOn();
+//        String d2 = t2.getAddedOn();
+
+        String d1 = "" + t1.getAdded_on();
+        String d2 = "" + t2.getAdded_on();
 
         long p1 = Long.parseLong(d1);
         long p2 = Long.parseLong(d2);
