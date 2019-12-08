@@ -141,7 +141,8 @@ public class ItemstFragment extends ListFragment {
                         menu.findItem(R.id.action_set_label).setVisible(true);
                         menu.findItem(R.id.action_delete_label).setVisible(true);
 
-                        if (Integer.parseInt(MainActivity.qb_api) < 8) {
+                        // TODO: Check when this changed (qb_api X.Y.Z )
+                        if (MainActivity.qb_api < 8) {
                             menu.findItem(R.id.action_delete_label).setVisible(false);
                         }
 

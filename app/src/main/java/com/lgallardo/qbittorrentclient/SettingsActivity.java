@@ -117,7 +117,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         pathAndLabelDialog.setEnabled(true);
 
         try {
-            if (Integer.parseInt(MainActivity.qb_api) >= 7) {
+            // TODO: Check when this changed (qb_api X.Y.Z )
+            if (MainActivity.qb_api >= 7) {
                 pathAndLabelDialog.setEnabled(true);
             } else {
                 pathAndLabelDialog.setEnabled(false);

@@ -65,7 +65,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
             TextView info = (TextView) row.findViewById(R.id.info);
 
-//            info.setText("" + torrentsData[position].getInfo());
+            info.setText("" + torrentsData[position].getInfo());
 
             ImageView icon = (ImageView) row.findViewById(R.id.icon);
 

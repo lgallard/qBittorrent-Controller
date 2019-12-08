@@ -332,7 +332,8 @@ public class TorrentDetailsFragment extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
                 if (addedOn != null && !(addedOn.equals("null")) && !(addedOn.equals("4294967295"))) {
-                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
+                    // TODO: Check when this changed (qb_api X.Y.Z )
+                    if (MainActivity.qb_api < 10) {
                         // Old time format 2016-07-25T20:52:07
                         addedOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(addedOn)));
                     } else {
@@ -346,7 +347,8 @@ public class TorrentDetailsFragment extends Fragment {
 
                 if (completionOn != null && !(completionOn.equals("null")) && !(completionOn.equals("4294967295"))) {
 
-                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
+                    // TODO: Check when this changed (qb_api X.Y.Z )
+                    if (MainActivity.qb_api < 10) {
                         // Old time format 2016-07-25T20:52:07
                         completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
                     } else {
@@ -960,7 +962,8 @@ public class TorrentDetailsFragment extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
                 if (addedOn != null && !(addedOn.equals("null")) && !(addedOn.equals("4294967295"))) {
-                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
+                    // TODO: Check when this changed (qb_api X.Y.Z )
+                    if (MainActivity.qb_api < 10) {
                         // Old time format 2016-07-25T20:52:07
                         addedOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(addedOn)));
                     } else {
@@ -973,8 +976,8 @@ public class TorrentDetailsFragment extends Fragment {
 
 
                 if (completionOn != null && !(completionOn.equals("null")) && !(completionOn.equals("4294967295"))) {
-
-                    if (Integer.parseInt(MainActivity.qb_api) < 10) {
+                    // TODO: Check when this changed (qb_api X.Y.Z )
+                    if (MainActivity.qb_api < 10) {
                         // Old time format 2016-07-25T20:52:07
                         completionOnTextView.setText(new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(sdf.parse(completionOn)));
                     } else {
@@ -1161,7 +1164,8 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_set_label).setVisible(true);
                 menu.findItem(R.id.action_delete_label).setVisible(true);
 
-                if (Integer.parseInt(MainActivity.qb_api) < 8) {
+                // TODO: Check when this changed (qb_api X.Y.Z )
+                if (MainActivity.qb_api < 8) {
                     menu.findItem(R.id.action_delete_label).setVisible(false);
                 }
 

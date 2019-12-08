@@ -46,49 +46,126 @@ class Torrent {
 //    private String label;
 
     // New format
-    private long added_on;
-    private long amount_left;
+    @SerializedName("added_on")
+    @Expose
+    private double added_on;
+    @SerializedName("amount_left")
+    @Expose
+    private double amount_left;
+    @SerializedName("auto_tmm")
+    @Expose
     private boolean auto_tmm;
+    @SerializedName("category")
+    @Expose
     private String category;
-    private long completed;
-    private long completion_on;
+    @SerializedName("completed")
+    @Expose
+    private double completed;
+    @SerializedName("completion_on")
+    @Expose
+    private double completion_on;
+    @SerializedName("dl_limit")
+    @Expose
     private int dl_limit;
+    @SerializedName("dlspeed")
+    @Expose
     private int dlspeed;
-    private long downloaded;
+    @SerializedName("downloaded")
+    @Expose
+    private double downloaded;
+    @SerializedName("downloaded_session")
+    @Expose
     private int downloaded_session;
-    private long eta;
+    @SerializedName("eta")
+    @Expose
+    private double eta;
+    @SerializedName("f_l_piece_prio")
+    @Expose
     private boolean f_l_piece_prio;
+    @SerializedName("force_start")
+    @Expose
     private boolean force_start;
     @SerializedName("hash")
     @Expose
     private String hash;
+    @SerializedName("last_activity")
+    @Expose
     private int last_activity;
+    @SerializedName("magnet_uri")
+    @Expose
     private String magnet_uri;
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("num_complete")
+    @Expose
     private int num_complete;
+    @SerializedName("num_incomplete")
+    @Expose
     private int num_incomplete;
+    @SerializedName("num_leechs")
+    @Expose
     private int num_leechs;
+    @SerializedName("num_seeds")
+    @Expose
     private int num_seeds;
+    @SerializedName("priority")
+    @Expose
     private int priority;
-    private long progress;
+    @SerializedName("progress")
+    @Expose
+    private double progress;
+    @SerializedName("ratio")
+    @Expose
     private float ratio;
+    @SerializedName("ratio_limit")
+    @Expose
     private int ratio_limit;
+    @SerializedName("save_path")
+    @Expose
     private String save_path;
-    private long seen_complete;
+    @SerializedName("seen_complete")
+    @Expose
+    private double seen_complete;
+    @SerializedName("seq_dl")
+    @Expose
     private boolean seq_dl;
-    private long size;
+    @SerializedName("size")
+    @Expose
+    private double size;
+    @SerializedName("state")
+    @Expose
     private String state;
+    @SerializedName("super_seeding")
+    @Expose
     private boolean super_seeding;
+    @SerializedName("tags")
+    @Expose
     private String tags;
+    @SerializedName("time_active")
+    @Expose
     private int time_active;
-    private long total_size;
+    @SerializedName("total_size")
+    @Expose
+    private double total_size;
+    @SerializedName("tracker")
+    @Expose
     private String tracker;
+    @SerializedName("up_limit")
+    @Expose
     private int up_limit;
-    private long uploaded;
+    @SerializedName("uploaded")
+    @Expose
+    private double uploaded;
+    @SerializedName("uploaded_session")
+    @Expose
     private int uploaded_session;
+    @SerializedName("upspeed")
+    @Expose
     private int upspeed;
+
+    // Extra
+    private String info;
 
 
 //    public Torrent(String name, String size, String state, String hash,
@@ -144,19 +221,19 @@ class Torrent {
 //    }
 //
 
-//    /**
-//     * @return the info
-//     */
-//    public String getInfo() {
-//        return info;
-//    }
-//
-//    /**
-//     * @param info the info to set
-//     */
-//    public void setInfo(String info) {
-//        this.info = info;
-//    }
+    /**
+     * @return the info
+     */
+    public String getInfo() {
+        return info;
+    }
+
+    /**
+     * @param info the info to set
+     */
+    public void setInfo(String info) {
+        this.info = info;
+    }
 
     /**
      * @return the state
@@ -660,19 +737,19 @@ class Torrent {
 
     // new format
 
-    public long getAdded_on() {
+    public double getAdded_on() {
         return added_on;
     }
 
-    public void setAdded_on(long added_on) {
+    public void setAdded_on(double added_on) {
         this.added_on = added_on;
     }
 
-    public long getAmount_left() {
+    public double getAmount_left() {
         return amount_left;
     }
 
-    public void setAmount_left(long amount_left) {
+    public void setAmount_left(double amount_left) {
         this.amount_left = amount_left;
     }
 
@@ -692,19 +769,19 @@ class Torrent {
         this.category = category;
     }
 
-    public long getCompleted() {
+    public double getCompleted() {
         return completed;
     }
 
-    public void setCompleted(long completed) {
+    public void setCompleted(double completed) {
         this.completed = completed;
     }
 
-    public long getCompletion_on() {
+    public double getCompletion_on() {
         return completion_on;
     }
 
-    public void setCompletion_on(long completion_on) {
+    public void setCompletion_on(double completion_on) {
         this.completion_on = completion_on;
     }
 
@@ -724,11 +801,11 @@ class Torrent {
         this.dlspeed = dlspeed;
     }
 
-    public long getDownloaded() {
+    public double getDownloaded() {
         return downloaded;
     }
 
-    public void setDownloaded(long downloaded) {
+    public void setDownloaded(double downloaded) {
         this.downloaded = downloaded;
     }
 
@@ -740,11 +817,11 @@ class Torrent {
         this.downloaded_session = downloaded_session;
     }
 
-    public long getEta() {
+    public double getEta() {
         return eta;
     }
 
-    public void setEta(long eta) {
+    public void setEta(double eta) {
         this.eta = eta;
     }
 
@@ -820,11 +897,11 @@ class Torrent {
         this.priority = priority;
     }
 
-    public long getProgress() {
+    public double getProgress() {
         return progress;
     }
 
-    public void setProgress(long progress) {
+    public void setProgress(double progress) {
         this.progress = progress;
     }
 
@@ -852,11 +929,11 @@ class Torrent {
         this.save_path = save_path;
     }
 
-    public long getSeen_complete() {
+    public double getSeen_complete() {
         return seen_complete;
     }
 
-    public void setSeen_complete(long seen_complete) {
+    public void setSeen_complete(double seen_complete) {
         this.seen_complete = seen_complete;
     }
 
@@ -868,11 +945,11 @@ class Torrent {
         this.seq_dl = seq_dl;
     }
 
-    public long getSize() {
+    public double getSize() {
         return size;
     }
 
-    public void setSize(long size) {
+    public void setSize(double size) {
         this.size = size;
     }
 
@@ -900,11 +977,11 @@ class Torrent {
         this.time_active = time_active;
     }
 
-    public long getTotal_size() {
+    public double getTotal_size() {
         return total_size;
     }
 
-    public void setTotal_size(long total_size) {
+    public void setTotal_size(double total_size) {
         this.total_size = total_size;
     }
 
@@ -924,11 +1001,11 @@ class Torrent {
         this.up_limit = up_limit;
     }
 
-    public long getUploaded() {
+    public double getUploaded() {
         return uploaded;
     }
 
-    public void setUploaded(long uploaded) {
+    public void setUploaded(double uploaded) {
         this.uploaded = uploaded;
     }
 

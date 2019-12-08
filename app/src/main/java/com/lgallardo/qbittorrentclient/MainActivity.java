@@ -92,8 +92,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.math.RoundingMode;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -192,8 +194,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Cookie (SID - Session ID)
     public static String cookie = null;
-    public static String qb_version = "4.1.x";
-    public static String qb_api = "0";
+    public static String qb_version = "4.2.x";
+    public static int qb_api = 230;
+
     public static String qbittorrentServer = "";
     public static LinearLayout headerInfo;
 
@@ -1076,13 +1079,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         String ApiURL;
 
-//        if (qb_version.equals("4.1.x")) {
-//            ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/app/webapiVersion";
-//
-//        } else {
-            ApiURL = protocol + "://" + hostname + ":" + port + "/version/api";
-//        }
+        if (qb_version.equals("4.1.x") || qb_version.equals("4.2.x")) {
+            ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/app/webapiVersion";
+            Log.d("Debug", "=== getApiVersion ===");
 
+
+        } else {
+            ApiURL = protocol + "://" + hostname + ":" + port + "/version/api";
+        }
+
+        Log.d("Debug", "ApiURL: " + ApiURL);
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1092,11 +1098,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "===x===");
+                        Log.d("Debug", "=== getApiVersion x===");
                         Log.d("Debug", "JSONObject: " + response);
                         Gson gson = new Gson();
 
-                        Integer responseInt = new Integer(-1);
+                        Float responseFloat = new Float(-1);
 
                         try {
 
@@ -1113,10 +1119,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             //api = gson.fromJson(jsonString, Api.class);
 
 
-                             responseInt  = gson.fromJson(response, Integer.class);
+                            responseFloat  = gson.fromJson(response, Float.class);
 
 
-                            Log.d("Debug", "responseInt => " + responseInt);
+                            Log.d("Debug", "responseInt => " + responseFloat);
 
                             //Log.d("Debug", "api 2 => " + api.getApiversion());
 
@@ -1127,10 +1133,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             Log.e("Error", e.toString());
                         }
 
-                        Log.d("Debug", "JSONObject: " + response);
-                        Log.d("Debug", "======");
+                        Log.d("Debug", "getApiVersion - JSONObject: " + response);
+                        Log.d("Debug", "getApiVersion ======");
 
-                        callback.onSuccess(responseInt.toString());
+                        callback.onSuccess(responseFloat.toString());
 
                     }
                 },
@@ -1138,7 +1144,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Log.d("Debug", " getApiVersion - Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", " getApiVersion 3 - Error in JSON response: " + error.getMessage());
 
                         callback.onSuccess("");
 
@@ -1148,15 +1154,27 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     }
                 }
         ) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("username", username);
+//                params.put("password", password);
+//                params.put("Host", hostname + ":" + port);
+//
+//                return params;
+//            }
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", username);
-                params.put("password", password);
+                params.put("User-Agent", "qBittorrent for Android");
                 params.put("Host", hostname + ":" + port);
-
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
                 return params;
             }
+
         };
 
         // Add request to te queue
@@ -1247,10 +1265,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         String url;
 
-        if (qb_version.equals("4.1.x")) {
+        if (qb_version.equals("4.2.x")) {
             url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
+            Log.d("Debug", "===cookie for 4.2.x ===");
         } else {
-            url = protocol + "://" + hostname + ":" + port + "/login";
+            Log.d("Debug", "===cookie for < 4.2.x ===");
+            if (qb_version.equals("4.1.x")) {
+                url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
+            } else {
+                url = protocol + "://" + hostname + ":" + port + "/login";
+            }
         }
 
         // New JSONObject request
@@ -2384,7 +2408,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Validate setLabel for API 10+
         try {
 
-            if (Integer.parseInt(MainActivity.qb_api) >= 10) {
+            // TODO: Check when this changed (qb_api X.Y.Z )
+            if (qb_api >= 10) {
                 labelHeaderTmp = "category";
                 url = url + "/command/setCategory";
             } else {
@@ -2517,7 +2542,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         String boundary = "";
 
-        if (Integer.parseInt(qb_api) >= 7) {
+        // TODO: Check when this changed (qb_api X.Y.Z )
+        if (qb_api >= 7) {
 
             boundary = "-----------------------" + (new Date()).getTime();
             boundary = "multipart/form-data; boundary=" + boundary;
@@ -2754,7 +2780,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         String ApiURL;
 
-        if (qb_version.equals("4.1.x")) {
+        if (qb_version.equals("4.1.x") || qb_version.equals("4.2.x")) {
             ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/transfer/speedLimitsMode";
         } else {
             ApiURL = protocol + "://" + hostname + ":" + port + "/command/alternativeSpeedLimitsEnabled";
@@ -3003,7 +3029,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = url + "/query/torrents?filter=" + state;
         }
 
-        if (qb_version.equals("4.1.x")) {
+        if (qb_version.equals("4.1.x") || qb_version.equals("4.2.x")) {
             url = url + "/api/v2/torrents/info?filter=" + state;
         }
 
@@ -3085,44 +3111,58 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">ApiVersion<: " + result);
+                String apiStr = "0";
+
+                Log.d("Debug: ", "[getApi] ApiVersion: " + result);
+
+                apiStr = result.replace(".","");
 
                 if (result != null && !result.equals("")) {
 
                     int api;
 
                     try {
-                        api = Integer.parseInt(result);
+                        api = Integer.parseInt(apiStr);
                     } catch (Exception e) {
                         api = 0;
                     }
 
-                    if (api >= 18) {
+                    if (api >= 201) {
                         qb_version = "4.1.x";
                         cookie = null;
                         getCookie();
 
-                        Log.d("Debug: ", "getApi was executed");
-                        Log.d("Debug: ", "getApi - cookie: " + cookie);
+                        Log.d("Debug: ", "[getApi] getApi was executed");
+                        Log.d("Debug: ", "[getApi] - cookie: " + cookie);
+                    }
 
-                    } else {
-                        if (result != null && (api > 1 || result.contains("3.2") || result.contains("3.3"))) {
-                            qb_version = "3.2.x";
-                            cookie = null;
-                            getCookie();
-                        } else {
-                            if (result.contains("3.1")) {
-                                qb_version = "3.1.x";
-                                cookie = null;
-                                getCookie();
-                            } else {
-                                qb_version = "2.x";
-                            }
-                        }
+                    if (api >= 230) {
+                        qb_version = "4.2.x";
+                        cookie = null;
+                        getCookie();
+
+                        Log.d("Debug: ", "[getApi] getApi was executed");
+                        Log.d("Debug: ", "[getApi] - cookie: " + cookie);
                     }
 
 
-                    qb_api = result;
+//                        if (result != null && (api > 1 || result.contains("3.2") || result.contains("3.3"))) {
+//                            qb_version = "3.2.x";
+//                            cookie = null;
+//                            getCookie();
+//                        } else {
+//                            if (result.contains("3.1")) {
+//                                qb_version = "3.1.x";
+//                                cookie = null;
+//                                getCookie();
+//                            } else {
+//                                qb_version = "2.x";
+//                            }
+//                        }
+//
+
+
+                    qb_api = api;
                     qbittorrentServer = result;
                 } else {
 
@@ -3163,7 +3203,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 }
 
 
-                                qb_api = result;
+                                qb_api = api;
                                 qbittorrentServer = result;
                             }
 
@@ -3680,36 +3720,53 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(List<Torrent> torrents) {
 
-//                String size;
-                long size;
-                Log.d("Debug", "*** torrents.size(): " + torrents.size());
+                String sizeStr = "";
+
+                double size;
+                Log.d("Debug", "[getTorrentList] torrents.size(): " + torrents.size());
 
                 for (int i = 0; i < torrents.size(); i++) {
 
                     Log.d("Debug", "- - -");
-                    Log.d("Debug", "> File: " + torrents.get(i).getName());
-                    Log.d("Debug", "> Hash: " + torrents.get(i).getHash());
+                    Log.d("Debug", "[getTorrentList] File: " + torrents.get(i).getName());
+                    Log.d("Debug", "[getTorrentList] Hash: " + torrents.get(i).getHash());
 
-                    if (qb_version.equals("3.2.x") || qb_version.equals("4.1.x")) {
+                    Log.d("Debug", "[getTorrentList] >>> Calculating sizes!!!!");
 
-                        Log.d("Debug", ">>>>>>> Calculating sizes!!!!");
+                    Log.d("Debug", "[getTorrentList] qb_version: "+ qb_version);
+                    Log.d("Debug", "[getTorrentList] qb_api: "+ qb_api);
 
-//                        size = Common.calculateSize(torrents.get(i).getSize());
+
+                    if (qb_api >= 201){
+                    //if (qb_version.equals("3.2.x") || qb_version.equals("4.1.x") || qb_version.equals("4.2.x")) {
+
+                        sizeStr = Common.calculateSize(torrents.get(i).getSize());
+                        Log.d("Debug", "[getTorrentList] sizeStr: " + sizeStr);
+
+
                         size = torrents.get(i).getSize();
                     } else {
                         size = torrents.get(i).getSize();
                     }
 
-                    Log.d("Debug", ">>>>>>> !!!!");
+                    Log.d("Debug", "[getTorrentList] !!!!");
+                    Log.d("Debug", "[getTorrentList] size: " + size);
 
-                    Double progress = Double.parseDouble("" + torrents.get(i).getProgress());
+                    Log.d("Debug", "[getTorrentList] progress raw: " + torrents.get(i).getProgress());
+
+                    double progress = torrents.get(i).getProgress();
 
                     // Set torrent progress
-//                    torrents.get(i).setProgress(String.format("%.1f", (progress * 100)));
+                    torrents.get(i).setProgress(progress);
 
-//                    Log.d("Debug", "> Size: " + size);
-//                    Log.d("Debug", "> progress: " + (progress * 100));
-//                    Log.d("Debug", "> progress reported: " + torrents.get(i).getProgress());
+                    // Format progress for UI
+                    DecimalFormat df = new DecimalFormat("0.00");
+                    df.setRoundingMode(RoundingMode.DOWN);
+                    String progressStr = df.format(progress * 100);
+
+                    Log.d("Debug", "[getTorrentList] Size: " + size);
+                    Log.d("Debug", "[getTorrentList] progress: " + (progress * 100));
+                    Log.d("Debug", "[getTorrentList] progress fixed: " + progressStr);
 
                     // Get torrent generic properties
                     try {
@@ -3719,15 +3776,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //
 //                        torrents.get(i).setDownloaded(String.format("%.1f", sizeScalar * progress).replace(",", ".") + sizeUnit);
 
+
+                        Log.d("Debug", "[getTorrentList] progress reported: " + torrents.get(i).getProgress()*100);
+
                     } catch (Exception e) {
                         torrents.get(i).setDownloaded(size);
                     }
 
-                    String infoString = "";
+                    String infoString = "xyz ";
 
                     if (packageName.equals("com.lgallardo.qbittorrentclient")) {
                         // Info free
-                        infoString = torrents.get(i).getDownloaded() + " / " + torrents.get(i).getSize() + " "
+                        infoString = torrents.get(i).getDownloaded() + " / " + sizeStr  + " "
                                 + Character.toString('\u2191') + " " + torrents.get(i).getUpspeed() + " "
                                 + Character.toString('\u2193') + " " + torrents.get(i).getDlspeed() + " "
                                 + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
@@ -3755,7 +3815,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     }
 
                     // Set info
-//                    torrents.get(i).setInfo(infoString);
+                   torrents.get(i).setInfo(infoString);
                 }
 
 
@@ -3910,7 +3970,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
                 // Sort by Added on
                 if (sortby_value == SORTBY_ADDEDON) {
-                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
+                    // TODO: Check when this changed (qb_api X.Y.Z )
+                    if (MainActivity.qb_api == 0 || MainActivity.qb_api >= 10) {
                         Collections.sort(torrentsFiltered, new TorrentAddedOnTimestampComparator(reverse_order));
                     } else {
                         Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
@@ -3918,7 +3979,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
                 // Sort by Completed on
                 if (sortby_value == SORTBY_COMPLETEDON) {
-                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
+                    // TODO: Check when this changed (qb_api X.Y.Z )
+                    if (MainActivity.qb_api == 0 || MainActivity.qb_api >= 10) {
                         Collections.sort(torrentsFiltered, new TorrentCompletedOnTimestampComparator(reverse_order));
                     } else {
                         Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
@@ -4226,7 +4288,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             params[0] = qbQueryString + "/torrents";
         }
 
-        if (qb_version.equals("3.2.x") || qb_version.equals("4.1.x")) {
+        if (qb_version.equals("3.2.x") || qb_version.equals("4.1.x") || qb_version.equals("4.2.x")) {
 
             if (qb_version.equals("3.2.x")) {
                 qbQueryString = "query";
@@ -4236,7 +4298,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             }
 
 
-            if (qb_version.equals("4.1.x")) {
+            if (qb_version.equals("4.1.x") || qb_version.equals("4.2.x")) {
                 qbQueryString = "query";
                 urlPrefix = "api/v2/torrents/info?filter=" + state;
                 params[0] = "api/v2/torrents/info?filter=" + state;
@@ -4244,9 +4306,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
 
-
             // Get API version in case it hadn't been gotten before
-            if (qb_api == null || qb_api.equals("") || qb_api.equals("0")) {
+            if (qb_api <= 0 ) {
                 getApi();
                 getCookie();
             }
@@ -4278,7 +4339,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         labelEncoded = labelEncoded.substring(labelEncoded.indexOf("%3D") + 3);
 
                         // to build the url and pass it to params[0]
-                        if (Integer.parseInt(MainActivity.qb_api) < 10) {
+
+                        // TODO: Check when this changed (qb_api X.Y.Z )
+                        if (MainActivity.qb_api < 10) {
                             params[0] = params[0] + "&label=" + labelEncoded;
                         } else {
                             params[0] = params[0] + "&category=" + labelEncoded;
@@ -5187,7 +5250,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             String up_limit = Integer.toString(Integer.parseInt(global_upload) * 1024);
             String down_limit = Integer.toString(Integer.parseInt(global_download) * 1024);
 
-            if (Integer.parseInt(qb_api) > 0) {
+            // TODO: Check when this changed (qb_api X.Y.Z )
+            if (qb_api > 0) {
                 alt_upload = Integer.toString(Integer.parseInt(alt_upload) * 1024);
                 alt_download = Integer.toString(Integer.parseInt(alt_download) * 1024);
             }
@@ -5374,6 +5438,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         addTorrentFileAPI7(url, path2Set, label2Set);
 
+//      // TODO: Check when this changed (qb_api X.Y.Z )
 //        if (Integer.parseInt(qb_api) >= 7) {
 //            addTorrentFileAPI7(url, path2Set, label2Set);
 //        } else {
@@ -5830,7 +5895,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         dark_ui = sharedPrefs.getBoolean("dark_ui", false);
 
-        qb_version = sharedPrefs.getString("qb_version", "3.2.x");
+        qb_version = sharedPrefs.getString("qb_version", "4.2.x");
 
         MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
 
