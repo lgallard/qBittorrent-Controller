@@ -1167,85 +1167,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    private void getVersion(final VolleyCallback callback) {
-
-        String ApiURL = protocol + "://" + hostname + ":" + port + "/about.html";
-
-        // New JSONObject request
-        StringRequest jsArrayRequest = new StringRequest(
-                Request.Method.GET,
-                ApiURL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-//                        Log.d("Debug", "===x===");
-//                        Log.d("Debug", "JSONObject: " + response);
-                        String aboutStartText = "qBittorrent v";
-                        String aboutEndText = " (Web UI)";
-
-                        int aboutStart = response.indexOf(aboutStartText);
-
-                        int aboutEnd = response.indexOf(aboutEndText);
-
-                        if (aboutEnd == -1) {
-                            aboutEndText = " Web UI";
-                            aboutEnd = response.indexOf(aboutEndText);
-                        }
-
-                        if (aboutStart >= 0 && aboutEnd > aboutStart) {
-                            response = response.substring(aboutStart + aboutStartText.length(), aboutEnd);
-                        }
-
-                        if (response == null) {
-                            response = "";
-                        }
-
-                        Gson gson = new Gson();
-
-                        Api api = null;
-                        try {
-                            api = gson.fromJson(new JSONObject("{\"apiversion\":" + response + "}").toString(), Api.class);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.e("Error", e.toString());
-                        }
-
-//                        Log.d("Debug", "JSONObject: " + response);
-//                        Log.d("Debug", "======");
-//                        Log.d("Debug: ", "ApiVersion: " + api.getApiversion());
-
-                        callback.onSuccess(api.getApiversion());
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-//                        Log.d("Debug", "getVersion - Error in JSON response: " + error.getMessage());
-
-                        Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
-                    }
-                }
-        ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("username", username);
-                params.put("password", password);
-                params.put("Host", hostname + ":" + port);
-
-                return params;
-            }
-        };
-
-        // Add request to te queue
-        addVolleyRequest(jsArrayRequest);
-
-    }
-
     private void getCookieV(final VolleyCallback callback) {
 
         String url;
@@ -3075,74 +2996,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         Log.d("Debug: ", "[getApi] - cookie: " + cookie);
                     }
 
-// DEPRECATED:
-//                        if (result != null && (api > 1 || result.contains("3.2") || result.contains("3.3"))) {
-//                            qb_version = "3.2.x";
-//                            cookie = null;
-//                            getCookie();
-//                        } else {
-//                            if (result.contains("3.1")) {
-//                                qb_version = "3.1.x";
-//                                cookie = null;
-//                                getCookie();
-//                            } else {
-//                                qb_version = "2.x";
-//                            }
-//                        }
-//
-
 
                     qb_api = api;
                     qbittorrentServer = result;
-                } else {
-
-                    getVersion(new VolleyCallback() {
-                        @Override
-                        public void onSuccess(String result) {
-
-                            Log.d("Debug: ", ">version<: " + result);
-
-                            if (result != null && !result.equals("")) {
-
-                                int api;
-
-                                try {
-
-                                    api = Integer.parseInt(result);
-
-                                } catch (Exception e) {
-                                    api = 0;
-                                }
-
-                                if (result != null && (api > 1 || result.contains("3.2") || result.contains("3.3"))) {
-
-                                    qb_version = "3.2.x";
-
-                                    // Get new cookie
-                                    cookie = null;
-
-                                } else if (result.contains("3.1")) {
-
-                                    qb_version = "3.1.x";
-                                    cookie = null;
-
-                                } else {
-
-                                    qb_version = "2.x";
-
-                                }
-
-
-                                qb_api = api;
-                                qbittorrentServer = result;
-                            }
-
-
-                        }
-                    });
-
                 }
-
             }
         });
     }
