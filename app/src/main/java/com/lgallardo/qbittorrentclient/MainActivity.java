@@ -1632,7 +1632,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/increasePrio";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/increasePrio";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1685,7 +1685,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/decreasePrio";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/decreasePrio";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1745,7 +1745,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/topPrio";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/topPrio";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1813,7 +1813,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/bottomPrio";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/bottomPrio";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1881,7 +1881,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/setTorrentsUpLimit";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/setTorrentsUpLimit";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1952,7 +1952,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/setTorrentsDlLimit";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/setTorrentsDlLimit";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2023,7 +2023,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/recheck";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/recheck";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2091,7 +2091,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/toggleFirstLastPiecePrio";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/toggleFirstLastPiecePrio";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2101,28 +2101,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
-                        Log.d("Debug", "hashes: " + hashes);
-
                         // Return value
                         callback.onSuccess("");
-
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -2159,7 +2146,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/toggleSequentialDownload";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/toggleSequentialDownload";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2168,12 +2155,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
-                        Log.d("Debug", "hashes: " + hashes);
-
                         // Return value
                         callback.onSuccess("");
 
@@ -2183,14 +2164,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -2316,7 +2290,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/toggleAlternativeSpeedLimits";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/toggleAlternativeSpeedLimits";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2325,10 +2299,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
                         // Return value
                         callback.onSuccess("");
 
@@ -2338,14 +2308,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -2391,11 +2354,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        if (qb_version.equals("4.1.x")) {
-            url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/add";
-        } else {
-            url = protocol + "://" + hostname + ":" + port + url + "/command/download";
-        }
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/add";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2404,11 +2363,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-//                        Log.d("Debug", "===Command===");
-//                        Log.d("Debug", "Response: " + response);
-//                        Log.d("Debug", "hashes: " + hashes);
-
                         // Return value
                         callback.onSuccess("");
 
@@ -2417,11 +2371,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
                     }
                 }
         ) {
@@ -2490,7 +2440,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/upload";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/add";
 
         CustomMultipartRequest customMultipartRequest = new CustomMultipartRequest(
                 url,
@@ -2550,7 +2500,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/addTrackers";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/addTrackers";
 
 
         // New JSONObject request
@@ -2607,13 +2557,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         String ApiURL;
 
-        if (qb_version.equals("4.1.x") || qb_version.equals("4.2.x")) {
-            ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/transfer/speedLimitsMode";
-        } else {
-            ApiURL = protocol + "://" + hostname + ":" + port + "/command/alternativeSpeedLimitsEnabled";
-        }
-
-//        Log.d("Debug", "ApiURL: " + ApiURL);
+        ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/transfer/speedLimitsMode";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2647,10 +2591,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             Log.e("Error", e.toString());
                         }
 
-//                        Log.d("Debug", "JSONObject: " + response);
-//                        Log.d("Debug", "======");
-//                        Log.d("Debug: ", "result: " + result.getResult());
-
                         callback.onSuccess(result.getResult());
                     }
                 },
@@ -2658,14 +2598,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-
                         Log.d("Debug", "getAlternativeSpeedLimitsEnabled - - Error in JSON response: " + error.getMessage());
 
                         callback.onSuccess("");
 
                         Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -2698,7 +2635,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/setFilePrio";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/transfer/filePrio";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2724,14 +2661,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -2771,7 +2701,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/command/setPreferences";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/app/setPreferences";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2780,28 +2710,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
-
                         // Return value
                         callback.onSuccess("");
-
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -2958,15 +2874,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-//                Log.d("Debug: ", ">>> Cookie: " + result);
-
                 MainActivity.cookie = result;
 
                 // Save cookie
                 savePreferenceAsString("qbCookie", result);
-
-                // Execute the task in background
-                //qbTask = new qBittorrentTask().execute(params);
 
                 // Test
                 getTorrentList(lastState);
@@ -2982,7 +2893,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-//                Log.d("Debug: ", ">>> ResumeAll: " + result);
                 toastText(R.string.AllTorrentsResumed);
 
                 // Refresh
