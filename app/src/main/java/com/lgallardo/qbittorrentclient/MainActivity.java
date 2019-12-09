@@ -1521,14 +1521,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        if (qb_version.equals("4.1.x")) {
-            url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
-            postParams.put("hashes", hashes);
-            postParams.put("deleteFiles", "false");
-        } else {
-            url = protocol + "://" + hostname + ":" + port + url + "/command/delete";
-            postParams.put("hashes", hashes);
-        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
+        postParams.put("hashes", hashes);
+        postParams.put("deleteFiles", "false");
+
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1537,19 +1534,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        Log.d("Debug", "===Command===");
-//                        Log.d("Debug", "Response: " + response);
-//                        Log.d("Debug", "hashes: " + hashes);
                         // Return value
                         callback.onSuccess("");
-
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -1586,15 +1577,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        if (qb_version.equals("4.1.x")) {
-            url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
-            postParams.put("hashes", hashes);
-            postParams.put("deleteFiles", "true");
-
-        } else {
-            url = protocol + "://" + hostname + ":" + port + url + "/command/deletePerm";
-            postParams.put("hashes", hashes);
-        }
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
+        postParams.put("hashes", hashes);
+        postParams.put("deleteFiles", "true");
 
         Log.d("Debug", "URL: " + url);
 
@@ -1605,10 +1590,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        Log.d("Debug", "===Command===");
-//                        Log.d("Debug", "Response: " + response);
-//                        Log.d("Debug", "hashes: " + hashes);
-                        // Return value
                         callback.onSuccess("");
                     }
                 },
@@ -1660,23 +1641,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-                        Log.d("Debug", "hashes: " + hashes);
-
                         // Return value
                         callback.onSuccess("");
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
                     }
                 }
         ) {
@@ -1722,16 +1694,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
-                        Log.d("Debug", "hashes: " + hashes);
-
                         // Return value
                         callback.onSuccess("");
-
-
                     }
                 },
                 new Response.ErrorListener() {
