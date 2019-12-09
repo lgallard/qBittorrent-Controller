@@ -13,9 +13,12 @@ public class ContentFile {
 
 	private String name;
 	private String size;
-	private Double progress;
+	private double progress;
 	private int priority;
 	private int recyclerViewItemHeight;
+	private boolean isSeed;
+	private int[] piece_range;
+	private double douavailability;
 
 	public ContentFile(String name, String size, Double progress, int priority) {
 
@@ -34,7 +37,7 @@ public class ContentFile {
 		return size;
 	}
 
-	public Double getProgress() {
+	public double getProgress() {
 		return progress;
 	}
 
@@ -68,5 +71,33 @@ public class ContentFile {
 
 	public void setRecyclerViewItemHeight(int recyclerViewItemHeight) {
 		this.recyclerViewItemHeight = recyclerViewItemHeight;
+	}
+
+	public void setProgress(double progress) {
+		this.progress = progress;
+	}
+
+	public boolean isSeed() {
+		return isSeed;
+	}
+
+	public void setSeed(boolean seed) {
+		isSeed = seed;
+	}
+
+	public int[] getPiece_range() {
+		return piece_range;
+	}
+
+	public void setPiece_range(int[] piece_range) {
+		this.piece_range = piece_range;
+	}
+
+	public double getDouavailability() {
+		return douavailability;
+	}
+
+	public void setDouavailability(double douavailability) {
+		this.douavailability = douavailability;
 	}
 }

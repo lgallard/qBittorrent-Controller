@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -86,9 +88,9 @@ public class Common {
         return new SimpleDateFormat("yyyy-MM-dd hh:mm a").format(df);
     }
 
-    protected static String secondsToEta(String secs) {
+    protected static String secondsToEta(long seconds) {
 
-        long seconds = Long.parseLong(secs);
+        String secs = "∞";
         int day = (int) TimeUnit.SECONDS.toDays(seconds);
         long hours = TimeUnit.SECONDS.toHours(seconds) - (day * 24);
         long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds) * 60);
@@ -158,6 +160,13 @@ public class Common {
         }
 
         return bytes;
+    }
+
+    protected static String ProgressForUi(double progress){
+        // Format progress for UI
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setRoundingMode(RoundingMode.DOWN);
+        return df.format(progress * 100);
     }
 
     protected static byte[] getBytes(InputStream inputStream) throws IOException {

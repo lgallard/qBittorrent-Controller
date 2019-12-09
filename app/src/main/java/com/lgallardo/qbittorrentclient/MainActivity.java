@@ -2568,37 +2568,36 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     public void onResponse(String response) {
 
                         Log.d("Debug", "===x===");
-                        Log.d("Debug", "JSONObject: " + response);
-                        Log.d("Debug", "getAlternativeSpeedLimitsEnabled - Cookie: " + cookie);
+                        Log.d("Debug", "[getAlternativeSpeedLimitsEnabled] JSONObject: " + response);
+                        Log.d("Debug", "[getAlternativeSpeedLimitsEnabled] Cookie: " + cookie);
 
                         Gson gson = new Gson();
+
+
+                        int responseInt = 0;
 
                         CustomStringResult result = null;
                         try {
 
-                            JSONObject jobj = new Gson().fromJson("{\"result\":" + response + "}", JSONObject.class);
+                            responseInt = gson.fromJson(response, Integer.class);
 
-                            Log.d("Debug", ">===xxx===<");
-                            //Log.d("Debug", "DATA: " + jobj.getJSONObject("data").toString());
-                            //Log.d("Debug", "HEADERS: " + jobj.getJSONObject("headers").toSkipping duplicate class check due to unsupported classloaderString());
-                            Log.d("Debug", "Response: " + response);
+                            Log.d("Debug", "[getAlternativeSpeedLimitsEnabled] Response: " + response);
 
-                            result = gson.fromJson(new JSONObject("{\"result\":" + response + "}").toString(), CustomStringResult.class);
-
-                            Log.d("Debug", "result: " + result.toString());
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                             Log.e("Error", e.toString());
                         }
 
-                        callback.onSuccess(result.getResult());
+                        Log.d("Debug", "[getAlternativeSpeedLimitsEnabled] ResponseInt: " + responseInt);
+
+                        callback.onSuccess(String.valueOf(responseInt));
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Log.d("Debug", "getAlternativeSpeedLimitsEnabled - - Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", "[getAlternativeSpeedLimitsEnabled] Error in JSON response: " + error.getMessage());
 
                         callback.onSuccess("");
 
@@ -3310,7 +3309,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 Boolean isAlternativeSpeedLimitsEnabled;
 
-//                Log.d("Debug: ", ">getAlternativeSpeedLimitsEnabled<: " + result);
+                Log.d("Debug: ", ">getAlternativeSpeedLimitsEnabled<: " + result);
 
                 if (result != null && !result.equals("")) {
 
@@ -3366,7 +3365,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(List<Torrent> torrents) {
 
-                String sizeInfo, downloadedInfo, progressInfo, etaInfo;
+                String sizeInfo, downloadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo;
 
                 double size;
                 Log.d("Debug", "[getTorrentList] torrents.size(): " + torrents.size());
@@ -3399,10 +3398,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // Set torrent progress
                     torrents.get(i).setProgress(progress);
 
-                    // Format progress for UI
-                    DecimalFormat df = new DecimalFormat("0.00");
-                    df.setRoundingMode(RoundingMode.DOWN);
-                    progressInfo = df.format(progress * 100);
+                    progressInfo = Common.ProgressForUi(progress);
 
                     Log.d("Debug", "[getTorrentList] Size: " + size);
                     Log.d("Debug", "[getTorrentList] progress: " + (progress * 100));
@@ -3412,35 +3408,20 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     downloadedInfo = Common.calculateSize(torrents.get(i).getSize()-torrents.get(i).getAmount_left());
 
                     // Get ETA
-                    if (torrents.get(i).getEta() == 8640000) {
-                        etaInfo = "∞";
-                    }
-                    else {
-                        etaInfo = Common.secondsToEta("" + torrents.get(i).getEta());
-                    }
+                    etaInfo = Common.secondsToEta(torrents.get(i).getEta());
 
-                    // Get torrent generic properties
-                    try {
-                        // Calculate total downloaded
-//                        Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
-//                        String sizeUnit = size.substring(size.indexOf(" "), size.length());
-//
-//                        torrents.get(i).setDownloaded(String.format("%.1f", sizeScalar * progress).replace(",", ".") + sizeUnit);
+                    // Get download speed
+                    uploadSpeedInfo = Common.calculateSize(torrents.get(i).getUpspeed()) + "/s";                    // Get download speed
+                    downloadSpeedInfo = Common.calculateSize(torrents.get(i).getDlspeed()) + "/s";
 
-
-                        Log.d("Debug", "[getTorrentList] progress reported: " + torrents.get(i).getProgress()*100);
-
-                    } catch (Exception e) {
-                        torrents.get(i).setDownloaded(size);
-                    }
 
                     String infoString = "";
 
                     if (packageName.equals("com.lgallardo.qbittorrentclient")) {
                         // Info free
                         infoString = downloadedInfo + " / " + sizeInfo  + " "
-                                + Character.toString('\u2191') + " " + torrents.get(i).getUpspeed() + " "
-                                + Character.toString('\u2193') + " " + torrents.get(i).getDlspeed() + " "
+                                + Character.toString('\u2191') + " " + uploadSpeedInfo + " "
+                                + Character.toString('\u2193') + " " + downloadSpeedInfo + " "
                                 + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
                                 + Character.toString('\u2022') + " " + progressInfo + "% "
                                 + Character.toString('\u2022') + " " + etaInfo;
@@ -3453,8 +3434,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     } else {
                         // Info pro
                         infoString = downloadedInfo + " / " + sizeInfo + " "
-                                + Character.toString('\u2191') + " " + torrents.get(i).getUpspeed() + " "
-                                + Character.toString('\u2193') + " " + torrents.get(i).getDlspeed() + " "
+                                + Character.toString('\u2191') + " " + uploadSpeedInfo + " "
+                                + Character.toString('\u2193') + " " + downloadSpeedInfo + " "
                                 + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
                                 + Character.toString('\u2022') + " " + etaInfo;
 

@@ -15,36 +15,6 @@ import com.google.gson.annotations.SerializedName;
 
 class Torrent {
 
-//    private String name;
-//    private String size;
-//    private String info;
-//    private String state;
-//    private String hash;
-//    private String dlspeed;
-//    private String upspeed;
-//    private String ratio;
-//    private String progress;
-//    private String downloaded;
-//    private String leechs;
-//    private String seeds;
-//    private String priority;
-//    private String eta;
-//    private String savePath;
-//    private String creationDate;
-//    private String comment;
-//    private String totalWasted;
-//    private String totalUploaded;
-//    private String totalDownloaded;
-//    private String timeElapsed;
-//    private String nbConnections;
-//    private String uploadLimit;
-//    private String downloadLimit;
-//    private boolean sequentialDownload;
-//    private boolean firstLastPiecePrio;
-//    private String addedOn;
-//    private String completionOn;
-//    private String label;
-
     // New format
     @SerializedName("added_on")
     @Expose

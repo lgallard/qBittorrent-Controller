@@ -130,11 +130,9 @@ public class TorrentDetailsFragment extends Fragment {
 
         View rootView;
 
-        if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.1.x")) {
-            rootView = inflater.inflate(R.layout.torrent_details, container, false);
-        } else {
-            rootView = inflater.inflate(R.layout.torrent_details_old, container, false);
-        }
+        rootView = inflater.inflate(R.layout.torrent_details, container, false);
+//        // TODO: delete old layout
+//        rootView = inflater.inflate(R.layout.torrent_details_old, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.RecyclerViewContentFiles); // Assigning the RecyclerView Object to the xml View
         rAdapter = new ContentFilesRecyclerViewAdapter((MainActivity) getActivity(), getActivity(), new ArrayList<TorrentDetailsItem>());
@@ -252,18 +250,18 @@ public class TorrentDetailsFragment extends Fragment {
 
                 // Get values from current activity
                 name = this.torrent.getName();
-                size = "" + this.torrent.getSize();
+                size = Common.calculateSize(this.torrent.getSize());
                 hash = this.torrent.getHash();
                 ratio = "" + this.torrent.getRatio();
                 state = this.torrent.getState();
-//                leechs = this.torrent.getLeechs();
-//                seeds = this.torrent.getSeeds();
-                progress = "" + this.torrent.getProgress();
+                leechs = "" + torrent.getNum_leechs();
+                seeds = "" + torrent.getNum_seeds();
+                progress = Common.ProgressForUi(this.torrent.getProgress()) + "%";
                 priority = "" + this.torrent.getPriority();
-                eta = "" + this.torrent.getEta();
+                eta = Common.secondsToEta(this.torrent.getEta());
                 uploadSpeed = "" + this.torrent.getUpspeed();
-                downloadSpeed = "" + this.torrent.getDlspeed();
-                downloaded = "" + this.torrent.getDownloaded();
+                downloadSpeed = Common.calculateSize(this.torrent.getDlspeed()) + "/s";
+                downloaded = Common.calculateSize(this.torrent.getSize() - this.torrent.getAmount_left());
 //                addedOn = this.torrent.getAddedOn();
 //                completionOn = this.torrent.getCompletionOn();
 //                label = this.torrent.getLabel();
@@ -318,7 +316,7 @@ public class TorrentDetailsFragment extends Fragment {
             priorityTextView.setText(priority);
 
 
-            if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.1.x")) {
+            if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.2.x")) {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
                 firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
@@ -482,21 +480,8 @@ public class TorrentDetailsFragment extends Fragment {
         url = protocol + "://" + hostname + ":" + port + url;
 
         // Command
-        if (qb_version.equals("2.x")) {
-            url = url + "/query/propertiesFiles/" + hash;
-        }
 
-        if (qb_version.equals("3.1.x")) {
-            url = url + "/query/propertiesFiles/" + hash;
-        }
-
-        if (qb_version.equals("3.2.x")) {
-            url = url + "/query/propertiesFiles/" + hash;
-        }
-
-        if (qb_version.equals("4.1.x")) {
-            url = url + "/api/v2/torrents/files?hash=" + hash;
-        }
+        url = url + "/api/v2/torrents/files?hash=" + hash;
 
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -505,6 +490,8 @@ public class TorrentDetailsFragment extends Fragment {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+
+                        Log.d("Debug", "[getTorrentContents] respomse: " + response);
 
                         // Get list type to parse it
                         Type listType = new TypeToken<List<ContentFile>>() {
@@ -568,21 +555,8 @@ public class TorrentDetailsFragment extends Fragment {
         url = protocol + "://" + hostname + ":" + port + url;
 
         // Command
-        if (qb_version.equals("2.x")) {
-            url = url + "/query/propertiesTrackers/" + hash;
-        }
+        url = url + "/api/v2/torrents/trackers?hash=" + hash;
 
-        if (qb_version.equals("3.1.x")) {
-            url = url + "/query/propertiesTrackers/" + hash;
-        }
-
-        if (qb_version.equals("3.2.x")) {
-            url = url + "/query/propertiesTrackers/" + hash;
-        }
-
-        if (qb_version.equals("4.1.x")) {
-            url = url + "/api/v2/torrents/trackers?hash=" + hash;
-        }
 
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -592,7 +566,9 @@ public class TorrentDetailsFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
 
-                        // Get list type to parse it
+                        Log.d("Debug", "[getTorrentTrackers] response: " + response);
+
+                        // Get list type to parse itgetTorrentTrackers
                         Type listType = new TypeToken<List<Tracker>>() {
                         }.getType();
 
@@ -654,21 +630,7 @@ public class TorrentDetailsFragment extends Fragment {
         url = protocol + "://" + hostname + ":" + port + url;
 
         // Command
-//        if (qb_version.equals("2.x")) {
-//            url = url + "/json/propertiesGeneral/" + hash;
-//        }
-
-        if (qb_version.equals("3.1.x")) {
-            url = url + "/query/propertiesGeneral/" + hash;
-        }
-
-        if (qb_version.equals("3.2.x")) {
-            url = url + "/query/propertiesGeneral/" + hash;
-        }
-
-        if (qb_version.equals("4.1.x")) {
-            url = url + "/api/v2/torrents/properties?hash=" + hash;
-        }
+        url = url + "/api/v2/torrents/properties?hash=" + hash;
 
         JsonObjectRequest jsArrayRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -677,6 +639,7 @@ public class TorrentDetailsFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d("Debug", "[getTorrentGeneralInfo] response: " + response);
                         // Return value
                         callback.onSuccess((GeneralInfo) new Gson().fromJson(response.toString(), GeneralInfo.class));
                     }
@@ -769,92 +732,94 @@ public class TorrentDetailsFragment extends Fragment {
 
                 GeneralInfoItem item;
 
-                if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.1.x")) {
+                Log.d("Debug", "[getTorrentGeneralInfo] onSuccess >");
 
-                    // Save path
-                    item = generalInfoItems.get(0);
-                    item.setValue(generalInfo.getSave_path());
-                    generalInfoItems.set(0, item);
+                Log.d("Debug", "[getTorrentGeneralInfo] generalInfo: " + generalInfo.getPeers());
 
-                    // Creation date
-                    item = generalInfoItems.get(1);
-                    item.setValue(Common.unixTimestampToDate(Long.toString(generalInfo.getCreation_date())));
-                    generalInfoItems.set(1, item);
+                // Save path
+                item = generalInfoItems.get(0);
+                item.setValue(generalInfo.getSave_path());
+                generalInfoItems.set(0, item);
 
-                    // Comment
-                    item = generalInfoItems.get(2);
-                    item.setValue(generalInfo.getComment());
-                    generalInfoItems.set(2, item);
+                Log.d("Debug", "[getTorrentGeneralInfo] Save_path: " + generalInfo.getSave_path());
 
-                    // Total wasted
-                    item = generalInfoItems.get(3);
-                    item.setValue(Common.calculateSize(Long.toString(generalInfo.getTotal_wasted())).replace(",", "."));
-                    generalInfoItems.set(3, item);
+                // Creation date
+                item = generalInfoItems.get(1);
+                item.setValue(Common.unixTimestampToDate(Long.toString(generalInfo.getCreation_date())));
+                generalInfoItems.set(1, item);
 
-                    // Total uploaded
-                    item = generalInfoItems.get(4);
-                    item.setValue(Common.calculateSize(Long.toString(generalInfo.getTotal_uploaded())).replace(",", "."));
-                    generalInfoItems.set(4, item);
+                // Comment
+                item = generalInfoItems.get(2);
+                item.setValue(generalInfo.getComment());
+                generalInfoItems.set(2, item);
 
-                    // Total downloaded
-                    item = generalInfoItems.get(5);
-                    item.setValue(Common.calculateSize(Long.toString(generalInfo.getTotal_downloaded())).replace(",", "."));
-                    generalInfoItems.set(5, item);
+                // Total wasted
+                item = generalInfoItems.get(3);
+                item.setValue(Common.calculateSize(Long.toString(generalInfo.getTotal_wasted())).replace(",", "."));
+                generalInfoItems.set(3, item);
 
-                    // Time elapsed
-                    item = generalInfoItems.get(6);
-                    item.setValue(Common.secondsToEta(Long.toString(generalInfo.getTime_elapsed())).replace(",", "."));
-                    generalInfoItems.set(6, item);
+                // Total uploaded
+                item = generalInfoItems.get(4);
+                item.setValue(Common.calculateSize(Long.toString(generalInfo.getTotal_uploaded())).replace(",", "."));
+                generalInfoItems.set(4, item);
 
-                    // Number of connections
-                    item = generalInfoItems.get(7);
-                    item.setValue(Long.toString(generalInfo.getNb_connections()));
-                    generalInfoItems.set(7, item);
+                // Total downloaded
+                item = generalInfoItems.get(5);
+                item.setValue(Common.calculateSize(Long.toString(generalInfo.getTotal_downloaded())).replace(",", "."));
+                generalInfoItems.set(5, item);
 
-                    // Share ratio
-                    item = generalInfoItems.get(8);
-                    // Format ratio
-                    try {
-                        item.setValue(String.format("%.2f", generalInfo.getShare_ratio()).replace(",", "."));
-                    } catch (Exception e) {
-                    }
-                    generalInfoItems.set(8, item);
+                // Time elapsed
+                item = generalInfoItems.get(6);
+                item.setValue(Common.secondsToEta(generalInfo.getTime_elapsed()).replace(",", "."));
+                generalInfoItems.set(6, item);
 
-                    // Upload limit
-                    item = generalInfoItems.get(9);
-                    item.setValue(Long.toString(generalInfo.getUp_limit()));
-                    generalInfoItems.set(9, item);
+                // Number of connections
+                item = generalInfoItems.get(7);
+                item.setValue(Long.toString(generalInfo.getNb_connections()));
+                generalInfoItems.set(7, item);
 
-                    // Download limit
-                    item = generalInfoItems.get(10);
-                    item.setValue(Long.toString(generalInfo.getDl_limit()));
-                    generalInfoItems.set(10, item);
-
-                    // Format Upload and Download limit
-
-                    // Upload limit
-                    item = generalInfoItems.get(9);
-
-                    if (!item.getValue().equals("-1")) {
-                        item.setValue(Common.calculateSize(item.getValue()).replace(",", ".") + "/s");
-                    } else {
-                        item.setValue("∞");
-                    }
-
-                    generalInfoItems.set(9, item);
-
-                    // Download limit
-                    item = generalInfoItems.get(10);
-
-                    if (!item.getValue().equals("-1")) {
-                        item.setValue(Common.calculateSize(item.getValue()).replace(",", ".") + "/s");
-                    } else {
-                        item.setValue("∞");
-                    }
-
-                    generalInfoItems.set(10, item);
-
+                // Share ratio
+                item = generalInfoItems.get(8);
+                // Format ratio
+                try {
+                    item.setValue(String.format("%.2f", generalInfo.getShare_ratio()).replace(",", "."));
+                } catch (Exception e) {
                 }
+                generalInfoItems.set(8, item);
+
+                // Upload limit
+                item = generalInfoItems.get(9);
+                item.setValue(Long.toString(generalInfo.getUp_limit()));
+                generalInfoItems.set(9, item);
+
+                // Download limit
+                item = generalInfoItems.get(10);
+                item.setValue(Long.toString(generalInfo.getDl_limit()));
+                generalInfoItems.set(10, item);
+
+                // Format Upload and Download limit
+
+                // Upload limit
+                item = generalInfoItems.get(9);
+
+                if (!item.getValue().equals("-1")) {
+                    item.setValue(Common.calculateSize(item.getValue()).replace(",", ".") + "/s");
+                } else {
+                    item.setValue("∞");
+                }
+
+                generalInfoItems.set(9, item);
+
+                // Download limit
+                item = generalInfoItems.get(10);
+
+                if (!item.getValue().equals("-1")) {
+                    item.setValue(Common.calculateSize(item.getValue()).replace(",", ".") + "/s");
+                } else {
+                    item.setValue("∞");
+                }
+
+                generalInfoItems.set(10, item);
 
                 // Refresh adapater
                 generalInfoAdapter.refreshGeneralInfo(generalInfoItems);
@@ -876,18 +841,18 @@ public class TorrentDetailsFragment extends Fragment {
 
             // Get values from current activity
             name = torrent.getName();
-            size = "" + torrent.getSize();
+            size = Common.calculateSize(this.torrent.getSize());
             hash = torrent.getHash();
             ratio = "" + torrent.getRatio();
             state = torrent.getState();
-//            leechs = torrent.getLeechs();
-//            seeds = torrent.getSeeds();
-            progress = "" + torrent.getProgress();
+            leechs = "" + torrent.getNum_leechs();
+            seeds = "" + torrent.getNum_seeds();
+            progress = progress = Common.ProgressForUi(this.torrent.getProgress()) + "%";
             priority = "" + torrent.getPriority();
-            eta = "" + torrent.getEta();
+            eta = Common.secondsToEta(this.torrent.getEta());
             uploadSpeed = "" + torrent.getUpspeed();
-            downloadSpeed = "" + torrent.getDlspeed();
-            downloaded = "" + torrent.getDownloaded();
+            downloadSpeed = Common.calculateSize(this.torrent.getDlspeed()) + "/s";
+            downloaded = Common.calculateSize(this.torrent.getSize() - this.torrent.getAmount_left());
 //            addedOn = torrent.getAddedOn();
 //            completionOn = torrent.getCompletionOn();
 //            label = torrent.getLabel();
@@ -946,7 +911,7 @@ public class TorrentDetailsFragment extends Fragment {
             etaTextView.setText(eta);
 
 
-            if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.1.x")) {
+            if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.2.x")) {
                 sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
                 firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
@@ -1154,37 +1119,25 @@ public class TorrentDetailsFragment extends Fragment {
                 menu.findItem(R.id.action_search).setVisible(true);
             }
 
-            if (MainActivity.qb_version.equals("3.2.x") || MainActivity.qb_version.equals("4.1.x")) {
-                menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
-                menu.findItem(R.id.action_sequential_download).setVisible(true);
-                menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
-                // TODO: Change add_tracker to true
+            menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
+            menu.findItem(R.id.action_sequential_download).setVisible(true);
+            menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
+            // TODO: Change add_tracker to true
 //                menu.findItem(R.id.action_add_tracker).setVisible(false);
-                menu.findItem(R.id.action_label_menu).setVisible(true);
-                menu.findItem(R.id.action_set_label).setVisible(true);
-                menu.findItem(R.id.action_delete_label).setVisible(true);
+            menu.findItem(R.id.action_label_menu).setVisible(true);
+            menu.findItem(R.id.action_set_label).setVisible(true);
+            menu.findItem(R.id.action_delete_label).setVisible(true);
 
-                // TODO: Check when this changed (qb_api X.Y.Z )
-                if (MainActivity.qb_api < 8) {
-                    menu.findItem(R.id.action_delete_label).setVisible(false);
-                }
-
-                // Set Alternate Speed limit state
-                if (MainActivity.alternative_speeds) {
-                    menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
-                } else {
-                    menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
-                }
-
-            } else {
-                menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
-                menu.findItem(R.id.action_sequential_download).setVisible(false);
-                menu.findItem(R.id.action_toggle_alternative_rate).setVisible(false);
-                // TODO: Change add_tracker to true
-//                menu.findItem(R.id.action_add_tracker).setVisible(false);
-                menu.findItem(R.id.action_label_menu).setVisible(false);
-                menu.findItem(R.id.action_set_label).setVisible(false);
+            // TODO: Check when this changed (qb_api X.Y.Z )
+            if (MainActivity.qb_api < 8) {
                 menu.findItem(R.id.action_delete_label).setVisible(false);
+            }
+
+            // Set Alternate Speed limit state
+            if (MainActivity.alternative_speeds) {
+                menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
+            } else {
+                menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
             }
 
         }
