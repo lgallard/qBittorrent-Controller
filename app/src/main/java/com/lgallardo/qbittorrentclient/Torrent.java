@@ -78,7 +78,7 @@ class Torrent {
     private int downloaded_session;
     @SerializedName("eta")
     @Expose
-    private double eta;
+    private long eta;
     @SerializedName("f_l_piece_prio")
     @Expose
     private boolean f_l_piece_prio;
@@ -284,7 +284,7 @@ class Torrent {
 //        this.dlspeed = dlspeed;
 //    }
 
-    public int getSpeedWeight(String type) {
+    private int getSpeedWeight(String type) {
 
         String scalar = "0";
         String unit = "";
@@ -426,7 +426,6 @@ class Torrent {
 //
     public int getEtaInMinutes() {
 
-//        String[] words = eta.split("\\s+");
         String[] words = ("" + eta).split("\\s+");
         String minutes = "0";
         String hours = "0";
@@ -817,11 +816,11 @@ class Torrent {
         this.downloaded_session = downloaded_session;
     }
 
-    public double getEta() {
+    public long getEta() {
         return eta;
     }
 
-    public void setEta(double eta) {
+    public void setEta(long eta) {
         this.eta = eta;
     }
 

@@ -22,9 +22,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class Common {
 
-    public static String calculateSize(String value) {
+    protected static String calculateSize(String value) {
 
-        if(value == null || value == "")
+        if(value == null || value.equals(""))
             return "0";
 
         long bytes = Long.parseLong(value);
@@ -38,16 +38,10 @@ public class Common {
 
     }
 
-
-    public static String calculateSize(double value) {
+    protected static String calculateSize(double value) {
 
         String result = "0 B";
-        String valueStr = String.valueOf(value);
 
-        valueStr = valueStr.substring(0, valueStr.indexOf("."));
-
-
-        //long bytes = Long.parseLong(valueStr);
         long bytes = (long) value;
 
         int unit = 1024;
@@ -59,7 +53,7 @@ public class Common {
 
     }
 
-    public static double humanSizeToBytes(String value) {
+    protected static double humanSizeToBytes(String value) {
         String scalar;
         int unit = 1024;
         int exp;
@@ -69,115 +63,85 @@ public class Common {
 
         String[] words = value.split("\\s+");
 
-//        Log.d("Debug", "words length:" + words.length);
-
         if (words.length == 2) {
-
-//            Log.d("Debug", "words[0]:" + words[0]);
-//            Log.d("Debug", "words[1]:" + words[1]);
-
 
             try {
                 scalar = words[0].replace(",", ".");
 
-//                Log.d("Debug", "scalar:" + scalar);
-
-
                 exp = "BKMGTPE".indexOf((words[1]).toCharArray()[0]);
-
-//                Log.d("Debug", "exp:" + exp);
-
 
                 returnValue = Double.parseDouble(scalar) * Math.pow(unit, exp);
 
             } catch (Exception e) {
+                returnValue = 0;
             }
-
-
         }
 
         return returnValue;
     }
 
-
-
-    public static String unixTimestampToDate(String unixDate) {
-
-
+    protected static String unixTimestampToDate(String unixDate) {
         long dv = Long.valueOf(unixDate) * 1000;// its need to be in milisecond
         Date df = new Date(dv);
-        String dateString = new SimpleDateFormat("yyyy-MM-dd hh:mm a").format(df);
-
-        return dateString;
+        return new SimpleDateFormat("yyyy-MM-dd hh:mm a").format(df);
     }
 
-    public static String secondsToEta(String secs) {
+    protected static String secondsToEta(String secs) {
 
-        if (!secs.equals("∞")) {
+        long seconds = Long.parseLong(secs);
+        int day = (int) TimeUnit.SECONDS.toDays(seconds);
+        long hours = TimeUnit.SECONDS.toHours(seconds) - (day * 24);
+        long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds) * 60);
+        long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) * 60);
 
-            long seconds = Long.parseLong(secs);
 
-            int day = (int) TimeUnit.SECONDS.toDays(seconds);
-            long hours = TimeUnit.SECONDS.toHours(seconds) - (day * 24);
-            long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds) * 60);
-            long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) * 60);
+        if (day >= 100) {
+            secs = "∞";
+        } else {
 
-            secs = "";
-
-            if (day >= 100) {
-                secs = "∞";
+            if (day > 0) {
+                secs = day + "d " + hours + "h";
             } else {
 
-                if (day > 0) {
-                    secs = day + "d " + hours + "h";
+                if (hours > 0) {
+                    secs = hours + "h " + minute + "m";
                 } else {
 
-                    if (hours > 0) {
-                        secs = hours + "h " + minute + "m";
+                    if (minute > 0) {
+                        secs = minute + "m";
                     } else {
-
-                        if (minute > 0) {
-                            secs = minute + "m";
-                        } else {
-                            secs = second + "s";
-                        }
-
+                        secs = second + "s";
                     }
-
-
                 }
-
             }
         }
 
         return secs;
     }
+
     // This method converts unix timestamp to date representation
-    public static String timestampToDate(String timestamp){
+    protected static String timestampToDate(String timestamp){
 
-        Long unixtimestamp = Long.parseLong(timestamp);
+        long unixtimestamp = new Long(timestamp);
 
-//        Log.d("Debug", "TimeStamp: " + unixtimestamp);
-
-        if("4294967295".equals(unixtimestamp)){
+        if(unixtimestamp == Long.parseLong("4294967295")){
             return "";
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
         Date date = new Date(unixtimestamp*1000);
         return new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(date);
-
     }
 
 
     // Taken from https://stackoverflow.com/questions/10039672/android-how-to-read-file-in-bytes
 
-    public static byte[] fullyReadFileToBytes(File f) throws IOException {
+    protected static byte[] fullyReadFileToBytes(File f) throws IOException {
         int size = (int) f.length();
         byte bytes[] = new byte[size];
         byte tmpBuff[] = new byte[size];
         FileInputStream fis = new FileInputStream(f);
-        ;
+
         try {
 
             int read = fis.read(bytes, 0, size);
@@ -189,8 +153,6 @@ public class Common {
                     remain -= read;
                 }
             }
-        } catch (IOException e) {
-            throw e;
         } finally {
             fis.close();
         }
@@ -198,7 +160,7 @@ public class Common {
         return bytes;
     }
 
-    public static byte[] getBytes(InputStream inputStream) throws IOException {
+    protected static byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];
@@ -209,7 +171,5 @@ public class Common {
         }
         return byteBuffer.toByteArray();
     }
-
-
 
 }

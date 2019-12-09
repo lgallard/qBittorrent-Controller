@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public static final int DRAWER_LABEL = 6;
     public static final int DRAWER_LABEL_CATEGORY = 8;
 
-    private ArrayList<String> labels = new ArrayList<String>();
+    private ArrayList<String> labels = new ArrayList<>();
 
     // Fragments
     private AboutFragment secondFragment;
@@ -456,22 +456,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are
 
 
-        ArrayList<DrawerItem> serverItems = new ArrayList<DrawerItem>();
-        ArrayList<DrawerItem> actionItems = new ArrayList<DrawerItem>();
+        ArrayList<DrawerItem> serverItems = new ArrayList<>();
+        ArrayList<DrawerItem> actionItems = new ArrayList<>();
 //        ArrayList<ObjectDrawerItem> labelItems = new ArrayList<ObjectDrawerItem>();
-        ArrayList<DrawerItem> settingsItems = new ArrayList<DrawerItem>();
+        ArrayList<DrawerItem> settingsItems = new ArrayList<>();
 
 
         // Add server category
         serverItems.add(new DrawerItem(R.drawable.ic_drawer_servers, getResources().getString(R.string.drawer_servers_category), DRAWER_CATEGORY, false, null));
 
         // Server items
-        int currentServerValue = 1;
+        int currentServerValue;
 
         try {
             currentServerValue = Integer.parseInt(MainActivity.currentServer);
         } catch (NumberFormatException e) {
-
+            currentServerValue = 1;
         }
 
         for (int i = 0; i < navigationDrawerServerItems.length; i++) {
@@ -850,7 +850,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         {
 
-            if (auto_refresh == true && canrefresh == true && activityIsVisible == true) {
+            if (auto_refresh && canrefresh && activityIsVisible ) {
 
                 refreshCurrent();
             }
@@ -1098,7 +1098,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         Log.d("Debug", "JSONObject: " + response);
                         Gson gson = new Gson();
 
-                        Float responseFloat = new Float(-1);
+                        Float responseFloat = Float.valueOf(-1);
 
                         try {
 
@@ -1196,7 +1196,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         //Log.d("Debug", "headers: " + CustomStringRequest.headers);
 
                         JSONObject jsonObject = null;
-                        CustomObjectResult customObjectResult = null;
+                        CustomObjectResult customObjectResult;
                         try {
                             jsonObject = new JSONObject(response);
                         } catch (Exception e) {
@@ -2502,7 +2502,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         try {
             fileBytesTemp = Common.fullyReadFileToBytes(file);
         } catch (IOException e) {
-            fileBytesTemp = null;
             e.printStackTrace();
         }
 
@@ -2907,14 +2906,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         List<Torrent> listTorrent = (List<Torrent>) new Gson().fromJson(response.toString(), listType);
 
-                        Log.d("Debug: ", "GetAllTorrents - torrent list - Name: " + listTorrent.get(0).getName());
-                        Log.d("Debug: ", "GetAllTorrents - torrent list - List Torrent: " + listTorrent.toString());
-
-                        Log.d("Debug: ", "GetAllTorrents - response: " + response.toString());
-                        Log.d("Debug: ", "GetAllTorrents - onResponse before callback.onSuccess");
-                        Log.d("Debug: ", "GetAllTorrents - onResponse - torrents size: " + torrents.size());
-
-
                         // Return value
                         callback.onSuccess(torrents);
 
@@ -2962,18 +2953,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                String apiStr = "0";
-
-                Log.d("Debug: ", "[getApi] ApiVersion: " + result);
-
-                apiStr = result.replace(".","");
-
                 if (result != null && !result.equals("")) {
 
                     int api;
 
                     try {
-                        api = Integer.parseInt(apiStr);
+                        api = Integer.parseInt(result.replace(".",""));
                     } catch (Exception e) {
                         api = 0;
                     }
@@ -3455,7 +3440,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 if (result != null && !result.equals("")) {
 
-                    if ("1".equals(result) == true) {
+                    if ("1".equals(result)) {
                         isAlternativeSpeedLimitsEnabled = true;
                     } else {
                         isAlternativeSpeedLimitsEnabled = false;
@@ -3507,9 +3492,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(List<Torrent> torrents) {
 
-                String sizeInfo = "";
-                String downloadedInfo = "";
-                String progressInfo = "";
+                String sizeInfo, downloadedInfo, progressInfo, etaInfo;
 
                 double size;
                 Log.d("Debug", "[getTorrentList] torrents.size(): " + torrents.size());
@@ -3554,6 +3537,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // Get downloaded
                     downloadedInfo = Common.calculateSize(torrents.get(i).getSize()-torrents.get(i).getAmount_left());
 
+                    // Get ETA
+                    if (torrents.get(i).getEta() == 8640000) {
+                        etaInfo = "∞";
+                    }
+                    else {
+                        etaInfo = Common.secondsToEta("" + torrents.get(i).getEta());
+                    }
+
                     // Get torrent generic properties
                     try {
                         // Calculate total downloaded
@@ -3578,7 +3569,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 + Character.toString('\u2193') + " " + torrents.get(i).getDlspeed() + " "
                                 + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
                                 + Character.toString('\u2022') + " " + progressInfo + "% "
-                                + Character.toString('\u2022') + " " + torrents.get(i).getEta();
+                                + Character.toString('\u2022') + " " + etaInfo;
 
 //                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
 //                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
@@ -3591,7 +3582,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 + Character.toString('\u2191') + " " + torrents.get(i).getUpspeed() + " "
                                 + Character.toString('\u2193') + " " + torrents.get(i).getDlspeed() + " "
                                 + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
-                                + Character.toString('\u2022') + " " + torrents.get(i).getEta();
+                                + Character.toString('\u2022') + " " + etaInfo;
 
 //                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
 //                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
