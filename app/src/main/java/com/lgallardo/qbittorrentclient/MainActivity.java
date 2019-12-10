@@ -2033,10 +2033,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
+                        Log.d("Debug", "[recheckTorrent] Response: " + response);
 
-                        Log.d("Debug", "hash: " + hash);
+                        Log.d("Debug", "[recheckTorrent] hash: " + hash);
 
                         // Return value
                         callback.onSuccess("");
@@ -2072,7 +2071,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("hash", hash);
+                params.put("hashes", hash);
                 return params;
             }
         };
@@ -3169,7 +3168,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> recheckTorrents: " + result);
+                Log.d("Debug: ", ">>> [recheckTorrent] result: " + result);
 
             }
         });
