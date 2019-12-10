@@ -221,7 +221,7 @@ public class NotifierService extends BroadcastReceiver {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "[NS][getCookie] Response: " + response);
+//                        Log.d("Debug", "[NS][getCookie] Response: " + response);
 
                         JSONObject jsonObject = null;
                         CustomObjectResult customObjectResult = null;
@@ -400,14 +400,14 @@ public class NotifierService extends BroadcastReceiver {
 
                 for (int i = 0; i < torrents.size(); i++) {
 
-                    Log.d("Debug", "[NS][getTorrentList] File: " + torrents.get(i).getName());
-                    Log.d("Debug", "[NS][getTorrentList] Hash: " + torrents.get(i).getHash());
+//                    Log.d("Debug", "[NS][getTorrentList] File: " + torrents.get(i).getName());
+//                    Log.d("Debug", "[NS][getTorrentList] Hash: " + torrents.get(i).getHash());
 
                     // Get torrent size
                     sizeInfo = Common.calculateSize(torrents.get(i).getSize());
 
-                    Log.d("Debug", "[NS][getTorrentList] sizeInfo: " + sizeInfo);
-                    Log.d("Debug", "[NS][getTorrentList] progress raw: " + torrents.get(i).getProgress());
+//                    Log.d("Debug", "[NS][getTorrentList] sizeInfo: " + sizeInfo);
+//                    Log.d("Debug", "[NS][getTorrentList] progress raw: " + torrents.get(i).getProgress());
 
                     double progress = torrents.get(i).getProgress();
 
@@ -416,8 +416,8 @@ public class NotifierService extends BroadcastReceiver {
 
                     progressInfo = Common.ProgressForUi(progress);
 
-                    Log.d("Debug", "[NS][getTorrentList] progress: " + (progress * 100));
-                    Log.d("Debug", "[NS][getTorrentList] progress fixed: " + progressInfo);
+//                    Log.d("Debug", "[NS][getTorrentList] progress: " + (progress * 100));
+//                    Log.d("Debug", "[NS][getTorrentList] progress fixed: " + progressInfo);
 
                     // Get downloaded
                     downloadedInfo = Common.calculateSize(torrents.get(i).getSize()-torrents.get(i).getAmount_left());
@@ -434,10 +434,10 @@ public class NotifierService extends BroadcastReceiver {
 
                     // Info
                     infoString = downloadedInfo + " "
-                            + Character.toString('\u2193') + " " + downloadSpeedInfo + " "
-                            + Character.toString('\u2191') + " " + uploadSpeedInfo + " "
-                            + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
-                            + Character.toString('\u2022') + " " + etaInfo;
+                            +'\u2193' + " " + downloadSpeedInfo + " "
+                            +'\u2191' + " " + uploadSpeedInfo + " "
+                            +'\u2022' + " " + torrents.get(i).getRatio() + " "
+                            +'\u2022' + " " + etaInfo;
 
                     // Set info
                     torrents.get(i).setInfo(infoString);

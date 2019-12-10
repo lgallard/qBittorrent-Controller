@@ -941,7 +941,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 return true;
             case R.id.action_file_high_priority:
 //                Log.d("Debug", "High priority");
-                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 2);
+                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 6);
                 return true;
             case R.id.action_file_maximum_priority:
 //                Log.d("Debug", "Maximum priority");
@@ -2577,7 +2577,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/transfer/filePrio";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/filePrio";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2586,13 +2586,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.d("Debug", "[setFilePrio] executing");
 
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
-                        Log.d("Debug", "hashes: " + hashes);
-                        Log.d("Debug", "id: " + id);
-                        Log.d("Debug", "priority: " + priority);
+//                        Log.d("Debug", "[setFilePrio] Response: " + response);
+//                        Log.d("Debug", "[setFilePrio] hashes: " + hashes);
+//                        Log.d("Debug", "[setFilePrio] id: " + id);
+//                        Log.d("Debug", "[setFilePrio] priority: " + priority);
 
                         // Return value
                         callback.onSuccess("");
@@ -2603,7 +2602,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                        Log.d("Debug", "[setFilePrio] Error in JSON response: " + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "[setFilePrio] Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
         ) {
@@ -3302,7 +3303,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> setFilePrio: " + result);
+                Log.d("Debug: ", "[setFilePrio] Result: " + result);
+
+                // Refresh
+                refreshAfterCommand(2);
+                swipeRefresh();
 
             }
         });
@@ -3362,10 +3367,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         // Info free
                         infoString = downloadedInfo + " / " + sizeInfo  + " "
                                 + '\u2191' + " " + uploadSpeedInfo + " "
-                                + Character.toString('\u2193') + " " + downloadSpeedInfo + " "
-                                + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
-                                + Character.toString('\u2022') + " " + progressInfo + "% "
-                                + Character.toString('\u2022') + " " + etaInfo;
+                                + '\u2193' + " " + downloadSpeedInfo + " "
+                                + '\u2022' + " " + torrents.get(i).getRatio() + " "
+                                + '\u2022' + " " + progressInfo + "% "
+                                + '\u2022' + " " + etaInfo;
 
 //                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
 //                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
@@ -3376,9 +3381,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         // Info pro
                         infoString = downloadedInfo + " / " + sizeInfo + " "
                                 + '\u2191' + " " + uploadSpeedInfo + " "
-                                + Character.toString('\u2193') + " " + downloadSpeedInfo + " "
-                                + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
-                                + Character.toString('\u2022') + " " + etaInfo;
+                                + '\u2193' + " " + downloadSpeedInfo + " "
+                                + '\u2022' + " " + torrents.get(i).getRatio() + " "
+                                + '\u2022' + " " + etaInfo;
 
 //                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
 //                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();

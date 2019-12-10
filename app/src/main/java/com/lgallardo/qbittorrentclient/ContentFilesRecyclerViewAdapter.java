@@ -249,7 +249,7 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
             case 1:
                 priorityString = context.getResources().getString(R.string.action_file_normal_priority);
                 break;
-            case 2:
+            case 6:
                 priorityString = context.getResources().getString(R.string.action_file_high_priority);
                 break;
             case 7:
