@@ -491,8 +491,6 @@ public class TorrentDetailsFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
 
-                        Log.d("Debug", "[getTorrentContents] respomse: " + response);
-
                         // Get list type to parse it
                         Type listType = new TypeToken<List<ContentFile>>() {
                         }.getType();
@@ -566,8 +564,6 @@ public class TorrentDetailsFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
 
-                        Log.d("Debug", "[getTorrentTrackers] response: " + response);
-
                         // Get list type to parse itgetTorrentTrackers
                         Type listType = new TypeToken<List<Tracker>>() {
                         }.getType();
@@ -592,7 +588,6 @@ public class TorrentDetailsFragment extends Fragment {
 
                         // Log error
                         Log.d("Debug", "getTorrentTrackers - Error in JSON response: " + error.getMessage());
-
                     }
                 }
 
@@ -639,7 +634,6 @@ public class TorrentDetailsFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("Debug", "[getTorrentGeneralInfo] response: " + response);
                         // Return value
                         callback.onSuccess((GeneralInfo) new Gson().fromJson(response.toString(), GeneralInfo.class));
                     }
@@ -1137,7 +1131,7 @@ public class TorrentDetailsFragment extends Fragment {
             if (MainActivity.alternative_speeds) {
                 menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
             } else {
-                menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
+                menu.findItem(R.id.action_toggle_alternative_rate).setChecked(false);
             }
 
         }

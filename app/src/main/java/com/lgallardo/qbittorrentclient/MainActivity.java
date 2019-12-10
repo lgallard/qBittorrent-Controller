@@ -313,7 +313,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Searching field
     private String searchField = "";
-    private String qbQueryString = "query";
 
     // Alarm manager
     private AlarmManager alarmMgr;
@@ -1171,17 +1170,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         String url;
 
-        if (qb_version.equals("4.2.x")) {
-            url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
-            Log.d("Debug", "===cookie for 4.2.x ===");
-        } else {
-            Log.d("Debug", "===cookie for < 4.2.x ===");
-            if (qb_version.equals("4.1.x")) {
-                url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
-            } else {
-                url = protocol + "://" + hostname + ":" + port + "/login";
-            }
-        }
+        url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
 
         // New JSONObject request
         CustomStringRequest jsArrayRequest = new CustomStringRequest(
@@ -1191,8 +1180,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "===cookie===");
-                        Log.d("Debug", "Response: " + response);
+                        Log.d("Debug", "[getCookieV] Response: " + response);
                         //Log.d("Debug", "headers: " + CustomStringRequest.headers);
 
                         JSONObject jsonObject = null;
@@ -1200,7 +1188,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         try {
                             jsonObject = new JSONObject(response);
                         } catch (Exception e) {
-                            Log.e("Debug", "THIS => " + e.getMessage());
+                            Log.e("Debug", "[getCookieV] error: " + e.getMessage());
                             e.printStackTrace();
                         }
 
@@ -1209,39 +1197,31 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         String cookieString = null;
 
                         try {
-                            Log.d("Debug", "JSONObject: " + jsonObject.toString());
+                            Log.d("Debug", "[getCookieV] JSONObject: " + jsonObject.toString());
                             customObjectResult = gson.fromJson(jsonObject.toString(), CustomObjectResult.class);
 
-                            Log.d("Debug", "DATA?: " + customObjectResult.getData());
-                            Log.d("Debug", "HEADERS?: " + customObjectResult.getHeaders());
-                            Log.d("Debug", "======");
+                            Log.d("Debug", "[getCookieV] DATA?: " + customObjectResult.getData());
+                            Log.d("Debug", "[getCookieV] HEADERS?: " + customObjectResult.getHeaders());
+
                             // Get Headers
                             String headers = customObjectResult.getHeaders();
 
 
-                            Log.d("Debug", "Headers => " + headers);
-                            Log.d("Debug", "======");
+                            Log.d("Debug", "[getCookieV] Headers: " + headers);
 
                             // Get set-cookie from headers
                             cookieString = headers.split("set-cookie=")[1].split(";")[0];
 
 
-                            Log.d("Debug", "set-cookie => " + cookieString);
-                            Log.d("Debug", "======");
+                            Log.d("Debug", "[getCookieV] set-cookie: " + cookieString);
+
 
                         } catch (Exception e) {
 
-                            Log.e("Debug", "THIS 2 => " + e.getMessage());
+                            Log.e("Debug", "[getCookieV] error 2 => " + e.getMessage());
                             e.printStackTrace();
                         }
 
-
-//                        Log.d("Debug", "JSONObject: " + customObjectResult.toString());
-//                        Log.d("Debug", "======");
-//                        Log.d("Debug", "Headers => "+ headers);
-//                        Log.d("Debug", "======");
-//                        Log.d("Debug", "set-cookie => "+ cookieString);
-//                        Log.d("Debug", "======");
 
                         // Return value
                         callback.onSuccess(cookieString);
@@ -1252,7 +1232,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Log.d("Debug", "getCookie - Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", "[getCookieV] Error in JSON response: " + error.getMessage());
 
                         callback.onSuccess("");
 
@@ -1881,7 +1861,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/setTorrentsUpLimit";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/transfer/uploadLimit";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1890,31 +1870,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
-                        Log.d("Debug", "hashes: " + hashes);
-                        Log.d("Debug", "limit: " + limit);
-
-
                         // Return value
                         callback.onSuccess("");
-
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
                         Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -1952,7 +1916,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/setTorrentsDlLimit";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/transfer/setDownloadLimit";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1961,28 +1925,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
-
-                        Log.d("Debug", "hashes: " + hashes);
-                        Log.d("Debug", "limit: " + limit);
-
-
                         // Return value
                         callback.onSuccess("");
-
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
                         Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
 
 
@@ -2032,10 +1982,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.d("Debug", "[recheckTorrent] Response: " + response);
-
-                        Log.d("Debug", "[recheckTorrent] hash: " + hash);
 
                         // Return value
                         callback.onSuccess("");
@@ -2289,7 +2235,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/toggleAlternativeSpeedLimits";
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/transfer/toggleSpeedLimitsMode";
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2300,8 +2246,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     public void onResponse(String response) {
                         // Return value
                         callback.onSuccess("");
-
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -3235,7 +3179,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> toggleAlternativeSpeedLimits: " + result);
+                Log.d("Debug: ", "[toggleAlternativeSpeedLimits] OK");
 
                 toastText(R.string.toggledAlternativeRates);
 
@@ -3308,20 +3252,27 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 Boolean isAlternativeSpeedLimitsEnabled;
 
-                Log.d("Debug: ", ">getAlternativeSpeedLimitsEnabled<: " + result);
+                Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] result: " + result);
 
                 if (result != null && !result.equals("")) {
 
-                    if ("1".equals(result)) {
-                        isAlternativeSpeedLimitsEnabled = true;
-                    } else {
-                        isAlternativeSpeedLimitsEnabled = false;
+
+                    if("1".equals(result)) {
+                        alternative_speeds = true;
+                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] ON");
+                    }
+                    else {
+                        alternative_speeds = false;
+                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] OFF");
                     }
 
-                    savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", isAlternativeSpeedLimitsEnabled);
+                    savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", alternative_speeds);
+
+
                     if (altSpeedLimitsMenuItem != null) {
+                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] altSpeedLimitsMenuItem not null");
                         altSpeedLimitsMenuItem.setEnabled(true);
-                        altSpeedLimitsMenuItem.setChecked(isAlternativeSpeedLimitsEnabled);
+                        altSpeedLimitsMenuItem.setChecked(alternative_speeds);
                     }
                 } else {
                     Log.d("Debug: ", "getAlternativeSpeedLimitsEnabled got null");
@@ -3371,26 +3322,26 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 for (int i = 0; i < torrents.size(); i++) {
 
-                    Log.d("Debug", "- - -");
-                    Log.d("Debug", "[getTorrentList] File: " + torrents.get(i).getName());
-                    Log.d("Debug", "[getTorrentList] Hash: " + torrents.get(i).getHash());
-
-                    Log.d("Debug", "[getTorrentList] >>> Calculating sizes!!!!");
-
-                    Log.d("Debug", "[getTorrentList] qb_version: "+ qb_version);
-                    Log.d("Debug", "[getTorrentList] qb_api: "+ qb_api);
+//                    Log.d("Debug", "- - -");
+//                    Log.d("Debug", "[getTorrentList] File: " + torrents.get(i).getName());
+//                    Log.d("Debug", "[getTorrentList] Hash: " + torrents.get(i).getHash());
+//
+//                    Log.d("Debug", "[getTorrentList] >>> Calculating sizes!!!!");
+//
+//                    Log.d("Debug", "[getTorrentList] qb_version: "+ qb_version);
+//                    Log.d("Debug", "[getTorrentList] qb_api: "+ qb_api);
 
 
                     // Get torrent size
                     sizeInfo = Common.calculateSize(torrents.get(i).getSize());
-                    Log.d("Debug", "[getTorrentList] sizeStr: " + sizeInfo);
+//                    Log.d("Debug", "[getTorrentList] sizeStr: " + sizeInfo);
 
                     size = torrents.get(i).getSize();
 
-                    Log.d("Debug", "[getTorrentList] !!!!");
-                    Log.d("Debug", "[getTorrentList] size: " + size);
-
-                    Log.d("Debug", "[getTorrentList] progress raw: " + torrents.get(i).getProgress());
+//                    Log.d("Debug", "[getTorrentList] !!!!");
+//                    Log.d("Debug", "[getTorrentList] size: " + size);
+//
+//                    Log.d("Debug", "[getTorrentList] progress raw: " + torrents.get(i).getProgress());
 
                     double progress = torrents.get(i).getProgress();
 
@@ -3399,9 +3350,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     progressInfo = Common.ProgressForUi(progress);
 
-                    Log.d("Debug", "[getTorrentList] Size: " + size);
-                    Log.d("Debug", "[getTorrentList] progress: " + (progress * 100));
-                    Log.d("Debug", "[getTorrentList] progress fixed: " + progressInfo);
+//                    Log.d("Debug", "[getTorrentList] Size: " + size);
+//                    Log.d("Debug", "[getTorrentList] progress: " + (progress * 100));
+//                    Log.d("Debug", "[getTorrentList] progress fixed: " + progressInfo);
 
                     // Get downloaded
                     downloadedInfo = Common.calculateSize(torrents.get(i).getSize()-torrents.get(i).getAmount_left());
@@ -3693,7 +3644,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     String AltSpeedInfo;
 
                     if (alternative_speeds) {
-
                         AltSpeedInfo = Character.toString('\u2713') + "  ";
                     } else {
                         AltSpeedInfo = "";
@@ -3905,22 +3855,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             return;
         }
 
-        if (qb_version.equals("2.x")) {
-            qbQueryString = "json";
-            urlPrefix = qbQueryString + "/events";
-            // TODO: Delete
-            params[0] = qbQueryString + "/events";
-        }
 
-        if (qb_version.equals("3.1.x")) {
-            qbQueryString = "json";
-            urlPrefix = qbQueryString + "/torrents";
-            // TODO: Delete
-            params[0] = qbQueryString + "/torrents";
-        }
-
-
-        qbQueryString = "query";
         urlPrefix = "api/v2/torrents/info?filter=" + state;
         params[0] = "api/v2/torrents/info?filter=" + state;
 

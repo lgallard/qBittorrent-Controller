@@ -134,25 +134,13 @@ public class ItemstFragment extends ListFragment {
 
                 @Override
                 public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                    if (MainActivity.qb_version.equals("3.2.x")) {
+
                         menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                         menu.findItem(R.id.action_sequential_download).setVisible(true);
                         menu.findItem(R.id.action_label_menu).setVisible(true);
                         menu.findItem(R.id.action_set_label).setVisible(true);
                         menu.findItem(R.id.action_delete_label).setVisible(true);
 
-                        // TODO: Check when this changed (qb_api X.Y.Z )
-                        if (MainActivity.qb_api < 8) {
-                            menu.findItem(R.id.action_delete_label).setVisible(false);
-                        }
-
-                    } else {
-                        menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
-                        menu.findItem(R.id.action_sequential_download).setVisible(false);
-                        menu.findItem(R.id.action_label_menu).setVisible(false);
-                        menu.findItem(R.id.action_set_label).setVisible(false);
-                        menu.findItem(R.id.action_delete_label).setVisible(false);
-                    }
                     return true;
                 }
 
@@ -680,18 +668,13 @@ public class ItemstFragment extends ListFragment {
 
             }
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
-                menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
+            menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
 
-                // Set Alternate Speed limit state
-                if (MainActivity.alternative_speeds) {
-                    menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
-                } else {
-                    menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
-                }
-
+            // Set Alternate Speed limit state
+            if (MainActivity.alternative_speeds) {
+                menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
             } else {
-                menu.findItem(R.id.action_toggle_alternative_rate).setVisible(false);
+                menu.findItem(R.id.action_toggle_alternative_rate).setChecked(false);
             }
 
             menu.findItem(R.id.action_sortby_name).setVisible(true);

@@ -211,11 +211,7 @@ public class NotifierService extends BroadcastReceiver {
 
         String url;
 
-        if (qb_version.equals("4.1.x")) {
-            url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
-        } else {
-               url = protocol + "://" + hostname + ":" + port + "/login";
-        }
+        url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
 
         // New JSONObject request
         CustomStringRequest jsArrayRequest = new CustomStringRequest(
@@ -225,9 +221,7 @@ public class NotifierService extends BroadcastReceiver {
                     @Override
                     public void onResponse(String response) {
 
-                        //Log.d("Debug", "===cookie===");
-                        //Log.d("Debug", "Response: " + response);
-                        //Log.d("Debug", "headers: " + CustomStringRequest.headers);
+                        Log.d("Debug", "[NS][getCookie] Response: " + response);
 
                         JSONObject jsonObject = null;
                         CustomObjectResult customObjectResult = null;
@@ -311,21 +305,7 @@ public class NotifierService extends BroadcastReceiver {
         url = protocol + "://" + hostname + ":" + port + url;
 
         // Command
-        if (qb_version.equals("2.x")) {
-            url = url + "/json/events";
-        }
-
-        if (qb_version.equals("3.1.x")) {
-            url = url + "/json/torrents";
-        }
-
-        if (qb_version.equals("3.2.x")) {
-            url = url + "/query/torrents?filter=" + state;
-        }
-
-        if (qb_version.equals("4.1.x")) {
-            url = url + "/api/v2/torrents/info?filter=" + state;
-        }
+        url = url + "/api/v2/torrents/info?filter=" + state;
 
         //Log.d("Debug: ", "GetAllTorrents NS - URL: " + url);
         //Log.d("Debug: ", "GetAllTorrents NS - cookies: " + cookie);
@@ -419,19 +399,12 @@ public class NotifierService extends BroadcastReceiver {
 
                 for (int i = 0; i < torrents.size(); i++) {
 
-                    Log.d("Debug", "NS - - -");
-                    Log.d("Debug", ">NS File: " + torrents.get(i).getName());
-                    Log.d("Debug", ">NS Hash: " + torrents.get(i).getHash());
+                    Log.d("Debug", "[NS][getTorrentList] File: " + torrents.get(i).getName());
+                    Log.d("Debug", "[NS][getTorrentList]Hash: " + torrents.get(i).getHash());
 
-                    if (qb_version.equals("3.2.x") || qb_version.equals("4.1.x")) {
-                        Log.d("Debug", ">>>>>>> NS Calculating sizes!!!!");
-//                        size = Common.calculateSize(torrents.get(i).getSize());
-                        size = Common.calculateSize("" + torrents.get(i).getSize());
-                    } else {
-//                        size = torrents.get(i).getSize();
-                        size = "" + torrents.get(i).getSize();
-                    }
-                    Log.d("Debug", "NS >>>>>>> !!!!");
+
+                    Log.d("Debug", "[NS][getTorrentList] Calculating sizes!!!!");
+                    size = Common.calculateSize(torrents.get(i).getSize());
 
                     Double progress = Double.parseDouble("" + torrents.get(i).getProgress());
 
