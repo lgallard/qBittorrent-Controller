@@ -395,48 +395,52 @@ public class NotifierService extends BroadcastReceiver {
             @Override
             public void onSuccess(List<Torrent> torrents) {
 
-                String size;
+                String infoString = "";
+                String sizeInfo, downloadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo;
 
                 for (int i = 0; i < torrents.size(); i++) {
 
                     Log.d("Debug", "[NS][getTorrentList] File: " + torrents.get(i).getName());
-                    Log.d("Debug", "[NS][getTorrentList]Hash: " + torrents.get(i).getHash());
+                    Log.d("Debug", "[NS][getTorrentList] Hash: " + torrents.get(i).getHash());
 
+                    // Get torrent size
+                    sizeInfo = Common.calculateSize(torrents.get(i).getSize());
 
-                    Log.d("Debug", "[NS][getTorrentList] Calculating sizes!!!!");
-                    size = Common.calculateSize(torrents.get(i).getSize());
+                    Log.d("Debug", "[NS][getTorrentList] sizeInfo: " + sizeInfo);
+                    Log.d("Debug", "[NS][getTorrentList] progress raw: " + torrents.get(i).getProgress());
 
-                    Double progress = Double.parseDouble("" + torrents.get(i).getProgress());
+                    double progress = torrents.get(i).getProgress();
 
                     // Set torrent progress
-//                    torrents.get(i).setProgress(String.format("%.1f", (progress * 100)));
+                    torrents.get(i).setProgress(progress);
 
-                    //Log.d("Debug", "NS> Size: " + size);
-                    //Log.d("Debug", "NS> progress: " + (progress * 100));
-                    //Log.d("Debug", "NS> progress reported: " + torrents.get(i).getProgress());
+                    progressInfo = Common.ProgressForUi(progress);
 
-                    // Get torrent generic properties
-                    try {
-                        // Calculate total downloaded
-                        Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
-                        String sizeUnit = size.substring(size.indexOf(" "), size.length());
+                    Log.d("Debug", "[NS][getTorrentList] progress: " + (progress * 100));
+                    Log.d("Debug", "[NS][getTorrentList] progress fixed: " + progressInfo);
 
-//                        torrents.get(i).setDownloaded(String.format("%.1f", sizeScalar * progress).replace(",", ".") + sizeUnit);
+                    // Get downloaded
+                    downloadedInfo = Common.calculateSize(torrents.get(i).getSize()-torrents.get(i).getAmount_left());
 
-                    } catch (Exception e) {
-//                        torrents.get(i).setDownloaded(size);
-                    }
+                    // Get ETA
+                    etaInfo = Common.secondsToEta(torrents.get(i).getEta());
 
-                    String infoString = "";
+                    // Get upload speed
+                    uploadSpeedInfo = Common.calculateSize(torrents.get(i).getUpspeed()) + "/s";
+
+                    // Get download speed
+                    downloadSpeedInfo = Common.calculateSize(torrents.get(i).getDlspeed()) + "/s";
 
 
                     // Info
-                    infoString = torrents.get(i).getDownloaded() + " " + Character.toString('\u2193') + " " + torrents.get(i).getDlspeed() + " "
-                            + Character.toString('\u2191') + " " + torrents.get(i).getUpspeed() + " " + Character.toString('\u2022') + " "
-                            + torrents.get(i).getRatio() + " " + Character.toString('\u2022') + " " + torrents.get(i).getEta();
+                    infoString = downloadedInfo + " "
+                            + Character.toString('\u2193') + " " + downloadSpeedInfo + " "
+                            + Character.toString('\u2191') + " " + uploadSpeedInfo + " "
+                            + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
+                            + Character.toString('\u2022') + " " + etaInfo;
 
                     // Set info
-//                    torrents.get(i).setInfo(infoString);
+                    torrents.get(i).setInfo(infoString);
                 }
 
                 Iterator it;
@@ -452,7 +456,7 @@ public class NotifierService extends BroadcastReceiver {
                 String[] completedNames;
 
                 for (int i = 0; i < completedHashesArray.length; i++) {
-                    //Log.i("Debug", "NS - Last completed - " + completedHashesArray[i]);
+                    Log.i("Debug", "[NS][getTorrentList] Last completed: " + completedHashesArray[i]);
                     last_completed.put(completedHashesArray[i], null);
                 }
 
@@ -462,8 +466,7 @@ public class NotifierService extends BroadcastReceiver {
                     for (int i = 0; i < torrents.size(); i++) {
 
                         // Completed torrents
-//                        if (torrents.get(i).getPercentage().equals("100")) {
-                        if (("" + torrents.get(i).getProgress()).equals("100")) {
+                        if ((torrents.get(i).getProgress()) == 1) {
                             completed.put(torrents.get(i).getHash(), torrents.get(i));
 
                             // Build  completed hashes string here
@@ -472,6 +475,7 @@ public class NotifierService extends BroadcastReceiver {
                             } else {
                                 completedHashes += "|" + torrents.get(i).getHash();
                             }
+                            Log.i("Debug", "[NS][getTorrentList] completedHashes: " + completedHashes);
                         }
                     }
 

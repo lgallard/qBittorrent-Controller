@@ -3315,9 +3315,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(List<Torrent> torrents) {
 
+                String infoString = "";
                 String sizeInfo, downloadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo;
 
-                double size;
                 Log.d("Debug", "[getTorrentList] torrents.size(): " + torrents.size());
 
                 for (int i = 0; i < torrents.size(); i++) {
@@ -3325,22 +3325,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //                    Log.d("Debug", "- - -");
 //                    Log.d("Debug", "[getTorrentList] File: " + torrents.get(i).getName());
 //                    Log.d("Debug", "[getTorrentList] Hash: " + torrents.get(i).getHash());
-//
-//                    Log.d("Debug", "[getTorrentList] >>> Calculating sizes!!!!");
-//
 //                    Log.d("Debug", "[getTorrentList] qb_version: "+ qb_version);
 //                    Log.d("Debug", "[getTorrentList] qb_api: "+ qb_api);
 
 
                     // Get torrent size
                     sizeInfo = Common.calculateSize(torrents.get(i).getSize());
-//                    Log.d("Debug", "[getTorrentList] sizeStr: " + sizeInfo);
 
-                    size = torrents.get(i).getSize();
-
-//                    Log.d("Debug", "[getTorrentList] !!!!");
-//                    Log.d("Debug", "[getTorrentList] size: " + size);
-//
+//                    Log.d("Debug", "[getTorrentList] sizeInfo: " + sizeInfo);
 //                    Log.d("Debug", "[getTorrentList] progress raw: " + torrents.get(i).getProgress());
 
                     double progress = torrents.get(i).getProgress();
@@ -3350,7 +3342,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     progressInfo = Common.ProgressForUi(progress);
 
-//                    Log.d("Debug", "[getTorrentList] Size: " + size);
 //                    Log.d("Debug", "[getTorrentList] progress: " + (progress * 100));
 //                    Log.d("Debug", "[getTorrentList] progress fixed: " + progressInfo);
 
@@ -3360,17 +3351,17 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // Get ETA
                     etaInfo = Common.secondsToEta(torrents.get(i).getEta());
 
+                    // Get upload speed
+                    uploadSpeedInfo = Common.calculateSize(torrents.get(i).getUpspeed()) + "/s";
+
                     // Get download speed
-                    uploadSpeedInfo = Common.calculateSize(torrents.get(i).getUpspeed()) + "/s";                    // Get download speed
                     downloadSpeedInfo = Common.calculateSize(torrents.get(i).getDlspeed()) + "/s";
 
-
-                    String infoString = "";
 
                     if (packageName.equals("com.lgallardo.qbittorrentclient")) {
                         // Info free
                         infoString = downloadedInfo + " / " + sizeInfo  + " "
-                                + Character.toString('\u2191') + " " + uploadSpeedInfo + " "
+                                + '\u2191' + " " + uploadSpeedInfo + " "
                                 + Character.toString('\u2193') + " " + downloadSpeedInfo + " "
                                 + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
                                 + Character.toString('\u2022') + " " + progressInfo + "% "
@@ -3384,7 +3375,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     } else {
                         // Info pro
                         infoString = downloadedInfo + " / " + sizeInfo + " "
-                                + Character.toString('\u2191') + " " + uploadSpeedInfo + " "
+                                + '\u2191' + " " + uploadSpeedInfo + " "
                                 + Character.toString('\u2193') + " " + downloadSpeedInfo + " "
                                 + Character.toString('\u2022') + " " + torrents.get(i).getRatio() + " "
                                 + Character.toString('\u2022') + " " + etaInfo;
