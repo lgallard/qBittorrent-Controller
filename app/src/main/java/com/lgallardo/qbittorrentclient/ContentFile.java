@@ -9,18 +9,37 @@
 
 package com.lgallardo.qbittorrentclient;
 
-public class ContentFile {
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+public class ContentFile {
+	// New format
+	@SerializedName("name")
+	@Expose
 	private String name;
-	private String size;
+	@SerializedName("size")
+	@Expose
+	private double size;
+	@SerializedName("progress")
+	@Expose
 	private double progress;
+	@SerializedName("priority")
+	@Expose
 	private int priority;
+	@SerializedName("recyclerViewItemHeight")
+	@Expose
 	private int recyclerViewItemHeight;
+	@SerializedName("isSeed")
+	@Expose
 	private boolean isSeed;
+	@SerializedName("piece_range")
+	@Expose
 	private int[] piece_range;
+	@SerializedName("douavailability")
+	@Expose
 	private double douavailability;
 
-	public ContentFile(String name, String size, Double progress, int priority) {
+	public ContentFile(String name, double size, Double progress, int priority) {
 
 		this.name = name;
 		this.size = size;
@@ -34,7 +53,7 @@ public class ContentFile {
 	}
 
 	public String getSize() {
-		return size;
+		return Common.calculateSize(size);
 	}
 
 	public double getProgress() {
@@ -49,7 +68,7 @@ public class ContentFile {
 		this.name = name;
 	}
 
-	public void setSize(String size) {
+	public void setSize(double size) {
 		this.size = size;
 	}
 

@@ -25,7 +25,6 @@ public class GeneralInfo {
     @SerializedName("total_wasted")
     @Expose
     private long total_wasted;
-
     @SerializedName("total_uploaded")
     @Expose
     private long total_uploaded;
