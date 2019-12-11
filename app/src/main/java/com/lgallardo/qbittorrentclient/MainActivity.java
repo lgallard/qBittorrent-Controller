@@ -1080,10 +1080,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 
         ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/app/webapiVersion";
-        Log.d("Debug", "=== getApiVersion ===");
 
 
-        Log.d("Debug", "ApiURL: " + ApiURL);
+
+        Log.d("Debug", "[getApiVersion] ApiURL: " + ApiURL);
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -1093,8 +1093,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "=== getApiVersion x===");
-                        Log.d("Debug", "JSONObject: " + response);
+                        Log.d("Debug", "[getApiVersion] Response: " + response);
+
                         Gson gson = new Gson();
 
                         Float responseFloat = Float.valueOf(-1);
@@ -1104,12 +1104,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                             String jsonString = "{\"apiversion\":"  + response + "}";
 
-                            Log.d("Debug", "jsonString => : " + jsonString);
+                            Log.d("Debug", "[getApiVersion] jsonString: " + jsonString);
 
                             JSONObject jobj = new JSONObject(jsonString);
 
-                            Log.d("Debug", "jobj => : " + jobj);
-                            Log.d("Debug", "jobj (string) => : " + jobj.toString());
+                            Log.d("Debug", "[getApiVersion] jobj (string) => : " + jobj.toString());
 
                             //api = gson.fromJson(jsonString, Api.class);
 
@@ -1117,21 +1116,20 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                             responseFloat  = gson.fromJson(response, Float.class);
 
 
-                            Log.d("Debug", "responseInt => " + responseFloat);
-
-                            //Log.d("Debug", "api 2 => " + api.getApiversion());
+                            Log.d("Debug", "[getApiVersion] responseFloat: " + responseFloat);
 
 
                         } catch (JSONException e) {
-                            Log.d("Debug", "THIS 0 => error: " + e);
+                            Log.d("Debug", "[getApiVersion] Error: " + e);
                             e.printStackTrace();
                             Log.e("Error", e.toString());
                         }
 
-                        Log.d("Debug", "getApiVersion - JSONObject: " + response);
-                        Log.d("Debug", "getApiVersion ======");
+                        Log.d("Debug", "[getApiVersion] JSONObject: " + response);
 
                         callback.onSuccess(responseFloat.toString());
+
+                        connection403ErrorCounter = 0;
 
                     }
                 },
@@ -1139,12 +1137,31 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Log.d("Debug", " getApiVersion 3 - Error in JSON response: " + error.getMessage());
+                        NetworkResponse networkResponse = error.networkResponse;
+
+                        if (networkResponse != null) {
+                            Log.d("Debug", "[getApiVersion] statusCode: " + networkResponse.statusCode);
+
+                            if (networkResponse.statusCode == 404){
+                                Toast.makeText(getApplicationContext(), "Host not found!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (networkResponse.statusCode == 403){
+
+                                Log.d("Debug", "[getApiVersion] connection403ErrorCounter: " + connection403ErrorCounter);
+
+                                connection403ErrorCounter = connection403ErrorCounter+1;
+
+//                                if(connection403ErrorCounter >= 2) {
+                                    Toast.makeText(getApplicationContext(), "Authentication error!", Toast.LENGTH_SHORT).show();
+//                                }
+                            }
+                        }
+
+
+                        Log.d("Debug", " [getApiVersion] Error in JSON response: " + error.getMessage());
 
                         callback.onSuccess("");
-
-                        Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
 
                     }
                 }
@@ -1226,6 +1243,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         // Return value
                         callback.onSuccess(cookieString);
 
+                        connection403ErrorCounter = 0;
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -1236,7 +1255,27 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         callback.onSuccess("");
 
-                        Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        NetworkResponse networkResponse = error.networkResponse;
+
+                        if (networkResponse != null) {
+                            Log.d("Debug", "[getCookieV] statusCode: " + networkResponse.statusCode);
+
+
+                            if (networkResponse.statusCode == 403) {
+                                Log.d("Debug", "[getCookieV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
+
+                                Toast.makeText(getApplicationContext(), "User's IP is banned for too many failed login attempts!", Toast.LENGTH_SHORT).show();
+
+//                                if (connection403ErrorCounter <= 2) {
+//                                    getApi();
+//                                }
+//
+//                                if(connection403ErrorCounter > 2) {
+//                                    Toast.makeText(getApplicationContext(), "Please check your account settings!", Toast.LENGTH_SHORT).show();
+//                                }
+                            }
+                        }
+
 
                     }
                 }
@@ -2539,12 +2578,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
                         Log.d("Debug", "[getAlternativeSpeedLimitsEnabled] Error in JSON response: " + error.getMessage());
-
                         callback.onSuccess("");
 
-                        Toast.makeText(getApplicationContext(), "Error getting new API version: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
         ) {
@@ -2706,8 +2742,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         url = url + "/api/v2/torrents/info?filter=" + state;
 
 
-        Log.d("Debug: ", "GetAllTorrents - URL: " + url);
-        Log.d("Debug: ", "GetAllTorrents - cookies: " + cookie);
+        Log.d("Debug: ", "[getTorrentListV] URL: " + url);
+        Log.d("Debug: ", "[getTorrentListV] cookies: " + cookie);
 
 
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
@@ -2718,7 +2754,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(JSONArray response) {
 
-                        Log.d("Debug: ", "GetAllTorrents - onResponse");
+                        Log.d("Debug: ", "[getTorrentListV] onResponse");
 
                         // Get list type to parse it
                         Type listType = new TypeToken<List<Torrent>>() {
@@ -2741,11 +2777,34 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         // Log status code
                         NetworkResponse networkResponse = error.networkResponse;
                         if (networkResponse != null) {
-                            Log.d("Debug", "getAllTorrents - statusCode: " + networkResponse.statusCode);
+                            Log.d("Debug", "[getTorrentListV] statusCode: " + networkResponse.statusCode);
+
+                            if (networkResponse.statusCode == 404){
+                                Toast.makeText(getApplicationContext(), "Host not found!", Toast.LENGTH_SHORT).show();
+                            }
+
+
+                            if (networkResponse.statusCode == 403){
+                                Log.d("Debug", "[getTorrentListV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
+
+                                connection403ErrorCounter = connection403ErrorCounter+1;
+
+//                                if(connection403ErrorCounter <= 1) {
+//                                    getCookie();
+//                                }
+
+                                if(connection403ErrorCounter > 0) {
+                                    Toast.makeText(getApplicationContext(), "Authentication error!", Toast.LENGTH_SHORT).show();
+                                    //refresh();
+                                }
+
+                            }
                         }
 
                         // Log error
-                        Log.d("Debug", "getAllTorrents - Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", "[getTorrentListV] Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", "[getTorrentListV] Error in JSON error: " + error);
+
 
                     }
                 }
@@ -2777,6 +2836,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public void onSuccess(String result) {
 
                 if (result != null && !result.equals("")) {
+
 
                     int api;
 
@@ -3327,6 +3387,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 for (int i = 0; i < torrents.size(); i++) {
 
+                    connection403ErrorCounter = 0;
+
 //                    Log.d("Debug", "- - -");
 //                    Log.d("Debug", "[getTorrentList] File: " + torrents.get(i).getName());
 //                    Log.d("Debug", "[getTorrentList] Hash: " + torrents.get(i).getHash());
@@ -3858,7 +3920,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Get API version in case it hadn't been gotten before
 
-        getApi();
+        //getApi();
         getCookie();
 
 
@@ -4748,15 +4810,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         editor.apply();
 
         canrefresh = true;
-        refreshSwipeLayout();
+        //refreshSwipeLayout();
+
+        refresh();
 
 //        refreshCurrent();
 
-        // Get new token and cookie
-        MainActivity.cookie = null;
+//        // Get new token and cookie
+//        MainActivity.cookie = null;
+//
+//        // Get API;
+//        getApi();
 
-        // Get API;
-        getApi();
 
 //        Log.d("Debug", "MainActivity - changeCurrentServer called");
     }
