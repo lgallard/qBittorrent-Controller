@@ -46,7 +46,6 @@ class TorrentListAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-
 //        View row = super.getView(position, convertView, parent);
 
         LayoutInflater inflater = (LayoutInflater) context
@@ -106,13 +105,13 @@ class TorrentListAdapter extends ArrayAdapter<String> {
                 ProgressBar progressBar = (ProgressBar) row.findViewById(R.id.progressBar1);
                 TextView percentageTV = (TextView) row.findViewById(R.id.percentage);
 
-//                String percentage = torrentsData[position].getPercentage();
+                double percentage = torrentsData[position].getProgress();
 
-                String percentage = "" + torrentsData[position].getProgress();
+                progressBar.setProgress((int) (percentage*100));
 
-                progressBar.setProgress(Integer.parseInt(percentage));
+//                Log.d("Debug", "[TorrentListAdapter] percentage: " + percentage);
 
-                percentageTV.setText(percentage + "%");
+                percentageTV.setText(Common.ProgressForUiTruncated(percentage) + "%");
             }
 
             row.setBackgroundColor(getContext().getResources().getColor(android.R.color.background_light)); //default color
@@ -121,8 +120,6 @@ class TorrentListAdapter extends ArrayAdapter<String> {
                 row.setBackgroundColor(getContext().getResources().getColor(android.R.color.holo_blue_light));// this is a selected position so make it blue
             }
         } else {
-
-//            Log.d("Debug", "No results");
 
             TextView name = (TextView) row.findViewById(R.id.name);
             name.setText(context.getString(R.string.no_results));
@@ -137,7 +134,6 @@ class TorrentListAdapter extends ArrayAdapter<String> {
                 percentageTV.setVisibility(View.GONE);
 
             }
-
 
             ImageView icon = (ImageView) row.findViewById(R.id.icon);
             TextView info = (TextView) row.findViewById(R.id.info);
@@ -154,8 +150,6 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
 
     public void setNewSelection(int position, boolean value) {
-
-        Log.i("torrentListAdapter", "setNewSelection invoked " + position + " " + value);
 
         mSelection.put(position, value);
         notifyDataSetChanged();

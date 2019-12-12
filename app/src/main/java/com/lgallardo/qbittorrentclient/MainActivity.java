@@ -385,8 +385,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        Log.d("Debug", "[onCreate] OK");
+
         // Get preferences
         getSettings();
+
+//        Log.d("Debug", "[onCreate] getSettings OK");
 
         // Set alarm for checking completed torrents, if not set
         if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), NotifierService.class), PendingIntent.FLAG_NO_CREATE) == null) {
@@ -671,6 +675,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Load banner
         loadBanner();
 
+//        Log.d("Debug", "[onCreate] Finished");
+
     }
 
     // Search bar in Material Design
@@ -799,30 +805,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void onPause() {
         super.onPause();
         activityIsVisible = false;
-
-//        // Cancel toast messages
-//        if(toast != null) {
-//            toast.cancel();
-//        }
-
-
     }
-
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//
-//        // Cancel toast messages
-//        if(toast != null) {
-//            toast.cancel();
-//        }
-//
-//        // Cancel qbTask
-//        if(qbTask != null){
-//            qbTask.cancel(true);
-//        }
-//
-//    }
 
     // Load Banner
     public void loadBanner() {
@@ -852,7 +835,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         {
 
             if (auto_refresh && canrefresh && activityIsVisible ) {
-
                 refreshCurrent();
             }
 
@@ -862,9 +844,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     };// runnable
 
     public void refreshCurrent() {
-//        if (!hostname.equals("")) {
-
-//            switch (drawerList.getCheckedItemPosition()) {
         switch (actionStates.indexOf(currentState)) {
             case 0:
                 refresh("all", currentLabel);
@@ -891,7 +870,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 refresh();
                 break;
         }
-//        }
     }
 
 
@@ -3455,6 +3433,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     }
 
+//                    Log.d("Debug", "[getTorrentList] infoString: " + infoString);
+
                     // Set info
                    torrents.get(i).setInfo(infoString);
                 }
@@ -3861,6 +3841,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Disable refreshSwipeLayout
                 disableRefreshSwipeLayout();
 
+
             }
 
         });
@@ -3942,13 +3923,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     labelEncoded = labelEncoded.substring(labelEncoded.indexOf("%3D") + 3);
 
                     // to build the url and pass it to params[0]
-
-                    // TODO: Check when this changed (qb_api X.Y.Z )
-                    if (MainActivity.qb_api < 10) {
-                        params[0] = params[0] + "&label=" + labelEncoded;
-                    } else {
-                        params[0] = params[0] + "&category=" + labelEncoded;
-                    }
+                    params[0] = params[0] + "&category=" + labelEncoded;
                 }
 
             } catch (Exception e) {
@@ -5785,6 +5760,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             // Load banner
             loadBanner();
+
+            Log.d("Debug", "[TorrentDetailsFragment] refreshed!");
 
         }
 
