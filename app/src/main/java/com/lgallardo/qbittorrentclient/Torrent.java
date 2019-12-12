@@ -18,7 +18,7 @@ class Torrent {
     // New format
     @SerializedName("added_on")
     @Expose
-    private double added_on;
+    private long added_on;
     @SerializedName("amount_left")
     @Expose
     private double amount_left;
@@ -33,7 +33,7 @@ class Torrent {
     private double completed;
     @SerializedName("completion_on")
     @Expose
-    private double completion_on;
+    private long completion_on;
     @SerializedName("dl_limit")
     @Expose
     private int dl_limit;
@@ -442,275 +442,14 @@ class Torrent {
 
         return etaInMinutes;
     }
-//
-//    /**
-//     * @return the downloaded size
-//     */
-//    public String getDownloaded() {
-//        return downloaded;
-//    }
-//
-//    /**
-//     * @param downloaded the downloaded to set
-//     */
-//    public void setDownloaded(String downloaded) {
-//        this.downloaded = downloaded;
-//    }
-//
-//    /**
-//     * @return the leechs
-//     */
-//    public String getLeechs() {
-//        return leechs;
-//    }
-//
-//    /**
-//     * @param leechs the leechs to set
-//     */
-//    public void setLeechs(String leechs) {
-//        this.leechs = leechs;
-//    }
-//
-//    /**
-//     * @return the seeds
-//     */
-//    public String getSeeds() {
-//        return seeds;
-//    }
-//
-//    /**
-//     * @param seeds the seeds to set
-//     */
-//    public void setSeeds(String seeds) {
-//        this.seeds = seeds;
-//    }
-
-//    /**
-//     * @return the priority
-//     */
-//    public String getPriority() {
-//
-//        if(priority.equals("-1") || priority.equals("0")){
-//            return "*";
-//        }
-//        return priority;
-//    }
-//
-//    /**
-//     * @param priority the priority to set
-//     */
-//    public void setPriority(String priority) {
-//        this.priority = priority;
-//    }
-
-//    /**
-//     * @return the eta
-//     */
-//    public String getEta() {
-//
-//        if(eta.equals("8640000")){
-//            return "∞";
-//        }
-//
-//        return eta;
-//    }
-//
-//    /**
-//     * @param eta the eta to set
-//     */
-//    public void setEta(String eta) {
-//        this.eta = eta;
-//    }
-//
-//    /**
-//     * @return the path
-//     */
-//    public String getSavePath() {
-//        return savePath;
-//    }
-//
-//    /**
-//     * @param savePath the path to set
-//     */
-//    public void setSavePath(String savePath) {
-//        this.savePath = savePath;
-//    }
-//
-//    /**
-//     * @return the creationDate
-//     */
-//    public String getCreationDate() {
-//        return creationDate;
-//    }
-//
-//    /**
-//     * @param creationDate the creationDate to set
-//     */
-//    public void setCreationDate(String creationDate) {
-//        this.creationDate = creationDate;
-//    }
-//
-//    /**
-//     * @return the comment
-//     */
-//    public String getComment() {
-//        return comment;
-//    }
-//
-//    /**
-//     * @param comment the comment to set
-//     */
-//    public void setComment(String comment) {
-//        this.comment = comment;
-//    }
-//
-//    /**
-//     * @return the totalWasted
-//     */
-//    public String getTotalWasted() {
-//        return totalWasted;
-//    }
-//
-//    /**
-//     * @param totalWasted the totalWasted to set
-//     */
-//    public void setTotalWasted(String totalWasted) {
-//        this.totalWasted = totalWasted;
-//    }
-//
-//    /**
-//     * @return the totalUploaded
-//     */
-//    public String getTotalUploaded() {
-//        return totalUploaded;
-//    }
-//
-//    /**
-//     * @param totalUploaded the totalUploaded to set
-//     */
-//    public void setTotalUploaded(String totalUploaded) {
-//        this.totalUploaded = totalUploaded;
-//    }
-//
-//    /**
-//     * @return the totalDownloaded
-//     */
-//    public String getTotalDownloaded() {
-//        return totalDownloaded;
-//    }
-//
-//    /**
-//     * @param totalDownloaded the totalDownloaded to set
-//     */
-//    public void setTotalDownloaded(String totalDownloaded) {
-//        this.totalDownloaded = totalDownloaded;
-//    }
-//
-//    /**
-//     * @return the timeElapsed
-//     */
-//    public String getTimeElapsed() {
-//
-//        return timeElapsed;
-//    }
-//
-//    /**
-//     * @param timeElapsed the timeElapsed to set
-//     */
-//    public void setTimeElapsed(String timeElapsed) {
-//        this.timeElapsed = timeElapsed;
-//    }
-//
-//    /**
-//     * @return the nbConnections
-//     */
-//    public String getNbConnections() {
-//        return nbConnections;
-//    }
-//
-//    /**
-//     * @param nbConnections the nbConnections to set
-//     */
-//    public void setNbConnections(String nbConnections) {
-//        this.nbConnections = nbConnections;
-//    }
-//
-//    public String getUploadLimit() {
-//
-//        if (uploadLimit.equals("-1")) {
-//            return "∞";
-//        }
-//
-//        return uploadLimit;
-//    }
-//
-//    public void setUploadLimit(String uploadLimit) {
-//        this.uploadLimit = uploadLimit;
-//    }
-//
-//    public String getDownloadLimit() {
-//
-//        if (downloadLimit.equals("-1")) {
-//            return "∞";
-//        }
-//
-//        return downloadLimit;
-//    }
-//
-//    public void setDownloadLimit(String downloadLimit) {
-//        this.downloadLimit = downloadLimit;
-//    }
-//
-//
-//    public boolean getSequentialDownload() {
-//        return sequentialDownload;
-//    }
-//
-//    public void setSequentialDownload(boolean sequentialDownload) {
-//        this.sequentialDownload = sequentialDownload;
-//    }
-//
-//    public boolean getisFirstLastPiecePrio() {
-//        return firstLastPiecePrio;
-//    }
-//
-//    public void setFirstLastPiecePrio(boolean firstLastPiecePrio) {
-//        this.firstLastPiecePrio = firstLastPiecePrio;
-//    }
-//
-//    public String getAddedOn() {
-//        return addedOn;
-//    }
-//
-//    public void setAddedOn(String addedOn) {
-//        this.addedOn = addedOn;
-//    }
-//
-//    public String getCompletionOn() {
-//        return completionOn;
-//    }
-//
-//    public void setCompletionOn(String completionOn) {
-//        this.completionOn = completionOn;
-//    }
-//
-//
-//    public String getLabel() {
-//        return label;
-//    }
-//
-//    public void setLabel(String label) {
-//        this.label = label;
-//    }
-
 
     // new format
 
-    public double getAdded_on() {
+    public long getAdded_on() {
         return added_on;
     }
 
-    public void setAdded_on(double added_on) {
+    public void setAdded_on(long added_on) {
         this.added_on = added_on;
     }
 
@@ -746,11 +485,11 @@ class Torrent {
         this.completed = completed;
     }
 
-    public double getCompletion_on() {
+    public long getCompletion_on() {
         return completion_on;
     }
 
-    public void setCompletion_on(double completion_on) {
+    public void setCompletion_on(long completion_on) {
         this.completion_on = completion_on;
     }
 

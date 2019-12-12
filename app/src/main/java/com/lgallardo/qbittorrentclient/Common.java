@@ -88,6 +88,13 @@ public class Common {
         return new SimpleDateFormat("yyyy-MM-dd hh:mm a").format(df);
     }
 
+    protected static String unixTimestampToDate(long unixDate) {
+//        long dv = Long.valueOf(unixDate) * 1000;// its need to be in milisecond
+        Date df = new Date(unixDate);
+        return new SimpleDateFormat("yyyy-MM-dd hh:mm a").format(df);
+    }
+
+
     protected static String secondsToEta(long seconds) {
 
         String secs = "∞";
@@ -132,9 +139,19 @@ public class Common {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
         Date date = new Date(unixtimestamp*1000);
-        return new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(date);
+        return new SimpleDateFormat("yyyy-MM-dd hh:mm a").format(date);
     }
 
+    protected static String timestampToDate(long unixtimestamp){
+
+
+        if(unixtimestamp == Long.parseLong("4294967295")){
+            return "";
+        }
+
+        Date date = new Date(unixtimestamp*1000);
+        return new SimpleDateFormat("yyyy-MM-dd hh:mm a").format(date);
+    }
 
     // Taken from https://stackoverflow.com/questions/10039672/android-how-to-read-file-in-bytes
 

@@ -93,9 +93,11 @@ public class TorrentDetailsFragment extends Fragment {
     // Torrent variables
     String name, info, hash, ratio, size, progressInfo = "", state, leechs, seeds, priority, savePath, creationDate, comment, totalWasted, totalUploaded,
             totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit, downloaded, eta, downloadSpeed, uploadSpeed,
-            addedOn, completionOn, label;
+            label;
 
     double progress;
+
+    long addedOn, completionOn;
 
     static String hashToUpdate;
 
@@ -186,7 +188,6 @@ public class TorrentDetailsFragment extends Fragment {
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    Log.d("Debug", "[TorrentDetailsFragment] onRrefresh");
                     refreshListener.swipeRefresh();
                 }
             });
@@ -229,12 +230,10 @@ public class TorrentDetailsFragment extends Fragment {
                 uploadSpeed = savedInstanceState.getString("torrentDetailUploadSpeed", "");
                 downloadSpeed = savedInstanceState.getString("torrentDetailDownloadSpeed", "");
                 downloaded = savedInstanceState.getString("torrentDetailDownloaded", "");
-                addedOn = savedInstanceState.getString("torrentDetailsAddedOn", "");
-                completionOn = savedInstanceState.getString("torrentDetailsCompletionOn", "");
+                addedOn = savedInstanceState.getLong("torrentDetailsAddedOn", 0);
+                completionOn = savedInstanceState.getLong("torrentDetailsCompletionOn", 0);
                 label = savedInstanceState.getString("torrentDetailsLabel", "");
                 hashToUpdate = hash;
-
-                Log.d("Debug", "[TorrentDetailsFragment] progress: " + progress);
 
             } else {
 
@@ -253,12 +252,19 @@ public class TorrentDetailsFragment extends Fragment {
                 uploadSpeed = "" + this.torrent.getUpspeed();
                 downloadSpeed = Common.calculateSize(this.torrent.getDlspeed()) + "/s";
                 downloaded = Common.calculateSize(this.torrent.getSize() - this.torrent.getAmount_left());
-
-                Log.d("Debug", "[TorrentDetailsFragment] savedInstanceState is null - progress: " + progress);
-
-//                addedOn = this.torrent.getAddedOn();
-//                completionOn = this.torrent.getCompletionOn();
+                addedOn = this.torrent.getAdded_on();
+                completionOn = this.torrent.getCompletion_on();
 //                label = this.torrent.getLabel();
+
+
+//                Log.d("Debug", "[TorrentDetailsFragment] addedOn: " + addedOn);
+//                Log.d("Debug", "[TorrentDetailsFragment] addedOn: " + Common.unixTimestampToDate(addedOn));
+//                Log.d("Debug", "[TorrentDetailsFragment] addedOn: " + Common.timestampToDate(addedOn));
+//
+//                Log.d("Debug", "[TorrentDetailsFragment] completionOn: " + completionOn);
+//                Log.d("Debug", "[TorrentDetailsFragment] completionOn: " + Common.unixTimestampToDate(completionOn));
+//                Log.d("Debug", "[TorrentDetailsFragment] completionOn: " + Common.timestampToDate(completionOn));
+
 
                 hashToUpdate = hash;
 
@@ -293,28 +299,20 @@ public class TorrentDetailsFragment extends Fragment {
             sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
             firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
-//                sequentialDownloadCheckBox.setChecked(this.torrent.getSequentialDownload());
-//                firstLAstPiecePrioCheckBox.setChecked(this.torrent.getisFirstLastPiecePrio());
-
             TextView addedOnTextView = (TextView) rootView.findViewById(R.id.torrentAddedOn);
             TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);
             TextView labelTextView = (TextView) rootView.findViewById(R.id.torrentLabel);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-
-            if (addedOn != null && !(addedOn.equals("null")) && !(addedOn.equals("4294967295"))) {
-                // New unix timestamp format 4294967295
+            if (addedOn != 10800) {
+                // Not fully added yet
                 addedOnTextView.setText(Common.timestampToDate(addedOn));
-
             } else {
                 addedOnTextView.setText("");
             }
 
-
-            if (completionOn != null && !(completionOn.equals("null")) && !(completionOn.equals("4294967295"))) {
-                // New unix timestamp format 4294967295
+            if (completionOn != 10800) {
+                // Not completed yet
                 completionOnTextView.setText(Common.timestampToDate(completionOn));
-
             } else {
                 completionOnTextView.setText("");
             }
@@ -337,9 +335,6 @@ public class TorrentDetailsFragment extends Fragment {
                 // Set progress bar
                 ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar1);
                 TextView percentageTV = (TextView) rootView.findViewById(R.id.percentage);
-
-                Log.d("Debug", "[TorrentDetailsFragment] progress: " + progress);
-                Log.d("Debug", "[TorrentDetailsFragment] progressBar: " + progressInfo);
 
                 progressBar.setProgress((int) (progress * 100));
                 percentageTV.setText(progressInfo);
@@ -813,13 +808,13 @@ public class TorrentDetailsFragment extends Fragment {
             uploadSpeed = "" + torrent.getUpspeed();
             downloadSpeed = Common.calculateSize(torrent.getDlspeed()) + "/s";
             downloaded = Common.calculateSize(torrent.getSize() - torrent.getAmount_left());
-//            addedOn = torrent.getAddedOn();
-//            completionOn = torrent.getCompletionOn();
+            addedOn = torrent.getAdded_on();
+            completionOn = torrent.getCompletion_on();
 //            label = torrent.getLabel();
 
 
-            Log.d("Debug", "[TorrentDetailsFragment] update - progress: " + progress);
-
+//            Log.d("Debug", "[TorrentDetailsFragment] update - progress: " + progress);
+//
 
             FragmentManager fragmentManager = getFragmentManager();
 
@@ -864,7 +859,6 @@ public class TorrentDetailsFragment extends Fragment {
             sequentialDownloadCheckBox = (CheckBox) rootView.findViewById(R.id.torrentSequentialDownload);
             firstLAstPiecePrioCheckBox = (CheckBox) rootView.findViewById(R.id.torrentFirstLastPiecePrio);
 
-
             TextView addedOnTextView = (TextView) rootView.findViewById(R.id.torrentAddedOn);
             TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);
 
@@ -873,23 +867,19 @@ public class TorrentDetailsFragment extends Fragment {
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
-            if (addedOn != null && !(addedOn.equals("null")) && !(addedOn.equals("4294967295"))) {
-                // New unix timestamp format 4294967295
+            if (addedOn != 10800) {
+                // Not fully added yet
                 addedOnTextView.setText(Common.timestampToDate(addedOn));
-
             } else {
                 addedOnTextView.setText("");
             }
 
-
-            if (completionOn != null && !(completionOn.equals("null")) && !(completionOn.equals("4294967295"))) {
-                // New unix timestamp format 4294967295
+            if (completionOn != 10800) {
+                // Not completed yet
                 completionOnTextView.setText(Common.timestampToDate(completionOn));
-
             } else {
                 completionOnTextView.setText("");
             }
-
 
             if (label != null && !(label.equals("null"))) {
                 labelTextView.setText(label);
@@ -1002,8 +992,8 @@ public class TorrentDetailsFragment extends Fragment {
         outState.putString("torrentDetailUploadSpeed", uploadSpeed);
         outState.putString("torrentDetailDownloadSpeed", downloadSpeed);
         outState.putString("torrentDetailDownloaded", downloaded);
-        outState.putString("torrentDetailsAddedOn", addedOn);
-        outState.putString("torrentDetailsCompletionOn", completionOn);
+        outState.putLong("torrentDetailsAddedOn", addedOn);
+        outState.putLong("torrentDetailsCompletionOn", completionOn);
 
     }
 
