@@ -90,7 +90,7 @@ android {
 repositories {
     mavenCentral()
     maven {
-        url "http://dl.bintray.com/lukaville/maven"
+        url "https://dl.bintray.com/lukaville/maven"
     }
 }
 
