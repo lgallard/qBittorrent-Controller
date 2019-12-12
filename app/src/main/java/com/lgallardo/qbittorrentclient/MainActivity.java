@@ -66,8 +66,10 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -2774,6 +2776,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
+                        if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+
+                            Log.d("Debug", "[getTorrentListV] Connection error!");
+                            Toast.makeText(getApplicationContext(), "Connection error!", Toast.LENGTH_SHORT).show();
+                        }
                         // Log status code
                         NetworkResponse networkResponse = error.networkResponse;
                         if (networkResponse != null) {
@@ -2783,21 +2790,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 Toast.makeText(getApplicationContext(), "Host not found!", Toast.LENGTH_SHORT).show();
                             }
 
-
                             if (networkResponse.statusCode == 403){
                                 Log.d("Debug", "[getTorrentListV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
 
                                 connection403ErrorCounter = connection403ErrorCounter+1;
 
-//                                if(connection403ErrorCounter <= 1) {
-//                                    getCookie();
-//                                }
-
-                                if(connection403ErrorCounter > 0) {
+                                if(connection403ErrorCounter > 1) {
                                     Toast.makeText(getApplicationContext(), "Authentication error!", Toast.LENGTH_SHORT).show();
                                     //refresh();
                                 }
-
                             }
                         }
 
@@ -3259,9 +3260,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> addTorrent: " + result);
+//                Log.d("Debug: ", "[addTorrent] result: " + result);
 
-                toastText(R.string.torrentFileAdded);
+                toastText(R.string.torrentAdded);
 
                 // Refresh
                 refreshAfterCommand(3);
@@ -3610,21 +3611,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
                 // Sort by Added on
                 if (sortby_value == SORTBY_ADDEDON) {
-                    // TODO: Check when this changed (qb_api X.Y.Z )
-                    if (MainActivity.qb_api == 0 || MainActivity.qb_api >= 10) {
-                        Collections.sort(torrentsFiltered, new TorrentAddedOnTimestampComparator(reverse_order));
-                    } else {
-                        Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
-                    }
+                    Collections.sort(torrentsFiltered, new TorrentAddedOnTimestampComparator(reverse_order));
                 }
                 // Sort by Completed on
                 if (sortby_value == SORTBY_COMPLETEDON) {
-                    // TODO: Check when this changed (qb_api X.Y.Z )
-                    if (MainActivity.qb_api == 0 || MainActivity.qb_api >= 10) {
-                        Collections.sort(torrentsFiltered, new TorrentCompletedOnTimestampComparator(reverse_order));
-                    } else {
-                        Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
-                    }
+                    Collections.sort(torrentsFiltered, new TorrentCompletedOnTimestampComparator(reverse_order));
                 }
 
                 // Get names (delete in background method)
@@ -4097,7 +4088,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             emailIntent.setType("text/plain");
 
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"lgallard+qbcontroller@gmail.com"});
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"qbcontroller@gmail.com"});
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "qBittorrentController report");
 
             // Include report
@@ -4245,7 +4236,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     urlTorrent = getFileNameFromStream(getContentResolver().openInputStream(handledIntent.getData()));
 
-//                    Log.d("Debug", "urlTorrent path (content): " + urlTorrent);
+//                    Log.d("Debug", "[handleUrlTorrent] urlTorrent path (content): " + urlTorrent);
                 }
 
                 // Handle format for downloaded torrent files (Ex: /storage/emulated/0/Download/afile.torrent)
@@ -4259,7 +4250,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         // Get raw absolute and add file schema
                         urlTorrent = "file://" + (new File(encodedUri.getRawPath())).getAbsolutePath();
 
-//                        Log.d("Debug", "urlTorrent path: " + urlTorrent);
+//                        Log.d("Debug", "[handleUrlTorrent] urlTorrent path: " + urlTorrent);
                     }
 
                 }
@@ -4274,15 +4265,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 } else {
 
                     // Send magnet or torrent link
-//                    Log.d("Debug", "urlTorrent 1: " + urlTorrent );
+//                    Log.d("Debug", "[handleUrlTorrent] urlTorrent 1: " + urlTorrent );
 
                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
 
 
                     // If It is a valid torrent or magnet link
                     if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType())) {
-//                        Log.d("Debug", "URL: " + urlTorrent);
-
+//                        Log.d("Debug", "[handleUrlTorrent] URL: " + urlTorrent);
                         addTorrent(urlTorrent, path2Set, label2Set);
                     } else {
                         // Open not valid torrent or magnet link in browser
@@ -4294,13 +4284,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
             } catch (UnsupportedEncodingException e) {
-                Log.e("Debug", "Check URL: " + e.toString());
+                Log.e("Debug", "[handleUrlTorrent] Check URL: " + e.toString());
             } catch (NullPointerException e) {
-                Log.e("Debug", "urlTorrent is null: " + e.toString());
+                Log.e("Debug", "[handleUrlTorrent] urlTorrent is null: " + e.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
-                Log.e("Debug", "urlTorrent is not ok: " + e.toString());
+                Log.e("Debug", "[handleUrlTorrent] urlTorrent is not ok: " + e.toString());
             }
         }
     }
