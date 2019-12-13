@@ -21,7 +21,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <application android:allowBackup="true"
+    <application
+        android:usesCleartextTraffic="true"
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_shortname"
         android:theme="@style/AppTheme"
