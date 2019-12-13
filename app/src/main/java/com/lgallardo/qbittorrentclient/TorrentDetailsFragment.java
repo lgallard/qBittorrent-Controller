@@ -1049,9 +1049,11 @@ public class TorrentDetailsFragment extends Fragment {
             menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
             // TODO: Change add_tracker to true
 //                menu.findItem(R.id.action_add_tracker).setVisible(false);
-            menu.findItem(R.id.action_label_menu).setVisible(true);
-            menu.findItem(R.id.action_set_label).setVisible(true);
-            menu.findItem(R.id.action_delete_label).setVisible(true);
+
+            // TODO: set label/category visible after implement it
+            menu.findItem(R.id.action_label_menu).setVisible(false);
+            menu.findItem(R.id.action_set_label).setVisible(false);
+            menu.findItem(R.id.action_delete_label).setVisible(false);
 
             // TODO: Check when this changed (qb_api X.Y.Z )
             if (MainActivity.qb_api < 8) {

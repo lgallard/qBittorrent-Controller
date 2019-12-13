@@ -90,14 +90,16 @@ public class AboutFragment extends Fragment {
         if (menu != null) {
             menu.findItem(R.id.action_refresh).setVisible(true);
             menu.findItem(R.id.action_search).setVisible(true);
+            menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
+
             menu.findItem(R.id.action_add).setVisible(true);
 
             if (menu.findItem(R.id.action_resume_all) != null) {
-                menu.findItem(R.id.action_resume_all).setVisible(false);
+                menu.findItem(R.id.action_resume_all).setVisible(true);
             }
 
             if (menu.findItem(R.id.action_pause_all) != null) {
-                menu.findItem(R.id.action_pause_all).setVisible(false);
+                menu.findItem(R.id.action_pause_all).setVisible(true);
             }
 
             if (menu.findItem(R.id.action_resume) != null) {

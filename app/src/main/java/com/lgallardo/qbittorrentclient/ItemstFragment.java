@@ -135,11 +135,13 @@ public class ItemstFragment extends ListFragment {
                 @Override
                 public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
 
-                        menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
-                        menu.findItem(R.id.action_sequential_download).setVisible(true);
-                        menu.findItem(R.id.action_label_menu).setVisible(true);
-                        menu.findItem(R.id.action_set_label).setVisible(true);
-                        menu.findItem(R.id.action_delete_label).setVisible(true);
+                    menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
+                    menu.findItem(R.id.action_sequential_download).setVisible(true);
+
+                    // TODO: set label/category visible after implement it
+                    menu.findItem(R.id.action_label_menu).setVisible(false);
+                    menu.findItem(R.id.action_set_label).setVisible(false);
+                    menu.findItem(R.id.action_delete_label).setVisible(false);
 
                     return true;
                 }
@@ -420,7 +422,7 @@ public class ItemstFragment extends ListFragment {
                             return true;
                         case R.id.action_set_label:
 
-                            m.setLabelDialog(hashes);
+                            m.setCategoryDialog(hashes);
 
                             // Clear selection
                             nr = 0;
@@ -435,7 +437,7 @@ public class ItemstFragment extends ListFragment {
 
                         case R.id.action_delete_label:
 
-                            m.setLabel(hashes, " ");
+                            m.setCategory(hashes, " ");
 
                             // Clear selection
                             nr = 0;

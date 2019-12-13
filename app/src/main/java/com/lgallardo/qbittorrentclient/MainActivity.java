@@ -2156,12 +2156,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    private void setLabel(final String hashes, final String label, final VolleyCallback callback) {
+    private void setCategory(final String hashes, final String category, final VolleyCallback callback) {
 
         String url = "";
-
-        String labelHeaderTmp = "label";
-
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && !subfolder.equals("")) {
@@ -2169,25 +2166,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
 
-        url = protocol + "://" + hostname + ":" + port + url;
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/setCategory";
 
-        // Validate setLabel for API 10+
-        try {
-
-            // TODO: Check when this changed (qb_api X.Y.Z )
-            if (qb_api >= 10) {
-                labelHeaderTmp = "category";
-                url = url + "/command/setCategory";
-            } else {
-                labelHeaderTmp = "label";
-                url = url + "/command/setLabel";
-            }
-        } catch (Exception e) {
-            labelHeaderTmp = "label";
-            url = url + "/command/setLabel";
-        }
-
-        final String labelHeader = labelHeaderTmp;
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2197,26 +2177,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "===Command===");
-                        Log.d("Debug", "Response: " + response);
+                        Log.d("Debug", "[setCategory] response: " + response);
 
                         // Return value
                         callback.onSuccess("");
-
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
-                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
-
-
+                        Log.d("Debug", "[setCategory] Error in JSON response: " + error.getMessage());
                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-
                     }
                 }
         ) {
@@ -2235,7 +2207,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("hashes", hashes);
-                params.put(labelHeader, label);
+                params.put("category", category);
                 return params;
             }
         };
@@ -3195,16 +3167,14 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    public void setLabel(String hashes, String label) {
+    public void setCategory(String hashes, String label) {
 
-        setLabel(hashes, label, new VolleyCallback() {
+        setCategory(hashes, label, new VolleyCallback() {
             @Override
             public void onSuccess(String result) {
-
-                Log.d("Debug: ", ">>> setLabel: " + result);
+                Log.d("Debug: ", "[setCategory] Result: " + result);
 
                 toastText(R.string.torrentsApplyingChange);
-
                 // Refresh
                 refreshAfterCommand(3);
 
@@ -4670,12 +4640,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 return true;
             case R.id.action_set_label:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                    setLabelDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                    setCategoryDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                 }
                 return true;
             case R.id.action_delete_label:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                    setLabel(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate, " ");
+                    setCategory(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate, " ");
                 }
                 return true;
 
@@ -4741,7 +4711,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     addUrlTracker(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                 }
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -5078,7 +5047,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
-    public void setLabelDialog(final String hash) {
+    public void setCategoryDialog(final String hash) {
 
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(MainActivity.this);
@@ -5108,7 +5077,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     String labelEncoded = Uri.encode(label.getText().toString());
 
-                    setLabel(hash, labelEncoded);
+                    setCategory(hash, labelEncoded);
                 }
             });
 
@@ -5760,8 +5729,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             // Load banner
             loadBanner();
-
-            Log.d("Debug", "[TorrentDetailsFragment] refreshed!");
 
         }
 
