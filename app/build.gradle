@@ -60,7 +60,7 @@ android {
             minSdkVersion 14
             targetSdkVersion 28
            archivesBaseName = "qBittorrentController_v" + versionName
-            versionCode 4704
+            versionCode 4705
             dimension "default"
         }
         free {
@@ -69,7 +69,7 @@ android {
             minSdkVersion 14
             targetSdkVersion 28
             archivesBaseName = "qBittorrentController_v" + versionName
-            versionCode 4704
+            versionCode 4705
             dimension "default"
         }
     }
