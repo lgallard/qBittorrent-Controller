@@ -64,31 +64,69 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+import java.math.RoundingMode;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 interface RefreshListener {
-    public void swipeRefresh();
+    void swipeRefresh();
+}
+
+interface TorrentsListCallBack {
+    void onSuccess(List<Torrent> list);
+}
+
+interface ContentsListCallback {
+    void onSuccess(List<ContentFile> list);
+}
+
+interface TrackersListCallback {
+    void onSuccess(List<Tracker> list);
+}
+
+interface GeneralInfoCallback {
+    void onSuccess(GeneralInfo generalInfo);
 }
 
 public class MainActivity extends AppCompatActivity implements RefreshListener {
@@ -158,8 +196,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Cookie (SID - Session ID)
     public static String cookie = null;
-    public static String qb_version = "3.2.x";
-    public static String qb_api = "0";
+    public static String qb_version = "4.2.x";
+    public static int qb_api = 230;
+
     public static String qbittorrentServer = "";
     public static LinearLayout headerInfo;
 
@@ -168,9 +207,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Current label
     public static String currentLabel;
-
-
-    protected static com.lgallardo.qbittorrentclient.JSONParser jParser;
 
     // Preferences properties
     protected static String currentServer;
@@ -255,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public static final int DRAWER_LABEL = 6;
     public static final int DRAWER_LABEL_CATEGORY = 8;
 
-    private ArrayList<String> labels = new ArrayList<String>();
+    private ArrayList<String> labels = new ArrayList<>();
 
     // Fragments
     private AboutFragment secondFragment;
@@ -279,7 +315,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     // Searching field
     private String searchField = "";
-    private String qbQueryString = "query";
 
     // Alarm manager
     private AlarmManager alarmMgr;
@@ -335,12 +370,27 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private Toast toast;
     private AsyncTask<String, Integer, Torrent[]> qbTask;
 
+    // This is the delay before refreshing
+    private int delay = 1;
+
+    // Multipart
+    private final Context context = this;
+    private final String twoHyphens = "--";
+    private final String lineEnd = "\r\n";
+
+    // Replacement for params[0]
+    String urlPrefix = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        Log.d("Debug", "[onCreate] OK");
+
         // Get preferences
         getSettings();
+
+//        Log.d("Debug", "[onCreate] getSettings OK");
 
         // Set alarm for checking completed torrents, if not set
         if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), NotifierService.class), PendingIntent.FLAG_NO_CREATE) == null) {
@@ -355,18 +405,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     notification_period, alarmIntent);
         }
 
-        // Set alarm for RSS checking, if not set
-        if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), RSSService.class), PendingIntent.FLAG_NO_CREATE) == null) {
-
-            // Set Alarm for checking completed torrents
-            alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
-            Intent intent = new Intent(getApplication(), RSSService.class);
-            alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
-
-            alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + 5000,
-                    AlarmManager.INTERVAL_DAY, alarmIntent);
-        }
+//        // Set alarm for RSS checking, if not set
+//        if (PendingIntent.getBroadcast(getApplication(), 0, new Intent(getApplication(), RSSService.class), PendingIntent.FLAG_NO_CREATE) == null) {
+//
+//            // Set Alarm for checking completed torrents
+//            alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
+//            Intent intent = new Intent(getApplication(), RSSService.class);
+//            alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
+//
+//            alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//                    SystemClock.elapsedRealtime() + 5000,
+//                    AlarmManager.INTERVAL_DAY, alarmIntent);
+//        }
 
         // Set Theme (It must be fore inflating or setContentView)
         if (dark_ui) {
@@ -411,27 +461,26 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are
 
 
-        ArrayList<DrawerItem> serverItems = new ArrayList<DrawerItem>();
-        ArrayList<DrawerItem> actionItems = new ArrayList<DrawerItem>();
+        ArrayList<DrawerItem> serverItems = new ArrayList<>();
+        ArrayList<DrawerItem> actionItems = new ArrayList<>();
 //        ArrayList<ObjectDrawerItem> labelItems = new ArrayList<ObjectDrawerItem>();
-        ArrayList<DrawerItem> settingsItems = new ArrayList<DrawerItem>();
+        ArrayList<DrawerItem> settingsItems = new ArrayList<>();
 
 
         // Add server category
         serverItems.add(new DrawerItem(R.drawable.ic_drawer_servers, getResources().getString(R.string.drawer_servers_category), DRAWER_CATEGORY, false, null));
 
         // Server items
-        int currentServerValue = 1;
+        int currentServerValue;
 
         try {
             currentServerValue = Integer.parseInt(MainActivity.currentServer);
         } catch (NumberFormatException e) {
-
+            currentServerValue = 1;
         }
 
         for (int i = 0; i < navigationDrawerServerItems.length; i++) {
             serverItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, navigationDrawerServerItems[i], DRAWER_ITEM_SERVERS, ((i + 1) == currentServerValue), "changeCurrentServer"));
-
         }
 
         // Add actions
@@ -446,7 +495,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Add labels
 
         // Add settings actions
-        settingsItems.add(new DrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTIONS, false, "openOptions"));
+        //settingsItems.add(new DrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTIONS, false, "openOptions"));
         settingsItems.add(new DrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[8], DRAWER_ITEM_ACTIONS, false, "openSettings"));
 
         if (packageName.equals("com.lgallardo.qbittorrentclient")) {
@@ -504,9 +553,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         getSupportActionBar().setHomeButtonEnabled(false);
 
 
-        // Get options and save them as shared preferences
-        qBittorrentOptions qso = new qBittorrentOptions();
-        qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
+//        // Get options and save them as shared preferences
+//        qBittorrentOptions qso = new qBittorrentOptions();
+//        qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
 
         // If it was awoken from an intent-filter,
         // get intent from the intent filter and Add URL torrent
@@ -626,12 +675,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Load banner
         loadBanner();
 
+//        Log.d("Debug", "[onCreate] Finished");
+
     }
 
     // Search bar in Material Design
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         altSpeedLimitsMenuItem = menu.findItem(R.id.action_toggle_alternative_rate);
+        altSpeedLimitsMenuItem.setEnabled(true);
+        altSpeedLimitsMenuItem.setChecked(alternative_speeds);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -752,30 +805,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void onPause() {
         super.onPause();
         activityIsVisible = false;
-
-//        // Cancel toast messages
-//        if(toast != null) {
-//            toast.cancel();
-//        }
-
-
     }
-
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//
-//        // Cancel toast messages
-//        if(toast != null) {
-//            toast.cancel();
-//        }
-//
-//        // Cancel qbTask
-//        if(qbTask != null){
-//            qbTask.cancel(true);
-//        }
-//
-//    }
 
     // Load Banner
     public void loadBanner() {
@@ -804,8 +834,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         {
 
-            if (auto_refresh == true && canrefresh == true && activityIsVisible == true) {
-
+            if (auto_refresh && canrefresh && activityIsVisible ) {
                 refreshCurrent();
             }
 
@@ -815,9 +844,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     };// runnable
 
     public void refreshCurrent() {
-//        if (!hostname.equals("")) {
-
-//            switch (drawerList.getCheckedItemPosition()) {
         switch (actionStates.indexOf(currentState)) {
             case 0:
                 refresh("all", currentLabel);
@@ -844,7 +870,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 refresh();
                 break;
         }
-//        }
     }
 
 
@@ -896,7 +921,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 return true;
             case R.id.action_file_high_priority:
 //                Log.d("Debug", "High priority");
-                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 2);
+                setFilePrio(TorrentDetailsFragment.hashToUpdate, TorrentDetailsFragment.fileContentRowPosition, 6);
                 return true;
             case R.id.action_file_maximum_priority:
 //                Log.d("Debug", "Maximum priority");
@@ -1000,6 +1025,2828 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
+    // Volley
+
+    protected void addVolleyRequest(JsonObjectRequest jsArrayRequest) {
+
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsArrayRequest);
+
+    }
+
+    protected void addVolleyRequest(JsonArrayRequest jsArrayRequest) {
+
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsArrayRequest);
+
+    }
+
+    protected void addVolleyRequest(StringRequest stringArrayRequest) {
+
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(stringArrayRequest);
+
+    }
+
+    protected void addVolleyRequest(CustomMultipartRequest customMultipartRequest) {
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(customMultipartRequest);
+    }
+
+    public interface VolleyCallback {
+        void onSuccess(String result);
+    }
+
+
+    private void getApiVersion(final VolleyCallback callback) {
+
+        String ApiURL;
+
+
+        ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/app/webapiVersion";
+
+
+
+        Log.d("Debug", "[getApiVersion] ApiURL: " + ApiURL);
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.GET,
+                ApiURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "[getApiVersion] Response: " + response);
+
+                        Gson gson = new Gson();
+
+                        Float responseFloat = Float.valueOf(-1);
+
+                        try {
+
+
+                            String jsonString = "{\"apiversion\":"  + response + "}";
+
+                            Log.d("Debug", "[getApiVersion] jsonString: " + jsonString);
+
+                            JSONObject jobj = new JSONObject(jsonString);
+
+                            Log.d("Debug", "[getApiVersion] jobj (string) => : " + jobj.toString());
+
+                            //api = gson.fromJson(jsonString, Api.class);
+
+
+                            responseFloat  = gson.fromJson(response, Float.class);
+
+
+                            Log.d("Debug", "[getApiVersion] responseFloat: " + responseFloat);
+
+
+                        } catch (JSONException e) {
+                            Log.d("Debug", "[getApiVersion] Error: " + e);
+                            e.printStackTrace();
+                            Log.e("Error", e.toString());
+                        }
+
+                        Log.d("Debug", "[getApiVersion] JSONObject: " + response);
+
+                        callback.onSuccess(responseFloat.toString());
+
+                        connection403ErrorCounter = 0;
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        NetworkResponse networkResponse = error.networkResponse;
+
+                        if (networkResponse != null) {
+                            Log.d("Debug", "[getApiVersion] statusCode: " + networkResponse.statusCode);
+
+                            if (networkResponse.statusCode == 404){
+                                Toast.makeText(getApplicationContext(), "Host not found!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (networkResponse.statusCode == 403){
+
+                                Log.d("Debug", "[getApiVersion] connection403ErrorCounter: " + connection403ErrorCounter);
+
+                                connection403ErrorCounter = connection403ErrorCounter+1;
+
+//                                if(connection403ErrorCounter >= 2) {
+                                    Toast.makeText(getApplicationContext(), "Authentication error!", Toast.LENGTH_SHORT).show();
+//                                }
+                            }
+                        }
+
+
+                        Log.d("Debug", " [getApiVersion] Error in JSON response: " + error.getMessage());
+
+                        callback.onSuccess("");
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void getCookieV(final VolleyCallback callback) {
+
+        String url;
+
+        url = protocol + "://" + hostname + ":" + port + "/api/v2/auth/login";
+
+        // New JSONObject request
+        CustomStringRequest jsArrayRequest = new CustomStringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "[getCookieV] Response: " + response);
+                        //Log.d("Debug", "headers: " + CustomStringRequest.headers);
+
+                        JSONObject jsonObject = null;
+                        CustomObjectResult customObjectResult;
+                        try {
+                            jsonObject = new JSONObject(response);
+                        } catch (Exception e) {
+                            Log.e("Debug", "[getCookieV] error: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+
+                        Gson gson = new Gson();
+
+                        String cookieString = null;
+
+                        try {
+                            Log.d("Debug", "[getCookieV] JSONObject: " + jsonObject.toString());
+                            customObjectResult = gson.fromJson(jsonObject.toString(), CustomObjectResult.class);
+
+                            Log.d("Debug", "[getCookieV] DATA?: " + customObjectResult.getData());
+                            Log.d("Debug", "[getCookieV] HEADERS?: " + customObjectResult.getHeaders());
+
+                            // Get Headers
+                            String headers = customObjectResult.getHeaders();
+
+
+                            Log.d("Debug", "[getCookieV] Headers: " + headers);
+
+                            // Get set-cookie from headers
+                            cookieString = headers.split("set-cookie=")[1].split(";")[0];
+
+
+                            Log.d("Debug", "[getCookieV] set-cookie: " + cookieString);
+
+
+                        } catch (Exception e) {
+
+                            Log.e("Debug", "[getCookieV] error 2 => " + e.getMessage());
+                            e.printStackTrace();
+                        }
+
+
+                        // Return value
+                        callback.onSuccess(cookieString);
+
+                        connection403ErrorCounter = 0;
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Log.d("Debug", "[getCookieV] Error in JSON response: " + error.getMessage());
+
+                        callback.onSuccess("");
+
+                        NetworkResponse networkResponse = error.networkResponse;
+
+                        if (networkResponse != null) {
+                            Log.d("Debug", "[getCookieV] statusCode: " + networkResponse.statusCode);
+
+
+                            if (networkResponse.statusCode == 403) {
+                                Log.d("Debug", "[getCookieV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
+
+                                Toast.makeText(getApplicationContext(), "User's IP is banned for too many failed login attempts!", Toast.LENGTH_SHORT).show();
+
+//                                if (connection403ErrorCounter <= 2) {
+//                                    getApi();
+//                                }
+//
+//                                if(connection403ErrorCounter > 2) {
+//                                    Toast.makeText(getApplicationContext(), "Please check your account settings!", Toast.LENGTH_SHORT).show();
+//                                }
+                            }
+                        }
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type:", "application/x-www-form-urlencoded");
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("password", password);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void resumeAllTorrents(final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+        // Command
+        url = url + "/api/v2/torrents/resume";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Return value
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", "all");
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void startTorrent(String hash, final VolleyCallback callback) {
+
+        final String hash_param = hash;
+        String url = "";
+        final String key;
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/resume";
+        key = "hashes";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Return value
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put(key, hash_param);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void pauseAllTorrents(final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+        // Command
+        url = url + "/api/v2/torrents/pause";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", "all");
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void pauseTorrent(String hash, final VolleyCallback callback) {
+
+        final String hash_param = hash;
+        String url = "";
+        final String key;
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/pause";
+        key = "hashes";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put(key, hash_param);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void deleteTorrent(final String hashes, final VolleyCallback callback) {
+
+        String url = "";
+        final Map<String, String> postParams = new HashMap<>();
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
+        postParams.put("hashes", hashes);
+        postParams.put("deleteFiles", "false");
+
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Return value
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                return postParams;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void deleteDriveTorrent(final String hashes, final VolleyCallback callback) {
+
+        String url = "";
+        final Map<String, String> postParams = new HashMap<>();
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/delete";
+        postParams.put("hashes", hashes);
+        postParams.put("deleteFiles", "true");
+
+        Log.d("Debug", "URL: " + url);
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                return postParams;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void increasePrioTorrent(final String hashes, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/increasePrio";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Return value
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void decreasePrioTorrent(final String hashes, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/decreasePrio";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Return value
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void maxPrioTorrent(final String hashes, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/topPrio";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        Log.d("Debug", "hashes: " + hashes);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void minPrioTorrent(final String hashes, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/bottomPrio";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        Log.d("Debug", "hashes: " + hashes);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void setUpRateLimit(final String hashes, final String limit, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/transfer/uploadLimit";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Return value
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                params.put("limit", limit);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void setDownRateLimit(final String hashes, final String limit, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/transfer/setDownloadLimit";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Return value
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                params.put("limit", limit);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void recheckTorrent(final String hash, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/recheck";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+
+
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hash);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void toggleFirstLastPiecePrio(final String hashes, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/toggleFirstLastPiecePrio";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        // Return value
+                        callback.onSuccess("");
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void toggleSequentialDownload(final String hashes, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/toggleSequentialDownload";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void setCategory(final String hashes, final String category, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/setCategory";
+
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "[setCategory] response: " + response);
+
+                        // Return value
+                        callback.onSuccess("");
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Debug", "[setCategory] Error in JSON response: " + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hashes", hashes);
+                params.put("category", category);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void toggleAlternativeSpeedLimits(final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/transfer/toggleSpeedLimitsMode";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Return value
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void addTorrent(final String hashes, final String path2Set, final String label2Set, final VolleyCallback callback) {
+
+        String boundary = "";
+
+        // TODO: Check when this changed (qb_api X.Y.Z )
+        if (qb_api >= 7) {
+
+            boundary = "-----------------------" + (new Date()).getTime();
+            boundary = "multipart/form-data; boundary=" + boundary;
+        } else {
+
+            boundary = "application/x-www-form-urlencoded";
+        }
+
+
+        final String urlContentType = boundary;
+
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/add";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Return value
+                        callback.onSuccess("");
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", urlContentType);
+                params.put("savepath", path2Set);
+                params.put("category", label2Set);
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("urls", hashes);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void addTorrentFileAPI7(final String hash, final String path2Set, final String label2Set, final VolleyCallback callback) {
+
+        final String boundary = "-----------------------" + (new Date()).getTime();
+        final String urlContentType = "multipart/form-data; boundary=" + boundary;
+        byte[] multipartBody = null;
+
+        String url = "";
+
+        byte[] fileBytesTemp = null;
+
+        final File file = new File(hash);
+
+        try {
+            fileBytesTemp = Common.fullyReadFileToBytes(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        final byte[] fileBytes = fileBytesTemp;
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
+
+        try {
+            // the file
+            buildPart(boundary, dos, fileBytes, file.getName());
+            // send multipart form data necessary after file data
+            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+            // pass to multipart body
+            multipartBody = bos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/add";
+
+        CustomMultipartRequest customMultipartRequest = new CustomMultipartRequest(
+                url,
+                urlContentType,
+                multipartBody,
+                new Response.Listener<NetworkResponse>() {
+                    @Override
+                    public void onResponse(NetworkResponse response) {
+                        //Toast.makeText(context, "Upload successfully!", Toast.LENGTH_SHORT).show();
+                        // Return value
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Toast.makeText(context, "Upload failed!\r\n" + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", urlContentType);
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+
+                if (path2Set != null && path2Set.length() != 0) {
+                    params.put("savepath", path2Set);
+                }
+
+                if (label2Set != null && label2Set.length() != 0) {
+                    params.put("category", label2Set);
+                }
+
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(customMultipartRequest);
+    }
+
+    private void addTracker(final String hash, final String urlParam, final VolleyCallback callback) {
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/addTrackers";
+
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===Command===");
+                        Log.d("Debug", "Response: " + response);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Debug", "Error in JSON response: " + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hash", hash);
+                params.put("urls", urlParam);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void getAlternativeSpeedLimitsEnabled(final VolleyCallback callback) {
+
+        String ApiURL;
+
+        ApiURL = protocol + "://" + hostname + ":" + port + "/api/v2/transfer/speedLimitsMode";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.GET,
+                ApiURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("Debug", "===x===");
+                        Log.d("Debug", "[getAlternativeSpeedLimitsEnabled] JSONObject: " + response);
+                        Log.d("Debug", "[getAlternativeSpeedLimitsEnabled] Cookie: " + cookie);
+
+                        Gson gson = new Gson();
+
+
+                        int responseInt = 0;
+
+                        CustomStringResult result = null;
+                        try {
+
+                            responseInt = gson.fromJson(response, Integer.class);
+
+                            Log.d("Debug", "[getAlternativeSpeedLimitsEnabled] Response: " + response);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e("Error", e.toString());
+                        }
+
+                        Log.d("Debug", "[getAlternativeSpeedLimitsEnabled] ResponseInt: " + responseInt);
+
+                        callback.onSuccess(String.valueOf(responseInt));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Debug", "[getAlternativeSpeedLimitsEnabled] Error in JSON response: " + error.getMessage());
+                        callback.onSuccess("");
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void setFilePrio(final String hashes, final int idTemp, final int priorityTemp, final VolleyCallback callback) {
+
+        final String id = Integer.toString(idTemp);
+        final String priority = Integer.toString(priorityTemp);
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/torrents/filePrio";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Debug", "[setFilePrio] executing");
+
+//                        Log.d("Debug", "[setFilePrio] Response: " + response);
+//                        Log.d("Debug", "[setFilePrio] hashes: " + hashes);
+//                        Log.d("Debug", "[setFilePrio] id: " + id);
+//                        Log.d("Debug", "[setFilePrio] priority: " + priority);
+
+                        // Return value
+                        callback.onSuccess("");
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Log.d("Debug", "[setFilePrio] Error in JSON response: " + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "[setFilePrio] Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("hash", hashes);
+                params.put("id", id);
+                params.put("priority", priority);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    private void setQBittorrentPrefefrences(final String json, final VolleyCallback callback) {
+
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/app/setPreferences";
+
+        // New JSONObject request
+        StringRequest jsArrayRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Return value
+                        callback.onSuccess("");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("json", json);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+    }
+
+    // Get all torrents
+    private List getTorrentListV(final String state, final TorrentsListCallBack callback) {
+
+        final List<Torrent> torrents = new ArrayList<>();
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+        // Command
+        url = url + "/api/v2/torrents/info?filter=" + state;
+
+
+        Log.d("Debug: ", "[getTorrentListV] URL: " + url);
+        Log.d("Debug: ", "[getTorrentListV] cookies: " + cookie);
+
+
+        JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        Log.d("Debug: ", "[getTorrentListV] onResponse");
+
+                        // Get list type to parse it
+                        Type listType = new TypeToken<List<Torrent>>() {
+                        }.getType();
+
+                        // Parse Lists using Gson
+                        torrents.addAll((List<Torrent>) new Gson().fromJson(response.toString(), listType));
+
+                        List<Torrent> listTorrent = (List<Torrent>) new Gson().fromJson(response.toString(), listType);
+
+                        // Return value
+                        callback.onSuccess(torrents);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+
+                            Log.d("Debug", "[getTorrentListV] Connection error!");
+                            Toast.makeText(getApplicationContext(), "Connection error!", Toast.LENGTH_SHORT).show();
+                        }
+                        // Log status code
+                        NetworkResponse networkResponse = error.networkResponse;
+                        if (networkResponse != null) {
+                            Log.d("Debug", "[getTorrentListV] statusCode: " + networkResponse.statusCode);
+
+                            if (networkResponse.statusCode == 404){
+                                Toast.makeText(getApplicationContext(), "Host not found!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (networkResponse.statusCode == 403){
+                                Log.d("Debug", "[getTorrentListV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
+
+                                connection403ErrorCounter = connection403ErrorCounter+1;
+
+                                if(connection403ErrorCounter > 1) {
+                                    Toast.makeText(getApplicationContext(), "Authentication error!", Toast.LENGTH_SHORT).show();
+                                    //refresh();
+                                }
+                            }
+                        }
+
+                        // Log error
+                        Log.d("Debug", "[getTorrentListV] Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", "[getTorrentListV] Error in JSON error: " + error);
+
+
+                    }
+                }
+
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsArrayRequest);
+
+        // Return the lists
+        return torrents;
+    }
+
+    // Wraps
+    private void getApi() {
+        getApiVersion(new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                if (result != null && !result.equals("")) {
+
+
+                    int api;
+
+                    try {
+                        api = Integer.parseInt(result.replace(".",""));
+                    } catch (Exception e) {
+                        api = 0;
+                    }
+
+                    if (api >= 201) {
+                        qb_version = "4.1.x";
+                        cookie = null;
+                        getCookie();
+
+                        Log.d("Debug: ", "[getApi] getApi was executed");
+                        Log.d("Debug: ", "[getApi] - cookie: " + cookie);
+                    }
+
+                    if (api >= 230) {
+                        qb_version = "4.2.x";
+                        cookie = null;
+                        getCookie();
+
+                        Log.d("Debug: ", "[getApi] getApi was executed");
+                        Log.d("Debug: ", "[getApi] - cookie: " + cookie);
+                    }
+
+
+                    qb_api = api;
+                    qbittorrentServer = result;
+                }
+            }
+        });
+    }
+
+    private void getCookie() {
+        getCookieV(new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                MainActivity.cookie = result;
+
+                // Save cookie
+                savePreferenceAsString("qbCookie", result);
+
+                // Test
+                getTorrentList(lastState);
+
+
+            }
+        });
+    }
+
+    private void resumeAllTorrents() {
+
+        resumeAllTorrents(new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                toastText(R.string.AllTorrentsResumed);
+
+                // Refresh
+                refreshAfterCommand(2);
+
+            }
+        });
+    }
+
+    public void startSelectedTorrents(String hashes) {
+
+        String[] hashesArray = hashes.split("\\|");
+
+        for (int i = 0; hashesArray.length > i; i++) {
+            startTorrent(hashesArray[i], true);
+        }
+
+        toastText(R.string.torrentsSelectedStarted);
+
+        // Delay of 1 second
+        refreshAfterCommand(2);
+
+    }
+
+    private void startTorrent(String hash) {
+        startTorrent(hash, false);
+    }
+
+    private void startTorrent(String hash, final boolean isSelection) {
+
+        startTorrent(hash, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Start Torrent: " + result);
+
+                if (!isSelection) {
+                    toastText(R.string.torrentStarted);
+
+                    // Refresh
+                    refreshAfterCommand(delay);
+
+                }
+
+            }
+        });
+    }
+
+    private void pauseAllTorrents() {
+
+        pauseAllTorrents(new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+//                Log.d("Debug: ", ">>> PauseAll: " + result);
+                toastText(R.string.AllTorrentsPaused);
+
+                // Refresh
+                refreshAfterCommand(delay);
+
+            }
+        });
+    }
+
+    public void pauseSelectedTorrents(String hashes) {
+
+        String[] hashesArray = hashes.split("\\|");
+
+        for (int i = 0; hashesArray.length > i; i++) {
+            pauseTorrent(hashesArray[i], true);
+        }
+
+        toastText(R.string.torrentsSelectedPaused);
+
+        // Delay of 1 second
+        refreshAfterCommand(2);
+
+    }
+
+    private void pauseTorrent(String hash, final boolean isSelection) {
+
+        pauseTorrent(hash, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Pause Torrent: " + result);
+
+                if (!isSelection) {
+                    toastText(R.string.torrentPaused);
+
+                    // Refresh
+                    refreshAfterCommand(delay);
+
+                }
+
+            }
+        });
+    }
+
+    private void pauseTorrent(String hash) {
+        pauseTorrent(hash, false);
+    }
+
+    public void deleteSelectedTorrents(String hashes) {
+
+        deleteTorrent(hashes, true);
+
+        toastText(R.string.torrentsSelectedDeleted);
+
+        // Delay of 1 second
+        refreshAfterCommand(2);
+
+    }
+
+    private void deleteTorrent(String hashes) {
+        deleteTorrent(hashes, false);
+    }
+
+    private void deleteTorrent(String hash, final boolean isSelection) {
+
+        deleteTorrent(hash, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Delete Torrent: " + result);
+
+                if (!isSelection) {
+                    toastText(R.string.torrentDeleted);
+
+                    // Refresh
+                    refreshAfterCommand(delay);
+
+                }
+
+            }
+        });
+    }
+
+    public void deleteDriveSelectedTorrents(String hashes) {
+
+        deleteDriveTorrent(hashes, true);
+
+        toastText(R.string.torrentsSelectedDeletedDrive);
+
+        // Delay of 1 second
+        refreshAfterCommand(2);
+
+    }
+
+    private void deleteDriveTorrent(String hashes) {
+        deleteDriveTorrent(hashes, false);
+    }
+
+    private void deleteDriveTorrent(String hash, final boolean isSelection) {
+
+        deleteDriveTorrent(hash, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Delete Drive Torrent: " + result);
+
+                if (!isSelection) {
+                    toastText(R.string.torrentDeletedDrive);
+
+                    // Refresh
+                    refreshAfterCommand(delay);
+
+                }
+
+            }
+        });
+    }
+
+    public void increasePrioTorrent(String hashes) {
+
+        increasePrioTorrent(hashes, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Increase priority: " + result);
+
+                toastText(R.string.increasePrioTorrent);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void decreasePrioTorrent(String hashes) {
+
+        decreasePrioTorrent(hashes, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Increase priority: " + result);
+
+                toastText(R.string.decreasePrioTorrent);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void maxPrioTorrent(String hashes) {
+
+        maxPrioTorrent(hashes, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Max priority: " + result);
+
+                toastText(R.string.priorityUpdated);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void minPrioTorrent(String hashes) {
+
+        minPrioTorrent(hashes, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Min priority: " + result);
+
+                toastText(R.string.priorityUpdated);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void setUpRateLimit(String hashes, String limit) {
+
+        setUpRateLimit(hashes, limit, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> setUpRateLimit: " + result);
+
+            }
+        });
+
+    }
+
+    public void setDownRateLimit(String hashes, String limit) {
+
+        setDownRateLimit(hashes, limit, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> setDownRateLimit: " + result);
+
+            }
+        });
+
+    }
+
+    public void recheckTorrent(String hash) {
+
+        recheckTorrent(hash, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> [recheckTorrent] result: " + result);
+
+            }
+        });
+
+    }
+
+    public void toggleFirstLastPiecePrio(String hashes) {
+
+        toggleFirstLastPiecePrio(hashes, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> Toggle first last piece priority: " + result);
+
+                toastText(R.string.torrentstogglefisrtLastPiecePrio);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void toggleSequentialDownload(String hashes) {
+
+        toggleSequentialDownload(hashes, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> toggleSequentialDownload: " + result);
+
+                toastText(R.string.torrentstoggleSequentialDownload);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void setCategory(String hashes, String label) {
+
+        setCategory(hashes, label, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d("Debug: ", "[setCategory] Result: " + result);
+
+                toastText(R.string.torrentsApplyingChange);
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void toggleAlternativeSpeedLimits() {
+
+        toggleAlternativeSpeedLimits(new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", "[toggleAlternativeSpeedLimits] OK");
+
+                toastText(R.string.toggledAlternativeRates);
+
+                // Refresh
+                refreshAfterCommand(2);
+                swipeRefresh();
+
+            }
+        });
+
+    }
+
+    public void addTorrent(String hashes, String path, String label) {
+
+        addTorrent(hashes, path, label, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+//                Log.d("Debug: ", "[addTorrent] result: " + result);
+
+                toastText(R.string.torrentAdded);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void addTorrentFileAPI7(String hash, String path, String label) {
+
+        addTorrentFileAPI7(hash, path, label, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug", ">>> addTorrentFile: " + result);
+
+                toastText(R.string.torrentFileAdded);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    public void addTracker(String hashes, String url) {
+
+        addTracker(hashes, url, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> addTracker: " + result);
+                toastText(R.string.torrentsApplyingChange);
+
+                // Refresh
+                refreshAfterCommand(3);
+
+            }
+        });
+
+    }
+
+    private void getAlternativeSpeedLimitsEnabled() {
+        getAlternativeSpeedLimitsEnabled(new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Boolean isAlternativeSpeedLimitsEnabled;
+
+                Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] result: " + result);
+
+                if (result != null && !result.equals("")) {
+
+
+                    if("1".equals(result)) {
+                        alternative_speeds = true;
+                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] ON");
+                    }
+                    else {
+                        alternative_speeds = false;
+                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] OFF");
+                    }
+
+                    savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", alternative_speeds);
+
+
+                    if (altSpeedLimitsMenuItem != null) {
+                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] altSpeedLimitsMenuItem not null");
+                        altSpeedLimitsMenuItem.setEnabled(true);
+                        altSpeedLimitsMenuItem.setChecked(alternative_speeds);
+                    }
+                } else {
+                    Log.d("Debug: ", "getAlternativeSpeedLimitsEnabled got null");
+                }
+            }
+        });
+    }
+
+    public void setQBittorrentPrefefrences(String json) {
+
+        setQBittorrentPrefefrences(json, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", ">>> setQBittorrentPrefefrences: " + result);
+
+                toastText(R.string.setQBittorrentPrefefrences);
+
+            }
+        });
+
+    }
+
+    public void setFilePrio(String hashes, int id, int priority) {
+
+        setFilePrio(hashes, id, priority, new VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                Log.d("Debug: ", "[setFilePrio] Result: " + result);
+
+                // Refresh
+                refreshAfterCommand(2);
+                swipeRefresh();
+
+            }
+        });
+
+    }
+
+    public void getTorrentList(String state) {
+
+        getTorrentListV(state, new TorrentsListCallBack() {
+            @Override
+            public void onSuccess(List<Torrent> torrents) {
+
+                String infoString = "";
+                String sizeInfo, downloadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo;
+
+                Log.d("Debug", "[getTorrentList] torrents.size(): " + torrents.size());
+
+                for (int i = 0; i < torrents.size(); i++) {
+
+                    connection403ErrorCounter = 0;
+
+//                    Log.d("Debug", "- - -");
+//                    Log.d("Debug", "[getTorrentList] File: " + torrents.get(i).getName());
+//                    Log.d("Debug", "[getTorrentList] Hash: " + torrents.get(i).getHash());
+//                    Log.d("Debug", "[getTorrentList] qb_version: "+ qb_version);
+//                    Log.d("Debug", "[getTorrentList] qb_api: "+ qb_api);
+
+
+                    // Get torrent size
+                    sizeInfo = Common.calculateSize(torrents.get(i).getSize());
+
+//                    Log.d("Debug", "[getTorrentList] sizeInfo: " + sizeInfo);
+//                    Log.d("Debug", "[getTorrentList] progress raw: " + torrents.get(i).getProgress());
+
+                    double progress = torrents.get(i).getProgress();
+
+                    // Set torrent progress
+                    torrents.get(i).setProgress(progress);
+
+                    progressInfo = Common.ProgressForUi(progress);
+
+//                    Log.d("Debug", "[getTorrentList] progress: " + (progress * 100));
+//                    Log.d("Debug", "[getTorrentList] progress fixed: " + progressInfo);
+
+                    // Get downloaded
+                    downloadedInfo = Common.calculateSize(torrents.get(i).getSize()-torrents.get(i).getAmount_left());
+
+                    // Get ETA
+                    etaInfo = Common.secondsToEta(torrents.get(i).getEta());
+
+                    // Get upload speed
+                    uploadSpeedInfo = Common.calculateSize(torrents.get(i).getUpspeed()) + "/s";
+
+                    // Get download speed
+                    downloadSpeedInfo = Common.calculateSize(torrents.get(i).getDlspeed()) + "/s";
+
+
+                    if (packageName.equals("com.lgallardo.qbittorrentclient")) {
+                        // Info free
+                        infoString = downloadedInfo + " / " + sizeInfo  + " "
+                                + '\u2191' + " " + uploadSpeedInfo + " "
+                                + '\u2193' + " " + downloadSpeedInfo + " "
+                                + '\u2022' + " " + torrents.get(i).getRatio() + " "
+                                + '\u2022' + " " + progressInfo + "% "
+                                + '\u2022' + " " + etaInfo;
+
+//                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
+//                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
+//                        }
+
+
+                    } else {
+                        // Info pro
+                        infoString = downloadedInfo + " / " + sizeInfo + " "
+                                + '\u2191' + " " + uploadSpeedInfo + " "
+                                + '\u2193' + " " + downloadSpeedInfo + " "
+                                + '\u2022' + " " + torrents.get(i).getRatio() + " "
+                                + '\u2022' + " " + etaInfo;
+
+//                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
+//                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
+//                        }
+
+
+                    }
+
+//                    Log.d("Debug", "[getTorrentList] infoString: " + infoString);
+
+                    // Set info
+                   torrents.get(i).setInfo(infoString);
+                }
+
+
+                // On Post execute
+                // Reporting
+                if (CustomLogger.isMainActivityReporting()) {
+                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - result length: " + torrents.size());
+                    //CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
+                }
+
+
+                ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
+
+                // Labels
+
+                String label = null;
+
+//                Log.d("Debug", "Still looking for..."+searchField);
+
+                for (int i = 0; i < torrents.size(); i++) {
+
+                    // Get label
+//                    label = torrents.get(i).getLabel();
+
+
+                    if (!labels.contains(label)) {
+
+                        // Add Label
+                        labels.add(label);
+//                        Log.d("Debug", "Label: " + label);
+
+                    }
+
+                    if (currentState.equals("all") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        torrentsFiltered.add(torrents.get(i));
+                    }
+
+                    if (currentState.equals("downloading") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("downloading".equals(torrents.get(i).getState()) || "stalledDL".equals(torrents.get(i).getState()) || "pausedDL".equals(torrents.get(i).getState())
+                                || "queuedDL".equals(torrents.get(i).getState()) || "checkingDL".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+                    if (currentState.equals("completed") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("uploading".equals(torrents.get(i).getState()) || "stalledUP".equals(torrents.get(i).getState()) || "pausedUP".equals(torrents.get(i).getState())
+                                || "queuedUP".equals(torrents.get(i).getState()) || "checkingUP".equals(torrents.get(i).getState()) || "forcedUP".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+                    if (currentState.equals("seeding") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("uploading".equals(torrents.get(i).getState()) || "stalledUP".equals(torrents.get(i).getState()) || "forcedUP".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+
+                    if (currentState.equals("pause") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("pausedDL".equals(torrents.get(i).getState()) || "pausedUP".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+                    if (currentState.equals("active") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("uploading".equals(torrents.get(i).getState()) || "downloading".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+                    if (currentState.equals("inactive") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
+                        if ("pausedUP".equals(torrents.get(i).getState()) || "pausedDL".equals(torrents.get(i).getState()) || "queueUP".equals(torrents.get(i).getState())
+                                || "queueDL".equals(torrents.get(i).getState()) || "stalledUP".equals(torrents.get(i).getState())
+                                || "stalledDL".equals(torrents.get(i).getState())) {
+                            torrentsFiltered.add(torrents.get(i));
+                        }
+                    }
+
+                }
+
+                // Labels
+                ArrayList<DrawerItem> labelItems = new ArrayList<DrawerItem>();
+
+                // Set unlabeled first
+
+                // Add label category
+                labelItems.add(new DrawerItem(R.drawable.ic_drawer_labels, getResources().getString(R.string.drawer_label_labels), DRAWER_LABEL_CATEGORY, true, "labelCategory"));
+
+                // Add All
+                label = getResources().getString(R.string.drawer_label_all);
+
+//                Log.d("Debug", "labes.size(): " + labels.size());
+
+                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, (currentLabel.equals(label) || !labels.contains(currentLabel) && !currentLabel.equals(getResources().getString(R.string.drawer_label_unlabeled))), "label"));
+
+                // Add unlabeled
+                label = getResources().getString(R.string.drawer_label_unlabeled);
+                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label) || currentLabel.equals(""), "label"));
+
+
+//                Log.d("Debug", "currentLabel: " + currentLabel);
+
+                if (labels != null && !(labels.contains(null))) {
+                    // Sort labels
+                    Collections.sort(labels);
+
+                    for (int i = 0; i < labels.size(); i++) {
+
+                        label = labels.get(i);
+
+                        if (label != null && !label.equals("")) {
+                            labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label), "label"));
+                        }
+                    }
+
+
+                    rAdapter.refreshDrawerLabels(labelItems);
+
+                }
+
+                // Sort by filename
+                if (sortby_value == SORTBY_NAME) {
+                    Collections.sort(torrentsFiltered, new TorrentNameComparator(reverse_order));
+                }
+                // Sort by size
+                if (sortby_value == SORTBY_SIZE) {
+                    Collections.sort(torrentsFiltered, new TorrentSizeComparator(reverse_order));
+                }
+                // Sort by Eta
+                if (sortby_value == SORTBY_ETA) {
+                    Collections.sort(torrentsFiltered, new TorrentEtaComparator(reverse_order));
+                }
+                // Sort by priority
+                if (sortby_value == SORTBY_PRIORITY) {
+                    Collections.sort(torrentsFiltered, new TorrentPriorityComparator(reverse_order));
+                }
+                // Sort by progress
+                if (sortby_value == SORTBY_PROGRESS) {
+                    Collections.sort(torrentsFiltered, new TorrentProgressComparator(reverse_order));
+                }
+                // Sort by Ratio
+                if (sortby_value == SORTBY_RATIO) {
+                    Collections.sort(torrentsFiltered, new TorrentRatioComparator(reverse_order));
+                }
+                // Sort by download speed
+                if (sortby_value == SORTBY_DOWNLOAD) {
+                    Collections.sort(torrentsFiltered, new TorrentDownloadSpeedComparator(reverse_order));
+                }
+                // Sort by upload speed
+                if (sortby_value == SORTBY_UPLOAD) {
+                    Collections.sort(torrentsFiltered, new TorrentUploadSpeedComparator(reverse_order));
+                }
+                // Sort by Added on
+                if (sortby_value == SORTBY_ADDEDON) {
+                    Collections.sort(torrentsFiltered, new TorrentAddedOnTimestampComparator(reverse_order));
+                }
+                // Sort by Completed on
+                if (sortby_value == SORTBY_COMPLETEDON) {
+                    Collections.sort(torrentsFiltered, new TorrentCompletedOnTimestampComparator(reverse_order));
+                }
+
+                // Get names (delete in background method)
+                MainActivity.names = new String[torrentsFiltered.size()];
+                MainActivity.lines = new Torrent[torrentsFiltered.size()];
+
+                uploadSpeedCount = 0;
+                downloadSpeedCount = 0;
+
+                uploadCount = 0;
+                downloadCount = 0;
+
+                try {
+
+                    Torrent torrentToUpdate = null;
+
+                    // Reporting
+                    if (CustomLogger.isMainActivityReporting()) {
+                        CustomLogger.saveReportMessage("Main", "qBittorrentTask - torrentsFiltered.size: " + torrentsFiltered.size());
+                    }
+
+                    for (int i = 0; i < torrentsFiltered.size(); i++) {
+
+                        Torrent torrent = torrentsFiltered.get(i);
+
+                        MainActivity.names[i] = torrent.getName();
+                        MainActivity.lines[i] = torrent;
+
+                        if (torrent.getHash().equals(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate)) {
+                            torrentToUpdate = torrent;
+                        }
+
+//                        uploadSpeedCount += (int) Common.humanSizeToBytes(torrent.getUpspeed());
+//                        downloadSpeedCount += (int) Common.humanSizeToBytes(torrent.getDlspeed());
+
+                        uploadSpeedCount += torrent.getUpspeed();
+                        downloadSpeedCount += torrent.getDlspeed();
+
+                        if ("uploading".equals(torrent.getState())) {
+                            uploadCount = uploadCount + 1;
+                        }
+
+                        if ("downloading".equals(torrent.getState())) {
+                            downloadCount = downloadCount + 1;
+                        }
+
+                    }
+
+                    // Update torrent list
+                    try {
+                        myadapter.setNames(names);
+                        myadapter.setData(lines);
+                        myadapter.notifyDataSetChanged();
+                    } catch (NullPointerException ne)
+
+                    {
+                        myadapter = new TorrentListAdapter(MainActivity.this, names, lines);
+                        firstFragment.setListAdapter(myadapter);
+
+                        myadapter.setNames(names);
+                        myadapter.setData(lines);
+                        myadapter.notifyDataSetChanged();
+
+                    } catch (IllegalStateException le) {
+                        Log.e("Debug", "IllegalStateException: " + le.toString());
+                    }
+
+                    // Create the about fragment
+                    aboutFragment = new AboutFragment();
+
+                    // Add the fragment to the 'list_frame' FrameLayout
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                    String AltSpeedInfo;
+
+                    if (alternative_speeds) {
+                        AltSpeedInfo = Character.toString('\u2713') + "  ";
+                    } else {
+                        AltSpeedInfo = "";
+                    }
+
+
+                    // Got some results
+                    if (torrentsFiltered.size() > 0) {
+
+                        // Set headerInfo
+                        TextView uploadSpeedTextView = (TextView) findViewById(R.id.upspeed);
+                        TextView downloadSpeedTextView = (TextView) findViewById(R.id.dlspeed);
+
+                        headerInfo = (LinearLayout) findViewById(R.id.header);
+
+                        if (header) {
+                            headerInfo.setVisibility(View.VISIBLE);
+                        } else {
+                            headerInfo.setVisibility(View.GONE);
+                        }
+
+
+                        uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
+                        downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
+
+
+                        //Set first and second fragments
+                        if (findViewById(R.id.fragment_container) != null) {
+
+                            // Set where is the second container
+                            firstFragment.setSecondFragmentContainer(R.id.content_frame);
+
+                            // Set first fragment
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof HelpFragment) {
+                                fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
+                            }
+
+                            // Set second fragment
+                            if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
+
+                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
+
+                                if (torrentToUpdate != null) {
+                                    // Update torrent details
+                                    detailsFragment.updateDetails(torrentToUpdate);
+                                } else {
+
+                                    // Torrent no longer found
+
+                                    // Set second fragment with About fragment
+                                    fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
+
+                                    // Reset back button stack
+                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                        fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                    }
+                                }
+
+
+                            } else {
+                                // Reset back button stack
+                                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                    fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                }
+
+                            }
+
+                        } else {
+
+                            // Set where is the second container
+                            firstFragment.setSecondFragmentContainer(R.id.one_frame);
+
+                            // Set first fragment
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
+                                fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+                            }
+
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
+
+                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("firstFragment");
+
+                                if (torrentToUpdate != null) {
+                                    // Update torrent
+                                    detailsFragment.updateDetails(torrentToUpdate);
+                                } else {
+
+                                    // Torrent no longer found
+
+                                    // Reset back button stack
+                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                        fragmentManager.popBackStack();
+                                    }
+
+                                }
+                            }
+                        }
+                    } else {
+
+                        // No results
+
+                        myadapter.setNames(null);
+                        myadapter.setData(null);
+
+                        myadapter.notifyDataSetChanged();
+
+                        // Hide headerInfo
+                        TextView uploadSpeedTextView = (TextView) findViewById(R.id.upspeed);
+                        TextView downloadSpeedTextView = (TextView) findViewById(R.id.dlspeed);
+
+                        uploadSpeedTextView.setText(AltSpeedInfo);
+                        downloadSpeedTextView.setText("");
+
+
+                        //Set first and second fragments
+                        if (findViewById(R.id.fragment_container) != null) {
+
+                            // Set where is the second container
+                            firstFragment.setSecondFragmentContainer(R.id.content_frame);
+
+                            // Set first fragment
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof HelpFragment) {
+                                fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
+                            }
+
+                            // Set second fragment
+                            if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
+                                fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
+
+                                // Reset back button stack
+                                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                    fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                }
+
+                            }
+                        } else {
+
+                            // Set where is the second container
+                            firstFragment.setSecondFragmentContainer(R.id.one_frame);
+
+                            // Set first fragment
+                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
+                                fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
+                            }
+
+                            // Reset back button stack
+                            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                                fragmentManager.popBackStack();
+                            }
+                        }
+                    }
+
+                    // Commit
+                    fragmentTransaction.commit();
+
+                } catch (Exception e) {
+                    Log.e("ADAPTER", e.toString());
+
+                    if (CustomLogger.isMainActivityReporting()) {
+                        CustomLogger.saveReportMessage("Main", "[qBittorrentTask - AdapterException]: " + e.toString());
+                    }
+                }
+
+                // Send report
+                emailReport();
+
+                // Disable refreshSwipeLayout
+                disableRefreshSwipeLayout();
+
+
+            }
+
+        });
+
+    }
+
+    // End of wraps
+
+    // MultiPart
+    private void buildPart(String boundary, DataOutputStream dataOutputStream, byte[] fileData, String fileName) throws IOException {
+        dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
+        dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\"; filename=\""
+                + fileName + "\"" + lineEnd);
+        dataOutputStream.writeBytes(lineEnd);
+
+        ByteArrayInputStream fileInputStream = new ByteArrayInputStream(fileData);
+        int bytesAvailable = fileInputStream.available();
+
+        int maxBufferSize = 1024 * 1024;
+        int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+        byte[] buffer = new byte[bufferSize];
+
+        // read file and write it into form...
+        int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+        while (bytesRead > 0) {
+            dataOutputStream.write(buffer, 0, bufferSize);
+            bytesAvailable = fileInputStream.available();
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+        }
+
+        dataOutputStream.writeBytes(lineEnd);
+    }
+
 
     private void refresh(String state, String label) {
 
@@ -1008,65 +3855,49 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             return;
         }
 
-        if (qb_version.equals("2.x")) {
-            qbQueryString = "json";
-            params[0] = qbQueryString + "/events";
-        }
 
-        if (qb_version.equals("3.1.x")) {
-            qbQueryString = "json";
-            params[0] = qbQueryString + "/torrents";
-        }
+        urlPrefix = "api/v2/torrents/info?filter=" + state;
+        params[0] = "api/v2/torrents/info?filter=" + state;
 
-        if (qb_version.equals("3.2.x")) {
-            qbQueryString = "query";
-            params[0] = qbQueryString + "/torrents?filter=" + state;
 
-            // Get API version in case it hasn't been gotten before
-            if (qb_api == null || qb_api.equals("") || qb_api.equals("0")) {
-                new qBittorrentApiTask().execute(new Intent());
+        // Get API version in case it hadn't been gotten before
+
+        //getApi();
+        getCookie();
+
+
+        // Label
+        if (label != null && !label.equals(getResources().getString(R.string.drawer_label_all))) {
+
+
+            if (label.equals(getResources().getString(R.string.drawer_label_unlabeled))) {
+                label = "";
             }
 
-            // Label
-            if (label != null && !label.equals(getResources().getString(R.string.drawer_label_all))) {
+            if (!labels.contains(label)) {
+                label = getResources().getString(R.string.drawer_label_all);
+            }
 
-
-                if (label.equals(getResources().getString(R.string.drawer_label_unlabeled))) {
-                    label = "";
-                }
-
-                if (!labels.contains(label)) {
-                    label = getResources().getString(R.string.drawer_label_all);
-                }
-
-                saveLastLabel(label);
+            saveLastLabel(label);
 
 //                Log.d("Debug", "Label filter: " + label);
 
-                try {
+            try {
 
-                    if (!label.equals(getResources().getString(R.string.drawer_label_all))) {
+                if (!label.equals(getResources().getString(R.string.drawer_label_all))) {
 
-                        // I used a dummy URL to encode label
-                        String labelEncoded = Uri.encode("http://www.dummy.org?label=" + label);
+                    // I used a dummy URL to encode label
+                    String labelEncoded = Uri.encode("http://www.dummy.org?label=" + label);
 
-                        // then I got the the encoded label
-                        labelEncoded = labelEncoded.substring(labelEncoded.indexOf("%3D") + 3);
+                    // then I got the the encoded label
+                    labelEncoded = labelEncoded.substring(labelEncoded.indexOf("%3D") + 3);
 
-                        // to build the url and pass it to params[0]
-                        if (Integer.parseInt(MainActivity.qb_api) < 10) {
-                            params[0] = params[0] + "&label=" + labelEncoded;
-                        } else {
-                            params[0] = params[0] + "&category=" + labelEncoded;
-                        }
-                    }
-
-                } catch (Exception e) {
-                    Log.e("Debug", "[Main] Label Exception: " + e.toString());
+                    // to build the url and pass it to params[0]
+                    params[0] = params[0] + "&category=" + labelEncoded;
                 }
-            } else {
-//                Log.d("Debug", "Label filter2: " + label);
 
+            } catch (Exception e) {
+                Log.e("Debug", "[Main] Label Exception: " + e.toString());
             }
 
 
@@ -1102,7 +3933,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         httpStatusCode = 0;
                         disableRefreshSwipeLayout();
                     } else {
-                        new qBittorrentCookieTask().execute(params);
+
+                        getCookie();
+
                     }
 
 
@@ -1123,10 +3956,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     } else {
 
                         // Execute the task in background
-                        qbTask = new qBittorrentTask().execute(params);
+                        //qbTask = new qBittorrentTask().execute(params);
+
+                        // Test
+                        getTorrentList(state);
 
                         // Check if  alternative speed limit is set
-                        new qBittorrentCommand().execute(new String[]{"alternativeSpeedLimitsEnabled", ""});
+                        getAlternativeSpeedLimitsEnabled();
                     }
                 }
 
@@ -1197,7 +4033,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
             emailIntent.setType("text/plain");
 
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"lgallard+qbcontroller@gmail.com"});
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"qbcontroller@gmail.com"});
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "qBittorrentController report");
 
             // Include report
@@ -1315,7 +4151,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     input.close();
                 }
             } catch (IOException e) {
-                Log.e("Debug",  "Error closing the input stream " + tempFile.toString() + ": " + e.toString());
+                Log.e("Debug", "Error closing the input stream " + tempFile.toString() + ": " + e.toString());
             }
         }
 
@@ -1333,7 +4169,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //        Log.d("Debug", "urlTorrent: " + urlTorrent);
 
         // if there is not a path to the file, open de file picker
-        if (urlTorrent == null ) {
+        if (urlTorrent == null) {
             openFilePicker();
         } else {
 
@@ -1343,27 +4179,26 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Handle format for torrent files on Downloaded list
                 if (urlTorrent.substring(0, 7).equals("content")) {
 
-                        urlTorrent = getFileNameFromStream(getContentResolver().openInputStream(handledIntent.getData()));
+                    urlTorrent = getFileNameFromStream(getContentResolver().openInputStream(handledIntent.getData()));
 
-//                    Log.d("Debug", "urlTorrent path (content): " + urlTorrent);
+//                    Log.d("Debug", "[handleUrlTorrent] urlTorrent path (content): " + urlTorrent);
                 }
 
                 // Handle format for downloaded torrent files (Ex: /storage/emulated/0/Download/afile.torrent)
-                if (urlTorrent.contains(".torrent") && urlTorrent.substring(0,1).equals("/")) {
+                if (urlTorrent.contains(".torrent") && urlTorrent.substring(0, 1).equals("/")) {
 
-                    if (urlTorrent.substring(0,1).equals("/")) {
+                    if (urlTorrent.substring(0, 1).equals("/")) {
 
-                    // Encode path
+                        // Encode path
                         URI encodedUri = new URI(URLEncoder.encode(urlTorrent, "UTF-8"));
 
-                    // Get raw absolute and add file schema
+                        // Get raw absolute and add file schema
                         urlTorrent = "file://" + (new File(encodedUri.getRawPath())).getAbsolutePath();
 
-//                        Log.d("Debug", "urlTorrent path: " + urlTorrent);
+//                        Log.d("Debug", "[handleUrlTorrent] urlTorrent path: " + urlTorrent);
                     }
 
                 }
-
 
 
                 // Once formatted, add the torrent
@@ -1371,20 +4206,19 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     // File
                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
-                    addTorrentFile(Uri.parse(urlTorrent).getPath());
+                    addTorrentFile(Uri.parse(urlTorrent).getPath().replaceAll("\\+", "\\ "));
                 } else {
 
                     // Send magnet or torrent link
-//                    Log.d("Debug", "urlTorrent 1: " + urlTorrent );
+//                    Log.d("Debug", "[handleUrlTorrent] urlTorrent 1: " + urlTorrent );
 
                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
 
 
                     // If It is a valid torrent or magnet link
                     if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType())) {
-//                        Log.d("Debug", "URL: " + urlTorrent);
-
-                        addTorrent(urlTorrent);
+//                        Log.d("Debug", "[handleUrlTorrent] URL: " + urlTorrent);
+                        addTorrent(urlTorrent, path2Set, label2Set);
                     } else {
                         // Open not valid torrent or magnet link in browser
 
@@ -1395,13 +4229,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
             } catch (UnsupportedEncodingException e) {
-                Log.e("Debug", "Check URL: " + e.toString());
+                Log.e("Debug", "[handleUrlTorrent] Check URL: " + e.toString());
             } catch (NullPointerException e) {
-                Log.e("Debug", "urlTorrent is null: " + e.toString());
+                Log.e("Debug", "[handleUrlTorrent] urlTorrent is null: " + e.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
-                Log.e("Debug", "urlTorrent is not ok: " + e.toString());
+                Log.e("Debug", "[handleUrlTorrent] urlTorrent is not ok: " + e.toString());
             }
         }
     }
@@ -1525,6 +4359,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+
+        // Disable RSS support
+        menu.findItem(R.id.action_rss).setVisible(false);
+
         // Retrieve the SearchView and plug it into SearchManager
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
@@ -1652,27 +4490,19 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Add torrent URL
                 addUrlTorrent();
                 return true;
-            case R.id.action_rss:
-                // Open RSS Activity
-                Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
-                startActivity(intent);
-                return true;
+//            case R.id.action_rss:
+//                // Open RSS Activity
+//                Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
+//                startActivity(intent);
+//                return true;
             case R.id.action_pause:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     pauseTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_resume:
                 if (TorrentDetailsFragment.hashToUpdate != null) {
                     startTorrent(TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_delete:
@@ -1759,37 +4589,21 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_increase_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     increasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_decrease_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     decreasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_max_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     maxPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_min_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     minPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_resume_all:
@@ -1801,78 +4615,42 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             case R.id.action_upload_rate_limit:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     uploadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
 
             case R.id.action_download_rate_limit:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     downloadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_recheck:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     recheckTorrents(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_first_last_piece_prio:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleFirstLastPiecePrio(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_sequential_download:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     toggleSequentialDownload(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
                 }
                 return true;
             case R.id.action_set_label:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                    setLabelDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
+                    setCategoryDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                 }
                 return true;
             case R.id.action_delete_label:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                    setLabel(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate, " ");
-
-//                    if (findViewById(R.id.one_frame) != null) {
-//                        popBackStackPhoneView();
-//                    }
+                    setCategory(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate, " ");
                 }
                 return true;
 
             case R.id.action_toggle_alternative_rate:
                 toggleAlternativeSpeedLimits();
-
-                refreshAfterCommand(2);
-                swipeRefresh();
-
-//                if (findViewById(R.id.one_frame) != null) {
-//                    popBackStackPhoneView();
-//                }
-
                 return true;
             case R.id.action_sortby_name:
                 saveSortBy(SORTBY_NAME);
@@ -1930,15 +4708,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 swipeRefresh();
                 return true;
             case R.id.action_add_tracker:
-//                Log.d("Debug", "Adding tracker");
-
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-
                     addUrlTracker(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
                 }
-
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -1972,13 +4744,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         editor.apply();
 
         canrefresh = true;
-        refreshSwipeLayout();
+        //refreshSwipeLayout();
+
+        refresh();
 
 //        refreshCurrent();
 
-        // Get new token and cookie
-        MainActivity.cookie = null;
-        new qBittorrentApiTask().execute(new Intent());
+//        // Get new token and cookie
+//        MainActivity.cookie = null;
+//
+//        // Get API;
+//        getApi();
+
 
 //        Log.d("Debug", "MainActivity - changeCurrentServer called");
     }
@@ -2011,80 +4788,27 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
              * Save qBittorrent's options remotely *
              ****************************************/
 
-            // Maximum global number of simultaneous connections
-            json += "\"max_connec\":" + global_max_num_connections;
+            Gson gson = new Gson();
 
-            // Maximum number of simultaneous connections per torrent
-            json += ",\"max_connec_per_torrent\":" + max_num_conn_per_torrent;
+            String up_limit = Integer.toString(Integer.parseInt(global_upload) * 1024);
+            String down_limit = Integer.toString(Integer.parseInt(global_download) * 1024);
 
-            // Global maximum number of upload slots:
-            json += ",\"max_uploads\":" + max_uploads;
-
-            // Maximum number of upload slots per torrent
-            json += ",\"max_uploads_per_torrent\":" + max_num_upslots_per_torrent;
-
-            // Global upload speed limit in KiB/s; -1 means no limit is applied
-            json += ",\"up_limit\":" + global_upload;
-
-            // Global download speed limit in KiB/s; -1 means no limit is
-            // applied
-            json += ",\"dl_limit\":" + global_download;
-
-            // alternative global upload speed limit in KiB/s
-            json += ",\"alt_up_limit\":" + alt_upload;
-
-            // alternative global upload speed limit in KiB/s
-            json += ",\"alt_dl_limit\":" + alt_download;
-
-            // Is torrent queuing enabled ?
-            json += ",\"queueing_enabled\":" + torrent_queueing;
-
-            // Maximum number of active simultaneous downloads
-            json += ",\"max_active_downloads\":" + max_act_downloads;
-
-            // Maximum number of active simultaneous uploads
-            json += ",\"max_active_uploads\":" + max_act_uploads;
-
-            // Maximum number of active simultaneous downloads and uploads
-            json += ",\"max_active_torrents\":" + max_act_torrents;
-
-            // Schedule alternative rate limits
-            json += ",\"scheduler_enabled\":" + schedule_alternative_rate_limits;
-
-            // Scheduler starting hour
-            json += ",\"schedule_from_hour\":" + alt_from_hour;
-
-            // Scheduler starting min
-            json += ",\"schedule_from_min\":" + alt_from_min;
-
-            // Scheduler ending hour
-            json += ",\"schedule_to_hour\":" + alt_to_hour;
-
-            // Scheduler ending min
-            json += ",\"schedule_to_min\":" + alt_to_min;
-
-            // Scheduler scheduler days
-            json += ",\"scheduler_days\":" + scheduler_days;
-
-//            Log.d("Debug", "max_ratio_enabled:" + max_ratio_enabled);
-
-            // Share Ratio Limiting
-            json += ",\"max_ratio_enabled\":" + max_ratio_enabled;
-
-            if (max_ratio_enabled == false) {
-                json += ",\"max_ratio\":-1";
-            } else {
-                json += ",\"max_ratio\":" + Float.parseFloat(max_ratio);
+            // TODO: Check when this changed (qb_api X.Y.Z )
+            if (qb_api > 0) {
+                alt_upload = Integer.toString(Integer.parseInt(alt_upload) * 1024);
+                alt_download = Integer.toString(Integer.parseInt(alt_download) * 1024);
             }
 
-//            String max_ratio_string = "4) max_ratio: " + Float.parseFloat(max_ratio);
-//            Log.d("Debug", "3) max_ratio: " + Float.parseFloat(max_ratio));
-//            Log.d("Debug", max_ratio_string );
 
-            json += ",\"max_ratio_act\":" + max_ratio_act;
+            Options options = new Options(global_max_num_connections, global_max_num_connections,
+                    max_num_conn_per_torrent, max_num_conn_per_torrent, max_uploads,
+                    max_num_upslots_per_torrent, max_num_upslots_per_torrent,
+                    global_upload, up_limit, global_download, down_limit,
+                    alt_upload, alt_download, torrent_queueing, max_act_downloads,
+                    max_act_uploads, max_act_torrents, schedule_alternative_rate_limits,
+                    alt_from_hour, alt_from_min, alt_to_hour, alt_to_min, scheduler_days);
 
-            // Put everything in an json object
-            json = "{" + json + "}";
+            json = gson.toJson(options).toString();
 
             // Set preferences using this json object
             setQBittorrentPrefefrences(json);
@@ -2242,11 +4966,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Options - Execute the task in background
         toastText(R.string.getQBittorrentPrefefrences);
 
-        qBittorrentOptions qso = new qBittorrentOptions();
-        qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
+//        qBittorrentOptions qso = new qBittorrentOptions();
+//        qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
 
     }
-
 
     protected void getPRO() {
         Intent intent = new Intent(
@@ -2254,177 +4977,20 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         startActivityForResult(intent, GETPRO_CODE);
     }
 
-    public void startTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"start", hash});
-    }
-
-    public void startSelectedTorrents(String hashes) {
-        // Execute the task in background
-
-        String[] hashesArray = hashes.split("\\|");
-
-        for (int i = 0; hashesArray.length > i; i++) {
-            qBittorrentCommand qtc = new qBittorrentCommand();
-            qtc.execute(new String[]{"startSelected", hashesArray[i]});
-        }
-
-        toastText(R.string.torrentsSelectedStarted);
-
-        // Delay of 3 seconds
-        refreshAfterCommand(3);
-    }
-
-    public void pauseTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"pause", hash});
-    }
-
-    public void pauseSelectedTorrents(String hashes) {
-        // Execute the task in background
-
-        String[] hashesArray = hashes.split("\\|");
-
-        for (int i = 0; hashesArray.length > i; i++) {
-            qBittorrentCommand qtc = new qBittorrentCommand();
-            qtc.execute(new String[]{"pauseSelected", hashesArray[i]});
-        }
-
-        toastText(R.string.torrentsSelectedPaused);
-
-        // Delay of 1 second
-        refreshAfterCommand(1);
-
-    }
-
-    public void deleteTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"delete", hash});
-    }
-
-    public void deleteSelectedTorrents(String hashes) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"deleteSelected", hashes});
-
-        toastText(R.string.torrentsSelectedDeleted);
-
-        // Delay of 1 second
-        refreshAfterCommand(1);
-    }
-
-    public void deleteDriveTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"deleteDrive", hash});
-    }
-
-    public void deleteDriveSelectedTorrents(String hashes) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"deleteDriveSelected", hashes});
-
-        toastText(R.string.torrentsSelectedDeletedDrive);
-
-        // Delay of 1 second
-        refreshAfterCommand(1);
-    }
-
-    public void addTorrent(String url) {
-        // Execute the task in background
-
-        try {
-            if (Integer.parseInt(MainActivity.qb_api) >= 7) {
-                qBittorrentCommand qtc = new qBittorrentCommand();
-                qtc.execute(new String[]{"addTorrentAPI7", url, path2Set, label2Set});
-
-            } else {
-                qBittorrentCommand qtc = new qBittorrentCommand();
-                qtc.execute(new String[]{"addTorrent", url, path2Set, label2Set});
-            }
-
-        } catch (Exception e) {
-            qBittorrentCommand qtc = new qBittorrentCommand();
-            qtc.execute(new String[]{"addTorrent", url, path2Set, label2Set});
-        }
-
-    }
-
-    public void addTracker(String hash, String url) {
-        // Execute the task in background
-//        Log.d("Debug", "addTracker - Adding tracker");
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"addTracker", hash + "&" + url});
-    }
-
-
     public void addTorrentFile(String url) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
-    }
 
-    public void pauseAllTorrents() {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
+        addTorrentFileAPI7(url, path2Set, label2Set);
 
-        if (qb_version.equals("3.2.x")) {
-            qtc.execute(new String[]{"pauseAll", null});
-        } else {
-            qtc.execute(new String[]{"pauseall", null});
-        }
-    }
-
-    public void resumeAllTorrents() {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-
-        if (qb_version.equals("3.2.x")) {
-            qtc.execute(new String[]{"resumeAll", null});
-        } else {
-            qtc.execute(new String[]{"resumeall", null});
-        }
-    }
-
-    public void increasePrioTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"increasePrio", hash});
-
-    }
-
-    public void decreasePrioTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"decreasePrio", hash});
-
-    }
-
-    public void maxPrioTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"maxPrio", hash});
-
-    }
-
-    public void minPrioTorrent(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"minPrio", hash});
-
-    }
-
-    public void setFilePrio(String hash, int id, int priority) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-
-        hash = hash + "&" + id + "&" + priority;
-
-        qtc.execute(new String[]{"setFilePrio", hash});
-
+//      // TODO: Check when this changed (qb_api X.Y.Z )
+//        if (Integer.parseInt(qb_api) >= 7) {
+//            addTorrentFileAPI7(url, path2Set, label2Set);
+//        } else {
+//            addTorrentFile(url, path2Set, label2Set);
+//            // Execute the task in background
+//            qBittorrentCommand qtc = new qBittorrentCommand();
+//            qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
+//
+//        }
     }
 
     public void recheckTorrents(String hashes) {
@@ -2433,49 +4999,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         String[] hashesArray = hashes.split("\\|");
 
         for (int i = 0; hashesArray.length > i; i++) {
-            qBittorrentCommand qtc = new qBittorrentCommand();
-            qtc.execute(new String[]{"recheckSelected", hashesArray[i]});
+            recheckTorrent(hashesArray[i]);
         }
 
         toastText(R.string.torrentsRecheck);
 
         // Delay of 3 seconds
         refreshAfterCommand(3);
-    }
-
-    public void toggleFirstLastPiecePrio(String hashes) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"toggleFirstLastPiecePrio", hashes});
-
-    }
-
-    public void toggleSequentialDownload(String hashes) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"toggleSequentialDownload", hashes});
-
-    }
-
-    public void setLabel(String hashes, String label) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"setLabel", hashes + "&" + label});
-
-    }
-
-    public void toggleAlternativeSpeedLimits() {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"toggleAlternativeSpeedLimits", ""});
-
-    }
-
-    public void setQBittorrentPrefefrences(String hash) {
-        // Execute the task in background
-        qBittorrentCommand qtc = new qBittorrentCommand();
-        qtc.execute(new String[]{"setQBittorrentPrefefrences", hash});
-
     }
 
     public void uploadRateLimitDialog(final String hash) {
@@ -2517,7 +5047,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
-    public void setLabelDialog(final String hash) {
+    public void setCategoryDialog(final String hash) {
 
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(MainActivity.this);
@@ -2547,7 +5077,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     String labelEncoded = Uri.encode(label.getText().toString());
 
-                    setLabel(hash, labelEncoded);
+                    setCategory(hash, labelEncoded);
                 }
             });
 
@@ -2578,8 +5108,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 String[] hashesArray = hash.split("\\|");
 
                 for (int i = 0; hashesArray.length > i; i++) {
-                    qBittorrentCommand qtc = new qBittorrentCommand();
-                    qtc.execute(new String[]{"setUploadRateLimit", hashesArray[i] + "&" + limit * 1024});
+                    setUpRateLimit(hashesArray[i], "" + limit * 1024);
                 }
 
                 toastText(R.string.setUploadRateLimit);
@@ -2613,8 +5142,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 String[] hashesArray = hash.split("\\|");
 
                 for (int i = 0; hashesArray.length > i; i++) {
-                    qBittorrentCommand qtc = new qBittorrentCommand();
-                    qtc.execute(new String[]{"setDownloadRateLimit", hashesArray[i] + "&" + limit * 1024});
+                    setDownRateLimit(hashesArray[i], "" + limit * 1024);
                 }
 
                 toastText(R.string.setDownloadRateLimit);
@@ -2910,7 +5438,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         dark_ui = sharedPrefs.getBoolean("dark_ui", false);
 
-        qb_version = sharedPrefs.getString("qb_version", "3.2.x");
+        qb_version = sharedPrefs.getString("qb_version", "4.2.x");
 
         MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
 
@@ -2966,7 +5494,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         if (ssid != null && !ssid.equals("")) {
 
             // Get SSID if WiFi
-            WifiManager wifiMgr = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifiMgr = (WifiManager) getApplication().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
             String wifiSSID = wifiInfo.getSSID();
 
@@ -3324,10 +5852,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             labelTextView.setAdapter(labelAdapter);
 
             // Checkbox value
-            if (pathAndLabelDialog){
+            if (pathAndLabelDialog) {
                 checkBoxPathAndLabelDialog.setChecked(false);
-            }
-            else{
+            } else {
                 checkBoxPathAndLabelDialog.setChecked(true);
             }
 
@@ -3400,1263 +5927,173 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
-
-    // Here is where the action happens
-    private class qBittorrentCookieTask extends AsyncTask<String, Integer, String[]> {
-
-        @Override
-        protected String[] doInBackground(String... params) {
-
-            // Get values from preferences
-            getSettings();
-
-            // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
-
-            String newCookie = "";
-            String api = "";
-
-            try {
-                newCookie = jParser.getNewCookie();
-
-            } catch (JSONParserStatusCodeException e) {
-                httpStatusCode = e.getCode();
-
-            }
-
-            if (newCookie == null) {
-                newCookie = "";
-            }
-
-            if (api == null) {
-                api = "";
-
-            }
-
-            return new String[]{newCookie, api};
-
-        }
-
-        @Override
-        protected void onPostExecute(String[] result) {
-
-            MainActivity.cookie = result[0];
-
-            // Save cookie
-            savePreferenceAsString("qbCookie", result[0]);
-
-            // Execute the task in background
-            qbTask = new qBittorrentTask().execute(params);
-
-        }
-    }
-
-    // Here is where the action happens
-    private class qBittorrentApiTask extends AsyncTask<Intent, Integer, String[]> {
-
-        @Override
-        protected String[] doInBackground(Intent... intents) {
-
-            // Get values from preferences
-            getSettings();
-
-            // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
-
-            String apiVersion = "";
-
-            httpStatusCode = 0;
-
-            // Try to get the API number
-            try {
-
-                apiVersion = jParser.getApi();
-                qb_api = apiVersion;
-                qbittorrentServer = apiVersion;
-
-//                Log.d("Debug", "API: " + apiVersion);
-
-            } catch (JSONParserStatusCodeException e) {
-
-                qb_api = "0";
-                httpStatusCode = e.getCode();
-
-                Log.d("Debug", "API Exception: " + httpStatusCode);
-
-            }
-
-            // If < 3.2.x, get qBittorrent version
-            if (httpStatusCode > 200 || apiVersion == null) {
-
-                try {
-
-                    apiVersion = jParser.getVersion();
-                    qbittorrentServer = apiVersion;
-
-                } catch (JSONParserStatusCodeException e) {
-                    httpStatusCode = e.getCode();
-                }
-
-            }
-
-
-            return new String[]{apiVersion, intents[0].getStringExtra("currentState")};
-
-        }
-
-        @Override
-        protected void onPostExecute(String[] result) {
-
-            String apiVersion = result[0];
-
-            int api = 0;
-
-            try {
-
-                api = Integer.parseInt(apiVersion);
-
-            } catch (Exception e) {
-                api = 0;
-            }
-
-            if (apiVersion != null && (api > 1 || apiVersion.contains("3.2") || apiVersion.contains("3.3"))) {
-
-                qb_version = "3.2.x";
-
-                // Get new cookie
-                cookie = null;
-
-            } else if (apiVersion.contains("3.1")) {
-
-                qb_version = "3.1.x";
-                cookie = null;
-
-            } else {
-
-                qb_version = "2.x";
-
-            }
-
-            // Save version
-            savePreferenceAsString("qb_version", qb_version);
-
-
-            // Refresh
-            String stateBefore = result[1];
-
-            if (stateBefore != null) {
-
-                // Set selection according to last state
-                setSelectionAndTitle(stateBefore);
-
-                // Set the refresh layout (refresh icon, etc)
-                refreshSwipeLayout();
-
-                // Refresh state
-                refresh(stateBefore, "");
-
-                // load banner
-                loadBanner();
-
-            } else {
-
-                swipeRefresh();
-
-            }
-
-
-        }
-    }
-
-    // Here is where the action happens
-    private class qBittorrentCommand extends AsyncTask<String, Integer, String[]> {
-
-        @Override
-        protected String[] doInBackground(String... params) {
-
-            String result = "";
-
-            // Get values from preferences
-            getSettings();
-
-            // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
-
-            jParser.setCookie(cookie);
-
-            try {
-
-                httpStatusCode = 0;
-
-
-                // Validate setLabel for API 10+
-                try {
-                    if (Integer.parseInt(MainActivity.qb_api) >= 10 && "setLabel".equals(params[0])) {
-                        params[0] = "setCategory";
-//                        Log.d("Debug", params[0]);
-                    }
-                } catch (NumberFormatException e) {
-//                    Log.e("Debug", e.toString());
-                }
-
-//                Log.d("Debug", "params.length: " + params.length );
-//                Log.d("Debug", "command: " + params[0]);
-
-
-                // This helps to set the savepath and the label to set when sending the torrent
-                if (params.length == 4) {
-
-                    result = jParser.postCommand(params[0], params[1], new String[]{params[2], params[3]});
-                } else {
-                    result = jParser.postCommand(params[0], params[1]);
-                }
-
-            } catch (JSONParserStatusCodeException e) {
-
-                httpStatusCode = e.getCode();
-
-            }
-
-            return (new String[]{params[0], result});
-
-        }
-
-        @Override
-        protected void onPostExecute(String[] results) {
-
-
-            String command = results[0];
-            String result = results[1];
-
-            // Handle HTTP status code
-
-            if (httpStatusCode == 1) {
-
-                toastText(R.string.error1);
-                httpStatusCode = 0;
-                return;
-            }
-
-            if (httpStatusCode == 2) {
-                toastText(R.string.error2);
-                toast.show();
-                httpStatusCode = 0;
-                return;
-            }
-
-
-            if (httpStatusCode == 401) {
-                toastText(R.string.error401);
-                httpStatusCode = 0;
-                return;
-            }
-
-            if (httpStatusCode == 403 || httpStatusCode == 404) {
-
-                if (qb_version.equals("3.2.x")) {
-                    cookie = null;
-                }
-
-                connection403ErrorCounter = connection403ErrorCounter + 1;
-
-                if (connection403ErrorCounter > 1) {
-                    if (cookie != null && !cookie.equals("")) {
-                        // Only toasts the message if there is not a cookie set before
-                        toastText(R.string.error403);
-                        cookie = null;
-                    }
-                    httpStatusCode = 0;
-                    disableRefreshSwipeLayout();
-                }
-
-
-                httpStatusCode = 0;
-                return;
-            }
-
-
-            // This delay is needed for postCommaresume action. Other actions have a
-            // fewer delay (1 second).
-            int delay = 1;
-
-            int messageId = R.string.connection_error;
-
-            if (command == null) {
-                messageId = R.string.connection_error;
-            }
-
-            if ("start".equals(command)) {
-                messageId = R.string.torrentStarted;
-
-                // Needed to refresh after a resume and see the change
-                delay = 3;
-            }
-
-            if ("pause".equals(command)) {
-                messageId = R.string.torrentPaused;
-                delay = 3;
-
-            }
-
-            if ("delete".equals(command)) {
-                messageId = R.string.torrentDeleted;
-            }
-
-            if ("deleteDrive".equals(command)) {
-                messageId = R.string.torrentDeletedDrive;
-            }
-
-            if ("addTorrent".equals(command) || "addTorrentAPI7".equals(command) ) {
-                messageId = R.string.torrentAdded;
-            }
-
-            if ("addTorrentFile".equals(command)) {
-                messageId = R.string.torrentFileAdded;
-            }
-
-            if ("addTracker".equals(command)) {
-                messageId = R.string.torrentsApplyingChange;
-                delay = 3;
-            }
-
-
-            if ("pauseAll".equals(command)) {
-                messageId = R.string.AllTorrentsPaused;
-            }
-
-            if ("resumeAll".equals(command)) {
-                messageId = R.string.AllTorrentsResumed;
-
-                // Needed to refresh after a "resume all" and see the changes
-                delay = 3;
-            }
-
-            if ("increasePrio".equals(command)) {
-                messageId = R.string.increasePrioTorrent;
-                delay = 3;
-            }
-
-            if ("decreasePrio".equals(command)) {
-                messageId = R.string.decreasePrioTorrent;
-                delay = 3;
-            }
-
-            if ("maxPrio".equals(command)) {
-                messageId = R.string.priorityUpdated;
-                delay = 3;
-            }
-
-            if ("minPrio".equals(command)) {
-                messageId = R.string.priorityUpdated;
-                delay = 3;
-            }
-
-            if ("setFilePrio".equals(command)) {
-                messageId = R.string.priorityUpdated;
-            }
-
-
-            if ("setQBittorrentPrefefrences".equals(command)) {
-                messageId = R.string.setQBittorrentPrefefrences;
-            }
-
-            if ("setUploadRateLimit".equals(command)) {
-                messageId = R.string.setUploadRateLimit;
-//                if (findViewById(R.id.one_frame) != null) {
-//                    popBackStackPhoneView();
+//    // Here is where the action happens
+//    private class qBittorrentOptions extends AsyncTask<String, Integer, String> {
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//
+//            // Get settings
+//            getSettings();
+//
+//            // Creating new JSON Parser
+//            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
+//
+//            jParser.setCookie(cookie);
+//
+//            // Get the Json object
+//            JSONObject json = null;
+//            try {
+//                json = jParser.getJSONFromUrl(params[0]);
+//
+//            } catch (JSONParserStatusCodeException e) {
+//
+//                httpStatusCode = e.getCode();
+//                Log.e("JSONParserStatusCode", e.toString());
+//
+//            }
+//
+//            if (json != null) {
+//
+//                try {
+//
+//                    global_max_num_connections = json.getString(TAG_GLOBAL_MAX_NUM_CONNECTIONS);
+//                    max_num_conn_per_torrent = json.getString(TAG_MAX_NUM_CONN_PER_TORRENT);
+//                    max_uploads = json.getString(TAG_MAX_UPLOADS);
+//                    max_num_upslots_per_torrent = json.getString(TAG_MAX_NUM_UPSLOTS_PER_TORRENT);
+//
+//
+//                    if (Integer.parseInt(qb_api) > 0) {
+//                        global_upload = Integer.toString(json.getInt(TAG_GLOBAL_UPLOAD) / 1024);
+//                        global_download = Integer.toString(json.getInt(TAG_GLOBAL_DOWNLOAD) / 1024);
+//                        alt_upload = Integer.toString(json.getInt(TAG_ALT_UPLOAD) / 1024);
+//                        alt_download = Integer.toString(json.getInt(TAG_ALT_DOWNLOAD) / 1024);
+//                    } else {
+//                        global_upload = json.getString(TAG_GLOBAL_UPLOAD);
+//                        global_download = json.getString(TAG_GLOBAL_DOWNLOAD);
+//                        alt_upload = json.getString(TAG_ALT_UPLOAD);
+//                        alt_download = json.getString(TAG_ALT_DOWNLOAD);
+//                    }
+//
+//
+//                    global_upload = Integer.toString(json.getInt(TAG_GLOBAL_UPLOAD) / 1024);
+//                    global_download = Integer.toString(json.getInt(TAG_GLOBAL_DOWNLOAD) / 1024);
+//                    alt_upload = Integer.toString(json.getInt(TAG_ALT_UPLOAD) / 1024);
+//                    alt_download = Integer.toString(json.getInt(TAG_ALT_DOWNLOAD) / 1024);
+//
+//
+//                    torrent_queueing = json.getBoolean(TAG_TORRENT_QUEUEING);
+//                    max_act_downloads = json.getString(TAG_MAX_ACT_DOWNLOADS);
+//                    max_act_uploads = json.getString(TAG_MAX_ACT_UPLOADS);
+//                    max_act_torrents = json.getString(TAG_MAX_ACT_TORRENTS);
+//
+//                    schedule_alternative_rate_limits = json.getBoolean(TAG_SCHEDULER_ENABLED);
+//                    alt_from_hour = json.getString(TAG_SCHEDULE_FROM_HOUR);
+//                    alt_from_min = json.getString(TAG_SCHEDULE_FROM_MIN);
+//                    alt_to_hour = json.getString(TAG_SCHEDULE_TO_HOUR);
+//                    alt_to_min = json.getString(TAG_SCHEDULE_TO_MIN);
+//                    scheduler_days = json.getString(TAG_SCHEDULER_DAYS);
+//
+//                    max_ratio_enabled = json.getBoolean(TAG_MAX_RATIO_ENABLED);
+//                    max_ratio = json.getString(TAG_MAX_RATIO);
+//                    max_ratio_act = json.getString(TAG_MAX_RATIO_ACT);
+//
+//                    // Save options locally
+//                    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+//                    Editor editor = sharedPrefs.edit();
+//
+//                    // Save key-values
+//                    editor.putString("global_max_num_connections", global_max_num_connections);
+//                    editor.putString("max_num_conn_per_torrent", max_num_conn_per_torrent);
+//                    editor.putString("max_uploads", max_uploads);
+//                    editor.putString("max_num_upslots_per_torrent", max_num_upslots_per_torrent);
+//                    editor.putString("global_upload", global_upload);
+//                    editor.putString("global_download", global_download);
+//                    editor.putString("alt_upload", alt_upload);
+//                    editor.putString("alt_download", alt_download);
+//                    editor.putBoolean("torrent_queueing", torrent_queueing);
+//                    editor.putString("max_act_downloads", max_act_downloads);
+//                    editor.putString("max_act_uploads", max_act_uploads);
+//                    editor.putString("max_act_torrents", max_act_torrents);
+//
+//                    editor.putBoolean("schedule_alternative_rate_limits", schedule_alternative_rate_limits);
+//                    editor.putString("alt_from", alt_from_hour + ":" + alt_from_min);
+//                    editor.putString("alt_to", alt_to_hour + ":" + alt_to_min);
+//                    editor.putString("scheduler_days", scheduler_days);
+//
+//                    editor.putBoolean("max_ratio_enabled", max_ratio_enabled);
+//                    editor.putString("max_ratio", max_ratio);
+//                    editor.putString("max_ratio_act", max_ratio_act);
+//
+//
+//                    // Commit changes
+//                    editor.commit();
+//
+//                } catch (Exception e) {
+//                    Log.e("MAIN:", e.toString());
+//                    return null;
 //                }
-            }
-
-            if ("setDownloadRateLimit".equals(command)) {
-                messageId = R.string.setDownloadRateLimit;
-//                if (findViewById(R.id.one_frame) != null) {
-//                    popBackStackPhoneView();
+//
+//            }
+//
+//            // Return getSettings or setSettings
+//            return params[1];
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String result) {
+//
+//            if (result == null) {
+//
+//                toastText(R.string.connection_error);
+//
+//                // Handle HTTP status code
+//                if (httpStatusCode == 1) {
+//                    toastText(R.string.error1);
+//                    httpStatusCode = 0;
 //                }
-            }
-
-            if ("recheckSelected".equals(command)) {
-                messageId = R.string.torrentsRecheck;
-            }
-
-            if ("toggleFirstLastPiecePrio".equals(command)) {
-                messageId = R.string.torrentstogglefisrtLastPiecePrio;
-            }
-
-            if ("toggleSequentialDownload".equals(command)) {
-                messageId = R.string.torrentstoggleSequentialDownload;
-            }
-
-            if ("toggleAlternativeSpeedLimits".equals(command)) {
-                messageId = R.string.toggledAlternativeRates;
-            }
-
-            if ("setLabel".equals(command) || "setCategory".equals(command)) {
-                messageId = R.string.torrentsApplyingChange;
-                delay = 3;
-            }
-
-
-            if ("alternativeSpeedLimitsEnabled".equals(command)) {
-
-                try {
-
-                    if ("1".equals(result) == true) {
-                        savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", true);
-                        altSpeedLimitsMenuItem.setEnabled(true);
-                        altSpeedLimitsMenuItem.setChecked(true);
-                    }
-
-
-                    // Here an else cannot be used, because result can be ""
-                    if ("0".equals(result) == true) {
-                        savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", false);
-                        altSpeedLimitsMenuItem.setEnabled(true);
-                        altSpeedLimitsMenuItem.setChecked(false);
-                    }
-
-                } catch (Exception e) {
-                }
-
-//                Log.d("Debug", "alternativeSpeedLimitsEnabled: " + result);
-
-            }
-
-            if (!("startSelected".equals(command)) && !("pauseSelected".equals(command)) && !("deleteSelected".equals(command)) && !("deleteDriveSelected".equals(command)) && !("setUploadRateLimit".equals(command)) && !("setDownloadRateLimit".equals(command)) && !("recheckSelected".equals(command)) && !("alternativeSpeedLimitsEnabled".equals(command))) {
-
-                toastText(messageId);
-
-                // Refresh
-                refreshAfterCommand(delay);
-            }
-        }
-    }
-
-    // Here is where the action happens
-    private class qBittorrentTask extends AsyncTask<String, Integer, Torrent[]> {
-
-        @Override
-        protected Torrent[] doInBackground(String... params) {
-
-            String name, size, info, progress, state, hash, ratio, leechs, seeds, priority, eta, uploadSpeed, downloadSpeed, addedOn, completionOn, label;
-            boolean sequentialDownload = false;
-            boolean firstLastPiecePrio = false;
-
-            Torrent[] torrents = null;
-
-            // Get settings
-            getSettings();
-
-            try {
-
-                // Creating new JSON Parser
-                jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
-
-                jParser.setCookie(MainActivity.cookie);
-
-                JSONArray jArray = jParser.getJSONArrayFromUrl(params[0]);
-
-                if (jArray != null) {
-
-                    torrents = new Torrent[jArray.length()];
-
-                    MainActivity.names = new String[jArray.length()];
-
-                    for (int i = 0; i < jArray.length(); i++) {
-
-                        JSONObject json = jArray.getJSONObject(i);
-
-                        name = json.getString(TAG_NAME);
-                        size = json.getString(TAG_SIZE).replace(",", ".");
-                        progress = String.format("%.2f", json.getDouble(TAG_PROGRESS) * 100) + "%";
-                        progress = progress.replace(",", ".");
-                        info = "";
-                        state = json.getString(TAG_STATE);
-                        hash = json.getString(TAG_HASH);
-                        ratio = json.getString(TAG_RATIO).replace(",", ".");
-                        leechs = json.getString(TAG_NUMLEECHS);
-                        seeds = json.getString(TAG_NUMSEEDS);
-                        priority = json.getString(TAG_PRIORITY);
-                        eta = json.getString(TAG_ETA);
-                        downloadSpeed = json.getString(TAG_DLSPEED);
-                        uploadSpeed = json.getString(TAG_UPSPEED);
-
-                        try {
-                            addedOn = json.getString(TAG_ADDEDON);
-                        } catch (JSONException je) {
-                            addedOn = null;
-                        }
-
-                        try {
-                            completionOn = json.getString(TAG_COMPLETIONON);
-                        } catch (JSONException je) {
-                            completionOn = null;
-                        }
-
-
-                        try {
-                            if (Integer.parseInt(MainActivity.qb_api) < 10) {
-                                label = json.getString(TAG_LABEL);
-                            } else {
-                                label = json.getString(TAG_CATEGORY);
-                            }
-
-                        } catch (Exception e) {
-                            label = null;
-                        }
-
-                        if (qb_version.equals("3.2.x")) {
-
-                            size = Common.calculateSize(size);
-                            eta = Common.secondsToEta(eta);
-                            downloadSpeed = Common.calculateSize(downloadSpeed) + "/s";
-                            uploadSpeed = Common.calculateSize(uploadSpeed) + "/s";
-
-                            try {
-                                sequentialDownload = json.getBoolean(TAG_SEQDL);
-                            } catch (Exception e) {
-                                sequentialDownload = false;
-                            }
-
-
-                            try {
-                                firstLastPiecePrio = json.getBoolean(TAG_FLPIECEPRIO);
-                            } catch (Exception e) {
-                                firstLastPiecePrio = false;
-                            }
-                        }
-
-                        torrents[i] = new Torrent(name, size, state, hash, info, ratio, progress, leechs, seeds, priority, eta, downloadSpeed, uploadSpeed, sequentialDownload, firstLastPiecePrio, addedOn, completionOn, label);
-
-                        MainActivity.names[i] = name;
-
-                        // Get torrent generic properties
-
-                        try {
-                            // Calculate total downloaded
-                            Double sizeScalar = Double.parseDouble(size.substring(0, size.indexOf(" ")));
-                            String sizeUnit = size.substring(size.indexOf(" "), size.length());
-
-                            torrents[i].setDownloaded(String.format("%.1f", sizeScalar * json.getDouble(TAG_PROGRESS)).replace(",", ".") + sizeUnit);
-
-                        } catch (Exception e) {
-                            torrents[i].setDownloaded(size);
-                        }
-
-                        String infoString = "";
-
-                        if (packageName.equals("com.lgallardo.qbittorrentclient")) {
-                            // Info free
-                            infoString = torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " "
-                                    + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " "
-                                    + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
-                                    + Character.toString('\u2022') + " " + torrents[i].getRatio() + " "
-                                    + Character.toString('\u2022') + " " + progress + " "
-                                    + Character.toString('\u2022') + " " + torrents[i].getEta();
-
-                            if (torrents[i].getLabel() != null && !torrents[i].getLabel().equals("")) {
-                                infoString = infoString + " " + Character.toString('\u2022') + " " + torrents[i].getLabel();
-                            }
-
-
-                        } else {
-                            // Info pro
-                            infoString = torrents[i].getDownloaded() + " / " + torrents[i].getSize() + " "
-                                    + Character.toString('\u2191') + " " + torrents[i].getUploadSpeed() + " "
-                                    + Character.toString('\u2193') + " " + torrents[i].getDownloadSpeed() + " "
-                                    + Character.toString('\u2022') + " " + torrents[i].getRatio() + " "
-                                    + Character.toString('\u2022') + " " + torrents[i].getEta();
-
-                            if (torrents[i].getLabel() != null && !torrents[i].getLabel().equals("")) {
-                                infoString = infoString + " " + Character.toString('\u2022') + " " + torrents[i].getLabel();
-                            }
-
-
-                        }
-
-                        // Set info
-                        torrents[i].setInfo(infoString);
-                    }
-
-                }
-            } catch (JSONParserStatusCodeException e) {
-                httpStatusCode = e.getCode();
-
-                torrents = null;
-                Log.e("JSONParserStatusCode", e.toString());
-
-                if (CustomLogger.isMainActivityReporting()) {
-                    CustomLogger.saveReportMessage("Main", "[qBittorrentTask - JSONParserStatusCode]: " + e.toString());
-                }
-
-
-            } catch (Exception e) {
-                torrents = null;
-                Log.e("MAIN:=", e.toString());
-                e.printStackTrace();
-
-                if (CustomLogger.isMainActivityReporting()) {
-                    CustomLogger.saveReportMessage("Main", "[qBittorrentTask - Exception]: " + e.toString());
-                }
-            }
-
-            return torrents;
-
-        }
-
-        @Override
-        protected void onPostExecute(Torrent[] result) {
-
-            if (result == null) {
-
-                // Reporting
-                if (CustomLogger.isMainActivityReporting()) {
-                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - result is null");
-                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
-                }
-
-
-                // Handle HTTP status code
-
-                if (httpStatusCode == 1) {
-                    toastText(R.string.error1);
-                    httpStatusCode = 0;
-                }
-
-                if (httpStatusCode == 2) {
-                    toastText(R.string.error2);
-                    httpStatusCode = 0;
-                }
-
-
-                if (httpStatusCode == 401) {
-                    toastText(R.string.error401);
-
-                    // Get new Cookie
-                    if (qb_version.equals("3.2.x")) {
-                        cookie = null;
-                    }
-
-                    httpStatusCode = 0;
-                }
-                if (httpStatusCode == 400) {
-
-                    toastText(R.string.connection_error);
-
-                    // Get new Cookie
-                    if (qb_version.equals("3.2.x")) {
-                        cookie = null;
-                    }
-
-                    httpStatusCode = 0;
-                    return;
-                }
-
-                if (httpStatusCode == 403 || httpStatusCode == 404) {
-
-//                    Log.d("Debug","MainActivity - refresh - qb_version:" +qb_version );
-
-                    // Get new Cookie
-                    if (qb_version.equals("3.2.x")) {
-
-
-                        connection403ErrorCounter = connection403ErrorCounter + 1;
-
-
-                        if (connection403ErrorCounter > 1) {
-
-
-                            if (cookie != null && !cookie.equals("")) {
-                                // Only toasts the message if there is not a cookie set before
-                                toastText(R.string.error403);
-                            }
-
-                            cookie = null;
-                            httpStatusCode = 0;
-                            disableRefreshSwipeLayout();
-
-                        } else {
-
-                            // Ask a new cookie and re-execute the task in background
-                            new qBittorrentCookieTask().execute(params);
-
-                        }
-
-
-                    }
-
-
-                }
-
-
-            } else {
-
-
-                // Reporting
-                if (CustomLogger.isMainActivityReporting()) {
-                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - result length: " + result.length);
-                    CustomLogger.saveReportMessage("Main", "qBittorrentTask - httpStatusCode: " + httpStatusCode);
-                }
-
-
-                connection403ErrorCounter = 0;
-
-
-                ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
-
-                // Labels
-
-                String label = null;
-
-//                Log.d("Debug", "Still looking for..."+searchField);
-
-                for (int i = 0; i < result.length; i++) {
-
-                    // Get label
-                    label = result[i].getLabel();
-
-
-                    if (!labels.contains(label)) {
-
-                        // Add Label
-                        labels.add(label);
-//                        Log.d("Debug", "Label: " + label);
-
-                    }
-
-
-                    if (params[1].equals("all") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        torrentsFiltered.add(result[i]);
-                    }
-
-                    if (params[1].equals("downloading") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("downloading".equals(result[i].getState()) || "stalledDL".equals(result[i].getState()) || "pausedDL".equals(result[i].getState())
-                                || "queuedDL".equals(result[i].getState()) || "checkingDL".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-                    if (params[1].equals("completed") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())
-                                || "queuedUP".equals(result[i].getState()) || "checkingUP".equals(result[i].getState()) || "forcedUP".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-                    if (params[1].equals("seeding") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("uploading".equals(result[i].getState()) || "stalledUP".equals(result[i].getState()) || "forcedUP".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-
-                    if (params[1].equals("pause") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("pausedDL".equals(result[i].getState()) || "pausedUP".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-                    if (params[1].equals("active") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("uploading".equals(result[i].getState()) || "downloading".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-                    if (params[1].equals("inactive") && (searchField == "" || result[i].getFile().toUpperCase().contains(searchField.toUpperCase()))) {
-                        if ("pausedUP".equals(result[i].getState()) || "pausedDL".equals(result[i].getState()) || "queueUP".equals(result[i].getState())
-                                || "queueDL".equals(result[i].getState()) || "stalledUP".equals(result[i].getState())
-                                || "stalledDL".equals(result[i].getState())) {
-                            torrentsFiltered.add(result[i]);
-                        }
-                    }
-
-                }
-
-
-                // Labels
-                ArrayList<DrawerItem> labelItems = new ArrayList<DrawerItem>();
-
-                // Set unlabeled first
-
-                // Add label category
-                labelItems.add(new DrawerItem(R.drawable.ic_drawer_labels, getResources().getString(R.string.drawer_label_labels), DRAWER_LABEL_CATEGORY, true, "labelCategory"));
-
-
-                // Add All
-                label = getResources().getString(R.string.drawer_label_all);
-
-//                Log.d("Debug", "labes.size(): " + labels.size());
-
-                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, (currentLabel.equals(label) || !labels.contains(currentLabel) && !currentLabel.equals(getResources().getString(R.string.drawer_label_unlabeled))), "label"));
-
-                // Add unlabeled
-                label = getResources().getString(R.string.drawer_label_unlabeled);
-                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label) || currentLabel.equals(""), "label"));
-
-
-//                Log.d("Debug", "currentLabel: " + currentLabel);
-
-                if (labels != null && !(labels.contains(null))) {
-                    // Sort labels
-                    Collections.sort(labels);
-
-                    for (int i = 0; i < labels.size(); i++) {
-
-                        label = labels.get(i);
-
-                        if (label != null && !label.equals("")) {
-                            labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label), "label"));
-                        }
-                    }
-
-
-                    rAdapter.refreshDrawerLabels(labelItems);
-
-                }
-
-                // Sort by filename
-                if (sortby_value == SORTBY_NAME) {
-                    Collections.sort(torrentsFiltered, new TorrentNameComparator(reverse_order));
-                }
-                // Sort by size
-                if (sortby_value == SORTBY_SIZE) {
-                    Collections.sort(torrentsFiltered, new TorrentSizeComparator(reverse_order));
-                }
-                // Sort by Eta
-                if (sortby_value == SORTBY_ETA) {
-                    Collections.sort(torrentsFiltered, new TorrentEtaComparator(reverse_order));
-                }
-                // Sort by priority
-                if (sortby_value == SORTBY_PRIORITY) {
-                    Collections.sort(torrentsFiltered, new TorrentPriorityComparator(reverse_order));
-                }
-                // Sort by progress
-                if (sortby_value == SORTBY_PROGRESS) {
-                    Collections.sort(torrentsFiltered, new TorrentProgressComparator(reverse_order));
-                }
-                // Sort by Ratio
-                if (sortby_value == SORTBY_RATIO) {
-                    Collections.sort(torrentsFiltered, new TorrentRatioComparator(reverse_order));
-                }
-                // Sort by download speed
-                if (sortby_value == SORTBY_DOWNLOAD) {
-                    Collections.sort(torrentsFiltered, new TorrentDownloadSpeedComparator(reverse_order));
-                }
-                // Sort by upload speed
-                if (sortby_value == SORTBY_UPLOAD) {
-                    Collections.sort(torrentsFiltered, new TorrentUploadSpeedComparator(reverse_order));
-                }
-                // Sort by Added on
-                if (sortby_value == SORTBY_ADDEDON) {
-                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
-                        Collections.sort(torrentsFiltered, new TorrentAddedOnTimestampComparator(reverse_order));
-                    } else {
-                        Collections.sort(torrentsFiltered, new TorrentAddedOnComparator(reverse_order));
-                    }
-                }
-                // Sort by Completed on
-                if (sortby_value == SORTBY_COMPLETEDON) {
-                    if (MainActivity.qb_api == null || Integer.parseInt(MainActivity.qb_api) >= 10) {
-                        Collections.sort(torrentsFiltered, new TorrentCompletedOnTimestampComparator(reverse_order));
-                    } else {
-                        Collections.sort(torrentsFiltered, new TorrentCompletedOnComparator(reverse_order));
-                    }
-                }
-
-                // Get names (delete in background method)
-                MainActivity.names = new String[torrentsFiltered.size()];
-                MainActivity.lines = new Torrent[torrentsFiltered.size()];
-
-                uploadSpeedCount = 0;
-                downloadSpeedCount = 0;
-
-                uploadCount = 0;
-                downloadCount = 0;
-
-                try {
-
-                    Torrent torrentToUpdate = null;
-
-                    // Reporting
-                    if (CustomLogger.isMainActivityReporting()) {
-                        CustomLogger.saveReportMessage("Main", "qBittorrentTask - torrentsFiltered.size: " + torrentsFiltered.size());
-                    }
-
-                    for (int i = 0; i < torrentsFiltered.size(); i++) {
-
-                        Torrent torrent = torrentsFiltered.get(i);
-
-                        MainActivity.names[i] = torrent.getFile();
-                        MainActivity.lines[i] = torrent;
-
-                        if (torrent.getHash().equals(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate)) {
-                            torrentToUpdate = torrent;
-                        }
-
-                        uploadSpeedCount += (int) Common.humanSizeToBytes(torrent.getUploadSpeed());
-                        downloadSpeedCount += (int) Common.humanSizeToBytes(torrent.getDownloadSpeed());
-
-                        if ("uploading".equals(torrent.getState())) {
-                            uploadCount = uploadCount + 1;
-                        }
-
-                        if ("downloading".equals(torrent.getState())) {
-                            downloadCount = downloadCount + 1;
-                        }
-
-                    }
-
-                    // Update torrent list
-                    try {
-                        myadapter.setNames(names);
-                        myadapter.setData(lines);
-                        myadapter.notifyDataSetChanged();
-                    } catch (NullPointerException ne)
-
-                    {
-                        myadapter = new TorrentListAdapter(MainActivity.this, names, lines);
-                        firstFragment.setListAdapter(myadapter);
-
-                        myadapter.setNames(names);
-                        myadapter.setData(lines);
-                        myadapter.notifyDataSetChanged();
-
-                    } catch (IllegalStateException le) {
-                        Log.e("Debug", "IllegalStateException: " + le.toString());
-                    }
-
-                    // Create the about fragment
-                    aboutFragment = new AboutFragment();
-
-                    // Add the fragment to the 'list_frame' FrameLayout
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                    String AltSpeedInfo;
-
-                    if (alternative_speeds) {
-
-                        AltSpeedInfo = Character.toString('\u2713') + "  ";
-                    } else {
-                        AltSpeedInfo = "";
-                    }
-
-
-                    // Got some results
-                    if (torrentsFiltered.size() > 0) {
-
-                        // Set headerInfo
-                        TextView uploadSpeedTextView = (TextView) findViewById(R.id.uploadSpeed);
-                        TextView downloadSpeedTextView = (TextView) findViewById(R.id.downloadSpeed);
-
-                        headerInfo = (LinearLayout) findViewById(R.id.header);
-
-                        if (header) {
-                            headerInfo.setVisibility(View.VISIBLE);
-                        } else {
-                            headerInfo.setVisibility(View.GONE);
-                        }
-
-
-                        uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + uploadSpeedCount) + "/s " + "(" + uploadCount + ")");
-                        downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + "(" + downloadCount + ")");
-
-
-                        //Set first and second fragments
-                        if (findViewById(R.id.fragment_container) != null) {
-
-                            // Set where is the second container
-                            firstFragment.setSecondFragmentContainer(R.id.content_frame);
-
-                            // Set first fragment
-                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof HelpFragment) {
-                                fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
-                            }
-
-                            // Set second fragment
-                            if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
-
-                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("secondFragment");
-
-                                if (torrentToUpdate != null) {
-                                    // Update torrent details
-                                    detailsFragment.updateDetails(torrentToUpdate);
-                                } else {
-
-                                    // Torrent no longer found
-
-                                    // Set second fragment with About fragment
-                                    fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
-
-                                    // Reset back button stack
-                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                        fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                    }
-                                }
-
-
-                            } else {
-                                // Reset back button stack
-                                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                    fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                }
-
-                            }
-
-                        } else {
-
-                            // Set where is the second container
-                            firstFragment.setSecondFragmentContainer(R.id.one_frame);
-
-                            // Set first fragment
-                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
-                                fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
-                            }
-
-                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
-
-                                com.lgallardo.qbittorrentclient.TorrentDetailsFragment detailsFragment = (com.lgallardo.qbittorrentclient.TorrentDetailsFragment) fragmentManager.findFragmentByTag("firstFragment");
-
-                                if (torrentToUpdate != null) {
-                                    // Update torrent
-                                    detailsFragment.updateDetails(torrentToUpdate);
-                                } else {
-
-                                    // Torrent no longer found
-
-                                    // Reset back button stack
-                                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                        fragmentManager.popBackStack();
-                                    }
-
-                                }
-                            }
-                        }
-                    } else {
-
-                        // No results
-
-                        myadapter.setNames(null);
-                        myadapter.setData(null);
-
-                        myadapter.notifyDataSetChanged();
-
-                        // Hide headerInfo
-                        TextView uploadSpeedTextView = (TextView) findViewById(R.id.uploadSpeed);
-                        TextView downloadSpeedTextView = (TextView) findViewById(R.id.downloadSpeed);
-
-                        uploadSpeedTextView.setText(AltSpeedInfo);
-                        downloadSpeedTextView.setText("");
-
-
-                        //Set first and second fragments
-                        if (findViewById(R.id.fragment_container) != null) {
-
-                            // Set where is the second container
-                            firstFragment.setSecondFragmentContainer(R.id.content_frame);
-
-                            // Set first fragment
-                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof HelpFragment) {
-                                fragmentTransaction.replace(R.id.list_frame, firstFragment, "firstFragment");
-                            }
-
-                            // Set second fragment
-                            if (!(fragmentManager.findFragmentByTag("secondFragment") instanceof AboutFragment)) {
-                                fragmentTransaction.replace(R.id.content_frame, aboutFragment, "secondFragment");
-
-                                // Reset back button stack
-                                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                    fragmentManager.popBackStack("secondFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                }
-
-                            }
-                        } else {
-
-                            // Set where is the second container
-                            firstFragment.setSecondFragmentContainer(R.id.one_frame);
-
-                            // Set first fragment
-                            if (fragmentManager.findFragmentByTag("firstFragment") instanceof AboutFragment) {
-                                fragmentTransaction.replace(R.id.one_frame, firstFragment, "firstFragment");
-                            }
-
-                            // Reset back button stack
-                            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                                fragmentManager.popBackStack();
-                            }
-                        }
-                    }
-
-                    // Commit
-                    fragmentTransaction.commit();
-
-                } catch (Exception e) {
-                    Log.e("ADAPTER", e.toString());
-
-                    if (CustomLogger.isMainActivityReporting()) {
-                        CustomLogger.saveReportMessage("Main", "[qBittorrentTask - AdapterException]: " + e.toString());
-                    }
-                }
-
-            }
-
-            // Send report
-            emailReport();
-
-            // Disable refreshSwipeLayout
-            disableRefreshSwipeLayout();
-        }
-    }
-
-    // Here is where the action happens
-    private class qBittorrentOptions extends AsyncTask<String, Integer, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            // Get settings
-            getSettings();
-
-            // Creating new JSON Parser
-            com.lgallardo.qbittorrentclient.JSONParser jParser = new com.lgallardo.qbittorrentclient.JSONParser(hostname, subfolder, protocol, port, keystore_path, keystore_password, username, password, connection_timeout, data_timeout);
-
-            jParser.setCookie(cookie);
-
-            // Get the Json object
-            JSONObject json = null;
-            try {
-                json = jParser.getJSONFromUrl(params[0]);
-
-            } catch (JSONParserStatusCodeException e) {
-
-                httpStatusCode = e.getCode();
-                Log.e("JSONParserStatusCode", e.toString());
-
-            }
-
-            if (json != null) {
-
-                try {
-
-                    global_max_num_connections = json.getString(TAG_GLOBAL_MAX_NUM_CONNECTIONS);
-                    max_num_conn_per_torrent = json.getString(TAG_MAX_NUM_CONN_PER_TORRENT);
-                    max_uploads = json.getString(TAG_MAX_UPLOADS);
-                    max_num_upslots_per_torrent = json.getString(TAG_MAX_NUM_UPSLOTS_PER_TORRENT);
-                    global_upload = json.getString(TAG_GLOBAL_UPLOAD);
-                    global_download = json.getString(TAG_GLOBAL_DOWNLOAD);
-                    alt_upload = json.getString(TAG_ALT_UPLOAD);
-                    alt_download = json.getString(TAG_ALT_DOWNLOAD);
-                    torrent_queueing = json.getBoolean(TAG_TORRENT_QUEUEING);
-                    max_act_downloads = json.getString(TAG_MAX_ACT_DOWNLOADS);
-                    max_act_uploads = json.getString(TAG_MAX_ACT_UPLOADS);
-                    max_act_torrents = json.getString(TAG_MAX_ACT_TORRENTS);
-
-                    schedule_alternative_rate_limits = json.getBoolean(TAG_SCHEDULER_ENABLED);
-                    alt_from_hour = json.getString(TAG_SCHEDULE_FROM_HOUR);
-                    alt_from_min = json.getString(TAG_SCHEDULE_FROM_MIN);
-                    alt_to_hour = json.getString(TAG_SCHEDULE_TO_HOUR);
-                    alt_to_min = json.getString(TAG_SCHEDULE_TO_MIN);
-                    scheduler_days = json.getString(TAG_SCHEDULER_DAYS);
-
-                    max_ratio_enabled = json.getBoolean(TAG_MAX_RATIO_ENABLED);
-                    max_ratio = json.getString(TAG_MAX_RATIO);
-                    max_ratio_act = json.getString(TAG_MAX_RATIO_ACT);
-
-                    // Save options locally
-                    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                    Editor editor = sharedPrefs.edit();
-
-                    // Save key-values
-                    editor.putString("global_max_num_connections", global_max_num_connections);
-                    editor.putString("max_num_conn_per_torrent", max_num_conn_per_torrent);
-                    editor.putString("max_uploads", max_uploads);
-                    editor.putString("max_num_upslots_per_torrent", max_num_upslots_per_torrent);
-                    editor.putString("global_upload", global_upload);
-                    editor.putString("global_download", global_download);
-                    editor.putString("alt_upload", alt_upload);
-                    editor.putString("alt_download", alt_download);
-                    editor.putBoolean("torrent_queueing", torrent_queueing);
-                    editor.putString("max_act_downloads", max_act_downloads);
-                    editor.putString("max_act_uploads", max_act_uploads);
-                    editor.putString("max_act_torrents", max_act_torrents);
-
-                    editor.putBoolean("schedule_alternative_rate_limits", schedule_alternative_rate_limits);
-                    editor.putString("alt_from", alt_from_hour + ":" + alt_from_min);
-                    editor.putString("alt_to", alt_to_hour + ":" + alt_to_min);
-                    editor.putString("scheduler_days", scheduler_days);
-
-                    editor.putBoolean("max_ratio_enabled", max_ratio_enabled);
-                    editor.putString("max_ratio", max_ratio);
-                    editor.putString("max_ratio_act", max_ratio_act);
-
-
-                    // Commit changes
-                    editor.commit();
-
-                } catch (Exception e) {
-                    Log.e("MAIN:", e.toString());
-                    return null;
-                }
-
-            }
-
-            // Return getSettings or setSettings
-            return params[1];
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            if (result == null) {
-
-                toastText(R.string.connection_error);
-
-                // Handle HTTP status code
-                if (httpStatusCode == 1) {
-                    toastText(R.string.error1);
-                    httpStatusCode = 0;
-                }
-
-                if (httpStatusCode == 2) {
-                    toastText(R.string.error2);
-                    httpStatusCode = 0;
-                }
-
-                if (httpStatusCode == 401) {
-                    toastText(R.string.error401);
-                    httpStatusCode = 0;
-                }
-
-                if (httpStatusCode == 403 || httpStatusCode == 404) {
-                    toastText(R.string.error403);
-                    httpStatusCode = 0;
-                    disableRefreshSwipeLayout();
-
-                    if (qb_version.equals("3.2.x")) {
-                        // Get new Cookie
-                        cookie = null;
-                    }
-                }
-
-            } else {
-
-                // Set options with the preference UI
-
-                if (result.equals("setOptions")) {
-
-                    // Open options activity
-                    openOptions();
-                }
-
-                // Get options only
-                if (result.equals("getOptions")) {
-
-                    // Do nothing
-
-                }
-            }
-        }
-    }
+//
+//                if (httpStatusCode == 2) {
+//                    toastText(R.string.error2);
+//                    httpStatusCode = 0;
+//                }
+//
+//                if (httpStatusCode == 401) {
+//                    toastText(R.string.error401);
+//                    httpStatusCode = 0;
+//                }
+//
+//                if (httpStatusCode == 403 || httpStatusCode == 404) {
+//                    toastText(R.string.error403);
+//                    httpStatusCode = 0;
+//                    disableRefreshSwipeLayout();
+//
+//                    if (qb_version.equals("3.2.x")) {
+//                        // Get new Cookie
+//                        cookie = null;
+//                    }
+//                }
+//
+//            } else {
+//
+//                // Set options with the preference UI
+//
+//                if (result.equals("setOptions")) {
+//
+//                    // Open options activity
+//                    openOptions();
+//                }
+//
+//                // Get options only
+//                if (result.equals("getOptions")) {
+//
+//                    // Do nothing
+//
+//                }
+//            }
+//        }
+//    }
 
     // Drawer classes
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2014-2015 Luis M. Gallardo D.
+ *   Copyright (c) 2014-2018 Luis M. Gallardo D.
  *   All rights reserved. This program and the accompanying materials
  *   are made available under the terms of the GNU Lesser General Public License v3.0
  *   which accompanies this distribution, and is available at
@@ -9,13 +9,8 @@
 
 package com.lgallardo.qbittorrentclient;
 
-/**
- * Created by lgallard on 28/08/15.
- */
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +56,7 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
 
-            textViewFile = (TextView) itemView.findViewById(R.id.file);
+            textViewFile = (TextView) itemView.findViewById(R.id.name);
             textViewInfo = (TextView) itemView.findViewById(R.id.info);
             textViewPriorityInfo = (TextView) itemView.findViewById(R.id.priorityInfo);
             textViewPercentage = (TextView) itemView.findViewById(R.id.percentage);
@@ -75,32 +70,16 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
         @Override
         public void onClick(View view) {
 
-
             TorrentDetailsItem recyclerItem;
-
 
             // Get item
             recyclerItem = items.get(getLayoutPosition());
 
-
-            // Perform Action
-//            Log.d("Debug", "onClicked invoked!");
-
             // Set file priority
-
             if (recyclerItem.getAction().equals("setFilePriority")) {
-
-//                Log.d("Debug", "setFilePriority");
-
                 TorrentDetailsFragment.fileContentRowPosition = getAdapterPosition();
-
-
                 mainActivity.openContextMenu(itemView);
-
-                //notifyDataSetChanged();
-
             }
-
 
         }
 
@@ -249,7 +228,6 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
 
 //            Log.d("Debug", "refreshContentFiles - TYPE: " + item.getType());
 
-
         }
 
 
@@ -271,7 +249,7 @@ public class ContentFilesRecyclerViewAdapter extends RecyclerView.Adapter<Conten
             case 1:
                 priorityString = context.getResources().getString(R.string.action_file_normal_priority);
                 break;
-            case 2:
+            case 6:
                 priorityString = context.getResources().getString(R.string.action_file_high_priority);
                 break;
             case 7:

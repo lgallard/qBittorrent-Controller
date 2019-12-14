@@ -26,9 +26,11 @@ public class TorrentCompletedOnComparator implements Comparator<Torrent> {
         Date date1 = null;
         Date date2 = null;
 
-        String d1 = t1.getCompletionOn();
-        String d2 = t2.getCompletionOn();
+//        String d1 = t1.getCompletionOn();
+//        String d2 = t2.getCompletionOn();
 
+        String d1 = "" + t1.getCompletion_on();
+        String d2 = "" + t2.getCompletion_on();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 

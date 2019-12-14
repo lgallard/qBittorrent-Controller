@@ -134,24 +134,15 @@ public class ItemstFragment extends ListFragment {
 
                 @Override
                 public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                    if (MainActivity.qb_version.equals("3.2.x")) {
-                        menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
-                        menu.findItem(R.id.action_sequential_download).setVisible(true);
-                        menu.findItem(R.id.action_label_menu).setVisible(true);
-                        menu.findItem(R.id.action_set_label).setVisible(true);
-                        menu.findItem(R.id.action_delete_label).setVisible(true);
 
-                        if (Integer.parseInt(MainActivity.qb_api) < 8) {
-                            menu.findItem(R.id.action_delete_label).setVisible(false);
-                        }
+                    menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
+                    menu.findItem(R.id.action_sequential_download).setVisible(true);
 
-                    } else {
-                        menu.findItem(R.id.action_first_last_piece_prio).setVisible(false);
-                        menu.findItem(R.id.action_sequential_download).setVisible(false);
-                        menu.findItem(R.id.action_label_menu).setVisible(false);
-                        menu.findItem(R.id.action_set_label).setVisible(false);
-                        menu.findItem(R.id.action_delete_label).setVisible(false);
-                    }
+                    // TODO: set label/category visible after implement it
+                    menu.findItem(R.id.action_label_menu).setVisible(false);
+                    menu.findItem(R.id.action_set_label).setVisible(false);
+                    menu.findItem(R.id.action_delete_label).setVisible(false);
+
                     return true;
                 }
 
@@ -431,7 +422,7 @@ public class ItemstFragment extends ListFragment {
                             return true;
                         case R.id.action_set_label:
 
-                            m.setLabelDialog(hashes);
+                            m.setCategoryDialog(hashes);
 
                             // Clear selection
                             nr = 0;
@@ -446,7 +437,7 @@ public class ItemstFragment extends ListFragment {
 
                         case R.id.action_delete_label:
 
-                            m.setLabel(hashes, " ");
+                            m.setCategory(hashes, " ");
 
                             // Clear selection
                             nr = 0;
@@ -679,18 +670,13 @@ public class ItemstFragment extends ListFragment {
 
             }
 
-            if (MainActivity.qb_version.equals("3.2.x")) {
-                menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
+            menu.findItem(R.id.action_toggle_alternative_rate).setVisible(true);
 
-                // Set Alternate Speed limit state
-                if (MainActivity.alternative_speeds) {
-                    menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
-                } else {
-                    menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
-                }
-
+            // Set Alternate Speed limit state
+            if (MainActivity.alternative_speeds) {
+                menu.findItem(R.id.action_toggle_alternative_rate).setChecked(true);
             } else {
-                menu.findItem(R.id.action_toggle_alternative_rate).setVisible(false);
+                menu.findItem(R.id.action_toggle_alternative_rate).setChecked(false);
             }
 
             menu.findItem(R.id.action_sortby_name).setVisible(true);

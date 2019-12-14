@@ -41,7 +41,7 @@
     <string name="dm_deleteDriveTorrent">Pressing OK will delete the torrent and its data from the hard drive</string>
     <string name="dt_deleteDriveTorrent">Delete the torrent and its data</string>
     <string name="torrentAdded">Torrent sent!</string>
-    <string name="torrentFileAdded">Torrent file sent!</string>
+    <string name="torrentFileAdded">Torrent name sent!</string>
     <string name="torrentStarted">Torrent started!</string>
     <string name="torrentPaused">Torrent paused!</string>
     <string name="AllTorrentsPaused">All torrents were paused!</string>
@@ -184,7 +184,7 @@
     <string name="torrentsRecheck">Recheck started</string>
     <string name="torrentstogglefisrtLastPiecePrio">Toggled first and last piece download</string>
     <string name="torrentstoggleSequentialDownload">Toggled sequential download</string>
-    <string name="settings_qbittorrent_appearance_category">Apparence</string>
+    <string name="settings_qbittorrent_appearance_category">Appearance</string>
     <string name="settings_qbittorrent_darkui_dialog_title">Use dark theme </string>
     <string name="settings_qbittorrent_darkui_summary">Restart the app to apply the theme</string>
     <string name="sortby_menu_name">Name</string>

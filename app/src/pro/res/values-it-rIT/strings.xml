@@ -30,7 +30,7 @@
     <string name="dm_deleteDriveTorrent">Premendo OK cancellerà il torrent ed i suoi dati dal disco rigido</string>
     <string name="dt_deleteDriveTorrent">Eliminare torrent ed i suoi dati</string>
     <string name="torrentAdded">Torrent inviato!</string>
-    <string name="torrentFileAdded">Di file torrent inviato!</string>
+    <string name="torrentFileAdded">Di name torrent inviato!</string>
     <string name="torrentStarted">Torrent iniziato!</string>
     <string name="torrentPaused">Torrent fermato!</string>
     <string name="AllTorrentsPaused">Tutti i torrenti sono stati messi in pausa!</string>
@@ -243,10 +243,10 @@
     <string name="settings_qbittorrent_https_category">HTTPS</string>
     <string name="settings_qbittorrent_https_self_signed_keystore_password_title">Password di archivio chiavi</string>
     <string name="settings_qbittorrent_https_self_signed_bks_file_title">Chiavi per il certificato auto-firmato</string>
-    <string name="error_grant_permission">L\'accesso storage è necessario per scaricare e inviare file torrent!\n\nVolete concedere l\'autorizzazione nelle impostazioni di Android?</string>
-    <string name="error_permission">L\'accesso storage è necessario per scaricare e inviare file torrent!</string>
-    <string name="error_grant_permission2">L\'accesso storage è necessario per elencare directory e file!\n\nVolete concedere l\'autorizzazione nelle impostazioni di Android?</string>
-    <string name="error_permission2">L\'accesso storage è necessario per elencare directory e file!</string>
+    <string name="error_grant_permission">L\'accesso storage è necessario per scaricare e inviare name torrent!\n\nVolete concedere l\'autorizzazione nelle impostazioni di Android?</string>
+    <string name="error_permission">L\'accesso storage è necessario per scaricare e inviare name torrent!</string>
+    <string name="error_grant_permission2">L\'accesso storage è necessario per elencare directory e name!\n\nVolete concedere l\'autorizzazione nelle impostazioni di Android?</string>
+    <string name="error_permission2">L\'accesso storage è necessario per elencare directory e name!</string>
     <string name="sortby_menu_speed">Velocità...</string>
     <string name="sortby_menu_added_on">Aggiunto il</string>
     <string name="sortby_menu_completed_on">Completato nel</string>
@@ -264,7 +264,7 @@
     <string name="action_add_tracker">Aggiungere tracker</string>
     <string name="help_libraries">Software utilizzato:</string>
     <string name="action_add_url">Aggiungere link torrent</string>
-    <string name="action_add_file">Aggiungere torrent file</string>
+    <string name="action_add_file">Aggiungere torrent name</string>
     <string name="pathAndLabelDialogText">Non mostrare più questa finestra</string>
     <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Salva percorso ed etichetta della finestra di dialogo</string>
     <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Abilita salvataggio del percorso e della finestra</string>

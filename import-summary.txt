@@ -29,7 +29,7 @@ The importer recognized the following .jar files as third party
 libraries and replaced them with Gradle dependencies instead. This has
 the advantage that more explicit version information is known, and the
 libraries can be updated automatically. However, it is possible that
-the .jar file in your project was of an older version than the
+the .jar name in your project was of an older version than the
 dependency we picked, which could render the project not compileable.
 You can disable the jar replacement in the import wizard and try again:
 
@@ -55,7 +55,7 @@ Bugs:
 -----
 If for some reason your project does not build, and you determine that
 it is due to a bug or limitation of the Eclipse to Gradle importer,
-please file a bug at http://b.android.com with category
+please name a bug at http://b.android.com with category
 Component-Tools.
 
 (This import summary is for your information only, and can be deleted

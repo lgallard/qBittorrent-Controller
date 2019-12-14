@@ -30,7 +30,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
     private Context context;
 
     public TorrentListAdapter(Context context, String[] torrentsNames, Torrent[] torrentsData) {
-        super(context, R.layout.row, R.id.file, torrentsNames);
+        super(context, R.layout.row, R.id.name, torrentsNames);
 
         this.context = context;
         this.torrentsNames = torrentsNames;
@@ -46,7 +46,6 @@ class TorrentListAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-
 //        View row = super.getView(position, convertView, parent);
 
         LayoutInflater inflater = (LayoutInflater) context
@@ -56,11 +55,11 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
         if (torrentsData != null) {
 
-            String file = torrentsData[position].getFile();
+            String file = torrentsData[position].getName();
 
             String state = torrentsData[position].getState();
 
-            TextView name = (TextView) row.findViewById(R.id.file);
+            TextView name = (TextView) row.findViewById(R.id.name);
             name.setText(file);
 
             TextView info = (TextView) row.findViewById(R.id.info);
@@ -106,11 +105,13 @@ class TorrentListAdapter extends ArrayAdapter<String> {
                 ProgressBar progressBar = (ProgressBar) row.findViewById(R.id.progressBar1);
                 TextView percentageTV = (TextView) row.findViewById(R.id.percentage);
 
-                String percentage = torrentsData[position].getPercentage();
+                double percentage = torrentsData[position].getProgress();
 
-                progressBar.setProgress(Integer.parseInt(percentage));
+                progressBar.setProgress((int) (percentage*100));
 
-                percentageTV.setText(percentage + "%");
+//                Log.d("Debug", "[TorrentListAdapter] percentage: " + percentage);
+
+                percentageTV.setText(Common.ProgressForUiTruncated(percentage) + "%");
             }
 
             row.setBackgroundColor(getContext().getResources().getColor(android.R.color.background_light)); //default color
@@ -120,9 +121,7 @@ class TorrentListAdapter extends ArrayAdapter<String> {
             }
         } else {
 
-//            Log.d("Debug", "No results");
-
-            TextView name = (TextView) row.findViewById(R.id.file);
+            TextView name = (TextView) row.findViewById(R.id.name);
             name.setText(context.getString(R.string.no_results));
 
             // Hide progress bar
@@ -135,7 +134,6 @@ class TorrentListAdapter extends ArrayAdapter<String> {
                 percentageTV.setVisibility(View.GONE);
 
             }
-
 
             ImageView icon = (ImageView) row.findViewById(R.id.icon);
             TextView info = (TextView) row.findViewById(R.id.info);
@@ -152,8 +150,6 @@ class TorrentListAdapter extends ArrayAdapter<String> {
 
 
     public void setNewSelection(int position, boolean value) {
-
-        Log.i("torrentListAdapter", "setNewSelection invoked " + position + " " + value);
 
         mSelection.put(position, value);
         notifyDataSetChanged();
