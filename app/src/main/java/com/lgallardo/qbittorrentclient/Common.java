@@ -193,6 +193,13 @@ public class Common {
         return df.format(progress * 100);
     }
 
+    protected static String RatioForUi(double ratio){
+        // Format progress for UI
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setRoundingMode(RoundingMode.DOWN);
+        return df.format(ratio);
+    }
+
     protected static byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         int bufferSize = 1024;

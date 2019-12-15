@@ -241,7 +241,7 @@ public class TorrentDetailsFragment extends Fragment {
                 name = this.torrent.getName();
                 size = Common.calculateSize(this.torrent.getSize());
                 hash = this.torrent.getHash();
-                ratio = "" + this.torrent.getRatio();
+                ratio = Common.RatioForUi(this.torrent.getRatio());
                 state = this.torrent.getState();
                 leechs = "" + torrent.getNum_leechs();
                 seeds = "" + torrent.getNum_seeds();
@@ -797,7 +797,7 @@ public class TorrentDetailsFragment extends Fragment {
             name = torrent.getName();
             size = Common.calculateSize(torrent.getSize());
             hash = torrent.getHash();
-            ratio = "" + torrent.getRatio();
+            ratio = Common.RatioForUi(this.torrent.getRatio());
             state = torrent.getState();
             leechs = "" + torrent.getNum_leechs();
             seeds = "" + torrent.getNum_seeds();

@@ -3332,7 +3332,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public void onSuccess(List<Torrent> torrents) {
 
                 String infoString = "";
-                String sizeInfo, downloadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo;
+                String sizeInfo, downloadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo, ratioInfo;
 
                 Log.d("Debug", "[getTorrentList] torrents.size(): " + torrents.size());
 
@@ -3340,7 +3340,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                     connection403ErrorCounter = 0;
 
-//                    Log.d("Debug", "- - -");
 //                    Log.d("Debug", "[getTorrentList] File: " + torrents.get(i).getName());
 //                    Log.d("Debug", "[getTorrentList] Hash: " + torrents.get(i).getHash());
 //                    Log.d("Debug", "[getTorrentList] qb_version: "+ qb_version);
@@ -3375,13 +3374,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // Get download speed
                     downloadSpeedInfo = Common.calculateSize(torrents.get(i).getDlspeed()) + "/s";
 
+                    // Get Ratio
+                    ratioInfo = Common.RatioForUi(torrents.get(i).getRatio());
+
 
                     if (packageName.equals("com.lgallardo.qbittorrentclient")) {
                         // Info free
                         infoString = downloadedInfo + " / " + sizeInfo  + " "
                                 + '\u2191' + " " + uploadSpeedInfo + " "
                                 + '\u2193' + " " + downloadSpeedInfo + " "
-                                + '\u2022' + " " + torrents.get(i).getRatio() + " "
+                                + '\u2022' + " " + ratioInfo + " "
                                 + '\u2022' + " " + progressInfo + "% "
                                 + '\u2022' + " " + etaInfo;
 
@@ -3395,7 +3397,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         infoString = downloadedInfo + " / " + sizeInfo + " "
                                 + '\u2191' + " " + uploadSpeedInfo + " "
                                 + '\u2193' + " " + downloadSpeedInfo + " "
-                                + '\u2022' + " " + torrents.get(i).getRatio() + " "
+                                + '\u2022' + " " + ratioInfo + " "
                                 + '\u2022' + " " + etaInfo;
 
 //                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
