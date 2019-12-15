@@ -396,7 +396,7 @@ public class NotifierService extends BroadcastReceiver {
             public void onSuccess(List<Torrent> torrents) {
 
                 String infoString = "";
-                String sizeInfo, downloadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo;
+                String sizeInfo, downloadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo, ratioInfo;
 
                 for (int i = 0; i < torrents.size(); i++) {
 
@@ -431,12 +431,15 @@ public class NotifierService extends BroadcastReceiver {
                     // Get download speed
                     downloadSpeedInfo = Common.calculateSize(torrents.get(i).getDlspeed()) + "/s";
 
+                    // Get Ratio
+                    ratioInfo = Common.RatioForUi(torrents.get(i).getRatio());
+
 
                     // Info
                     infoString = downloadedInfo + " "
                             +'\u2193' + " " + downloadSpeedInfo + " "
                             +'\u2191' + " " + uploadSpeedInfo + " "
-                            +'\u2022' + " " + torrents.get(i).getRatio() + " "
+                            +'\u2022' + " " + ratioInfo  + " "
                             +'\u2022' + " " + etaInfo;
 
                     // Set info
