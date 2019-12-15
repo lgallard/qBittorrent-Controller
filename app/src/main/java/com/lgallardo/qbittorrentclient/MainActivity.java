@@ -1178,7 +1178,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             url = subfolder + "/" + url;
         }
 
-        url = protocol + "://" + hostname + ":" + port + url + "/api/v2/auth/login";
+        url = protocol + "://" + hostname + ":" + port + url;
+
+        // Command
+        url = url + "/api/v2/auth/login";
 
         // New JSONObject request
         CustomStringRequest jsArrayRequest = new CustomStringRequest(
