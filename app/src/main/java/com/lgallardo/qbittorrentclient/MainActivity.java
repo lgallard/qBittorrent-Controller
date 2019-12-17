@@ -2284,6 +2284,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void addTorrent(final String hashes, final String path2Set, final String label2Set, final VolleyCallback callback) {
 
+//        Log.d("Debug", "[addTorrent] path2set " + path2Set);
+//        Log.d("Debug", "[addTorrent] label2Set " + label2Set);
+
         String boundary = "";
 
         boundary = "-----------------------" + (new Date()).getTime();
@@ -2331,7 +2334,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", urlContentType);
-                params.put("savepath", path2Set);
                 params.put("category", label2Set);
                 params.put("Cookie", cookie);
                 return params;
@@ -2341,6 +2343,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("urls", hashes);
+                if (path2Set != null && path2Set.length() != 0) {
+                    params.put("savepath", path2Set);
+                }
                 return params;
             }
         };
@@ -5834,12 +5839,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //        Log.d("Debug", "qb_api: " + qb_api);
 //        Log.d("Debug", "type: " + type);
 
-        if (qb_version.equals("3.2.x") && pathAndLabelDialog) {
+        if (pathAndLabelDialog) {
 
             // Variables
 
             final AutoCompleteTextView pathTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.path_sent);
-            final AutoCompleteTextView labelTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.label_sent);
+//            final AutoCompleteTextView labelTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.label_sent);
             final CheckBox checkBoxPathAndLabelDialog = (CheckBox) sentTorrentView.findViewById(R.id.pathAndLabelDialog);
 
 
@@ -5853,7 +5858,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             // Label
             ArrayAdapter<String> labelAdapter = new ArrayAdapter<String>(
                     this, android.R.layout.simple_list_item_1, label_history.toArray(new String[label_history.size()]));
-            labelTextView.setAdapter(labelAdapter);
+//            labelTextView.setAdapter(labelAdapter);
 
             // Checkbox value
             if (pathAndLabelDialog) {
@@ -5882,7 +5887,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     public void onClick(DialogInterface dialog, int id) {
 
                         MainActivity.path2Set = pathTextView.getText().toString();
-                        MainActivity.label2Set = labelTextView.getText().toString();
+//                        MainActivity.label2Set = labelTextView.getText().toString();
 
                         if (!(path2Set.equals(""))) {
                             addPath2History(path2Set);
@@ -5891,6 +5896,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         if (!(label2Set.equals(""))) {
                             addLabel2History(label2Set);
                         }
+
+
+//                        Log.d("Debug", "[sendTorrent] path2Set: " + path2Set);
 
                         // Save checkbox
                         savePreferenceAsBoolean("pathAndLabelDialog", !(checkBoxPathAndLabelDialog.isChecked()));
