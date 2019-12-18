@@ -1029,24 +1029,29 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     protected void addVolleyRequest(JsonObjectRequest jsArrayRequest) {
 
-        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsArrayRequest);
+//        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsArrayRequest);
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueueHttps(jsArrayRequest, keystore_path, keystore_password);
 
     }
 
     protected void addVolleyRequest(JsonArrayRequest jsArrayRequest) {
 
-        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsArrayRequest);
+//        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsArrayRequest);
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueueHttps(jsArrayRequest, keystore_path, keystore_password);
 
     }
 
     protected void addVolleyRequest(StringRequest stringArrayRequest) {
 
-        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(stringArrayRequest);
+//        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(stringArrayRequest);
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueueHttps(stringArrayRequest, keystore_path, keystore_password);
 
     }
 
     protected void addVolleyRequest(CustomMultipartRequest customMultipartRequest) {
-        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(customMultipartRequest);
+//        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(customMultipartRequest);
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueueHttps(customMultipartRequest, keystore_path, keystore_password);
+
     }
 
     public interface VolleyCallback {

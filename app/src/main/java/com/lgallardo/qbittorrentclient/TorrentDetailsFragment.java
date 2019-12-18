@@ -52,6 +52,8 @@ import java.util.Map;
 
 import static com.lgallardo.qbittorrentclient.MainActivity.cookie;
 import static com.lgallardo.qbittorrentclient.MainActivity.hostname;
+import static com.lgallardo.qbittorrentclient.MainActivity.keystore_password;
+import static com.lgallardo.qbittorrentclient.MainActivity.keystore_path;
 import static com.lgallardo.qbittorrentclient.MainActivity.port;
 import static com.lgallardo.qbittorrentclient.MainActivity.protocol;
 import static com.lgallardo.qbittorrentclient.MainActivity.qb_version;
@@ -418,11 +420,11 @@ public class TorrentDetailsFragment extends Fragment {
 
     // Volley singletons
     protected void addVolleyRequest(JsonObjectRequest jsArrayRequest) {
-        VolleySingleton.getInstance(getActivity().getApplication()).addToRequestQueue(jsArrayRequest);
+        VolleySingleton.getInstance(getActivity().getApplication()).addToRequestQueueHttps(jsArrayRequest, keystore_path, keystore_password);
     }
 
     protected void addVolleyRequest(JsonArrayRequest jsArrayRequest) {
-        VolleySingleton.getInstance(getActivity().getApplication()).addToRequestQueue(jsArrayRequest);
+        VolleySingleton.getInstance(getActivity().getApplication()).addToRequestQueueHttps(jsArrayRequest, keystore_path, keystore_password);
     }
 
     // Volley methods

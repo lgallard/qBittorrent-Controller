@@ -199,11 +199,11 @@ public class NotifierService extends BroadcastReceiver {
 
     // Volley singletons
     protected void addVolleyRequest(StringRequest stringArrayRequest) {
-        VolleySingleton.getInstance(context).addToRequestQueue(stringArrayRequest);
+        VolleySingleton.getInstance(context).addToRequestQueueHttps(stringArrayRequest, keystore_path, keystore_password);
     }
 
     protected void addVolleyRequest(JsonArrayRequest jsArrayRequest) {
-        VolleySingleton.getInstance(context).addToRequestQueue(jsArrayRequest);
+        VolleySingleton.getInstance(context).addToRequestQueueHttps(jsArrayRequest, keystore_path, keystore_password);
     }
 
     // Volley methods
