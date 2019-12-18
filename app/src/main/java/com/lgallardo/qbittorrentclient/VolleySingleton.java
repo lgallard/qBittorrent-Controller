@@ -85,7 +85,9 @@ public class VolleySingleton {
 //            Log.d("Debug", "[SSLSocketFactory] requestQueue is NOT null");
 //        }
 
-        Log.d("Debug", "[SSLSocketFactory] getRequestQueueHttps");
+//        Log.d("Debug", "[SSLSocketFactory] getRequestQueueHttps");
+//        Log.d("Debug", "[SSLSocketFactory] keystore_path: " + keystore_path);
+//        Log.d("Debug", "[SSLSocketFactory] keystore_password: " + keystore_password);
 
         requestQueue = Volley.newRequestQueue(context.getApplicationContext(), new HurlStack(null, getSocketFactory(keystore_path, keystore_password)));
 
@@ -154,9 +156,8 @@ public class VolleySingleton {
 
             File localTrustStoreFile = new File(keystore_path);
 
-            Log.d("Debug", "[SSLSocketFactory] File path: " + localTrustStoreFile.getPath());
-
-            Log.d("Debug", "[SSLSocketFactory] localTrustStoreFile path: " + localTrustStoreFile.getPath());
+//            Log.d("Debug", "[SSLSocketFactory] File path: " + localTrustStoreFile.getPath());
+//            Log.d("Debug", "[SSLSocketFactory] localTrustStoreFile path: " + localTrustStoreFile.getPath());
 
 
             InputStream caInput = new FileInputStream(localTrustStoreFile);
@@ -172,13 +173,20 @@ public class VolleySingleton {
 
             KeyStore keyStore = KeyStore.getInstance("BKS");
 
+            if(keystore_password == null || keystore_password.isEmpty()){
+                keyStore.load(null, null);
 
-            keyStore.load(caInput, keystore_password.toCharArray());
-//            keyStore.setCertificateEntry("ca", ca);
+            }
+            else{
+                keyStore.load(caInput, keystore_password.toCharArray());
+            }
+
+
+            //            keyStore.setCertificateEntry("ca", ca);
 
             caInput.close();
 
-            Log.d("Debug", "[SSLSocketFactory] caInput close: " + caInput);
+//            Log.d("Debug", "[SSLSocketFactory] caInput close: " + caInput);
 
 
             HostnameVerifier hostnameVerifier = new HostnameVerifier() {
@@ -222,7 +230,7 @@ public class VolleySingleton {
 
         try {
 
-            Log.d("Debug", "[SSLSocketFactory] Return SocketFactory!");
+//            Log.d("Debug", "[SSLSocketFactory] Return SocketFactory!");
 
             SSLSocketFactory sf = sslContext.getSocketFactory();
             HttpsURLConnection.setDefaultSSLSocketFactory(sf);
@@ -231,115 +239,10 @@ public class VolleySingleton {
 
         } catch (Exception e) {
 
-            Log.d("Debug", "[SSLSocketFactory] Return null");
+//            Log.d("Debug", "[SSLSocketFactory] Return null");
             return null;
         }
     }
 
-//    private SSLSocketFactory getSocketFactory(String keystore_path, String keystore_password) {
-//
-//        Log.d("Debug", "[SSLSocketFactory] keystore_path: " + keystore_path);
-//        Log.d("Debug", "[SSLSocketFactory] keystore_password: " + keystore_password);
-//
-//
-//        CertificateFactory cf = null;
-//        FileInputStream in = null;
-//
-//        try {
-//
-//            File localTrustStoreFile = new File(keystore_path);
-//
-//            Log.d("Debug", "[SSLSocketFactory] File path: " + localTrustStoreFile.getPath());
-//
-//            Log.d("Debug", "[SSLSocketFactory] localTrustStoreFile path: " + localTrustStoreFile.getPath());
-//
-//
-//            in = new FileInputStream(localTrustStoreFile);
-//
-//            Log.d("Debug", "[SSLSocketFactory] in path: " + in.toString());
-//
-//            cf = CertificateFactory.getInstance("X.509");
-//
-////            InputStream caInput = getResources().openRawResource(R.raw.server);
-//
-//            Certificate ca = null;
-//            try {
-////                ca = cf.generateCertificate(caInput);
-//                Log.d("Debug", "[SSLSocketFactory] Generating certificate");
-//
-//                ca = cf.generateCertificate(in);
-//                Log.d("Debug", "[SSLSocketFactory] ca=" + ((X509Certificate) ca).getSubjectDN());
-//            } catch (Exception e) {
-//                Log.e("Debug", "[SSLSocketFactory] Exception: " + e.getMessage());
-//            } finally {
-////                caInput.close();
-//                in.close();
-//            }
-//
-//
-//            // TODO: This is the default keystore. Add a flow control here
-//            //  when no self-sign certificate is provided
-////            String keyStoreType = KeyStore.getDefaultType();
-////            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-////            keyStore.load(null, null);
-////            keyStore.setCertificateEntry("ca", ca);
-//
-//            KeyStore keyStore = KeyStore.getInstance("BKS");
-//            keyStore.load(in, keystore_password.toCharArray());
-//            keyStore.setCertificateEntry("ca", ca);
-//
-//            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-//            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-//            tmf.init(keyStore);
-//
-//
-//            HostnameVerifier hostnameVerifier = new HostnameVerifier() {
-//                @Override
-//                public boolean verify(String hostname, SSLSession session) {
-//
-//                    Log.d("Debug", "[SSLSocketFactory] CipherUsed" + session.getCipherSuite());
-//                    return hostname.compareTo(hostname) == 0; //The Hostname of your server
-//
-//                }
-//            };
-//
-//
-//            HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
-//            SSLContext context = null;
-//            context = SSLContext.getInstance("TLS");
-//
-//            context.init(null, tmf.getTrustManagers(), null);
-//            HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
-//
-//
-//            // check
-//            TrustManager[] wrappedTrustManagers = getWrappedTrustManagers(tmf.getTrustManagers());
-//            SSLContext sslContext = SSLContext.getInstance("TLS");
-//            sslContext.init(null, wrappedTrustManagers, null);
-//
-//            SSLSocketFactory sf = context.getSocketFactory();
-//
-//
-////            return sf;
-//
-//            return sslContext.getSocketFactory();
-//
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        } catch (KeyStoreException e) {
-//            e.printStackTrace();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (KeyManagementException e) {
-//            e.printStackTrace();
-//        } catch (java.security.cert.CertificateException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
-//
 
 }
