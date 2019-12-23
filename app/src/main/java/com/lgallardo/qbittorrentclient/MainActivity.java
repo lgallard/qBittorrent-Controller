@@ -282,9 +282,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
     public static DrawerLayout drawerLayout;
     public static ActionBarDrawerToggle drawerToggle;
-    public static final int DRAWER_ITEM_ACTIONS = 1;
-    public static final int DRAWER_ITEM_SERVERS = 3;
-    public static final int DRAWER_CATEGORY = 5;
+    public static final int DRAWER_ITEM_ACTION = 1;
+    public static final int DRAWER_ITEM_SERVER = 3;
+    public static final int DRAWER_SERVERS = 5;
     public static final int DRAWER_LABEL = 6;
 //    public static final int DRAWER_LABEL_CATEGORY = 8;
 
@@ -463,8 +463,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         ArrayList<DrawerItem> settingsItems = new ArrayList<>();
 
 
-        // Add server category
-        serverItems.add(new DrawerItem(R.drawable.ic_drawer_servers, getResources().getString(R.string.drawer_servers_category), DRAWER_CATEGORY, false, null));
+        // Add server
+        serverItems.add(new DrawerItem(R.drawable.ic_drawer_servers, getResources().getString(R.string.drawer_servers_category), DRAWER_SERVERS, false, null));
 
         // Server items
         int currentServerValue;
@@ -476,35 +476,35 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
         for (int i = 0; i < navigationDrawerServerItems.length; i++) {
-            serverItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, navigationDrawerServerItems[i], DRAWER_ITEM_SERVERS, ((i + 1) == currentServerValue), "changeCurrentServer"));
+            serverItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, navigationDrawerServerItems[i], DRAWER_ITEM_SERVER, ((i + 1) == currentServerValue), "changeCurrentServer"));
         }
 
         // Add actions
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_all, navigationDrawerItemTitles[0], DRAWER_ITEM_ACTIONS, lastState.equals("all"), "refreshAll"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_downloading, navigationDrawerItemTitles[1], DRAWER_ITEM_ACTIONS, lastState.equals("downloading"), "refreshDownloading"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_completed, navigationDrawerItemTitles[2], DRAWER_ITEM_ACTIONS, lastState.equals("completed"), "refreshCompleted"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_seeding, navigationDrawerItemTitles[3], DRAWER_ITEM_ACTIONS, lastState.equals("seeding"), "refreshSeeding"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_paused, navigationDrawerItemTitles[4], DRAWER_ITEM_ACTIONS, lastState.equals("pause"), "refreshPaused"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_active, navigationDrawerItemTitles[5], DRAWER_ITEM_ACTIONS, lastState.equals("active"), "refreshActive"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[6], DRAWER_ITEM_ACTIONS, lastState.equals("inactive"), "refreshInactive"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_all, navigationDrawerItemTitles[0], DRAWER_ITEM_ACTION, lastState.equals("all"), "refreshAll"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_downloading, navigationDrawerItemTitles[1], DRAWER_ITEM_ACTION, lastState.equals("downloading"), "refreshDownloading"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_completed, navigationDrawerItemTitles[2], DRAWER_ITEM_ACTION, lastState.equals("completed"), "refreshCompleted"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_seeding, navigationDrawerItemTitles[3], DRAWER_ITEM_ACTION, lastState.equals("seeding"), "refreshSeeding"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_paused, navigationDrawerItemTitles[4], DRAWER_ITEM_ACTION, lastState.equals("pause"), "refreshPaused"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_active, navigationDrawerItemTitles[5], DRAWER_ITEM_ACTION, lastState.equals("active"), "refreshActive"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[6], DRAWER_ITEM_ACTION, lastState.equals("inactive"), "refreshInactive"));
 
         // Add categories
 
         // Add settings actions
-        //settingsItems.add(new DrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTIONS, false, "openOptions"));
-        settingsItems.add(new DrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[8], DRAWER_ITEM_ACTIONS, false, "openSettings"));
+        //settingsItems.add(new DrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTION, false, "openOptions"));
+        settingsItems.add(new DrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[8], DRAWER_ITEM_ACTION, false, "openSettings"));
 
         if (packageName.equals("com.lgallardo.qbittorrentclient")) {
-            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTIONS, false, "getPro"));
-            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[10], DRAWER_ITEM_ACTIONS, false, "openHelp"));
+            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTION, false, "getPro"));
+            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[10], DRAWER_ITEM_ACTION, false, "openHelp"));
         } else {
-            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTIONS, false, "openHelp"));
+            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTION, false, "openHelp"));
         }
 
 
         rAdapter = new DrawerItemRecyclerViewAdapter(getApplicationContext(), this, serverItems, actionItems, settingsItems, null);
         rAdapter.notifyDataSetChanged();
-        
+
         mRecyclerView.setAdapter(rAdapter);
 
         mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
@@ -853,7 +853,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 refresh("seeding", currentCategory);
                 break;
             case 4:
-                refresh("pause", currentCategory);
+                refresh("paused", currentCategory);
                 break;
             case 5:
                 refresh("active", currentCategory);
@@ -1016,7 +1016,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void refresh() {
 
-        refresh("all", currentCategory);
+        refresh(currentState, currentCategory);
 
     }
 
@@ -2430,15 +2430,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-
                 if (path2Set != null && path2Set.length() != 0) {
                     params.put("savepath", path2Set);
                 }
-
                 if (category2Set != null && category2Set.length() != 0) {
                     params.put("category", category2Set);
                 }
-
                 return params;
             }
         };
@@ -2690,11 +2687,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Get all torrents
-    private List getTorrentListV(final String state, final TorrentsListCallBack callback) {
+    private List getTorrentListV(final String state, final String category, final TorrentsListCallBack callback) {
 
         final List<Torrent> torrents = new ArrayList<>();
 
         String url = "";
+        String categoryEncoded = "";
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && !subfolder.equals("")) {
@@ -2704,10 +2702,73 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         url = protocol + "://" + hostname + ":" + port + url;
 
         // Command
-        url = url + "/api/v2/torrents/info?filter=" + state;
+//        url = url + "/api/v2/torrents/info?filter=" + state;
+        url = url + "/api/v2/torrents/info";
+
+        url = url + "?filter=" + state;
+
+
+        if (category != null && !category.equals(getResources().getString(R.string.drawer_category_all))) {
+
+
+//            if (category.equals(getResources().getString(R.string.drawer_category_uncategorized))) {
+//                categoryEncoded = "";
+//                url = url + "&category=" + categoryEncoded;
+//            }
+
+//            if (!categories.contains(category)) {
+//                categoryEncoded = getResources().getString(R.string.drawer_category_all);
+//            }
+
+            saveLastCategory(category);
+
+            try {
+
+//                if (!category.equals(getResources().getString(R.string.drawer_category_all)) && !category.equals(getResources().getString(R.string.drawer_category_uncategorized))) {
+
+                if (!category.equals(getResources().getString(R.string.drawer_category_all))) {
+
+                     if (category.equals(getResources().getString(R.string.drawer_category_uncategorized))){
+                         categoryEncoded = Uri.encode("http://www.dummy.org?category=" );
+                     }
+                     else {
+                         // I used a dummy URL to encode category
+                         categoryEncoded = Uri.encode("http://www.dummy.org?category=" + category);
+                     }
+
+                    // then I got the the encoded category
+                    categoryEncoded = categoryEncoded.substring(categoryEncoded.indexOf("%3D") + 3);
+
+                    // to build the url and pass it to category param
+                    url = url + "&category=" + categoryEncoded;
+                }
+
+            } catch (Exception e) {
+                Log.e("Debug", "[getTorrentListV] Category Exception: " + e.toString());
+            }
+
+        }
+
+//        if (category != null && category.length() != 0) {
+//
+//            // I used a dummy URL to encode category
+//            String categoryEncoded = Uri.encode("http://www.dummy.org?category=" + category);
+//
+//            // then I got the the encoded category
+//            categoryEncoded = categoryEncoded.substring(categoryEncoded.indexOf("%3D") + 3);
+//
+//            url = url + "&category="+categoryEncoded;
+//
+//        }
 
 //        Log.d("Debug: ", "[getTorrentListV] URL: " + url);
 //        Log.d("Debug: ", "[getTorrentListV] cookies: " + cookie);
+
+        Log.d("Debug: ", "[getTorrentListV] category: " + category);
+        Log.d("Debug: ", "[getTorrentListV] categoryEncoded: " + categoryEncoded);
+        Log.d("Debug: ", "[getTorrentListV] url: " + url);
+
+//        Log.d("Debug: ", "[getTorrentListV] filter: " + state);
 
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -2780,6 +2841,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 params.put("Cookie", cookie);
                 return params;
             }
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+//                params.put("filter", state);
+//                params.put("category", "test");
+//                if (category != null && category.length() != 0) {
+//                    params.put("category", category);
+//                }
+                return params;
+            }
         };
 
         // Add request to te queue
@@ -2843,7 +2913,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 savePreferenceAsString("qbCookie", result);
 
                 // Test
-                getTorrentList(lastState);
+//                getTorrentList(lastState, lastCategory);
 
 
             }
@@ -3330,9 +3400,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    public void getTorrentList(String state) {
+    public void getTorrentList(String state, String category) {
 
-        getTorrentListV(state, new TorrentsListCallBack() {
+        getTorrentListV(state, category, new TorrentsListCallBack() {
             @Override
             public void onSuccess(List<Torrent> torrents) {
 
@@ -3435,8 +3505,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 for (int i = 0; i < torrents.size(); i++) {
 
-                    if (!categories.contains(category)) {
+                    // Get label
+                    category = torrents.get(i).getCategory();
 
+
+                    if (!categories.contains(category)) {
                         // Add category
                         categories.add(category);
                     }
@@ -3494,7 +3567,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 // Set uncategorized first
 
                 // Add category
-                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_categories, getResources().getString(R.string.drawer_category_categories), DRAWER_CATEGORY, true, "category"));
+                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_categories, getResources().getString(R.string.drawer_category_categories), DRAWER_SERVERS, true, "category"));
 
                 // Add All
                 category = getResources().getString(R.string.drawer_category_all);
@@ -3517,6 +3590,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         if (category != null && !category.equals("")) {
                             categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_LABEL, currentCategory.equals(category), "category"));
+                            Log.d("Debug", "[getTorrentList] category: " + category);
                         }
                     }
 
@@ -3854,8 +3928,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
 
-        urlPrefix = "api/v2/torrents/info?filter=" + state;
-        params[0] = "api/v2/torrents/info?filter=" + state;
+//        urlPrefix = "api/v2/torrents/info?filter=" + state;
+//        params[0] = "api/v2/torrents/info?filter=" + state;
 
 
         // Get API version in case it hadn't been gotten before
@@ -3863,43 +3937,45 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         //getApi();
         getCookie();
 
+        Log.d("Debug", "[refresh] category: " + category);
 
-        // Category
-        if (category != null && !category.equals(getResources().getString(R.string.drawer_category_all))) {
+//        TODO: Delete old code for category (label)
+//        // Category
+//        if (category != null && !category.equals(getResources().getString(R.string.drawer_category_all))) {
+//
+//
+//            if (category.equals(getResources().getString(R.string.drawer_category_uncategorized))) {
+//                category = "";
+//            }
+//
+//            if (!categories.contains(category)) {
+//                category = getResources().getString(R.string.drawer_category_all);
+//            }
+//
+//            saveLastCategory(category);
+//
+//            try {
+//
+//                if (!category.equals(getResources().getString(R.string.drawer_category_all))) {
+//
+//                    // I used a dummy URL to encode category
+//                    String categoryEncoded = Uri.encode("http://www.dummy.org?category=" + category);
+//
+//                    // then I got the the encoded category
+//                    categoryEncoded = categoryEncoded.substring(categoryEncoded.indexOf("%3D") + 3);
+//
+//                    // to build the url and pass it to params[0]
+//                    params[0] = params[0] + "&category=" + categoryEncoded;
+//                }
+//
+//            } catch (Exception e) {
+//                Log.e("Debug", "[refresh] Category Exception: " + e.toString());
+//            }
+//
+//
+//        }
 
-
-            if (category.equals(getResources().getString(R.string.drawer_category_uncategorized))) {
-                category = "";
-            }
-
-            if (!categories.contains(category)) {
-                category = getResources().getString(R.string.drawer_category_all);
-            }
-
-            saveLastCategory(category);
-
-            try {
-
-                if (!category.equals(getResources().getString(R.string.drawer_category_all))) {
-
-                    // I used a dummy URL to encode category
-                    String categoryEncoded = Uri.encode("http://www.dummy.org?category=" + category);
-
-                    // then I got the the encoded category
-                    categoryEncoded = categoryEncoded.substring(categoryEncoded.indexOf("%3D") + 3);
-
-                    // to build the url and pass it to params[0]
-                    params[0] = params[0] + "&category=" + categoryEncoded;
-                }
-
-            } catch (Exception e) {
-                Log.e("Debug", "[Main] Category Exception: " + e.toString());
-            }
-
-
-        }
-
-        params[1] = state;
+//        params[1] = state;
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -3929,21 +4005,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         httpStatusCode = 0;
                         disableRefreshSwipeLayout();
                     } else {
-
                         getCookie();
-
                     }
 
-
                 } else {
-
 
                     if (connection403ErrorCounter > 1) {
 
                         if (cookie != null && !cookie.equals("")) {
                             // Only toasts the message if there is not a cookie set before
                             toastText(R.string.error403);
-
                             cookie = null;
                         }
 
@@ -3955,7 +4026,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         //qbTask = new qBittorrentTask().execute(params);
 
                         // Test
-                        getTorrentList(state);
+                        getTorrentList(state, category);
 
                         // Check if  alternative speed limit is set
                         getAlternativeSpeedLimitsEnabled();
@@ -4160,9 +4231,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // permission was granted, yay! Do the
         // contacts-related task you need to do.
 
-        Log.d("Debug", "[handleUrlTorrent] urlTorrent: " + urlTorrent);
-
-        Log.d("Debug", "[handleUrlTorrent] category2Set: " + category2Set);
+//        Log.d("Debug", "[handleUrlTorrent] urlTorrent: " + urlTorrent);
+//        Log.d("Debug", "[handleUrlTorrent] category2Set: " + category2Set);
 
         // if there is not a path to the file, open de file picker
         if (urlTorrent == null) {
@@ -5884,8 +5954,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         }
 
 
-                        Log.d("Debug", "[sendTorrent] path2Set: " + path2Set);
-                        Log.d("Debug", "[sendTorrent] category2Set: " + category2Set);
+//                        Log.d("Debug", "[sendTorrent] path2Set: " + path2Set);
+//                        Log.d("Debug", "[sendTorrent] category2Set: " + category2Set);
 
                         // Save checkbox
                         savePreferenceAsBoolean("pathAndCategoryDialog", !(checkBoxPathAndCategoryDialog.isChecked()));
