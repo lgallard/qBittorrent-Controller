@@ -139,7 +139,7 @@ public class GeneralInfoRecyclerViewAdapter extends RecyclerView.Adapter<General
 
         GeneralInfoItem item = items.get(position);
 
-//        Log.d("Debug", "onBindViewHolder - item.label: " + item.getLabel());
+//        Log.d("Debug", "onBindViewHolder - item.category: " + item.getLabel());
 //        Log.d("Debug", "onBindViewHolder - item.value: " + item.getValue());
 
 

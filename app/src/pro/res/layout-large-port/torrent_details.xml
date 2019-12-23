@@ -338,10 +338,10 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/torrent_details_label" />
+                        android:text="@string/torrent_details_category" />
 
                     <TextView
-                        android:id="@+id/torrentLabel"
+                        android:id="@+id/torrentCategory"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

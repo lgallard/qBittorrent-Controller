@@ -64,7 +64,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private Preference keystore_path;
     private EditTextPreference keystore_password;
 
-    private CheckBoxPreference pathAndLabelDialog;
+    private CheckBoxPreference pathAndCategoryDialog;
 
 
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
@@ -109,23 +109,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         getQBittorrentServerValues(currentServer.getValue());
 
 
-        // savepath and label (category) checkbox
-        pathAndLabelDialog = (CheckBoxPreference) findPreference("pathAndLabelDialog");
+        // savepath and category (category) pathAndCategoryDialogcheckbox
+        pathAndCategoryDialog = (CheckBoxPreference) findPreference("pathAndCategoryDialog");
 
 
-        // Enable savepath and label preference if API7+ (qBittorrent 3.3.1+)
-        pathAndLabelDialog.setEnabled(true);
+        // Enable savepath and category preference
+        pathAndCategoryDialog.setEnabled(true);
 
-        try {
-            // TODO: Check when this changed (qb_api X.Y.Z )
-            if (MainActivity.qb_api >= 7) {
-                pathAndLabelDialog.setEnabled(true);
-            } else {
-                pathAndLabelDialog.setEnabled(false);
-            }
-
-        } catch (Exception e) {
-        }
 
 
         Preference pref = findPreference("currentServer");

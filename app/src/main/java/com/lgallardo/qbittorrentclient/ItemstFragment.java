@@ -138,10 +138,10 @@ public class ItemstFragment extends ListFragment {
                     menu.findItem(R.id.action_first_last_piece_prio).setVisible(true);
                     menu.findItem(R.id.action_sequential_download).setVisible(true);
 
-                    // TODO: set label/category visible after implement it
+                    // TODO: set category/category visible after implement it
                     menu.findItem(R.id.action_label_menu).setVisible(false);
-                    menu.findItem(R.id.action_set_label).setVisible(false);
-                    menu.findItem(R.id.action_delete_label).setVisible(false);
+                    menu.findItem(R.id.action_set_category).setVisible(false);
+                    menu.findItem(R.id.action_delete_category).setVisible(false);
 
                     return true;
                 }
@@ -420,7 +420,7 @@ public class ItemstFragment extends ListFragment {
                             mode.finish();
 
                             return true;
-                        case R.id.action_set_label:
+                        case R.id.action_set_category:
 
                             m.setCategoryDialog(hashes);
 
@@ -435,7 +435,7 @@ public class ItemstFragment extends ListFragment {
 
                             return true;
 
-                        case R.id.action_delete_label:
+                        case R.id.action_delete_category:
 
                             m.setCategory(hashes, " ");
 
@@ -663,10 +663,10 @@ public class ItemstFragment extends ListFragment {
                 menu.findItem(R.id.action_add_tracker).setVisible(false);
             }
 
-            if (menu.findItem(R.id.action_set_label) != null) {
+            if (menu.findItem(R.id.action_set_category) != null) {
                 menu.findItem(R.id.action_label_menu).setVisible(false);
-                menu.findItem(R.id.action_set_label).setVisible(false);
-                menu.findItem(R.id.action_delete_label).setVisible(false);
+                menu.findItem(R.id.action_set_category).setVisible(false);
+                menu.findItem(R.id.action_delete_category).setVisible(false);
 
             }
 

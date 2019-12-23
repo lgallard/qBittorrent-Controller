@@ -140,7 +140,7 @@ class Torrent {
 
 //    public Torrent(String name, String size, String state, String hash,
 //                   String info, String ratio, String progress, String leechs,
-//                   String seeds, String priority, String eta, String dlspeed, String upspeed, boolean sequentialDownload, boolean firstLastPiecePrio, String addedOn, String completionOn, String label) {
+//                   String seeds, String priority, String eta, String dlspeed, String upspeed, boolean sequentialDownload, boolean firstLastPiecePrio, String addedOn, String completionOn, String category) {
 //        this.name = name;
 //        this.size = size;
 //        this.state = state;
@@ -158,7 +158,7 @@ class Torrent {
 //        this.firstLastPiecePrio = firstLastPiecePrio;
 //        this.addedOn = addedOn;
 //        this.completionOn = completionOn;
-//        this.label = label;
+//        this.category = category;
 //
 //    }
 

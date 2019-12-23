@@ -48,7 +48,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
     public static ArrayList<DrawerItem> serverItems;
     public static ArrayList<DrawerItem> actionItems;
     public static ArrayList<DrawerItem> settingsItems;
-    public static ArrayList<DrawerItem> labelItems;
+    public static ArrayList<DrawerItem> categoryItems;
 
     public static int actionPosition = 0;
 
@@ -105,7 +105,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick - serverItems size: " + DrawerItemRecyclerViewAdapter.serverItems.size());
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick - actionItems size: " + DrawerItemRecyclerViewAdapter.actionItems.size());
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick - settingsItems size: " + DrawerItemRecyclerViewAdapter.settingsItems.size());
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick - labelItems size: " + DrawerItemRecyclerViewAdapter.labelItems.size());
+//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick - categoryItems size: " + DrawerItemRecyclerViewAdapter.categoryItems.size());
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick - items size: " + DrawerItemRecyclerViewAdapter.items.size());
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - offSetPosition: " + (drawerOffset));
 //            Log.d("Debug", "DrawerItemRecyclerViewAdapter - OnClick() - getLayoutPosition: " + getLayoutPosition());
@@ -410,8 +410,8 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                     mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
                 }
 
-                // Clicked on label category
-                if (drawerItem.getAction().equals("labelCategory")) {
+                // Clicked on category
+                if (drawerItem.getAction().equals("category")) {
 
                     if (drawerItem.isActive()) {
 
@@ -420,8 +420,8 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                         drawerItem.setActive(false);
                         items.set(getLayoutPosition() - 1, drawerItem);
 
-                        // Remove all label items
-                        removeLabelItems();
+                        // Remove all category items
+                        removeCategoryItems();
 
 
                     } else {
@@ -431,10 +431,10 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
                         items.set(getLayoutPosition() - 1, drawerItem);
 
 
-                        // Insert all label items
-                        for (int i = 0; i < labelItems.size(); i++) {
+                        // Insert all category items
+                        for (int i = 0; i < categoryItems.size(); i++) {
 
-                            DrawerItem item = labelItems.get(i);
+                            DrawerItem item = categoryItems.get(i);
 
 
                             if (item.getType() == TYPE_LABEL || item.getType() == TYPE_LABEL_ACTIVE) {
@@ -450,16 +450,16 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
                 }
 
-                // Clicked on label
-                if (drawerItem.getAction().equals("label")) {
+                // Clicked on category
+                if (drawerItem.getAction().equals("category")) {
 
 
-                    if (drawerItem.name.equals(mainActivity.getResources().getString(R.string.drawer_label_all))) {
-                        mainActivity.saveLastLabel(mainActivity.getResources().getString(R.string.drawer_label_all));
+                    if (drawerItem.name.equals(mainActivity.getResources().getString(R.string.drawer_category_all))) {
+                        mainActivity.saveLastCategory(mainActivity.getResources().getString(R.string.drawer_category_all));
                     } else {
-                        mainActivity.saveLastLabel(drawerItem.name);
+                        mainActivity.saveLastCategory(drawerItem.name);
                     }
-//                    Log.d("Debug", "label: " + drawerItem.name);
+//                    Log.d("Debug", "category: " + drawerItem.name);
 
                     mainActivity.refreshCurrent();
 
@@ -490,7 +490,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
     }
 
 
-    DrawerItemRecyclerViewAdapter(Context context, MainActivity mainActivity, ArrayList<DrawerItem> serverItems, ArrayList<DrawerItem> actionItems, ArrayList<DrawerItem> settingsItems, ArrayList<DrawerItem> labelItems) {
+    DrawerItemRecyclerViewAdapter(Context context, MainActivity mainActivity, ArrayList<DrawerItem> serverItems, ArrayList<DrawerItem> actionItems, ArrayList<DrawerItem> settingsItems, ArrayList<DrawerItem> categoryItems) {
 
         this.mainActivity = mainActivity;
         this.context = context;
@@ -501,7 +501,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         DrawerItemRecyclerViewAdapter.serverItems = serverItems;
         DrawerItemRecyclerViewAdapter.actionItems = actionItems;
         DrawerItemRecyclerViewAdapter.settingsItems = settingsItems;
-        DrawerItemRecyclerViewAdapter.labelItems = labelItems;
+        DrawerItemRecyclerViewAdapter.categoryItems = categoryItems;
 
         DrawerItemRecyclerViewAdapter.items = new ArrayList<DrawerItem>();
 
@@ -510,16 +510,16 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         DrawerItemRecyclerViewAdapter.items.addAll(actionItems);
         DrawerItemRecyclerViewAdapter.items.addAll(settingsItems);
 
-        if (labelItems != null) {
-            DrawerItemRecyclerViewAdapter.items.addAll(labelItems);
+        if (categoryItems != null) {
+            DrawerItemRecyclerViewAdapter.items.addAll(categoryItems);
         } else {
-            DrawerItemRecyclerViewAdapter.labelItems = new ArrayList<DrawerItem>();
+            DrawerItemRecyclerViewAdapter.categoryItems = new ArrayList<DrawerItem>();
         }
 
 //        Log.d("Debug", "DrawerItemRecyclerViewAdapter - Constructor - serverItems size: " + DrawerItemRecyclerViewAdapter.serverItems.size());
 //        Log.d("Debug", "DrawerItemRecyclerViewAdapter - Constructor - actionItems size: " + DrawerItemRecyclerViewAdapter.actionItems.size());
 //        Log.d("Debug", "DrawerItemRecyclerViewAdapter - Constructor - settingsItems size: " + DrawerItemRecyclerViewAdapter.settingsItems.size());
-//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - Constructor - labelItems size: " + DrawerItemRecyclerViewAdapter.labelItems.size());
+//        Log.d("Debug", "DrawerItemRecyclerViewAdapter - Constructor - categoryItems size: " + DrawerItemRecyclerViewAdapter.categoryItems.size());
 //        Log.d("Debug", "DrawerItemRecyclerViewAdapter - Constructor - items size: " + DrawerItemRecyclerViewAdapter.items.size());
 
         drawerOffset = 1;
@@ -583,7 +583,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
     }
 
-    private void removeLabelItems() {
+    private void removeCategoryItems() {
         // Remove all server items
         ListIterator iterator = items.listIterator();
 
@@ -672,7 +672,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         mainActivity.changeCurrentServer();
     }
 
-    public void refreshDrawer(ArrayList<DrawerItem> serverItems, ArrayList<DrawerItem> actionItems, ArrayList<DrawerItem> settingsItems, ArrayList<DrawerItem> labelItems) {
+    public void refreshDrawer(ArrayList<DrawerItem> serverItems, ArrayList<DrawerItem> actionItems, ArrayList<DrawerItem> settingsItems, ArrayList<DrawerItem> categoryItems) {
 
         DrawerItemRecyclerViewAdapter.serverItems = serverItems;
         DrawerItemRecyclerViewAdapter.actionItems = actionItems;
@@ -686,8 +686,8 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         DrawerItemRecyclerViewAdapter.items.addAll(actionItems);
         DrawerItemRecyclerViewAdapter.items.addAll(settingsItems);
 
-        if (labelItems != null) {
-            DrawerItemRecyclerViewAdapter.items.addAll(labelItems);
+        if (categoryItems != null) {
+            DrawerItemRecyclerViewAdapter.items.addAll(categoryItems);
         }
 
 
@@ -707,7 +707,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         DrawerItemRecyclerViewAdapter.items.addAll(serverItems);
         DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.actionItems);
         DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.settingsItems);
-        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.labelItems);
+        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.categoryItems);
 
         // Close server category
         removeServerItems();
@@ -716,9 +716,9 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
     }
 
-    public void refreshDrawerLabels(ArrayList<DrawerItem> labelItems) {
+    public void refreshDrawerCategories(ArrayList<DrawerItem> categoryItems) {
 
-        DrawerItemRecyclerViewAdapter.labelItems = labelItems;
+        DrawerItemRecyclerViewAdapter.categoryItems = categoryItems;
 
 
         DrawerItemRecyclerViewAdapter.items = new ArrayList<DrawerItem>();
@@ -727,7 +727,7 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.serverItems);
         DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.actionItems);
         DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.settingsItems);
-        DrawerItemRecyclerViewAdapter.items.addAll(labelItems);
+        DrawerItemRecyclerViewAdapter.items.addAll(categoryItems);
 
         // Close server category
         removeServerItems();
@@ -869,15 +869,15 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
             return TYPE_CATEGORY;
         }
 
-        if (items.get(position - 1).getType() == TYPE_LABEL_CATEGORY && !(items.get(position - 1).isActive())) {
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_LABEL_CATEGORY");
-            return TYPE_LABEL_CATEGORY;
-        }
-
-        if (items.get(position - 1).getType() == TYPE_LABEL_CATEGORY && items.get(position - 1).isActive()) {
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_LABEL_CATEGORY");
-            return TYPE_LABEL_CATEGORY;
-        }
+//        if (items.get(position - 1).getType() == TYPE_LABEL_CATEGORY && !(items.get(position - 1).isActive())) {
+////            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_LABEL_CATEGORY");
+//            return TYPE_LABEL_CATEGORY;
+//        }
+//
+//        if (items.get(position - 1).getType() == TYPE_LABEL_CATEGORY && items.get(position - 1).isActive()) {
+////            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_LABEL_CATEGORY");
+//            return TYPE_LABEL_CATEGORY;
+//        }
 
 
         if (items.get(position - 1).getType() == TYPE_SERVER && !(items.get(position - 1).isActive())) {
@@ -891,15 +891,15 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         }
 
 
-        if (items.get(position - 1).getType() == TYPE_LABEL && !(items.get(position - 1).isActive())) {
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_LABEL");
-            return TYPE_LABEL;
-        }
-
-        if (items.get(position - 1).getType() == TYPE_LABEL && items.get(position - 1).isActive()) {
-//            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_LABEL_ACTIVE");
-            return TYPE_LABEL_ACTIVE;
-        }
+//        if (items.get(position - 1).getType() == TYPE_LABEL && !(items.get(position - 1).isActive())) {
+////            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_LABEL");
+//            return TYPE_LABEL;
+//        }
+//
+//        if (items.get(position - 1).getType() == TYPE_LABEL && items.get(position - 1).isActive()) {
+////            Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_LABEL_ACTIVE");
+//            return TYPE_LABEL_ACTIVE;
+//        }
 
         // Default
 //        Log.d("Debug", "DrawerItemRecyclerViewAdapter - TYPE_ITEM");

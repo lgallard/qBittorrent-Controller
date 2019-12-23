@@ -253,20 +253,20 @@
     <string name="sortby_menu_date">Data...</string>
     <string name="torrent_details_addedon">Aggiunto il:</string>
     <string name="torrent_details_completedon">Completato nel:</string>
-    <string name="drawer_label_labels">Etichette</string>
-    <string name="drawer_label_all">Tutto</string>
-    <string name="drawer_label_unlabeled">Senza etichetta</string>
-    <string name="torrent_details_label">Etichetta:</string>
-    <string name="torrent_label_menu">Etichetta...</string>
+    <string name="drawer_category_categories">Etichette</string>
+    <string name="drawer_category_all">Tutto</string>
+    <string name="drawer_category_uncategorized">Senza categoria</string>
+    <string name="torrent_details_category">Categoria:</string>
+    <string name="torrent_category_menu">Categoria...</string>
     <string name="torrentsApplyingChange">Applicando il cambiamento!</string>
-    <string name="action_delete_label">Eliminare l\'etichetta</string>
-    <string name="action_set_label">Imposta l\'etichetta</string>
+    <string name="action_delete_category">Eliminare l\'categoria</string>
+    <string name="action_set_category">Imposta l\'categoria</string>
     <string name="action_add_tracker">Aggiungere tracker</string>
     <string name="help_libraries">Software utilizzato:</string>
     <string name="action_add_url">Aggiungere link torrent</string>
     <string name="action_add_file">Aggiungere torrent name</string>
     <string name="pathAndLabelDialogText">Non mostrare più questa finestra</string>
-    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Salva percorso ed etichetta della finestra di dialogo</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Salva percorso ed categoria della finestra di dialogo</string>
     <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Abilita salvataggio del percorso e della finestra</string>
 
 </resources>

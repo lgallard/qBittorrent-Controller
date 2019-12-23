@@ -196,7 +196,7 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="pathAndLabelDialog"
+            android:key="pathAndCategoryDialog"
             android:summary="@string/settings_qbittorrent_pathAndLabelDialog_dialog_sumary"
             android:title="@string/settings_qbittorrent_pathAndLabelDialog_dialog_title" />
 

@@ -158,10 +158,10 @@ public class AboutFragment extends Fragment {
                 menu.findItem(R.id.action_add_tracker).setVisible(false);
             }
 
-            if (menu.findItem(R.id.action_set_label) != null) {
+            if (menu.findItem(R.id.action_set_category) != null) {
                 menu.findItem(R.id.action_label_menu).setVisible(false);
-                menu.findItem(R.id.action_set_label).setVisible(false);
-                menu.findItem(R.id.action_delete_label).setVisible(false);
+                menu.findItem(R.id.action_set_category).setVisible(false);
+                menu.findItem(R.id.action_delete_category).setVisible(false);
             }
 
 
