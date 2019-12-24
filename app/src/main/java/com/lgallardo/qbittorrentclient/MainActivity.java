@@ -361,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     public static String path2Set;
     public static String category2Set;
-    protected static boolean pathAndCategoryDialog = false;
+    protected static boolean pathAndCategoryDialog = true;
 
 
     private Toast toast;
@@ -3576,8 +3576,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_LABEL, (currentCategory.equals(category) || !categories.contains(currentCategory) && !currentCategory.equals(getResources().getString(R.string.drawer_category_uncategorized))), "category"));
 
                 // Add uncategorized
-                category = getResources().getString(R.string.drawer_category_uncategorized);
-                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_LABEL, currentCategory.equals(category) || currentCategory.equals(""), "category"));
+                // TODO: Uncomment to enable uncategorized item
+//                category = getResources().getString(R.string.drawer_category_uncategorized);
+//                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_LABEL, currentCategory.equals(category) || currentCategory.equals(""), "category"));
 
 
                 if (categories != null && !(categories.contains(null))) {
@@ -5592,7 +5593,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         path_history = sharedPrefs.getStringSet("path_history", new HashSet<String>());
         category_history = sharedPrefs.getStringSet("category_history", new HashSet<String>());
 
-        pathAndCategoryDialog = sharedPrefs.getBoolean("pathAndCategoryDialog", false);
+        pathAndCategoryDialog = sharedPrefs.getBoolean("pathAndCategoryDialog", true);
 
     }
 
