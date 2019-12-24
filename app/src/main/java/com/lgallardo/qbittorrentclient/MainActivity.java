@@ -1191,7 +1191,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "[getCookieV] Response: " + response);
+//                        Log.d("Debug", "[getCookieV] Response: " + response);
                         //Log.d("Debug", "headers: " + CustomStringRequest.headers);
 
                         JSONObject jsonObject = null;
@@ -1208,23 +1208,23 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         String cookieString = null;
 
                         try {
-                            Log.d("Debug", "[getCookieV] JSONObject: " + jsonObject.toString());
+//                            Log.d("Debug", "[getCookieV] JSONObject: " + jsonObject.toString());
                             customObjectResult = gson.fromJson(jsonObject.toString(), CustomObjectResult.class);
 
-                            Log.d("Debug", "[getCookieV] DATA?: " + customObjectResult.getData());
-                            Log.d("Debug", "[getCookieV] HEADERS?: " + customObjectResult.getHeaders());
+//                            Log.d("Debug", "[getCookieV] DATA?: " + customObjectResult.getData());
+//                            Log.d("Debug", "[getCookieV] HEADERS?: " + customObjectResult.getHeaders());
 
                             // Get Headers
                             String headers = customObjectResult.getHeaders();
 
 
-                            Log.d("Debug", "[getCookieV] Headers: " + headers);
+//                            Log.d("Debug", "[getCookieV] Headers: " + headers);
 
                             // Get set-cookie from headers
                             cookieString = headers.split("set-cookie=")[1].split(";")[0];
 
 
-                            Log.d("Debug", "[getCookieV] set-cookie: " + cookieString);
+//                            Log.d("Debug", "[getCookieV] set-cookie: " + cookieString);
 
 
                         } catch (Exception e) {
@@ -1245,18 +1245,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Log.d("Debug", "[getCookieV] Error in JSON response: " + error.getMessage());
+//                        Log.d("Debug", "[getCookieV] Error in JSON response: " + error.getMessage());
 
                         callback.onSuccess("");
 
                         NetworkResponse networkResponse = error.networkResponse;
 
                         if (networkResponse != null) {
-                            Log.d("Debug", "[getCookieV] statusCode: " + networkResponse.statusCode);
+//                            Log.d("Debug", "[getCookieV] statusCode: " + networkResponse.statusCode);
 
 
                             if (networkResponse.statusCode == 403) {
-                                Log.d("Debug", "[getCookieV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
+//                                Log.d("Debug", "[getCookieV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
 
                                 Toast.makeText(getApplicationContext(), "User's IP is banned for too many failed login attempts!", Toast.LENGTH_SHORT).show();
 
@@ -1613,7 +1613,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         postParams.put("hashes", hashes);
         postParams.put("deleteFiles", "true");
 
-        Log.d("Debug", "URL: " + url);
+//        Log.d("Debug", "URL: " + url);
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2193,7 +2193,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "[setCategory] response: " + response);
+//                        Log.d("Debug", "[setCategory] response: " + response);
 
                         // Return value
                         callback.onSuccess("");
@@ -2285,7 +2285,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private void addTorrent(final String hashes, final String path2Set, final String category2Set, final VolleyCallback callback) {
 
 //        Log.d("Debug", "[addTorrent] path2set " + path2Set);
-        Log.d("Debug", "[addTorrent] category2Set " + category2Set);
+//        Log.d("Debug", "[addTorrent] category2Set " + category2Set);
 
         String boundary = "";
 
@@ -2764,9 +2764,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //        Log.d("Debug: ", "[getTorrentListV] URL: " + url);
 //        Log.d("Debug: ", "[getTorrentListV] cookies: " + cookie);
 
-        Log.d("Debug: ", "[getTorrentListV] category: " + category);
-        Log.d("Debug: ", "[getTorrentListV] categoryEncoded: " + categoryEncoded);
-        Log.d("Debug: ", "[getTorrentListV] url: " + url);
+//        Log.d("Debug: ", "[getTorrentListV] category: " + category);
+//        Log.d("Debug: ", "[getTorrentListV] categoryEncoded: " + categoryEncoded);
+//        Log.d("Debug: ", "[getTorrentListV] url: " + url);
 
 //        Log.d("Debug: ", "[getTorrentListV] filter: " + state);
 
@@ -2960,7 +2960,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Start Torrent: " + result);
+//                Log.d("Debug: ", ">>> Start Torrent: " + result);
 
                 if (!isSelection) {
                     toastText(R.string.torrentStarted);
@@ -3011,7 +3011,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Pause Torrent: " + result);
+//                Log.d("Debug: ", ">>> Pause Torrent: " + result);
 
                 if (!isSelection) {
                     toastText(R.string.torrentPaused);
@@ -3050,7 +3050,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Delete Torrent: " + result);
+//                Log.d("Debug: ", ">>> Delete Torrent: " + result);
 
                 if (!isSelection) {
                     toastText(R.string.torrentDeleted);
@@ -3085,7 +3085,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Delete Drive Torrent: " + result);
+//                Log.d("Debug: ", ">>> Delete Drive Torrent: " + result);
 
                 if (!isSelection) {
                     toastText(R.string.torrentDeletedDrive);
@@ -3105,7 +3105,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Increase priority: " + result);
+//                Log.d("Debug: ", ">>> Increase priority: " + result);
 
                 toastText(R.string.increasePrioTorrent);
 
@@ -3123,7 +3123,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Increase priority: " + result);
+//                Log.d("Debug: ", ">>> Increase priority: " + result);
 
                 toastText(R.string.decreasePrioTorrent);
 
@@ -3141,7 +3141,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Max priority: " + result);
+//                Log.d("Debug: ", ">>> Max priority: " + result);
 
                 toastText(R.string.priorityUpdated);
 
@@ -3159,7 +3159,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Min priority: " + result);
+//                Log.d("Debug: ", ">>> Min priority: " + result);
 
                 toastText(R.string.priorityUpdated);
 
@@ -3177,7 +3177,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> setUpRateLimit: " + result);
+//                Log.d("Debug: ", ">>> setUpRateLimit: " + result);
 
             }
         });
@@ -3190,7 +3190,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> setDownRateLimit: " + result);
+//                Log.d("Debug: ", ">>> setDownRateLimit: " + result);
 
             }
         });
@@ -3203,7 +3203,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> [recheckTorrent] result: " + result);
+//                Log.d("Debug: ", ">>> [recheckTorrent] result: " + result);
 
             }
         });
@@ -3216,7 +3216,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Toggle first last piece priority: " + result);
+//                Log.d("Debug: ", ">>> Toggle first last piece priority: " + result);
 
                 toastText(R.string.torrentstogglefisrtLastPiecePrio);
 
@@ -3234,7 +3234,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> toggleSequentialDownload: " + result);
+//                Log.d("Debug: ", ">>> toggleSequentialDownload: " + result);
 
                 toastText(R.string.torrentstoggleSequentialDownload);
 
@@ -3251,7 +3251,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         setCategory(hashes, category, new VolleyCallback() {
             @Override
             public void onSuccess(String result) {
-                Log.d("Debug: ", "[setCategory] Result: " + result);
+//                Log.d("Debug: ", "[setCategory] Result: " + result);
                 toastText(R.string.torrentsApplyingChange);
                 // Refresh
                 refreshAfterCommand(3);
@@ -3266,7 +3266,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", "[toggleAlternativeSpeedLimits] OK");
+//                Log.d("Debug: ", "[toggleAlternativeSpeedLimits] OK");
 
                 toastText(R.string.toggledAlternativeRates);
 
@@ -3303,7 +3303,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug", ">>> addTorrentFile: " + result);
+//                Log.d("Debug", ">>> addTorrentFile: " + result);
 
                 toastText(R.string.torrentFileAdded);
 
@@ -3321,7 +3321,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> addTracker: " + result);
+//                Log.d("Debug: ", ">>> addTracker: " + result);
                 toastText(R.string.torrentsApplyingChange);
 
                 // Refresh
@@ -3339,30 +3339,28 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 Boolean isAlternativeSpeedLimitsEnabled;
 
-                Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] result: " + result);
+//                Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] result: " + result);
 
                 if (result != null && !result.equals("")) {
 
 
                     if("1".equals(result)) {
                         alternative_speeds = true;
-                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] ON");
+//                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] ON");
                     }
                     else {
                         alternative_speeds = false;
-                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] OFF");
+//                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] OFF");
                     }
 
                     savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", alternative_speeds);
 
 
                     if (altSpeedLimitsMenuItem != null) {
-                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] altSpeedLimitsMenuItem not null");
+//                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] altSpeedLimitsMenuItem not null");
                         altSpeedLimitsMenuItem.setEnabled(true);
                         altSpeedLimitsMenuItem.setChecked(alternative_speeds);
                     }
-                } else {
-                    Log.d("Debug: ", "getAlternativeSpeedLimitsEnabled got null");
                 }
             }
         });
@@ -3374,7 +3372,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> setQBittorrentPrefefrences: " + result);
+//                Log.d("Debug: ", ">>> setQBittorrentPrefefrences: " + result);
 
                 toastText(R.string.setQBittorrentPrefefrences);
 
@@ -3389,7 +3387,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", "[setFilePrio] Result: " + result);
+//                Log.d("Debug: ", "[setFilePrio] Result: " + result);
 
                 // Refresh
                 refreshAfterCommand(2);
@@ -3409,7 +3407,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 String infoString = "";
                 String sizeInfo, downloadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo, ratioInfo;
 
-                Log.d("Debug", "[getTorrentList] torrents.size(): " + torrents.size());
+//                Log.d("Debug", "[getTorrentList] torrents.size(): " + torrents.size());
 
                 for (int i = 0; i < torrents.size(); i++) {
 
@@ -3591,7 +3589,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                         if (category != null && !category.equals("")) {
                             categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_LABEL, currentCategory.equals(category), "category"));
-                            Log.d("Debug", "[getTorrentList] category: " + category);
+//                            Log.d("Debug", "[getTorrentList] category: " + category);
                         }
                     }
 
@@ -3938,7 +3936,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         //getApi();
         getCookie();
 
-        Log.d("Debug", "[refresh] category: " + category);
+//        Log.d("Debug", "[refresh] category: " + category);
 
 //        TODO: Delete old code for category (label)
 //        // Category
