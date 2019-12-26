@@ -250,7 +250,7 @@ public class TorrentDetailsFragment extends Fragment {
                 progressInfo = Common.ProgressForUiTruncated(progress) + "%";
                 priority = "" + this.torrent.getPriority();
                 eta = Common.secondsToEta(this.torrent.getEta());
-                uploadSpeed = "" + this.torrent.getUpspeed();
+                uploadSpeed = Common.calculateSize(this.torrent.getUpspeed()) + "/s";
                 downloadSpeed = Common.calculateSize(this.torrent.getDlspeed()) + "/s";
                 downloaded = Common.calculateSize(this.torrent.getSize() - this.torrent.getAmount_left());
                 addedOn = this.torrent.getAdded_on();
@@ -805,7 +805,7 @@ public class TorrentDetailsFragment extends Fragment {
             progressInfo = Common.ProgressForUiTruncated(progress) + "%";
             priority = "" + torrent.getPriority();
             eta = Common.secondsToEta(torrent.getEta());
-            uploadSpeed = "" + torrent.getUpspeed();
+            uploadSpeed = Common.calculateSize(torrent.getUpspeed()) + "/s";
             downloadSpeed = Common.calculateSize(torrent.getDlspeed()) + "/s";
             downloaded = Common.calculateSize(torrent.getSize() - torrent.getAmount_left());
             addedOn = torrent.getAdded_on();
