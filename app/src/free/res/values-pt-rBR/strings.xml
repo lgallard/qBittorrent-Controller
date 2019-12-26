@@ -261,19 +261,19 @@
     <string name="sortby_menu_added_on">Adicionado em</string>
     <string name="torrent_details_addedon">Adicionado em:</string>
     <string name="torrent_details_completedon">Concluída em:</string>
-    <string name="drawer_label_labels">Etiquetas</string>
-    <string name="drawer_label_all">Tudo</string>
-    <string name="drawer_label_unlabeled">Sem etiquetas</string>
-    <string name="torrent_details_label">Etiqueta:</string>
-    <string name="torrent_label_menu">Etiqueta...</string>
+    <string name="drawer_category_categories">Etiquetas</string>
+    <string name="drawer_category_all">Tudo</string>
+    <string name="drawer_category_uncategorized">Sem categorias</string>
+    <string name="torrent_details_category">Categoria:</string>
+    <string name="torrent_category_menu">Categoria...</string>
     <string name="torrentsApplyingChange">Aplicando mudança!</string>
-    <string name="action_delete_label">Remover etiqueta</string>
-    <string name="action_set_label">Definir etiqueta</string>
+    <string name="action_delete_category">Remover categoria</string>
+    <string name="action_set_category">Definir categoria</string>
     <string name="action_add_tracker">Adicionar tracker</string>
     <string name="help_libraries">Software usado:</string>
     <string name="action_add_file">Adicionar arquivo torrent</string>
     <string name="action_add_url">Adicionar link de torrent</string>
     <string name="pathAndLabelDialogText">Não mostrar esta caixa de diálogo novamente</string>
-    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Ativar caixa de diálogo Salvar caminho e etiqueta</string>
     <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Salvar diálogo de rótulos e rótulos</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Ativar caixa de diálogo salvar caminho e categoria</string>
 </resources>

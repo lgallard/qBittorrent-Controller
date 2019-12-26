@@ -83,20 +83,20 @@
         android:title="@string/torrent_details_first_last" />
     <item
         android:id="@+id/action_label_menu"
-        android:title="@string/torrent_label_menu">
+        android:title="@string/torrent_category_menu">
 
         <menu>
 
             <item
-                android:id="@+id/action_set_label"
-                android:icon="@drawable/ic_drawer_labels"
-                android:title="@string/action_set_label"
+                android:id="@+id/action_set_category"
+                android:icon="@drawable/ic_drawer_categories"
+                android:title="@string/action_set_category"
                 android:showAsAction="ifRoom" />
 
             <item
-                android:id="@+id/action_delete_label"
+                android:id="@+id/action_delete_category"
                 android:icon="@drawable/ic_action_delete_drive"
-                android:title="@string/action_delete_label"
+                android:title="@string/action_delete_category"
                 android:showAsAction="ifRoom" />
         </menu>
 

@@ -1,4 +1,4 @@
-/*
+ /*
  *   Copyright (c) 2014-2015 Luis M. Gallardo D.
  *   All rights reserved. This program and the accompanying materials
  *   are made available under the terms of the GNU Lesser General Public License v3.0
@@ -94,16 +94,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.math.RoundingMode;
 import java.net.URI;
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -115,6 +114,10 @@ interface RefreshListener {
 
 interface TorrentsListCallBack {
     void onSuccess(List<Torrent> list);
+}
+
+interface CategoriesListCallBack {
+    void onSuccess(List<Category> list);
 }
 
 interface ContentsListCallback {
@@ -141,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static final String TAG_UPSPEED = "upspeed";
     protected static final String TAG_ADDEDON = "added_on";
     protected static final String TAG_COMPLETIONON = "completion_on";
-    protected static final String TAG_LABEL = "label";
     protected static final String TAG_CATEGORY = "category";
 
     protected static final String TAG_NUMLEECHS = "num_leechs";
@@ -205,8 +207,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     // Current state
     public static String currentState;
 
-    // Current label
-    public static String currentLabel;
+    // Current category
+    public static String currentCategory;
 
     // Preferences properties
     protected static String currentServer;
@@ -225,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected static boolean reverse_order;
     protected static boolean dark_ui;
     protected static String lastState;
-    protected static String lastLabel;
+    protected static String lastCategory;
     protected static long notification_period;
     protected static boolean header;
     public static boolean alternative_speeds;
@@ -285,13 +287,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
     public static DrawerLayout drawerLayout;
     public static ActionBarDrawerToggle drawerToggle;
-    public static final int DRAWER_ITEM_ACTIONS = 1;
-    public static final int DRAWER_ITEM_SERVERS = 3;
-    public static final int DRAWER_CATEGORY = 5;
-    public static final int DRAWER_LABEL = 6;
-    public static final int DRAWER_LABEL_CATEGORY = 8;
-
-    private ArrayList<String> labels = new ArrayList<>();
+    public static final int DRAWER_ITEM_ACTION = 1;
+    public static final int DRAWER_ITEM_SERVER = 3;
+    public static final int DRAWER_SERVERS = 5;
+    public static final int DRAWER_CATEGORY = 6;
+    public static final int DRAWER_CATEGORIES = 8;
 
     // Fragments
     private AboutFragment secondFragment;
@@ -358,13 +358,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     private String urlTorrent;
 
 
-    // Path and label history
+    // Path and category history
     private Set<String> path_history;
-    private Set<String> label_history;
+    private Set<String> category_history;
 
     public static String path2Set;
-    public static String label2Set;
-    protected static boolean pathAndLabelDialog = false;
+    public static String category2Set;
+    protected static boolean pathAndCategoryDialog = true;
 
 
     private Toast toast;
@@ -463,12 +463,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         ArrayList<DrawerItem> serverItems = new ArrayList<>();
         ArrayList<DrawerItem> actionItems = new ArrayList<>();
-//        ArrayList<ObjectDrawerItem> labelItems = new ArrayList<ObjectDrawerItem>();
         ArrayList<DrawerItem> settingsItems = new ArrayList<>();
 
 
-        // Add server category
-        serverItems.add(new DrawerItem(R.drawable.ic_drawer_servers, getResources().getString(R.string.drawer_servers_category), DRAWER_CATEGORY, false, null));
+        // Add server
+        serverItems.add(new DrawerItem(R.drawable.ic_drawer_servers, getResources().getString(R.string.drawer_servers_category), DRAWER_SERVERS, false, null));
 
         // Server items
         int currentServerValue;
@@ -480,36 +479,35 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
         for (int i = 0; i < navigationDrawerServerItems.length; i++) {
-            serverItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, navigationDrawerServerItems[i], DRAWER_ITEM_SERVERS, ((i + 1) == currentServerValue), "changeCurrentServer"));
+            serverItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, navigationDrawerServerItems[i], DRAWER_ITEM_SERVER, ((i + 1) == currentServerValue), "changeCurrentServer"));
         }
 
         // Add actions
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_all, navigationDrawerItemTitles[0], DRAWER_ITEM_ACTIONS, lastState.equals("all"), "refreshAll"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_downloading, navigationDrawerItemTitles[1], DRAWER_ITEM_ACTIONS, lastState.equals("downloading"), "refreshDownloading"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_completed, navigationDrawerItemTitles[2], DRAWER_ITEM_ACTIONS, lastState.equals("completed"), "refreshCompleted"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_seeding, navigationDrawerItemTitles[3], DRAWER_ITEM_ACTIONS, lastState.equals("seeding"), "refreshSeeding"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_paused, navigationDrawerItemTitles[4], DRAWER_ITEM_ACTIONS, lastState.equals("pause"), "refreshPaused"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_active, navigationDrawerItemTitles[5], DRAWER_ITEM_ACTIONS, lastState.equals("active"), "refreshActive"));
-        actionItems.add(new DrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[6], DRAWER_ITEM_ACTIONS, lastState.equals("inactive"), "refreshInactive"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_all, navigationDrawerItemTitles[0], DRAWER_ITEM_ACTION, lastState.equals("all"), "refreshAll"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_downloading, navigationDrawerItemTitles[1], DRAWER_ITEM_ACTION, lastState.equals("downloading"), "refreshDownloading"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_completed, navigationDrawerItemTitles[2], DRAWER_ITEM_ACTION, lastState.equals("completed"), "refreshCompleted"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_seeding, navigationDrawerItemTitles[3], DRAWER_ITEM_ACTION, lastState.equals("seeding"), "refreshSeeding"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_paused, navigationDrawerItemTitles[4], DRAWER_ITEM_ACTION, lastState.equals("pause"), "refreshPaused"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_active, navigationDrawerItemTitles[5], DRAWER_ITEM_ACTION, lastState.equals("active"), "refreshActive"));
+        actionItems.add(new DrawerItem(R.drawable.ic_drawer_inactive, navigationDrawerItemTitles[6], DRAWER_ITEM_ACTION, lastState.equals("inactive"), "refreshInactive"));
 
-        // Add labels
+        // Add categories
 
         // Add settings actions
-        //settingsItems.add(new DrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTIONS, false, "openOptions"));
-        settingsItems.add(new DrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[8], DRAWER_ITEM_ACTIONS, false, "openSettings"));
+        //settingsItems.add(new DrawerItem(R.drawable.ic_action_options, navigationDrawerItemTitles[7], DRAWER_ITEM_ACTION, false, "openOptions"));
+        settingsItems.add(new DrawerItem(R.drawable.ic_drawer_settings, navigationDrawerItemTitles[8], DRAWER_ITEM_ACTION, false, "openSettings"));
 
         if (packageName.equals("com.lgallardo.qbittorrentclient")) {
-            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTIONS, false, "getPro"));
-            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[10], DRAWER_ITEM_ACTIONS, false, "openHelp"));
+            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_pro, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTION, false, "getPro"));
+            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[10], DRAWER_ITEM_ACTION, false, "openHelp"));
         } else {
-            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTIONS, false, "openHelp"));
+            settingsItems.add(new DrawerItem(R.drawable.ic_drawer_help, navigationDrawerItemTitles[9], DRAWER_ITEM_ACTION, false, "openHelp"));
         }
 
 
         rAdapter = new DrawerItemRecyclerViewAdapter(getApplicationContext(), this, serverItems, actionItems, settingsItems, null);
         rAdapter.notifyDataSetChanged();
 
-//        drawerList.setAdapter(adapter);
         mRecyclerView.setAdapter(rAdapter);
 
         mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
@@ -846,25 +844,25 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public void refreshCurrent() {
         switch (actionStates.indexOf(currentState)) {
             case 0:
-                refresh("all", currentLabel);
+                refresh("all", currentCategory);
                 break;
             case 1:
-                refresh("downloading", currentLabel);
+                refresh("downloading", currentCategory);
                 break;
             case 2:
-                refresh("completed", currentLabel);
+                refresh("completed", currentCategory);
                 break;
             case 3:
-                refresh("seeding", currentLabel);
+                refresh("seeding", currentCategory);
                 break;
             case 4:
-                refresh("pause", currentLabel);
+                refresh("paused", currentCategory);
                 break;
             case 5:
-                refresh("active", currentLabel);
+                refresh("active", currentCategory);
                 break;
             case 6:
-                refresh("inactive", currentLabel);
+                refresh("inactive", currentCategory);
                 break;
             default:
                 refresh();
@@ -1015,13 +1013,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     protected void refreshFromDrawerAction(String state, String title) {
         setTitle(title);
         refreshSwipeLayout();
-        refresh(state, currentLabel);
+        refresh(state, currentCategory);
         saveLastState(state);
     }
 
     private void refresh() {
 
-        refresh("all", currentLabel);
+        refresh(currentState, currentCategory);
 
     }
 
@@ -1196,7 +1194,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "[getCookieV] Response: " + response);
+//                        Log.d("Debug", "[getCookieV] Response: " + response);
                         //Log.d("Debug", "headers: " + CustomStringRequest.headers);
 
                         JSONObject jsonObject = null;
@@ -1213,23 +1211,23 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         String cookieString = null;
 
                         try {
-                            Log.d("Debug", "[getCookieV] JSONObject: " + jsonObject.toString());
+//                            Log.d("Debug", "[getCookieV] JSONObject: " + jsonObject.toString());
                             customObjectResult = gson.fromJson(jsonObject.toString(), CustomObjectResult.class);
 
-                            Log.d("Debug", "[getCookieV] DATA?: " + customObjectResult.getData());
-                            Log.d("Debug", "[getCookieV] HEADERS?: " + customObjectResult.getHeaders());
+//                            Log.d("Debug", "[getCookieV] DATA?: " + customObjectResult.getData());
+//                            Log.d("Debug", "[getCookieV] HEADERS?: " + customObjectResult.getHeaders());
 
                             // Get Headers
                             String headers = customObjectResult.getHeaders();
 
 
-                            Log.d("Debug", "[getCookieV] Headers: " + headers);
+//                            Log.d("Debug", "[getCookieV] Headers: " + headers);
 
                             // Get set-cookie from headers
                             cookieString = headers.split("set-cookie=")[1].split(";")[0];
 
 
-                            Log.d("Debug", "[getCookieV] set-cookie: " + cookieString);
+//                            Log.d("Debug", "[getCookieV] set-cookie: " + cookieString);
 
 
                         } catch (Exception e) {
@@ -1250,18 +1248,18 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Log.d("Debug", "[getCookieV] Error in JSON response: " + error.getMessage());
+//                        Log.d("Debug", "[getCookieV] Error in JSON response: " + error.getMessage());
 
                         callback.onSuccess("");
 
                         NetworkResponse networkResponse = error.networkResponse;
 
                         if (networkResponse != null) {
-                            Log.d("Debug", "[getCookieV] statusCode: " + networkResponse.statusCode);
+//                            Log.d("Debug", "[getCookieV] statusCode: " + networkResponse.statusCode);
 
 
                             if (networkResponse.statusCode == 403) {
-                                Log.d("Debug", "[getCookieV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
+//                                Log.d("Debug", "[getCookieV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
 
                                 Toast.makeText(getApplicationContext(), "User's IP is banned for too many failed login attempts!", Toast.LENGTH_SHORT).show();
 
@@ -1618,7 +1616,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         postParams.put("hashes", hashes);
         postParams.put("deleteFiles", "true");
 
-        Log.d("Debug", "URL: " + url);
+//        Log.d("Debug", "URL: " + url);
 
         // New JSONObject request
         StringRequest jsArrayRequest = new StringRequest(
@@ -2198,7 +2196,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("Debug", "[setCategory] response: " + response);
+//                        Log.d("Debug", "[setCategory] response: " + response);
 
                         // Return value
                         callback.onSuccess("");
@@ -2287,10 +2285,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    private void addTorrent(final String hashes, final String path2Set, final String label2Set, final VolleyCallback callback) {
+    private void addTorrent(final String hashes, final String path2Set, final String category2Set, final VolleyCallback callback) {
 
 //        Log.d("Debug", "[addTorrent] path2set " + path2Set);
-//        Log.d("Debug", "[addTorrent] label2Set " + label2Set);
+//        Log.d("Debug", "[addTorrent] category2Set " + category2Set);
 
         String boundary = "";
 
@@ -2339,7 +2337,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", urlContentType);
-                params.put("category", label2Set);
                 params.put("Cookie", cookie);
                 return params;
             }
@@ -2351,6 +2348,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 if (path2Set != null && path2Set.length() != 0) {
                     params.put("savepath", path2Set);
                 }
+                if (category2Set != null && category2Set.length() != 0) {
+                    params.put("category", category2Set);
+                }
                 return params;
             }
         };
@@ -2360,7 +2360,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    private void addTorrentFileAPI7(final String hash, final String path2Set, final String label2Set, final VolleyCallback callback) {
+    private void addTorrentFileAPI7(final String hash, final String path2Set, final String category2Set, final VolleyCallback callback) {
 
         final String boundary = "-----------------------" + (new Date()).getTime();
         final String urlContentType = "multipart/form-data; boundary=" + boundary;
@@ -2433,15 +2433,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-
                 if (path2Set != null && path2Set.length() != 0) {
                     params.put("savepath", path2Set);
                 }
-
-                if (label2Set != null && label2Set.length() != 0) {
-                    params.put("category", label2Set);
+                if (category2Set != null && category2Set.length() != 0) {
+                    params.put("category", category2Set);
                 }
-
                 return params;
             }
         };
@@ -2693,11 +2690,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Get all torrents
-    private List getTorrentListV(final String state, final TorrentsListCallBack callback) {
+    private List getTorrentListV(final String state, final String category, final TorrentsListCallBack callback) {
 
         final List<Torrent> torrents = new ArrayList<>();
 
         String url = "";
+        String categoryEncoded = "";
 
         // if server is publish in a subfolder, fix url
         if (subfolder != null && !subfolder.equals("")) {
@@ -2707,10 +2705,73 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         url = protocol + "://" + hostname + ":" + port + url;
 
         // Command
-        url = url + "/api/v2/torrents/info?filter=" + state;
+//        url = url + "/api/v2/torrents/info?filter=" + state;
+        url = url + "/api/v2/torrents/info";
+
+        url = url + "?filter=" + state;
+
+
+        if (category != null && !category.equals(getResources().getString(R.string.drawer_category_all))) {
+
+
+//            if (category.equals(getResources().getString(R.string.drawer_category_uncategorized))) {
+//                categoryEncoded = "";
+//                url = url + "&category=" + categoryEncoded;
+//            }
+
+//            if (!categories.contains(category)) {
+//                categoryEncoded = getResources().getString(R.string.drawer_category_all);
+//            }
+
+            saveLastCategory(category);
+
+            try {
+
+//                if (!category.equals(getResources().getString(R.string.drawer_category_all)) && !category.equals(getResources().getString(R.string.drawer_category_uncategorized))) {
+
+                if (!category.equals(getResources().getString(R.string.drawer_category_all).toLowerCase())) {
+
+                     if (category.equals(getResources().getString(R.string.drawer_category_uncategorized))){
+                         categoryEncoded = Uri.encode("http://www.dummy.org?category=" );
+                     }
+                     else {
+                         // I used a dummy URL to encode category
+                         categoryEncoded = Uri.encode("http://www.dummy.org?category=" + category);
+                     }
+
+                    // then I got the the encoded category
+                    categoryEncoded = categoryEncoded.substring(categoryEncoded.indexOf("%3D") + 3);
+
+                    // to build the url and pass it to category param
+                    url = url + "&category=" + categoryEncoded;
+                }
+
+            } catch (Exception e) {
+                Log.e("Debug", "[getTorrentListV] Category Exception: " + e.toString());
+            }
+
+        }
+
+//        if (category != null && category.length() != 0) {
+//
+//            // I used a dummy URL to encode category
+//            String categoryEncoded = Uri.encode("http://www.dummy.org?category=" + category);
+//
+//            // then I got the the encoded category
+//            categoryEncoded = categoryEncoded.substring(categoryEncoded.indexOf("%3D") + 3);
+//
+//            url = url + "&category="+categoryEncoded;
+//
+//        }
 
 //        Log.d("Debug: ", "[getTorrentListV] URL: " + url);
 //        Log.d("Debug: ", "[getTorrentListV] cookies: " + cookie);
+
+//        Log.d("Debug: ", "[getTorrentListV] category: " + category);
+//        Log.d("Debug: ", "[getTorrentListV] categoryEncoded: " + categoryEncoded);
+//        Log.d("Debug: ", "[getTorrentListV] url: " + url);
+
+//        Log.d("Debug: ", "[getTorrentListV] filter: " + state);
 
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -2783,6 +2844,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 params.put("Cookie", cookie);
                 return params;
             }
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+//                params.put("filter", state);
+//                params.put("category", "test");
+//                if (category != null && category.length() != 0) {
+//                    params.put("category", category);
+//                }
+                return params;
+            }
         };
 
         // Add request to te queue
@@ -2790,6 +2860,122 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Return the lists
         return torrents;
+    }
+
+    // Get all categories
+
+    private List getCategoryListV(final CategoriesListCallBack callback) {
+
+        final List<Category> categories = new ArrayList<>();
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+        // Command
+        url = url + "/api/v2/torrents/categories";
+
+
+
+        JsonObjectRequest jsObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d("Debug: ", "[getCategoryListV] onResponse");
+
+                        Iterator<String> iter = response.keys();
+                        while (iter.hasNext()) {
+                            String key = iter.next();
+                            String name, savePath;
+                            try {
+                                JSONObject value = (JSONObject) response.get(key);
+                                name = value.getString("name");
+                                savePath = value.getString("savePath");
+
+                                Log.d("Debug: ", "[getCategoryListV] name: " + name);
+                                Log.d("Debug: ", "[getCategoryListV] savePath: " + savePath);
+
+                                // Add category to the list
+                                categories.add(new Category(name,savePath));
+
+
+                            } catch (JSONException e) {
+                                // Something went wrong!
+                            }
+                        }
+
+                        // Return value
+                        callback.onSuccess(categories);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+//                            Log.d("Debug", "[getTorrentListV] Connection error!");
+                            Toast.makeText(getApplicationContext(), "Connection error!", Toast.LENGTH_SHORT).show();
+                        }
+                        // Log status code
+                        NetworkResponse networkResponse = error.networkResponse;
+                        if (networkResponse != null) {
+//                            Log.d("Debug", "[getTorrentListV] statusCode: " + networkResponse.statusCode);
+
+                            if (networkResponse.statusCode == 404){
+                                Toast.makeText(getApplicationContext(), "Host not found!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (networkResponse.statusCode == 403){
+                                Log.d("Debug", "[getCategoryListV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
+
+                                connection403ErrorCounter = connection403ErrorCounter+1;
+
+                                if(connection403ErrorCounter > 1) {
+                                    Toast.makeText(getApplicationContext(), "[getCategoryListV] Authentication error!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        // Log error
+                        Log.d("Debug", "[getCategoryListV] Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", "[getCategoryListV] Error in JSON error: " + error);
+
+
+                    }
+                }
+
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsObjectRequest);
+
+        // Return the list
+        return categories;
     }
 
     // Wraps
@@ -2846,7 +3032,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 savePreferenceAsString("qbCookie", result);
 
                 // Test
-                getTorrentList(lastState);
+//                getTorrentList(lastState, lastCategory);
 
 
             }
@@ -2893,7 +3079,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Start Torrent: " + result);
+//                Log.d("Debug: ", ">>> Start Torrent: " + result);
 
                 if (!isSelection) {
                     toastText(R.string.torrentStarted);
@@ -2944,7 +3130,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Pause Torrent: " + result);
+//                Log.d("Debug: ", ">>> Pause Torrent: " + result);
 
                 if (!isSelection) {
                     toastText(R.string.torrentPaused);
@@ -2983,7 +3169,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Delete Torrent: " + result);
+//                Log.d("Debug: ", ">>> Delete Torrent: " + result);
 
                 if (!isSelection) {
                     toastText(R.string.torrentDeleted);
@@ -3018,7 +3204,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Delete Drive Torrent: " + result);
+//                Log.d("Debug: ", ">>> Delete Drive Torrent: " + result);
 
                 if (!isSelection) {
                     toastText(R.string.torrentDeletedDrive);
@@ -3038,7 +3224,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Increase priority: " + result);
+//                Log.d("Debug: ", ">>> Increase priority: " + result);
 
                 toastText(R.string.increasePrioTorrent);
 
@@ -3056,7 +3242,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Increase priority: " + result);
+//                Log.d("Debug: ", ">>> Increase priority: " + result);
 
                 toastText(R.string.decreasePrioTorrent);
 
@@ -3074,7 +3260,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Max priority: " + result);
+//                Log.d("Debug: ", ">>> Max priority: " + result);
 
                 toastText(R.string.priorityUpdated);
 
@@ -3092,7 +3278,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Min priority: " + result);
+//                Log.d("Debug: ", ">>> Min priority: " + result);
 
                 toastText(R.string.priorityUpdated);
 
@@ -3110,7 +3296,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> setUpRateLimit: " + result);
+//                Log.d("Debug: ", ">>> setUpRateLimit: " + result);
 
             }
         });
@@ -3123,7 +3309,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> setDownRateLimit: " + result);
+//                Log.d("Debug: ", ">>> setDownRateLimit: " + result);
 
             }
         });
@@ -3136,7 +3322,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> [recheckTorrent] result: " + result);
+//                Log.d("Debug: ", ">>> [recheckTorrent] result: " + result);
 
             }
         });
@@ -3149,7 +3335,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> Toggle first last piece priority: " + result);
+//                Log.d("Debug: ", ">>> Toggle first last piece priority: " + result);
 
                 toastText(R.string.torrentstogglefisrtLastPiecePrio);
 
@@ -3167,7 +3353,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> toggleSequentialDownload: " + result);
+//                Log.d("Debug: ", ">>> toggleSequentialDownload: " + result);
 
                 toastText(R.string.torrentstoggleSequentialDownload);
 
@@ -3179,17 +3365,15 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    public void setCategory(String hashes, String label) {
+    public void setCategory(String hashes, String category) {
 
-        setCategory(hashes, label, new VolleyCallback() {
+        setCategory(hashes, category, new VolleyCallback() {
             @Override
             public void onSuccess(String result) {
-                Log.d("Debug: ", "[setCategory] Result: " + result);
-
+//                Log.d("Debug: ", "[setCategory] Result: " + result);
                 toastText(R.string.torrentsApplyingChange);
                 // Refresh
                 refreshAfterCommand(3);
-
             }
         });
 
@@ -3201,7 +3385,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", "[toggleAlternativeSpeedLimits] OK");
+//                Log.d("Debug: ", "[toggleAlternativeSpeedLimits] OK");
 
                 toastText(R.string.toggledAlternativeRates);
 
@@ -3214,9 +3398,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    public void addTorrent(String hashes, String path, String label) {
+    public void addTorrent(String hashes, String path, String category) {
 
-        addTorrent(hashes, path, label, new VolleyCallback() {
+        addTorrent(hashes, path, category, new VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -3232,13 +3416,13 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    public void addTorrentFileAPI7(String hash, String path, String label) {
+    public void addTorrentFileAPI7(String hash, String path, String category) {
 
-        addTorrentFileAPI7(hash, path, label, new VolleyCallback() {
+        addTorrentFileAPI7(hash, path, category, new VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug", ">>> addTorrentFile: " + result);
+//                Log.d("Debug", ">>> addTorrentFile: " + result);
 
                 toastText(R.string.torrentFileAdded);
 
@@ -3256,7 +3440,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> addTracker: " + result);
+//                Log.d("Debug: ", ">>> addTracker: " + result);
                 toastText(R.string.torrentsApplyingChange);
 
                 // Refresh
@@ -3274,30 +3458,28 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 Boolean isAlternativeSpeedLimitsEnabled;
 
-                Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] result: " + result);
+//                Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] result: " + result);
 
                 if (result != null && !result.equals("")) {
 
 
                     if("1".equals(result)) {
                         alternative_speeds = true;
-                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] ON");
+//                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] ON");
                     }
                     else {
                         alternative_speeds = false;
-                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] OFF");
+//                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] OFF");
                     }
 
                     savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", alternative_speeds);
 
 
                     if (altSpeedLimitsMenuItem != null) {
-                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] altSpeedLimitsMenuItem not null");
+//                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] altSpeedLimitsMenuItem not null");
                         altSpeedLimitsMenuItem.setEnabled(true);
                         altSpeedLimitsMenuItem.setChecked(alternative_speeds);
                     }
-                } else {
-                    Log.d("Debug: ", "getAlternativeSpeedLimitsEnabled got null");
                 }
             }
         });
@@ -3309,7 +3491,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", ">>> setQBittorrentPrefefrences: " + result);
+//                Log.d("Debug: ", ">>> setQBittorrentPrefefrences: " + result);
 
                 toastText(R.string.setQBittorrentPrefefrences);
 
@@ -3324,7 +3506,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.d("Debug: ", "[setFilePrio] Result: " + result);
+//                Log.d("Debug: ", "[setFilePrio] Result: " + result);
 
                 // Refresh
                 refreshAfterCommand(2);
@@ -3335,16 +3517,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     }
 
-    public void getTorrentList(String state) {
+    public void getTorrentList(String state, String category) {
 
-        getTorrentListV(state, new TorrentsListCallBack() {
+        getTorrentListV(state, category, new TorrentsListCallBack() {
             @Override
             public void onSuccess(List<Torrent> torrents) {
 
                 String infoString = "";
                 String sizeInfo, downloadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo, ratioInfo;
 
-                Log.d("Debug", "[getTorrentList] torrents.size(): " + torrents.size());
+//                Log.d("Debug", "[getTorrentList] torrents.size(): " + torrents.size());
 
                 for (int i = 0; i < torrents.size(); i++) {
 
@@ -3397,8 +3579,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 + '\u2022' + " " + progressInfo + "% "
                                 + '\u2022' + " " + etaInfo;
 
-//                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
-//                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
+//                        if (torrents.get(i).getCategory() != null && !torrents.get(i).getCategory().equals("")) {
+//                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getCategory();
 //                        }
 
 
@@ -3410,8 +3592,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 + '\u2022' + " " + ratioInfo + " "
                                 + '\u2022' + " " + etaInfo;
 
-//                        if (torrents.get(i).getLabel() != null && !torrents.get(i).getLabel().equals("")) {
-//                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getLabel();
+//                        if (torrents.get(i).getCategory() != null && !torrents.get(i).getCategory().equals("")) {
+//                            infoString = infoString + " " + Character.toString('\u2022') + " " + torrents.get(i).getCategory();
 //                        }
 
 
@@ -3434,25 +3616,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 ArrayList<Torrent> torrentsFiltered = new ArrayList<Torrent>();
 
-                // Labels
+                // Categories
+                String category = null;
 
-                String label = null;
-
-//                Log.d("Debug", "Still looking for..."+searchField);
 
                 for (int i = 0; i < torrents.size(); i++) {
-
-                    // Get label
-//                    label = torrents.get(i).getLabel();
-
-
-                    if (!labels.contains(label)) {
-
-                        // Add Label
-                        labels.add(label);
-//                        Log.d("Debug", "Label: " + label);
-
-                    }
 
                     if (currentState.equals("all") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
                         torrentsFiltered.add(torrents.get(i));
@@ -3501,45 +3669,48 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 }
 
-                // Labels
-                ArrayList<DrawerItem> labelItems = new ArrayList<DrawerItem>();
+                // Categories
+                final ArrayList<DrawerItem> categoryItems = new ArrayList<DrawerItem>();
 
-                // Set unlabeled first
+                // Set uncategorized first
 
-                // Add label category
-                labelItems.add(new DrawerItem(R.drawable.ic_drawer_labels, getResources().getString(R.string.drawer_label_labels), DRAWER_LABEL_CATEGORY, true, "labelCategory"));
+                // Add category
+                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_categories, getResources().getString(R.string.drawer_category_categories), DRAWER_CATEGORIES, true, "categories"));
 
                 // Add All
-                label = getResources().getString(R.string.drawer_label_all);
+                category = getResources().getString(R.string.drawer_category_all);
+                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_CATEGORY, (currentCategory.equals(category) ), "category"));
 
-//                Log.d("Debug", "labes.size(): " + labels.size());
-
-                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, (currentLabel.equals(label) || !labels.contains(currentLabel) && !currentLabel.equals(getResources().getString(R.string.drawer_label_unlabeled))), "label"));
-
-                // Add unlabeled
-                label = getResources().getString(R.string.drawer_label_unlabeled);
-                labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label) || currentLabel.equals(""), "label"));
+                // Add uncategorized
+                // TODO: Uncomment to enable uncategorized item
+//                category = getResources().getString(R.string.drawer_category_uncategorized);
+//                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_CATEGORY, currentCategory.equals(category) || currentCategory.equals(""), "category"));
 
 
-//                Log.d("Debug", "currentLabel: " + currentLabel);
+                getCategoryListV(new CategoriesListCallBack() {
+                    @Override
+                    public void onSuccess(List<Category> categories) {
+                        Log.d("Debug", "[getCategoryListV] onSuccess");
 
-                if (labels != null && !(labels.contains(null))) {
-                    // Sort labels
-                    Collections.sort(labels);
+                        String name, savePath;
 
-                    for (int i = 0; i < labels.size(); i++) {
+                        for (int i = 0; i < categories.size(); i++) {
 
-                        label = labels.get(i);
+                            name = categories.get(i).getName();
+                            savePath = categories.get(i).getSavePath();
 
-                        if (label != null && !label.equals("")) {
-                            labelItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, label, DRAWER_LABEL, currentLabel.equals(label), "label"));
+//                            Log.d("Debug", "[getCategoryListV] Name: " + name);
+//                            Log.d("Debug", "[getCategoryListV] Save Path: " + savePath);
+
+                            // Add category name to the drawer menu
+                            if (name != null && !name.equals("")) {
+                                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, name, DRAWER_CATEGORY, currentCategory.equals(name), "category"));
+                            }
                         }
+
+                        rAdapter.refreshDrawerCategories(categoryItems);
                     }
-
-
-                    rAdapter.refreshDrawerLabels(labelItems);
-
-                }
+                });
 
                 // Sort by filename
                 if (sortby_value == SORTBY_NAME) {
@@ -3862,7 +4033,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
 
-    private void refresh(String state, String label) {
+    private void refresh(String state, String category) {
 
         // If Contextual Action Bar is open, don't refresh
         if (firstFragment != null && firstFragment.mActionMode != null) {
@@ -3870,8 +4041,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
 
 
-        urlPrefix = "api/v2/torrents/info?filter=" + state;
-        params[0] = "api/v2/torrents/info?filter=" + state;
+//        urlPrefix = "api/v2/torrents/info?filter=" + state;
+//        params[0] = "api/v2/torrents/info?filter=" + state;
 
 
         // Get API version in case it hadn't been gotten before
@@ -3879,45 +4050,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         //getApi();
         getCookie();
 
-
-        // Label
-        if (label != null && !label.equals(getResources().getString(R.string.drawer_label_all))) {
-
-
-            if (label.equals(getResources().getString(R.string.drawer_label_unlabeled))) {
-                label = "";
-            }
-
-            if (!labels.contains(label)) {
-                label = getResources().getString(R.string.drawer_label_all);
-            }
-
-            saveLastLabel(label);
-
-//                Log.d("Debug", "Label filter: " + label);
-
-            try {
-
-                if (!label.equals(getResources().getString(R.string.drawer_label_all))) {
-
-                    // I used a dummy URL to encode label
-                    String labelEncoded = Uri.encode("http://www.dummy.org?label=" + label);
-
-                    // then I got the the encoded label
-                    labelEncoded = labelEncoded.substring(labelEncoded.indexOf("%3D") + 3);
-
-                    // to build the url and pass it to params[0]
-                    params[0] = params[0] + "&category=" + labelEncoded;
-                }
-
-            } catch (Exception e) {
-                Log.e("Debug", "[Main] Label Exception: " + e.toString());
-            }
-
-
-        }
-
-        params[1] = state;
+//        Log.d("Debug", "[refresh] category: " + category);
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -3947,21 +4080,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         httpStatusCode = 0;
                         disableRefreshSwipeLayout();
                     } else {
-
                         getCookie();
-
                     }
 
-
                 } else {
-
 
                     if (connection403ErrorCounter > 1) {
 
                         if (cookie != null && !cookie.equals("")) {
                             // Only toasts the message if there is not a cookie set before
                             toastText(R.string.error403);
-
                             cookie = null;
                         }
 
@@ -3973,7 +4101,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         //qbTask = new qBittorrentTask().execute(params);
 
                         // Test
-                        getTorrentList(state);
+                        getTorrentList(state, category);
 
                         // Check if  alternative speed limit is set
                         getAlternativeSpeedLimitsEnabled();
@@ -4034,7 +4162,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         CustomLogger.saveReportMessage("Main", "Current state: " + currentState);
         CustomLogger.saveReportMessage("Main", "Last state: " + lastState);
 
-        CustomLogger.saveReportMessage("Main", "Current Label: " + currentLabel);
+        CustomLogger.saveReportMessage("Main", "Current Category: " + currentCategory);
 
 
     }
@@ -4109,7 +4237,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 saveLastState("completed");
                 setSelectionAndTitle("completed");
-                refresh("completed", currentLabel);
+                refresh("completed", currentCategory);
             }
 
             if (intent.getStringExtra("from").equals("RSSItemActivity")) {
@@ -4178,9 +4306,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // permission was granted, yay! Do the
         // contacts-related task you need to do.
 
-//
-//        Log.d("Debug", "=== handleUrlTorrent === ");
-//        Log.d("Debug", "urlTorrent: " + urlTorrent);
+//        Log.d("Debug", "[handleUrlTorrent] urlTorrent: " + urlTorrent);
+//        Log.d("Debug", "[handleUrlTorrent] category2Set: " + category2Set);
 
         // if there is not a path to the file, open de file picker
         if (urlTorrent == null) {
@@ -4232,7 +4359,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     // If It is a valid torrent or magnet link
                     if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType())) {
 //                        Log.d("Debug", "[handleUrlTorrent] URL: " + urlTorrent);
-                        addTorrent(urlTorrent, path2Set, label2Set);
+                        addTorrent(urlTorrent, path2Set, category2Set);
                     } else {
                         // Open not valid torrent or magnet link in browser
 
@@ -4286,7 +4413,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             if (intent.getStringExtra("from").equals("NotifierService")) {
                 saveLastState("completed");
                 setSelectionAndTitle("completed");
-                refresh("completed", currentLabel);
+                refresh("completed", currentCategory);
             }
         } catch (NullPointerException npe) {
 
@@ -4652,12 +4779,12 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     toggleSequentialDownload(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                 }
                 return true;
-            case R.id.action_set_label:
+            case R.id.action_set_category:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     setCategoryDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
                 }
                 return true;
-            case R.id.action_delete_label:
+            case R.id.action_delete_category:
                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                     setCategory(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate, " ");
                 }
@@ -4993,16 +5120,16 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     public void addTorrentFile(String url) {
 
-        addTorrentFileAPI7(url, path2Set, label2Set);
+        addTorrentFileAPI7(url, path2Set, category2Set);
 
 //      // TODO: Check when this changed (qb_api X.Y.Z )
 //        if (Integer.parseInt(qb_api) >= 7) {
-//            addTorrentFileAPI7(url, path2Set, label2Set);
+//            addTorrentFileAPI7(url, path2Set, category2Set);
 //        } else {
-//            addTorrentFile(url, path2Set, label2Set);
+//            addTorrentFile(url, path2Set, category2Set);
 //            // Execute the task in background
 //            qBittorrentCommand qtc = new qBittorrentCommand();
-//            qtc.execute(new String[]{"addTorrentFile", url, path2Set, label2Set});
+//            qtc.execute(new String[]{"addTorrentFile", url, path2Set, category2Set});
 //
 //        }
     }
@@ -5065,10 +5192,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(MainActivity.this);
-        View view = li.inflate(R.layout.set_label, null);
+        View view = li.inflate(R.layout.set_category, null);
 
         // URL input
-        final EditText label = (EditText) view.findViewById(R.id.set_label);
+        final EditText category = (EditText) view.findViewById(R.id.set_category);
 
         if (!isFinishing()) {
             // Dialog
@@ -5089,9 +5216,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 public void onClick(DialogInterface dialog, int id) {
                     // User accepted the dialog
 
-                    String labelEncoded = Uri.encode(label.getText().toString());
+                    String categoryEncoded = Uri.encode(category.getText().toString());
 
-                    setCategory(hash, labelEncoded);
+                    setCategory(hash, categoryEncoded);
                 }
             });
 
@@ -5214,32 +5341,32 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //        switch (drawerList.getCheckedItemPosition()) {
         switch (actionStates.indexOf(currentState)) {
             case 0:
-                refreshWithDelay("all", currentLabel, delay);
+                refreshWithDelay("all", currentCategory, delay);
                 break;
             case 1:
-                refreshWithDelay("downloading", currentLabel, delay);
+                refreshWithDelay("downloading", currentCategory, delay);
                 break;
             case 2:
-                refreshWithDelay("completed", currentLabel, delay);
+                refreshWithDelay("completed", currentCategory, delay);
                 break;
             case 3:
-                refreshWithDelay("seeding", currentLabel, delay);
+                refreshWithDelay("seeding", currentCategory, delay);
                 break;
             case 4:
-                refreshWithDelay("pause", currentLabel, delay);
+                refreshWithDelay("pause", currentCategory, delay);
                 break;
             case 5:
-                refreshWithDelay("active", currentLabel, delay);
+                refreshWithDelay("active", currentCategory, delay);
                 break;
             case 6:
-                refreshWithDelay("inactive", currentLabel, delay);
+                refreshWithDelay("inactive", currentCategory, delay);
                 break;
             case 7:
                 break;
             case 8:
                 break;
             default:
-                refreshWithDelay("all", currentLabel, delay);
+                refreshWithDelay("all", currentCategory, delay);
                 break;
         }
 
@@ -5366,7 +5493,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     }
 
     // Delay method
-    public void refreshWithDelay(final String state, final String label, int seconds) {
+    public void refreshWithDelay(final String state, final String category, int seconds) {
 
         seconds *= 1000;
 
@@ -5375,7 +5502,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
             @Override
             public void run() {
                 // Do something after 5s = 5000ms
-                refresh(state, label);
+                refresh(state, category);
             }
         }, seconds);
     }
@@ -5459,10 +5586,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Get last state
         lastState = sharedPrefs.getString("lastState", "all");
 
-        // Get last label
-//        lastLabel = sharedPrefs.getString("lastLabel", "all");
-        lastLabel = sharedPrefs.getString("lastLabel", "all");
-        currentLabel = lastLabel;
+        // Get last category
+        lastCategory = sharedPrefs.getString("lastCategory", "all");
+        currentCategory = lastCategory;
 
 
         // Notification check
@@ -5537,11 +5663,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         keystore_path = sharedPrefs.getString("keystore_path" + currentServer, "");
         keystore_password = sharedPrefs.getString("keystore_password" + currentServer, "");
 
-        // Get path and label history
+        // Get path and category history
         path_history = sharedPrefs.getStringSet("path_history", new HashSet<String>());
-        label_history = sharedPrefs.getStringSet("label_history", new HashSet<String>());
+        category_history = sharedPrefs.getStringSet("category_history", new HashSet<String>());
 
-        pathAndLabelDialog = sharedPrefs.getBoolean("pathAndLabelDialog", false);
+        pathAndCategoryDialog = sharedPrefs.getBoolean("pathAndCategoryDialog", true);
 
     }
 
@@ -5626,9 +5752,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         savePreferenceAsString("lastState", state);
     }
 
-    public void saveLastLabel(String label) {
-        currentLabel = label;
-        savePreferenceAsString("lastLabel", label);
+    public void saveLastCategory(String category) {
+        currentCategory = category;
+        savePreferenceAsString("lastCategory", category);
     }
 
     private void saveSortBy(int sortby_value) {
@@ -5838,38 +5964,38 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         View sentTorrentView = li.inflate(R.layout.send_torrent, null);
 
         MainActivity.path2Set = "";
-        MainActivity.label2Set = "";
+        MainActivity.category2Set = "";
 
 //        Log.d("Debug", "qb_version: " + qb_version);
 //        Log.d("Debug", "qb_api: " + qb_api);
 //        Log.d("Debug", "type: " + type);
 
-        if (pathAndLabelDialog) {
+        if (pathAndCategoryDialog) {
 
             // Variables
 
             final AutoCompleteTextView pathTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.path_sent);
-//            final AutoCompleteTextView labelTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.label_sent);
-            final CheckBox checkBoxPathAndLabelDialog = (CheckBox) sentTorrentView.findViewById(R.id.pathAndLabelDialog);
+            final AutoCompleteTextView categoryTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.category_sent);
+            final CheckBox checkBoxPathAndCategoryDialog = (CheckBox) sentTorrentView.findViewById(R.id.pathAndCategoryDialog);
 
 
-            // Load history for path and label autocomplete text field
+            // Load history for path and category autocomplete text field
 
             // Path
             ArrayAdapter<String> pathAdapter = new ArrayAdapter<String>(
                     this, android.R.layout.simple_list_item_1, path_history.toArray(new String[path_history.size()]));
             pathTextView.setAdapter(pathAdapter);
 
-            // Label
-            ArrayAdapter<String> labelAdapter = new ArrayAdapter<String>(
-                    this, android.R.layout.simple_list_item_1, label_history.toArray(new String[label_history.size()]));
-//            labelTextView.setAdapter(labelAdapter);
+            // Category
+            ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(
+                    this, android.R.layout.simple_list_item_1, category_history.toArray(new String[category_history.size()]));
+            categoryTextView.setAdapter(categoryAdapter);
 
             // Checkbox value
-            if (pathAndLabelDialog) {
-                checkBoxPathAndLabelDialog.setChecked(false);
+            if (pathAndCategoryDialog) {
+                checkBoxPathAndCategoryDialog.setChecked(false);
             } else {
-                checkBoxPathAndLabelDialog.setChecked(true);
+                checkBoxPathAndCategoryDialog.setChecked(true);
             }
 
             // Dialog
@@ -5892,21 +6018,22 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     public void onClick(DialogInterface dialog, int id) {
 
                         MainActivity.path2Set = pathTextView.getText().toString();
-//                        MainActivity.label2Set = labelTextView.getText().toString();
+                        MainActivity.category2Set = categoryTextView.getText().toString();
 
                         if (!(path2Set.equals(""))) {
                             addPath2History(path2Set);
                         }
 
-                        if (!(label2Set.equals(""))) {
-                            addLabel2History(label2Set);
+                        if (!(category2Set.equals(""))) {
+                            addCategory2History(category2Set);
                         }
 
 
 //                        Log.d("Debug", "[sendTorrent] path2Set: " + path2Set);
+//                        Log.d("Debug", "[sendTorrent] category2Set: " + category2Set);
 
                         // Save checkbox
-                        savePreferenceAsBoolean("pathAndLabelDialog", !(checkBoxPathAndLabelDialog.isChecked()));
+                        savePreferenceAsBoolean("pathAndCategoryDialog", !(checkBoxPathAndCategoryDialog.isChecked()));
 
                         // User accepted
                         handleUrlTorrent();
@@ -5936,11 +6063,11 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         }
     }
 
-    private void addLabel2History(String label) {
+    private void addCategory2History(String category) {
 
-        if (!label_history.contains(label)) {
-            label_history.add(label);
-            savePreferenceAsStringSet("label_history", label_history);
+        if (!category_history.contains(category)) {
+            category_history.add(category);
+            savePreferenceAsStringSet("category_history", category_history);
         }
     }
 

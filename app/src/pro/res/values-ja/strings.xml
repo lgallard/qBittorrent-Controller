@@ -143,8 +143,6 @@
   <string name="settings_qbittorrent_darkui_dialog_title">ダークテーマを使用する</string>
   <string name="settings_qbittorrent_header_dialog_title">速度と合計を表示</string>
   <string name="settings_qbittorrent_header_dialog_sumary">アップロード/ダウンロード速度と合計</string>
-  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">保存パスとラベルのダイアログ</string>
-  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">保存パスとラベルのダイアログを有効にします</string>
   <string name="options_qbittorrent_connections_limits_category">接続限度</string>
   <string name="options_qbittorrent_global_max_connections_title">グローバル最大接続数</string>
   <string name="options_qbittorrent_global_max_connections_dialog_title">接続のグローバル最大数?</string>
@@ -247,17 +245,19 @@
   <string name="error_permission2">ファイルやディレクトリを一覧表示するために、ストレージのアクセスが必要です!</string>
   <string name="torrent_details_addedon">追加:</string>
   <string name="torrent_details_completedon">完了:</string>
-  <string name="drawer_label_labels">ラベル</string>
-  <string name="drawer_label_all">すべて</string>
-  <string name="drawer_label_unlabeled">ラベルを外しました</string>
-  <string name="torrent_details_label">ラベル:</string>
-  <string name="action_set_label">ラベルを設定</string>
-  <string name="action_delete_label">ラベルを削除</string>
+  <string name="drawer_category_categories">カテゴリー</string>
+  <string name="drawer_category_all">すべて</string>
+  <string name="drawer_category_uncategorized">未分類</string>
+  <string name="torrent_details_category">カテゴリー:</string>
+  <string name="action_set_category">カテゴリーを設定する</string>
+  <string name="action_delete_category">カテゴリーを削除</string>
   <string name="torrentsApplyingChange">変更を適用中!</string>
-  <string name="torrent_label_menu">ラベル...</string>
+  <string name="torrent_category_menu">カテゴリー...</string>
   <string name="action_add_tracker">トラッカーを追加</string>
   <string name="help_libraries">使用ソフトウェア:</string>
   <string name="action_add_file">Torrent ファイルを追加</string>
   <string name="action_add_url">Torrent リンクを追加</string>
   <string name="pathAndLabelDialogText">今後このダイアログを表示しない</string>
+  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">保存パスとラベルのダイアログ</string>
+  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">保存パスとラベルのダイアログを有効にします</string>
 </resources>

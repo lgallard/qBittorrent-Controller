@@ -56,7 +56,6 @@ import static com.lgallardo.qbittorrentclient.MainActivity.keystore_password;
 import static com.lgallardo.qbittorrentclient.MainActivity.keystore_path;
 import static com.lgallardo.qbittorrentclient.MainActivity.port;
 import static com.lgallardo.qbittorrentclient.MainActivity.protocol;
-import static com.lgallardo.qbittorrentclient.MainActivity.qb_version;
 import static com.lgallardo.qbittorrentclient.MainActivity.subfolder;
 
 
@@ -95,7 +94,7 @@ public class TorrentDetailsFragment extends Fragment {
     // Torrent variables
     String name, info, hash, ratio, size, progressInfo = "", state, leechs, seeds, priority, savePath, creationDate, comment, totalWasted, totalUploaded,
             totalDownloaded, timeElapsed, nbConnections, shareRatio, uploadRateLimit, downloadRateLimit, downloaded, eta, downloadSpeed, uploadSpeed,
-            label;
+            category;
 
     double progress;
 
@@ -234,7 +233,7 @@ public class TorrentDetailsFragment extends Fragment {
                 downloaded = savedInstanceState.getString("torrentDetailDownloaded", "");
                 addedOn = savedInstanceState.getLong("torrentDetailsAddedOn", 0);
                 completionOn = savedInstanceState.getLong("torrentDetailsCompletionOn", 0);
-                label = savedInstanceState.getString("torrentDetailsLabel", "");
+                category = savedInstanceState.getString("torrentDetailsCategory", "");
                 hashToUpdate = hash;
 
             } else {
@@ -251,13 +250,12 @@ public class TorrentDetailsFragment extends Fragment {
                 progressInfo = Common.ProgressForUiTruncated(progress) + "%";
                 priority = "" + this.torrent.getPriority();
                 eta = Common.secondsToEta(this.torrent.getEta());
-                uploadSpeed = "" + this.torrent.getUpspeed();
+                uploadSpeed = Common.calculateSize(this.torrent.getUpspeed()) + "/s";
                 downloadSpeed = Common.calculateSize(this.torrent.getDlspeed()) + "/s";
                 downloaded = Common.calculateSize(this.torrent.getSize() - this.torrent.getAmount_left());
                 addedOn = this.torrent.getAdded_on();
                 completionOn = this.torrent.getCompletion_on();
-//                label = this.torrent.getLabel();
-
+                category = this.torrent.getCategory();
 
 //                Log.d("Debug", "[TorrentDetailsFragment] addedOn: " + addedOn);
 //                Log.d("Debug", "[TorrentDetailsFragment] addedOn: " + Common.unixTimestampToDate(addedOn));
@@ -303,7 +301,7 @@ public class TorrentDetailsFragment extends Fragment {
 
             TextView addedOnTextView = (TextView) rootView.findViewById(R.id.torrentAddedOn);
             TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);
-            TextView labelTextView = (TextView) rootView.findViewById(R.id.torrentLabel);
+            TextView categoryTextView = (TextView) rootView.findViewById(R.id.torrentCategory);
 
             if (addedOn != 10800) {
                 // Not fully added yet
@@ -319,10 +317,10 @@ public class TorrentDetailsFragment extends Fragment {
                 completionOnTextView.setText("");
             }
 
-            if (label != null && !(label.equals("null"))) {
-                labelTextView.setText(label);
+            if (category != null && !(category.equals("null"))) {
+                categoryTextView.setText(category);
             } else {
-                labelTextView.setText("");
+                categoryTextView.setText("");
             }
 
 
@@ -807,12 +805,12 @@ public class TorrentDetailsFragment extends Fragment {
             progressInfo = Common.ProgressForUiTruncated(progress) + "%";
             priority = "" + torrent.getPriority();
             eta = Common.secondsToEta(torrent.getEta());
-            uploadSpeed = "" + torrent.getUpspeed();
+            uploadSpeed = Common.calculateSize(torrent.getUpspeed()) + "/s";
             downloadSpeed = Common.calculateSize(torrent.getDlspeed()) + "/s";
             downloaded = Common.calculateSize(torrent.getSize() - torrent.getAmount_left());
             addedOn = torrent.getAdded_on();
             completionOn = torrent.getCompletion_on();
-//            label = torrent.getLabel();
+            category = torrent.getCategory();
 
 
 //            Log.d("Debug", "[TorrentDetailsFragment] update - progress: " + progress);
@@ -864,7 +862,7 @@ public class TorrentDetailsFragment extends Fragment {
             TextView addedOnTextView = (TextView) rootView.findViewById(R.id.torrentAddedOn);
             TextView completionOnTextView = (TextView) rootView.findViewById(R.id.torrentCompletionOn);
 
-            TextView labelTextView = (TextView) rootView.findViewById(R.id.torrentLabel);
+            TextView categoryTextView = (TextView) rootView.findViewById(R.id.torrentCategory);
 
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
@@ -883,10 +881,10 @@ public class TorrentDetailsFragment extends Fragment {
                 completionOnTextView.setText("");
             }
 
-            if (label != null && !(label.equals("null"))) {
-                labelTextView.setText(label);
+            if (category != null && !(category.equals("null"))) {
+                categoryTextView.setText(category);
             } else {
-                labelTextView.setText("");
+                categoryTextView.setText("");
             }
 
 
@@ -1052,14 +1050,14 @@ public class TorrentDetailsFragment extends Fragment {
             // TODO: Change add_tracker to true
 //                menu.findItem(R.id.action_add_tracker).setVisible(false);
 
-            // TODO: set label/category visible after implement it
+            // TODO: set category/category visible after implement it
             menu.findItem(R.id.action_label_menu).setVisible(false);
-            menu.findItem(R.id.action_set_label).setVisible(false);
-            menu.findItem(R.id.action_delete_label).setVisible(false);
+            menu.findItem(R.id.action_set_category).setVisible(false);
+            menu.findItem(R.id.action_delete_category).setVisible(false);
 
             // TODO: Check when this changed (qb_api X.Y.Z )
             if (MainActivity.qb_api < 8) {
-                menu.findItem(R.id.action_delete_label).setVisible(false);
+                menu.findItem(R.id.action_delete_category).setVisible(false);
             }
 
             // Set Alternate Speed limit state

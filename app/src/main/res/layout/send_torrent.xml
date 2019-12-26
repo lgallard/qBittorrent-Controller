@@ -24,26 +24,26 @@
 
         />
 
-    <!--TextView
-        android:id="@+id/textLabel"
+    <TextView
+        android:id="@+id/textCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="20dp"
-        android:text="@string/torrent_details_label" />
+        android:text="@string/torrent_details_category" />
 
     <AutoCompleteTextView
-        android:id="@+id/label_sent"
+        android:id="@+id/category_sent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="20dp"
-        /-->
+        />
 
     <CheckBox
-        android:id="@+id/pathAndLabelDialog"
+        android:id="@+id/pathAndCategoryDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pathAndLabelDialogText" />

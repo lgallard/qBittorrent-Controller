@@ -146,15 +146,11 @@
     <string name="settings_qbittorrent_sortby_dialog_title">Sort by...</string>
     <string name="settings_qbittorrent_reverse_order_summary">Reverse order</string>
     <string name="settings_qbittorrent_reverse_order_dialog_title">Reverse order?</string>
-
     <string name="settings_qbittorrent_appearance_category">Appearance</string>
     <string name="settings_qbittorrent_darkui_dialog_title">Use dark theme</string>
     <string name="settings_qbittorrent_header_dialog_title">Show speeds and totals</string>
     <string name="settings_qbittorrent_header_dialog_sumary">Upload/download speeds and totals</string>
-
-    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Save path and label dialog</string>
-    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Enable save path and label dialog</string>
-
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Save path and category dialog</string>
     <string name="options_qbittorrent_connections_limits_category">Connections Limits</string>
     <string name="options_qbittorrent_global_max_connections_title">Global max connections</string>
     <string name="options_qbittorrent_global_max_connections_dialog_title">Global maximum number of connections?</string>
@@ -257,17 +253,18 @@
     <string name="error_permission2">Storage access required to list directories and files!</string>
     <string name="torrent_details_addedon">Added on:</string>
     <string name="torrent_details_completedon">Completed on:</string>
-    <string name="drawer_label_labels">Labels</string>
-    <string name="drawer_label_all">All</string>
-    <string name="drawer_label_unlabeled">Unlabeled</string>
-    <string name="torrent_details_label">Label:</string>
-    <string name="action_set_label">Set label</string>
-    <string name="action_delete_label">Delete label</string>
+    <string name="drawer_category_categories">Categories</string>
+    <string name="drawer_category_all">All</string>
+    <string name="drawer_category_uncategorized">Uncategorized</string>
+    <string name="torrent_details_category">Category:</string>
+    <string name="action_set_category">Set category</string>
+    <string name="action_delete_category">Delete category</string>
     <string name="torrentsApplyingChange">Applying change!</string>
-    <string name="torrent_label_menu">Label...</string>
+    <string name="torrent_category_menu">Category...</string>
     <string name="action_add_tracker">Add tracker</string>
     <string name="help_libraries">Software used:</string>
     <string name="action_add_file">Add torrent file</string>
     <string name="action_add_url">Add torrent link</string>
     <string name="pathAndLabelDialogText">Don\'t show this dialog again</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Enable save path and category dialog</string>
 </resources>

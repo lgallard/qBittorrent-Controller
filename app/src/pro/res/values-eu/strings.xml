@@ -257,20 +257,19 @@
     <string name="sortby_menu_speed">Abiadura...</string>
     <string name="torrent_details_addedon">Gehituta:</string>
     <string name="torrent_details_completedon">Osatuta:</string>
-    <string name="drawer_label_labels">Etiketak</string>
-    <string name="drawer_label_all">Guztiak></string>
-    <string name="drawer_label_unlabeled">Etiketatugabe</string>
-    <string name="torrent_details_label">Etiketa:</string>
-    <string name="torrent_label_menu">Etiketa...</string>
+    <string name="drawer_category_categories">Kategoriak</string>
+    <string name="drawer_category_all">Guztiak></string>
+    <string name="drawer_category_uncategorized">Kategoriarik ez</string>
+    <string name="torrent_details_category">Kategoria:</string>
+    <string name="torrent_category_menu">Kategoria...</string>
     <string name="torrentsApplyingChange">Aldaketa ezartzen!</string>
-    <string name="action_delete_label">Ezabatu etiketa</string>
-    <string name="action_set_label">Ezarri etiketa</string>
+    <string name="action_delete_category">Ezabatu kategoria</string>
+    <string name="action_set_category">Ezarri kategoria</string>
     <string name="action_add_tracker">Gehitu tracker</string>
     <string name="help_libraries">Erabilitako softwarea:</string>
     <string name="action_add_file">Gehitu torrent fitxategia</string>
     <string name="action_add_url">Gehitu torrent esteka</string>
     <string name="pathAndLabelDialogText">Ez da elkarrizketa hau berriro erakutsi</string>
-    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Gaitu bidea eta etiketa elkarrizketa-gorde</string>
     <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Gorde bidea eta etiketa elkarrizketa-</string>
-
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Gaitu gorde bidea eta kategoria elkarrizketa-koadroa</string>
 </resources>
