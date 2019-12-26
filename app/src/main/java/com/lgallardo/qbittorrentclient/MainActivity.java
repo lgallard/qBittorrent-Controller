@@ -1,4 +1,4 @@
-/*
+ /*
  *   Copyright (c) 2014-2015 Luis M. Gallardo D.
  *   All rights reserved. This program and the accompanying materials
  *   are made available under the terms of the GNU Lesser General Public License v3.0
@@ -102,6 +102,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -113,6 +114,10 @@ interface RefreshListener {
 
 interface TorrentsListCallBack {
     void onSuccess(List<Torrent> list);
+}
+
+interface CategoriesListCallBack {
+    void onSuccess(List<Category> list);
 }
 
 interface ContentsListCallback {
@@ -285,10 +290,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
     public static final int DRAWER_ITEM_ACTION = 1;
     public static final int DRAWER_ITEM_SERVER = 3;
     public static final int DRAWER_SERVERS = 5;
-    public static final int DRAWER_LABEL = 6;
-//    public static final int DRAWER_LABEL_CATEGORY = 8;
-
-    private ArrayList<String> categories = new ArrayList<>();
+    public static final int DRAWER_CATEGORY = 6;
+    public static final int DRAWER_CATEGORIES = 8;
 
     // Fragments
     private AboutFragment secondFragment;
@@ -2726,7 +2729,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
 //                if (!category.equals(getResources().getString(R.string.drawer_category_all)) && !category.equals(getResources().getString(R.string.drawer_category_uncategorized))) {
 
-                if (!category.equals(getResources().getString(R.string.drawer_category_all))) {
+                if (!category.equals(getResources().getString(R.string.drawer_category_all).toLowerCase())) {
 
                      if (category.equals(getResources().getString(R.string.drawer_category_uncategorized))){
                          categoryEncoded = Uri.encode("http://www.dummy.org?category=" );
@@ -2857,6 +2860,122 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         // Return the lists
         return torrents;
+    }
+
+    // Get all categories
+
+    private List getCategoryListV(final CategoriesListCallBack callback) {
+
+        final List<Category> categories = new ArrayList<>();
+
+        String url = "";
+
+        // if server is publish in a subfolder, fix url
+        if (subfolder != null && !subfolder.equals("")) {
+            url = subfolder + "/" + url;
+        }
+
+        url = protocol + "://" + hostname + ":" + port + url;
+
+        // Command
+        url = url + "/api/v2/torrents/categories";
+
+
+
+        JsonObjectRequest jsObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d("Debug: ", "[getCategoryListV] onResponse");
+
+                        Iterator<String> iter = response.keys();
+                        while (iter.hasNext()) {
+                            String key = iter.next();
+                            String name, savePath;
+                            try {
+                                JSONObject value = (JSONObject) response.get(key);
+                                name = value.getString("name");
+                                savePath = value.getString("savePath");
+
+                                Log.d("Debug: ", "[getCategoryListV] name: " + name);
+                                Log.d("Debug: ", "[getCategoryListV] savePath: " + savePath);
+
+                                // Add category to the list
+                                categories.add(new Category(name,savePath));
+
+
+                            } catch (JSONException e) {
+                                // Something went wrong!
+                            }
+                        }
+
+                        // Return value
+                        callback.onSuccess(categories);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+//                            Log.d("Debug", "[getTorrentListV] Connection error!");
+                            Toast.makeText(getApplicationContext(), "Connection error!", Toast.LENGTH_SHORT).show();
+                        }
+                        // Log status code
+                        NetworkResponse networkResponse = error.networkResponse;
+                        if (networkResponse != null) {
+//                            Log.d("Debug", "[getTorrentListV] statusCode: " + networkResponse.statusCode);
+
+                            if (networkResponse.statusCode == 404){
+                                Toast.makeText(getApplicationContext(), "Host not found!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (networkResponse.statusCode == 403){
+                                Log.d("Debug", "[getCategoryListV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
+
+                                connection403ErrorCounter = connection403ErrorCounter+1;
+
+                                if(connection403ErrorCounter > 1) {
+                                    Toast.makeText(getApplicationContext(), "[getCategoryListV] Authentication error!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        // Log error
+                        Log.d("Debug", "[getCategoryListV] Error in JSON response: " + error.getMessage());
+                        Log.d("Debug", "[getCategoryListV] Error in JSON error: " + error);
+
+
+                    }
+                }
+
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("User-Agent", "qBittorrent for Android");
+                params.put("Host", hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", cookie);
+                return params;
+            }
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
+
+        // Add request to te queue
+        addVolleyRequest(jsObjectRequest);
+
+        // Return the list
+        return categories;
     }
 
     // Wraps
@@ -3503,15 +3622,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
                 for (int i = 0; i < torrents.size(); i++) {
 
-                    // Get label
-                    category = torrents.get(i).getCategory();
-
-
-                    if (!categories.contains(category)) {
-                        // Add category
-                        categories.add(category);
-                    }
-
                     if (currentState.equals("all") && (searchField == "" || torrents.get(i).getName().toUpperCase().contains(searchField.toUpperCase()))) {
                         torrentsFiltered.add(torrents.get(i));
                     }
@@ -3560,43 +3670,47 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                 }
 
                 // Categories
-                ArrayList<DrawerItem> categoryItems = new ArrayList<DrawerItem>();
+                final ArrayList<DrawerItem> categoryItems = new ArrayList<DrawerItem>();
 
                 // Set uncategorized first
 
                 // Add category
-                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_categories, getResources().getString(R.string.drawer_category_categories), DRAWER_SERVERS, true, "category"));
+                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_categories, getResources().getString(R.string.drawer_category_categories), DRAWER_CATEGORIES, true, "categories"));
 
                 // Add All
                 category = getResources().getString(R.string.drawer_category_all);
-
-
-                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_LABEL, (currentCategory.equals(category) || !categories.contains(currentCategory) && !currentCategory.equals(getResources().getString(R.string.drawer_category_uncategorized))), "category"));
+                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_CATEGORY, (currentCategory.equals(category) ), "category"));
 
                 // Add uncategorized
                 // TODO: Uncomment to enable uncategorized item
 //                category = getResources().getString(R.string.drawer_category_uncategorized);
-//                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_LABEL, currentCategory.equals(category) || currentCategory.equals(""), "category"));
+//                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_CATEGORY, currentCategory.equals(category) || currentCategory.equals(""), "category"));
 
 
-                if (categories != null && !(categories.contains(null))) {
-                    // Sort categories
-                    Collections.sort(categories);
+                getCategoryListV(new CategoriesListCallBack() {
+                    @Override
+                    public void onSuccess(List<Category> categories) {
+                        Log.d("Debug", "[getCategoryListV] onSuccess");
 
-                    for (int i = 0; i < categories.size(); i++) {
+                        String name, savePath;
 
-                        category = categories.get(i);
+                        for (int i = 0; i < categories.size(); i++) {
 
-                        if (category != null && !category.equals("")) {
-                            categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_LABEL, currentCategory.equals(category), "category"));
-//                            Log.d("Debug", "[getTorrentList] category: " + category);
+                            name = categories.get(i).getName();
+                            savePath = categories.get(i).getSavePath();
+
+//                            Log.d("Debug", "[getCategoryListV] Name: " + name);
+//                            Log.d("Debug", "[getCategoryListV] Save Path: " + savePath);
+
+                            // Add category name to the drawer menu
+                            if (name != null && !name.equals("")) {
+                                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, name, DRAWER_CATEGORY, currentCategory.equals(name), "category"));
+                            }
                         }
+
+                        rAdapter.refreshDrawerCategories(categoryItems);
                     }
-
-
-                    rAdapter.refreshDrawerCategories(categoryItems);
-
-                }
+                });
 
                 // Sort by filename
                 if (sortby_value == SORTBY_NAME) {
@@ -3937,44 +4051,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         getCookie();
 
 //        Log.d("Debug", "[refresh] category: " + category);
-
-//        TODO: Delete old code for category (label)
-//        // Category
-//        if (category != null && !category.equals(getResources().getString(R.string.drawer_category_all))) {
-//
-//
-//            if (category.equals(getResources().getString(R.string.drawer_category_uncategorized))) {
-//                category = "";
-//            }
-//
-//            if (!categories.contains(category)) {
-//                category = getResources().getString(R.string.drawer_category_all);
-//            }
-//
-//            saveLastCategory(category);
-//
-//            try {
-//
-//                if (!category.equals(getResources().getString(R.string.drawer_category_all))) {
-//
-//                    // I used a dummy URL to encode category
-//                    String categoryEncoded = Uri.encode("http://www.dummy.org?category=" + category);
-//
-//                    // then I got the the encoded category
-//                    categoryEncoded = categoryEncoded.substring(categoryEncoded.indexOf("%3D") + 3);
-//
-//                    // to build the url and pass it to params[0]
-//                    params[0] = params[0] + "&category=" + categoryEncoded;
-//                }
-//
-//            } catch (Exception e) {
-//                Log.e("Debug", "[refresh] Category Exception: " + e.toString());
-//            }
-//
-//
-//        }
-
-//        params[1] = state;
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();

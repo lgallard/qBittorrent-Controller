@@ -252,20 +252,19 @@
     <string name="error_permission2">L\'accès au stockage est nécessaire afin de lister les répertoires et fichiers!</string>
     <string name="torrent_details_addedon">Ajouté le:</string>
     <string name="torrent_details_completedon">Complété le:</string>
-    <string name="drawer_label_labels">Étiquettes</string>
-    <string name="drawer_label_all">Tout</string>
-    <string name="drawer_label_unlabeled">Sans étiquette</string>
-    <string name="torrent_details_label">Étiquette:</string>
-    <string name="action_set_label">Définir l\'étiquette</string>
-    <string name="action_delete_label">Supprimer l\'étiquette</string>
-    <string name="torrentsApplyingChange">Changement appliqué!</string>
-    <string name="torrent_label_menu">Étiquette...</string>
-    <string name="action_add_tracker">Ajouter un tracker</string>
-    <string name="help_libraries">Logiciels utilisés:</string>
-    <string name="action_add_file">Ajouter un fichier torrent</string>
+    <string name="drawer_category_categories">Catégories</string>
+    <string name="drawer_category_all">Tout</string>
+    <string name="drawer_category_uncategorized">Pas de catégories</string>
+    <string name="torrent_details_category">Catégories:</string>
+    <string name="action_set_category">Définir l\'catégorie</string>
+    <string name="action_delete_category">Supprimer l\'catégorie</string>
+    <string name="torrentsApplyingChange">Appliquer le changement!</string>
+    <string name="torrent_category_menu">Catégorie...</string>
+    <string name="action_add_tracker">Ajouter tracker</string>
+    <string name="help_libraries">Les logiciels utilisés:</string>
+    <string name="action_add_file">Ajouter fichier torrent</string>
     <string name="action_add_url">Ajouter un lien torrent</string>
-    <string name="pathAndLabelDialogText">Ne plus afficher cette boîte de dialogue</string>
-    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Activer la boîte de dialogue de sauvegarde et d\'étiquette</string>
-    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Enregistrer la boîte de dialogue de chemin et d\'étiquette</string>
-
+    <string name="pathAndLabelDialogText">Ne plus afficher ce message</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Message du chemin de sauvegarde et de l\'étiquette</string>
+    <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Activer le message du chemin de sauvegarde et de l\'étiquette</string>
 </resources>

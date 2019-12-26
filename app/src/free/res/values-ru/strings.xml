@@ -261,20 +261,19 @@
   <string name="sortby_menu_added_on">добавлен</string>
   <string name="torrent_details_addedon">добавлен:</string>
   <string name="torrent_details_completedon">Завершена:</string>
-  <string name="drawer_label_labels">Этикетки</string>
-  <string name="drawer_label_all">Все</string>
-  <string name="drawer_label_unlabeled">Немеченому</string>
-  <string name="torrent_details_label">Этикетка:</string>
-  <string name="torrent_label_menu">Этикетка...</string>
+  <string name="drawer_category_categories">категории</string>
+  <string name="drawer_category_all">Все</string>
+  <string name="drawer_category_uncategorized">некатегоризированных</string>
+  <string name="torrent_details_category">Категория:</string>
+  <string name="torrent_category_menu">Категория...</string>
   <string name="torrentsApplyingChange">Применение изменений!</string>
-  <string name="action_delete_label">Удалить ярлык</string>
-  <string name="action_set_label">Определить этикетку</string>
+  <string name="action_delete_category">Удалить категорию</string>
+  <string name="action_set_category">Установить категорию</string>
   <string name="action_add_tracker">Добавить tracker</string>
   <string name="help_libraries">используется программное обеспечение:</string>
   <string name="action_add_url">Добавить торрент ссылку</string>
   <string name="action_add_file">Добавить торрент-файл</string>
   <string name="pathAndLabelDialogText">Больше не показывать этот диалог</string>
-  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Включить путь для сохранения и диалога метки</string>
-  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Сохранить путь и диалог метки</string>
-
+  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Диалог Сохранить путь и категорию</string>
+  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Включить диалог сохранения пути и категории</string>
 </resources>

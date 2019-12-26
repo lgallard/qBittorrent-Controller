@@ -143,8 +143,6 @@
   <string name="settings_qbittorrent_darkui_dialog_title">Utilisez thème sombre</string>
   <string name="settings_qbittorrent_header_dialog_title">Afficher les vitesses et les totaux</string>
   <string name="settings_qbittorrent_header_dialog_sumary">Transférer/vitesses de téléchargement et les totaux</string>
-  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Message du chemin de sauvegarde et de l\'étiquette</string>
-  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Activer le message du chemin de sauvegarde et de l\'étiquette</string>
   <string name="options_qbittorrent_connections_limits_category">Limites de connexion</string>
   <string name="options_qbittorrent_global_max_connections_title">Max Global de connexions</string>
   <string name="options_qbittorrent_global_max_connections_dialog_title">Nombre maximum global de connexions?</string>
@@ -260,4 +258,6 @@
   <string name="action_add_file">Ajouter fichier torrent</string>
   <string name="action_add_url">Ajouter un lien torrent</string>
   <string name="pathAndLabelDialogText">Ne plus afficher ce message</string>
+  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_title">Message du chemin de sauvegarde et de l\'étiquette</string>
+  <string name="settings_qbittorrent_pathAndLabelDialog_dialog_sumary">Activer le message du chemin de sauvegarde et de l\'étiquette</string>
 </resources>
