@@ -1174,6 +1174,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
     private void getCookieV(final VolleyCallback callback) {
 
+        Log.d("Debug: ", "[getCookieV] getApi on Volley!");
+
         String url = "";
 
         // if server is publish in a subfolder, fix url
@@ -1186,6 +1188,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         // Command
         url = url + "/api/v2/auth/login";
 
+        Log.d("Debug: ", "[getCookieV] url: " + url);
+
         // New JSONObject request
         CustomStringRequest jsArrayRequest = new CustomStringRequest(
                 Request.Method.POST,
@@ -1194,8 +1198,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(String response) {
 
-//                        Log.d("Debug", "[getCookieV] Response: " + response);
-                        //Log.d("Debug", "headers: " + CustomStringRequest.headers);
+                        Log.d("Debug", "[getCookieV] Response: " + response);
+//                        Log.d("Debug", "headers: " + CustomStringRequest.headers);
 
                         JSONObject jsonObject = null;
                         CustomObjectResult customObjectResult;
@@ -1271,8 +1275,10 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 //                                    Toast.makeText(getApplicationContext(), "Please check your account settings!", Toast.LENGTH_SHORT).show();
 //                                }
                             }
-                        }
+                        } else {
 
+                            Toast.makeText(getApplicationContext(), "Check your connection settings!", Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 }
@@ -2752,17 +2758,6 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
 
         }
 
-//        if (category != null && category.length() != 0) {
-//
-//            // I used a dummy URL to encode category
-//            String categoryEncoded = Uri.encode("http://www.dummy.org?category=" + category);
-//
-//            // then I got the the encoded category
-//            categoryEncoded = categoryEncoded.substring(categoryEncoded.indexOf("%3D") + 3);
-//
-//            url = url + "&category="+categoryEncoded;
-//
-//        }
 
 //        Log.d("Debug: ", "[getTorrentListV] URL: " + url);
 //        Log.d("Debug: ", "[getTorrentListV] cookies: " + cookie);
@@ -2890,7 +2885,7 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        Log.d("Debug: ", "[getCategoryListV] onResponse");
+//                        Log.d("Debug: ", "[getCategoryListV] onResponse");
 
                         Iterator<String> iter = response.keys();
                         while (iter.hasNext()) {
@@ -2900,9 +2895,9 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                                 JSONObject value = (JSONObject) response.get(key);
                                 name = value.getString("name");
                                 savePath = value.getString("savePath");
-
-                                Log.d("Debug: ", "[getCategoryListV] name: " + name);
-                                Log.d("Debug: ", "[getCategoryListV] savePath: " + savePath);
+//
+//                                Log.d("Debug: ", "[getCategoryListV] name: " + name);
+//                                Log.d("Debug: ", "[getCategoryListV] savePath: " + savePath);
 
                                 // Add category to the list
                                 categories.add(new Category(name,savePath));
@@ -3000,8 +2995,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         cookie = null;
                         getCookie();
 
-                        Log.d("Debug: ", "[getApi] getApi was executed");
-                        Log.d("Debug: ", "[getApi] - cookie: " + cookie);
+//                        Log.d("Debug: ", "[getApi] getApi was executed");
+//                        Log.d("Debug: ", "[getApi] - cookie: " + cookie);
                     }
 
                     if (api >= 230) {
@@ -3009,8 +3004,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
                         cookie = null;
                         getCookie();
 
-                        Log.d("Debug: ", "[getApi] getApi was executed");
-                        Log.d("Debug: ", "[getApi] - cookie: " + cookie);
+//                        Log.d("Debug: ", "[getApi] getApi was executed");
+//                        Log.d("Debug: ", "[getApi] - cookie: " + cookie);
                     }
 
 
@@ -3025,6 +3020,8 @@ public class MainActivity extends AppCompatActivity implements RefreshListener {
         getCookieV(new VolleyCallback() {
             @Override
             public void onSuccess(String result) {
+
+//                Log.d("Debug: ", "[getCookie] getApi on Success!");
 
                 MainActivity.cookie = result;
 
