@@ -153,41 +153,50 @@ public class VolleySingleton {
         SSLContext sslContext = null;
         try {
             cf = CertificateFactory.getInstance("X.509");
-
-            File localTrustStoreFile = new File(keystore_path);
-
-//            Log.d("Debug", "[SSLSocketFactory] File path: " + localTrustStoreFile.getPath());
-//            Log.d("Debug", "[SSLSocketFactory] localTrustStoreFile path: " + localTrustStoreFile.getPath());
-
-
-            InputStream caInput = new FileInputStream(localTrustStoreFile);
-
-            Log.d("Debug", "[SSLSocketFactory] InputStream: " + caInput);
-
-
-//            Certificate ca = cf.generateCertificate(caInput);
-
-
-//            Log.d("Debug", "[SSLSocketFactory] getSubjectDN: " + ((X509Certificate) ca).getSubjectDN());
-
+            File localTrustStoreFile = null;
+            InputStream caInput = null;
 
             KeyStore keyStore = KeyStore.getInstance("BKS");
 
-            if(keystore_password == null || keystore_password.isEmpty()){
+            try {
+
+                localTrustStoreFile = new File(keystore_path);
+                caInput = new FileInputStream(localTrustStoreFile);
+
+                Log.d("Debug", "[SSLSocketFactory] File path: " + localTrustStoreFile.getPath());
+//            Log.d("Debug", "[SSLSocketFactory] localTrustStoreFile path: " + localTrustStoreFile.getPath());
+
+                if(caInput == null || localTrustStoreFile == null || !localTrustStoreFile.exists()){
+
+                    Log.d("Debug", "[SSLSocketFactory] caInput or localTrustStoreFile is null or empty: ");
+
+                    keyStore.load(null, null);
+
+                }else {
+
+                    if (keystore_password == null || keystore_password.isEmpty()) {
+
+                        Log.d("Debug", "[SSLSocketFactory] keystore_password is null or empty: ");
+
+                        keyStore.load(caInput, "".toCharArray());
+
+                    } else {
+
+                        Log.d("Debug", "[SSLSocketFactory] keystore_password is NOT  null ");
+                        keyStore.load(caInput, keystore_password.toCharArray());
+                    }
+
+                }
+
+                caInput.close();
+
+            } catch (FileNotFoundException e) {
+                Log.d("Debug", "[SSLSocketFactory] FileNotFoundException: " + e.getMessage());
+                Log.d("Debug", "[SSLSocketFactory] keyStore.load(null, null) ");
+//                e.printStackTrace()
+
                 keyStore.load(null, null);
-
             }
-            else{
-                keyStore.load(caInput, keystore_password.toCharArray());
-            }
-
-
-            //            keyStore.setCertificateEntry("ca", ca);
-
-            caInput.close();
-
-//            Log.d("Debug", "[SSLSocketFactory] caInput close: " + caInput);
-
 
             HostnameVerifier hostnameVerifier = new HostnameVerifier() {
                 @Override
@@ -211,18 +220,17 @@ public class VolleySingleton {
         } catch (CertificateException e) {
             Log.d("Debug", "[SSLSocketFactory] CertificateException: " + e.getMessage());
             e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            Log.d("Debug", "[SSLSocketFactory] FileNotFoundException: " + e.getMessage());
-            e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
             Log.d("Debug", "[SSLSocketFactory] NoSuchAlgorithmException: " + e.getMessage());
-            e.printStackTrace();
-        } catch (IOException e) {
-            Log.d("Debug", "[SSLSocketFactory] IOException: " + e.getMessage());
             e.printStackTrace();
         } catch (KeyStoreException e) {
             Log.d("Debug", "[SSLSocketFactory] KeyStoreException: " + e.getMessage());
             e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            Log.d("Debug", "[SSLSocketFactory] IOException: " + e.getMessage());
+            e.printStackTrace();
+
         } catch (KeyManagementException e) {
             Log.d("Debug", "[SSLSocketFactory] KeyManagementException: " + e.getMessage());
             e.printStackTrace();
@@ -230,7 +238,7 @@ public class VolleySingleton {
 
         try {
 
-//            Log.d("Debug", "[SSLSocketFactory] Return SocketFactory!");
+            Log.d("Debug", "[SSLSocketFactory] Return SocketFactory!");
 
             SSLSocketFactory sf = sslContext.getSocketFactory();
             HttpsURLConnection.setDefaultSSLSocketFactory(sf);
