@@ -108,6 +108,8 @@
  import java.util.Set;
  import java.util.regex.Pattern;
 
+ import static com.lgallardo.qbittorrentclient.DrawerItemRecyclerViewAdapter.actionItems;
+
  interface RefreshListener {
      void swipeRefresh();
  }
@@ -253,6 +255,10 @@
      protected static long downloadSpeedCount;
      protected static int uploadCount;
      protected static int downloadCount;
+     protected static int seedingCount;
+     protected static int pauseCount;
+     protected static int activeCount;
+     protected static int inactiveCount;
      protected static boolean schedule_alternative_rate_limits;
      protected static String alt_from_hour;
      protected static String alt_from_min;
@@ -698,36 +704,36 @@
              currentState = state;
 
              if (state.equals("all")) {
-                 setTitle(navigationDrawerItemTitles[0]);
+                 setTitle(navigationDrawerItemTitles[0].split("\\Q(\\E")[0].trim());
              }
 
              if (state.equals("downloading")) {
-                 setTitle(navigationDrawerItemTitles[1]);
+                 setTitle(navigationDrawerItemTitles[1].split("\\Q(\\E")[0].trim());
              }
 
              if (state.equals("completed")) {
-                 setTitle(navigationDrawerItemTitles[2]);
+                 setTitle(navigationDrawerItemTitles[2].split("\\Q(\\E")[0].trim());
              }
 
              if (state.equals("seeding")) {
-                 setTitle(navigationDrawerItemTitles[3]);
+                 setTitle(navigationDrawerItemTitles[3].split("\\Q(\\E")[0].trim());
              }
 
              if (state.equals("pause")) {
-                 setTitle(navigationDrawerItemTitles[4]);
+                 setTitle(navigationDrawerItemTitles[4].split("\\Q(\\E")[0].trim());
              }
 
              if (state.equals("active")) {
-                 setTitle(navigationDrawerItemTitles[5]);
+                 setTitle(navigationDrawerItemTitles[5].split("\\Q(\\E")[0].trim());
              }
 
              if (state.equals("inactive")) {
-                 setTitle(navigationDrawerItemTitles[6]);
+                 setTitle(navigationDrawerItemTitles[6].split("\\Q(\\E")[0].trim());
              }
 
          } else {
              // Set title to All
-             setTitle(navigationDrawerItemTitles[0]);
+             setTitle(navigationDrawerItemTitles[0].split("\\Q(\\E")[0].trim());
          }
      }
 
@@ -1013,7 +1019,7 @@
 
 
      protected void refreshFromDrawerAction(String state, String title) {
-         setTitle(title);
+         setTitle(title.split("\\Q(\\E")[0].trim());
          refreshSwipeLayout();
          refresh(state, currentCategory);
          saveLastState(state);
@@ -3621,6 +3627,7 @@
 
 //                    Log.d("Debug", "[getTorrentList] progress: " + (progress * 100));
 //                    Log.d("Debug", "[getTorrentList] progress fixed: " + progressInfo);
+                     Log.d("Debug", "[getTorrentList] torrent state: " + torrents.get(i).getState());
 
                      // Get downloaded
                      downloadedInfo = Common.calculateSize(torrents.get(i).getDownloaded());
@@ -3828,7 +3835,40 @@
 
                  uploadCount = 0;
                  downloadCount = 0;
+                 seedingCount = 0;
+                 pauseCount = 0;
+                 activeCount = 0;
+                 inactiveCount = 0;
 
+                 List<String> downloadingStates = new ArrayList<>(
+                         Arrays.asList(
+                                 "downloading", "metaDL", "pausedDL", "queuedDL", "stalledDL", "checkingDL", "forceDL")
+                 );
+
+                 List<String> uploadingStates = new ArrayList<>(
+                         Arrays.asList(
+                                 "uploading", "pausedUP", "queuedUP", "stalledUP", "checkingUP", "forceUP")
+                 );
+
+                 List<String> seedingStates = new ArrayList<>(
+                         Arrays.asList(
+                                 "pausedUP", "queuedUP", "stalledUP")
+                 );
+
+                 List<String> pausedStates = new ArrayList<>(
+                         Arrays.asList(
+                                 "pausedDL", "pausedUP")
+                 );
+
+                 List<String> activeStates = new ArrayList<>(
+                         Arrays.asList(
+                                 "downloading", "uploading", "checkingDL", "checkingUP", "forceDL", "forceUP")
+                 );
+
+                 List<String> inactiveStates = new ArrayList<>(
+                         Arrays.asList(
+                                 "pausedDL", "pausedUP", "queuedDL", "queuedUP", "stalledDL", "stalledUP")
+                 );
                  try {
 
                      Torrent torrentToUpdate = null;
@@ -3849,15 +3889,45 @@
                              torrentToUpdate = torrent;
                          }
 
-                         uploadSpeedCount += torrent.getUpspeed();
                          downloadSpeedCount += torrent.getDlspeed();
+                         uploadSpeedCount += torrent.getUpspeed();
 
-                         if ("uploading".equals(torrent.getState())) {
-                             uploadCount = uploadCount + 1;
+                         Log.d("Debug", "[getTorrentList] torrent state: " +torrent.getState());
+
+                         for (String s : downloadingStates) {
+                             if (s.equals(torrent.getState())) {
+                                 downloadCount = downloadCount + 1;
+                             }
                          }
 
-                         if ("downloading".equals(torrent.getState())) {
-                             downloadCount = downloadCount + 1;
+                         for (String s : uploadingStates) {
+                             if (s.equals(torrent.getState())) {
+                                 uploadCount = uploadCount + 1;
+                             }
+                         }
+
+                         for (String s : seedingStates) {
+                             if (s.equals(torrent.getState())) {
+                                 seedingCount = seedingCount + 1;
+                             }
+                         }
+
+                         for (String s : pausedStates) {
+                             if (s.equals(torrent.getState())) {
+                                 pauseCount = pauseCount+ 1;
+                             }
+                         }
+
+                         for (String s : activeStates) {
+                             if (s.equals(torrent.getState())) {
+                                 activeCount = activeCount+ 1;
+                             }
+                         }
+
+                         for (String s : inactiveStates) {
+                             if (s.equals(torrent.getState())) {
+                                 inactiveCount = inactiveCount+ 1;
+                             }
                          }
 
                      }
@@ -4017,6 +4087,78 @@
                          CustomLogger.saveReportMessage("Main", "[qBittorrentTask - AdapterException]: " + e.toString());
                      }
                  }
+
+                 // Update drawer counts
+                 DrawerItem item;
+                 String name;
+
+                 Log.d("Debug", "[getTorrentList] currentState: " + currentState);
+
+                 // All
+                 item = actionItems.get(0);
+                 name = item.getName().split("\\Q(\\E")[0].trim();
+                 if (currentState.equals("all")) {
+                     name = name + " ( " + torrents.size() + " )";
+                 }
+                 item.setName(name);
+                 actionItems.set(0, item);
+
+                 // Downloading
+                 item = actionItems.get(1);
+                 name = item.getName().split("\\Q(\\E")[0].trim();
+                 if (currentState.equals("downloading")) {
+                     name = name + " ( " + downloadCount + " )";
+                 }
+                 item.setName(name);
+                 actionItems.set(1, item);
+
+                 // Completed
+                 item = actionItems.get(2);
+                 name = item.getName().split("\\Q(\\E")[0].trim();
+                 if (currentState.equals("completed")) {
+                     name = name + " ( " + uploadCount + " )";
+                 }
+                 item.setName(name);
+                 actionItems.set(2, item);
+
+                 // Seeding
+                 item = actionItems.get(3);
+                 name = item.getName().split("\\Q(\\E")[0].trim();
+                 if (currentState.equals("seeding")) {
+                     name = name + " ( " + seedingCount + " )";
+                 }
+                 item.setName(name);
+                 actionItems.set(3, item);
+
+                 // Paused
+                 item = actionItems.get(4);
+                 name = item.getName().split("\\Q(\\E")[0].trim();
+                 if (currentState.equals("pause")) {
+                     name = name + " ( " + pauseCount + " )";
+                 }
+                 item.setName(name);
+                 actionItems.set(4, item);
+
+                 // Active
+                 item = actionItems.get(5);
+                 name = item.getName().split("\\Q(\\E")[0].trim();
+                 if (currentState.equals("active")) {
+                     name = name + " ( " + activeCount + " )";
+                 }
+                 item.setName(name);
+                 actionItems.set(5, item);
+
+                 // Inactive
+                 item = actionItems.get(6);
+                 name = item.getName().split("\\Q(\\E")[0].trim();
+                 if (currentState.equals("inactive")) {
+                     name = name + " ( " + inactiveCount + " )";
+                 }
+                 item.setName(name);
+                 actionItems.set(6, item);
+
+                // Refresh drawer
+                 rAdapter.refreshDrawer();
 
                  // Send report
                  emailReport();
