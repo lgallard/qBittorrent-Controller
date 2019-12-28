@@ -661,6 +661,24 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
     }
 
+    public void refreshDrawer() {
+
+        DrawerItemRecyclerViewAdapter.serverItems = serverItems;
+
+
+        DrawerItemRecyclerViewAdapter.items = new ArrayList<DrawerItem>();
+
+        // Add items
+        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.serverItems);
+        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.actionItems);
+        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.settingsItems);
+        DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.categoryItems);
+
+        // Refresh
+        notifyDataSetChanged();
+
+    }
+
     public void refreshDrawerServers(ArrayList<DrawerItem> serverItems) {
 
         DrawerItemRecyclerViewAdapter.serverItems = serverItems;
@@ -676,7 +694,6 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
         // Close servers
         removeServerItems();
-
 
         // Refresh
         notifyDataSetChanged();
