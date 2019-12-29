@@ -3706,7 +3706,7 @@
                  getTransferInfo();
 
                  String infoString = "";
-                 String sizeInfo, downloadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo, ratioInfo;
+                 String sizeInfo, downloadedInfo, uploadedInfo, progressInfo, etaInfo, uploadSpeedInfo, downloadSpeedInfo, ratioInfo;
 
 //                Log.d("Debug", "[getTorrentList] torrents.size(): " + torrents.size());
 
@@ -3740,6 +3740,9 @@
                      // Get downloaded
                      downloadedInfo = Common.calculateSize(torrents.get(i).getDownloaded());
 
+                     // Get uploaded
+                     uploadedInfo = Common.calculateSize(torrents.get(i).getUploaded());
+
                      // Get ETA
                      etaInfo = Common.secondsToEta(torrents.get(i).getEta());
 
@@ -3756,8 +3759,9 @@
                      if (packageName.equals("com.lgallardo.qbittorrentclient")) {
                          // Info free
                          infoString = downloadedInfo + " / " + sizeInfo + " "
-                                 + '\u2191' + " " + uploadSpeedInfo + " "
                                  + '\u2193' + " " + downloadSpeedInfo + " "
+                                 + '\u2191' + " " + uploadSpeedInfo + " "
+                                 + '\u2022' + " " + uploadedInfo + " "
                                  + '\u2022' + " " + ratioInfo + " "
                                  + '\u2022' + " " + progressInfo + "% "
                                  + '\u2022' + " " + etaInfo;
@@ -3770,8 +3774,9 @@
                      } else {
                          // Info pro
                          infoString = downloadedInfo + " / " + sizeInfo + " "
-                                 + '\u2191' + " " + uploadSpeedInfo + " "
                                  + '\u2193' + " " + downloadSpeedInfo + " "
+                                 + '\u2191' + " " + uploadSpeedInfo + " "
+                                 + '\u2022' + " " + uploadedInfo + " "
                                  + '\u2022' + " " + ratioInfo + " "
                                  + '\u2022' + " " + etaInfo;
 
