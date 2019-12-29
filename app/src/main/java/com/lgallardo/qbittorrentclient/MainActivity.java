@@ -122,6 +122,10 @@
      void onSuccess(List<Category> list);
  }
 
+ interface ServerStateCallBack {
+     void onSuccess(ServerState serverState);
+ }
+
  interface TransferInfoCallback {
      void onSuccess(TransferInfo transferInfo);
  }
@@ -237,6 +241,7 @@
      protected static long notification_period;
      protected static boolean header;
      public static boolean alternative_speeds;
+     public static String freeSpaceOnDisk;
 
      // Option
      protected static String global_max_num_connections;
@@ -2854,7 +2859,6 @@
      }
 
      // Get all categories
-
      private List getCategoryListV(final CategoriesListCallBack callback) {
 
          final List<Category> categories = new ArrayList<>();
@@ -3000,7 +3004,6 @@
 
                          // Parse object using Gson
 
-
                          final TransferInfo tf = (TransferInfo) new Gson().fromJson(response.toString(), TransferInfo.class);
 
                          // Return value
@@ -3048,6 +3051,110 @@
          addVolleyRequest(jsObjectRequest);
 
      }
+
+     // Get serverState
+     private void getServerStateV(final ServerStateCallBack callback) {
+
+         String url = "";
+
+         // if server is publish in a subfolder, fix url
+         if (subfolder != null && !subfolder.equals("")) {
+             url = subfolder + "/" + url;
+         }
+
+         url = protocol + "://" + hostname + ":" + port + url;
+
+         // Command
+         url = url + "/api/v2/sync/maindata";
+
+
+         JsonObjectRequest jsObjectRequest = new JsonObjectRequest(
+                 Request.Method.GET,
+                 url,
+                 null,
+                 new Response.Listener<JSONObject>() {
+                     @Override
+                     public void onResponse(JSONObject response) {
+
+//                        Log.d("Debug: ", "[getServerStateV] onResponse");
+
+                         try {
+
+                             JSONObject serverState = response.getJSONObject("server_state");
+
+                             final ServerState ss = (ServerState) new Gson().fromJson(serverState.toString(), ServerState.class);
+
+                             Log.d("Debug: ", "[getServerStateV] Free_space_on_disk: " + Common.calculateSize(ss.getFree_space_on_disk()));
+                             Log.d("Debug: ", "[getServerStateV] alt_speed_limits: " + ss.isUse_alt_speed_limits());
+
+                             // Return value
+                             callback.onSuccess(ss);
+
+                         } catch (JSONException e) {
+                             // Something went wrong!
+                         }
+
+                     }
+                 },
+                 new Response.ErrorListener() {
+                     @Override
+                     public void onErrorResponse(VolleyError error) {
+
+                         if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+//                            Log.d("Debug", "[getServerStateV] Connection error!");
+                             Toast.makeText(getApplicationContext(), "Connection error!", Toast.LENGTH_SHORT).show();
+                         }
+                         // Log status code
+                         NetworkResponse networkResponse = error.networkResponse;
+                         if (networkResponse != null) {
+//                            Log.d("Debug", "[getServerStateV] statusCode: " + networkResponse.statusCode);
+
+                             if (networkResponse.statusCode == 404) {
+                                 Toast.makeText(getApplicationContext(), "Host not found!", Toast.LENGTH_SHORT).show();
+                             }
+
+                             if (networkResponse.statusCode == 403) {
+                                 Log.d("Debug", "[getServerStateV] trying to gen new cookie - connection403ErrorCounter: " + connection403ErrorCounter);
+
+                                 connection403ErrorCounter = connection403ErrorCounter + 1;
+
+                                 if (connection403ErrorCounter > 1) {
+                                     Toast.makeText(getApplicationContext(), "[getCategoryListV] Authentication error!", Toast.LENGTH_SHORT).show();
+                                 }
+                             }
+                         }
+
+                         // Log error
+                         Log.d("Debug", "[getServerStateV] Error in JSON response: " + error.getMessage());
+                         Log.d("Debug", "[getServerStateV] Error in JSON error: " + error);
+
+
+                     }
+                 }
+
+         ) {
+             @Override
+             public Map<String, String> getHeaders() throws AuthFailureError {
+                 Map<String, String> params = new HashMap<>();
+                 params.put("User-Agent", "qBittorrent for Android");
+                 params.put("Host", hostname + ":" + port);
+                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+                 params.put("Content-Type", "application/x-www-form-urlencoded");
+                 params.put("Cookie", cookie);
+                 return params;
+             }
+
+             public Map<String, String> getParams() {
+                 Map<String, String> params = new HashMap<>();
+                 return params;
+             }
+         };
+
+         // Add request to te queue
+         addVolleyRequest(jsObjectRequest);
+
+     }
+
 
      // Wraps
      private void getApi() {
@@ -3524,38 +3631,38 @@
 
      }
 
-     private void getAlternativeSpeedLimitsEnabled() {
-         getAlternativeSpeedLimitsEnabled(new VolleyCallback() {
-             @Override
-             public void onSuccess(String result) {
-
-                 Boolean isAlternativeSpeedLimitsEnabled;
-
-//                Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] result: " + result);
-
-                 if (result != null && !result.equals("")) {
-
-
-                     if ("1".equals(result)) {
-                         alternative_speeds = true;
-//                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] ON");
-                     } else {
-                         alternative_speeds = false;
-//                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] OFF");
-                     }
-
-                     savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", alternative_speeds);
-
-
-                     if (altSpeedLimitsMenuItem != null) {
-//                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] altSpeedLimitsMenuItem not null");
-                         altSpeedLimitsMenuItem.setEnabled(true);
-                         altSpeedLimitsMenuItem.setChecked(alternative_speeds);
-                     }
-                 }
-             }
-         });
-     }
+//     private void getAlternativeSpeedLimitsEnabled() {
+//         getAlternativeSpeedLimitsEnabled(new VolleyCallback() {
+//             @Override
+//             public void onSuccess(String result) {
+//
+//                 Boolean isAlternativeSpeedLimitsEnabled;
+//
+////                Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] result: " + result);
+//
+//                 if (result != null && !result.equals("")) {
+//
+//
+//                     if ("1".equals(result)) {
+//                         alternative_speeds = true;
+////                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] ON");
+//                     } else {
+//                         alternative_speeds = false;
+////                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] OFF");
+//                     }
+//
+//                     savePreferenceAsBoolean("alternativeSpeedLimitsEnabled", alternative_speeds);
+//
+//
+//                     if (altSpeedLimitsMenuItem != null) {
+////                        Log.d("Debug: ", "[getAlternativeSpeedLimitsEnabled] altSpeedLimitsMenuItem not null");
+//                         altSpeedLimitsMenuItem.setEnabled(true);
+//                         altSpeedLimitsMenuItem.setChecked(alternative_speeds);
+//                     }
+//                 }
+//             }
+//         });
+//     }
 
      public void setQBittorrentPrefefrences(String json) {
 
@@ -3595,6 +3702,7 @@
              @Override
              public void onSuccess(List<Torrent> torrents) {
 
+                 getServerState();
                  getTransferInfo();
 
                  String infoString = "";
@@ -4179,6 +4287,7 @@
          getTransferInfoV(new TransferInfoCallback() {
              @Override
              public void onSuccess(TransferInfo transferInfo) {
+
 //                 Log.d("Debug", "[getTransferInfo] Up speed: " + transferInfo.getUp_info_speed());
 //                 Log.d("Debug", "[getTransferInfo] getDl_info_data: " + transferInfo.getDl_info_data());
 //
@@ -4205,14 +4314,65 @@
                  }
 
                  uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + transferInfo.getUp_info_speed()) + "/s " + " T: " +  Common.calculateSize(transferInfo.getDl_info_data()) + "  (" + uploadCount + ")" );
-                 downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + " T: " +  Common.calculateSize(transferInfo.getUp_info_data()) + "  (" + downloadCount + ")" );
 
+
+                 if( freeSpaceOnDisk == null){
+                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + " T: " + Common.calculateSize(transferInfo.getUp_info_data()) + "  (" + downloadCount + ")");
+                 }
+                 else {
+                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + " T: " + Common.calculateSize(transferInfo.getUp_info_data()) + "  (" + downloadCount + ")" + " < Free: " + freeSpaceOnDisk + " >");
+                 }
              }
 
          });
 
      }
 
+     public void getServerState() {
+
+         getServerStateV(new ServerStateCallBack() {
+             @Override
+             public void onSuccess(ServerState serverState) {
+                 Log.d("Debug", "[getServerState] Free_space_on_disk: " + Common.calculateSize(serverState.getFree_space_on_disk()));
+                 Log.d("Debug: ", "[getServerStateV] alt_speed_limits: " + serverState.isUse_alt_speed_limits());
+//                 Log.d("Debug", "[getTransferInfo] getDl_info_data: " + transferInfo.getDl_info_data());
+//
+//
+//                 // Set headerInfo
+//                 TextView uploadSpeedTextView = (TextView) findViewById(R.id.upspeed);
+//                 TextView downloadSpeedTextView = (TextView) findViewById(R.id.dlspeed);
+//
+//                 headerInfo = (LinearLayout) findViewById(R.id.header);
+//
+//                 if (header) {
+//                     headerInfo.setVisibility(View.VISIBLE);
+//                 } else {
+//                     headerInfo.setVisibility(View.GONE);
+//                 }
+//
+//
+//                 String AltSpeedInfo;
+//
+//                 if (alternative_speeds) {
+//                     AltSpeedInfo = '\u2713' + "  ";
+//                 } else {
+//                     AltSpeedInfo = "";
+//                 }
+//
+//                 uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + transferInfo.getUp_info_speed()) + "/s " + " T: " +  Common.calculateSize(transferInfo.getDl_info_data()) + "  (" + uploadCount + ")" );
+//                 downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + " T: " +  Common.calculateSize(transferInfo.getUp_info_data()) + "  (" + downloadCount + ")" );
+                 alternative_speeds = serverState.isUse_alt_speed_limits();
+
+                 if (altSpeedLimitsMenuItem != null) {
+                     altSpeedLimitsMenuItem.setEnabled(true);
+                     altSpeedLimitsMenuItem.setChecked(alternative_speeds);
+                 }
+
+                 freeSpaceOnDisk = Common.calculateSize(serverState.getFree_space_on_disk());
+             }
+         });
+
+     }
      // End of wraps
 
      // MultiPart
@@ -4314,7 +4474,7 @@
                          getTorrentList(state, category);
 
                          // Check if  alternative speed limit is set
-                         getAlternativeSpeedLimitsEnabled();
+//                         getAlternativeSpeedLimitsEnabled();
                      }
                  }
 
