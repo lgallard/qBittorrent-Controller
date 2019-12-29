@@ -1,4 +1,4 @@
-/app/app.iml
+app/app.iml
 # Built application files
 *.apk
 *.ap_
@@ -30,4 +30,3 @@ proguard/
 .idea/workspace.xml
 .idea/
 
-app/app.iml
