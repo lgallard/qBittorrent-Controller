@@ -4318,14 +4318,14 @@
                      AltSpeedInfo = "";
                  }
 
-                 uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + transferInfo.getUp_info_speed()) + "/s " + " T: " +  Common.calculateSize(transferInfo.getDl_info_data()) + "  (" + uploadCount + ")" );
+                 uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + transferInfo.getUp_info_speed()) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getDl_info_data()) + "  (" + uploadCount + ")" );
 
 
                  if( freeSpaceOnDisk == null){
-                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + " T: " + Common.calculateSize(transferInfo.getUp_info_data()) + "  (" + downloadCount + ")");
+                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " +  Common.calculateSize(transferInfo.getUp_info_data()) + " (" + downloadCount + ")");
                  }
                  else {
-                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + " T: " + Common.calculateSize(transferInfo.getUp_info_data()) + "  (" + downloadCount + ")" + " < Free: " + freeSpaceOnDisk + " >");
+                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " +  Common.calculateSize(transferInfo.getUp_info_data()) + " (" + downloadCount + ") " + '\u2022' + " Free: " + freeSpaceOnDisk);
                  }
              }
 

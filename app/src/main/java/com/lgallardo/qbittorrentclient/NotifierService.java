@@ -305,7 +305,9 @@ public class NotifierService extends BroadcastReceiver {
         url = protocol + "://" + hostname + ":" + port + url;
 
         // Command
-        url = url + "/api/v2/torrents/info?filter=" + state;
+        url = url + "/api/v2/torrents/info";
+
+        url = url + "?filter=" + state;
 
         //Log.d("Debug: ", "GetAllTorrents NS - URL: " + url);
         //Log.d("Debug: ", "GetAllTorrents NS - cookies: " + cookie);
@@ -317,6 +319,7 @@ public class NotifierService extends BroadcastReceiver {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+
                         // Get list type to parse it
                         Type listType = new TypeToken<List<Torrent>>() {
                         }.getType();
