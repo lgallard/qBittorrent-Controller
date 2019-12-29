@@ -3084,8 +3084,8 @@
 
                              final ServerState ss = (ServerState) new Gson().fromJson(serverState.toString(), ServerState.class);
 
-                             Log.d("Debug: ", "[getServerStateV] Free_space_on_disk: " + Common.calculateSize(ss.getFree_space_on_disk()));
-                             Log.d("Debug: ", "[getServerStateV] alt_speed_limits: " + ss.isUse_alt_speed_limits());
+//                             Log.d("Debug: ", "[getServerStateV] Free_space_on_disk: " + Common.calculateSize(ss.getFree_space_on_disk()));
+//                             Log.d("Debug: ", "[getServerStateV] alt_speed_limits: " + ss.isUse_alt_speed_limits());
 
                              // Return value
                              callback.onSuccess(ss);
@@ -3119,7 +3119,7 @@
                                  connection403ErrorCounter = connection403ErrorCounter + 1;
 
                                  if (connection403ErrorCounter > 1) {
-                                     Toast.makeText(getApplicationContext(), "[getCategoryListV] Authentication error!", Toast.LENGTH_SHORT).show();
+                                     Toast.makeText(getApplicationContext(), "[getServerStateV] Authentication error!", Toast.LENGTH_SHORT).show();
                                  }
                              }
                          }
@@ -4333,34 +4333,9 @@
          getServerStateV(new ServerStateCallBack() {
              @Override
              public void onSuccess(ServerState serverState) {
-                 Log.d("Debug", "[getServerState] Free_space_on_disk: " + Common.calculateSize(serverState.getFree_space_on_disk()));
-                 Log.d("Debug: ", "[getServerStateV] alt_speed_limits: " + serverState.isUse_alt_speed_limits());
-//                 Log.d("Debug", "[getTransferInfo] getDl_info_data: " + transferInfo.getDl_info_data());
-//
-//
-//                 // Set headerInfo
-//                 TextView uploadSpeedTextView = (TextView) findViewById(R.id.upspeed);
-//                 TextView downloadSpeedTextView = (TextView) findViewById(R.id.dlspeed);
-//
-//                 headerInfo = (LinearLayout) findViewById(R.id.header);
-//
-//                 if (header) {
-//                     headerInfo.setVisibility(View.VISIBLE);
-//                 } else {
-//                     headerInfo.setVisibility(View.GONE);
-//                 }
-//
-//
-//                 String AltSpeedInfo;
-//
-//                 if (alternative_speeds) {
-//                     AltSpeedInfo = '\u2713' + "  ";
-//                 } else {
-//                     AltSpeedInfo = "";
-//                 }
-//
-//                 uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + transferInfo.getUp_info_speed()) + "/s " + " T: " +  Common.calculateSize(transferInfo.getDl_info_data()) + "  (" + uploadCount + ")" );
-//                 downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + " T: " +  Common.calculateSize(transferInfo.getUp_info_data()) + "  (" + downloadCount + ")" );
+//                 Log.d("Debug", "[getServerState] Free_space_on_disk: " + Common.calculateSize(serverState.getFree_space_on_disk()));
+//                 Log.d("Debug: ", "[getServerStateV] alt_speed_limits: " + serverState.isUse_alt_speed_limits());
+
                  alternative_speeds = serverState.isUse_alt_speed_limits();
 
                  if (altSpeedLimitsMenuItem != null) {
