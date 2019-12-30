@@ -949,7 +949,12 @@
      @Override
      public void setTitle(CharSequence title) {
          this.title = title;
-         getSupportActionBar().setTitle(title);
+
+         if (currentCategory != null && currentCategory != "") {
+             getSupportActionBar().setTitle(title + " (" + currentCategory + ")");
+         } else {
+             getSupportActionBar().setTitle(title);
+         }
      }
 
      @Override

@@ -438,10 +438,14 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
 
 //                    Log.d("Debug", "[DrawerItemRecyclerViewAdapter] category: " + drawerItem.name);
 
+                    mainActivity.setSelectionAndTitle(mainActivity.currentState);
+
                     mainActivity.refreshCurrent();
 
                     // Close drawer
                     mainActivity.drawerLayout.closeDrawer(mainActivity.mRecyclerView);
+
+
                 }
 
 
