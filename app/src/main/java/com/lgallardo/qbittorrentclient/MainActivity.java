@@ -4852,7 +4852,7 @@
          getMenuInflater().inflate(R.menu.main, menu);
 
          // Disable RSS support
-         menu.findItem(R.id.action_rss).setVisible(false);
+         menu.findItem(R.id.action_rss).setVisible(true);
 
          // Retrieve the SearchView and plug it into SearchManager
          final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
@@ -4981,11 +4981,11 @@
                  // Add torrent URL
                  addUrlTorrent();
                  return true;
-//            case R.id.action_rss:
-//                // Open RSS Activity
-//                Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
-//                startActivity(intent);
-//                return true;
+            case R.id.action_rss:
+                // Open RSS Activity
+                Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
+                startActivity(intent);
+                return true;
              case R.id.action_pause:
                  if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
                      pauseTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
