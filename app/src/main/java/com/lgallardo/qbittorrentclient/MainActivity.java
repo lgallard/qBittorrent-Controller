@@ -2386,11 +2386,16 @@
 
      private void addTorrentFileAPI7(final String hash, final String path2Set, final String category2Set, final VolleyCallback callback) {
 
+         Log.d("Debug", "[addTorrentFileAPI7] path2set " + path2Set);
+         Log.d("Debug", "[addTorrentFileAPI7] category2Set " + category2Set);
+
          final String boundary = "-----------------------" + (new Date()).getTime();
          final String urlContentType = "multipart/form-data; boundary=" + boundary;
          byte[] multipartBody = null;
          byte[] fileBytesTemp = null;
          final File file = new File(hash);
+         String category = "";
+         String savepath = "";
 
          try {
              fileBytesTemp = Common.fullyReadFileToBytes(file);
@@ -2404,13 +2409,19 @@
          DataOutputStream dos = new DataOutputStream(bos);
 
          try {
-             // the file
+
+             // Send file multipart form data necessary after file data
+             // Category and savepath are set in the multipart body
              buildPart(boundary, dos, fileBytes, file.getName());
-             // send multipart form data necessary after file data
+
+             // End of file
              dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
              // pass to multipart body
              multipartBody = bos.toByteArray();
+
          } catch (IOException e) {
+             Log.d("Debug", "[addTorrentFileAPI7] IOException " + e.getMessage());
              e.printStackTrace();
          }
 
@@ -4010,7 +4021,7 @@
                          downloadSpeedCount += torrent.getDlspeed();
                          uploadSpeedCount += torrent.getUpspeed();
 
-                         Log.d("Debug", "[getTorrentList] torrent state: " +torrent.getState());
+                         Log.d("Debug", "[getTorrentList] torrent state: " + torrent.getState());
 
                          for (String s : downloadingStates) {
                              if (s.equals(torrent.getState())) {
@@ -4032,19 +4043,19 @@
 
                          for (String s : pausedStates) {
                              if (s.equals(torrent.getState())) {
-                                 pauseCount = pauseCount+ 1;
+                                 pauseCount = pauseCount + 1;
                              }
                          }
 
                          for (String s : activeStates) {
                              if (s.equals(torrent.getState())) {
-                                 activeCount = activeCount+ 1;
+                                 activeCount = activeCount + 1;
                              }
                          }
 
                          for (String s : inactiveStates) {
                              if (s.equals(torrent.getState())) {
-                                 inactiveCount = inactiveCount+ 1;
+                                 inactiveCount = inactiveCount + 1;
                              }
                          }
 
@@ -4275,7 +4286,7 @@
                  item.setName(name);
                  actionItems.set(6, item);
 
-                // Refresh drawer
+                 // Refresh drawer
                  rAdapter.refreshDrawer();
 
                  // Send report
@@ -4323,14 +4334,13 @@
                      AltSpeedInfo = "";
                  }
 
-                 uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + transferInfo.getUp_info_speed()) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getUp_info_data()) + "  (" + uploadCount + ")" );
+                 uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + transferInfo.getUp_info_speed()) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getUp_info_data()) + "  (" + uploadCount + ")");
 
 
-                 if( freeSpaceOnDisk == null){
-                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " +  Common.calculateSize(transferInfo.getDl_info_data()) + " (" + downloadCount + ")");
-                 }
-                 else {
-                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " +  Common.calculateSize(transferInfo.getDl_info_data()) + " (" + downloadCount + ") " + '\u2022' + " Free: " + freeSpaceOnDisk);
+                 if (freeSpaceOnDisk == null) {
+                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getDl_info_data()) + " (" + downloadCount + ")");
+                 } else {
+                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getDl_info_data()) + " (" + downloadCount + ") " + '\u2022' + " Free: " + freeSpaceOnDisk);
                  }
              }
 
@@ -4363,9 +4373,9 @@
      // MultiPart
      private void buildPart(String boundary, DataOutputStream dataOutputStream, byte[] fileData, String fileName) throws IOException {
          dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
-         dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\"; filename=\""
-                 + fileName + "\"" + lineEnd);
+         dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\"; filename=\"" + fileName + "\"" + lineEnd);
          dataOutputStream.writeBytes(lineEnd);
+
 
          ByteArrayInputStream fileInputStream = new ByteArrayInputStream(fileData);
          int bytesAvailable = fileInputStream.available();
@@ -4385,864 +4395,878 @@
          }
 
          dataOutputStream.writeBytes(lineEnd);
+
+         if (path2Set != null && path2Set.length() != 0) {
+             dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
+             dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"savepath\"" + lineEnd + lineEnd + path2Set);
+             dataOutputStream.writeBytes(lineEnd);
+         }
+
+         if (category2Set != null && category2Set.length() != 0) {
+             dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
+             dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"category\"" + lineEnd + lineEnd + category2Set);
+             dataOutputStream.writeBytes(lineEnd);
+         }
+
+
      }
 
 
-     private void refresh(String state, String category) {
+         private void refresh (String state, String category){
 
-         // If Contextual Action Bar is open, don't refresh
-         if (firstFragment != null && firstFragment.mActionMode != null) {
-             return;
-         }
+             // If Contextual Action Bar is open, don't refresh
+             if (firstFragment != null && firstFragment.mActionMode != null) {
+                 return;
+             }
 
 
 //        urlPrefix = "api/v2/torrents/info?filter=" + state;
 //        params[0] = "api/v2/torrents/info?filter=" + state;
 
 
-         // Get API version in case it hadn't been gotten before
+             // Get API version in case it hadn't been gotten before
 
-         //getApi();
-         getCookie();
+             //getApi();
+             getCookie();
 
 //        Log.d("Debug", "[refresh] category: " + category);
 
-         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+             ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
 
-         if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
+             if (networkInfo != null && networkInfo.isConnected() && !networkInfo.isFailover()) {
 
-             // Logs for reporting
-             if (CustomLogger.isMainActivityReporting()) {
-                 generateSettingsReport();
-             }
+                 // Logs for reporting
+                 if (CustomLogger.isMainActivityReporting()) {
+                     generateSettingsReport();
+                 }
 
-             if (hostname.equals("")) {
-                 qBittorrentNoSettingsFoundDialog(R.string.info, R.string.about_help1);
-             } else {
+                 if (hostname.equals("")) {
+                     qBittorrentNoSettingsFoundDialog(R.string.info, R.string.about_help1);
+                 } else {
 
 //                Log.d("Report", "Report: " + CustomLogger.getReport());
 
 
-                 if (qb_version.equals("3.2.x") && (cookie == null || cookie.equals(""))) {
-                     // Request new cookie and execute task in background
+                     if (qb_version.equals("3.2.x") && (cookie == null || cookie.equals(""))) {
+                         // Request new cookie and execute task in background
 
-                     if (connection403ErrorCounter > 1) {
+                         if (connection403ErrorCounter > 1) {
 
-                         toastText(R.string.error403);
-
-                         httpStatusCode = 0;
-                         disableRefreshSwipeLayout();
-                     } else {
-                         getCookie();
-                     }
-
-                 } else {
-
-                     if (connection403ErrorCounter > 1) {
-
-                         if (cookie != null && !cookie.equals("")) {
-                             // Only toasts the message if there is not a cookie set before
                              toastText(R.string.error403);
-                             cookie = null;
+
+                             httpStatusCode = 0;
+                             disableRefreshSwipeLayout();
+                         } else {
+                             getCookie();
                          }
 
-                         httpStatusCode = 0;
-                         disableRefreshSwipeLayout();
                      } else {
 
-                         // Execute the task in background
-                         //qbTask = new qBittorrentTask().execute(params);
+                         if (connection403ErrorCounter > 1) {
 
-                         // Test
-                         getTorrentList(state, category);
+                             if (cookie != null && !cookie.equals("")) {
+                                 // Only toasts the message if there is not a cookie set before
+                                 toastText(R.string.error403);
+                                 cookie = null;
+                             }
 
-                         // Check if  alternative speed limit is set
+                             httpStatusCode = 0;
+                             disableRefreshSwipeLayout();
+                         } else {
+
+                             // Execute the task in background
+                             //qbTask = new qBittorrentTask().execute(params);
+
+                             // Test
+                             getTorrentList(state, category);
+
+                             // Check if  alternative speed limit is set
 //                         getAlternativeSpeedLimitsEnabled();
+                         }
                      }
+
                  }
+
+             } else {
+
+                 // Connection Error message
+                 toastText(R.string.connection_error);
+
+                 disableRefreshSwipeLayout();
+             }
+
+         }
+
+         private void toastText ( int message){
+
+             if (activityIsVisible == true) {
+                 toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+                 toast.show();
+             }
+
+         }
+
+         // This method adds information to generate a report for support
+         private void generateSettingsReport () {
+             CustomLogger.saveReportMessage("Main", "currentServer: " + currentServer);
+             CustomLogger.saveReportMessage("Main", "hostname: " + hostname);
+             CustomLogger.saveReportMessage("Main", "https: " + https);
+             CustomLogger.saveReportMessage("Main", "port: " + port);
+             CustomLogger.saveReportMessage("Main", "subfolder: " + subfolder);
+             CustomLogger.saveReportMessage("Main", "protocol: " + protocol);
+
+             CustomLogger.saveReportMessage("Main", "username: " + username);
+             CustomLogger.saveReportMessage("Main", "password: [is" + (password.isEmpty() ? "" : " not") + " empty]");
+
+             CustomLogger.saveReportMessage("Main", "Auto-refresh?: " + auto_refresh);
+             CustomLogger.saveReportMessage("Main", "Refresh period: " + refresh_period);
+
+             CustomLogger.saveReportMessage("Main", "Connection timeout: " + connection_timeout);
+             CustomLogger.saveReportMessage("Main", "Data timeout: " + data_timeout);
+
+             CustomLogger.saveReportMessage("Main", "dark_ui: " + dark_ui);
+             CustomLogger.saveReportMessage("Main", "qb_version: " + qb_version);
+             CustomLogger.saveReportMessage("Main", "qBittorrent server: " + qbittorrentServer);
+
+
+             CustomLogger.saveReportMessage("Main", "Cookie: [is" + ((cookie != null && cookie.isEmpty()) ? "" : " not") + " empty]");
+             CustomLogger.saveReportMessage("Main", "enable_notifications: " + enable_notifications);
+             CustomLogger.saveReportMessage("Main", "notification_period: " + notification_period);
+
+             CustomLogger.saveReportMessage("Main", "packageName: " + packageName);
+             CustomLogger.saveReportMessage("Main", "packageVersion: " + packageVersion);
+
+             CustomLogger.saveReportMessage("Main", "Current state: " + currentState);
+             CustomLogger.saveReportMessage("Main", "Last state: " + lastState);
+
+             CustomLogger.saveReportMessage("Main", "Current Category: " + currentCategory);
+
+
+         }
+
+         public void emailReport () {
+
+             if (CustomLogger.isMainActivityReporting()) {
+
+                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+                 emailIntent.setType("text/plain");
+
+                 emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"qbcontroller@gmail.com"});
+                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "qBittorrentController report");
+
+                 // Include report
+                 emailIntent.putExtra(Intent.EXTRA_TEXT, CustomLogger.getReport());
+
+                 // Delete report
+                 CustomLogger.setMainActivityReporting(false);
+                 CustomLogger.deleteMainReport();
+                 CustomLogger.deleteNotifierReport();
+
+                 // Launch email chooser
+                 startActivity(Intent.createChooser(emailIntent, "Send qBittorrent report..."));
+
+                 // Reporting - Finish report
+                 CustomLogger.setMainActivityReporting(false);
 
              }
 
-         } else {
-
-             // Connection Error message
-             toastText(R.string.connection_error);
-
-             disableRefreshSwipeLayout();
-         }
-
-     }
-
-     private void toastText(int message) {
-
-         if (activityIsVisible == true) {
-             toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
-             toast.show();
-         }
-
-     }
-
-     // This method adds information to generate a report for support
-     private void generateSettingsReport() {
-         CustomLogger.saveReportMessage("Main", "currentServer: " + currentServer);
-         CustomLogger.saveReportMessage("Main", "hostname: " + hostname);
-         CustomLogger.saveReportMessage("Main", "https: " + https);
-         CustomLogger.saveReportMessage("Main", "port: " + port);
-         CustomLogger.saveReportMessage("Main", "subfolder: " + subfolder);
-         CustomLogger.saveReportMessage("Main", "protocol: " + protocol);
-
-         CustomLogger.saveReportMessage("Main", "username: " + username);
-         CustomLogger.saveReportMessage("Main", "password: [is" + (password.isEmpty() ? "" : " not") + " empty]");
-
-         CustomLogger.saveReportMessage("Main", "Auto-refresh?: " + auto_refresh);
-         CustomLogger.saveReportMessage("Main", "Refresh period: " + refresh_period);
-
-         CustomLogger.saveReportMessage("Main", "Connection timeout: " + connection_timeout);
-         CustomLogger.saveReportMessage("Main", "Data timeout: " + data_timeout);
-
-         CustomLogger.saveReportMessage("Main", "dark_ui: " + dark_ui);
-         CustomLogger.saveReportMessage("Main", "qb_version: " + qb_version);
-         CustomLogger.saveReportMessage("Main", "qBittorrent server: " + qbittorrentServer);
-
-
-         CustomLogger.saveReportMessage("Main", "Cookie: [is" + ((cookie != null && cookie.isEmpty()) ? "" : " not") + " empty]");
-         CustomLogger.saveReportMessage("Main", "enable_notifications: " + enable_notifications);
-         CustomLogger.saveReportMessage("Main", "notification_period: " + notification_period);
-
-         CustomLogger.saveReportMessage("Main", "packageName: " + packageName);
-         CustomLogger.saveReportMessage("Main", "packageVersion: " + packageVersion);
-
-         CustomLogger.saveReportMessage("Main", "Current state: " + currentState);
-         CustomLogger.saveReportMessage("Main", "Last state: " + lastState);
-
-         CustomLogger.saveReportMessage("Main", "Current Category: " + currentCategory);
-
-
-     }
-
-     public void emailReport() {
-
-         if (CustomLogger.isMainActivityReporting()) {
-
-             Intent emailIntent = new Intent(Intent.ACTION_SEND);
-
-             emailIntent.setType("text/plain");
-
-             emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"qbcontroller@gmail.com"});
-             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "qBittorrentController report");
-
-             // Include report
-             emailIntent.putExtra(Intent.EXTRA_TEXT, CustomLogger.getReport());
-
-             // Delete report
-             CustomLogger.setMainActivityReporting(false);
-             CustomLogger.deleteMainReport();
-             CustomLogger.deleteNotifierReport();
-
-             // Launch email chooser
-             startActivity(Intent.createChooser(emailIntent, "Send qBittorrent report..."));
-
-             // Reporting - Finish report
-             CustomLogger.setMainActivityReporting(false);
 
          }
 
+         @Override
+         protected void onNewIntent (Intent intent){
 
-     }
+             handleIntent(intent);
+         }
 
-     @Override
-     protected void onNewIntent(Intent intent) {
+         private void handleIntent (Intent intent){
 
-         handleIntent(intent);
-     }
+             if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 
-     private void handleIntent(Intent intent) {
-
-         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-
-             // Use the query to search your data somehow
-             searchField = intent.getStringExtra(SearchManager.QUERY);
+                 // Use the query to search your data somehow
+                 searchField = intent.getStringExtra(SearchManager.QUERY);
 
 //            Log.d("Debug", "Search for..." + searchField);
 
-             // Autorefresh
-             refreshSwipeLayout();
-             refreshCurrent();
-         }
-
-         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-
-             // Add torrent (file, url or magnet)
-             addTorrentByIntent(intent);
-
-             // // Activity is visible
-             activityIsVisible = true;
-
-             // Autorefresh
-             refreshCurrent();
-
-         }
-
-         try {
-
-
-             if (intent.getStringExtra("from").equals("NotifierService")) {
-
-                 saveLastState("completed");
-                 setSelectionAndTitle("completed");
-                 refresh("completed", currentCategory);
+                 // Autorefresh
+                 refreshSwipeLayout();
+                 refreshCurrent();
              }
 
-             if (intent.getStringExtra("from").equals("RSSItemActivity")) {
+             if (Intent.ACTION_VIEW.equals(intent.getAction())) {
 
                  // Add torrent (file, url or magnet)
                  addTorrentByIntent(intent);
 
-                 // // Activity is visble
+                 // // Activity is visible
                  activityIsVisible = true;
 
                  // Autorefresh
                  refreshCurrent();
+
              }
 
+             try {
+
+
+                 if (intent.getStringExtra("from").equals("NotifierService")) {
+
+                     saveLastState("completed");
+                     setSelectionAndTitle("completed");
+                     refresh("completed", currentCategory);
+                 }
+
+                 if (intent.getStringExtra("from").equals("RSSItemActivity")) {
+
+                     // Add torrent (file, url or magnet)
+                     addTorrentByIntent(intent);
+
+                     // // Activity is visble
+                     activityIsVisible = true;
+
+                     // Autorefresh
+                     refreshCurrent();
+                 }
+
 //            Log.d("Debug", "lastState (handle intent):End " );
-         } catch (Exception e) {
+             } catch (Exception e) {
 
 //            Log.e("Debug", "Handle intent: " + e.toString() );
 
-         }
-     }
-
-     // Based on Trandroid's addTorrentFromStream
-     // https://github.com/erickok/transdroid/blob/531051adafdac197295fef3d02e8608e86585c13/app/src/main/java/org/transdroid/core/gui/TorrentsActivity.java#L1157
-     public String getFileNameFromStream(InputStream input) {
-
-         String fileName = null;
-
-         File tempFile = new File("/not/yet/set");
-         try {
-             // Write a temporary file with the torrent contents
-             tempFile = File.createTempFile("qbcontroller_", ".torrent", getCacheDir());
-             FileOutputStream output = new FileOutputStream(tempFile);
-             try {
-                 final byte[] buffer = new byte[1024];
-                 int read;
-                 while ((read = input.read(buffer)) != -1) {
-                     output.write(buffer, 0, read);
-                 }
-                 output.flush();
-
-                 // Get filename
-                 fileName = Uri.fromFile(tempFile).toString();
-
-             } finally {
-                 output.close();
              }
-         } catch (IOException e) {
-             Log.e("Debug", "Can't write input stream to " + tempFile.toString() + ": " + e.toString());
-         } finally {
+         }
+
+         // Based on Trandroid's addTorrentFromStream
+         // https://github.com/erickok/transdroid/blob/531051adafdac197295fef3d02e8608e86585c13/app/src/main/java/org/transdroid/core/gui/TorrentsActivity.java#L1157
+         public String getFileNameFromStream (InputStream input){
+
+             String fileName = null;
+
+             File tempFile = new File("/not/yet/set");
              try {
-                 if (input != null) {
-                     input.close();
+                 // Write a temporary file with the torrent contents
+                 tempFile = File.createTempFile("qbcontroller_", ".torrent", getCacheDir());
+                 FileOutputStream output = new FileOutputStream(tempFile);
+                 try {
+                     final byte[] buffer = new byte[1024];
+                     int read;
+                     while ((read = input.read(buffer)) != -1) {
+                         output.write(buffer, 0, read);
+                     }
+                     output.flush();
+
+                     // Get filename
+                     fileName = Uri.fromFile(tempFile).toString();
+
+                 } finally {
+                     output.close();
                  }
              } catch (IOException e) {
-                 Log.e("Debug", "Error closing the input stream " + tempFile.toString() + ": " + e.toString());
+                 Log.e("Debug", "Can't write input stream to " + tempFile.toString() + ": " + e.toString());
+             } finally {
+                 try {
+                     if (input != null) {
+                         input.close();
+                     }
+                 } catch (IOException e) {
+                     Log.e("Debug", "Error closing the input stream " + tempFile.toString() + ": " + e.toString());
+                 }
              }
+
+             return fileName;
          }
 
-         return fileName;
-     }
 
+         private void handleUrlTorrent () {
 
-     private void handleUrlTorrent() {
-
-         // permission was granted, yay! Do the
-         // contacts-related task you need to do.
+             // permission was granted, yay! Do the
+             // contacts-related task you need to do.
 
 //        Log.d("Debug", "[handleUrlTorrent] urlTorrent: " + urlTorrent);
 //        Log.d("Debug", "[handleUrlTorrent] category2Set: " + category2Set);
 
-         // if there is not a path to the file, open de file picker
-         if (urlTorrent == null) {
-             openFilePicker();
-         } else {
+             // if there is not a path to the file, open de file picker
+             if (urlTorrent == null) {
+                 openFilePicker();
+             } else {
 
-             try {
+                 try {
 
 
-                 // Handle format for torrent files on Downloaded list
-                 if (urlTorrent.substring(0, 7).equals("content")) {
+                     // Handle format for torrent files on Downloaded list
+                     if (urlTorrent.substring(0, 7).equals("content")) {
 
-                     urlTorrent = getFileNameFromStream(getContentResolver().openInputStream(handledIntent.getData()));
+                         urlTorrent = getFileNameFromStream(getContentResolver().openInputStream(handledIntent.getData()));
 
 //                    Log.d("Debug", "[handleUrlTorrent] urlTorrent path (content): " + urlTorrent);
-                 }
+                     }
 
-                 // Handle format for downloaded torrent files (Ex: /storage/emulated/0/Download/afile.torrent)
-                 if (urlTorrent.contains(".torrent") && urlTorrent.substring(0, 1).equals("/")) {
+                     // Handle format for downloaded torrent files (Ex: /storage/emulated/0/Download/afile.torrent)
+                     if (urlTorrent.contains(".torrent") && urlTorrent.substring(0, 1).equals("/")) {
 
-                     if (urlTorrent.substring(0, 1).equals("/")) {
+                         if (urlTorrent.substring(0, 1).equals("/")) {
 
-                         // Encode path
-                         URI encodedUri = new URI(URLEncoder.encode(urlTorrent, "UTF-8"));
+                             // Encode path
+                             URI encodedUri = new URI(URLEncoder.encode(urlTorrent, "UTF-8"));
 
-                         // Get raw absolute and add file schema
-                         urlTorrent = "file://" + (new File(encodedUri.getRawPath())).getAbsolutePath();
+                             // Get raw absolute and add file schema
+                             urlTorrent = "file://" + (new File(encodedUri.getRawPath())).getAbsolutePath();
 
 //                        Log.d("Debug", "[handleUrlTorrent] urlTorrent path: " + urlTorrent);
+                         }
+
                      }
 
-                 }
 
+                     // Once formatted, add the torrent
+                     if (urlTorrent.substring(0, 4).equals("file")) {
 
-                 // Once formatted, add the torrent
-                 if (urlTorrent.substring(0, 4).equals("file")) {
+                         // File
+                         urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
+                         addTorrentFile(Uri.parse(urlTorrent).getPath().replaceAll("\\+", "\\ "));
+                     } else {
 
-                     // File
-                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
-                     addTorrentFile(Uri.parse(urlTorrent).getPath().replaceAll("\\+", "\\ "));
-                 } else {
-
-                     // Send magnet or torrent link
+                         // Send magnet or torrent link
 //                    Log.d("Debug", "[handleUrlTorrent] urlTorrent 1: " + urlTorrent );
 
-                     urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
+                         urlTorrent = Uri.decode(URLEncoder.encode(urlTorrent, "UTF-8"));
 
 
-                     // If It is a valid torrent or magnet link
-                     if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType())) {
+                         // If It is a valid torrent or magnet link
+                         if (urlTorrent.contains(".torrent") || urlTorrent.contains("magnet:") || "application/x-bittorrent".equals(handledIntent.getType())) {
 //                        Log.d("Debug", "[handleUrlTorrent] URL: " + urlTorrent);
-                         addTorrent(urlTorrent, path2Set, category2Set);
-                     } else {
-                         // Open not valid torrent or magnet link in browser
+                             addTorrent(urlTorrent, path2Set, category2Set);
+                         } else {
+                             // Open not valid torrent or magnet link in browser
 
-                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTorrent));
-                         startActivity(browserIntent);
+                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlTorrent));
+                             startActivity(browserIntent);
+                         }
+
                      }
 
+                 } catch (UnsupportedEncodingException e) {
+                     Log.e("Debug", "[handleUrlTorrent] Check URL: " + e.toString());
+                 } catch (NullPointerException e) {
+                     Log.e("Debug", "[handleUrlTorrent] urlTorrent is null: " + e.toString());
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 } catch (Exception e) {
+                     Log.e("Debug", "[handleUrlTorrent] urlTorrent is not ok: " + e.toString());
                  }
-
-             } catch (UnsupportedEncodingException e) {
-                 Log.e("Debug", "[handleUrlTorrent] Check URL: " + e.toString());
-             } catch (NullPointerException e) {
-                 Log.e("Debug", "[handleUrlTorrent] urlTorrent is null: " + e.toString());
-             } catch (IOException e) {
-                 e.printStackTrace();
-             } catch (Exception e) {
-                 Log.e("Debug", "[handleUrlTorrent] urlTorrent is not ok: " + e.toString());
              }
          }
-     }
 
 
-     private void addTorrentByIntent(Intent intent) {
+         private void addTorrentByIntent (Intent intent){
 
 //        Log.d("Debug", "addTorrentByIntent invoked");
 
-         // TODO: Define a setting for this timeout in preferences
+             // TODO: Define a setting for this timeout in preferences
 
-         // Delay sending of file
-         final Handler handler = new Handler();
-         handler.postDelayed(new Runnable() {
-             @Override
-             public void run() {
-                 //Do something after 3000ms
-                 // Nothing
+             // Delay sending of file
+             final Handler handler = new Handler();
+             handler.postDelayed(new Runnable() {
+                 @Override
+                 public void run() {
+                     //Do something after 3000ms
+                     // Nothing
+                 }
+             }, 3000);
+
+             handledIntent = intent;
+
+             urlTorrent = intent.getDataString();
+
+             if (urlTorrent != null && urlTorrent.length() != 0) {
+
+                 // Check dangerous permissions
+                 checkDangerousPermissions();
+
              }
-         }, 3000);
 
-         handledIntent = intent;
+             try {
+                 if (intent.getStringExtra("from").equals("NotifierService")) {
+                     saveLastState("completed");
+                     setSelectionAndTitle("completed");
+                     refresh("completed", currentCategory);
+                 }
+             } catch (NullPointerException npe) {
 
-         urlTorrent = intent.getDataString();
-
-         if (urlTorrent != null && urlTorrent.length() != 0) {
-
-             // Check dangerous permissions
-             checkDangerousPermissions();
+             }
 
          }
 
-         try {
-             if (intent.getStringExtra("from").equals("NotifierService")) {
-                 saveLastState("completed");
-                 setSelectionAndTitle("completed");
-                 refresh("completed", currentCategory);
-             }
-         } catch (NullPointerException npe) {
 
-         }
+         private void checkDangerousPermissions () {
 
-     }
+             // Check Dangerous permissions (Android 6.0+, API 23+)
+             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
 
-     private void checkDangerousPermissions() {
+                 // Should we show an explanation?
+                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                     genericOkDialog(R.string.error_permission,
+                             new DialogInterface.OnClickListener() {
+                                 @Override
+                                 public void onClick(DialogInterface dialog, int which) {
+                                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                             MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                                 }
+                             });
 
-         // Check Dangerous permissions (Android 6.0+, API 23+)
-         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                 } else {
 
+                     // No explanation needed, request the permission.
+                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                             MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 
-             // Should we show an explanation?
-             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                 genericOkDialog(R.string.error_permission,
-                         new DialogInterface.OnClickListener() {
-                             @Override
-                             public void onClick(DialogInterface dialog, int which) {
-                                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-                             }
-                         });
+                 }
+
 
              } else {
 
-                 // No explanation needed, request the permission.
-                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                 // Permissions granted
+                 sendTorrent();
+//            handleUrlTorrent();
 
              }
 
 
-         } else {
-
-             // Permissions granted
-             sendTorrent();
-//            handleUrlTorrent();
-
          }
 
 
-     }
+         @Override
+         public void onRequestPermissionsResult ( int requestCode,
+         String permissions[], int[] grantResults){
+             switch (requestCode) {
+                 case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                     // If request is cancelled, the result arrays are empty.
+                     if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-
-     @Override
-     public void onRequestPermissionsResult(int requestCode,
-                                            String permissions[], int[] grantResults) {
-         switch (requestCode) {
-             case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
-                 // If request is cancelled, the result arrays are empty.
-                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                     // Permissions granted
-                     sendTorrent();
+                         // Permissions granted
+                         sendTorrent();
 //                    handleUrlTorrent();
 
 
-                 } else {
+                     } else {
 
-                     // Permission denied
+                         // Permission denied
 
 
-                     // Should we show an explanation?
-                     if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                         // Should we show an explanation?
+                         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
-                         genericOkCancelDialog(R.string.error_grant_permission,
-                                 new DialogInterface.OnClickListener() {
-                                     @Override
-                                     public void onClick(DialogInterface dialog, int which) {
-                                         Intent appIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                         appIntent.setData(Uri.parse("package:" + packageName));
-                                         startActivityForResult(appIntent, 0);
-                                     }
-                                 });
+                             genericOkCancelDialog(R.string.error_grant_permission,
+                                     new DialogInterface.OnClickListener() {
+                                         @Override
+                                         public void onClick(DialogInterface dialog, int which) {
+                                             Intent appIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                             appIntent.setData(Uri.parse("package:" + packageName));
+                                             startActivityForResult(appIntent, 0);
+                                         }
+                                     });
+                         }
+                         return;
                      }
-                     return;
                  }
              }
          }
-     }
 
-     @Override
-     public boolean onCreateOptionsMenu(Menu menu) {
-         getMenuInflater().inflate(R.menu.main, menu);
+         @Override
+         public boolean onCreateOptionsMenu (Menu menu){
+             getMenuInflater().inflate(R.menu.main, menu);
 
-         // Disable RSS support
-         menu.findItem(R.id.action_rss).setVisible(false);
+             // Disable RSS support
+             menu.findItem(R.id.action_rss).setVisible(false);
 
-         // Retrieve the SearchView and plug it into SearchManager
-         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+             // Retrieve the SearchView and plug it into SearchManager
+             final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+             SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+             searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 
 
-         // Handle open/close SearchView (using an item menu)
-         final MenuItem menuItem = menu.findItem(R.id.action_search);
+             // Handle open/close SearchView (using an item menu)
+             final MenuItem menuItem = menu.findItem(R.id.action_search);
 
-         // When back is pressed or the SearchView is close, delete the query field
-         // and close the SearchView using the item menu
-         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-             @Override
-             public void onFocusChange(View view, boolean queryTextFocused) {
-                 if (!queryTextFocused) {
-                     menuItem.collapseActionView();
-                     searchView.setQuery("", false);
-                     searchField = "";
+             // When back is pressed or the SearchView is close, delete the query field
+             // and close the SearchView using the item menu
+             searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+                 @Override
+                 public void onFocusChange(View view, boolean queryTextFocused) {
+                     if (!queryTextFocused) {
+                         menuItem.collapseActionView();
+                         searchView.setQuery("", false);
+                         searchField = "";
 
+                         refreshSwipeLayout();
+                         refreshCurrent();
+                     }
+                 }
+             });
+
+             // This must be implemented to override defaul searchview behaviour, in order to
+             // make it work with tablets
+             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                 @Override
+                 public boolean onQueryTextSubmit(String query) {
+
+                     //Log.d("Debug", "onQueryTextSubmit - searchField: " + query);
+
+                     // false: don't actually send the query. We are going to do something different
+                     searchView.setQuery(query, false);
+
+                     // Set the variable we use in the intent to perform the search
+                     searchField = query;
+
+                     // Refresh using the search field
                      refreshSwipeLayout();
                      refreshCurrent();
+
+                     // Close the soft keyboard
+                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                     imm.hideSoftInputFromWindow(menuItem.getActionView().getWindowToken(), 0);
+
+                     // Here true means, override default searchview query
+                     return true;
                  }
-             }
-         });
 
-         // This must be implemented to override defaul searchview behaviour, in order to
-         // make it work with tablets
-         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-             @Override
-             public boolean onQueryTextSubmit(String query) {
-
-                 //Log.d("Debug", "onQueryTextSubmit - searchField: " + query);
-
-                 // false: don't actually send the query. We are going to do something different
-                 searchView.setQuery(query, false);
-
-                 // Set the variable we use in the intent to perform the search
-                 searchField = query;
-
-                 // Refresh using the search field
-                 refreshSwipeLayout();
-                 refreshCurrent();
-
-                 // Close the soft keyboard
-                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                 imm.hideSoftInputFromWindow(menuItem.getActionView().getWindowToken(), 0);
-
-                 // Here true means, override default searchview query
-                 return true;
-             }
-
-             @Override
-             public boolean onQueryTextChange(String newText) {
-                 return false;
-             }
-         });
-
-         // There is a bug setting the hint from searchable.xml, so force it
-         searchView.setQueryHint(getResources().getString(R.string.search_hint));
-
-
-         return true;
-     }
-
-     public void popBackStackPhoneView() {
-
-         // Set default toolbar behaviour
-         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-
-
-         actionBar.setDisplayHomeAsUpEnabled(false);
-         drawerToggle.setDrawerIndicatorEnabled(true);
-         actionBar.setHomeButtonEnabled(true);
-
-
-         drawerToggle.setToolbarNavigationClickListener(ItemstFragment.originalListener);
-
-         // Set title
-         setSelectionAndTitle(MainActivity.currentState);
-
-         // Show herderInfo in phone's view
-         if (findViewById(R.id.one_frame) != null) {
-
-             if (headerInfo != null) {
-                 if (header) {
-                     headerInfo.setVisibility(View.VISIBLE);
-                 } else {
-                     headerInfo.setVisibility(View.GONE);
+                 @Override
+                 public boolean onQueryTextChange(String newText) {
+                     return false;
                  }
-             }
+             });
 
-         } else {
-             headerInfo.setVisibility(View.VISIBLE);
-         }
+             // There is a bug setting the hint from searchable.xml, so force it
+             searchView.setQueryHint(getResources().getString(R.string.search_hint));
 
 
-         getFragmentManager().popBackStack();
-
-     }
-
-     @Override
-     public boolean onOptionsItemSelected(MenuItem item) {
-
-         Builder builder;
-         AlertDialog dialog;
-
-         if (drawerToggle.onOptionsItemSelected(item)) {
              return true;
          }
 
-         // Enable title (just in case)
-         getSupportActionBar().setDisplayShowTitleEnabled(true);
+         public void popBackStackPhoneView () {
 
-         switch (item.getItemId()) {
+             // Set default toolbar behaviour
+             android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
-             case R.id.action_refresh:
-                 swipeRefresh();
+
+             actionBar.setDisplayHomeAsUpEnabled(false);
+             drawerToggle.setDrawerIndicatorEnabled(true);
+             actionBar.setHomeButtonEnabled(true);
+
+
+             drawerToggle.setToolbarNavigationClickListener(ItemstFragment.originalListener);
+
+             // Set title
+             setSelectionAndTitle(MainActivity.currentState);
+
+             // Show herderInfo in phone's view
+             if (findViewById(R.id.one_frame) != null) {
+
+                 if (headerInfo != null) {
+                     if (header) {
+                         headerInfo.setVisibility(View.VISIBLE);
+                     } else {
+                         headerInfo.setVisibility(View.GONE);
+                     }
+                 }
+
+             } else {
+                 headerInfo.setVisibility(View.VISIBLE);
+             }
+
+
+             getFragmentManager().popBackStack();
+
+         }
+
+         @Override
+         public boolean onOptionsItemSelected (MenuItem item){
+
+             Builder builder;
+             AlertDialog dialog;
+
+             if (drawerToggle.onOptionsItemSelected(item)) {
                  return true;
-             case R.id.action_add_file:
-                 // Add torrent file
-                 openFilePicker();
-                 return true;
-             case R.id.action_add_url:
-                 // Add torrent URL
-                 addUrlTorrent();
-                 return true;
+             }
+
+             // Enable title (just in case)
+             getSupportActionBar().setDisplayShowTitleEnabled(true);
+
+             switch (item.getItemId()) {
+
+                 case R.id.action_refresh:
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_add_file:
+                     // Add torrent file
+                     openFilePicker();
+                     return true;
+                 case R.id.action_add_url:
+                     // Add torrent URL
+                     addUrlTorrent();
+                     return true;
 //            case R.id.action_rss:
 //                // Open RSS Activity
 //                Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.RSSFeedActivity.class);
 //                startActivity(intent);
 //                return true;
-             case R.id.action_pause:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     pauseTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             case R.id.action_resume:
-                 if (TorrentDetailsFragment.hashToUpdate != null) {
-                     startTorrent(TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             case R.id.action_delete:
+                 case R.id.action_pause:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         pauseTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 case R.id.action_resume:
+                     if (TorrentDetailsFragment.hashToUpdate != null) {
+                         startTorrent(TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 case R.id.action_delete:
 
-                 okay = false;
+                     okay = false;
 
-                 if (!isFinishing()) {
+                     if (!isFinishing()) {
 
-                     builder = new Builder(this);
+                         builder = new Builder(this);
 
-                     // Message
-                     builder.setMessage(R.string.dm_deleteTorrent).setTitle(R.string.dt_deleteTorrent);
+                         // Message
+                         builder.setMessage(R.string.dm_deleteTorrent).setTitle(R.string.dt_deleteTorrent);
 
-                     // Cancel
-                     builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                         public void onClick(DialogInterface dialog, int id) {
-                             // User cancelled the dialog
+                         // Cancel
+                         builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                             public void onClick(DialogInterface dialog, int id) {
+                                 // User cancelled the dialog
 
-                             okay = false;
-                         }
-                     });
-
-                     // Ok
-                     builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                         public void onClick(DialogInterface dialog, int id) {
-                             // User accepted the dialog
-
-                             if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                                 deleteTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-                                 if (findViewById(R.id.one_frame) != null) {
-                                     popBackStackPhoneView();
-                                 }
+                                 okay = false;
                              }
+                         });
 
-                         }
-                     });
+                         // Ok
+                         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                             public void onClick(DialogInterface dialog, int id) {
+                                 // User accepted the dialog
 
-                     // Create dialog
-                     dialog = builder.create();
+                                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                                     deleteTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
 
-                     // Show dialog
-                     dialog.show();
-                 }
-                 return true;
-             case R.id.action_delete_drive:
-
-                 if (!isFinishing()) {
-                     builder = new Builder(this);
-
-                     // Message
-                     builder.setMessage(R.string.dm_deleteDriveTorrent).setTitle(R.string.dt_deleteDriveTorrent);
-
-                     // Cancel
-                     builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                         public void onClick(DialogInterface dialog, int id) {
-                             // User canceled the dialog
-                         }
-                     });
-
-                     // Ok
-                     builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                         public void onClick(DialogInterface dialog, int id) {
-                             // User accepted the dialog
-                             if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                                 deleteDriveTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-
-                                 if (findViewById(R.id.one_frame) != null) {
-                                     popBackStackPhoneView();
+                                     if (findViewById(R.id.one_frame) != null) {
+                                         popBackStackPhoneView();
+                                     }
                                  }
+
                              }
+                         });
 
-                         }
-                     });
+                         // Create dialog
+                         dialog = builder.create();
 
-                     // Create dialog
-                     dialog = builder.create();
+                         // Show dialog
+                         dialog.show();
+                     }
+                     return true;
+                 case R.id.action_delete_drive:
 
-                     // Show dialog
-                     dialog.show();
+                     if (!isFinishing()) {
+                         builder = new Builder(this);
 
-                 }
-                 return true;
-             case R.id.action_increase_prio:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     increasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             case R.id.action_decrease_prio:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     decreasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             case R.id.action_max_prio:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     maxPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             case R.id.action_min_prio:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     minPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             case R.id.action_resume_all:
-                 resumeAllTorrents();
-                 return true;
-             case R.id.action_pause_all:
-                 pauseAllTorrents();
-                 return true;
-             case R.id.action_upload_rate_limit:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     uploadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
+                         // Message
+                         builder.setMessage(R.string.dm_deleteDriveTorrent).setTitle(R.string.dt_deleteDriveTorrent);
 
-             case R.id.action_download_rate_limit:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     downloadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             case R.id.action_recheck:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     recheckTorrents(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             case R.id.action_first_last_piece_prio:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     toggleFirstLastPiecePrio(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             case R.id.action_sequential_download:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     toggleSequentialDownload(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             case R.id.action_set_category:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     setCategoryDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             case R.id.action_delete_category:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     setCategory(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate, " ");
-                 }
-                 return true;
+                         // Cancel
+                         builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                             public void onClick(DialogInterface dialog, int id) {
+                                 // User canceled the dialog
+                             }
+                         });
 
-             case R.id.action_toggle_alternative_rate:
-                 toggleAlternativeSpeedLimits();
-                 return true;
-             case R.id.action_sortby_name:
-                 saveSortBy(SORTBY_NAME);
-                 invalidateOptionsMenu();
-                 swipeRefresh();
-                 return true;
-             case R.id.action_sortby_size:
-                 saveSortBy(SORTBY_SIZE);
-                 invalidateOptionsMenu();
-                 swipeRefresh();
-                 return true;
-             case R.id.action_sortby_eta:
-                 saveSortBy(SORTBY_ETA);
-                 invalidateOptionsMenu();
-                 swipeRefresh();
-                 return true;
-             case R.id.action_sortby_priority:
-                 saveSortBy(SORTBY_PRIORITY);
-                 invalidateOptionsMenu();
-                 swipeRefresh();
-                 return true;
-             case R.id.action_sortby_progress:
-                 saveSortBy(SORTBY_PROGRESS);
-                 invalidateOptionsMenu();
-                 swipeRefresh();
-                 return true;
-             case R.id.action_sortby_ratio:
-                 saveSortBy(SORTBY_RATIO);
-                 invalidateOptionsMenu();
-                 swipeRefresh();
-                 return true;
-             case R.id.action_sortby_downloadSpeed:
-                 saveSortBy(SORTBY_DOWNLOAD);
-                 invalidateOptionsMenu();
-                 swipeRefresh();
-                 return true;
-             case R.id.action_sortby_uploadSpeed:
-                 saveSortBy(SORTBY_UPLOAD);
-                 invalidateOptionsMenu();
-                 swipeRefresh();
-                 return true;
-             case R.id.action_sortby_added_on:
-                 saveSortBy(SORTBY_ADDEDON);
-                 invalidateOptionsMenu();
-                 swipeRefresh();
-                 return true;
-             case R.id.action_sortby_completed_on:
-                 saveSortBy(SORTBY_COMPLETEDON);
-                 invalidateOptionsMenu();
-                 swipeRefresh();
-                 return true;
-             case R.id.action_sortby_reverse_order:
-                 saveReverseOrder(!reverse_order);
-                 invalidateOptionsMenu();
-                 swipeRefresh();
-                 return true;
-             case R.id.action_add_tracker:
-                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
-                     addUrlTracker(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
-                 }
-                 return true;
-             default:
-                 return super.onOptionsItemSelected(item);
+                         // Ok
+                         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                             public void onClick(DialogInterface dialog, int id) {
+                                 // User accepted the dialog
+                                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                                     deleteDriveTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+
+                                     if (findViewById(R.id.one_frame) != null) {
+                                         popBackStackPhoneView();
+                                     }
+                                 }
+
+                             }
+                         });
+
+                         // Create dialog
+                         dialog = builder.create();
+
+                         // Show dialog
+                         dialog.show();
+
+                     }
+                     return true;
+                 case R.id.action_increase_prio:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         increasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 case R.id.action_decrease_prio:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         decreasePrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 case R.id.action_max_prio:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         maxPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 case R.id.action_min_prio:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         minPrioTorrent(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 case R.id.action_resume_all:
+                     resumeAllTorrents();
+                     return true;
+                 case R.id.action_pause_all:
+                     pauseAllTorrents();
+                     return true;
+                 case R.id.action_upload_rate_limit:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         uploadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+
+                 case R.id.action_download_rate_limit:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         downloadRateLimitDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 case R.id.action_recheck:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         recheckTorrents(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 case R.id.action_first_last_piece_prio:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         toggleFirstLastPiecePrio(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 case R.id.action_sequential_download:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         toggleSequentialDownload(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 case R.id.action_set_category:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         setCategoryDialog(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 case R.id.action_delete_category:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         setCategory(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate, " ");
+                     }
+                     return true;
+
+                 case R.id.action_toggle_alternative_rate:
+                     toggleAlternativeSpeedLimits();
+                     return true;
+                 case R.id.action_sortby_name:
+                     saveSortBy(SORTBY_NAME);
+                     invalidateOptionsMenu();
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_sortby_size:
+                     saveSortBy(SORTBY_SIZE);
+                     invalidateOptionsMenu();
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_sortby_eta:
+                     saveSortBy(SORTBY_ETA);
+                     invalidateOptionsMenu();
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_sortby_priority:
+                     saveSortBy(SORTBY_PRIORITY);
+                     invalidateOptionsMenu();
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_sortby_progress:
+                     saveSortBy(SORTBY_PROGRESS);
+                     invalidateOptionsMenu();
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_sortby_ratio:
+                     saveSortBy(SORTBY_RATIO);
+                     invalidateOptionsMenu();
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_sortby_downloadSpeed:
+                     saveSortBy(SORTBY_DOWNLOAD);
+                     invalidateOptionsMenu();
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_sortby_uploadSpeed:
+                     saveSortBy(SORTBY_UPLOAD);
+                     invalidateOptionsMenu();
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_sortby_added_on:
+                     saveSortBy(SORTBY_ADDEDON);
+                     invalidateOptionsMenu();
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_sortby_completed_on:
+                     saveSortBy(SORTBY_COMPLETEDON);
+                     invalidateOptionsMenu();
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_sortby_reverse_order:
+                     saveReverseOrder(!reverse_order);
+                     invalidateOptionsMenu();
+                     swipeRefresh();
+                     return true;
+                 case R.id.action_add_tracker:
+                     if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate != null) {
+                         addUrlTracker(com.lgallardo.qbittorrentclient.TorrentDetailsFragment.hashToUpdate);
+                     }
+                     return true;
+                 default:
+                     return super.onOptionsItemSelected(item);
+             }
          }
-     }
 
-     //Change current server
-     protected void changeCurrentServer() {
+         //Change current server
+         protected void changeCurrentServer () {
 
-         connection403ErrorCounter = 0;
+             connection403ErrorCounter = 0;
 
-         // Get values from preferences
-         getSettings();
+             // Get values from preferences
+             getSettings();
 
-         // redraw menu
-         invalidateOptionsMenu();
+             // redraw menu
+             invalidateOptionsMenu();
 
-         // Get options from server and save them as shared preferences
-         // locally
+             // Get options from server and save them as shared preferences
+             // locally
 //            qBittorrentOptions qso = new qBittorrentOptions();
 //            qso.execute(new String[]{qbQueryString + "/preferences", "getSettings"});
 
-         // Save completedHashes
-         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-         Editor editor = sharedPrefs.edit();
+             // Save completedHashes
+             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+             Editor editor = sharedPrefs.edit();
 
-         // Save hashes
-         editor.putString("completed_hashes", "");
+             // Save hashes
+             editor.putString("completed_hashes", "");
 
-         // Commit changes
-         editor.apply();
+             // Commit changes
+             editor.apply();
 
-         canrefresh = true;
-         //refreshSwipeLayout();
+             canrefresh = true;
+             //refreshSwipeLayout();
 
-         refresh();
+             refresh();
 
 //        refreshCurrent();
 
@@ -5254,228 +5278,228 @@
 
 
 //        Log.d("Debug", "MainActivity - changeCurrentServer called");
-     }
+         }
 
 
-     @Override
-     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+         @Override
+         protected void onActivityResult ( int requestCode, int resultCode, Intent data){
 
-         if (requestCode == SETTINGS_CODE) {
+             if (requestCode == SETTINGS_CODE) {
 
 //            Log.d("Debug", "Notification alarm set");
 
-             alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
-             Intent intent = new Intent(getApplication(), NotifierService.class);
-             alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
+                 alarmMgr = (AlarmManager) getApplication().getSystemService(Context.ALARM_SERVICE);
+                 Intent intent = new Intent(getApplication(), NotifierService.class);
+                 alarmIntent = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
 
-             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                     SystemClock.elapsedRealtime() + 5000,
-                     notification_period, alarmIntent);
-         }
+                 alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                         SystemClock.elapsedRealtime() + 5000,
+                         notification_period, alarmIntent);
+             }
 
-         if (requestCode == OPTION_CODE) {
+             if (requestCode == OPTION_CODE) {
 
-             String json = "";
+                 String json = "";
 
-             // Get Options
-             getOptions();
+                 // Get Options
+                 getOptions();
 
-             /***************************************
-              * Save qBittorrent's options remotely *
-              ****************************************/
+                 /***************************************
+                  * Save qBittorrent's options remotely *
+                  ****************************************/
 
-             Gson gson = new Gson();
+                 Gson gson = new Gson();
 
-             String up_limit = Integer.toString(Integer.parseInt(global_upload) * 1024);
-             String down_limit = Integer.toString(Integer.parseInt(global_download) * 1024);
+                 String up_limit = Integer.toString(Integer.parseInt(global_upload) * 1024);
+                 String down_limit = Integer.toString(Integer.parseInt(global_download) * 1024);
 
-             // TODO: Check when this changed (qb_api X.Y.Z )
-             if (qb_api > 0) {
-                 alt_upload = Integer.toString(Integer.parseInt(alt_upload) * 1024);
-                 alt_download = Integer.toString(Integer.parseInt(alt_download) * 1024);
+                 // TODO: Check when this changed (qb_api X.Y.Z )
+                 if (qb_api > 0) {
+                     alt_upload = Integer.toString(Integer.parseInt(alt_upload) * 1024);
+                     alt_download = Integer.toString(Integer.parseInt(alt_download) * 1024);
+                 }
+
+
+                 Options options = new Options(global_max_num_connections, global_max_num_connections,
+                         max_num_conn_per_torrent, max_num_conn_per_torrent, max_uploads,
+                         max_num_upslots_per_torrent, max_num_upslots_per_torrent,
+                         global_upload, up_limit, global_download, down_limit,
+                         alt_upload, alt_download, torrent_queueing, max_act_downloads,
+                         max_act_uploads, max_act_torrents, schedule_alternative_rate_limits,
+                         alt_from_hour, alt_from_min, alt_to_hour, alt_to_min, scheduler_days);
+
+                 json = gson.toJson(options).toString();
+
+                 // Set preferences using this json object
+                 setQBittorrentPrefefrences(json);
+
+                 // Now it can be refreshed
+                 canrefresh = true;
+
+             }
+
+             if (requestCode == HELP_CODE && resultCode == RESULT_OK) {
+                 // Now it can be refreshed
+                 canrefresh = true;
+
+                 refreshSwipeLayout();
+                 refreshCurrent();
              }
 
 
-             Options options = new Options(global_max_num_connections, global_max_num_connections,
-                     max_num_conn_per_torrent, max_num_conn_per_torrent, max_uploads,
-                     max_num_upslots_per_torrent, max_num_upslots_per_torrent,
-                     global_upload, up_limit, global_download, down_limit,
-                     alt_upload, alt_download, torrent_queueing, max_act_downloads,
-                     max_act_uploads, max_act_torrents, schedule_alternative_rate_limits,
-                     alt_from_hour, alt_from_min, alt_to_hour, alt_to_min, scheduler_days);
+             if (requestCode == SETTINGS_CODE && resultCode == RESULT_OK) {
 
-             json = gson.toJson(options).toString();
+                 // Change current server (from settings or drawer menu)
+                 changeCurrentServer();
 
-             // Set preferences using this json object
-             setQBittorrentPrefefrences(json);
+             }
 
-             // Now it can be refreshed
-             canrefresh = true;
-
-         }
-
-         if (requestCode == HELP_CODE && resultCode == RESULT_OK) {
-             // Now it can be refreshed
-             canrefresh = true;
-
-             refreshSwipeLayout();
-             refreshCurrent();
-         }
-
-
-         if (requestCode == SETTINGS_CODE && resultCode == RESULT_OK) {
-
-             // Change current server (from settings or drawer menu)
-             changeCurrentServer();
-
-         }
-
-         if (requestCode == ADDFILE_CODE && resultCode == RESULT_OK) {
-
-             String file_path_value = "";
-
-             // MaterialDesignPicker
              if (requestCode == ADDFILE_CODE && resultCode == RESULT_OK) {
 
-                 urlTorrent = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                 String file_path_value = "";
 
-                 sendTorrent();
+                 // MaterialDesignPicker
+                 if (requestCode == ADDFILE_CODE && resultCode == RESULT_OK) {
 
-             }
+                     urlTorrent = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
 
-         }
-
-     }
-
-     private void addUrlTorrent() {
-
-         // get prompts.xml view
-         LayoutInflater li = LayoutInflater.from(MainActivity.this);
-         View addTorrentView = li.inflate(R.layout.add_torrent, null);
-
-         // URL input
-         final EditText urlInput = (EditText) addTorrentView.findViewById(R.id.url);
-
-         if (!isFinishing()) {
-             // Dialog
-             Builder builder = new Builder(MainActivity.this);
-
-             // Set add_torrent.xml to AlertDialog builder
-             builder.setView(addTorrentView);
-
-             // Cancel
-             builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User cancelled the dialog
-                 }
-             });
-
-             // Okv
-             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User accepted the dialog
-                     urlTorrent = urlInput.getText().toString();
                      sendTorrent();
 
                  }
-             });
 
-             // Create dialog
-             AlertDialog dialog = builder.create();
+             }
 
-             // Show dialog
-             dialog.show();
          }
 
-     }
+         private void addUrlTorrent () {
 
-     public void addUrlTracker(final String hash) {
+             // get prompts.xml view
+             LayoutInflater li = LayoutInflater.from(MainActivity.this);
+             View addTorrentView = li.inflate(R.layout.add_torrent, null);
 
-         // get prompts.xml view
-         LayoutInflater li = LayoutInflater.from(MainActivity.this);
-         View addTrackerView = li.inflate(R.layout.add_tracker, null);
+             // URL input
+             final EditText urlInput = (EditText) addTorrentView.findViewById(R.id.url);
 
-         // URL input
-         final EditText urlInput = (EditText) addTrackerView.findViewById(R.id.url);
+             if (!isFinishing()) {
+                 // Dialog
+                 Builder builder = new Builder(MainActivity.this);
 
-         if (!isFinishing()) {
-             // Dialog
-             Builder builder = new Builder(MainActivity.this);
+                 // Set add_torrent.xml to AlertDialog builder
+                 builder.setView(addTorrentView);
 
-             // Set add_torrent.xml to AlertDialog builder
-             builder.setView(addTrackerView);
+                 // Cancel
+                 builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int id) {
+                         // User cancelled the dialog
+                     }
+                 });
 
-             // Cancel
-             builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User cancelled the dialog
+                 // Okv
+                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int id) {
+                         // User accepted the dialog
+                         urlTorrent = urlInput.getText().toString();
+                         sendTorrent();
+
+                     }
+                 });
+
+                 // Create dialog
+                 AlertDialog dialog = builder.create();
+
+                 // Show dialog
+                 dialog.show();
+             }
+
+         }
+
+         public void addUrlTracker ( final String hash){
+
+             // get prompts.xml view
+             LayoutInflater li = LayoutInflater.from(MainActivity.this);
+             View addTrackerView = li.inflate(R.layout.add_tracker, null);
+
+             // URL input
+             final EditText urlInput = (EditText) addTrackerView.findViewById(R.id.url);
+
+             if (!isFinishing()) {
+                 // Dialog
+                 Builder builder = new Builder(MainActivity.this);
+
+                 // Set add_torrent.xml to AlertDialog builder
+                 builder.setView(addTrackerView);
+
+                 // Cancel
+                 builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int id) {
+                         // User cancelled the dialog
 //                    Log.d("Debug", "addUrlTracker - Cancelled");
-                 }
-             });
+                     }
+                 });
 
-             // Ok
-             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User accepted the dialog
+                 // Ok
+                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int id) {
+                         // User accepted the dialog
 //                    Log.d("Debug", "addUrlTracker - Adding tracker");
-                     addTracker(hash, urlInput.getText().toString());
-                 }
-             });
+                         addTracker(hash, urlInput.getText().toString());
+                     }
+                 });
 
-             // Create dialog
-             AlertDialog dialog = builder.create();
+                 // Create dialog
+                 AlertDialog dialog = builder.create();
 
-             // Show dialog
-             dialog.show();
+                 // Show dialog
+                 dialog.show();
+             }
          }
-     }
 
 
-     protected void openSettings() {
-         canrefresh = false;
+         protected void openSettings () {
+             canrefresh = false;
 
-         Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.SettingsActivity.class);
-         startActivityForResult(intent, SETTINGS_CODE);
+             Intent intent = new Intent(getBaseContext(), com.lgallardo.qbittorrentclient.SettingsActivity.class);
+             startActivityForResult(intent, SETTINGS_CODE);
 
-     }
+         }
 
-     protected void openHelp() {
-         canrefresh = false;
+         protected void openHelp () {
+             canrefresh = false;
 
-         Intent intent = new Intent(getBaseContext(), HelpActivity.class);
-         intent.putExtra("current", lastState);
-         startActivityForResult(intent, HELP_CODE);
+             Intent intent = new Intent(getBaseContext(), HelpActivity.class);
+             intent.putExtra("current", lastState);
+             startActivityForResult(intent, HELP_CODE);
 
-     }
+         }
 
-     private void openOptions() {
-         canrefresh = false;
-         // Retrieve preferences for options
-         Intent intent = new Intent(getBaseContext(), OptionsActivity.class);
-         startActivityForResult(intent, OPTION_CODE);
+         private void openOptions () {
+             canrefresh = false;
+             // Retrieve preferences for options
+             Intent intent = new Intent(getBaseContext(), OptionsActivity.class);
+             startActivityForResult(intent, OPTION_CODE);
 
-     }
+         }
 
-     // This get qBittorrent options to save them in shared preferences variables and then open the Option activity
-     protected void getAndOpenOptions() {
+         // This get qBittorrent options to save them in shared preferences variables and then open the Option activity
+         protected void getAndOpenOptions () {
 
-         // Options - Execute the task in background
-         toastText(R.string.getQBittorrentPrefefrences);
+             // Options - Execute the task in background
+             toastText(R.string.getQBittorrentPrefefrences);
 
 //        qBittorrentOptions qso = new qBittorrentOptions();
 //        qso.execute(new String[]{qbQueryString + "/preferences", "setOptions"});
 
-     }
+         }
 
-     protected void getPRO() {
-         Intent intent = new Intent(
-                 new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclientpro")));
-         startActivityForResult(intent, GETPRO_CODE);
-     }
+         protected void getPRO () {
+             Intent intent = new Intent(
+                     new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclientpro")));
+             startActivityForResult(intent, GETPRO_CODE);
+         }
 
-     public void addTorrentFile(String url) {
+         public void addTorrentFile (String url){
 
-         addTorrentFileAPI7(url, path2Set, category2Set);
+             addTorrentFileAPI7(url, path2Set, category2Set);
 
 //      // TODO: Check when this changed (qb_api X.Y.Z )
 //        if (Integer.parseInt(qb_api) >= 7) {
@@ -5487,879 +5511,38 @@
 //            qtc.execute(new String[]{"addTorrentFile", url, path2Set, category2Set});
 //
 //        }
-     }
-
-     public void recheckTorrents(String hashes) {
-         // Execute the task in background
-
-         String[] hashesArray = hashes.split("\\|");
-
-         for (int i = 0; hashesArray.length > i; i++) {
-             recheckTorrent(hashesArray[i]);
          }
 
-         toastText(R.string.torrentsRecheck);
+         public void recheckTorrents (String hashes){
+             // Execute the task in background
 
-         // Delay of 3 seconds
-         refreshAfterCommand(3);
-     }
+             String[] hashesArray = hashes.split("\\|");
 
-     public void uploadRateLimitDialog(final String hash) {
-
-         // get prompts.xml view
-         LayoutInflater li = LayoutInflater.from(MainActivity.this);
-         View view = li.inflate(R.layout.upload_rate_limit, null);
-
-         // URL input
-         final EditText uploadRateLimit = (EditText) view.findViewById(R.id.upload_rate_limit);
-
-         if (!isFinishing()) {
-             // Dialog
-             Builder builder = new Builder(MainActivity.this);
-
-             // Set add_torrent.xml to AlertDialog builder
-             builder.setView(view);
-
-             // Cancel
-             builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User cancelled the dialog
-                 }
-             });
-
-             // Ok
-             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User accepted the dialog
-                     setUploadRateLimit(hash, uploadRateLimit.getText().toString());
-                 }
-             });
-
-             // Create dialog
-             AlertDialog dialog = builder.create();
-
-             // Show dialog
-             dialog.show();
-         }
-     }
-
-     public void setCategoryDialog(final String hash) {
-
-         // get prompts.xml view
-         LayoutInflater li = LayoutInflater.from(MainActivity.this);
-         View view = li.inflate(R.layout.set_category, null);
-
-         // URL input
-         final EditText category = (EditText) view.findViewById(R.id.set_category);
-
-         if (!isFinishing()) {
-             // Dialog
-             Builder builder = new Builder(MainActivity.this);
-
-             // Set add_torrent.xml to AlertDialog builder
-             builder.setView(view);
-
-             // Cancel
-             builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User cancelled the dialog
-                 }
-             });
-
-             // Ok
-             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User accepted the dialog
-
-                     String categoryEncoded = Uri.encode(category.getText().toString());
-
-                     setCategory(hash, categoryEncoded);
-                 }
-             });
-
-             // Create dialog
-             AlertDialog dialog = builder.create();
-
-             // Show dialog
-             dialog.show();
-         }
-     }
-
-     public void setUploadRateLimit(String hash, String uploadRateLimit) {
-         int limit;
-
-         if (uploadRateLimit != null && !uploadRateLimit.equals("")) {
-
-             if (global_upload != null) {
-
-                 if (Integer.parseInt(global_upload) > 0) {
-
-                     limit = (Integer.parseInt(uploadRateLimit) > Integer.parseInt(global_upload) && Integer.parseInt(global_upload) != 0) ? Integer
-                             .parseInt(global_upload) : Integer.parseInt(uploadRateLimit);
-
-                 } else {
-                     limit = Integer.parseInt(uploadRateLimit);
-                 }
-
-                 String[] hashesArray = hash.split("\\|");
-
-                 for (int i = 0; hashesArray.length > i; i++) {
-                     setUpRateLimit(hashesArray[i], "" + limit * 1024);
-                 }
-
-                 toastText(R.string.setUploadRateLimit);
-
-                 // Delay of 1 second
-                 refreshAfterCommand(1);
-
-             } else {
-                 genericOkDialog(R.string.error, R.string.global_value_error);
-
-             }
-         }
-
-     }
-
-     public void setDownloadRateLimit(String hash, String downloadRateLimit) {
-
-         int limit;
-
-         if (downloadRateLimit != null && !downloadRateLimit.equals("")) {
-
-             if (global_download != null) {
-
-                 if (Integer.parseInt(global_download) > 0) {
-                     limit = (Integer.parseInt(downloadRateLimit) > Integer.parseInt(global_download)) ? Integer.parseInt(global_download) : Integer
-                             .parseInt(downloadRateLimit);
-                 } else {
-                     limit = Integer.parseInt(downloadRateLimit);
-                 }
-
-                 String[] hashesArray = hash.split("\\|");
-
-                 for (int i = 0; hashesArray.length > i; i++) {
-                     setDownRateLimit(hashesArray[i], "" + limit * 1024);
-                 }
-
-                 toastText(R.string.setDownloadRateLimit);
-
-                 // Delay of 1 second
-                 refreshAfterCommand(1);
-
-             } else {
-                 genericOkDialog(R.string.error, R.string.global_value_error);
-             }
-         }
-     }
-
-     public void downloadRateLimitDialog(final String hash) {
-
-         // get prompts.xml view
-         LayoutInflater li = LayoutInflater.from(MainActivity.this);
-         View view = li.inflate(R.layout.download_rate_limit, null);
-
-         // URL input
-         final EditText downloadRateLimit = (EditText) view.findViewById(R.id.download_rate_limit);
-
-         if (!isFinishing()) {
-             // Dialog
-             Builder builder = new Builder(MainActivity.this);
-
-             // Set add_torrent.xml to AlertDialog builder
-             builder.setView(view);
-
-             // Cancel
-             builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User cancelled the dialog
-                 }
-             });
-
-             // Ok
-             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User accepted the dialog
-                     setDownloadRateLimit(hash, downloadRateLimit.getText().toString());
-                 }
-             });
-
-             // Create dialog
-             AlertDialog dialog = builder.create();
-
-             // Show dialog
-             dialog.show();
-         }
-     }
-
-     public void refreshAfterCommand(int delay) {
-
-//        switch (drawerList.getCheckedItemPosition()) {
-         switch (actionStates.indexOf(currentState)) {
-             case 0:
-                 refreshWithDelay("all", currentCategory, delay);
-                 break;
-             case 1:
-                 refreshWithDelay("downloading", currentCategory, delay);
-                 break;
-             case 2:
-                 refreshWithDelay("completed", currentCategory, delay);
-                 break;
-             case 3:
-                 refreshWithDelay("seeding", currentCategory, delay);
-                 break;
-             case 4:
-                 refreshWithDelay("pause", currentCategory, delay);
-                 break;
-             case 5:
-                 refreshWithDelay("active", currentCategory, delay);
-                 break;
-             case 6:
-                 refreshWithDelay("inactive", currentCategory, delay);
-                 break;
-             case 7:
-                 break;
-             case 8:
-                 break;
-             default:
-                 refreshWithDelay("all", currentCategory, delay);
-                 break;
-         }
-
-     }
-
-     public void genericOkDialog(int title, int message) {
-         genericOkDialog(title, message, null);
-     }
-
-     public void genericOkDialog(int message, DialogInterface.OnClickListener okListener) {
-         genericOkDialog(-1, message, okListener);
-     }
-
-     public void genericOkDialog(int message) {
-         genericOkDialog(-1, message, null);
-     }
-
-     public void genericOkDialog(int title, int message, DialogInterface.OnClickListener okListener) {
-
-         if (!isFinishing()) {
-
-             Builder builder = new Builder(this);
-
-             // Title
-             if (title != -1) {
-                 builder.setTitle(title);
+             for (int i = 0; hashesArray.length > i; i++) {
+                 recheckTorrent(hashesArray[i]);
              }
 
-             // Message
-             builder.setMessage(message);
+             toastText(R.string.torrentsRecheck);
 
-             // Ok
-             builder.setPositiveButton(R.string.ok, okListener);
-
-             // Create dialog
-             AlertDialog dialog = builder.create();
-
-             // Show dialog
-             dialog.show();
+             // Delay of 3 seconds
+             refreshAfterCommand(3);
          }
 
-     }
+         public void uploadRateLimitDialog ( final String hash){
 
-     private void genericOkCancelDialog(int title, int message) {
+             // get prompts.xml view
+             LayoutInflater li = LayoutInflater.from(MainActivity.this);
+             View view = li.inflate(R.layout.upload_rate_limit, null);
 
-         genericOkCancelDialog(title, message, null);
-     }
+             // URL input
+             final EditText uploadRateLimit = (EditText) view.findViewById(R.id.upload_rate_limit);
 
-     private void genericOkCancelDialog(int message, DialogInterface.OnClickListener okListener) {
-
-         genericOkCancelDialog(-1, message, okListener);
-
-     }
-
-     private void genericOkCancelDialog(int message) {
-
-         genericOkCancelDialog(-1, message, null);
-
-     }
-
-     private void genericOkCancelDialog(int title, int message, DialogInterface.OnClickListener okListener) {
-
-         if (!isFinishing()) {
-
-             Builder builder = new Builder(this);
-
-             // Title
-             if (title != -1) {
-                 builder.setTitle(title);
-             }
-
-             // Message
-             builder.setMessage(message);
-
-             // Ok
-             builder.setPositiveButton(R.string.ok, okListener);
-
-             // Cancel
-             builder.setNegativeButton(R.string.cancel, null);
-
-             // Create dialog
-             AlertDialog dialog = builder.create();
-
-             // Show dialog
-             dialog.show();
-         }
-
-     }
-
-     public void qBittorrentNoSettingsFoundDialog(int title, int message) {
-
-         if (!isFinishing()) {
-
-             Builder builder = new Builder(this);
-
-             // Message
-             builder.setMessage(message).setTitle(title);
-
-             // Ok
-             builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User accepted the dialog
-                 }
-             });
-
-             // Settings
-             builder.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() {
-
-                 public void onClick(DialogInterface dialog, int id) {
-                     // User accepted the dialog
-                     openSettings();
-                 }
-             });
-
-
-             // Create dialog
-             AlertDialog dialog = builder.create();
-
-             // Show dialog
-             dialog.show();
-         }
-
-     }
-
-     // Delay method
-     public void refreshWithDelay(final String state, final String category, int seconds) {
-
-         seconds *= 1000;
-
-         final Handler handler = new Handler();
-         handler.postDelayed(new Runnable() {
-             @Override
-             public void run() {
-                 // Do something after 5s = 5000ms
-                 refresh(state, category);
-             }
-         }, seconds);
-     }
-
-     // Get settings
-     protected void getSettings() {
-         // Preferences stuff
-         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-
-         builderPrefs = new StringBuilder();
-
-         builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
-
-         // Get values from preferences
-         currentServer = sharedPrefs.getString("currentServer", "1");
-         hostname = sharedPrefs.getString("hostname", "");
-         subfolder = sharedPrefs.getString("subfolder", "");
-
-         protocol = sharedPrefs.getString("protocol", "NULL");
-
-         // If user leave the field empty, set 8080 port
-         try {
-             port = Integer.parseInt(sharedPrefs.getString("port", "8080"));
-         } catch (NumberFormatException e) {
-             port = 8080;
-
-         }
-         username = sharedPrefs.getString("username", "NULL");
-         password = sharedPrefs.getString("password", "NULL");
-         https = sharedPrefs.getBoolean("https", false);
-
-         // Check https
-         if (https) {
-             protocol = "https";
-         } else {
-             protocol = "http";
-         }
-
-         // Get refresh info
-         auto_refresh = sharedPrefs.getBoolean("auto_refresh", true);
-
-         try {
-             refresh_period = Integer.parseInt(sharedPrefs.getString("refresh_period", "120000"));
-         } catch (NumberFormatException e) {
-             refresh_period = 120000;
-         }
-
-         // Get connection and data timeouts
-         try {
-             connection_timeout = Integer.parseInt(sharedPrefs.getString("connection_timeout", "10"));
-
-             // New default value to make it work with qBittorrent 3.2.x
-             if (connection_timeout < 10) {
-                 connection_timeout = 10;
-             }
-         } catch (NumberFormatException e) {
-             connection_timeout = 10;
-         }
-
-         try {
-             data_timeout = Integer.parseInt(sharedPrefs.getString("data_timeout", "20"));
-
-             // New default value to make it work with qBittorrent 3.2.x
-             if (data_timeout < 20) {
-                 data_timeout = 20;
-             }
-
-         } catch (NumberFormatException e) {
-             data_timeout = 20;
-         }
-
-         sortby_value = sharedPrefs.getInt("sortby_value", 1);
-         reverse_order = sharedPrefs.getBoolean("reverse_order", false);
-
-         dark_ui = sharedPrefs.getBoolean("dark_ui", false);
-
-         qb_version = sharedPrefs.getString("qb_version", "4.2.x");
-
-         MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
-
-         // Get last state
-         lastState = sharedPrefs.getString("lastState", "all");
-
-         // Get last category
-         lastCategory = sharedPrefs.getString("lastCategory", "all");
-         currentCategory = lastCategory;
-
-
-         // Notification check
-         enable_notifications = sharedPrefs.getBoolean("enable_notifications", false);
-
-         try {
-             notification_period = Long.parseLong(sharedPrefs.getString("notification_period", "120000L"));
-         } catch (NumberFormatException e) {
-             notification_period = 120000L;
-         }
-
-         header = sharedPrefs.getBoolean("header", true);
-
-         // Get package info
-         PackageInfo pInfo = null;
-         try {
-             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-         } catch (PackageManager.NameNotFoundException e) {
-             e.printStackTrace();
-         }
-
-         // Get package name
-         packageName = pInfo.packageName;
-         packageVersion = pInfo.versionName;
-
-         // Get AlternativeSpeedLimitsEnabled value
-         alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
-
-         // Get local SSID properties
-         ssid = sharedPrefs.getString("ssid", "");
-         local_hostname = sharedPrefs.getString("local_hostname", null);
-
-
-         // If user leave the field empty, set 8080 port
-         try {
-             local_port = Integer.parseInt(sharedPrefs.getString("local_port", "-1"));
-         } catch (NumberFormatException e) {
-             local_port = -1;
-
-         }
-
-         // Set SSI and local hostname and port
-         if (ssid != null && !ssid.equals("")) {
-
-             // Get SSID if WiFi
-             WifiManager wifiMgr = (WifiManager) getApplication().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-             WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
-             String wifiSSID = wifiInfo.getSSID();
-
-//            Log.d("Debug", "WiFi SSID: " + wifiSSID);
-//            Log.d("Debug", "SSID: " + ssid);
-
-             if (wifiSSID.toUpperCase().equals("\"" + ssid.toUpperCase() + "\"") && wifiMgr.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
-
-                 if (local_hostname != null && !local_hostname.equals("")) {
-                     hostname = local_hostname;
-                 }
-
-                 if (local_port != -1) {
-                     port = local_port;
-                 }
-
-//                Log.d("Debug", "hostname: " + hostname);
-//                Log.d("Debug", "port: " + port);
-//                Log.d("Debug", "local_hostname: " + local_hostname);
-//                Log.d("Debug", "local_port: " + local_port);
-
-             }
-         }
-
-         // Get keystore for self-signed certificate
-         keystore_path = sharedPrefs.getString("keystore_path" + currentServer, "");
-         keystore_password = sharedPrefs.getString("keystore_password" + currentServer, "");
-
-         // Get path and category history
-         path_history = sharedPrefs.getStringSet("path_history", new HashSet<String>());
-         category_history = sharedPrefs.getStringSet("category_history", new HashSet<String>());
-
-         pathAndCategoryDialog = sharedPrefs.getBoolean("pathAndCategoryDialog", true);
-
-     }
-
-     // Get Options
-     protected void getOptions() {
-         // Preferences stuff
-         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-
-         builderPrefs = new StringBuilder();
-
-         builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
-
-         // Get values from options
-         global_max_num_connections = sharedPrefs.getString("global_max_num_connections", "0");
-         max_num_conn_per_torrent = sharedPrefs.getString("max_num_conn_per_torrent", "0");
-         max_uploads = sharedPrefs.getString("max_uploads", "0");
-         max_num_upslots_per_torrent = sharedPrefs.getString("max_num_upslots_per_torrent", "0");
-
-         global_upload = sharedPrefs.getString("global_upload", "0");
-         global_download = sharedPrefs.getString("global_download", "0");
-
-         alt_upload = sharedPrefs.getString("alt_upload", "0");
-         alt_download = sharedPrefs.getString("alt_download", "0");
-
-         // This will used for checking if the torrent queuing option are used
-         torrent_queueing = sharedPrefs.getBoolean("torrent_queueing", false);
-
-         max_act_downloads = sharedPrefs.getString("max_act_downloads", "0");
-         max_act_uploads = sharedPrefs.getString("max_act_uploads", "0");
-         max_act_torrents = sharedPrefs.getString("max_act_torrents", "0");
-
-         schedule_alternative_rate_limits = sharedPrefs.getBoolean("schedule_alternative_rate_limits", false);
-
-         alt_from_hour = "" + TimePreference.getHour(sharedPrefs.getString("alt_from", "8:00"));
-         alt_from_min = "" + TimePreference.getMinute(sharedPrefs.getString("alt_from", "8:00"));
-
-         alt_to_hour = "" + TimePreference.getHour(sharedPrefs.getString("alt_to", "20:00"));
-         alt_to_min = "" + TimePreference.getMinute(sharedPrefs.getString("alt_to", "20:00"));
-
-         scheduler_days = sharedPrefs.getString("scheduler_days", "NULL");
-
-         // Check alternatives speed
-         alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
-
-         // Share Ratio Limiting
-         max_ratio_enabled = sharedPrefs.getBoolean("max_ratio_enabled", false);
-         max_ratio = sharedPrefs.getString("max_ratio", "0");
-         max_ratio_act = sharedPrefs.getString("max_ratio_act", "NULL");
-
-     }
-
-     protected void notifyCompleted(HashMap completedTorrents) {
-
-         Intent intent = new Intent(this, MainActivity.class);
-         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-         // build notification
-         // the addAction re-use the same intent to keep the example short
-         Notification.Builder builder = new Notification.Builder(this)
-                 .setContentTitle("qBittorrent")
-                 .setContentText("Torrent(s) completed")
-                 .setSmallIcon(R.drawable.ic_stat_completed)
-                 .setNumber(completedTorrents.size())
-                 .setContentIntent(pIntent)
-                 .setAutoCancel(true);
-
-
-         NotificationManager notificationManager =
-                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-         Notification notification;
-
-         notification = builder.getNotification();
-
-         notificationManager.notify(0, notification);
-
-
-     }
-
-     private void saveLastState(String state) {
-         currentState = state;
-         savePreferenceAsString("lastState", state);
-     }
-
-     public void saveLastCategory(String category) {
-         currentCategory = category;
-         savePreferenceAsString("lastCategory", category);
-     }
-
-     private void saveSortBy(int sortby_value) {
-         MainActivity.sortby_value = sortby_value;
-         savePreferenceAsInt("sortby_value", sortby_value);
-     }
-
-     // Save key-value preference as String
-     private void savePreferenceAsString(String preference, String value) {
-
-         // Save preference locally
-         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-         Editor editor = sharedPrefs.edit();
-
-         // Save key-values
-         editor.putString(preference, value);
-
-         // Commit changes
-         editor.apply();
-
-     }
-
-     // Save key-value preference as a String Set
-     private void savePreferenceAsStringSet(String preference, Set<String> value) {
-
-         // Save preference locally
-         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-         Editor editor = sharedPrefs.edit();
-
-         // Save key-values
-         editor.putStringSet(preference, value);
-
-         // Commit changes
-         editor.apply();
-
-     }
-
-     // Save key-value preference as Int
-     private void savePreferenceAsInt(String preference, int value) {
-
-         // Save preference locally
-         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-         Editor editor = sharedPrefs.edit();
-
-         // Save key-values
-         editor.putInt(preference, value);
-
-         // Commit changes
-         editor.apply();
-
-     }
-
-
-     // Save key-value preference as boolean
-     private void savePreferenceAsBoolean(String preference, boolean value) {
-
-         // Save preference locally
-         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-         Editor editor = sharedPrefs.edit();
-
-         // Save key-values
-         editor.putBoolean(preference, value);
-
-         // Commit changes
-         editor.apply();
-
-     }
-
-     private void saveReverseOrder(boolean reverse_order) {
-         MainActivity.reverse_order = reverse_order;
-         // Save options locally
-         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-         Editor editor = sharedPrefs.edit();
-
-         // Save key-values
-         editor.putBoolean("reverse_order", reverse_order);
-
-         // Commit changes
-         editor.apply();
-
-     }
-
-     private void selectItem(int position) {
-
-
-         if (findViewById(R.id.one_frame) != null) {
-             FragmentManager fragmentManager = getFragmentManager();
-
-             if (fragmentManager.findFragmentByTag("firstFragment") instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
-                 // Reset back button stack
-                 for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-                     fragmentManager.popBackStack();
-                 }
-             }
-         }
-     }
-
-     @Override
-     public void swipeRefresh() {
-
-         if (hostname.equals("")) {
-             qBittorrentNoSettingsFoundDialog(R.string.info, R.string.about_help1);
-             disableRefreshSwipeLayout();
-
-         } else {
-
-             // Set the refresh layout (refresh icon, etc)
-             refreshSwipeLayout();
-
-             // Actually refresh data
-             refreshCurrent();
-
-             // Load banner
-             loadBanner();
-
-         }
-
-     }
-
-     public static void disableRefreshSwipeLayout() {
-
-         if (com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout != null) {
-             com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setRefreshing(false);
-             com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.clearAnimation();
-             com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setEnabled(true);
-         }
-
-         if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
-             com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(false);
-             com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.clearAnimation();
-             com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(true);
-         }
-
-         if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
-             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(false);
-             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.clearAnimation();
-             com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setEnabled(true);
-         }
-
-         listViewRefreshing = false;
-     }
-
-     public void refreshSwipeLayout() {
-
-         if (!hostname.equals("")) {
-
-             listViewRefreshing = true;
-
-             if (AboutFragment.mSwipeRefreshLayout != null) {
-                 AboutFragment.mSwipeRefreshLayout.setRefreshing(true);
-             }
-
-             if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
-                 com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(true);
-                 com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(false);
-             }
-
-             if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
-                 com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(true);
-             }
-         }
-
-     }
-
-     private void openFilePicker() {
-
-         // Check Dangerous permissions (Android 6.0+, API 23+)
-         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-
-             // Should we show an explanation?
-             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                 genericOkDialog(R.string.error_permission2,
-                         new DialogInterface.OnClickListener() {
-                             @Override
-                             public void onClick(DialogInterface dialog, int which) {
-                                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-                             }
-                         });
-
-             } else {
-
-                 // No explanation needed, request the permission.
-                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-
-             }
-
-
-         } else {
-
-             // Permissions granted, open file picker
-             Intent intent = new Intent(getApplicationContext(), FilePickerActivity.class);
-             intent.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.torrent"));
-//            startActivityForResult(INTENT, RESULT_CODE);
-             startActivityForResult(intent, ADDFILE_CODE);
-
-         }
-
-
-     }
-
-     public void sendTorrent() {
-         // get prompts.xml view
-         LayoutInflater li = LayoutInflater.from(this);
-         View sentTorrentView = li.inflate(R.layout.send_torrent, null);
-
-         MainActivity.path2Set = "";
-         MainActivity.category2Set = "";
-
-//        Log.d("Debug", "qb_version: " + qb_version);
-//        Log.d("Debug", "qb_api: " + qb_api);
-//        Log.d("Debug", "type: " + type);
-
-         if (pathAndCategoryDialog) {
-
-             // Variables
-
-             final AutoCompleteTextView pathTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.path_sent);
-             final AutoCompleteTextView categoryTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.category_sent);
-             final CheckBox checkBoxPathAndCategoryDialog = (CheckBox) sentTorrentView.findViewById(R.id.pathAndCategoryDialog);
-
-
-             // Load history for path and category autocomplete text field
-
-             // Path
-             ArrayAdapter<String> pathAdapter = new ArrayAdapter<String>(
-                     this, android.R.layout.simple_list_item_1, path_history.toArray(new String[path_history.size()]));
-             pathTextView.setAdapter(pathAdapter);
-
-             // Category
-             ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(
-                     this, android.R.layout.simple_list_item_1, category_history.toArray(new String[category_history.size()]));
-             categoryTextView.setAdapter(categoryAdapter);
-
-             // Checkbox value
-             if (pathAndCategoryDialog) {
-                 checkBoxPathAndCategoryDialog.setChecked(false);
-             } else {
-                 checkBoxPathAndCategoryDialog.setChecked(true);
-             }
-
-             // Dialog
              if (!isFinishing()) {
                  // Dialog
-                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                 Builder builder = new Builder(MainActivity.this);
 
-                 // Set send_torrent.xml to AlertDialog builder
-                 builder.setView(sentTorrentView);
+                 // Set add_torrent.xml to AlertDialog builder
+                 builder.setView(view);
 
                  // Cancel
                  builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -6371,27 +5554,8 @@
                  // Ok
                  builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                      public void onClick(DialogInterface dialog, int id) {
-
-                         MainActivity.path2Set = pathTextView.getText().toString();
-                         MainActivity.category2Set = categoryTextView.getText().toString();
-
-                         if (!(path2Set.equals(""))) {
-                             addPath2History(path2Set);
-                         }
-
-                         if (!(category2Set.equals(""))) {
-                             addCategory2History(category2Set);
-                         }
-
-
-//                        Log.d("Debug", "[sendTorrent] path2Set: " + path2Set);
-//                        Log.d("Debug", "[sendTorrent] category2Set: " + category2Set);
-
-                         // Save checkbox
-                         savePreferenceAsBoolean("pathAndCategoryDialog", !(checkBoxPathAndCategoryDialog.isChecked()));
-
-                         // User accepted
-                         handleUrlTorrent();
+                         // User accepted the dialog
+                         setUploadRateLimit(hash, uploadRateLimit.getText().toString());
                      }
                  });
 
@@ -6401,38 +5565,901 @@
                  // Show dialog
                  dialog.show();
              }
-
-         } else {
-
-             // No dialog for qBittorrent version < 3.2.x or if it's disabled
-             handleUrlTorrent();
          }
 
-     }
+         public void setCategoryDialog ( final String hash){
 
-     private void addPath2History(String path) {
+             // get prompts.xml view
+             LayoutInflater li = LayoutInflater.from(MainActivity.this);
+             View view = li.inflate(R.layout.set_category, null);
 
-         if (!path_history.contains(path)) {
-             path_history.add(path);
-             savePreferenceAsStringSet("path_history", path_history);
+             // URL input
+             final EditText category = (EditText) view.findViewById(R.id.set_category);
+
+             if (!isFinishing()) {
+                 // Dialog
+                 Builder builder = new Builder(MainActivity.this);
+
+                 // Set add_torrent.xml to AlertDialog builder
+                 builder.setView(view);
+
+                 // Cancel
+                 builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int id) {
+                         // User cancelled the dialog
+                     }
+                 });
+
+                 // Ok
+                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int id) {
+                         // User accepted the dialog
+
+                         String categoryEncoded = Uri.encode(category.getText().toString());
+
+                         setCategory(hash, categoryEncoded);
+                     }
+                 });
+
+                 // Create dialog
+                 AlertDialog dialog = builder.create();
+
+                 // Show dialog
+                 dialog.show();
+             }
          }
-     }
 
-     private void addCategory2History(String category) {
+         public void setUploadRateLimit (String hash, String uploadRateLimit){
+             int limit;
 
-         if (!category_history.contains(category)) {
-             category_history.add(category);
-             savePreferenceAsStringSet("category_history", category_history);
+             if (uploadRateLimit != null && !uploadRateLimit.equals("")) {
+
+                 if (global_upload != null) {
+
+                     if (Integer.parseInt(global_upload) > 0) {
+
+                         limit = (Integer.parseInt(uploadRateLimit) > Integer.parseInt(global_upload) && Integer.parseInt(global_upload) != 0) ? Integer
+                                 .parseInt(global_upload) : Integer.parseInt(uploadRateLimit);
+
+                     } else {
+                         limit = Integer.parseInt(uploadRateLimit);
+                     }
+
+                     String[] hashesArray = hash.split("\\|");
+
+                     for (int i = 0; hashesArray.length > i; i++) {
+                         setUpRateLimit(hashesArray[i], "" + limit * 1024);
+                     }
+
+                     toastText(R.string.setUploadRateLimit);
+
+                     // Delay of 1 second
+                     refreshAfterCommand(1);
+
+                 } else {
+                     genericOkDialog(R.string.error, R.string.global_value_error);
+
+                 }
+             }
+
          }
-     }
 
-     // Drawer classes
-     private class DrawerItemClickListener implements ListView.OnItemClickListener {
+         public void setDownloadRateLimit (String hash, String downloadRateLimit){
+
+             int limit;
+
+             if (downloadRateLimit != null && !downloadRateLimit.equals("")) {
+
+                 if (global_download != null) {
+
+                     if (Integer.parseInt(global_download) > 0) {
+                         limit = (Integer.parseInt(downloadRateLimit) > Integer.parseInt(global_download)) ? Integer.parseInt(global_download) : Integer
+                                 .parseInt(downloadRateLimit);
+                     } else {
+                         limit = Integer.parseInt(downloadRateLimit);
+                     }
+
+                     String[] hashesArray = hash.split("\\|");
+
+                     for (int i = 0; hashesArray.length > i; i++) {
+                         setDownRateLimit(hashesArray[i], "" + limit * 1024);
+                     }
+
+                     toastText(R.string.setDownloadRateLimit);
+
+                     // Delay of 1 second
+                     refreshAfterCommand(1);
+
+                 } else {
+                     genericOkDialog(R.string.error, R.string.global_value_error);
+                 }
+             }
+         }
+
+         public void downloadRateLimitDialog ( final String hash){
+
+             // get prompts.xml view
+             LayoutInflater li = LayoutInflater.from(MainActivity.this);
+             View view = li.inflate(R.layout.download_rate_limit, null);
+
+             // URL input
+             final EditText downloadRateLimit = (EditText) view.findViewById(R.id.download_rate_limit);
+
+             if (!isFinishing()) {
+                 // Dialog
+                 Builder builder = new Builder(MainActivity.this);
+
+                 // Set add_torrent.xml to AlertDialog builder
+                 builder.setView(view);
+
+                 // Cancel
+                 builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int id) {
+                         // User cancelled the dialog
+                     }
+                 });
+
+                 // Ok
+                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int id) {
+                         // User accepted the dialog
+                         setDownloadRateLimit(hash, downloadRateLimit.getText().toString());
+                     }
+                 });
+
+                 // Create dialog
+                 AlertDialog dialog = builder.create();
+
+                 // Show dialog
+                 dialog.show();
+             }
+         }
+
+         public void refreshAfterCommand ( int delay){
+
+//        switch (drawerList.getCheckedItemPosition()) {
+             switch (actionStates.indexOf(currentState)) {
+                 case 0:
+                     refreshWithDelay("all", currentCategory, delay);
+                     break;
+                 case 1:
+                     refreshWithDelay("downloading", currentCategory, delay);
+                     break;
+                 case 2:
+                     refreshWithDelay("completed", currentCategory, delay);
+                     break;
+                 case 3:
+                     refreshWithDelay("seeding", currentCategory, delay);
+                     break;
+                 case 4:
+                     refreshWithDelay("pause", currentCategory, delay);
+                     break;
+                 case 5:
+                     refreshWithDelay("active", currentCategory, delay);
+                     break;
+                 case 6:
+                     refreshWithDelay("inactive", currentCategory, delay);
+                     break;
+                 case 7:
+                     break;
+                 case 8:
+                     break;
+                 default:
+                     refreshWithDelay("all", currentCategory, delay);
+                     break;
+             }
+
+         }
+
+         public void genericOkDialog ( int title, int message){
+             genericOkDialog(title, message, null);
+         }
+
+         public void genericOkDialog ( int message, DialogInterface.OnClickListener okListener){
+             genericOkDialog(-1, message, okListener);
+         }
+
+         public void genericOkDialog ( int message){
+             genericOkDialog(-1, message, null);
+         }
+
+         public void genericOkDialog ( int title, int message, DialogInterface.
+         OnClickListener okListener){
+
+             if (!isFinishing()) {
+
+                 Builder builder = new Builder(this);
+
+                 // Title
+                 if (title != -1) {
+                     builder.setTitle(title);
+                 }
+
+                 // Message
+                 builder.setMessage(message);
+
+                 // Ok
+                 builder.setPositiveButton(R.string.ok, okListener);
+
+                 // Create dialog
+                 AlertDialog dialog = builder.create();
+
+                 // Show dialog
+                 dialog.show();
+             }
+
+         }
+
+         private void genericOkCancelDialog ( int title, int message){
+
+             genericOkCancelDialog(title, message, null);
+         }
+
+         private void genericOkCancelDialog ( int message, DialogInterface.
+         OnClickListener okListener){
+
+             genericOkCancelDialog(-1, message, okListener);
+
+         }
+
+         private void genericOkCancelDialog ( int message){
+
+             genericOkCancelDialog(-1, message, null);
+
+         }
+
+         private void genericOkCancelDialog ( int title, int message, DialogInterface.
+         OnClickListener okListener){
+
+             if (!isFinishing()) {
+
+                 Builder builder = new Builder(this);
+
+                 // Title
+                 if (title != -1) {
+                     builder.setTitle(title);
+                 }
+
+                 // Message
+                 builder.setMessage(message);
+
+                 // Ok
+                 builder.setPositiveButton(R.string.ok, okListener);
+
+                 // Cancel
+                 builder.setNegativeButton(R.string.cancel, null);
+
+                 // Create dialog
+                 AlertDialog dialog = builder.create();
+
+                 // Show dialog
+                 dialog.show();
+             }
+
+         }
+
+         public void qBittorrentNoSettingsFoundDialog ( int title, int message){
+
+             if (!isFinishing()) {
+
+                 Builder builder = new Builder(this);
+
+                 // Message
+                 builder.setMessage(message).setTitle(title);
+
+                 // Ok
+                 builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                     public void onClick(DialogInterface dialog, int id) {
+                         // User accepted the dialog
+                     }
+                 });
+
+                 // Settings
+                 builder.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() {
+
+                     public void onClick(DialogInterface dialog, int id) {
+                         // User accepted the dialog
+                         openSettings();
+                     }
+                 });
+
+
+                 // Create dialog
+                 AlertDialog dialog = builder.create();
+
+                 // Show dialog
+                 dialog.show();
+             }
+
+         }
+
+         // Delay method
+         public void refreshWithDelay ( final String state, final String category, int seconds){
+
+             seconds *= 1000;
+
+             final Handler handler = new Handler();
+             handler.postDelayed(new Runnable() {
+                 @Override
+                 public void run() {
+                     // Do something after 5s = 5000ms
+                     refresh(state, category);
+                 }
+             }, seconds);
+         }
+
+         // Get settings
+         protected void getSettings () {
+             // Preferences stuff
+             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+
+             builderPrefs = new StringBuilder();
+
+             builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
+
+             // Get values from preferences
+             currentServer = sharedPrefs.getString("currentServer", "1");
+             hostname = sharedPrefs.getString("hostname", "");
+             subfolder = sharedPrefs.getString("subfolder", "");
+
+             protocol = sharedPrefs.getString("protocol", "NULL");
+
+             // If user leave the field empty, set 8080 port
+             try {
+                 port = Integer.parseInt(sharedPrefs.getString("port", "8080"));
+             } catch (NumberFormatException e) {
+                 port = 8080;
+
+             }
+             username = sharedPrefs.getString("username", "NULL");
+             password = sharedPrefs.getString("password", "NULL");
+             https = sharedPrefs.getBoolean("https", false);
+
+             // Check https
+             if (https) {
+                 protocol = "https";
+             } else {
+                 protocol = "http";
+             }
+
+             // Get refresh info
+             auto_refresh = sharedPrefs.getBoolean("auto_refresh", true);
+
+             try {
+                 refresh_period = Integer.parseInt(sharedPrefs.getString("refresh_period", "120000"));
+             } catch (NumberFormatException e) {
+                 refresh_period = 120000;
+             }
+
+             // Get connection and data timeouts
+             try {
+                 connection_timeout = Integer.parseInt(sharedPrefs.getString("connection_timeout", "10"));
+
+                 // New default value to make it work with qBittorrent 3.2.x
+                 if (connection_timeout < 10) {
+                     connection_timeout = 10;
+                 }
+             } catch (NumberFormatException e) {
+                 connection_timeout = 10;
+             }
+
+             try {
+                 data_timeout = Integer.parseInt(sharedPrefs.getString("data_timeout", "20"));
+
+                 // New default value to make it work with qBittorrent 3.2.x
+                 if (data_timeout < 20) {
+                     data_timeout = 20;
+                 }
+
+             } catch (NumberFormatException e) {
+                 data_timeout = 20;
+             }
+
+             sortby_value = sharedPrefs.getInt("sortby_value", 1);
+             reverse_order = sharedPrefs.getBoolean("reverse_order", false);
+
+             dark_ui = sharedPrefs.getBoolean("dark_ui", false);
+
+             qb_version = sharedPrefs.getString("qb_version", "4.2.x");
+
+             MainActivity.cookie = sharedPrefs.getString("qbCookie", null);
+
+             // Get last state
+             lastState = sharedPrefs.getString("lastState", "all");
+
+             // Get last category
+             lastCategory = sharedPrefs.getString("lastCategory", "all");
+             currentCategory = lastCategory;
+
+
+             // Notification check
+             enable_notifications = sharedPrefs.getBoolean("enable_notifications", false);
+
+             try {
+                 notification_period = Long.parseLong(sharedPrefs.getString("notification_period", "120000L"));
+             } catch (NumberFormatException e) {
+                 notification_period = 120000L;
+             }
+
+             header = sharedPrefs.getBoolean("header", true);
+
+             // Get package info
+             PackageInfo pInfo = null;
+             try {
+                 pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+             } catch (PackageManager.NameNotFoundException e) {
+                 e.printStackTrace();
+             }
+
+             // Get package name
+             packageName = pInfo.packageName;
+             packageVersion = pInfo.versionName;
+
+             // Get AlternativeSpeedLimitsEnabled value
+             alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
+
+             // Get local SSID properties
+             ssid = sharedPrefs.getString("ssid", "");
+             local_hostname = sharedPrefs.getString("local_hostname", null);
+
+
+             // If user leave the field empty, set 8080 port
+             try {
+                 local_port = Integer.parseInt(sharedPrefs.getString("local_port", "-1"));
+             } catch (NumberFormatException e) {
+                 local_port = -1;
+
+             }
+
+             // Set SSI and local hostname and port
+             if (ssid != null && !ssid.equals("")) {
+
+                 // Get SSID if WiFi
+                 WifiManager wifiMgr = (WifiManager) getApplication().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                 WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+                 String wifiSSID = wifiInfo.getSSID();
+
+//            Log.d("Debug", "WiFi SSID: " + wifiSSID);
+//            Log.d("Debug", "SSID: " + ssid);
+
+                 if (wifiSSID.toUpperCase().equals("\"" + ssid.toUpperCase() + "\"") && wifiMgr.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+
+                     if (local_hostname != null && !local_hostname.equals("")) {
+                         hostname = local_hostname;
+                     }
+
+                     if (local_port != -1) {
+                         port = local_port;
+                     }
+
+//                Log.d("Debug", "hostname: " + hostname);
+//                Log.d("Debug", "port: " + port);
+//                Log.d("Debug", "local_hostname: " + local_hostname);
+//                Log.d("Debug", "local_port: " + local_port);
+
+                 }
+             }
+
+             // Get keystore for self-signed certificate
+             keystore_path = sharedPrefs.getString("keystore_path" + currentServer, "");
+             keystore_password = sharedPrefs.getString("keystore_password" + currentServer, "");
+
+             // Get path and category history
+             path_history = sharedPrefs.getStringSet("path_history", new HashSet<String>());
+             category_history = sharedPrefs.getStringSet("category_history", new HashSet<String>());
+
+             pathAndCategoryDialog = sharedPrefs.getBoolean("pathAndCategoryDialog", true);
+
+         }
+
+         // Get Options
+         protected void getOptions () {
+             // Preferences stuff
+             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+
+             builderPrefs = new StringBuilder();
+
+             builderPrefs.append("\n" + sharedPrefs.getString("language", "NULL"));
+
+             // Get values from options
+             global_max_num_connections = sharedPrefs.getString("global_max_num_connections", "0");
+             max_num_conn_per_torrent = sharedPrefs.getString("max_num_conn_per_torrent", "0");
+             max_uploads = sharedPrefs.getString("max_uploads", "0");
+             max_num_upslots_per_torrent = sharedPrefs.getString("max_num_upslots_per_torrent", "0");
+
+             global_upload = sharedPrefs.getString("global_upload", "0");
+             global_download = sharedPrefs.getString("global_download", "0");
+
+             alt_upload = sharedPrefs.getString("alt_upload", "0");
+             alt_download = sharedPrefs.getString("alt_download", "0");
+
+             // This will used for checking if the torrent queuing option are used
+             torrent_queueing = sharedPrefs.getBoolean("torrent_queueing", false);
+
+             max_act_downloads = sharedPrefs.getString("max_act_downloads", "0");
+             max_act_uploads = sharedPrefs.getString("max_act_uploads", "0");
+             max_act_torrents = sharedPrefs.getString("max_act_torrents", "0");
+
+             schedule_alternative_rate_limits = sharedPrefs.getBoolean("schedule_alternative_rate_limits", false);
+
+             alt_from_hour = "" + TimePreference.getHour(sharedPrefs.getString("alt_from", "8:00"));
+             alt_from_min = "" + TimePreference.getMinute(sharedPrefs.getString("alt_from", "8:00"));
+
+             alt_to_hour = "" + TimePreference.getHour(sharedPrefs.getString("alt_to", "20:00"));
+             alt_to_min = "" + TimePreference.getMinute(sharedPrefs.getString("alt_to", "20:00"));
+
+             scheduler_days = sharedPrefs.getString("scheduler_days", "NULL");
+
+             // Check alternatives speed
+             alternative_speeds = sharedPrefs.getBoolean("alternativeSpeedLimitsEnabled", false);
+
+             // Share Ratio Limiting
+             max_ratio_enabled = sharedPrefs.getBoolean("max_ratio_enabled", false);
+             max_ratio = sharedPrefs.getString("max_ratio", "0");
+             max_ratio_act = sharedPrefs.getString("max_ratio_act", "NULL");
+
+         }
+
+         protected void notifyCompleted (HashMap completedTorrents){
+
+             Intent intent = new Intent(this, MainActivity.class);
+             PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+             // build notification
+             // the addAction re-use the same intent to keep the example short
+             Notification.Builder builder = new Notification.Builder(this)
+                     .setContentTitle("qBittorrent")
+                     .setContentText("Torrent(s) completed")
+                     .setSmallIcon(R.drawable.ic_stat_completed)
+                     .setNumber(completedTorrents.size())
+                     .setContentIntent(pIntent)
+                     .setAutoCancel(true);
+
+
+             NotificationManager notificationManager =
+                     (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+             Notification notification;
+
+             notification = builder.getNotification();
+
+             notificationManager.notify(0, notification);
+
+
+         }
+
+         private void saveLastState (String state){
+             currentState = state;
+             savePreferenceAsString("lastState", state);
+         }
+
+         public void saveLastCategory (String category){
+             currentCategory = category;
+             savePreferenceAsString("lastCategory", category);
+         }
+
+         private void saveSortBy ( int sortby_value){
+             MainActivity.sortby_value = sortby_value;
+             savePreferenceAsInt("sortby_value", sortby_value);
+         }
+
+         // Save key-value preference as String
+         private void savePreferenceAsString (String preference, String value){
+
+             // Save preference locally
+             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+             Editor editor = sharedPrefs.edit();
+
+             // Save key-values
+             editor.putString(preference, value);
+
+             // Commit changes
+             editor.apply();
+
+         }
+
+         // Save key-value preference as a String Set
+         private void savePreferenceAsStringSet (String preference, Set < String > value){
+
+             // Save preference locally
+             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+             Editor editor = sharedPrefs.edit();
+
+             // Save key-values
+             editor.putStringSet(preference, value);
+
+             // Commit changes
+             editor.apply();
+
+         }
+
+         // Save key-value preference as Int
+         private void savePreferenceAsInt (String preference,int value){
+
+             // Save preference locally
+             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+             Editor editor = sharedPrefs.edit();
+
+             // Save key-values
+             editor.putInt(preference, value);
+
+             // Commit changes
+             editor.apply();
+
+         }
+
+
+         // Save key-value preference as boolean
+         private void savePreferenceAsBoolean (String preference,boolean value){
+
+             // Save preference locally
+             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+             Editor editor = sharedPrefs.edit();
+
+             // Save key-values
+             editor.putBoolean(preference, value);
+
+             // Commit changes
+             editor.apply();
+
+         }
+
+         private void saveReverseOrder ( boolean reverse_order){
+             MainActivity.reverse_order = reverse_order;
+             // Save options locally
+             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+             Editor editor = sharedPrefs.edit();
+
+             // Save key-values
+             editor.putBoolean("reverse_order", reverse_order);
+
+             // Commit changes
+             editor.apply();
+
+         }
+
+         private void selectItem ( int position){
+
+
+             if (findViewById(R.id.one_frame) != null) {
+                 FragmentManager fragmentManager = getFragmentManager();
+
+                 if (fragmentManager.findFragmentByTag("firstFragment") instanceof com.lgallardo.qbittorrentclient.TorrentDetailsFragment) {
+                     // Reset back button stack
+                     for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                         fragmentManager.popBackStack();
+                     }
+                 }
+             }
+         }
 
          @Override
-         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-             selectItem(position);
+         public void swipeRefresh () {
+
+             if (hostname.equals("")) {
+                 qBittorrentNoSettingsFoundDialog(R.string.info, R.string.about_help1);
+                 disableRefreshSwipeLayout();
+
+             } else {
+
+                 // Set the refresh layout (refresh icon, etc)
+                 refreshSwipeLayout();
+
+                 // Actually refresh data
+                 refreshCurrent();
+
+                 // Load banner
+                 loadBanner();
+
+             }
+
          }
 
+         public static void disableRefreshSwipeLayout () {
+
+             if (com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout != null) {
+                 com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setRefreshing(false);
+                 com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.clearAnimation();
+                 com.lgallardo.qbittorrentclient.AboutFragment.mSwipeRefreshLayout.setEnabled(true);
+             }
+
+             if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
+                 com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(false);
+                 com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.clearAnimation();
+                 com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(true);
+             }
+
+             if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
+                 com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(false);
+                 com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.clearAnimation();
+                 com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setEnabled(true);
+             }
+
+             listViewRefreshing = false;
+         }
+
+         public void refreshSwipeLayout () {
+
+             if (!hostname.equals("")) {
+
+                 listViewRefreshing = true;
+
+                 if (AboutFragment.mSwipeRefreshLayout != null) {
+                     AboutFragment.mSwipeRefreshLayout.setRefreshing(true);
+                 }
+
+                 if (com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout != null) {
+                     com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setRefreshing(true);
+                     com.lgallardo.qbittorrentclient.ItemstFragment.mSwipeRefreshLayout.setEnabled(false);
+                 }
+
+                 if (com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout != null) {
+                     com.lgallardo.qbittorrentclient.TorrentDetailsFragment.mSwipeRefreshLayout.setRefreshing(true);
+                 }
+             }
+
+         }
+
+         private void openFilePicker () {
+
+             // Check Dangerous permissions (Android 6.0+, API 23+)
+             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+
+                 // Should we show an explanation?
+                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                     genericOkDialog(R.string.error_permission2,
+                             new DialogInterface.OnClickListener() {
+                                 @Override
+                                 public void onClick(DialogInterface dialog, int which) {
+                                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                             MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                                 }
+                             });
+
+                 } else {
+
+                     // No explanation needed, request the permission.
+                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                             MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+                 }
+
+
+             } else {
+
+                 // Permissions granted, open file picker
+                 Intent intent = new Intent(getApplicationContext(), FilePickerActivity.class);
+                 intent.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.torrent"));
+//            startActivityForResult(INTENT, RESULT_CODE);
+                 startActivityForResult(intent, ADDFILE_CODE);
+
+             }
+
+
+         }
+
+         public void sendTorrent () {
+             // get prompts.xml view
+             LayoutInflater li = LayoutInflater.from(this);
+             View sentTorrentView = li.inflate(R.layout.send_torrent, null);
+
+             MainActivity.path2Set = "";
+             MainActivity.category2Set = "";
+
+//        Log.d("Debug", "qb_version: " + qb_version);
+//        Log.d("Debug", "qb_api: " + qb_api);
+//        Log.d("Debug", "type: " + type);
+
+             if (pathAndCategoryDialog) {
+
+                 // Variables
+
+                 final AutoCompleteTextView pathTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.path_sent);
+                 final AutoCompleteTextView categoryTextView = (AutoCompleteTextView) sentTorrentView.findViewById(R.id.category_sent);
+                 final CheckBox checkBoxPathAndCategoryDialog = (CheckBox) sentTorrentView.findViewById(R.id.pathAndCategoryDialog);
+
+
+                 // Load history for path and category autocomplete text field
+
+                 // Path
+                 ArrayAdapter<String> pathAdapter = new ArrayAdapter<String>(
+                         this, android.R.layout.simple_list_item_1, path_history.toArray(new String[path_history.size()]));
+                 pathTextView.setAdapter(pathAdapter);
+
+                 // Category
+                 ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(
+                         this, android.R.layout.simple_list_item_1, category_history.toArray(new String[category_history.size()]));
+                 categoryTextView.setAdapter(categoryAdapter);
+
+                 // Checkbox value
+                 if (pathAndCategoryDialog) {
+                     checkBoxPathAndCategoryDialog.setChecked(false);
+                 } else {
+                     checkBoxPathAndCategoryDialog.setChecked(true);
+                 }
+
+                 // Dialog
+                 if (!isFinishing()) {
+                     // Dialog
+                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                     // Set send_torrent.xml to AlertDialog builder
+                     builder.setView(sentTorrentView);
+
+                     // Cancel
+                     builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                         public void onClick(DialogInterface dialog, int id) {
+                             // User cancelled the dialog
+                         }
+                     });
+
+                     // Ok
+                     builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                         public void onClick(DialogInterface dialog, int id) {
+
+                             MainActivity.path2Set = pathTextView.getText().toString();
+                             MainActivity.category2Set = categoryTextView.getText().toString();
+
+                             if (!(path2Set.equals(""))) {
+                                 addPath2History(path2Set);
+                             }
+
+                             if (!(category2Set.equals(""))) {
+                                 addCategory2History(category2Set);
+                             }
+
+
+//                        Log.d("Debug", "[sendTorrent] path2Set: " + path2Set);
+//                        Log.d("Debug", "[sendTorrent] category2Set: " + category2Set);
+
+                             // Save checkbox
+                             savePreferenceAsBoolean("pathAndCategoryDialog", !(checkBoxPathAndCategoryDialog.isChecked()));
+
+                             // User accepted
+                             handleUrlTorrent();
+                         }
+                     });
+
+                     // Create dialog
+                     AlertDialog dialog = builder.create();
+
+                     // Show dialog
+                     dialog.show();
+                 }
+
+             } else {
+
+                 // No dialog for qBittorrent version < 3.2.x or if it's disabled
+                 handleUrlTorrent();
+             }
+
+         }
+
+         private void addPath2History (String path){
+
+             if (!path_history.contains(path)) {
+                 path_history.add(path);
+                 savePreferenceAsStringSet("path_history", path_history);
+             }
+         }
+
+         private void addCategory2History (String category){
+
+             if (!category_history.contains(category)) {
+                 category_history.add(category);
+                 savePreferenceAsStringSet("category_history", category_history);
+             }
+         }
+
+         // Drawer classes
+         private class DrawerItemClickListener implements ListView.OnItemClickListener {
+
+             @Override
+             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                 selectItem(position);
+             }
+
+         }
      }
- }
