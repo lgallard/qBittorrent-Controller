@@ -2745,8 +2745,6 @@
 
          url = url + "?filter=" + state;
 
-         Log.d("Debug: ", "[getTorrentListV] category: " + category);
-
 
          if (category != null && !category.equals(getResources().getString(R.string.drawer_category_all))) {
 
