@@ -37,8 +37,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:contentDescription="@string/app_name"
-
-                android:src="@drawable/ic_launcher" />
+                android:src="@mipmap/ic_launcher_foreground" />
 
             <TextView
                 android:id="@+id/textView3"
