@@ -5354,6 +5354,9 @@
                  // Change current server (from settings or drawer menu)
                  changeCurrentServer();
 
+                 refreshSwipeLayout();
+                 refreshCurrent();
+
              }
 
              if (requestCode == ADDFILE_CODE && resultCode == RESULT_OK) {
