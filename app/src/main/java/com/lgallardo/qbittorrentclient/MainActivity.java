@@ -2745,6 +2745,8 @@
 
          url = url + "?filter=" + state;
 
+         Log.d("Debug: ", "[getTorrentListV] category: " + category);
+
 
          if (category != null && !category.equals(getResources().getString(R.string.drawer_category_all))) {
 
@@ -5352,6 +5354,9 @@
                  // Change current server (from settings or drawer menu)
                  changeCurrentServer();
 
+                 refreshSwipeLayout();
+                 refreshCurrent();
+
              }
 
              if (requestCode == ADDFILE_CODE && resultCode == RESULT_OK) {
@@ -5969,7 +5974,7 @@
              lastState = sharedPrefs.getString("lastState", "all");
 
              // Get last category
-             lastCategory = sharedPrefs.getString("lastCategory", "all");
+             lastCategory = sharedPrefs.getString("lastCategory", getResources().getString(R.string.drawer_category_all));
              currentCategory = lastCategory;
 
 
