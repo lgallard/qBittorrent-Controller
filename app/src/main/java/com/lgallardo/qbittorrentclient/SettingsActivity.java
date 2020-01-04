@@ -118,9 +118,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         // Checkbox value
         if (MainActivity.pathAndCategoryDialog) {
-            pathAndCategoryDialog.setChecked(false);
-        } else {
             pathAndCategoryDialog.setChecked(true);
+        } else {
+            pathAndCategoryDialog.setChecked(false);
         }
 
 
