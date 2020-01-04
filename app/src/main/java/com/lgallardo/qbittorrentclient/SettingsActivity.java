@@ -116,6 +116,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         // Enable savepath and category preference
         pathAndCategoryDialog.setEnabled(true);
 
+        // Checkbox value
+        if (MainActivity.pathAndCategoryDialog) {
+            pathAndCategoryDialog.setChecked(false);
+        } else {
+            pathAndCategoryDialog.setChecked(true);
+        }
 
 
         Preference pref = findPreference("currentServer");
