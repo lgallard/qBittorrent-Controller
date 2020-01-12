@@ -39,6 +39,7 @@
  import android.provider.Settings;
  import android.support.v4.app.ActivityCompat;
  import android.support.v4.content.ContextCompat;
+ import android.support.v4.view.GravityCompat;
  import android.support.v4.view.MenuItemCompat;
  import android.support.v4.widget.DrawerLayout;
  import android.support.v7.app.ActionBarDrawerToggle;
@@ -556,51 +557,6 @@
                  super.onDrawerOpened(drawerView);
                  // getSupportActionBar().setTitle(drawerTitle);
                  // setTitle(R.string.app_shortname);
-
-                 // Categories
-                 String category = null;
-
-                 final ArrayList<DrawerItem> categoryItems = new ArrayList<DrawerItem>();
-
-                 // Set uncategorized first
-
-                 // Add category
-                 categoryItems.add(new DrawerItem(R.drawable.ic_drawer_categories, getResources().getString(R.string.drawer_category_categories), DRAWER_CATEGORIES, true, "categories"));
-
-                 // Add All
-                 category = getResources().getString(R.string.drawer_category_all);
-                 categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_CATEGORY, (currentCategory.equals(category)), "category"));
-
-                 // Add uncategorized
-                 // TODO: Uncomment to enable uncategorized item
-//                category = getResources().getString(R.string.drawer_category_uncategorized);
-//
-
-                 getCategoryListV(new CategoriesListCallBack() {
-                     @Override
-                     public void onSuccess(List<Category> categories) {
-                         Log.d("Debug", "[getCategoryListV] onSuccess");
-
-                         String name, savePath;
-
-                         for (int i = 0; i < categories.size(); i++) {
-
-                             name = categories.get(i).getName();
-                             savePath = categories.get(i).getSavePath();
-
-//                            Log.d("Debug", "[getCategoryListV] Name: " + name);
-//                            Log.d("Debug", "[getCategoryListV] Save Path: " + savePath);
-
-                             // Add category name to the drawer menu
-                             if (name != null && !name.equals("")) {
-                                 categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, name, DRAWER_CATEGORY, currentCategory.equals(name), "category"));
-                             }
-                         }
-
-                         rAdapter.refreshDrawerCategories(categoryItems);
-                     }
-                 });
-
              }
          };
 
@@ -2836,7 +2792,7 @@
                      @Override
                      public void onResponse(JSONArray response) {
 
-//                        Log.d("Debug: ", "[getTorrentListV] onResponse");
+//                         Log.d("Debug: ", "[getTorrentListV] onResponse");
 
                          // Get list type to parse it
                          Type listType = new TypeToken<List<Torrent>>() {
@@ -3915,48 +3871,50 @@
 
                  }
 
-//                 // Categories
-//                 final ArrayList<DrawerItem> categoryItems = new ArrayList<DrawerItem>();
-//
-//                 // Set uncategorized first
-//
-//                 // Add category
-//                 categoryItems.add(new DrawerItem(R.drawable.ic_drawer_categories, getResources().getString(R.string.drawer_category_categories), DRAWER_CATEGORIES, true, "categories"));
-//
-//                 // Add All
-//                 category = getResources().getString(R.string.drawer_category_all);
-//                 categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_CATEGORY, (currentCategory.equals(category)), "category"));
-//
-//                 // Add uncategorized
-//                 // TODO: Uncomment to enable uncategorized item
-////                category = getResources().getString(R.string.drawer_category_uncategorized);
-////                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_CATEGORY, currentCategory.equals(category) || currentCategory.equals(""), "category"));
-//
-//
-//                 getCategoryListV(new CategoriesListCallBack() {
-//                     @Override
-//                     public void onSuccess(List<Category> categories) {
-//                         Log.d("Debug", "[getCategoryListV] onSuccess");
-//
-//                         String name, savePath;
-//
-//                         for (int i = 0; i < categories.size(); i++) {
-//
-//                             name = categories.get(i).getName();
-//                             savePath = categories.get(i).getSavePath();
-//
-////                            Log.d("Debug", "[getCategoryListV] Name: " + name);
-////                            Log.d("Debug", "[getCategoryListV] Save Path: " + savePath);
-//
-//                             // Add category name to the drawer menu
-//                             if (name != null && !name.equals("")) {
-//                                 categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, name, DRAWER_CATEGORY, currentCategory.equals(name), "category"));
-//                             }
-//                         }
-//
-//                         rAdapter.refreshDrawerCategories(categoryItems);
-//                     }
-//                 });
+                 // Categories
+                 final ArrayList<DrawerItem> categoryItems = new ArrayList<DrawerItem>();
+
+                 // Set uncategorized first
+
+                 // Add category
+                 categoryItems.add(new DrawerItem(R.drawable.ic_drawer_categories, getResources().getString(R.string.drawer_category_categories), DRAWER_CATEGORIES, true, "categories"));
+
+                 // Add All
+                 category = getResources().getString(R.string.drawer_category_all);
+                 categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_CATEGORY, (currentCategory.equals(category)), "category"));
+
+                 // Add uncategorized
+                 // TODO: Uncomment to enable uncategorized item
+//                category = getResources().getString(R.string.drawer_category_uncategorized);
+//                categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, category, DRAWER_CATEGORY, currentCategory.equals(category) || currentCategory.equals(""), "category"));
+
+                 if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+
+                     getCategoryListV(new CategoriesListCallBack() {
+                         @Override
+                         public void onSuccess(List<Category> categories) {
+                             Log.d("Debug", "[getCategoryListV] onSuccess");
+
+                             String name, savePath;
+
+                             for (int i = 0; i < categories.size(); i++) {
+
+                                 name = categories.get(i).getName();
+                                 savePath = categories.get(i).getSavePath();
+
+//                            Log.d("Debug", "[getCategoryListV] Name: " + name);
+//                            Log.d("Debug", "[getCategoryListV] Save Path: " + savePath);
+
+                                 // Add category name to the drawer menu
+                                 if (name != null && !name.equals("")) {
+                                     categoryItems.add(new DrawerItem(R.drawable.ic_drawer_subitem, name, DRAWER_CATEGORY, currentCategory.equals(name), "category"));
+                                 }
+                             }
+
+                             rAdapter.refreshDrawerCategories(categoryItems);
+                         }
+                     });
+                 }
 
                  // Sort by filename
                  if (sortby_value == SORTBY_NAME) {
@@ -4329,9 +4287,6 @@
                  }
                  item.setName(name);
                  actionItems.set(6, item);
-
-                 // Refresh drawer
-                 rAdapter.refreshDrawer();
 
                  // Send report
                  emailReport();

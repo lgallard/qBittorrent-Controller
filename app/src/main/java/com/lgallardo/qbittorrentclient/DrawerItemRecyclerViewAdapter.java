@@ -678,6 +678,9 @@ public class DrawerItemRecyclerViewAdapter extends RecyclerView.Adapter<DrawerIt
         DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.settingsItems);
         DrawerItemRecyclerViewAdapter.items.addAll(DrawerItemRecyclerViewAdapter.categoryItems);
 
+        // Close servers
+        removeServerItems();
+
         // Refresh
         notifyDataSetChanged();
 
