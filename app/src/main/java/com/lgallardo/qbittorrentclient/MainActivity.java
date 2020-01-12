@@ -461,7 +461,7 @@
          setSupportActionBar(toolbar);
 
          // Set App title
-         setTitle(R.string.app_shortname);
+         this.title = R.string.app_shortname;
 
          // Drawer menu
          navigationDrawerServerItems = getResources().getStringArray(R.array.qBittorrentServers);
