@@ -390,7 +390,6 @@
      private int delay = 1;
 
      // Multipart
-     private final Context context = this;
      private final String twoHyphens = "--";
      private final String lineEnd = "\r\n";
 
@@ -1042,32 +1041,25 @@
      }
 
      // Volley
-
      protected void addVolleyRequest(JsonObjectRequest jsArrayRequest) {
-
-//        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsArrayRequest);
          VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueueHttps(jsArrayRequest, keystore_path, keystore_password);
-
      }
 
      protected void addVolleyRequest(JsonArrayRequest jsArrayRequest) {
-
-//        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsArrayRequest);
          VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueueHttps(jsArrayRequest, keystore_path, keystore_password);
-
      }
 
      protected void addVolleyRequest(StringRequest stringArrayRequest) {
-
-//        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(stringArrayRequest);
          VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueueHttps(stringArrayRequest, keystore_path, keystore_password);
-
      }
 
      protected void addVolleyRequest(CustomMultipartRequest customMultipartRequest) {
-//        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(customMultipartRequest);
          VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueueHttps(customMultipartRequest, keystore_path, keystore_password);
+     }
 
+
+     protected void addVolleyRequest(UrlsMultipartRequest urlsMultipartRequest) {
+         VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueueHttps(urlsMultipartRequest, keystore_path, keystore_password);
      }
 
      public interface VolleyCallback {
@@ -2309,18 +2301,16 @@
 
      }
 
-     private void addTorrent(final String hashes, final String path2Set, final String category2Set, final VolleyCallback callback) {
+     private void addTorrentUrls(final String urls, final String path2Set, final String category2Set, final VolleyCallback callback) {
 
-//        Log.d("Debug", "[addTorrent] path2set " + path2Set);
-//        Log.d("Debug", "[addTorrent] category2Set " + category2Set);
-
-         String boundary = "";
-
-         boundary = "-----------------------" + (new Date()).getTime();
-         boundary = "multipart/form-data; boundary=" + boundary;
+//         Log.d("Debug", "[addTorrentUrls] path2set " + path2Set);
+//         Log.d("Debug", "[addTorrentUrls] category2Set " + category2Set);
 
 
-         final String urlContentType = boundary;
+         byte[] multipartBody = null;
+
+         String category = "";
+         String savepath = "";
 
 
          String url = "";
@@ -2335,25 +2325,21 @@
          // Command
          url = url + "/api/v2/torrents/add";
 
-         // New JSONObject request
-         StringRequest jsArrayRequest = new StringRequest(
-                 Request.Method.POST,
+         UrlsMultipartRequest urlsMultipartRequest = new UrlsMultipartRequest(
                  url,
-                 new Response.Listener<String>() {
+                 new Response.Listener<NetworkResponse>() {
                      @Override
-                     public void onResponse(String response) {
+                     public void onResponse(NetworkResponse response) {
                          // Return value
                          callback.onSuccess("");
-
                      }
                  },
                  new Response.ErrorListener() {
                      @Override
                      public void onErrorResponse(VolleyError error) {
-                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                         //Toast.makeText(context, "Upload failed!\r\n" + error.toString(), Toast.LENGTH_SHORT).show();
                      }
-                 }
-         ) {
+                 }) {
              @Override
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
@@ -2368,7 +2354,7 @@
              @Override
              public Map<String, String> getParams() {
                  Map<String, String> params = new HashMap<>();
-                 params.put("urls", hashes);
+                 params.put("urls", urls);
                  if (path2Set != null && path2Set.length() != 0) {
                      params.put("savepath", path2Set);
                  }
@@ -2377,17 +2363,17 @@
                  }
                  return params;
              }
+
          };
 
          // Add request to te queue
-         addVolleyRequest(jsArrayRequest);
-
+         addVolleyRequest(urlsMultipartRequest);
      }
 
      private void addTorrentFileAPI7(final String hash, final String path2Set, final String category2Set, final VolleyCallback callback) {
 
-         Log.d("Debug", "[addTorrentFileAPI7] path2set " + path2Set);
-         Log.d("Debug", "[addTorrentFileAPI7] category2Set " + category2Set);
+//         Log.d("Debug", "[addTorrentFileAPI7] path2set " + path2Set);
+//         Log.d("Debug", "[addTorrentFileAPI7] category2Set " + category2Set);
 
          final String boundary = "-----------------------" + (new Date()).getTime();
          final String urlContentType = "multipart/form-data; boundary=" + boundary;
@@ -3596,7 +3582,7 @@
 
      public void addTorrent(String hashes, String path, String category) {
 
-         addTorrent(hashes, path, category, new VolleyCallback() {
+         addTorrentUrls(hashes, path, category, new VolleyCallback() {
              @Override
              public void onSuccess(String result) {
 
@@ -4369,7 +4355,7 @@
      }
      // End of wraps
 
-     // MultiPart
+     // MultiPart file
      private void buildPart(String boundary, DataOutputStream dataOutputStream, byte[] fileData, String fileName) throws IOException {
          dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
          dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\"; filename=\"" + fileName + "\"" + lineEnd);
@@ -4409,7 +4395,6 @@
 
 
      }
-
 
      private void refresh(String state, String category) {
 
@@ -6433,7 +6418,7 @@
 
          } else {
 
-             // No dialog for qBittorrent version < 3.2.x or if it's disabled
+             // No dialog if it's disabled
              handleUrlTorrent();
          }
 
