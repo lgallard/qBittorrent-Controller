@@ -1298,7 +1298,7 @@
                  Map<String, String> params = new HashMap<>();
                  //params.put("Host", hostname + ":" + port);
                  params.put("Referer", protocol + "://"  + hostname + ":" + port);
-                 params.put("Content-Type:", "application/x-www-form-urlencoded");
+                 params.put("Content-Type", "application/x-www-form-urlencoded");
 
                  return params;
              }
@@ -2346,7 +2346,7 @@
                  params.put("User-Agent", "qBittorrent for Android");
                  //params.put("Host", hostname + ":" + port);
                  params.put("Referer", protocol + "://" + hostname + ":" + port);
-                 params.put("Content-Type", urlContentType);
+//                 params.put("Content-Type", urlContentType);
                  params.put("Cookie", cookie);
                  return params;
              }
@@ -2446,7 +2446,7 @@
                  params.put("User-Agent", "qBittorrent for Android");
                  //params.put("Host", hostname + ":" + port);
                  params.put("Referer", protocol + "://" + hostname + ":" + port);
-                 params.put("Content-Type", urlContentType);
+//                 params.put("Content-Type", urlContentType);
                  params.put("Cookie", cookie);
                  return params;
              }

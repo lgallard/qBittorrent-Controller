@@ -272,7 +272,7 @@ public class NotifierService extends BroadcastReceiver {
                 Map<String, String> params = new HashMap<>();
                 params.put("Host", hostname + ":" + port);
                 params.put("Referer", protocol + "://" + hostname + ":" + port);
-                params.put("Content-Type:", "application/x-www-form-urlencoded");
+                params.put("Content-Type", "application/x-www-form-urlencoded");
 
                 return params;
             }
