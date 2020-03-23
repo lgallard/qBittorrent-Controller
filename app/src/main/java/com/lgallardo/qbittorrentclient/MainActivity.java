@@ -4301,6 +4301,7 @@
                  // Set headerInfo
                  TextView uploadSpeedTextView = (TextView) findViewById(R.id.upspeed);
                  TextView downloadSpeedTextView = (TextView) findViewById(R.id.dlspeed);
+                 TextView header2InfoTextView = (TextView) findViewById(R.id.header2_info);
 
                  headerInfo = (LinearLayout) findViewById(R.id.header);
 
@@ -4320,13 +4321,20 @@
                  }
 
                  uploadSpeedTextView.setText(AltSpeedInfo + Common.calculateSize("" + transferInfo.getUp_info_speed()) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getUp_info_data()) + "  (" + uploadCount + ")");
+                 downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getDl_info_data()) + " (" + downloadCount + ")");
 
-
-                 if (freeSpaceOnDisk == null) {
-                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getDl_info_data()) + " (" + downloadCount + ")");
-                 } else {
-                     downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getDl_info_data()) + " (" + downloadCount + ") " + '\u2022' + " Free: " + freeSpaceOnDisk);
+                 if (freeSpaceOnDisk != null) {
+                     // Phone
+                     if(header2InfoTextView != null) {
+                         downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getDl_info_data()) + " (" + downloadCount + ")");
+                         header2InfoTextView.setText("Free: " + freeSpaceOnDisk);
+                     }
+                     // Tablets
+                     else {
+                         downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " +  Common.calculateSize(transferInfo.getUp_info_data()) + " (" + downloadCount + ") " + '\u2022' + " Free: " + freeSpaceOnDisk);
+                     }
                  }
+
              }
 
          });
