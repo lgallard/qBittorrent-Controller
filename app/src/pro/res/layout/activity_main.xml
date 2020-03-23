@@ -1,5 +1,5 @@
 <!--
-  ~   Copyright (c) 2014-2015 Luis M. Gallardo D.
+  ~   Copyright (c) 2014-2020 Luis M. Gallardo D.
   ~   All rights reserved. This program and the accompanying materials
   ~   are made available under the terms of the GNU Lesser General Public License v3.0
   ~   which accompanies this distribution, and is available at
@@ -7,13 +7,14 @@
   ~
   -->
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="?backgroundSelector"
         android:orientation="vertical">
 
@@ -23,7 +24,7 @@
 
         <LinearLayout
             android:id="@+id/header"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?dropShadowBackground"
             android:elevation="1dp"
@@ -47,30 +48,44 @@
         </LinearLayout>
 
 
+
         <FrameLayout
             android:id="@+id/one_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
             android:padding="5dp" />
+
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:gravity="bottom" />
+            android:gravity="bottom"
+            ads:adSize="BANNER"
+            ads:adUnitId ="ca-app-pub-1035265933040074/6449288097"/>
+
+        <LinearLayout
+            android:id="@+id/header2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="?dropShadowBackground"
+            android:elevation="1dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/header2_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:text="---"/>
+        </LinearLayout>
 
     </LinearLayout>
-
-    <!--<ListView-->
-    <!--android:id="@+id/left_drawer"-->
-    <!--android:layout_width="240dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_gravity="start"-->
-    <!--android:background="#111"-->
-    <!--android:choiceMode="singleChoice"-->
-    <!--android:divider="@android:color/transparent"-->
-    <!--android:dividerHeight="0dp" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RecyclerView"
