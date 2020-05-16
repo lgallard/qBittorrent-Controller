@@ -270,8 +270,8 @@ public class NotifierService extends BroadcastReceiver {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("Host", hostname + ":" + port);
-                params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                params.put("Host", hostname + ":" + port);
+//                params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
 
                 return params;
@@ -351,8 +351,8 @@ public class NotifierService extends BroadcastReceiver {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
-                params.put("Host", hostname + ":" + port);
-                params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                params.put("Host", hostname + ":" + port);
+//                params.put("Referer", protocol + "://" + hostname + ":" + port);
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
                 return params;
