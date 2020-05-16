@@ -1169,8 +1169,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1296,8 +1296,8 @@
              @Override
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://"  + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
 
                  return params;
@@ -1353,8 +1353,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1418,8 +1418,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1473,8 +1473,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1533,8 +1533,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1595,8 +1595,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1656,8 +1656,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1711,8 +1711,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1768,8 +1768,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1825,8 +1825,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1882,8 +1882,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1939,8 +1939,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -1997,8 +1997,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -2055,8 +2055,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -2113,8 +2113,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -2169,8 +2169,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -2231,8 +2231,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -2288,8 +2288,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -2344,8 +2344,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
 //                 params.put("Content-Type", urlContentType);
                  params.put("Cookie", cookie);
                  return params;
@@ -2444,8 +2444,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
 //                 params.put("Content-Type", urlContentType);
                  params.put("Cookie", cookie);
                  return params;
@@ -2506,8 +2506,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -2578,8 +2578,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -2631,8 +2631,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -2690,8 +2690,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -2835,8 +2835,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -2955,8 +2955,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -3041,8 +3041,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -3139,8 +3139,8 @@
              public Map<String, String> getHeaders() throws AuthFailureError {
                  Map<String, String> params = new HashMap<>();
                  params.put("User-Agent", "qBittorrent for Android");
-                 //params.put("Host", hostname + ":" + port);
-                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
                  params.put("Content-Type", "application/x-www-form-urlencoded");
                  params.put("Cookie", cookie);
                  return params;
@@ -3737,7 +3737,7 @@
 
 //                    Log.d("Debug", "[getTorrentList] progress: " + (progress * 100));
 //                    Log.d("Debug", "[getTorrentList] progress fixed: " + progressInfo);
-                     Log.d("Debug", "[getTorrentList] torrent state: " + torrents.get(i).getState());
+//                    Log.d("Debug", "[getTorrentList] torrent state: " + torrents.get(i).getState());
 
                      // Get downloaded
                      downloadedInfo = Common.calculateSize(torrents.get(i).getDownloaded());
@@ -4325,13 +4325,13 @@
 
                  if (freeSpaceOnDisk != null) {
                      // Phone
-                     if(header2InfoTextView != null) {
+                     if (header2InfoTextView != null) {
                          downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getDl_info_data()) + " (" + downloadCount + ")");
                          header2InfoTextView.setText("Free: " + freeSpaceOnDisk);
                      }
                      // Tablets
                      else {
-                         downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " +  Common.calculateSize(transferInfo.getUp_info_data()) + " (" + downloadCount + ") " + '\u2022' + " Free: " + freeSpaceOnDisk);
+                         downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getUp_info_data()) + " (" + downloadCount + ") " + '\u2022' + " Free: " + freeSpaceOnDisk);
                      }
                  }
 

@@ -26,11 +26,12 @@ public class TorrentRatioComparator implements Comparator<Torrent> {
 
         if (reversed) {
             // Ascending order
-            return (int) (r1 - r2);
+            return  (r1 > r2 ? 1: -1);
         } else {
             // Descending order
-            return (int) (r2 - r1);
+            return (r2 > r1 ? 1: -1);
         }
+
     }
 }
 

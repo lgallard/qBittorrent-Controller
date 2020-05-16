@@ -26,11 +26,12 @@ public class TorrentUploadSpeedComparator implements Comparator<Torrent> {
 
         if (reversed) {
             // Ascending order
-            return w1 - w2;
+            return  (w1 > w2 ? 1: -1);
         } else {
             // Descending order
-            return w2 - w1;
+            return (w2 > w1 ? 1: -1);
         }
+
     }
 }
 

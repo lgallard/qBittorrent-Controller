@@ -8,7 +8,6 @@ app/app.iml
 
 # Java class files
 *.class
-
         
 # Gradle files
 .gradle/

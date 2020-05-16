@@ -58,14 +58,14 @@
             android:padding="5dp" />
 
 
-        <com.google.android.gms.ads.AdView
+        <!-- com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:gravity="bottom"
             ads:adSize="BANNER"
-            ads:adUnitId ="ca-app-pub-1035265933040074/6449288097"/>
+            ads:adUnitId ="ca-app-pub-1035265933040074/6449288097"/ -->
 
         <LinearLayout
             android:id="@+id/header2"
