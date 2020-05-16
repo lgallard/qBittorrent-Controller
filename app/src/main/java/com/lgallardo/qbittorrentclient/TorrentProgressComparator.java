@@ -21,15 +21,16 @@ public class TorrentProgressComparator implements Comparator<Torrent> {
     @Override
     public int compare(Torrent t1, Torrent t2) {
 
-        int p1 = (int) t1.getProgress();
-        int p2 = (int) t2.getProgress();
+
+        double p1 = t1.getProgress();
+        double p2 = t2.getProgress();
 
         if (reversed) {
             // Ascending order
-            return p1 - p2;
+            return  (p1 > p2 ? 1: -1);
         } else {
             // Descending order
-            return p2 - p1;
+            return (p2 > p1 ? 1: -1);
         }
     }
 }

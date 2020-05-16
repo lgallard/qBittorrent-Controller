@@ -21,16 +21,18 @@ public class TorrentEtaComparator implements Comparator<Torrent> {
     @Override
     public int compare(Torrent t1, Torrent t2) {
 
-        int eta1 = t1.getEtaInMinutes();
-        int eta2 = t2.getEtaInMinutes();
+
+        long e1 = t1.getEta();
+        long e2 = t2.getEta();
 
         if (reversed) {
-            // Descending order
-            return eta2 - eta1;
-        } else {
             // Ascending order
-            return eta1 - eta2;
+            return  (e1 > e2 ? 1: -1);
+        } else {
+            // Descending order
+            return (e2 > e1 ? 1: -1);
         }
+
 
     }
 }

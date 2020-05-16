@@ -21,43 +21,17 @@ public class TorrentSizeComparator implements Comparator<Torrent> {
     @Override
     public int compare(Torrent t1, Torrent t2) {
 
-//        String size1 = t1.getSize();
-//        String size2 = t2.getSize();
-
-        String size1 = "" + t1.getSize();
-        String size2 = "" + t2.getSize();
-
-
-        double p1 = Common.humanSizeToBytes(size1);
-        double p2 = Common.humanSizeToBytes(size2);
-
-        int returnValue = -1;
+        double s1 = t1.getSize();
+        double s2 = t2.getSize();
 
         if (reversed) {
             // Ascending order
-            if(p1 < p2){
-                returnValue = -1;
-            }
-            if(p1 > p2){
-                returnValue = 1;
-            }
-            if(p1 == p2){
-                returnValue = 0;
-            }
+            return  (s1 > s2 ? 1: -1);
         } else {
             // Descending order
-            if(p1 < p2){
-                returnValue = 1;
-            }
-            if(p1 > p2){
-                returnValue = -1;
-            }
-            if(p1 == p2){
-                returnValue = 0;
-            }
+            return (s2 > s1 ? 1: -1);
         }
 
-        return returnValue;
     }
 }
 
