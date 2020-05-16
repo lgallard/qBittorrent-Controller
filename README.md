@@ -25,5 +25,4 @@ This is the repository for **_qBittorrent Controller_**, an Android app for mana
 
 ## Download
 * [Google Play Store](https://play.google.com/store/apps/details?id=com.lgallardo.qbittorrentclient)
-* [F-Droid, a free/libre "market"](https://f-droid.org/repository/browse/?fdid=com.lgallardo.qbittorrentclient)
 * [GitHub](https://github.com/lgallard/qBittorrent-Client/releases)
