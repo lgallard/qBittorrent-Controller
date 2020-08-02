@@ -16,6 +16,7 @@
   <string name="action_add">Gehitu</string>
   <string name="action_pause">Pausatu</string>
   <string name="action_resume">Berrekin</string>
+  <string name="action_force_start">Force berrekin</string>
   <string name="action_resume_all">Berrekin guztiak</string>
   <string name="action_pause_all">Pausatu guztiak</string>
   <string name="action_delete">Ezabatu</string>

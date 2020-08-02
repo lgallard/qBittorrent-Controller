@@ -17,6 +17,7 @@
     <string name="action_pause">Wstrzymaj</string>
     <string name="action_resume">Wznów</string>
     <string name="action_resume_all">Wznów wszystko</string>
+    <string name="action_force_start">Wymuś wznowienie</string>
     <string name="action_pause_all">Pauza wszystko</string>
     <string name="action_delete">Usuń</string>
     <string name="action_delete_drive">Usuń dane</string>

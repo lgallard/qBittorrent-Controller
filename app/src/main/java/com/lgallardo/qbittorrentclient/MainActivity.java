@@ -1438,6 +1438,70 @@
 
      }
 
+     private void forceStartTorrent(final String hash, final VolleyCallback callback) {
+
+         String url = "";
+
+         // if server is publish in a subfolder, fix url
+         if (subfolder != null && !subfolder.equals("")) {
+             url = subfolder + "/" + url;
+         }
+
+         url = protocol + "://" + hostname + ":" + port + url;
+
+
+         // Be aware of this issue https://github.com/qbittorrent/qBittorrent/issues/8958
+
+         // Command
+         url = url + "/api/v2/torrents/setForceStart?hashes=" + hash.toLowerCase() + "&value=true";
+
+//         Log.d("Debug", "[forceStartTorrent] url: " + url);
+//         Log.d("Debug", "[forceStartTorrent] hashes: " + hash);
+
+         // New JSONObject request
+         StringRequest jsArrayRequest = new StringRequest(
+                 Request.Method.GET,
+                 url,
+                 new Response.Listener<String>() {
+                     @Override
+                     public void onResponse(String response) {
+                         // Return value
+                         callback.onSuccess("");
+                     }
+                 },
+                 new Response.ErrorListener() {
+                     @Override
+                     public void onErrorResponse(VolleyError error) {
+                         Log.d("Debug", "[forceStartTorrent] Error in JSON response: " + error.getMessage());
+                         Toast.makeText(getApplicationContext(), "Error executing command: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                     }
+                 }
+         ) {
+             @Override
+             public Map<String, String> getHeaders() throws AuthFailureError {
+                 Map<String, String> params = new HashMap<>();
+                 params.put("User-Agent", "qBittorrent for Android");
+//                 params.put("Host", hostname + ":" + port);
+//                 params.put("Referer", protocol + "://" + hostname + ":" + port);
+                 params.put("Content-Type", "application/x-www-form-urlencoded");
+                 params.put("Cookie", cookie);
+                 return params;
+             }
+
+             @Override
+             public Map<String, String> getParams() {
+                 Map<String, String> params = new HashMap<>();
+                 params.put("hashes", hash);
+                 return params;
+             }
+         };
+
+         // Add request to te queue
+         addVolleyRequest(jsArrayRequest);
+
+     }
+
+
      private void pauseAllTorrents(final VolleyCallback callback) {
 
          String url = "";
@@ -2074,6 +2138,7 @@
          addVolleyRequest(jsArrayRequest);
 
      }
+
 
      private void toggleFirstLastPiecePrio(final String hashes, final VolleyCallback callback) {
 
@@ -3258,6 +3323,45 @@
      private void startTorrent(String hash, final boolean isSelection) {
 
          startTorrent(hash, new VolleyCallback() {
+             @Override
+             public void onSuccess(String result) {
+
+//                Log.d("Debug: ", ">>> Start Torrent: " + result);
+
+                 if (!isSelection) {
+                     toastText(R.string.torrentStarted);
+
+                     // Refresh
+                     refreshAfterCommand(delay);
+
+                 }
+
+             }
+         });
+     }
+
+     public void forceStartSelectedTorrents(String hashes) {
+
+         String[] hashesArray = hashes.split("\\|");
+
+         for (int i = 0; hashesArray.length > i; i++) {
+             forceStartTorrent(hashesArray[i], true);
+         }
+
+         toastText(R.string.torrentsSelectedStarted);
+
+         // Delay of 1 second
+         refreshAfterCommand(2);
+
+     }
+
+     private void forceStartTorrent(String hash) {
+         forceStartTorrent(hash, false);
+     }
+
+     private void forceStartTorrent(String hash, final boolean isSelection) {
+
+         forceStartTorrent(hash, new VolleyCallback() {
              @Override
              public void onSuccess(String result) {
 
@@ -5096,6 +5200,11 @@
                      // Show dialog
                      dialog.show();
 
+                 }
+                 return true;
+             case R.id.action_force_start:
+                 if (TorrentDetailsFragment.hashToUpdate != null) {
+                     forceStartTorrent(TorrentDetailsFragment.hashToUpdate);
                  }
                  return true;
              case R.id.action_increase_prio:

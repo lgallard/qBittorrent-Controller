@@ -15,6 +15,7 @@
     <string name="action_pause">Приостановить</string>
     <string name="action_resume">Возобновить</string>
     <string name="action_resume_all">Возобновить все</string>
+    <string name="action_force_start">Принудительное возобновление</string>
     <string name="action_pause_all">Приостановить все</string>
     <string name="action_delete">Удалить раздачу</string>
     <string name="action_edit">Изменить</string>

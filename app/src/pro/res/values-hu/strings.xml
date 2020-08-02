@@ -7,6 +7,7 @@
   <string name="action_pause">Szüneteltetés</string>
   <string name="action_resume">Folytatás</string>
   <string name="action_resume_all">Összes folytatása</string>
+  <string name="action_force_start">Kényszerítse folytatása</string>
   <string name="action_pause_all">Összes szüneteltetése</string>
   <string name="action_delete">Törlés</string>
   <string name="action_edit">Szerkesztés</string>

@@ -17,6 +17,7 @@
     <string name="action_pause">Pausa</string>
     <string name="action_resume">Återuppta</string>
     <string name="action_resume_all">Återuppta alla</string>
+    <string name="action_force_start">Tvinga återuppta</string>
     <string name="action_pause_all">Pausa alla</string>
     <string name="action_delete">Radera</string>
     <string name="action_delete_drive">Radera uppgifter</string>

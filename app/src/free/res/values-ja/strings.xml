@@ -8,6 +8,7 @@
   <string name="action_pause">一時停止</string>
   <string name="action_resume">再開</string>
   <string name="action_resume_all">すべて再開</string>
+  <string name="action_force_start">強制的に再開</string>
   <string name="action_pause_all">すべて一時停止</string>
   <string name="action_delete">削除</string>
   <string name="action_edit">編集</string>

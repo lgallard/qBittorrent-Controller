@@ -32,6 +32,11 @@
         android:showAsAction="always"
         android:title="@string/action_delete_drive" />
     <item
+        android:id="@+id/action_force_start"
+        android:icon="@drawable/ic_action_force_start"
+        android:showAsAction="always"
+        android:title="@string/action_force_start" />
+    <item
         android:id="@+id/action_priority_menu"
         android:icon="@drawable/ic_action_increase_prio"
         android:showAsAction="ifRoom"

@@ -70,7 +70,7 @@ public class ItemstFragment extends ListFragment {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
 
-        mSwipeRefreshLayout.setColorSchemeColors(R.color.primary,                R.color.primary_dark, R.color.primary_text);
+        mSwipeRefreshLayout.setColorSchemeColors(R.color.primary, R.color.primary_dark, R.color.primary_text);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -292,7 +292,20 @@ public class ItemstFragment extends ListFragment {
                             }
 
                             return true;
+                        case R.id.action_force_start:
 
+                            m.forceStartSelectedTorrents(hashes);
+
+                            // Clear selection
+                            nr = 0;
+
+                            // Enable SwipeRefresh
+                            mSwipeRefreshLayout.setEnabled(true);
+
+                            mAdapter.clearSelection();
+                            mode.finish();
+
+                            return true;
                         case R.id.action_increase_prio:
                             m.increasePrioTorrent(hashes);
 
@@ -629,6 +642,10 @@ public class ItemstFragment extends ListFragment {
 
             if (menu.findItem(R.id.action_delete_drive) != null) {
                 menu.findItem(R.id.action_delete_drive).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.action_force_start) != null) {
+                menu.findItem(R.id.action_force_start).setVisible(false);
             }
 
             if (menu.findItem(R.id.action_upload_rate_limit) != null) {

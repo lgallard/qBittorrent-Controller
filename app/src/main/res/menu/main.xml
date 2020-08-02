@@ -113,6 +113,7 @@
         android:icon="@drawable/ic_action_pause"
         android:title="@string/action_pause"
         app:showAsAction="always" />
+
     <item
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_action_delete"
@@ -122,6 +123,11 @@
         android:id="@+id/action_delete_drive"
         android:icon="@drawable/ic_action_delete_drive"
         android:title="@string/action_delete_drive"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_force_start"
+        android:icon="@drawable/ic_action_force_start"
+        android:title="@string/action_force_start"
         app:showAsAction="always" />
 
     <item
