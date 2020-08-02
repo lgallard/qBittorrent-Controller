@@ -14,6 +14,7 @@
     <string name="action_pause">Pause</string>
     <string name="action_resume">Resume</string>
     <string name="action_resume_all">Resume all</string>
+    <string name="action_force_start">Force Resume</string>
     <string name="action_pause_all">Pause all</string>
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>

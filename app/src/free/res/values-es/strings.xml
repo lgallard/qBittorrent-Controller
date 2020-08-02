@@ -18,6 +18,7 @@
     <string name="action_pause">Pausar</string>
     <string name="action_resume">Reanudar</string>
     <string name="action_resume_all">Reanudar todos</string>
+    <string name="action_force_start">Forzar reanudar</string>
     <string name="action_pause_all">Pausar todos</string>
     <string name="action_delete">Delete</string>
     <string name="action_delete_drive">Eliminar datos</string>

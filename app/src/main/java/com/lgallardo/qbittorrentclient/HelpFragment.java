@@ -60,15 +60,21 @@ public class HelpFragment extends Fragment {
 			if (menu.findItem(R.id.action_increase_prio) != null) {
 				menu.findItem(R.id.action_increase_prio).setVisible(false);
 			}
+
 			if (menu.findItem(R.id.action_decrease_prio) != null) {
 				menu.findItem(R.id.action_decrease_prio).setVisible(false);
-
 			}
+
 			if (menu.findItem(R.id.action_delete) != null) {
 				menu.findItem(R.id.action_delete).setVisible(false);
 			}
+
 			if (menu.findItem(R.id.action_delete_drive) != null) {
 				menu.findItem(R.id.action_delete_drive).setVisible(false);
+			}
+
+			if (menu.findItem(R.id.action_force_start) != null) {
+				menu.findItem(R.id.action_force_start).setVisible(false);
 			}
 
 			if (menu.findItem(R.id.action_upload_rate_limit) != null) {

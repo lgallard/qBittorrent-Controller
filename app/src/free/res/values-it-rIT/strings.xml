@@ -17,6 +17,7 @@
     <string name="action_pause">Pausa</string>
     <string name="action_resume">Ricomincia</string>
     <string name="action_resume_all">Riprendi tutto</string>
+    <string name="action_force_start">Forza riprenderi</string>
     <string name="action_pause_all">Pausa tutto</string>
     <string name="action_delete">Cancellare</string>
     <string name="action_delete_drive">Cancellare i dati</string>

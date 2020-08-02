@@ -8,6 +8,7 @@
     <string name="action_pause">Suspendre</string>
     <string name="action_resume">Reprendre</string>
     <string name="action_resume_all">Reprendre tout</string>
+    <string name="action_force_start">Forcer reprendre</string>
     <string name="action_pause_all">Suspendre tout</string>
     <string name="action_delete">Supprimer</string>
     <string name="action_edit">Modifier</string>
