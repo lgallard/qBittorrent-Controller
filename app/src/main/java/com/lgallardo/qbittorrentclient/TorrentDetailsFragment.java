@@ -430,14 +430,7 @@ public class TorrentDetailsFragment extends Fragment {
 
         final List<ContentFile> contentFiles = new ArrayList<>();
 
-        String url = "";
-
-        // if server is publish in a subfolder, fix url
-        if (subfolder != null && !subfolder.equals("")) {
-            url = subfolder + "/" + url;
-        }
-
-        url = protocol + "://" + hostname + ":" + port + url;
+        String url = MainActivity.buildURL();
 
         // Command
 
@@ -485,7 +478,7 @@ public class TorrentDetailsFragment extends Fragment {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
                 //params.put("Host", hostname + ":" + port);
-                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + (port != -1 ? ":" + port: ""));
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
                 return params;
@@ -503,14 +496,7 @@ public class TorrentDetailsFragment extends Fragment {
 
         final List<Tracker> trackers = new ArrayList<>();
 
-        String url = "";
-
-        // if server is publish in a subfolder, fix url
-        if (subfolder != null && !subfolder.equals("")) {
-            url = subfolder + "/" + url;
-        }
-
-        url = protocol + "://" + hostname + ":" + port + url;
+        String url = MainActivity.buildURL();
 
         // Command
         url = url + "/api/v2/torrents/trackers?hash=" + hash;
@@ -557,7 +543,7 @@ public class TorrentDetailsFragment extends Fragment {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
                 //params.put("Host", hostname + ":" + port);
-                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + ( port != -1 ? ":" + port : "" ));
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
                 return params;
@@ -575,14 +561,7 @@ public class TorrentDetailsFragment extends Fragment {
 
         final List<GeneralInfoItem> generalInfo = new ArrayList<>();
 
-        String url = "";
-
-        // if server is publish in a subfolder, fix url
-        if (subfolder != null && !subfolder.equals("")) {
-            url = subfolder + "/" + url;
-        }
-
-        url = protocol + "://" + hostname + ":" + port + url;
+        String url = MainActivity.buildURL();
 
         // Command
         url = url + "/api/v2/torrents/properties?hash=" + hash;
@@ -617,7 +596,7 @@ public class TorrentDetailsFragment extends Fragment {
                 Map<String, String> params = new HashMap<>();
                 params.put("User-Agent", "qBittorrent for Android");
                 //params.put("Host", hostname + ":" + port);
-                params.put("Referer", protocol + "://" + hostname + ":" + port);
+                params.put("Referer", protocol + "://" + hostname + (port != -1 ? ":" + port : ""));
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 params.put("Cookie", cookie);
                 return params;

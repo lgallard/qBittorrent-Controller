@@ -1069,14 +1069,7 @@
 
      private void getApiVersion(final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/app/webapiVersion";
@@ -1182,18 +1175,23 @@
 
      }
 
-     private void getCookieV(final VolleyCallback callback) {
-
-         Log.d("Debug: ", "[getCookieV] getApi on Volley!");
-
+     protected static String buildURL() {
          String url = "";
 
          // if server is publish in a subfolder, fix url
          if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
+             url = (subfolder.startsWith("/") ? subfolder : "/" + subfolder) + "/" + url;
          }
 
-         url = protocol + "://" + hostname + ":" + port + url;
+         url = protocol + "://" + hostname + (port != -1 ? ":" + port : "") + url;
+         return url;
+     }
+
+     private void getCookieV(final VolleyCallback callback) {
+
+         Log.d("Debug: ", "[getCookieV] getApi on Volley!");
+
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/auth/login";
@@ -1319,14 +1317,7 @@
 
      private void resumeAllTorrents(final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/resume";
@@ -1380,14 +1371,7 @@
 
          key = "hashes";
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/resume";
@@ -1440,14 +1424,7 @@
 
      private void forceStartTorrent(final String hash, final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
 
          // Be aware of this issue https://github.com/qbittorrent/qBittorrent/issues/8958
@@ -1504,14 +1481,7 @@
 
      private void pauseAllTorrents(final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/pause";
@@ -1563,14 +1533,7 @@
          final String key;
          key = "hashes";
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/pause";
@@ -1621,14 +1584,7 @@
 
          final Map<String, String> postParams = new HashMap<>();
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/delete";
@@ -1681,14 +1637,7 @@
 
          final Map<String, String> postParams = new HashMap<>();
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/delete";
@@ -1741,14 +1690,7 @@
      private void increasePrioTorrent(final String hashes, final VolleyCallback callback) {
 
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/increasePrio";
@@ -1797,14 +1739,7 @@
 
      private void decreasePrioTorrent(final String hashes, final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/decreasePrio";
@@ -1854,14 +1789,7 @@
 
      private void maxPrioTorrent(final String hashes, final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/topPrio";
@@ -1911,14 +1839,7 @@
 
      private void minPrioTorrent(final String hashes, final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/bottomPrio";
@@ -1968,14 +1889,7 @@
 
      private void setUpRateLimit(final String hashes, final String limit, final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/transfer/uploadLimit";
@@ -2026,14 +1940,7 @@
 
      private void setDownRateLimit(final String hashes, final String limit, final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/transfer/setDownloadLimit";
@@ -2084,14 +1991,7 @@
 
      private void recheckTorrent(final String hash, final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/recheck";
@@ -2142,14 +2042,7 @@
 
      private void toggleFirstLastPiecePrio(final String hashes, final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/toggleFirstLastPiecePrio";
@@ -2200,14 +2093,7 @@
 
      private void toggleSequentialDownload(final String hashes, final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/toggleSequentialDownload";
@@ -2256,14 +2142,7 @@
 
      private void setCategory(final String hashes, final String category, final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/setCategory";
@@ -2319,14 +2198,7 @@
 
      private void toggleAlternativeSpeedLimits(final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/transfer/toggleSpeedLimitsMode";
@@ -2378,14 +2250,7 @@
          String savepath = "";
 
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/add";
@@ -2476,14 +2341,7 @@
              e.printStackTrace();
          }
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/add";
@@ -2535,14 +2393,7 @@
 
      private void addTracker(final String hash, final String urlParam, final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/addTrackers";
@@ -2594,14 +2445,7 @@
 
      private void getAlternativeSpeedLimitsEnabled(final VolleyCallback callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/transfer/speedLimitsMode";
@@ -2661,14 +2505,7 @@
          final String id = Integer.toString(idTemp);
          final String priority = Integer.toString(priorityTemp);
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/filePrio";
@@ -2721,14 +2558,7 @@
      private void setQBittorrentPrefefrences(final String json, final VolleyCallback callback) {
 
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/app/setPreferences";
@@ -2780,15 +2610,8 @@
 
          final List<Torrent> torrents = new ArrayList<>();
 
-         String url = "";
          String categoryEncoded = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
 //        url = url + "/api/v2/torrents/info?filter=" + state;
@@ -2930,14 +2753,7 @@
 
          final List<Category> categories = new ArrayList<>();
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/torrents/categories";
@@ -3043,15 +2859,7 @@
      // Get Transfer Info
      private void getTransferInfoV(final TransferInfoCallback callback) {
 
-         String url = "";
-
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
 //        url = url + "/api/v2/torrents/info?filter=" + state;
@@ -3122,14 +2930,7 @@
      // Get serverState
      private void getServerStateV(final ServerStateCallBack callback) {
 
-         String url = "";
-
-         // if server is publish in a subfolder, fix url
-         if (subfolder != null && !subfolder.equals("")) {
-             url = subfolder + "/" + url;
-         }
-
-         url = protocol + "://" + hostname + ":" + port + url;
+         String url = buildURL();
 
          // Command
          url = url + "/api/v2/sync/maindata";
@@ -6011,11 +5812,11 @@
 
          // If user leave the field empty, set 8080 port
          try {
-             port = Integer.parseInt(sharedPrefs.getString("port", "8080"));
+             port = Integer.parseInt(sharedPrefs.getString("port", "-1"));
          } catch (NumberFormatException e) {
-             port = 8080;
-
+             port = -1;
          }
+
          username = sharedPrefs.getString("username", "NULL");
          password = sharedPrefs.getString("password", "NULL");
          https = sharedPrefs.getBoolean("https", false);
