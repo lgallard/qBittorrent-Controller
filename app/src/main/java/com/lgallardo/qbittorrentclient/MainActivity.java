@@ -4210,7 +4210,9 @@
 
                  headerInfo = (LinearLayout) findViewById(R.id.header);
 
-                 if (header) {
+                 boolean detailsFragment = findViewById(R.id.details_refresh_layout)!=null && findViewById(R.id.activity_main_swipe_refresh_layout)==null;
+
+                 if (header&!detailsFragment) {
                      headerInfo.setVisibility(View.VISIBLE);
                  } else {
                      headerInfo.setVisibility(View.GONE);
