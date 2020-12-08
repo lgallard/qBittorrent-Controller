@@ -4236,7 +4236,7 @@
                      }
                      // Tablets
                      else {
-                         downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getUp_info_data()) + " (" + downloadCount + ") " + '\u2022' + " Free: " + freeSpaceOnDisk);
+                         downloadSpeedTextView.setText(Character.toString('\u21C5') + " " + Common.calculateSize("" + downloadSpeedCount) + "/s " + '\u2022' + " " + Common.calculateSize(transferInfo.getDl_info_data()) + " (" + downloadCount + ") " + '\u2022' + " Free: " + freeSpaceOnDisk);
                      }
                  }
 
