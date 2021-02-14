@@ -37,6 +37,7 @@
  import android.os.SystemClock;
  import android.preference.PreferenceManager;
  import android.provider.Settings;
+ import android.support.annotation.NonNull;
  import android.support.v4.app.ActivityCompat;
  import android.support.v4.content.ContextCompat;
  import android.support.v4.view.GravityCompat;
@@ -60,6 +61,7 @@
  import android.widget.AutoCompleteTextView;
  import android.widget.CheckBox;
  import android.widget.EditText;
+ import android.widget.Filter;
  import android.widget.LinearLayout;
  import android.widget.ListView;
  import android.widget.TextView;
@@ -6270,13 +6272,54 @@
 
              // Load history for path and category autocomplete text field
 
+             class ContainsArrayAdapter extends ArrayAdapter<String> {
+                 Filter mFilter;
+                 public ContainsArrayAdapter(@NonNull Context context, int resource, @NonNull String[] objects) {
+                     super(context, resource, objects);
+                 }
+                 @Override
+                 public Filter getFilter() {
+                     if (null == mFilter) {
+                         mFilter = new Filter() {
+                             @Override
+                             protected Filter.FilterResults performFiltering(CharSequence charSequence) {
+                                 List<String> listOfMatches = new ArrayList<String>();
+                                 if(charSequence != null) {
+                                     for (int i = 0; i < getCount(); i++) {
+                                         String item = getItem(i);
+                                         if (item != null && item.contains(charSequence)) {
+                                             listOfMatches.add(item);
+                                         }
+                                     }
+                                 }
+                                 Filter.FilterResults results = new Filter.FilterResults();
+                                 results.values = listOfMatches;
+                                 results.count = listOfMatches.size();
+                                 return results;
+                             }
+
+                             @Override
+                             protected void publishResults(CharSequence charSequence, Filter.FilterResults
+                             filterResults) {
+                                 if (filterResults.count == 0) {
+                                     notifyDataSetInvalidated();
+                                 } else {
+                                     notifyDataSetChanged();
+                                 }
+                             }
+                         };
+                     }
+                     return mFilter;
+                 }
+             }
+
              // Path
-             ArrayAdapter<String> pathAdapter = new ArrayAdapter<String>(
+             ArrayAdapter<String> pathAdapter = new ContainsArrayAdapter (
                      this, android.R.layout.simple_list_item_1, path_history.toArray(new String[path_history.size()]));
              pathTextView.setAdapter(pathAdapter);
 
              // Category
-             ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(
+             ArrayAdapter<String> categoryAdapter = new ContainsArrayAdapter (
                      this, android.R.layout.simple_list_item_1, category_history.toArray(new String[category_history.size()]));
              categoryTextView.setAdapter(categoryAdapter);
 

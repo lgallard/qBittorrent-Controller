@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Value"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:textIsSelectable="true" />
 
 </LinearLayout>
