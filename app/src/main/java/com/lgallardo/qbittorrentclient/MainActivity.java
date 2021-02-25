@@ -6273,10 +6273,15 @@
              // Load history for path and category autocomplete text field
 
              class ContainsArrayAdapter extends ArrayAdapter<String> {
+
+                 ArrayList<String> mPaths;
                  Filter mFilter;
-                 public ContainsArrayAdapter(@NonNull Context context, int resource, @NonNull String[] objects) {
+
+                 public ContainsArrayAdapter(@NonNull Context context, int resource, @NonNull ArrayList<String> objects) {
                      super(context, resource, objects);
+                     mPaths = new ArrayList<>(objects);
                  }
+
                  @Override
                  public Filter getFilter() {
                      if (null == mFilter) {
@@ -6285,25 +6290,28 @@
                              protected Filter.FilterResults performFiltering(CharSequence charSequence) {
                                  List<String> listOfMatches = new ArrayList<String>();
                                  if(charSequence != null) {
-                                     for (int i = 0; i < getCount(); i++) {
-                                         String item = getItem(i);
+                                     for (int i = 0; i < mPaths.size(); i++) {
+                                         String item = mPaths.get(i);
                                          if (item != null && item.contains(charSequence)) {
                                              listOfMatches.add(item);
                                          }
                                      }
                                  }
                                  Filter.FilterResults results = new Filter.FilterResults();
-                                 results.values = listOfMatches;
-                                 results.count = listOfMatches.size();
+                                 synchronized(this) {
+                                     results.values = listOfMatches;
+                                     results.count = listOfMatches.size();
+                                 }
                                  return results;
                              }
 
                              @Override
-                             protected void publishResults(CharSequence charSequence, Filter.FilterResults
-                             filterResults) {
+                             protected void publishResults(CharSequence charSequence, Filter.FilterResults filterResults) {
+                                 clear();
                                  if (filterResults.count == 0) {
                                      notifyDataSetInvalidated();
                                  } else {
+                                     addAll((ArrayList<String>)filterResults.values);
                                      notifyDataSetChanged();
                                  }
                              }
@@ -6315,12 +6323,12 @@
 
              // Path
              ArrayAdapter<String> pathAdapter = new ContainsArrayAdapter (
-                     this, android.R.layout.simple_list_item_1, path_history.toArray(new String[path_history.size()]));
+                     this, android.R.layout.simple_list_item_1, new ArrayList<String>(path_history));
              pathTextView.setAdapter(pathAdapter);
 
              // Category
              ArrayAdapter<String> categoryAdapter = new ContainsArrayAdapter (
-                     this, android.R.layout.simple_list_item_1, category_history.toArray(new String[category_history.size()]));
+                     this, android.R.layout.simple_list_item_1, new ArrayList<String>(category_history));
              categoryTextView.setAdapter(categoryAdapter);
 
              // Checkbox value
