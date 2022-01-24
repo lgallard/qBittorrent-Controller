@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~   Copyright (c) 2014-2015 Luis M. Gallardo D.
+  ~   All rights reserved. This program and the accompanying materials
+  ~   are made available under the terms of the GNU Lesser General Public License v3.0
+  ~   which accompanies this distribution, and is available at
+  ~   http://www.gnu.org/licenses/lgpl.html
+  ~
+  -->
+
+<resources>
+    <string-array name="qBittorrentServers">
+        <item name="1">服务器1</item>
+        <item name="2">服务器2</item>
+        <item name="3">服务器3</item>
+    </string-array>
+    <string-array name="qBittorrentServersValues">
+        <item name="1">1</item>
+        <item name="2">2</item>
+        <item name="3">3</item>
+    </string-array>
+    <string-array name="autorefresh">
+        <item name="1">1秒</item>
+        <item name="2">2秒</item>
+        <item name="3">5秒</item>
+        <item name="4">10秒</item>
+        <item name="5">30秒</item>
+        <item name="6">1分种</item>
+        <item name="7">2分种</item>
+        <item name="8">5分种</item>
+        <item name="9">10分种</item>
+        <item name="10">15分种</item>
+    </string-array>
+    <string-array name="autorefreshValues">
+        <item name="1">1000</item>
+        <item name="2">2000</item>
+        <item name="3">5000</item>
+        <item name="4">10000</item>
+        <item name="5">30000</item>
+        <item name="6">60000</item>
+        <item name="7">120000</item>
+        <item name="8">300000</item>
+        <item name="9">600000</item>
+        <item name="10">900000</item>
+    </string-array>
+    <string-array name="notification">
+        <item name="1">2分钟</item>
+        <item name="2">5分钟</item>
+        <item name="3">15分钟</item>
+        <item name="4">30分钟</item>
+        <item name="5">1小时</item>
+        <item name="6">6小时</item>
+        <item name="7">12小时</item>
+        <item name="8">1天</item>
+    </string-array>
+    <string-array name="notificationValues">
+        <item name="1">120000</item>
+        <item name="2">300000</item>
+        <item name="3">900000</item>
+        <item name="4">1800000</item>
+        <item name="5">3600000</item>
+        <item name="6">21600000</item>
+        <item name="7">43200000</item>
+        <item name="8">86400000</item>
+    </string-array>
+    <string-array name="sortBy">
+        <item name="1">名称</item>
+        <item name="2">大小</item>
+        <item name="3">预计完成时间</item>
+        <item name="4">优先级</item>
+        <item name="5">进度</item>
+        <item name="6">比率</item>
+        <item name="7">下载速度</item>
+        <item name="8">上传速度</item>
+        <item name="9">添加时间</item>
+        <item name="10">完成时间</item>
+    </string-array>
+    <string-array name="sortByValues">
+        <item name="1">1</item>
+        <item name="2">2</item>
+        <item name="3">3</item>
+        <item name="4">4</item>
+        <item name="5">5</item>
+        <item name="6">6</item>
+        <item name="7">7</item>
+        <item name="8">8</item>
+        <item name="9">9</item>
+        <item name="10">10</item>
+    </string-array>
+    <string-array name="navigation_drawer_items_array">
+        <item>全部</item>
+        <item>下载中</item>
+        <item>已完成</item>
+        <item>做种中</item>
+        <item>已暂停</item>
+        <item>活动的</item>
+        <item>不活跃</item>
+        <item>选项</item>
+        <item>设置</item>
+        <item>帮助</item>
+    </string-array>
+    <string-array name="scheduler_days">
+        <item name="1">每天</item>
+        <item name="2">周末</item>
+        <item name="3">平时</item>
+        <item name="4">星期一</item>
+        <item name="5">星期二</item>
+        <item name="6">星期三</item>
+        <item name="7">星期四</item>
+        <item name="8">星期五</item>
+        <item name="9">星期六</item>
+        <item name="10">星期日</item>
+    </string-array>
+    <string-array name="scheduler_days_values">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+        <item name="4">3</item>
+        <item name="5">4</item>
+        <item name="6">5</item>
+        <item name="7">6</item>
+        <item name="8">7</item>
+        <item name="9">8</item>
+        <item name="10">9</item>
+    </string-array>
+    <string-array name="max_ratio_action">
+        <item name="1">暂停</item>
+        <item name="2">移除</item>
+    </string-array>
+    <string-array name="max_ratio_action_values">
+        <item name="1">0</item>
+        <item name="2">1</item>
+    </string-array>
+</resources>
